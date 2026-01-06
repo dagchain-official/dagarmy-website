@@ -72,7 +72,7 @@
     font-family: 'Inter Tight', sans-serif;
     line-height: 1.2;
     padding-bottom: 5px;
-    filter: drop-shadow(0 4px 20px rgba(168, 85, 247, 0.5));
+    filter: drop-shadow(0 4px 20px rgba(168, 85, 247, 0.2));
 }
 
 .distribution-title {
