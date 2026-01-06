@@ -1,0 +1,348 @@
+/* ===================================
+   DAG ARMY Website - Main Styles
+   =================================== */
+
+/* Hide Webflow badge */
+.w-webflow-badge,
+a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Custom Logo Styling */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-brand span {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Hero Section Animations */
+.hero-badge-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+.hero-heading-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+.hero-subtitle-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+.hero-button-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+/* Hero Bottom Section */
+.hero-bottom-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+/* AI Badge Animation */
+.ai-badge {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+/* Hero Lines */
+.hero-left-line-wrap,
+.hero-right-line-wrap {
+    opacity: 0;
+}
+
+/* Hero Shadow */
+.hero-shadow-wrap {
+    -webkit-transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+}
+
+/* Navbar */
+.navbar-two {
+    opacity: 0;
+}
+
+/* Text Formatting */
+.hero-heading {
+    white-space: nowrap;
+}
+
+.hero-heading span {
+    display: block;
+    white-space: nowrap;
+}
+
+.hero-subtitle span {
+    display: block;
+    white-space: nowrap;
+}
+
+.section-heading {
+    white-space: nowrap;
+}
+
+.subtitle {
+    white-space: nowrap;
+}
+
+/* Responsive Design Helpers */
+@media (max-width: 991px) {
+    .navbar-brand span {
+        font-size: 18px;
+    }
+
+    .hero-heading {
+        white-space: normal !important;
+    }
+
+    .hero-heading span,
+    .hero-subtitle span {
+        white-space: normal !important;
+        display: inline !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .navbar-brand img {
+        height: 32px;
+    }
+
+    .navbar-brand span {
+        font-size: 16px;
+    }
+}
+
+/* Hidden Elements */
+.hide {
+    display: none !important;
+}
+
+/* Display None Utilities */
+[style*="display: none"],
+[style*="display:none"] {
+    display: none !important;
+}
+
+/* ===================================
+   Rank & Badges Section - Innovation Theme Matching
+   =================================== */
+
+.ranks-badges {
+    background-color: #010510;
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Atmospheric Indigo Glow */
+.ranks-badges::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    height: 1000px;
+    background: radial-gradient(circle at center, rgba(94, 114, 228, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ranks-badges-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Table Container - Sleek Innovation Panel with Indigo Border */
+.ranks-table-container {
+    margin-top: 60px;
+    padding: 1px; /* Edge for gradient border */
+    background: linear-gradient(135deg, rgba(94, 114, 228, 0.2) 0%, rgba(130, 94, 228, 0.05) 100%);
+    border-radius: 24px;
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(94, 114, 228, 0.03);
+}
+
+.ranks-table-inner {
+    background: linear-gradient(135deg, rgba(10, 14, 26, 0.95) 0%, rgba(1, 5, 16, 0.98) 100%);
+    border-radius: 23px;
+    padding: 48px;
+    backdrop-filter: blur(20px);
+}
+
+/* Ranks Table */
+.ranks-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+}
+
+/* Header Styling - Professional & High-Contrast */
+.ranks-table thead th {
+    padding: 20px 24px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.4);
+    font-family: 'Inter Tight', sans-serif;
+    text-align: left;
+    border-bottom: 1px solid rgba(94, 114, 228, 0.1);
+}
+
+.ranks-table thead th:nth-child(2) {
+    text-align: center;
+}
+
+.ranks-table thead th:nth-child(3) {
+    text-align: right;
+}
+
+/* Body Styling - Clean Indigo Integration */
+.ranks-table tbody tr {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ranks-table tbody tr:hover {
+    background-color: rgba(94, 114, 228, 0.03);
+}
+
+.ranks-table tbody td {
+    padding: 22px 24px;
+    color: rgba(226, 232, 240, 0.7);
+    font-family: 'Inter Tight', sans-serif;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.03);
+}
+
+.ranks-table tbody tr:hover td {
+    color: #ffffff;
+}
+
+.ranks-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Column 1: Rank Name */
+.ranks-table tbody td:nth-child(1) {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(226, 232, 240, 0.85);
+}
+
+/* Column 2: Target $ */
+.ranks-table tbody td:nth-child(2) {
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    color: rgba(203, 213, 225, 0.8);
+}
+
+/* Column 3: Reward - Vibrant Indigo (Hero Match) */
+.ranks-table tbody td:nth-child(3) {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5e72e4; /* Indigo from Hero button */
+    text-align: right;
+}
+
+/* Prestigious Progress: High-Tier Rows */
+.ranks-table tbody tr:nth-last-child(-n+3) td:nth-child(1) {
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(94, 114, 228, 0.2);
+}
+
+/* Final Mythic Rank - Ultimate Innovation Styling */
+.ranks-table tbody tr:last-child {
+    background: linear-gradient(90deg, rgba(94, 114, 228, 0.08) 0%, transparent 100%);
+}
+
+.ranks-table tbody tr:last-child td:nth-child(1) {
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+.ranks-table tbody tr:last-child td:nth-child(3) {
+    color: #825ee4; /* Deep Violet from Hero button gradient */
+    text-shadow: 0 0 20px rgba(130, 94, 228, 0.5);
+    font-size: 13px;
+}
+
+/* Note Section */
+.ranks-note {
+    margin-top: 36px;
+    text-align: center;
+}
+
+.note-text {
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(148, 163, 184, 0.3);
+    font-family: 'Inter Tight', sans-serif;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .ranks-badges { padding: 80px 0; }
+    .ranks-table-inner { padding: 32px; }
+    .ranks-table tbody td { padding: 18px 20px; }
+}
+
+@media (max-width: 767px) {
+    .ranks-table-inner { padding: 20px; }
+    .ranks-table thead th, .ranks-table tbody td { padding: 14px 12px; }
+    .ranks-table-container { border-radius: 16px; transition: none; }
+    .ranks-table tbody td:nth-child(2) { font-size: 13px; }
+}
