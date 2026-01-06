@@ -48,6 +48,9 @@
             visibility: hidden !important;
         }
     </style>
+    <link href="css/airdrop-dagpoints.css" rel="stylesheet" type="text/css" />
+    <link href="css/contribute-earn.css" rel="stylesheet" type="text/css" />
+    <link href="css/trust-join.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         window.__WEBFLOW_CURRENCY_SETTINGS = {
             "currencyCode": "USD",
@@ -1178,126 +1181,68 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ranks-cards-container">
-                                <!-- Header Pills -->
-                                <div class="ranks-header-pills">
-                                    <div class="header-pill">RANK</div>
-                                    <div class="header-pill">TARGET $</div>
-                                    <div class="header-pill">REWARD</div>
-                                </div>
-
-                                <!-- Rank Cards Grid -->
-                                <div class="ranks-grid">
-                                    <!-- Initiator -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">INITIATOR</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$1,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 100$</div>
-                                    </div>
-
-                                    <!-- Vanguard -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">VANGUARD</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$2,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 200$</div>
-                                    </div>
-
-                                    <!-- Guardian -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">GUARDIAN</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$5,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 500$</div>
-                                    </div>
-
-                                    <!-- Striker -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">STRIKER</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$7,500</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 750$</div>
-                                    </div>
-
-                                    <!-- Invoker -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">INVOKER</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$10,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 1000$</div>
-                                    </div>
-
-                                    <!-- Commander -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">COMMANDER</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$15,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 1500$</div>
-                                    </div>
-
-                                    <!-- Champion -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">CHAMPION</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$20,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 2000$</div>
-                                    </div>
-
-                                    <!-- Conqueror -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">CONQUEROR</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$30,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 3000$</div>
-                                    </div>
-
-                                    <!-- Paragon -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">PARAGON</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$40,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 4000$</div>
-                                    </div>
-
-                                    <!-- Mythic -->
-                                    <div class="rank-card">
-                                        <div class="rank-card-name">MYTHIC</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-value">$50,000</div>
-                                    </div>
-                                    <div class="rank-card">
-                                        <div class="rank-card-reward">MYSTERY BOX 5000$</div>
-                                    </div>
-                                </div>
+                            <div class="ranks-table-container">
+                                <table class="ranks-table">
+                                    <thead>
+                                        <tr>
+                                            <th>RANK</th>
+                                            <th>TARGET $</th>
+                                            <th>REWARD</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>INITIATOR</td>
+                                            <td>$1,000</td>
+                                            <td>MYSTERY BOX 100$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>VANGUARD</td>
+                                            <td>$2,000</td>
+                                            <td>MYSTERY BOX 200$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>GUARDIAN</td>
+                                            <td>$5,000</td>
+                                            <td>MYSTERY BOX 500$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>STRIKER</td>
+                                            <td>$7,500</td>
+                                            <td>MYSTERY BOX 750$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>INVOKER</td>
+                                            <td>$10,000</td>
+                                            <td>MYSTERY BOX 1000$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>COMMANDER</td>
+                                            <td>$15,000</td>
+                                            <td>MYSTERY BOX 1500$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>CHAMPION</td>
+                                            <td>$20,000</td>
+                                            <td>MYSTERY BOX 2000$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>CONQUEROR</td>
+                                            <td>$30,000</td>
+                                            <td>MYSTERY BOX 3000$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PARAGON</td>
+                                            <td>$40,000</td>
+                                            <td>MYSTERY BOX 4000$</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MYTHIC</td>
+                                            <td>$50,000</td>
+                                            <td>MYSTERY BOX 5000$</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
                                 <!-- Note -->
                                 <div class="ranks-note">
@@ -1309,492 +1254,414 @@
                         </div>
                     </div>
                 </section>
-                <section class="stuff">
-                    <div class="stuff-wrap">
-                        <div class="section-header-wrap">
-                            <div class="section-header-content small">
-                                <div class="section-badge-wrap">
-                                    <div class="badge">
-                                        <div class="tag">Cool Stuff</div>
+                <section class="airdrop-distribution">
+                    <div class="container">
+                        <div class="airdrop-wrap">
+                            <div class="section-header-wrap">
+                                <div class="section-header-content">
+                                    <div class="section-badge-wrap">
+                                        <div class="badge">
+                                            <div class="tag">Weekly Airdrops</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="section-text-wrap">
-                                    <div class="heading-wrap">
-                                        <h2 class="section-heading">Explore our features <br />and stay compliant.
-                                        </h2>
-                                    </div>
-                                    <div class="subtitle-wrap">
-                                        <div class="paragraph-02 subtitle">AI alerts, and portfolio strategies—no
-                                            bots, just experts.</div>
+                                    <div class="section-text-wrap">
+                                        <div class="heading-wrap">
+                                            <h2 class="section-heading">Airdrop Distribution</h2>
+                                        </div>
+                                        <div class="subtitle-wrap">
+                                            <div class="paragraph-02 subtitle">Every week, DAGCHAIN allocates a
+                                                dedicated DAG ARMY Airdrop Pool</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="stuff-main-wrap">
-                            <div data-current="Tab 1" data-easing="ease" data-duration-in="300" data-duration-out="100"
-                                class="stuff-tabs w-tabs">
-                                <div class="stuff-tabs-menu w-tab-menu">
-                                    <a data-w-tab="Tab 1" class="stuff-tab-link w-inline-block w-tab-link w--current">
-                                        <div class="stuff-details-wrap">
-                                            <div class="stuff-text-wrap">
-                                                <div class="text-style-h4">Instant market insights</div>
-                                                <div class="stuff-subtitle-wrap">
-                                                    <div class="paragraph-02 stuff-subtitle">Say goodbye to manual
-                                                        invoice entry! With Routable’s AI-powered OCR, you can whip
-                                                        up bills in just seconds.</div>
-                                                </div>
-                                            </div>
-                                            <div class="stuff-dashboard-wrap _02"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d44fa41f3bea36b473982d_44f039752e05711af1847467fc75f3d6_Dashboard%201.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 2" class="stuff-tab-link w-inline-block w-tab-link">
-                                        <div class="stuff-details-wrap">
-                                            <div class="stuff-text-wrap">
-                                                <div class="text-style-h4">A ton of languages to choose from!</div>
-                                                <div class="stuff-subtitle-wrap">
-                                                    <div class="paragraph-02 stuff-subtitle">Transform your billing
-                                                        process effortlessly! With Routable’s advanced AI-driven OCR
-                                                        technology, you can generate invoices in mere moments,
-                                                        eliminating tedious manual entry.</div>
-                                                </div>
-                                            </div>
-                                            <div class="stuff-dashboard-wrap _02"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d4506822607123443abd79_Dashboard%202.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 3" class="stuff-tab-link w-inline-block w-tab-link">
-                                        <div class="stuff-details-wrap">
-                                            <div class="stuff-text-wrap">
-                                                <div class="text-style-h4">Risk assessment tool</div>
-                                                <div class="stuff-subtitle-wrap">
-                                                    <div class="paragraph-02 stuff-subtitle">Revolutionize your
-                                                        invoicing with features that create invoices in seconds,
-                                                        cutting out manual entry and enhancing your workflow.</div>
-                                                </div>
-                                            </div>
-                                            <div class="stuff-dashboard-wrap _02"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d45068bc3085869a4bcafb_Dashboard%203.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 4" class="stuff-tab-link w-inline-block w-tab-link">
-                                        <div class="stuff-details-wrap">
-                                            <div class="stuff-text-wrap">
-                                                <div class="text-style-h4">Analytics for profits</div>
-                                                <div class="stuff-subtitle-wrap">
-                                                    <div class="paragraph-02 stuff-subtitle">Revolutionize your
-                                                        invoicing with Routable’s AI OCR technology! Generate
-                                                        precise invoices in seconds, cutting out manual entry and
-                                                        enhancing your workflow.</div>
-                                                </div>
-                                            </div>
-                                            <div class="stuff-dashboard-wrap _02"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d45068bd59717692098620_Dashboard%204.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
-                                    </a>
+                            <div class="airdrop-main-wrap">
+                                <div class="distribution-label">
+                                    <div class="paragraph-01">Distribution Split</div>
                                 </div>
-                                <div class="stuff-tabs-content w-tab-content">
-                                    <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
-                                        <div data-w-id="ec14683a-053f-8877-795c-011c40724738"
-                                            style="-webkit-transform:translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);filter:blur(5px);opacity:0"
-                                            class="stuff-tabs-content-wrap">
-                                            <div class="stuff-dashboard-wrap"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d44fa41f3bea36b473982d_44f039752e05711af1847467fc75f3d6_Dashboard%201.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
+                                <div class="distribution-cards">
+                                    <div class="distribution-card">
+                                        <div class="distribution-percentage">50%</div>
+                                        <div class="distribution-title">DAG Lieutenants</div>
+                                        <div class="distribution-desc">Active contributors and service users</div>
                                     </div>
-                                    <div data-w-tab="Tab 2" class="w-tab-pane">
-                                        <div class="stuff-tabs-content-wrap">
-                                            <div class="stuff-dashboard-wrap"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d4506822607123443abd79_Dashboard%202.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
+                                    <div class="distribution-card">
+                                        <div class="distribution-percentage">30%</div>
+                                        <div class="distribution-title">DAG Generals</div>
+                                        <div class="distribution-desc">Strategic leaders and top performers</div>
                                     </div>
-                                    <div data-w-tab="Tab 3" class="w-tab-pane">
-                                        <div class="stuff-tabs-content-wrap">
-                                            <div class="stuff-dashboard-wrap"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d45068bc3085869a4bcafb_Dashboard%203.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
-                                        </div>
+                                    <div class="distribution-card">
+                                        <div class="distribution-percentage">20%</div>
+                                        <div class="distribution-title">DAG Soldiers</div>
+                                        <div class="distribution-desc">Foundation community members</div>
                                     </div>
-                                    <div data-w-tab="Tab 4" class="w-tab-pane">
-                                        <div class="stuff-tabs-content-wrap">
-                                            <div class="stuff-dashboard-wrap"><img loading="lazy"
-                                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d45068bd59717692098620_Dashboard%204.avif"
-                                                    alt="Dashboard" class="stuff-dashboard" /></div>
+                                </div>
+                                <div class="characteristics-label">
+                                    <div class="paragraph-01">Airdrop Characteristics</div>
+                                </div>
+                                <div class="characteristics-card">
+                                    <div class="characteristics-list">
+                                        <div class="characteristic-item">
+                                            <div class="characteristic-icon">✓</div>
+                                            <div class="characteristic-text">Performance-weighted</div>
+                                        </div>
+                                        <div class="characteristic-item">
+                                            <div class="characteristic-icon">✓</div>
+                                            <div class="characteristic-text">Rank-based</div>
+                                        </div>
+                                        <div class="characteristic-item">
+                                            <div class="characteristic-icon">✓</div>
+                                            <div class="characteristic-text">Transparent</div>
+                                        </div>
+                                        <div class="characteristic-item">
+                                            <div class="characteristic-icon">✓</div>
+                                            <div class="characteristic-text">Designed to reward contribution over time
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-            </div>
-            </section>
-            <section class="testimonial">
-                <div class="container">
-                    <div class="testimonial-wrap">
-                        <div class="section-header-wrap">
-                            <div class="section-header-content">
-                                <div class="section-badge-wrap">
-                                    <div class="badge">
-                                        <div class="tag">Testimonial</div>
+                </section>
+                <section class="dag-points">
+                    <div class="container">
+                        <div class="dag-points-wrap">
+                            <div class="section-header-wrap">
+                                <div class="section-header-content">
+                                    <div class="section-badge-wrap">
+                                        <div class="badge">
+                                            <div class="tag">DAG Points</div>
+                                        </div>
+                                    </div>
+                                    <div class="section-text-wrap">
+                                        <div class="heading-wrap">
+                                            <h2 class="section-heading">What Are DAG Points?</h2>
+                                        </div>
+                                        <div class="subtitle-wrap">
+                                            <div class="paragraph-02 subtitle">DAG Points are internal contribution
+                                                metrics earned by actively participating in the DAGCHAIN ecosystem.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="section-text-wrap">
-                                    <div class="heading-wrap">
-                                        <h2 class="section-heading">What Traders Are Saying</h2>
+                            </div>
+                            <div class="dag-points-main-wrap">
+                                <div class="points-sources-label">
+                                    <div class="paragraph-01">DAG Points Sources</div>
+                                </div>
+                                <div class="points-sources-grid">
+                                    <div class="points-source-card">
+                                        <div class="source-icon">🎯</div>
+                                        <div class="source-title">Platform Usage</div>
+                                        <div class="source-desc">Active engagement with DAGCHAIN and DAGGPT services
+                                        </div>
                                     </div>
-                                    <div class="subtitle-wrap">
-                                        <div class="paragraph-02 subtitle">Real experiences from users who trade
-                                            smarter with our platform.</div>
+                                    <div class="points-source-card">
+                                        <div class="source-icon">✅</div>
+                                        <div class="source-title">Completing Tasks</div>
+                                        <div class="source-desc">Finishing assigned community and ecosystem tasks</div>
                                     </div>
+                                    <div class="points-source-card">
+                                        <div class="source-icon">💰</div>
+                                        <div class="source-title">Sales Activity</div>
+                                        <div class="source-desc">Contributing to ecosystem growth through purchases
+                                        </div>
+                                    </div>
+                                    <div class="points-source-card">
+                                        <div class="source-icon">👥</div>
+                                        <div class="source-title">Community Engagement</div>
+                                        <div class="source-desc">Participating in discussions and community building
+                                        </div>
+                                    </div>
+                                    <div class="points-source-card">
+                                        <div class="source-icon">🔗</div>
+                                        <div class="source-title">Referrals</div>
+                                        <div class="source-desc">Direct referrals that contribute to ecosystem growth
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="points-purpose-label">
+                                    <div class="paragraph-01">DAG Points Purpose</div>
+                                </div>
+                                <div class="points-purpose-card">
+                                    <div class="purpose-list">
+                                        <div class="purpose-item">
+                                            <div class="purpose-icon">✓</div>
+                                            <div class="purpose-text">Determine rank progression</div>
+                                        </div>
+                                        <div class="purpose-item">
+                                            <div class="purpose-icon">✓</div>
+                                            <div class="purpose-text">Unlock DAG General eligibility</div>
+                                        </div>
+                                        <div class="purpose-item">
+                                            <div class="purpose-icon">✓</div>
+                                            <div class="purpose-text">Reflect long-term contribution</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="points-footer-note">
+                                    <p class="note-text">DAG Points are not tokens and have no speculative value.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="testimonial-main-wrap">
-                            <div class="testimonial-column">
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“I was worried about security, but the
-                                            enterprise-grade protection makes me feel safe while trading online.”
+                    </div>
+                </section>
+                <section class="contribute-earn">
+                    <div class="container">
+                        <div class="contribute-earn-wrap">
+                            <div class="section-header-wrap">
+                                <div class="section-header-content">
+                                    <div class="section-badge-wrap">
+                                        <div class="badge">
+                                            <div class="tag">Tasks & Participation</div>
                                         </div>
                                     </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9d050d24dfa806e0f1_Profile%20(2).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Emma W. – Beginner</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“Automation saved me so much time. I can focus on
-                                            strategy instead of watching charts all day.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9d67d844000eb3a1d2_Profile%20(3).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Lucas M. – Swing Trader</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“This platform feels like it was built for
-                                            professionals. The AI insights, speed, and UI design are on point.”
+                                    <div class="section-text-wrap">
+                                        <div class="heading-wrap">
+                                            <h2 class="section-heading">Contribute & Earn</h2>
                                         </div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9de1e9173b5736ede3_Profile%20(4).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Hiroshi K. – Pro Trader</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“Even with little experience, I find it easy to
-                                            use. The onboarding made everything simple.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9daa12995d880e1385_Profile%20(5).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Fatima Z. – Casual Trader</div>
+                                        <div class="subtitle-wrap">
+                                            <div class="paragraph-02 subtitle">DAG ARMY members may receive periodic
+                                                tasks to support ecosystem growth.</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="testimonial-column">
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“The execution speed is unmatched. Orders fill
-                                            instantly, which gives me confidence even during high market
-                                            volatility.”</div>
+                            <div class="contribute-earn-main-wrap">
+                                <div class="contribution-areas-label">
+                                    <div class="paragraph-01">Contribution Areas</div>
+                                </div>
+                                <div class="contribution-areas-grid">
+                                    <div class="contribution-area-card">
+                                        <div class="contribution-area-title">Platform Engagement</div>
+                                        <div class="contribution-area-desc">Active participation in DAGCHAIN and DAGGPT
+                                            platforms, testing features, and providing valuable feedback</div>
                                     </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9d47288bc0a613d502_Profile%20(6).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Alex R. – Professional Trader</div>
+                                    <div class="contribution-area-card">
+                                        <div class="contribution-area-title">Community Support</div>
+                                        <div class="contribution-area-desc">Helping new members, answering questions,
+                                            and fostering a positive community environment</div>
+                                    </div>
+                                    <div class="contribution-area-card">
+                                        <div class="contribution-area-title">Content Amplification</div>
+                                        <div class="contribution-area-desc">Sharing official announcements, creating
+                                            content, and spreading awareness about DAGCHAIN</div>
+                                    </div>
+                                    <div class="contribution-area-card">
+                                        <div class="contribution-area-title">Ecosystem Growth</div>
+                                        <div class="contribution-area-desc">Activities that directly contribute to
+                                            expanding the DAGCHAIN ecosystem and user base</div>
                                     </div>
                                 </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“AI-driven insights helped me spot trends earlier.
-                                            I’ve improved my strategies without spending endless hours analyzing
-                                            charts.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9d2d3c5c7d1abdcb80_Profile%20(7).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Maya T. – Swing Trader</div>
-                                    </div>
+                                <div class="task-characteristics-label">
+                                    <div class="paragraph-01">Task Characteristics</div>
                                 </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“The onboarding was smooth and the support team is
-                                            always available. I was able to migrate my portfolio in minutes.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9d23858cb6e5b19756_Profile%20(8).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Daniel K. – New User</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“The portfolio migration was seamless. I imported
-                                            years of data without losing anything important.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9dbfcdae16e6e8cfea_Profile%20(9).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Daniela C. – Analyst</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="testimonial-column hide">
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“Finally, one dashboard where I can see everything
-                                            without switching tabs.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9e0ef08dc88cb60482_Profile%20(10).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Sophia L. – Crypto Enthusiast</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“Signal accuracy is impressive. I don’t need to
-                                            second-guess my entries anymore.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9dc75be96a3e8fe0f6_Profile%20(11).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Michael B. – Day Trader</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“The global market access is a game-changer. I can
-                                            track my US stocks and Asian markets in one place seamlessly.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9e0ef08dc88cb6047d_Profile%20(12).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Arun P. – Investor</div>
-                                    </div>
-                                </div>
-                                <div class="testimonial-card">
-                                    <div class="testimonial-text-wrap">
-                                        <div class="paragraph-01">“It’s not just a tool, it feels like a trading
-                                            companion. The AI signals keep me disciplined and consistent.”</div>
-                                    </div>
-                                    <div class="testimonial-author-wrap"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68cc6b9d05dbfdb9170c6ae4_Profile%20(1).avif"
-                                            loading="lazy" alt="" class="testimonial-author-image" />
-                                        <div class="paragraph-02">Noah J. – Long-Term Investor</div>
+                                <div class="task-characteristics-card">
+                                    <div class="task-characteristics-grid">
+                                        <div class="task-characteristic-item">
+                                            <div class="task-characteristic-title">Simple</div>
+                                            <div class="task-characteristic-desc">Easy to understand and complete</div>
+                                        </div>
+                                        <div class="task-characteristic-item">
+                                            <div class="task-characteristic-title">Time-bound</div>
+                                            <div class="task-characteristic-desc">Clear deadlines for completion</div>
+                                        </div>
+                                        <div class="task-characteristic-item">
+                                            <div class="task-characteristic-title">Measurable</div>
+                                            <div class="task-characteristic-desc">Clearly defined success criteria</div>
+                                        </div>
+                                        <div class="task-characteristic-item">
+                                            <div class="task-characteristic-title">Impactful</div>
+                                            <div class="task-characteristic-desc">Designed to create real value</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <section class="faq-v2">
-                <div class="container">
-                    <div class="faq-v2-wrap">
-                        <div class="section-header-wrap">
-                            <div class="section-header-content small">
-                                <div class="section-badge-wrap">
-                                    <div class="badge">
-                                        <div class="tag">FAQ</div>
-                                    </div>
-                                </div>
-                                <div class="section-text-wrap">
-                                    <div class="heading-wrap">
-                                        <h2 class="section-heading">Frequently Asked Questions</h2>
-                                    </div>
-                                    <div class="subtitle-wrap">
-                                        <div class="paragraph-02 subtitle">Find quick answers to the most common
-                                            questions about our trading dashboard.</div>
+                </section>
+                <section class="built-on-trust">
+                    <div class="container">
+                        <div class="built-on-trust-wrap">
+                            <div class="section-header-wrap">
+                                <div class="section-header-content">
+                                    <div class="section-text-wrap">
+                                        <div class="heading-wrap">
+                                            <h2 class="section-heading">Built on Trust</h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="faq-v2-main-wrap">
-                            <div data-current="Tab 1" data-easing="ease" data-duration-in="300" data-duration-out="100"
-                                class="faq-v2-tab faq-tab w-tabs">
-                                <div class="faq-list w-tab-menu">
-                                    <a data-w-tab="Tab 1" class="faq-item black w-inline-block w-tab-link w--current">
-                                        <div class="faq-item-content">
-                                            <div class="faq-question-wrap">
-                                                <div class="paragraph-01">How accurate are the AI signals?</div>
-                                                <div class="faq-arrow-wrap"><img loading="lazy"
-                                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9bde977d82480d6025150_Arrow.svg"
-                                                        alt="" class="faq-arrow" /></div>
-                                            </div>
-                                            <div class="faq-answer-wrap">
-                                                <div class="paragraph-02 faq-answer">Our AI signals have up to 95%
-                                                    accuracy, tested across multiple markets.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 2" class="faq-item black w-inline-block w-tab-link">
-                                        <div class="faq-item-content">
-                                            <div class="faq-question-wrap">
-                                                <div class="paragraph-01">Can I use the dashboard on mobile?</div>
-                                                <div class="faq-arrow-wrap"><img loading="lazy"
-                                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9bde977d82480d6025150_Arrow.svg"
-                                                        alt="" class="faq-arrow" /></div>
-                                            </div>
-                                            <div class="faq-answer-wrap">
-                                                <div class="paragraph-02 faq-answer">Absolutely — we use advanced
-                                                    encryption and strict security protocols to keep your data safe.
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 3" class="faq-item black w-inline-block w-tab-link">
-                                        <div class="faq-item-content">
-                                            <div class="faq-question-wrap">
-                                                <div class="paragraph-01">Is my trading data secure?</div>
-                                                <div class="faq-arrow-wrap"><img loading="lazy"
-                                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9bde977d82480d6025150_Arrow.svg"
-                                                        alt="" class="faq-arrow" /></div>
-                                            </div>
-                                            <div class="faq-answer-wrap">
-                                                <div class="paragraph-02 faq-answer">No, beginners are welcome. Our
-                                                    platform is designed to guide you step by step.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 4" class="faq-item black w-inline-block w-tab-link">
-                                        <div class="faq-item-content">
-                                            <div class="faq-question-wrap">
-                                                <div class="paragraph-01">Which markets can I access?</div>
-                                                <div class="faq-arrow-wrap"><img loading="lazy"
-                                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9bde977d82480d6025150_Arrow.svg"
-                                                        alt="" class="faq-arrow" /></div>
-                                            </div>
-                                            <div class="faq-answer-wrap">
-                                                <div class="paragraph-02 faq-answer">You can trade across major
-                                                    markets including forex, stocks, crypto, and commodities.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a data-w-tab="Tab 5" class="faq-item black w-inline-block w-tab-link">
-                                        <div class="faq-item-content">
-                                            <div class="faq-question-wrap">
-                                                <div class="paragraph-01">What kind of support do you offer?</div>
-                                                <div class="faq-arrow-wrap"><img loading="lazy"
-                                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9bde977d82480d6025150_Arrow.svg"
-                                                        alt="" class="faq-arrow" /></div>
-                                            </div>
-                                            <div class="faq-answer-wrap">
-                                                <div class="paragraph-02 faq-answer">We provide 24/7 customer
-                                                    support via chat, email, and knowledge base.</div>
-                                            </div>
-                                        </div>
-                                    </a>
+                            <div class="built-on-trust-main-wrap">
+                                <div class="core-principles-label">
+                                    <div class="paragraph-01">Core Principles</div>
                                 </div>
-                                <div class="hide w-tab-content">
-                                    <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active"></div>
-                                    <div data-w-tab="Tab 2" class="w-tab-pane"></div>
-                                    <div data-w-tab="Tab 3" class="w-tab-pane"></div>
-                                    <div data-w-tab="Tab 4" class="w-tab-pane"></div>
-                                    <div data-w-tab="Tab 5" class="w-tab-pane"></div>
+                                <div class="core-principles-grid">
+                                    <div class="core-principle-card">
+                                        <div class="core-principle-title">No Hidden Mechanics</div>
+                                        <div class="core-principle-text">Everything is transparent and clearly
+                                            explained. No surprises, no fine print.</div>
+                                    </div>
+                                    <div class="core-principle-card">
+                                        <div class="core-principle-title">No Guaranteed Returns</div>
+                                        <div class="core-principle-text">We don't make false promises. Rewards are based
+                                            on contribution and ecosystem health.</div>
+                                    </div>
+                                    <div class="core-principle-card">
+                                        <div class="core-principle-title">No Pay-to-Win</div>
+                                        <div class="core-principle-text">Merit and contribution matter most. You can't
+                                            buy your way to the top.</div>
+                                    </div>
+                                    <div class="core-principle-card">
+                                        <div class="core-principle-title">No Inflationary Promises</div>
+                                        <div class="core-principle-text">Sustainable rewards from real ecosystem
+                                            allocations, not artificial token printing.</div>
+                                    </div>
+                                </div>
+                                <div class="sustainable-rewards-card">
+                                    <div class="sustainable-rewards-title">Sustainable Rewards</div>
+                                    <div class="sustainable-rewards-text">Rewards come from ecosystem allocations, not
+                                        artificial token printing. We're building for the long term.</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <section class="cta">
-                <div class="container">
-                    <div class="cta-wrap">
-                        <div class="cta-content-wrap"><a href="/contact" class="cta-link w-inline-block"><img
-                                    src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d592b7d84757b9d6941c48_Cta%20Badge.avif"
-                                    loading="lazy" alt="" class="cta-badge" /></a>
-                            <div class="cta-circle-one"></div>
-                            <div class="cta-circle-two"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="footer">
-                <div class="container">
-                    <div class="footer-wrap">
-                        <div class="footer-left">
-                            <div data-w-id="5604b1fd-90ab-d77a-5fdc-8c96874f038b" class="footer-content-wrap"><a
-                                    href="/" aria-current="page" class="footer-brand w-inline-block w--current"><img
-                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b0266ba7b2f22465298d_Logo.svg"
-                                        loading="lazy" alt="" class="footer-logo" /></a>
-                                <div class="paragraph-01 text-grey">SignalX empowers you to trade smarter, stay
-                                    informed, and grow your investments with confidence.</div>
-                            </div>
-                            <div data-w-id="5604b1fd-90ab-d77a-5fdc-8c96874f0390" class="footer-share-wrap"><a
-                                    href="https://www.instagram.com/" target="_blank"
-                                    class="footer-share-link w-inline-block"><img
-                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180d165bebdfe6d8da2_Instagram.svg"
-                                        loading="lazy" alt="" class="footer-share-icon" /></a>
-                                <a href="https://www.linkedin.com/" target="_blank"
-                                    class="footer-share-link w-inline-block"><img
-                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180586247610e1d6549_Linkdin.svg"
-                                        loading="lazy" alt="" class="footer-share-icon" /></a><a
-                                    href="https://facebook.com/" target="_blank"
-                                    class="footer-share-link w-inline-block"><img
-                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180787a244b5829ab6a_Facebook.svg"
-                                        loading="lazy" alt="" class="footer-share-icon" /></a>
-                            </div>
-                        </div>
-                        <div class="footer-right">
-                            <div class="footer-menu-column">
-                                <div class="text-style-h4 footer-menu-title">Main Pages</div>
-                                <div class="footer-menu-list"><a href="/" aria-current="page"
-                                        class="paragraph-01 footer-menu w--current">Home</a><a href="/about"
-                                        class="paragraph-01 footer-menu">About</a><a href="/features"
-                                        class="paragraph-01 footer-menu">Features</a><a href="/pricing"
-                                        class="paragraph-01 footer-menu">Pricing</a>
-                                    <a href="/blog" class="paragraph-01 footer-menu">Blog</a><a href="/contact"
-                                        class="paragraph-01 footer-menu">Contact</a>
+                </section>
+                <section class="who-should-join">
+                    <div class="container">
+                        <div class="who-should-join-wrap">
+                            <div class="section-header-wrap">
+                                <div class="section-header-content">
+                                    <div class="section-badge-wrap">
+                                        <div class="badge">
+                                            <div class="tag">WHO SHOULD JOIN</div>
+                                        </div>
+                                    </div>
+                                    <div class="section-text-wrap">
+                                        <div class="heading-wrap">
+                                            <h2 class="section-heading">Is DAG ARMY Right for You?</h2>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="footer-menu-column">
-                                <div class="text-style-h4 footer-menu-title">Inner Pages</div>
-                                <div class="footer-menu-list"><a href="/faq" class="paragraph-01 footer-menu">Faq</a><a
-                                        href="/career" class="paragraph-01 footer-menu">Career</a><a
-                                        href="https://signalx.webflow.io/blog/launching-your-first-ad-a-step-by-step-guide-to-facebook-google-ads"
-                                        class="paragraph-01 footer-menu">Blog Single</a>
-                                    <a href="https://signalx.webflow.io/product/pro"
-                                        class="paragraph-01 footer-menu">Pricing Single</a><a href="/integration"
-                                        class="paragraph-01 footer-menu">Integrations</a><a
-                                        href="#https://signalx.webflow.io/integration/behance"
-                                        class="paragraph-01 footer-menu">Integration Single</a>
-                                </div>
-                            </div>
-                            <div class="footer-menu-column">
-                                <div class="text-style-h4 footer-menu-title">Utility Pages</div>
-                                <div class="footer-menu-list"><a href="/404" class="paragraph-01 footer-menu">404</a><a
-                                        href="/401" class="paragraph-01 footer-menu">Password</a><a
-                                        href="/utility-page/license" class="paragraph-01 footer-menu">License</a><a
-                                        href="/utility-page/style-guide" class="paragraph-01 footer-menu">Style
-                                        Guide</a>
-                                    <a href="/utility-page/changelog" class="paragraph-01 footer-menu">Changelog</a>
+                            <div class="who-should-join-main-wrap">
+                                <div class="join-criteria-grid">
+                                    <div class="join-criteria-card">
+                                        <div class="join-criteria-title">You believe in AI + Blockchain convergence
+                                        </div>
+                                        <div class="join-criteria-text">You see the potential of combining artificial
+                                            intelligence with blockchain technology and want to be part of this
+                                            revolution.</div>
+                                    </div>
+                                    <div class="join-criteria-card">
+                                        <div class="join-criteria-title">You want to participate beyond speculation
+                                        </div>
+                                        <div class="join-criteria-text">You're not just looking for quick gains – you
+                                            want to actively contribute to building something meaningful.</div>
+                                    </div>
+                                    <div class="join-criteria-card">
+                                        <div class="join-criteria-title">You're building or using Web3 & AI tools</div>
+                                        <div class="join-criteria-text">You're already engaged with Web3 technologies or
+                                            AI applications and want to leverage DAGCHAIN's infrastructure.</div>
+                                    </div>
+                                    <div class="join-criteria-card">
+                                        <div class="join-criteria-title">You prefer contribution-based rewards</div>
+                                        <div class="join-criteria-text">You value merit-based systems where your effort
+                                            and contribution directly impact your rewards.</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <div data-w-id="7ff5c1fa-a55b-6a86-54bf-1b5e9acc64fe" class="copyright-wrap">
-                <div class="paragraph-01 copyright-text">© 2025 SignalX. All rights reserved - License. Powered by
-                    <a href="https://www.webflow.com" target="_blank" class="copyright-link">Webflow</a>.
+                </section>
+                <section class="cta">
+                    <div class="container">
+                        <div class="cta-wrap">
+                            <div class="cta-content-wrap"><a href="/contact" class="cta-link w-inline-block"><img
+                                        src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d592b7d84757b9d6941c48_Cta%20Badge.avif"
+                                        loading="lazy" alt="" class="cta-badge" /></a>
+                                <div class="cta-circle-one"></div>
+                                <div class="cta-circle-two"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="footer">
+                    <div class="container">
+                        <div class="footer-wrap">
+                            <div class="footer-left">
+                                <div data-w-id="5604b1fd-90ab-d77a-5fdc-8c96874f038b" class="footer-content-wrap"><a
+                                        href="/" aria-current="page" class="footer-brand w-inline-block w--current"><img
+                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b0266ba7b2f22465298d_Logo.svg"
+                                            loading="lazy" alt="" class="footer-logo" /></a>
+                                    <div class="paragraph-01 text-grey">SignalX empowers you to trade smarter, stay
+                                        informed, and grow your investments with confidence.</div>
+                                </div>
+                                <div data-w-id="5604b1fd-90ab-d77a-5fdc-8c96874f0390" class="footer-share-wrap"><a
+                                        href="https://www.instagram.com/" target="_blank"
+                                        class="footer-share-link w-inline-block"><img
+                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180d165bebdfe6d8da2_Instagram.svg"
+                                            loading="lazy" alt="" class="footer-share-icon" /></a>
+                                    <a href="https://www.linkedin.com/" target="_blank"
+                                        class="footer-share-link w-inline-block"><img
+                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180586247610e1d6549_Linkdin.svg"
+                                            loading="lazy" alt="" class="footer-share-icon" /></a><a
+                                        href="https://facebook.com/" target="_blank"
+                                        class="footer-share-link w-inline-block"><img
+                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180787a244b5829ab6a_Facebook.svg"
+                                            loading="lazy" alt="" class="footer-share-icon" /></a>
+                                </div>
+                            </div>
+                            <div class="footer-right">
+                                <div class="footer-menu-column">
+                                    <div class="text-style-h4 footer-menu-title">Main Pages</div>
+                                    <div class="footer-menu-list"><a href="/" aria-current="page"
+                                            class="paragraph-01 footer-menu w--current">Home</a><a href="/about"
+                                            class="paragraph-01 footer-menu">About</a><a href="/features"
+                                            class="paragraph-01 footer-menu">Features</a><a href="/pricing"
+                                            class="paragraph-01 footer-menu">Pricing</a>
+                                        <a href="/blog" class="paragraph-01 footer-menu">Blog</a><a href="/contact"
+                                            class="paragraph-01 footer-menu">Contact</a>
+                                    </div>
+                                </div>
+                                <div class="footer-menu-column">
+                                    <div class="text-style-h4 footer-menu-title">Inner Pages</div>
+                                    <div class="footer-menu-list"><a href="/faq"
+                                            class="paragraph-01 footer-menu">Faq</a><a href="/career"
+                                            class="paragraph-01 footer-menu">Career</a><a
+                                            href="https://signalx.webflow.io/blog/launching-your-first-ad-a-step-by-step-guide-to-facebook-google-ads"
+                                            class="paragraph-01 footer-menu">Blog Single</a>
+                                        <a href="https://signalx.webflow.io/product/pro"
+                                            class="paragraph-01 footer-menu">Pricing
+                                            Single</a><a href="/integration"
+                                            class="paragraph-01 footer-menu">Integrations</a><a
+                                            href="#https://signalx.webflow.io/integration/behance"
+                                            class="paragraph-01 footer-menu">Integration Single</a>
+                                    </div>
+                                </div>
+                                <div class="footer-menu-column">
+                                    <div class="text-style-h4 footer-menu-title">Utility Pages</div>
+                                    <div class="footer-menu-list"><a href="/404"
+                                            class="paragraph-01 footer-menu">404</a><a href="/401"
+                                            class="paragraph-01 footer-menu">Password</a><a href="/utility-page/license"
+                                            class="paragraph-01 footer-menu">License</a><a
+                                            href="/utility-page/style-guide" class="paragraph-01 footer-menu">Style
+                                            Guide</a>
+                                        <a href="/utility-page/changelog" class="paragraph-01 footer-menu">Changelog</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div data-w-id="7ff5c1fa-a55b-6a86-54bf-1b5e9acc64fe" class="copyright-wrap">
+                    <div class="paragraph-01 copyright-text">© 2025 SignalX. All rights reserved - License. Powered by
+                        <a href="https://www.webflow.com" target="_blank" class="copyright-link">Webflow</a>.
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=68c837a3fd39ba6dee05b987"
         type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
