@@ -132,11 +132,11 @@ a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
     .navbar-brand span {
         font-size: 18px;
     }
-    
+
     .hero-heading {
         white-space: normal;
     }
-    
+
     .hero-heading span,
     .hero-subtitle span {
         white-space: normal;
@@ -147,7 +147,7 @@ a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
     .navbar-brand img {
         height: 32px;
     }
-    
+
     .navbar-brand span {
         font-size: 16px;
     }
@@ -162,4 +162,244 @@ a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
 [style*="display: none"],
 [style*="display:none"] {
     display: none !important;
+}
+
+/* ===================================
+   Rank & Badges Section - Row Layout (Matching Image 2)
+   =================================== */
+
+.ranks-badges {
+    background: linear-gradient(180deg, #0a0e1a 0%, #0f1420 100%);
+    padding: 120px 0;
+    position: relative;
+}
+
+.ranks-badges-wrap {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+/* Cards Container */
+.ranks-cards-container {
+    margin-top: 60px;
+    padding: 0 20px;
+}
+
+/* Header Pills - Blue Style from Image 2 */
+.ranks-header-pills {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.header-pill {
+    background: linear-gradient(135deg, #4169e1 0%, #5b7ff5 100%);
+    padding: 16px 24px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-family: 'Inter Tight', sans-serif;
+    box-shadow: 0 3px 10px rgba(65, 105, 225, 0.3);
+}
+
+/* Rank Cards - Row-based Layout */
+.ranks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Each rank row contains 3 cards */
+.rank-card {
+    background: rgba(240, 242, 245, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    border-radius: 10px;
+    padding: 20px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Create row grouping - every 3 cards form a row */
+.rank-card:nth-child(3n+1) {
+    grid-column: 1;
+}
+
+.rank-card:nth-child(3n+2) {
+    grid-column: 2;
+}
+
+.rank-card:nth-child(3n) {
+    grid-column: 3;
+}
+
+/* Make the grid display rows */
+.ranks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    row-gap: 14px;
+}
+
+.rank-card:hover {
+    background: rgba(240, 242, 245, 0.12);
+    border-color: rgba(99, 102, 241, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Content */
+.rank-card-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(226, 232, 240, 0.95);
+    font-family: 'Inter Tight', sans-serif;
+}
+
+.rank-card-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(203, 213, 225, 0.9);
+    font-family: 'Inter Tight', sans-serif;
+}
+
+.rank-card-reward {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: rgba(96, 165, 250, 0.9);
+    font-family: 'Inter Tight', sans-serif;
+}
+
+/* Note Section */
+.ranks-note {
+    margin-top: 48px;
+    padding: 0 20px;
+}
+
+.note-text {
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(148, 163, 184, 0.65);
+    font-family: 'Inter Tight', sans-serif;
+    font-style: italic;
+    margin: 0;
+    text-align: left;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .ranks-badges {
+        padding: 80px 0;
+    }
+
+    .ranks-badges-wrap {
+        max-width: 100%;
+    }
+
+    .header-pill {
+        padding: 14px 20px;
+        font-size: 10px;
+    }
+
+    .rank-card {
+        padding: 18px 20px;
+        min-height: 60px;
+    }
+
+    .rank-card-name {
+        font-size: 12px;
+    }
+
+    .rank-card-value {
+        font-size: 13px;
+    }
+
+    .rank-card-reward {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 767px) {
+    .ranks-badges {
+        padding: 60px 0;
+    }
+
+    .ranks-cards-container {
+        padding: 0 16px;
+    }
+
+    .ranks-header-pills {
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .header-pill {
+        padding: 12px 16px;
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    .ranks-grid {
+        gap: 8px;
+        row-gap: 10px;
+    }
+
+    .rank-card {
+        padding: 16px 12px;
+        min-height: 55px;
+    }
+
+    .rank-card-name {
+        font-size: 10px;
+        letter-spacing: 0.3px;
+    }
+
+    .rank-card-value {
+        font-size: 11px;
+    }
+
+    .rank-card-reward {
+        font-size: 9px;
+        letter-spacing: 0.2px;
+    }
+
+    .note-text {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .ranks-header-pills,
+    .ranks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-pill {
+        padding: 14px 20px;
+        font-size: 10px;
+    }
+
+    .rank-card {
+        padding: 18px 16px;
+    }
+
+    .rank-card-name,
+    .rank-card-value,
+    .rank-card-reward {
+        font-size: 12px;
+    }
 }
