@@ -284,7 +284,7 @@ a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.4));
+    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.3));
     /* Glow */
 }
 
@@ -307,7 +307,7 @@ a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.6));
+    filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.4));
 }
 
 /* Note Section */
