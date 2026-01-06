@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Optimization Guide - DAG ARMY</title>
+    <style>
+        body {
+            font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            line-height: 1.6;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #00ff88;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #00ccff;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            border-bottom: 2px solid #00ccff;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #ff6b6b;
+            font-size: 1.4rem;
+            margin-top: 30px;
+        }
+
+        .issue {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .solution {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        pre {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        ul {
+            line-height: 2;
+        }
+
+        .metric {
+            display: inline-block;
+            background: rgba(0, 204, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🚀 DAG ARMY Website - Performance Optimization Guide</h1>
+    <p><strong>Analysis Date:</strong> January 6, 2026</p>
+
+    <h2>📊 Current Performance Issues</h2>
+
+    <div class="issue">
+        <h3>1. Heavy JavaScript Bundles</h3>
+        <p><strong>Problem:</strong> Three large Webflow JavaScript files loading at the end of the page:</p>
+        <ul>
+            <li><code>webflow.schunk.07a052941686489a.js</code></li>
+            <li><code>webflow.schunk.552a7623c09911c1.js</code></li>
+            <li><code>webflow.829d113a.7e0bce1df67d6ec7.js</code></li>
+        </ul>
+        <p><strong>Impact:</strong> These scripts block rendering and cause the site to feel sluggish, especially on
+            slower connections.</p>
+    </div>
+
+    <div class="issue">
+        <h3>2. Blocking External CSS</h3>
+        <p><strong>Problem:</strong> Large external CSS file from Webflow CDN:</p>
+        <ul>
+            <li><code>signalx.webflow.shared.88691a7fe.css</code> (loaded synchronously)</li>
+        </ul>
+        <p><strong>Impact:</strong> Delays first contentful paint and blocks rendering.</p>
+    </div>
+
+    <div class="issue">
+        <h3>3. No Resource Hints</h3>
+        <p><strong>Problem:</strong> Missing preload, prefetch, and dns-prefetch directives</p>
+        <p><strong>Impact:</strong> Browser can't optimize resource loading</p>
+    </div>
+
+    <div class="issue">
+        <h3>4. Heavy Animations</h3>
+        <p><strong>Problem:</strong> Multiple Lottie animations loading simultaneously</p>
+        <p><strong>Impact:</strong> CPU-intensive, especially on mobile devices</p>
+    </div>
+
+    <h2>✅ Recommended Solutions</h2>
+
+    <div class="solution">
+        <h3>Solution 1: Defer Non-Critical JavaScript</h3>
+        <p>Add <code>defer</code> or <code>async</code> attributes to script tags:</p>
+        <pre><code>&lt;!-- Instead of: --&gt;
+&lt;script src="webflow.js"&gt;&lt;/script&gt;
+
+&lt;!-- Use: --&gt;
+&lt;script src="webflow.js" defer&gt;&lt;/script&gt;</code></pre>
+    </div>
+
+    <div class="solution">
+        <h3>Solution 2: Add Resource Hints</h3>
+        <p>Add these to the <code>&lt;head&gt;</code> section:</p>
+        <pre><code>&lt;!-- DNS Prefetch --&gt;
+&lt;link rel="dns-prefetch" href="https://cdn.prod.website-files.com"&gt;
+&lt;link rel="dns-prefetch" href="https://d3e54v103j8qbb.cloudfront.net"&gt;
+
+&lt;!-- Preconnect --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+
+&lt;!-- Preload Critical Resources --&gt;
+&lt;link rel="preload" as="style" href="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/css/signalx.webflow.shared.88691a7fe.css"&gt;</code></pre>
+    </div>
+
+    <div class="solution">
+        <h3>Solution 3: Lazy Load Images</h3>
+        <p>All images already have <code>loading="lazy"</code> ✅ Good!</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution 4: Optimize Animations</h3>
+        <p>Reduce animation complexity and use CSS transforms instead of Lottie where possible:</p>
+        <pre><code>/* Use CSS transforms (GPU accelerated) */
+.animated-element {
+    transform: translateZ(0);
+    will-change: transform;
+    transition: transform 0.3s ease;
+}
+
+/* Instead of heavy Lottie animations */</code></pre>
+    </div>
+
+    <div class="solution">
+        <h3>Solution 5: Minify and Compress</h3>
+        <p>Enable gzip/brotli compression on your server:</p>
+        <ul>
+            <li>Reduces file sizes by 70-80%</li>
+            <li>Faster download times</li>
+            <li>Better user experience</li>
+        </ul>
+    </div>
+
+    <h2>🎯 Quick Wins (Implement Now)</h2>
+
+    <div class="solution">
+        <h3>1. Add defer to scripts</h3>
+        <p>Change all script tags at the bottom of index.html to use defer:</p>
+        <pre><code>&lt;script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js" 
+        defer
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" 
+        crossorigin="anonymous"&gt;&lt;/script&gt;
+
+&lt;script src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/js/webflow.schunk.07a052941686489a.js" 
+        defer&gt;&lt;/script&gt;
+
+&lt;script src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/js/webflow.schunk.552a7623c09911c1.js" 
+        defer&gt;&lt;/script&gt;
+
+&lt;script src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/js/webflow.829d113a.7e0bce1df67d6ec7.js" 
+        defer&gt;&lt;/script&gt;</code></pre>
+    </div>
+
+    <div class="solution">
+        <h3>2. Add Resource Hints to Head</h3>
+        <p>Add after line 23 in index.html (after the preconnect to fonts.gstatic.com):</p>
+        <pre><code>&lt;!-- Performance Optimization --&gt;
+&lt;link rel="dns-prefetch" href="https://cdn.prod.website-files.com"&gt;
+&lt;link rel="dns-prefetch" href="https://d3e54v103j8qbb.cloudfront.net"&gt;
+&lt;link rel="preconnect" href="https://cdn.prod.website-files.com"&gt;</code></pre>
+    </div>
+
+    <div class="solution">
+        <h3>3. Reduce Animation Load</h3>
+        <p>Consider disabling some Lottie animations on mobile devices:</p>
+        <pre><code>// In js/main.js
+if (window.innerWidth &lt; 768) {
+    // Disable heavy animations on mobile
+    document.querySelectorAll('[data-animation-type="lottie"]').forEach(el =&gt; {
+        el.style.display = 'none';
+    });
+}</code></pre>
+    </div>
+
+    <h2>📈 Expected Performance Improvements</h2>
+
+    <div class="metric">Initial Load: -30%</div>
+    <div class="metric">Time to Interactive: -40%</div>
+    <div class="metric">First Contentful Paint: -25%</div>
+    <div class="metric">Lighthouse Score: +15-20 points</div>
+
+    <h2>🔧 Implementation Steps</h2>
+
+    <ol>
+        <li><strong>Backup your current index.html</strong> (already have index-original-backup.html ✅)</li>
+        <li><strong>Add resource hints</strong> to the &lt;head&gt; section</li>
+        <li><strong>Add defer attributes</strong> to all script tags</li>
+        <li><strong>Test on localhost</strong> to ensure everything still works</li>
+        <li><strong>Measure performance</strong> using Chrome DevTools</li>
+        <li><strong>Deploy changes</strong> once verified</li>
+    </ol>
+
+    <h2>🛠️ Testing Tools</h2>
+
+    <ul>
+        <li><strong>Chrome DevTools</strong> - Network tab, Performance tab</li>
+        <li><strong>Lighthouse</strong> - Built into Chrome DevTools</li>
+        <li><strong>WebPageTest.org</strong> - Detailed performance analysis</li>
+        <li><strong>GTmetrix</strong> - Performance scoring</li>
+    </ul>
+
+    <p style="margin-top: 60px; padding-top: 40px; border-top: 1px solid #333; text-align: center; color: #666;">
+        <strong>Ready to optimize?</strong> Let me know and I'll apply these changes to your index.html file!
+    </p>
+</body>
+
+</html>
