@@ -1,11 +1,12 @@
 /* ===================================
-   Airdrop Distribution Section - Dark Theme
+   Airdrop Distribution Section - Premium Theme
    =================================== */
 
 .airdrop-distribution {
-    background: #010510;
-    padding: 120px 0;
+    padding: 60px 0;
+    /* Reduced from 120px */
     position: relative;
+    background: transparent;
 }
 
 .airdrop-wrap {
@@ -14,7 +15,8 @@
 }
 
 .airdrop-main-wrap {
-    margin-top: 60px;
+    margin-top: 40px;
+    /* Reduced from 60px */
     padding: 0 20px;
 }
 
@@ -32,7 +34,7 @@
     color: rgba(148, 163, 184, 0.8);
 }
 
-/* Distribution Cards */
+/* Distribution Cards - Matching Benefits Style */
 .distribution-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -41,27 +43,36 @@
 }
 
 .distribution-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
     padding: 32px 24px;
     text-align: center;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
 }
 
 .distribution-card:hover {
-    background: rgba(40, 45, 65, 0.7);
-    border-color: rgba(99, 102, 241, 0.25);
-    transform: translateY(-2px);
+    background: rgba(40, 45, 65, 0.6);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .distribution-percentage {
-    font-size: 48px;
-    font-weight: 700;
-    color: rgba(99, 102, 241, 0.9);
+    font-size: 64px;
+    font-weight: 800;
+    background: linear-gradient(180deg, #ffffff 0%, #a855f7 40%, #6366f1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 16px;
     font-family: 'Inter Tight', sans-serif;
+    line-height: 1.2;
+    padding-bottom: 5px;
+    filter: drop-shadow(0 4px 20px rgba(168, 85, 247, 0.5));
 }
 
 .distribution-title {
@@ -95,9 +106,9 @@
 
 /* Characteristics Card */
 .characteristics-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
     padding: 32px;
     backdrop-filter: blur(10px);
 }
@@ -116,7 +127,7 @@
 
 .characteristic-icon {
     font-size: 18px;
-    color: rgba(99, 102, 241, 0.8);
+    color: #818cf8;
 }
 
 .characteristic-text {
@@ -126,13 +137,14 @@
 }
 
 /* ===================================
-   DAG Points Section - Dark Theme
+   DAG Points Section - Premium Theme
    =================================== */
 
 .dag-points {
-    background: #010510;
-    padding: 120px 0;
+    padding: 60px 0;
+    /* Reduced from 120px */
     position: relative;
+    background: transparent;
 }
 
 .dag-points-wrap {
@@ -141,7 +153,8 @@
 }
 
 .dag-points-main-wrap {
-    margin-top: 60px;
+    margin-top: 40px;
+    /* Reduced from 60px */
     padding: 0 20px;
 }
 
@@ -168,9 +181,9 @@
 }
 
 .points-source-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
     padding: 28px 24px;
     text-align: center;
     transition: all 0.3s ease;
@@ -178,28 +191,38 @@
 }
 
 .points-source-card:hover {
-    background: rgba(40, 45, 65, 0.7);
-    border-color: rgba(99, 102, 241, 0.25);
-    transform: translateY(-2px);
+    background: rgba(40, 45, 65, 0.6);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .source-icon {
-    font-size: 32px;
-    margin-bottom: 16px;
+    font-size: 56px;
+    margin-bottom: 24px;
+    display: inline-block;
+    filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.6));
+    transition: transform 0.3s ease;
+}
+
+.points-source-card:hover .source-icon {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .source-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.95);
-    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
     font-family: 'Inter Tight', sans-serif;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 .source-desc {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.75);
+    color: rgba(148, 163, 184, 0.9);
     font-family: 'Inter Tight', sans-serif;
 }
 
@@ -219,9 +242,9 @@
 
 /* Points Purpose Card */
 .points-purpose-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
     padding: 32px;
     backdrop-filter: blur(10px);
     margin-bottom: 32px;
@@ -241,7 +264,7 @@
 
 .purpose-icon {
     font-size: 18px;
-    color: rgba(99, 102, 241, 0.8);
+    color: #818cf8;
 }
 
 .purpose-text {
@@ -266,7 +289,8 @@
 
     .airdrop-distribution,
     .dag-points {
-        padding: 80px 0;
+        padding: 40px 0;
+        /* Reduced from 80px */
     }
 
     .distribution-cards {
@@ -287,7 +311,8 @@
 
     .airdrop-distribution,
     .dag-points {
-        padding: 60px 0;
+        padding: 40px 0;
+        /* Reduced from 60px */
     }
 
     .airdrop-main-wrap,

@@ -1,11 +1,12 @@
 /* ===================================
-   Contribute & Earn Section - Dark Theme (Matching Image 2 Layout)
+   Contribute & Earn Section - Premium Theme
    =================================== */
 
 .contribute-earn {
-    background: #010510;
-    padding: 120px 0;
+    padding: 60px 0;
+    /* Reduced gap */
     position: relative;
+    background: transparent;
 }
 
 .contribute-earn-wrap {
@@ -14,7 +15,8 @@
 }
 
 .contribute-earn-main-wrap {
-    margin-top: 60px;
+    margin-top: 40px;
+    /* Tighter layout */
     padding: 0 20px;
 }
 
@@ -37,36 +39,41 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
+    /* Reduced gap */
 }
 
 .contribution-area-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
-    padding: 28px 24px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
+    padding: 32px 24px;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
 }
 
 .contribution-area-card:hover {
-    background: rgba(40, 45, 65, 0.7);
-    border-color: rgba(99, 102, 241, 0.25);
-    transform: translateY(-2px);
+    background: rgba(40, 45, 65, 0.6);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .contribution-area-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.95);
-    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
     font-family: 'Inter Tight', sans-serif;
+    letter-spacing: 0.3px;
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    /* Premium Glow */
 }
 
 .contribution-area-desc {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.75);
+    color: rgba(148, 163, 184, 0.9);
     font-family: 'Inter Tight', sans-serif;
 }
 
@@ -86,9 +93,9 @@
 
 /* Task Characteristics Card */
 .task-characteristics-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
     padding: 32px;
     backdrop-filter: blur(10px);
 }
@@ -101,27 +108,47 @@
 
 .task-characteristic-item {
     text-align: center;
+    position: relative;
+    padding: 10px;
+}
+
+.task-characteristic-item::after {
+    content: '';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 40px;
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.task-characteristic-item:last-child::after {
+    display: none;
 }
 
 .task-characteristic-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.95);
+    font-size: 18px;
+    font-weight: 700;
+    color: #818cf8;
+    /* Accent color */
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.25);
+    /* Subtle Glow */
     margin-bottom: 8px;
     font-family: 'Inter Tight', sans-serif;
 }
 
 .task-characteristic-desc {
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.75);
+    color: rgba(148, 163, 184, 0.85);
     font-family: 'Inter Tight', sans-serif;
 }
 
 /* Responsive Design */
 @media (max-width: 991px) {
     .contribute-earn {
-        padding: 80px 0;
+        padding: 40px 0;
     }
 
     .contribution-areas-grid {
@@ -133,11 +160,15 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
+
+    .task-characteristic-item::after {
+        display: none;
+    }
 }
 
 @media (max-width: 767px) {
     .contribute-earn {
-        padding: 60px 0;
+        padding: 40px 0;
     }
 
     .contribute-earn-main-wrap {
@@ -151,11 +182,11 @@
 
     .contribution-area-title,
     .task-characteristic-title {
-        font-size: 15px;
+        font-size: 18px;
     }
 
     .contribution-area-desc,
     .task-characteristic-desc {
-        font-size: 12px;
+        font-size: 13px;
     }
 }

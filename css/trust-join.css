@@ -1,11 +1,12 @@
 /* ===================================
-   Built on Trust Section - Dark Theme
+   Built on Trust & Join Section - Premium Theme
    =================================== */
 
 .built-on-trust {
-    background: #010510;
-    padding: 120px 0;
+    padding: 60px 0;
+    /* Reduced gap */
     position: relative;
+    background: transparent;
 }
 
 .built-on-trust-wrap {
@@ -14,7 +15,8 @@
 }
 
 .built-on-trust-main-wrap {
-    margin-top: 60px;
+    margin-top: 40px;
+    /* Tighter layout */
     padding: 0 20px;
 }
 
@@ -41,68 +43,74 @@
 }
 
 .core-principle-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
     padding: 28px 24px;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
 }
 
 .core-principle-card:hover {
-    background: rgba(40, 45, 65, 0.7);
-    border-color: rgba(99, 102, 241, 0.25);
-    transform: translateY(-2px);
+    background: rgba(40, 45, 65, 0.6);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .core-principle-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.95);
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
     margin-bottom: 10px;
     font-family: 'Inter Tight', sans-serif;
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    /* Premium Glow */
 }
 
 .core-principle-text {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.75);
+    color: rgba(148, 163, 184, 0.9);
     font-family: 'Inter Tight', sans-serif;
 }
 
 /* Sustainable Rewards Card */
 .sustainable-rewards-card {
-    background: rgba(30, 35, 50, 0.6);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%);
     border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 32px;
     backdrop-filter: blur(10px);
     text-align: center;
 }
 
 .sustainable-rewards-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.95);
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
     margin-bottom: 12px;
     font-family: 'Inter Tight', sans-serif;
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    /* Stronger Glow */
 }
 
 .sustainable-rewards-text {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.75);
+    color: rgba(148, 163, 184, 0.9);
     font-family: 'Inter Tight', sans-serif;
 }
 
 /* ===================================
-   Who Should Join Section - Dark Theme
+   Who Should Join Section - Premium Theme
    =================================== */
 
 .who-should-join {
-    background: #010510;
-    padding: 120px 0;
+    padding: 60px 0;
+    /* Reduced gap */
     position: relative;
+    background: transparent;
 }
 
 .who-should-join-wrap {
@@ -111,7 +119,7 @@
 }
 
 .who-should-join-main-wrap {
-    margin-top: 60px;
+    margin-top: 40px;
     padding: 0 20px;
 }
 
@@ -123,32 +131,35 @@
 }
 
 .join-criteria-card {
-    background: rgba(30, 35, 50, 0.6);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 12px;
-    padding: 28px 24px;
+    background: rgba(30, 35, 50, 0.4);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 16px;
+    padding: 32px 24px;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
 }
 
 .join-criteria-card:hover {
-    background: rgba(40, 45, 65, 0.7);
-    border-color: rgba(99, 102, 241, 0.25);
-    transform: translateY(-2px);
+    background: rgba(40, 45, 65, 0.6);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .join-criteria-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.95);
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
     margin-bottom: 10px;
     font-family: 'Inter Tight', sans-serif;
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    /* Premium Glow */
 }
 
 .join-criteria-text {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.75);
+    color: rgba(148, 163, 184, 0.9);
     font-family: 'Inter Tight', sans-serif;
 }
 
@@ -157,7 +168,7 @@
 
     .built-on-trust,
     .who-should-join {
-        padding: 80px 0;
+        padding: 40px 0;
     }
 
     .core-principles-grid,
@@ -171,7 +182,7 @@
 
     .built-on-trust,
     .who-should-join {
-        padding: 60px 0;
+        padding: 40px 0;
     }
 
     .built-on-trust-main-wrap,
@@ -182,12 +193,12 @@
     .core-principle-title,
     .join-criteria-title,
     .sustainable-rewards-title {
-        font-size: 15px;
+        font-size: 18px;
     }
 
     .core-principle-text,
     .join-criteria-text,
     .sustainable-rewards-text {
-        font-size: 12px;
+        font-size: 13px;
     }
 }
