@@ -1,0 +1,165 @@
+/* ===================================
+   DAG ARMY Website - Main Styles
+   =================================== */
+
+/* Hide Webflow badge */
+.w-webflow-badge,
+a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Custom Logo Styling */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-brand span {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Hero Section Animations */
+.hero-badge-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+.hero-heading-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+.hero-subtitle-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+.hero-button-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+/* Hero Bottom Section */
+.hero-bottom-wrap {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+/* AI Badge Animation */
+.ai-badge {
+    -webkit-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 35px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+/* Hero Lines */
+.hero-left-line-wrap,
+.hero-right-line-wrap {
+    opacity: 0;
+}
+
+/* Hero Shadow */
+.hero-shadow-wrap {
+    -webkit-transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -moz-transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    -ms-transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    transform: translate3d(0, 50px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+    opacity: 0;
+}
+
+/* Navbar */
+.navbar-two {
+    opacity: 0;
+}
+
+/* Text Formatting */
+.hero-heading {
+    white-space: nowrap;
+}
+
+.hero-heading span {
+    display: block;
+    white-space: nowrap;
+}
+
+.hero-subtitle span {
+    display: block;
+    white-space: nowrap;
+}
+
+.section-heading {
+    white-space: nowrap;
+}
+
+.subtitle {
+    white-space: nowrap;
+}
+
+/* Responsive Design Helpers */
+@media (max-width: 991px) {
+    .navbar-brand span {
+        font-size: 18px;
+    }
+    
+    .hero-heading {
+        white-space: normal;
+    }
+    
+    .hero-heading span,
+    .hero-subtitle span {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 767px) {
+    .navbar-brand img {
+        height: 32px;
+    }
+    
+    .navbar-brand span {
+        font-size: 16px;
+    }
+}
+
+/* Hidden Elements */
+.hide {
+    display: none !important;
+}
+
+/* Display None Utilities */
+[style*="display: none"],
+[style*="display:none"] {
+    display: none !important;
+}

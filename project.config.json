@@ -1,0 +1,50 @@
+{
+    "name": "DAG ARMY Website",
+    "version": "1.0.0",
+    "description": "Official community growth program website",
+    "type": "static",
+    "framework": "webflow-export",
+    "optimization": {
+        "css": "extracted",
+        "js": "modularized",
+        "images": "lazy-loaded",
+        "fonts": "google-fonts"
+    },
+    "deployment": {
+        "recommended": "vercel",
+        "alternatives": [
+            "netlify",
+            "github-pages"
+        ],
+        "build_command": "npm run build",
+        "output_directory": "./"
+    },
+    "local_development": {
+        "port": 5000,
+        "command": "npm run serve",
+        "hot_reload": false
+    },
+    "external_dependencies": {
+        "webflow_css": "https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/css/signalx.webflow.shared.88691a7fe.css",
+        "webfont_loader": "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js",
+        "webflow_js": "https://d3e54v103j8qbb.cloudfront.net/js/webflow.4d07f6c50.js"
+    },
+    "features": [
+        "responsive-design",
+        "lottie-animations",
+        "smooth-scrolling",
+        "seo-optimized",
+        "webflow-commerce-ready"
+    ],
+    "pages": {
+        "home": "index.html"
+    },
+    "assets": {
+        "logo": "logo1.png",
+        "hero_image": "dashboard-hero.jpeg"
+    },
+    "links": {
+        "dashboard": "http://localhost:4028",
+        "repository": "https://github.com/Om23092005/dagarmy-officail.git"
+    }
+}

@@ -1,36 +1,165 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DAG ARMY Website
 
-## Getting Started
+Official community growth program website for DAGCHAIN and DAGGPT.
 
-First, run the development server:
+## 📋 Project Overview
 
+This is a static website built with Webflow and exported as HTML. The site promotes the DAG ARMY community program where users can earn rewards for building, promoting, and scaling the AI-powered decentralized ecosystem.
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd dagarmy-website
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Running Locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Option 1: Using npm serve (Recommended)
+```bash
+npm run serve
+```
+The site will be available at `http://localhost:5000`
 
-## Learn More
+#### Option 2: Using Next.js dev server
+```bash
+npm run dev
+```
+The site will be available at `http://localhost:3000`
 
-To learn more about Next.js, take a look at the following resources:
+#### Option 3: Using Python HTTP Server
+```bash
+python -m http.server 8000
+```
+The site will be available at `http://localhost:8000`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+dagarmy-website/
+├── index.html              # Main HTML file
+├── css/
+│   └── styles.css         # Custom styles (extracted from inline)
+├── js/
+│   └── main.js            # Main JavaScript file (organized)
+├── logo1.png              # DAG ARMY logo
+├── dashboard-hero.jpeg    # Dashboard preview image
+├── package.json           # Node.js dependencies
+├── README.md              # This file
+└── node_modules/          # Dependencies (gitignored)
+```
 
-## Deploy on Vercel
+## 🎨 Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Responsive Design**: Fully responsive across all devices
+- **Smooth Animations**: Lottie animations and CSS transitions
+- **SEO Optimized**: Proper meta tags and semantic HTML
+- **Fast Loading**: Optimized assets and lazy loading
+- **Modern UI**: Clean, professional design with dark theme
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Technologies Used
+
+- **HTML5**: Semantic markup
+- **CSS3**: Modern styling with animations
+- **JavaScript**: Vanilla JS for interactions
+- **Webflow**: Original design platform
+- **Lottie**: Animation library
+- **Google Fonts**: Inter Tight font family
+
+## 📦 Available Scripts
+
+```bash
+npm run dev      # Start Next.js development server
+npm run build    # Build for production
+npm run start    # Start production server
+npm run lint     # Run ESLint
+npm run serve    # Serve static files (custom script)
+```
+
+## 🔧 Optimization Done
+
+1. **Code Organization**:
+   - Extracted inline CSS to separate file
+   - Organized JavaScript into modular functions
+   - Added proper comments and documentation
+
+2. **Performance**:
+   - Lazy loading for images
+   - Optimized asset delivery
+   - Minified external resources
+
+3. **Maintainability**:
+   - Clean file structure
+   - Separated concerns (HTML/CSS/JS)
+   - Added comprehensive documentation
+
+## 🌐 Deployment
+
+### Vercel (Recommended)
+```bash
+npm install -g vercel
+vercel
+```
+
+### Netlify
+1. Connect your repository to Netlify
+2. Build command: `npm run build`
+3. Publish directory: `./`
+
+### GitHub Pages
+1. Push to GitHub
+2. Enable GitHub Pages in repository settings
+3. Select main branch as source
+
+## 📝 Configuration
+
+### Update Dashboard Link
+Edit line 367 in `index.html` to change the dashboard URL:
+```html
+<a href="http://localhost:4028" ...>Launch Dashboard</a>
+```
+
+### Update Logo
+Replace `logo1.png` with your custom logo (recommended size: 40px height)
+
+### Update Meta Tags
+Edit the `<head>` section in `index.html` for SEO customization
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is part of the DAG ARMY ecosystem.
+
+## 🔗 Links
+
+- **Dashboard**: http://localhost:4028
+- **Main Website**: [Add your main website URL]
+- **Documentation**: [Add documentation URL]
+- **Community**: [Add community links]
+
+## 📞 Support
+
+For support, please contact the DAG ARMY team or open an issue in the repository.
+
+---
+
+**Built with ❤️ by the DAG ARMY Community**
