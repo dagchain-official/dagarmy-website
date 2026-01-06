@@ -3,7 +3,7 @@
    =================================== */
 
 .built-on-trust {
-    background: linear-gradient(180deg, #0f1420 0%, #0a0e1a 100%);
+    background: #010510;
     padding: 120px 0;
     position: relative;
 }
@@ -100,7 +100,7 @@
    =================================== */
 
 .who-should-join {
-    background: linear-gradient(180deg, #0a0e1a 0%, #0f1420 100%);
+    background: #010510;
     padding: 120px 0;
     position: relative;
 }
