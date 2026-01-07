@@ -184,20 +184,32 @@ a[href*="webflow.com"][target="_blank"][style*="position: fixed"] {
 
 /* Table Container - Premium Glass */
 .ranks-table-container {
-    margin-top: 40px;
+    margin-top: 50px;
     padding: 1px;
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(168, 85, 247, 0.1) 100%);
     border-radius: 24px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.ranks-table-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(99, 102, 241, 0.2), transparent 70%);
+    z-index: 0;
+    pointer-events: none;
 }
 
 .ranks-table-inner {
-    background: rgba(10, 14, 26, 0.85);
-    /* Darker glass */
+    background: linear-gradient(145deg, rgba(15, 17, 26, 0.9), rgba(10, 14, 26, 0.95));
     border-radius: 23px;
     padding: 40px;
     backdrop-filter: blur(20px);
     overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 /* Ranks Table */

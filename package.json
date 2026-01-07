@@ -4,10 +4,10 @@
     "private": true,
     "description": "DAG ARMY - Official community growth program for DAGCHAIN and DAGGPT",
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
+        "dev": "npx -y serve .",
+        "build": "echo 'No build step for static site'",
+        "start": "npx -y serve .",
+        "lint": "echo 'No linting for static site'",
         "serve": "npx -y serve -l 5000"
     },
     "dependencies": {

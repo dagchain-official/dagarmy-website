@@ -57,6 +57,7 @@
     <link href="css/contribute-earn.css" rel="stylesheet" type="text/css" />
     <link href="css/trust-join.css" rel="stylesheet" type="text/css" />
     <link href="css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="css/custom-hover.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         window.__WEBFLOW_CURRENCY_SETTINGS = {
             "currencyCode": "USD",
@@ -74,7 +75,7 @@
     <div class="page-wrapper two">
         <div class="page-inner-wrapper">
             <div class="main-wrapper two">
-                <section data-w-id="a4ec0004-6ab3-b6af-11c4-8f9f4166b287" class="hero">
+                <section id="join" data-w-id="a4ec0004-6ab3-b6af-11c4-8f9f4166b287" class="hero">
                     <div class="hero-top-wrap">
                         <div class="hero-top-inner-wrap">
                             <div style="opacity:0" class="navbar-two">
@@ -93,23 +94,23 @@
                                             <nav role="navigation" class="nav-menu-wrapper w-nav-menu">
                                                 <ul role="list" class="nav-menu w-list-unstyled">
                                                     <li class="nav-item">
-                                                        <a href="/" aria-current="page"
+                                                        <a href="#join" aria-current="page"
                                                             class="nav-link w-inline-block w--current">
                                                             <div class="nav-link-text">Home</div>
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a href="/about" class="nav-link w-inline-block">
+                                                        <a href="#about" class="nav-link w-inline-block">
                                                             <div class="nav-link-text">About</div>
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a href="/features" class="nav-link w-inline-block">
+                                                        <a href="#about" class="nav-link w-inline-block">
                                                             <div class="nav-link-text">Features</div>
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a href="/pricing" class="nav-link w-inline-block">
+                                                        <a href="#ranks" class="nav-link w-inline-block">
                                                             <div class="nav-link-text">Ranks</div>
                                                         </a>
                                                     </li>
@@ -126,12 +127,12 @@
                                                                     <div class="nav-dropdown-list">
                                                                         <div class="paragraph-02 text-grey">Main Pages
                                                                         </div>
-                                                                        <div class="dropdown-page-link-list"><a href="/"
-                                                                                aria-current="page"
+                                                                        <div class="dropdown-page-link-list"><a
+                                                                                href="#join" aria-current="page"
                                                                                 class="paragraph-02 dropdown-link w--current">Home</a><a
-                                                                                href="/about"
+                                                                                href="#about"
                                                                                 class="paragraph-02 dropdown-link">About</a><a
-                                                                                href="/features"
+                                                                                href="#about"
                                                                                 class="paragraph-02 dropdown-link">Features</a>
                                                                             <a href="#ranks"
                                                                                 class="paragraph-02 dropdown-link">Ranks</a><a
@@ -728,14 +729,14 @@
                         </div>
                     </div>
                 </section>
-                <section class="features">
+                <section id="about" class="features">
                     <div class="container">
                         <div class="features-wrap">
                             <div class="section-header-wrap">
                                 <div class="section-header-content small">
                                     <div data-w-id="ee0a6233-5526-48f8-225d-29421ce40730" class="section-badge-wrap">
                                         <div class="badge">
-                                            <div class="tag">Features</div>
+                                            <div class="tag">About</div>
                                         </div>
                                     </div>
                                     <div class="section-text-wrap">
@@ -782,14 +783,13 @@
                                 </div>
                                 <div class="features-list-wrap">
                                     <div class="features-card card-03">
-                                        <div class="features-image-wrap"><img
-                                                src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d55f7fccb3059f27cf28b3_Features%2001.avif"
-                                                loading="lazy" alt="Features Image " class="features-image-wrap" />
+                                        <div class="features-image-wrap"><img src="event%20section.png" loading="lazy"
+                                                alt="Event Section" class="features-image-wrap" />
                                         </div>
                                         <div class="features-text-wrap _03">
-                                            <div class="text-style-h4">Merit-Based System</div>
-                                            <div class="paragraph-01 text-grey">Your success is determined by real value
-                                                and contribution - no shortcuts, just merit.</div>
+                                            <div class="text-style-h4">Event-Based Progression</div>
+                                            <div class="paragraph-01 text-grey">Participation and verified activity
+                                                determine progression and access.</div>
                                         </div>
                                         <div class="features-card-texture"></div>
                                     </div>
@@ -937,11 +937,9 @@
                                 <div class="grow-list-wrap">
                                     <div class="grow-card _04">
                                         <div class="grow-lottie-wrap">
-                                            <div data-w-id="30070a36-40b7-1b2e-4bfe-0dcf4cefd027" data-is-ix2-target="1"
-                                                class="grow-lottie" data-animation-type="lottie"
-                                                data-src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68d55b8a55da90fe08e159d0_data.json"
-                                                data-loop="0" data-direction="1" data-autoplay="0" data-renderer="svg"
-                                                data-default-duration="0" data-duration="2.0166666666666666"></div>
+                                            <img src="images/joindagarmyherosection16580e562.png" alt="Join DAG Army"
+                                                class="grow-lottie"
+                                                style="object-fit: cover; width: 100%; height: 100%;" loading="lazy">
                                         </div>
                                         <div class="grow-card-texture"></div>
                                     </div>
@@ -1033,9 +1031,10 @@
                                         loading="lazy" alt="Simple Icon" class="simple-point" />
                                     <div class="simple-text-wrap">
                                         <div data-w-id="e6adac5e-a8ad-f11a-dbf1-5aa6b90ead3f" class="paragraph-01">Step
-                                            1 – Join as Soldier</div>
-                                        <div class="paragraph-02 simple-subtitle">Sign up instantly and become a DAG
-                                            Soldier. No payment required - just join and start.</div>
+                                            1 – Join as DAG Soldier</div>
+                                        <div class="paragraph-02 simple-subtitle">Join DAGCHAIN or DAGGPT and
+                                            automatically become a DAG Soldier. No payment. No approval. Entry point
+                                            into DAG ARMY.</div>
                                     </div>
                                 </div>
                             </div>
@@ -1045,9 +1044,10 @@
                                         loading="lazy" alt="Simple Icon" class="simple-point" />
                                     <div class="simple-text-wrap">
                                         <div data-w-id="c77bb3fb-9ca9-cb05-3863-9719a63d4f52" class="paragraph-01">Step
-                                            2 – Contribute &amp; Climb</div>
-                                        <div class="paragraph-02 simple-subtitle">Contribute to the ecosystem and unlock
-                                            Lieutenant and General ranks through merit.</div>
+                                            2 – Become DAG Lieutenant</div>
+                                        <div class="paragraph-02 simple-subtitle">Upgrade from Soldier by purchasing any
+                                            DAGCHAIN or DAGGPT service worth $149 or more. This unlocks higher
+                                            participation and increased weekly airdrops.</div>
                                     </div>
                                 </div>
                             </div>
@@ -1057,9 +1057,10 @@
                                         loading="lazy" alt="Simple Icon" class="simple-point" />
                                     <div class="simple-text-wrap">
                                         <div data-w-id="3a584457-2564-64a2-df79-35b6ef7ff504" class="paragraph-01">Step
-                                            3 – Earn Rewards</div>
-                                        <div class="paragraph-02 simple-subtitle">Receive weekly airdrops and mystery
-                                            boxes based on your rank and contributions.</div>
+                                            3 – Achieve DAG General</div>
+                                        <div class="paragraph-02 simple-subtitle">Qualify as an active DAG Lieutenant by
+                                            earning 50,000 DAG Points or generating $1,000 in sales. This grants
+                                            top-tier status, influence, and priority access.</div>
                                     </div>
                                 </div>
                             </div>
@@ -1261,7 +1262,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="airdrop-distribution">
+                <section id="airdrops" class="airdrop-distribution">
                     <div class="container">
                         <div class="airdrop-wrap">
                             <div class="section-header-wrap">
@@ -1598,74 +1599,45 @@
                     <div class="container">
                         <div class="footer-wrap">
                             <div class="footer-left">
-                                <div data-w-id="5604b1fd-90ab-d77a-5fdc-8c96874f038b" class="footer-content-wrap"><a
-                                        href="/" aria-current="page" class="footer-brand w-inline-block w--current"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b0266ba7b2f22465298d_Logo.svg"
-                                            loading="lazy" alt="" class="footer-logo" /></a>
-                                    <div class="paragraph-01 text-grey">SignalX empowers you to trade smarter, stay
-                                        informed, and grow your investments with confidence.</div>
-                                </div>
-                                <div data-w-id="5604b1fd-90ab-d77a-5fdc-8c96874f0390" class="footer-share-wrap"><a
-                                        href="https://www.instagram.com/" target="_blank"
-                                        class="footer-share-link w-inline-block"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180d165bebdfe6d8da2_Instagram.svg"
-                                            loading="lazy" alt="" class="footer-share-icon" /></a>
-                                    <a href="https://www.linkedin.com/" target="_blank"
-                                        class="footer-share-link w-inline-block"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180586247610e1d6549_Linkdin.svg"
-                                            loading="lazy" alt="" class="footer-share-icon" /></a><a
-                                        href="https://facebook.com/" target="_blank"
-                                        class="footer-share-link w-inline-block"><img
-                                            src="https://cdn.prod.website-files.com/68c837a3fd39ba6dee05b987/68c9b180787a244b5829ab6a_Facebook.svg"
-                                            loading="lazy" alt="" class="footer-share-icon" /></a>
+                                <div class="footer-content-wrap">
+                                    <a href="/" aria-current="page" class="footer-brand w-inline-block w--current"
+                                        style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                                        <img src="logo1.png" loading="lazy" alt="DAG ARMY" class="footer-logo"
+                                            style="height: 40px;" />
+                                        <div class="text-style-h4" style="margin-bottom: 0;">DAG ARMY</div>
+                                    </a>
+                                    <div class="paragraph-01 text-grey" style="margin-top: 20px;">
+                                        The official community growth and contribution program of DAGCHAIN and DAGGPT.
+                                        <br><br>
+                                        Building the future of AI-powered decentralized infrastructure.
+                                    </div>
                                 </div>
                             </div>
                             <div class="footer-right">
                                 <div class="footer-menu-column">
-                                    <div class="text-style-h4 footer-menu-title">Main Pages</div>
-                                    <div class="footer-menu-list"><a href="/" aria-current="page"
-                                            class="paragraph-01 footer-menu w--current">Home</a><a href="/about"
-                                            class="paragraph-01 footer-menu">About</a><a href="/features"
-                                            class="paragraph-01 footer-menu">Features</a><a href="/pricing"
-                                            class="paragraph-01 footer-menu">Pricing</a>
-                                        <a href="/blog" class="paragraph-01 footer-menu">Blog</a><a href="/contact"
-                                            class="paragraph-01 footer-menu">Contact</a>
+                                    <div class="text-style-h4 footer-menu-title">Quick Links</div>
+                                    <div class="footer-menu-list">
+                                        <a href="#about" class="paragraph-01 footer-menu">About</a>
+                                        <a href="#ranks" class="paragraph-01 footer-menu">Ranks</a>
+                                        <a href="#airdrops" class="paragraph-01 footer-menu">Airdrops</a>
+                                        <a href="#join" class="paragraph-01 footer-menu">Join Now</a>
                                     </div>
                                 </div>
                                 <div class="footer-menu-column">
-                                    <div class="text-style-h4 footer-menu-title">Inner Pages</div>
-                                    <div class="footer-menu-list"><a href="/faq"
-                                            class="paragraph-01 footer-menu">Faq</a><a href="/career"
-                                            class="paragraph-01 footer-menu">Career</a><a
-                                            href="https://signalx.webflow.io/blog/launching-your-first-ad-a-step-by-step-guide-to-facebook-google-ads"
-                                            class="paragraph-01 footer-menu">Blog Single</a>
-                                        <a href="https://signalx.webflow.io/product/pro"
-                                            class="paragraph-01 footer-menu">Pricing
-                                            Single</a><a href="/integration"
-                                            class="paragraph-01 footer-menu">Integrations</a><a
-                                            href="#https://signalx.webflow.io/integration/behance"
-                                            class="paragraph-01 footer-menu">Integration Single</a>
-                                    </div>
-                                </div>
-                                <div class="footer-menu-column">
-                                    <div class="text-style-h4 footer-menu-title">Utility Pages</div>
-                                    <div class="footer-menu-list"><a href="/404"
-                                            class="paragraph-01 footer-menu">404</a><a href="/401"
-                                            class="paragraph-01 footer-menu">Password</a><a href="/utility-page/license"
-                                            class="paragraph-01 footer-menu">License</a><a
-                                            href="/utility-page/style-guide" class="paragraph-01 footer-menu">Style
-                                            Guide</a>
-                                        <a href="/utility-page/changelog" class="paragraph-01 footer-menu">Changelog</a>
+                                    <div class="text-style-h4 footer-menu-title">Ecosystem</div>
+                                    <div class="footer-menu-list">
+                                        <a href="http://dagchain.network/" target="_blank"
+                                            class="paragraph-01 footer-menu">DAGCHAIN</a>
+                                        <a href="https://www.daggpt.network/" target="_blank"
+                                            class="paragraph-01 footer-menu">DAGGPT</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-                <div data-w-id="7ff5c1fa-a55b-6a86-54bf-1b5e9acc64fe" class="copyright-wrap">
-                    <div class="paragraph-01 copyright-text">© 2025 SignalX. All rights reserved - License. Powered by
-                        <a href="https://www.webflow.com" target="_blank" class="copyright-link">Webflow</a>.
-                    </div>
+                <div class="copyright-wrap">
+                    <div class="paragraph-01 copyright-text">© 2026 DAG ARMY. All rights reserved.</div>
                 </div>
             </div>
         </div>

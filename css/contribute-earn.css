@@ -3,8 +3,7 @@
    =================================== */
 
 .contribute-earn {
-    padding: 60px 0;
-    /* Reduced gap */
+    padding: 80px 0;
     position: relative;
     background: transparent;
 }
@@ -15,112 +14,147 @@
 }
 
 .contribute-earn-main-wrap {
-    margin-top: 40px;
-    /* Tighter layout */
+    margin-top: 50px;
     padding: 0 20px;
 }
 
 /* Contribution Areas Label */
 .contribution-areas-label {
-    margin-bottom: 24px;
+    margin-bottom: 30px;
     text-align: center;
 }
 
 .contribution-areas-label .paragraph-01 {
     font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.8);
+    color: #a855f7;
+    background: linear-gradient(90deg, #a855f7, #6366f1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
 }
 
 /* Contribution Areas Grid */
 .contribution-areas-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-    /* Reduced gap */
+    gap: 30px;
+    margin-bottom: 50px;
 }
 
 .contribution-area-card {
-    background: rgba(30, 35, 50, 0.4);
-    border: 1px solid rgba(99, 102, 241, 0.1);
-    border-radius: 16px;
-    padding: 32px 24px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    background: linear-gradient(145deg, rgba(30, 35, 50, 0.6), rgba(15, 17, 26, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 40px 30px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.contribution-area-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.1), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.contribution-area-card:hover::before {
+    opacity: 1;
 }
 
 .contribution-area-card:hover {
-    background: rgba(40, 45, 65, 0.6);
-    border-color: rgba(99, 102, 241, 0.3);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(168, 85, 247, 0.4);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(168, 85, 247, 0.2);
 }
 
 .contribution-area-title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     font-family: 'Inter Tight', sans-serif;
     letter-spacing: 0.3px;
-    text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-    /* Premium Glow */
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    position: relative;
+    z-index: 1;
 }
 
 .contribution-area-desc {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.9);
+    color: rgba(203, 213, 225, 0.8);
     font-family: 'Inter Tight', sans-serif;
+    position: relative;
+    z-index: 1;
 }
 
 /* Task Characteristics Label */
 .task-characteristics-label {
-    margin-bottom: 24px;
+    margin-bottom: 30px;
     text-align: center;
 }
 
 .task-characteristics-label .paragraph-01 {
     font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.8);
+    color: #a855f7;
+    background: linear-gradient(90deg, #a855f7, #6366f1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
 }
 
 /* Task Characteristics Card */
 .task-characteristics-card {
-    background: rgba(30, 35, 50, 0.4);
-    border: 1px solid rgba(99, 102, 241, 0.1);
-    border-radius: 16px;
-    padding: 32px;
-    backdrop-filter: blur(10px);
+    background: linear-gradient(145deg, rgba(30, 35, 50, 0.5), rgba(15, 17, 26, 0.7));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 40px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
 }
 
 .task-characteristics-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 30px;
 }
 
 .task-characteristic-item {
     text-align: center;
     position: relative;
-    padding: 10px;
+    padding: 20px 10px;
+    transition: transform 0.3s ease;
+}
+
+.task-characteristic-item:hover {
+    transform: translateY(-5px);
 }
 
 .task-characteristic-item::after {
     content: '';
     position: absolute;
-    right: -12px;
+    right: -15px;
     top: 50%;
     transform: translateY(-50%);
     width: 1px;
-    height: 40px;
-    background: rgba(99, 102, 241, 0.1);
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.3), transparent);
 }
 
 .task-characteristic-item:last-child::after {
@@ -128,37 +162,35 @@
 }
 
 .task-characteristic-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     color: #818cf8;
-    /* Accent color */
-    text-shadow: 0 0 10px rgba(129, 140, 248, 0.25);
-    /* Subtle Glow */
-    margin-bottom: 8px;
+    text-shadow: 0 0 15px rgba(129, 140, 248, 0.4);
+    margin-bottom: 12px;
     font-family: 'Inter Tight', sans-serif;
 }
 
 .task-characteristic-desc {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.6;
-    color: rgba(148, 163, 184, 0.85);
+    color: rgba(203, 213, 225, 0.8);
     font-family: 'Inter Tight', sans-serif;
 }
 
 /* Responsive Design */
 @media (max-width: 991px) {
     .contribute-earn {
-        padding: 40px 0;
+        padding: 60px 0;
     }
 
     .contribution-areas-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 20px;
     }
 
     .task-characteristics-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 30px;
     }
 
     .task-characteristic-item::after {
@@ -168,7 +200,7 @@
 
 @media (max-width: 767px) {
     .contribute-earn {
-        padding: 40px 0;
+        padding: 50px 0;
     }
 
     .contribute-earn-main-wrap {
@@ -177,7 +209,7 @@
 
     .task-characteristics-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 24px;
     }
 
     .contribution-area-title,
@@ -187,6 +219,6 @@
 
     .contribution-area-desc,
     .task-characteristic-desc {
-        font-size: 13px;
+        font-size: 14px;
     }
 }
