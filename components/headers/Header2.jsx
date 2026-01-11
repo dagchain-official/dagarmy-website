@@ -7,6 +7,7 @@ export default function Header2() {
   return (
     <header id="header_main" className="header style-2" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 0' }}>
       <div className="header-inner">
+        {/* Top Row: Logo, Search, Buttons */}
         <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
           {/* Logo Section - Left */}
           <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: '200px' }}>
@@ -100,6 +101,131 @@ export default function Header2() {
             aria-controls="offcanvasMenu"
             style={{ marginLeft: '12px' }}
           />
+        </div>
+
+        {/* Bottom Row: Navigation Menu */}
+        <div style={{ 
+          borderTop: '1px solid #f3f4f6',
+          background: '#fff'
+        }}>
+          <nav style={{ 
+            maxWidth: '1400px', 
+            margin: '0 auto', 
+            padding: '0 24px',
+            display: 'flex',
+            gap: '32px',
+            alignItems: 'center',
+            height: '48px'
+          }}>
+            <Link href="/about" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }} 
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              About
+            </Link>
+            <Link href="/courses" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Courses
+            </Link>
+            <Link href="/jobs" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Jobs
+            </Link>
+            <Link href="/training" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Training
+            </Link>
+            <Link href="/mentorship" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Mentorship
+            </Link>
+            <Link href="/competitions" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Competitions
+            </Link>
+            <Link href="/quizzes" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Quizzes
+            </Link>
+            <Link href="/hackathons" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Hackathons
+            </Link>
+            <Link href="/blogs" style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              Blogs
+            </Link>
+          </nav>
         </div>
       </div>
       <MobileNav />
