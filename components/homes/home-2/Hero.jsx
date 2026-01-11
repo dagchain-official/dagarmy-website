@@ -31,7 +31,7 @@ export default function Hero() {
   }, []);
   
   const options = {
-    spaceBetween: 30,
+    spaceBetween: 40,
     slidesPerView: 2,
     observer: true,
     observeParents: true,
@@ -44,19 +44,19 @@ export default function Hero() {
     breakpoints: {
       450: {
         slidesPerView: 3,
-        spaceBetween: 30,
+        spaceBetween: 40,
       },
       768: {
         slidesPerView: 4,
-        spaceBetween: 30,
+        spaceBetween: 40,
       },
       868: {
         slidesPerView: 5,
-        spaceBetween: 30,
+        spaceBetween: 40,
       },
       1400: {
         slidesPerView: 6,
-        spaceBetween: 90,
+        spaceBetween: 40,
       },
     },
   };
