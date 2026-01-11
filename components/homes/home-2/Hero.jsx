@@ -79,7 +79,7 @@ export default function Hero() {
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     fontWeight: '700'
-                  }}>250+</span> Best Online Training From DAGARMY
+                  }}>250+</span> Best Online Training From <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span>
                 </h1>
                 <h6 className="wow fadeInUp" data-wow-delay="0.3s" style={{
                   fontSize: '18px',

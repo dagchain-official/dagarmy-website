@@ -18,7 +18,7 @@ export default function Header2() {
                 width={62}
                 height={18}
               />
-              <span className="fw-7 fs-20" style={{ color: '#1f2937' }}>DAGARMY</span>
+              <span className="fw-7 fs-20" style={{ color: '#1f2937', fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span>
             </Link>
           </div>
 
