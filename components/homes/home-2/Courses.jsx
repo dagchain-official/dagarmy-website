@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useContextElement } from "@/context/Context";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
 const categories = [
   "Artificial Intelligence",
   "Blockchain",
@@ -61,9 +63,37 @@ export default function Courses() {
                 data-wow-delay="0.4s"
               >
                 <div className="widget-content-inner active">
-                  <div className="grid-layout-4 gap40">
-                    {filtered.map((elm, i) => (
-                      <div key={i} className="course-item h240 hover-img">
+                  <div style={{ position: 'relative', paddingLeft: '60px', paddingRight: '60px' }}>
+                    <Swiper
+                      modules={[Navigation, Pagination]}
+                      spaceBetween={30}
+                      slidesPerView={5}
+                      navigation={{
+                        prevEl: '.courses-prev',
+                        nextEl: '.courses-next',
+                      }}
+                      pagination={{ clickable: true }}
+                      breakpoints={{
+                        0: {
+                          slidesPerView: 1,
+                        },
+                        768: {
+                          slidesPerView: 2,
+                        },
+                        1024: {
+                          slidesPerView: 3,
+                        },
+                        1200: {
+                          slidesPerView: 4,
+                        },
+                        1400: {
+                          slidesPerView: 5,
+                        },
+                      }}
+                    >
+                      {filtered.map((elm, i) => (
+                        <SwiperSlide key={i}>
+                          <div className="course-item h240 hover-img">
                         <div className="features image-wrap">
                           <Image
                             className="lazyload"
@@ -199,7 +229,49 @@ export default function Courses() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                    <div className="courses-prev swiper-button-prev" style={{
+                      position: 'absolute',
+                      left: '0',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      width: '50px',
+                      height: '50px',
+                      background: '#8b5cf6',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      zIndex: 10,
+                      color: '#fff',
+                      fontSize: '20px',
+                      transition: 'all 0.3s',
+                    }}>
+                      <i className="icon-arrow-left" />
+                    </div>
+                    <div className="courses-next swiper-button-next" style={{
+                      position: 'absolute',
+                      right: '0',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      width: '50px',
+                      height: '50px',
+                      background: '#8b5cf6',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      zIndex: 10,
+                      color: '#fff',
+                      fontSize: '20px',
+                      transition: 'all 0.3s',
+                    }}>
+                      <i className="icon-arrow-right" />
+                    </div>
                   </div>
                 </div>
               </div>
