@@ -18,7 +18,7 @@ export default function RootLayout({
   
   useEffect(() => {
     if (typeof window !== "undefined") {
-      import("bootstrap/dist/js/bootstrap.esm").then(() => {});
+      import("bootstrap/dist/js/bootstrap.esm" as any).then(() => {});
     }
   }, []);
 
