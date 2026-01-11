@@ -137,7 +137,7 @@ export default function Footer1({ parentClass = "footer" }) {
                         <div className="icon">
                           <i className="flaticon-call" />
                         </div>
-                        <p>+44 07476 683666</p>
+                        <p>+44 7476 683666</p>
                       </li>
                       <li className="flex gap-10 items-center">
                         <div className="icon">
