@@ -148,16 +148,24 @@ export default function Hero() {
                 width: '100%',
                 height: '500px',
                 borderRadius: '24px',
-                background: '#f3f4f6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid #e5e7eb'
+                overflow: 'hidden',
+                border: '1px solid #e5e7eb',
+                position: 'relative'
               }}>
-                {/* Video will be placed here */}
-                <div style={{ color: '#9ca3af', fontSize: '16px' }}>
-                  Video placeholder
-                </div>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                >
+                  <source src="/images/courses/hero.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </div>
