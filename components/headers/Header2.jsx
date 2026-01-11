@@ -146,18 +146,6 @@ export default function Header2() {
               onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
               Jobs
             </Link>
-            <Link href="/training" style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#4b5563',
-              textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
-            }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
-              Training
-            </Link>
             <Link href="/mentorship" style={{
               fontSize: '14px',
               fontWeight: '500',
@@ -169,30 +157,6 @@ export default function Header2() {
               onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
               Mentorship
-            </Link>
-            <Link href="/competitions" style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#4b5563',
-              textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
-            }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
-              Competitions
-            </Link>
-            <Link href="/quizzes" style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#4b5563',
-              textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
-            }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
-              Quizzes
             </Link>
             <Link href="/hackathons" style={{
               fontSize: '14px',

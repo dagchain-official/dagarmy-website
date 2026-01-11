@@ -65,7 +65,7 @@ export default function Hero() {
   };
   return (
     <>
-      <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '40px' }}>
+      <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '80px' }}>
         <div className="tf-container" style={{ background: '#fff' }}>
           <div className="row items-center" style={{ alignItems: 'center', minHeight: 'auto' }}>
             <div className="col-lg-6">
