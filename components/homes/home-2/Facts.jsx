@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 export default function Facts() {
   return (
-    <section className="section-about-box tf-spacing-1 pt-0">
+    <section className="section-about-box tf-spacing-1 pt-0" style={{ paddingBottom: '60px' }}>
       <div className="tf-container">
         <div className="row">
           <div className="col-lg-7">
@@ -11,46 +11,23 @@ export default function Facts() {
                 <div className="image">
                   <Image
                     className="lazyload"
-                    data-src="/images/page-title/page-title-home2-1.jpg"
-                    alt=""
-                    src="/images/page-title/page-title-home2-1.jpg"
-                    width={591}
-                    height={680}
+                    data-src="/images/Master AI, Blockchain image/Master AI.png"
+                    alt="Master AI - Artificial Intelligence Education and Instruction"
+                    src="/images/Master AI, Blockchain image/Master AI.png"
+                    width={500}
+                    height={580}
                   />
                 </div>
                 <div className="box-agent">
-                  <ul className="agent-img-list">
-                    <li className="agent-img-item">
-                      <Image
-                        className="lazyload"
-                        data-src="/images/avatar/user-1.png"
-                        alt=""
-                        src="/images/avatar/user-1.png"
-                        width={84}
-                        height={84}
-                      />
-                    </li>
-                    <li className="agent-img-item">
-                      <Image
-                        className="lazyload"
-                        data-src="/images/avatar/user-2.png"
-                        alt=""
-                        src="/images/avatar/user-2.png"
-                        width={84}
-                        height={84}
-                      />
-                    </li>
-                    <li className="agent-img-item">
-                      <Image
-                        className="lazyload"
-                        data-src="/images/avatar/user-3.png"
-                        alt=""
-                        src="/images/avatar/user-3.png"
-                        width={84}
-                        height={84}
-                      />
-                    </li>
-                  </ul>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50px', height: '50px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '50%' }}>
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <polyline points="17 11 19 13 23 9"></polyline>
+                      </svg>
+                    </div>
+                  </div>
                   <div className="content">
                     <h6 className="fw-5">Expert Mentors</h6>
                     <p>Industry Leaders</p>
@@ -61,21 +38,21 @@ export default function Facts() {
                 <div className="image">
                   <Image
                     className="lazyload"
-                    data-src="/images/section/about-1.jpg"
-                    alt=""
-                    src="/images/section/about-1.jpg"
-                    width={681}
-                    height={681}
+                    data-src="/images/Master AI, Blockchain image/blockchain image.png"
+                    alt="Blockchain - Team Collaboration and Decentralized Technology"
+                    src="/images/Master AI, Blockchain image/blockchain image.png"
+                    width={580}
+                    height={580}
                   />
                 </div>
                 <div className="image">
                   <Image
                     className="lazyload"
-                    data-src="/images/page-title/page-title-home2-2.jpg"
-                    alt=""
-                    src="/images/page-title/page-title-home2-2.jpg"
-                    width={592}
-                    height={681}
+                    data-src="/images/Master AI, Blockchain image/Data Visualisation.png"
+                    alt="Data Visualisation - Analytics and Insight-Driven Intelligence"
+                    src="/images/Master AI, Blockchain image/Data Visualisation.png"
+                    width={500}
+                    height={580}
                   />
                 </div>
               </div>
@@ -106,19 +83,9 @@ export default function Facts() {
                   className="number-counter wow fadeInUp"
                   data-wow-delay="0.3s"
                 >
-                  <svg
-                    width={41}
-                    height={41}
-                    viewBox="0 0 41 41"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_127_1409)">
-                      <path
-                        d="M31.9606 32.5648V38.6294C31.9606 39.3971 31.3381 40.0195 30.5704 40.0195H10.0449C9.27721 40.0195 8.65479 39.3971 8.65479 38.6294V32.5648C8.65479 27.2472 12.9656 22.9363 18.2833 22.9363H22.332C27.6497 22.9363 31.9606 27.2472 31.9606 32.5648Z"
-                        fill="#E9DECE"
-                      />
-                    </g>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                   <div className="counter-content">
                     <span
@@ -137,19 +104,11 @@ export default function Facts() {
                   className="number-counter wow fadeInUp"
                   data-wow-delay="0.35s"
                 >
-                  <svg
-                    width={41}
-                    height={41}
-                    viewBox="0 0 41 41"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_127_1436)">
-                      <path
-                        d="M23.8227 27.3659C29.6079 27.3659 34.2978 32.348 34.2978 38.4937V39.887H6.31763V38.4937C6.31763 32.348 11.0075 27.3659 16.7927 27.3659L20.3077 33.6265L23.8227 27.3659Z"
-                        fill="white"
-                      />
-                    </g>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                   </svg>
                   <div className="counter-content">
                     <span
@@ -168,19 +127,9 @@ export default function Facts() {
                   className="number-counter wow fadeInUp"
                   data-wow-delay="0.4s"
                 >
-                  <svg
-                    width={41}
-                    height={41}
-                    viewBox="0 0 41 41"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_127_1424)">
-                      <path
-                        d="M23.6475 8.58945V11.7H6.00934C5.12145 11.7 4.40051 12.4269 4.40051 13.3148V26.162H1.29004V10.1984C1.29004 9.31648 2.01105 8.58945 2.89887 8.58945H23.6475Z"
-                        fill="#FFEFEA"
-                      />
-                    </g>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                   </svg>
                   <div className="counter-content">
                     <span
@@ -199,19 +148,10 @@ export default function Facts() {
                   className="number-counter wow fadeInUp"
                   data-wow-delay="0.45s"
                 >
-                  <svg
-                    width={41}
-                    height={41}
-                    viewBox="0 0 41 41"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_127_1398)">
-                      <path
-                        d="M36.7045 13.7493V33.1215H3.73267V13.7493C3.73267 11.3536 5.67478 9.41147 8.07048 9.41147H32.3667C34.7624 9.41147 36.7045 11.3536 36.7045 13.7493Z"
-                        fill="white"
-                      />
-                    </g>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
                   </svg>
                   <div className="counter-content">
                     <span
