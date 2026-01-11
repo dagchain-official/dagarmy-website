@@ -2,7 +2,7 @@ export const dagarmyCourses = [
   // Stream 1: Artificial Intelligence (The "Vibe Coder" Track)
   {
     id: 101,
-    imgSrc: "/images/courses/courses-01.jpg",
+    imgSrc: "/images/courses/Vibe Coding 101.png",
     title: "Vibe Coding 101: Building Full-Stack Web Apps with Natural Language",
     lessons: "12 Lessons",
     students: "1,234",
