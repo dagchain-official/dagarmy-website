@@ -177,15 +177,16 @@ export default function Hero() {
               style={{ background: '#fff' }}
             >
               {brandLogos.map((elm, i) => (
-                <SwiperSlide key={i} className="swiper-slide">
-                  <div className="slogan-logo">
+                <SwiperSlide key={i} className="swiper-slide" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div className="slogan-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60px' }}>
                     <Image
                       className="lazyload"
                       src={elm.imgSrc}
                       data-=""
-                      alt=""
+                      alt={elm.alt}
                       width={elm.width}
                       height={elm.height}
+                      style={{ objectFit: 'contain', maxHeight: '50px', width: 'auto' }}
                     />
                   </div>
                 </SwiperSlide>
