@@ -36,6 +36,7 @@ export default function Hero() {
     observer: true,
     observeParents: true,
     loop: true,
+    loopAdditionalSlides: 3,
     autoplay: {
       delay: 0,
       disableOnInteraction: false,
