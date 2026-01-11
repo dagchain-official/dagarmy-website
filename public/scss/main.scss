@@ -1,15 +1,15 @@
 // Theme Style
-@use "../css/bootstrap.css";
-@use "../css/animate.min.css";
-@use "../css/mmenu.css";
-@use "../css/swiper-bundle.min.css";
-@use "../css/magnific-popup.min.css";
-@use "./app.scss";
+@import "../css/bootstrap.css";
+@import "../css/animate.min.css";
+@import "../css/mmenu.css";
+@import "../css/swiper-bundle.min.css";
+@import "../css/magnific-popup.min.css";
+@import "./app.scss";
 
 // Font
-@use "../font/fonts.css";
+@import "../font/fonts.css";
 
 // Icons
-@use "../icons/flat/flaticon_upskill.css";
-@use "../icons/icomoon/style.css";
-@use "./custom.scss";
+@import "../icons/flat/flaticon_upskill.css";
+@import "../icons/icomoon/style.css";
+@import "./custom.scss";
