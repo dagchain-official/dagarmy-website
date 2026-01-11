@@ -90,7 +90,7 @@ export default function Hero() {
                 }}>
                   Start, switch, or advance your career with tech focussed courses, Professional Certificates, as we Build a Global Army of Future-Ready Tech Leaders.
                 </h6>
-                <div className="bottom-btns" style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
+                <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '80px' }}>
                   <a
                     href="#"
                     className="tf-btn wow fadeInUp"
@@ -130,42 +130,14 @@ export default function Hero() {
                     Explore courses
                     <i className="icon-arrow-top-right" />
                   </a>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '16px' }}>
-                    <div style={{ display: 'flex', marginLeft: '-8px' }}>
-                      <div style={{ 
-                        width: '48px', 
-                        height: '48px', 
-                        borderRadius: '50%', 
-                        background: '#fbbf24',
-                        border: '3px solid #fff',
-                        marginLeft: '-8px'
-                      }} />
-                      <div style={{ 
-                        width: '48px', 
-                        height: '48px', 
-                        borderRadius: '50%', 
-                        background: '#60a5fa',
-                        border: '3px solid #fff',
-                        marginLeft: '-8px'
-                      }} />
-                      <div style={{ 
-                        width: '48px', 
-                        height: '48px', 
-                        borderRadius: '50%', 
-                        background: '#f472b6',
-                        border: '3px solid #fff',
-                        marginLeft: '-8px'
-                      }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span key={star} style={{ color: '#8b5cf6', fontSize: '16px' }}>★</span>
+                      ))}
                     </div>
-                    <div>
-                      <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span key={star} style={{ color: '#8b5cf6', fontSize: '16px' }}>★</span>
-                        ))}
-                      </div>
-                      <div style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
-                        35k+ happy students
-                      </div>
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937', whiteSpace: 'nowrap' }}>
+                      35k+ happy students
                     </div>
                   </div>
                 </div>
