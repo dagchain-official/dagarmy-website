@@ -2,30 +2,28 @@ import React from "react";
 import Image from "next/image";
 export default function About() {
   return (
-    <section className="flat-about ">
+    <section className="flat-about">
       <div className="tf-container">
         <div className="row">
           <div className="col-lg-7">
-            <div className="heading-content ">
+            <div className="heading-content">
               <div className="widget box-sub-tag wow fadeInUp">
                 <div className="sub-tag-icon">
                   <i className="icon-flash" />
                 </div>
                 <div className="sub-tag-title">
-                  <p>Best Quality</p>
+                  <p>No Talent Left Behind</p>
                 </div>
               </div>
               <h2 className="font-cardo wow fadeInUp">
-                UpSkill Education Theme, Built Specifically For The Education
-                Centers Which Is Dedicated To Teaching And Involve Learners.
+                We Are Building a Global Army of "Vibe Coders," Technical Experts, and Visionary Entrepreneurs
               </h2>
             </div>
           </div>
           <div className="col-lg-5">
             <div className="content-right wow fadeInUp" data-wow-delay="0.1s">
               <p>
-                Lorem ipsum dolor sit amet consectur adipiscing elit sed eiusmod
-                ex tempor incididunt labore dolore magna aliquaenim minim.
+                At DAGARMY, we believe that brilliance is universal, but opportunity is not. We are not just another EdTech platform—we are a Talent Engagement and Incubation Engine, bridging the gap between hidden talent and global tech giants.
               </p>
             </div>
           </div>
@@ -94,8 +92,7 @@ export default function About() {
               </div>
               <div className="about-item item-7 wow fadeInUp">
                 <p>
-                  “Be open to new ideas and approaches. Develop your
-                  problem-solving skills.”{" "}
+                  "No Talent Left Behind. No Territory Left Unreached."
                 </p>
               </div>
             </div>

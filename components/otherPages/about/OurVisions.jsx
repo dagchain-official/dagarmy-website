@@ -24,25 +24,24 @@ export default function OurVisions() {
                   <i className="icon-flash" />
                 </div>
                 <div className="sub-tag-title">
-                  <p>Our Vision</p>
+                  <p>How We Operate</p>
                 </div>
               </div>
               <h2 className="fw-7 font-cardo wow fadeInUp">
-                35,000+ Happy Students Joined With Us To Achieve Their Goals
+                The Training Ground for Future Tech Leaders
               </h2>
               <p className="text-content wow fadeInUp">
-                Lorem ipsum dolor sit amet consectur adipiscing elit sed eiusmod
-                ex tempor incididunt labore dolore magna aliquaenim minim.
+                DAGARMY is a community-driven ecosystem where rank is earned through skill. We are the direct link between hidden talent in small towns and global tech giants.
               </p>
               <ul className="list">
                 <li className="item wow fadeInUp">
-                  Expert-led educational experiences.
+                  <strong>A Training Camp:</strong> We teach practical, "battle-ready" skills for the 2026 economy—from AI to Blockchain security.
                 </li>
                 <li className="item wow fadeInUp">
-                  Flexible pathways to personal and professional achievement.
+                  <strong>A Launchpad:</strong> We provide mentorship and strategic guidance to turn prototypes into products and ideas into startups.
                 </li>
                 <li className="item wow fadeInUp">
-                  Educational opportunities at every investment level.
+                  <strong>A Bridge:</strong> We vet our "Soldiers" through real-world challenges so companies hire proven excellence.
                 </li>
               </ul>
             </div>

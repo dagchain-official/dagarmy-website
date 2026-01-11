@@ -8,10 +8,10 @@ export default function Features() {
           <div className="col-12">
             <div className="heading-section text-center">
               <h2 className="fw-7 font-cardo wow fadeInUp">
-                Why StudyWith Us?
+                Bridging the Three Gaps
               </h2>
               <div className="sub fs-15 wow fadeInUp">
-                Become a valuable expert with UpSkill.
+                The world is changing faster than the classroom. We exist to solve three critical failures of the modern tech landscape.
               </div>
             </div>
           </div>
@@ -76,12 +76,11 @@ export default function Features() {
               <div className="content">
                 <h4>
                   <a className="fw-5" href="#">
-                    World Class Teachers
+                    The Skill Gap
                   </a>
                 </h4>
                 <p>
-                  What should be the structure of an effective <br /> websites
-                  and designs.
+                  Universities teach theory, but the industry demands practitioners. We train "Vibe Coders" who can build, not just memorize.
                 </p>
               </div>
             </div>
@@ -153,12 +152,11 @@ export default function Features() {
               <div className="content">
                 <h4>
                   <a className="fw-5" href="#">
-                    Global Community
+                    The Penetration Gap
                   </a>
                 </h4>
                 <p>
-                  What should be the structure of an effective <br /> websites
-                  and designs.
+                  Global companies want to hire from Tier 2 and Tier 3 cities but don't know where to look. We are their "boots on the ground," vetting the world's most loyal and skilled talent.
                 </p>
               </div>
             </div>
@@ -210,12 +208,11 @@ export default function Features() {
               <div className="content">
                 <h4>
                   <a className="fw-5" href="#">
-                    Top Notch Courses
+                    The Founder Gap
                   </a>
                 </h4>
                 <p>
-                  What should be the structure of an effective <br /> websites
-                  and designs.
+                  Many students have world-changing ideas but no roadmap. We provide the mentorship to turn those ideas into sustainable startups.
                 </p>
               </div>
             </div>

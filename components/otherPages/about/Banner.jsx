@@ -9,21 +9,18 @@ export default function Banner() {
             <div className="main-section">
               <div className="heading-section style-white mb-0">
                 <h2 className="font-cardo wow fadeInUp">
-                  Join More Than 1 Million <br /> Learners Worldwide
+                  Join the Army. <br /> Claim Your Future.
                 </h2>
                 <p className="sub wow fadeInUp">
-                  {" "}
-                  Effective learning starts with assessment. Learning a new
-                  skill <br />
-                  is hard work—Signal makes it easier.
+                  Our vision is a future where "DAGARMY Certified" is the ultimate signal of technical mastery. We are building an army of 1,000,000+ pre-vetted professionals and launching 100+ soldier-led startups every year.
                 </p>
               </div>
               <a
-                href="#"
+                href="/"
                 className="tf-btn style-secondary wow fadeInUp"
                 data-wow-delay="0.1s"
               >
-                Get Started Now <i className="icon-arrow-top-right" />
+                Explore Courses <i className="icon-arrow-top-right" />
               </a>
             </div>
           </div>
