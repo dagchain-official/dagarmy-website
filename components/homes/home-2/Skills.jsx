@@ -1,14 +1,14 @@
 import React from "react";
 const tags = [
-  "Information Systems",
-  "Human Resources",
-  "Business Management",
-  "Quality Control",
-  "Health Care",
-  "Contract Law",
-  "Management",
-  "Psychology",
-  "Programming",
+  "Artificial Intelligence",
+  "Blockchain Technology",
+  "Cyber Security",
+  "Data Visualization",
+  "Machine Learning",
+  "Smart Contracts",
+  "Cloud Computing",
+  "Web3 Development",
+  "Python Programming",
 ];
 export default function Skills() {
   return (
@@ -18,11 +18,10 @@ export default function Skills() {
           <div className="col-12">
             <div className="heading-section text-center">
               <h2 className="font-outfit wow fadeInUp" data-wow-delay="0.1s">
-                Advance Your Career.&nbsp;Learn In-Demand Skills.
+                Master Future-Ready Tech Skills.&nbsp;Build Your Army.
               </h2>
               <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
-                Advance your skills in business analytics, health care, graphic design,
-                management and more.
+                Master cutting-edge technologies in AI, Blockchain, Cyber Security, Data Visualization and more. Join the global army of Vibe Coders.
               </div>
             </div>
             <div
