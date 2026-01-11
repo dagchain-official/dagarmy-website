@@ -18,19 +18,19 @@
  ------------------------------------------------------------------------------ */
 
 /*--------- Abstracts variable ---------- */
-@use "./abstracts/index";
+@import "./abstracts/index";
 
 /*---------- Reset css styles ----------- */
-@use "reset";
+@import "reset";
 
 /*------------ Components ---------------- */
-@use "./component/index";
+@import "./component/index";
 
 /*------------ widgets ---------------- */
-@use "./widgets";
+@import "./widgets";
 
 /*------------ sections ---------------- */
-@use "./sections";
+@import "./sections";
 
 /*-------------- Responsive ----------------- */
-@use "./responsive";
+@import "./responsive";
