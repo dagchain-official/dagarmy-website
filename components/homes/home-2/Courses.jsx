@@ -72,7 +72,10 @@ export default function Courses() {
                         prevEl: '.courses-prev',
                         nextEl: '.courses-next',
                       }}
-                      pagination={{ clickable: true }}
+                      pagination={{ 
+                        clickable: true,
+                        el: '.courses-pagination',
+                      }}
                       breakpoints={{
                         0: {
                           slidesPerView: 1,
@@ -232,7 +235,13 @@ export default function Courses() {
                         </SwiperSlide>
                       ))}
                     </Swiper>
-                    <div className="courses-prev swiper-button-prev" style={{
+                    <style jsx global>{`
+                      .swiper-button-prev::after,
+                      .swiper-button-next::after {
+                        display: none !important;
+                      }
+                    `}</style>
+                    <div className="courses-prev" style={{
                       position: 'absolute',
                       left: '0',
                       top: '50%',
@@ -252,7 +261,7 @@ export default function Courses() {
                     }}>
                       <i className="icon-arrow-left" />
                     </div>
-                    <div className="courses-next swiper-button-next" style={{
+                    <div className="courses-next" style={{
                       position: 'absolute',
                       right: '0',
                       top: '50%',
@@ -273,6 +282,12 @@ export default function Courses() {
                       <i className="icon-arrow-right" />
                     </div>
                   </div>
+                  <div className="courses-pagination" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: '40px',
+                    gap: '8px',
+                  }}></div>
                 </div>
               </div>
             </div>
