@@ -177,7 +177,7 @@ export default function Hero() {
               className="slide-brand style-2 swiper-container"
               style={{ background: '#fff' }}
             >
-              {brandLogos.map((elm, i) => (
+              {[...brandLogos, ...brandLogos].map((elm, i) => (
                 <SwiperSlide key={i} className="swiper-slide" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div className="slogan-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60px' }}>
                     <Image
