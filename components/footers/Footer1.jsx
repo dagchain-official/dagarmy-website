@@ -137,13 +137,13 @@ export default function Footer1({ parentClass = "footer" }) {
                         <div className="icon">
                           <i className="flaticon-call" />
                         </div>
-                        <p>+1 (555) 789-0123</p>
+                        <p>+44 07476 683666</p>
                       </li>
                       <li className="flex gap-10 items-center">
                         <div className="icon">
                           <i className="flaticon-call" />
                         </div>
-                        <p>+44 (20) 7946-0958</p>
+                        <p>+1 (631) 954-5888</p>
                       </li>
                       <li className="flex gap-10 items-center">
                         <div className="icon">
