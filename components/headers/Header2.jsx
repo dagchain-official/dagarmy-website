@@ -115,6 +115,7 @@ export default function Header2() {
             display: 'flex',
             gap: '32px',
             alignItems: 'center',
+            justifyContent: 'center',
             height: '48px'
           }}>
             <Link href="/about" style={{ 
