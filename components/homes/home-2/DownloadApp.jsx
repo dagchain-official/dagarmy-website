@@ -1,8 +1,10 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import PremiumButton from "./PremiumButton";
 export default function DownloadApp() {
   return (
-    <section className="section-mobile-app bg-4">
+    <section className="section-mobile-app" style={{ background: '#ffffff' }}>
       <div className="tf-container">
         <div className="row align-items-center">
           <div className="col-md-6">
@@ -46,10 +48,13 @@ export default function DownloadApp() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '15px' }}>
-                <a href="#" className="tf-btn wow fadeInUp" data-wow-delay="0.4s">
-                  Start Learning Now
-                  <i className="icon-arrow-top-right" />
-                </a>
+                <PremiumButton
+                  text="Start Learning Now"
+                  href="#"
+                  className="wow fadeInUp"
+                  data-wow-delay="0.4s"
+                  style={{ fontSize: '16px', height: '52px', minWidth: '200px' }}
+                />
                 <a href="#" className="tf-btn style-secondary wow fadeInUp" data-wow-delay="0.45s">
                   View All Courses
                   <i className="icon-arrow-top-right" />

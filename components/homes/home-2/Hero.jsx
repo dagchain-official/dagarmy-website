@@ -5,15 +5,16 @@ import { Autoplay, FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import ModalVideo from "react-modal-video";
+import PremiumButton from "./PremiumButton";
 export default function Hero() {
   const [isOpen, setOpen] = useState(false);
-  
+
   // Add global style override for swiper backgrounds
   React.useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
       .page-title-home2,
-      .page-title-home2 *:not(.tf-btn):not(span):not(i),
+      .page-title-home2 *:not(.tf-btn):not(span):not(i):not(.btn-premium):not(.bg):not(.wrap):not(.content):not(.icon):not(.char),
       .wrap-brand,
       .wrap-brand *,
       .slide-brand,
@@ -29,14 +30,13 @@ export default function Hero() {
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
-  
+
   const options = {
-    spaceBetween: 40,
+    spaceBetween: 60,
     slidesPerView: 2,
     observer: true,
     observeParents: true,
     loop: true,
-    loopedSlides: 10,
     autoplay: {
       delay: 0,
       disableOnInteraction: false,
@@ -44,23 +44,22 @@ export default function Hero() {
     },
     speed: 5000,
     freeMode: true,
-    freeModeMomentum: false,
     breakpoints: {
       450: {
         slidesPerView: 3,
-        spaceBetween: 40,
+        spaceBetween: 60,
       },
       768: {
         slidesPerView: 4,
-        spaceBetween: 40,
+        spaceBetween: 60,
       },
       868: {
         slidesPerView: 5,
-        spaceBetween: 40,
+        spaceBetween: 60,
       },
       1400: {
         slidesPerView: 6,
-        spaceBetween: 40,
+        spaceBetween: 60,
       },
     },
   };
@@ -68,16 +67,16 @@ export default function Hero() {
     <>
       <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '40px' }}>
         <div className="tf-container" style={{ background: '#fff' }}>
-          <div className="row items-center">
+          <div className="row items-center" style={{ alignItems: 'center', minHeight: 'auto' }}>
             <div className="col-lg-6">
-              <div className="content">
-                <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{ 
-                  fontSize: '64px', 
-                  lineHeight: '1.2', 
+              <div className="content" style={{ paddingTop: '0', paddingBottom: '60px' }}>
+                <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{
+                  fontSize: '64px',
+                  lineHeight: '1.2',
                   marginBottom: '24px',
                   color: '#1f2937'
                 }}>
-                  Get <span style={{ 
+                  Get <span style={{
                     background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -94,27 +93,14 @@ export default function Hero() {
                 }}>
                   Start, switch, or advance your career with tech focussed courses, Professional Certificates, as we Build a Global Army of Future-Ready Tech Leaders.
                 </h6>
-                <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '80px' }}>
-                  <a
+                <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
+                  <PremiumButton
+                    text="Get Started"
                     href="#"
-                    className="tf-btn wow fadeInUp"
+                    className="wow fadeInUp"
                     data-wow-delay="0.4s"
-                    style={{
-                      padding: '14px 32px',
-                      background: '#1e293b',
-                      color: '#fff !important',
-                      borderRadius: '8px',
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    <span style={{ color: '#fff' }}>Get Started</span>
-                    <i className="icon-arrow-top-right" style={{ color: '#fff' }} />
-                  </a>
+                    style={{ fontSize: '16px', height: '52px', minWidth: '160px' }}
+                  />
                   <a
                     href="#"
                     style={{
@@ -173,7 +159,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
-          <div className="wrap-brand" style={{ background: '#fff !important', backgroundColor: '#fff', padding: '40px 0' }}>
+          <div className="wrap-brand" style={{ background: '#fff !important', backgroundColor: '#fff', padding: '24px 0 0 0' }}>
             <Swiper
               {...options}
               modules={[Autoplay, FreeMode]}
@@ -186,7 +172,6 @@ export default function Hero() {
                     <Image
                       className="lazyload"
                       src={elm.imgSrc}
-                      data-=""
                       alt={elm.alt}
                       width={elm.width}
                       height={elm.height}

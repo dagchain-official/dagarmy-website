@@ -3,7 +3,7 @@ import Link from "next/link";
 import { events2 } from "@/data/events";
 export default function Events() {
   return (
-    <section className="section-event tf-spacing-11">
+    <section className="section-event tf-spacing-11" style={{ background: '#ffffff', paddingTop: '60px', paddingBottom: '60px' }}>
       <div className="tf-container">
         <div className="row">
           <div className="col-12">

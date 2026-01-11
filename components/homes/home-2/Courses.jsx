@@ -23,7 +23,7 @@ export default function Courses() {
   }, [currentCategory, allProducts]);
 
   return (
-    <section className="section-popular-course tf-spacing-6 pt-0">
+    <section className="section-popular-course tf-spacing-6 pt-0" style={{ paddingTop: '0 !important' }}>
       <div className="tf-container">
         <div className="row">
           <div className="col-12">
@@ -47,9 +47,8 @@ export default function Courses() {
                       <li
                         key={index}
                         onClick={() => setCurrentCategory(category)}
-                        className={`item-title ${
-                          currentCategory === category ? "active" : ""
-                        }`}
+                        className={`item-title ${currentCategory === category ? "active" : ""
+                          }`}
                       >
                         {category}
                       </li>
@@ -74,9 +73,8 @@ export default function Courses() {
                             height={380}
                           />
                           <div
-                            className={`box-wishlist tf-action-btns ${
-                              isAddedtoWishlist(elm.id) ? "active" : ""
-                            } `}
+                            className={`box-wishlist tf-action-btns ${isAddedtoWishlist(elm.id) ? "active" : ""
+                              } `}
                             onClick={() => toggleWishlist(elm.id)}
                           >
                             <i className="flaticon-heart" />
