@@ -1,7 +1,7 @@
 "use client";
 import { brandLogos } from "@/data/brands";
 import React, { useState } from "react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import ModalVideo from "react-modal-video";
@@ -36,12 +36,15 @@ export default function Hero() {
     observer: true,
     observeParents: true,
     loop: true,
-    loopAdditionalSlides: 3,
+    loopedSlides: 10,
     autoplay: {
       delay: 0,
       disableOnInteraction: false,
+      pauseOnMouseEnter: false,
     },
-    speed: 10000,
+    speed: 5000,
+    freeMode: true,
+    freeModeMomentum: false,
     breakpoints: {
       450: {
         slidesPerView: 3,
@@ -173,7 +176,7 @@ export default function Hero() {
           <div className="wrap-brand" style={{ background: '#fff !important', backgroundColor: '#fff', padding: '40px 0' }}>
             <Swiper
               {...options}
-              modules={[Autoplay]}
+              modules={[Autoplay, FreeMode]}
               className="slide-brand style-2 swiper-container"
               style={{ background: '#fff' }}
             >
