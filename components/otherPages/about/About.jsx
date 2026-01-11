@@ -2,29 +2,30 @@ import React from "react";
 import Image from "next/image";
 export default function About() {
   return (
-    <section className="flat-about">
+    <section className="flat-about ">
       <div className="tf-container">
         <div className="row">
           <div className="col-lg-7">
-            <div className="heading-content">
+            <div className="heading-content ">
               <div className="widget box-sub-tag wow fadeInUp">
                 <div className="sub-tag-icon">
                   <i className="icon-flash" />
                 </div>
                 <div className="sub-tag-title">
-                  <p>Future-Ready Tech Education</p>
+                  <p>Best Quality</p>
                 </div>
               </div>
               <h2 className="font-cardo wow fadeInUp">
-                Building a Global Army of Future-Ready Tech Leaders Through AI, Blockchain, and Data Visualization
+                UpSkill Education Theme, Built Specifically For The Education
+                Centers Which Is Dedicated To Teaching And Involve Learners.
               </h2>
             </div>
           </div>
           <div className="col-lg-5">
             <div className="content-right wow fadeInUp" data-wow-delay="0.1s">
               <p>
-                DAGARMY is dedicated to empowering learners worldwide with cutting-edge technology skills. 
-                We provide industry-focused training programs that prepare you for the future of work.
+                Lorem ipsum dolor sit amet consectur adipiscing elit sed eiusmod
+                ex tempor incididunt labore dolore magna aliquaenim minim.
               </p>
             </div>
           </div>
@@ -36,7 +37,7 @@ export default function About() {
                 <Image
                   className="lazyload"
                   data-src="/images/section/about-9.jpg"
-                  alt="DAGARMY Education"
+                  alt=""
                   width={895}
                   height={520}
                   src="/images/section/about-9.jpg"
@@ -46,7 +47,7 @@ export default function About() {
                 <Image
                   className="lazyload"
                   data-src="/images/section/about-10.jpg"
-                  alt="Tech Training"
+                  alt=""
                   width={893}
                   height={1100}
                   src="/images/section/about-10.jpg"
@@ -55,7 +56,7 @@ export default function About() {
               <div className="about-item item-3 wow fadeInUp">
                 <Image
                   className="lazyload"
-                  alt="Learning Environment"
+                  alt=""
                   src="/images/page-title/page-title-home2-1.jpg"
                   width="591"
                   height="680"
@@ -65,7 +66,7 @@ export default function About() {
                 <Image
                   className="lazyload"
                   data-src="/images/courses/courses-04.jpg"
-                  alt="Course Preview"
+                  alt=""
                   width={520}
                   height={380}
                   src="/images/courses/courses-04.jpg"
@@ -75,7 +76,7 @@ export default function About() {
                 <Image
                   className="lazyload"
                   data-src="/images/section/about-1.jpg"
-                  alt="DAGARMY Community"
+                  alt=""
                   width={681}
                   height={681}
                   src="/images/section/about-1.jpg"
@@ -85,7 +86,7 @@ export default function About() {
                 <Image
                   className="lazyload"
                   data-src="/images/courses/courses-01.jpg"
-                  alt="Training Programs"
+                  alt=""
                   width={520}
                   height={380}
                   src="/images/courses/courses-01.jpg"
@@ -93,7 +94,8 @@ export default function About() {
               </div>
               <div className="about-item item-7 wow fadeInUp">
                 <p>
-                  "Empowering the next generation of tech leaders with future-ready skills in AI, Blockchain, and Data Visualization"
+                  “Be open to new ideas and approaches. Develop your
+                  problem-solving skills.”{" "}
                 </p>
               </div>
             </div>
