@@ -72,7 +72,7 @@ export default function Sidebar(props) {
     // Cleanup: remove event listeners when component unmounts
     return () => {
       showMoreButtons.forEach((button) => {
-        button.removeEventListener("click", () => {});
+        button.removeEventListener("click", () => { });
       });
     };
   }, []);
@@ -89,8 +89,40 @@ export default function Sidebar(props) {
               key={i}
               className={`checkbox-item fl-item2 ${i > 4 ? "d-none" : ""}`}
             >
-              <label>
-                <p>{elm}</p>
+              <label style={{ position: 'relative', cursor: 'pointer' }}>
+                <p
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '4px',
+                    transition: 'color 0.3s ease',
+                    margin: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '100%';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '0%';
+                  }}
+                >
+                  {elm}
+                  <span
+                    className="category-underline"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      left: '0',
+                      width: '0%',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </p>
                 <input
                   readOnly
                   onClick={(event) => {
@@ -192,8 +224,40 @@ export default function Sidebar(props) {
               key={i}
               className={`checkbox-item fl-item3  ${i > 2 ? "d-none" : ""}`}
             >
-              <label>
-                <p>{elm}</p>
+              <label style={{ position: 'relative', cursor: 'pointer' }}>
+                <p
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '4px',
+                    transition: 'color 0.3s ease',
+                    margin: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '100%';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '0%';
+                  }}
+                >
+                  {elm}
+                  <span
+                    className="category-underline"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      left: '0',
+                      width: '0%',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </p>
                 <input
                   readOnly
                   onClick={(event) => {
@@ -230,8 +294,40 @@ export default function Sidebar(props) {
         <ul className="tf-collapse-content">
           {levels.map((elm, index) => (
             <li key={index} className="checkbox-item">
-              <label>
-                <p>{elm}</p>
+              <label style={{ position: 'relative', cursor: 'pointer' }}>
+                <p
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '4px',
+                    transition: 'color 0.3s ease',
+                    margin: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '100%';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '0%';
+                  }}
+                >
+                  {elm}
+                  <span
+                    className="category-underline"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      left: '0',
+                      width: '0%',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </p>
                 <input
                   readOnly
                   onClick={(event) => {
@@ -265,8 +361,40 @@ export default function Sidebar(props) {
               key={index}
               className={`checkbox-item fl-item4  ${index > 5 ? "d-none" : ""}`}
             >
-              <label>
-                <p>{elm}</p>
+              <label style={{ position: 'relative', cursor: 'pointer' }}>
+                <p
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '4px',
+                    transition: 'color 0.3s ease',
+                    margin: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '100%';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '0%';
+                  }}
+                >
+                  {elm}
+                  <span
+                    className="category-underline"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      left: '0',
+                      width: '0%',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </p>
                 <input
                   readOnly
                   onClick={(event) => {
@@ -302,8 +430,40 @@ export default function Sidebar(props) {
         <ul className="tf-collapse-content">
           {durations.map((elm, index) => (
             <li key={index} className="checkbox-item">
-              <label>
-                <p>{elm}</p>
+              <label style={{ position: 'relative', cursor: 'pointer' }}>
+                <p
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '4px',
+                    transition: 'color 0.3s ease',
+                    margin: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '100%';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '0%';
+                  }}
+                >
+                  {elm}
+                  <span
+                    className="category-underline"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      left: '0',
+                      width: '0%',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </p>
                 <input
                   readOnly
                   onClick={(event) => {
@@ -334,8 +494,40 @@ export default function Sidebar(props) {
         <ul className="tf-collapse-content">
           {features.map((elm, index) => (
             <li key={index} className="checkbox-item">
-              <label>
-                <p>{elm}</p>
+              <label style={{ position: 'relative', cursor: 'pointer' }}>
+                <p
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    paddingBottom: '4px',
+                    transition: 'color 0.3s ease',
+                    margin: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '100%';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '';
+                    const underline = e.currentTarget.querySelector('.category-underline');
+                    if (underline) underline.style.width = '0%';
+                  }}
+                >
+                  {elm}
+                  <span
+                    className="category-underline"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      left: '0',
+                      width: '0%',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </p>
                 <input
                   readOnly
                   onClick={(event) => {
