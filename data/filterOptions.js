@@ -1,30 +1,23 @@
 export const categories = [
-  "Web Development",
-  "Software Testing",
-  "Mobile Development",
-  "Software Engineering",
-  "Game Development",
-  "Data Science",
-  "Cybersecurity",
+  "Artificial Intelligence",
+  "Blockchain",
+  "Data Visualisation",
+  "Cyber Security",
 ];
 
 export const instractors = [
-  "Kathryn Murphy",
-  "Eleanor Pena",
-  "Theresa Webb",
-  "Bessie Cooper",
+  "Sarah Chen",
+  "Marcus Lee",
+  "Alex Rivera",
+  "David Park",
+  "Emma Watson",
+  "Dr. James Kim",
+  "Lisa Zhang",
 ];
-export const levels = ["Beginner", "Intermediate", "Expert"];
-export const prices = ["Free", "Paid"];
+export const levels = ["Beginner", "Intermediate", "Advanced"];
+export const prices = ["Free"];
 export const languages = [
   "English",
-  "French",
-  "German",
-  "Italian",
-  "Turkish",
-  "Spain",
-  "Japanese",
-  "Thailand",
 ];
-export const durations = ["0-1 Hour", "1-3 Hours", "3-6 Hours"];
-export const features = ["Subtitle", "Quizzes", "Coding Exercises"];
+export const durations = ["5-7 Hours", "7-9 Hours", "9+ Hours"];
+export const features = ["Lifetime Access", "Certificate", "Practical Projects"];
