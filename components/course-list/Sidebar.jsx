@@ -210,7 +210,7 @@ export default function Sidebar(props) {
                 <span className="btn-checkbox" />
               </label>
               <span>
-                ( {dagarmyCourses.filter((el) => el.instractors.includes(elm)).length}
+                ( {dagarmyCourses.filter((el) => el.instractors?.includes(elm)).length}
                 )
               </span>
             </li>
@@ -248,7 +248,7 @@ export default function Sidebar(props) {
                 <span className="btn-checkbox" />
               </label>
               <span>
-                ( {dagarmyCourses.filter((el) => el.level.includes(elm)).length})
+                ( {dagarmyCourses.filter((el) => el.level?.includes(elm)).length})
               </span>
             </li>
           ))}
@@ -313,7 +313,7 @@ export default function Sidebar(props) {
                 <span className="btn-checkbox" />
               </label>
               <span>
-                ( {dagarmyCourses.filter((el) => el.language.includes(elm)).length})
+                ( {dagarmyCourses.filter((el) => el.language?.includes(elm)).length})
               </span>
             </li>
           ))}
@@ -350,7 +350,7 @@ export default function Sidebar(props) {
                 <span className="btn-checkbox" />
               </label>
               <span>
-                ( {dagarmyCourses.filter((el) => el.duration.includes(elm)).length})
+                ( {dagarmyCourses.filter((el) => el.duration?.includes(elm)).length})
               </span>
             </li>
           ))}
@@ -382,7 +382,7 @@ export default function Sidebar(props) {
                 <span className="btn-checkbox" />
               </label>
               <span>
-                ( {dagarmyCourses.filter((el) => el.features.includes(elm)).length})
+                ( {dagarmyCourses.filter((el) => el.features?.includes(elm)).length})
               </span>
             </li>
           ))}

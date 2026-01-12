@@ -1,4 +1,4 @@
-import { courses3 } from "@/data/courese";
+import { dagarmyCourses } from "@/data/dagarmy-courses";
 import {
   categories,
   durations,
@@ -126,7 +126,7 @@ export default function FilterDropdown(props) {
                 <span>
                   (
                   {
-                    courses3.filter((el) => el.filterCategories.includes(elm))
+                    dagarmyCourses.filter((el) => el.filterCategories.includes(elm))
                       .length
                   }
                   )
@@ -188,7 +188,7 @@ export default function FilterDropdown(props) {
                   <span>
                     (
                     {
-                      courses3.filter(
+                      dagarmyCourses.filter(
                         (el) => Math.round(el.rating) == Math.round(5 - i)
                       ).length
                     }
@@ -228,7 +228,7 @@ export default function FilterDropdown(props) {
                 </label>
                 <span>
                   ({" "}
-                  {courses3.filter((el) => el.instractors.includes(elm)).length}
+                  {dagarmyCourses.filter((el) => el.instractors?.includes(elm)).length}
                   )
                 </span>
               </li>
@@ -266,7 +266,7 @@ export default function FilterDropdown(props) {
                   <span className="btn-checkbox" />
                 </label>
                 <span>
-                  ( {courses3.filter((el) => el.level.includes(elm)).length})
+                  ( {dagarmyCourses.filter((el) => el.level?.includes(elm)).length})
                 </span>
               </li>
             ))}
@@ -297,7 +297,7 @@ export default function FilterDropdown(props) {
                   />
                   <span className="btn-checkbox" />
                 </label>
-                <span>({elm == "Free" ? 0 : courses3.length})</span>
+                <span>({elm == "Free" ? 0 : dagarmyCourses.length})</span>
               </li>
             ))}
           </ul>
@@ -333,7 +333,7 @@ export default function FilterDropdown(props) {
                   <span className="btn-checkbox" />
                 </label>
                 <span>
-                  ( {courses3.filter((el) => el.language.includes(elm)).length})
+                  ( {dagarmyCourses.filter((el) => el.language?.includes(elm)).length})
                 </span>
               </li>
             ))}
@@ -370,7 +370,7 @@ export default function FilterDropdown(props) {
                   <span className="btn-checkbox" />
                 </label>
                 <span>
-                  ( {courses3.filter((el) => el.duration.includes(elm)).length})
+                  ( {dagarmyCourses.filter((el) => el.duration?.includes(elm)).length})
                 </span>
               </li>
             ))}
@@ -402,7 +402,7 @@ export default function FilterDropdown(props) {
                   <span className="btn-checkbox" />
                 </label>
                 <span>
-                  ( {courses3.filter((el) => el.features.includes(elm)).length})
+                  ( {dagarmyCourses.filter((el) => el.features?.includes(elm)).length})
                 </span>
               </li>
             ))}

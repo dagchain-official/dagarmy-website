@@ -19,40 +19,35 @@ export default function PageTitle({
                 <li>
                   <i className="icon-arrow-right" />
                 </li>
-                <li>Development</li>
-                <li>
-                  <i className="icon-arrow-right" />
-                </li>
-                <li>Web Development</li>
+                <li>All Courses</li>
               </ul>
-              <h2 className="font-cardo fw-7">Web Development Courses</h2>
+              <h2 className="font-cardo fw-7">Master Future-Ready Tech Skills</h2>
               <p>
-                With one of our online web development courses, you can explore
-                different areas of this in-demand field.
+                Join the global army of Vibe Coders. Master AI, Blockchain, and Data Visualization with battle-tested courses designed for the 2026 economy.
               </p>
               <div className="widget tags-list style3">
-                <h6>Topics related to Web Development</h6>
+                <h6>Explore Our Training Streams</h6>
                 <ul className="tag-list">
                   <li className="tag-list-item">
-                    <a href="#">Design </a>
+                    <a href="#">Artificial Intelligence</a>
                   </li>
                   <li className="tag-list-item">
-                    <a href="#">UX</a>
+                    <a href="#">Blockchain</a>
                   </li>
                   <li className="tag-list-item">
-                    <a href="#">Java</a>
+                    <a href="#">Data Visualization</a>
                   </li>
                   <li className="tag-list-item">
-                    <a href="#">SEO</a>
+                    <a href="#">Cyber Security</a>
                   </li>
                   <li className="tag-list-item">
-                    <a href="#">Python</a>
+                    <a href="#">Web3 Development</a>
                   </li>
                   <li className="tag-list-item">
-                    <a href="#">Digital Media</a>
+                    <a href="#">Machine Learning</a>
                   </li>
                   <li className="tag-list-item">
-                    <a href="#">Software Development</a>
+                    <a href="#">Smart Contracts</a>
                   </li>
                 </ul>
               </div>
