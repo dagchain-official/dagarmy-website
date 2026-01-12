@@ -26,24 +26,46 @@ export default function Instractors() {
     },
   };
   return (
-    <section className="section-instructor tf-spacing-3 pt-0">
+    <section className="section-instructor tf-spacing-3 pt-0" style={{ background: '#ffffff', paddingTop: '80px', paddingBottom: '80px' }}>
       <div className="tf-container">
         <div className="row">
           <div className="col-12">
-            <div className="heading-section">
-              <h2 className="fw-7 font-cardo wow fadeInUp" data-wow-delay="0s">
+            <div className="heading-section" style={{ marginBottom: '50px' }}>
+              <h2 className="fw-7 font-cardo wow fadeInUp" data-wow-delay="0s" style={{ fontSize: '42px', color: '#1f2937', marginBottom: '20px' }}>
                 Learn From The Best Instructors
               </h2>
               <div className="flex items-center justify-between flex-wrap gap-10">
-                <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.1s">
-                  Lorem ipsum dolor sit amet, consectetur.
+                <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.1s" style={{ color: '#6b7280', fontSize: '16px', lineHeight: '1.6' }}>
+                  Industry experts and thought leaders teaching cutting-edge tech skills
                 </div>
                 <Link
                   href={`/instructor-list`}
-                  className="tf-btn-arrow wow fadeInUp"
+                  className="wow fadeInUp"
                   data-wow-delay="0.2s"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: '#8b5cf6',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#6d28d9';
+                    e.currentTarget.style.gap = '12px';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.gap = '8px';
+                  }}
                 >
-                  See All Instructors <i className="icon-arrow-top-right" />
+                  See All Instructors
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -87,7 +109,7 @@ export default function Instractors() {
                       </p>
                       <div className="ratings">
                         <div className="number">{instructor.rating}</div>
-                        <i className="icon-star-1" />
+                        <i className="icon-star-1" style={{ color: '#8b5cf6' }} />
                       </div>
                     </div>
                   </div>
