@@ -76,13 +76,13 @@ export default function Hero() {
                   marginBottom: '24px',
                   color: '#1f2937'
                 }}>
-                  Get <span style={{
+                  Join the <span style={{
                     background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     fontWeight: '700'
-                  }}>250+</span> Best Online Training From <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span>
+                  }}>Global Army</span> of Vibe Coders & Tech Leaders
                 </h1>
                 <h6 className="wow fadeInUp" data-wow-delay="0.3s" style={{
                   fontSize: '18px',
@@ -91,7 +91,7 @@ export default function Hero() {
                   marginBottom: '32px',
                   fontWeight: '400'
                 }}>
-                  Start, switch, or advance your career with tech focussed courses, Professional Certificates, as we Build a Global Army of Future-Ready Tech Leaders.
+                  No Talent Left Behind. Master AI, Blockchain, and Cyber Security. Turn your skills into startups, your potential into placements—from Tier 3 cities to Silicon Valley.
                 </h6>
                 <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
                   <PremiumButton
