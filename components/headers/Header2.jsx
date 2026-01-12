@@ -123,72 +123,192 @@ export default function Header2() {
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '6px',
+              display: 'inline-block'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#8b5cf6';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
               About
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
             </Link>
             <Link href="/courses" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '6px',
+              display: 'inline-block'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#8b5cf6';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
               Courses
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
             </Link>
             <Link href="/jobs" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '6px',
+              display: 'inline-block'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#8b5cf6';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
               Jobs
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
             </Link>
             <Link href="/mentorship" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '6px',
+              display: 'inline-block'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#8b5cf6';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
               Mentorship
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
             </Link>
             <Link href="/hackathons" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '6px',
+              display: 'inline-block'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#8b5cf6';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
               Hackathons
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
             </Link>
             <Link href="/blogs" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.2s',
-              whiteSpace: 'nowrap'
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '6px',
+              display: 'inline-block'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#8b5cf6';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
               Blogs
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
             </Link>
           </nav>
         </div>
