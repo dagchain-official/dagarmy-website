@@ -26,6 +26,52 @@ export default function Courses() {
 
   return (
     <section className="section-popular-course tf-spacing-6 pt-0" style={{ paddingTop: '0 !important' }}>
+      <style jsx global>{`
+        .badge-container {
+          position: relative;
+          display: inline-block;
+        }
+        .badge-container:hover .tooltip-text {
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+        .badge-container:hover img {
+          transform: scale(1.1);
+        }
+        .tooltip-text {
+          visibility: hidden;
+          position: absolute;
+          bottom: -40px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+          color: #ffffff;
+          text-align: center;
+          padding: 8px 14px;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 600;
+          white-space: nowrap;
+          z-index: 9999;
+          opacity: 0;
+          transition: opacity 0.3s, visibility 0.3s;
+          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4), 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+        .tooltip-text::after {
+          content: "";
+          position: absolute;
+          top: -5px;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 0 5px 5px 5px;
+          border-style: solid;
+          border-color: transparent transparent #7c3aed transparent;
+        }
+        .swiper-button-prev::after,
+        .swiper-button-next::after {
+          display: none !important;
+        }
+      `}</style>
       <div className="tf-container">
         <div className="row">
           <div className="col-12">
@@ -161,48 +207,6 @@ export default function Courses() {
                             </a>
                           </div>
                           <div className="bottom">
-                            <style jsx>{`
-                              .badge-container {
-                                position: relative;
-                                display: inline-block;
-                              }
-                              .badge-container:hover .tooltip-text {
-                                visibility: visible !important;
-                                opacity: 1 !important;
-                              }
-                              .badge-container:hover img {
-                                transform: scale(1.1);
-                              }
-                              .tooltip-text {
-                                visibility: hidden;
-                                position: absolute;
-                                bottom: -40px;
-                                left: 50%;
-                                transform: translateX(-50%);
-                                background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
-                                color: #ffffff;
-                                text-align: center;
-                                padding: 8px 14px;
-                                border-radius: 6px;
-                                font-size: 13px;
-                                font-weight: 600;
-                                white-space: nowrap;
-                                z-index: 9999;
-                                opacity: 0;
-                                transition: opacity 0.3s, visibility 0.3s;
-                                box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4), 0 0 20px rgba(168, 85, 247, 0.3);
-                              }
-                              .tooltip-text::after {
-                                content: "";
-                                position: absolute;
-                                top: -5px;
-                                left: 50%;
-                                margin-left: -5px;
-                                border-width: 0 5px 5px 5px;
-                                border-style: solid;
-                                border-color: transparent transparent #7c3aed transparent;
-                              }
-                            `}</style>
                             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                               {elm.badges && elm.badges.map((badge, idx) => (
                                 <div
@@ -235,12 +239,6 @@ export default function Courses() {
                         </SwiperSlide>
                       ))}
                     </Swiper>
-                    <style jsx global>{`
-                      .swiper-button-prev::after,
-                      .swiper-button-next::after {
-                        display: none !important;
-                      }
-                    `}</style>
                     <div className="courses-prev" style={{
                       position: 'absolute',
                       left: '0',
