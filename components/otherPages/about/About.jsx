@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 export default function About() {
   return (
-    <section className="flat-about">
+    <section className="flat-about" style={{ background: '#ffffff', paddingTop: '80px', paddingBottom: '60px' }}>
       <div className="tf-container">
         <div className="row">
           <div className="col-lg-7">

@@ -2,18 +2,35 @@ import React from "react";
 import Image from "next/image";
 export default function OurVisions() {
   return (
-    <section className="section-vison tf-spacing-8 pt-0 page-about ">
+    <section className="section-vison tf-spacing-8 pt-0 page-about" style={{ background: '#ffffff', paddingTop: '60px', paddingBottom: '60px' }}>
       <div className="tf-container">
-        <div className="row  ">
+        <div className="row align-items-center">
           <div className="col-lg-7">
-            <div className="images wow fadeInLeft">
+            <div
+              className="wow fadeInLeft"
+              style={{
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.1)',
+                maxHeight: '500px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
               <Image
                 className="lazyload"
-                data-src="/images/section/video-placeholder.jpg"
-                alt=""
-                src="/images/section/video-placeholder.jpg"
+                data-src="/images/about  us/image1.png"
+                alt="DAGARMY Training Ground - Future Tech Leaders"
+                src="/images/about  us/image1.png"
                 width={1372}
                 height={1101}
+                style={{
+                  objectFit: 'cover',
+                  width: '100%',
+                  height: '100%',
+                  maxHeight: '500px'
+                }}
               />
             </div>
           </div>
