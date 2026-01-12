@@ -36,12 +36,33 @@ export default function OurVisions() {
           </div>
           <div className="col-lg-5">
             <div className="content">
-              <div className="box-sub-tag wow fadeInUp">
-                <div className="sub-tag-icon">
-                  <i className="icon-flash" />
+              <div className="box-sub-tag wow fadeInUp" style={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(109, 40, 217, 0.05) 100%)',
+                border: '1px solid rgba(139, 92, 246, 0.15)',
+                borderRadius: '12px',
+                padding: '12px 20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(109, 40, 217, 0.1) 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1.5px solid rgba(139, 92, 246, 0.2)'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#8b5cf6" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="6" stroke="#8b5cf6" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="2" fill="#8b5cf6" />
+                  </svg>
                 </div>
                 <div className="sub-tag-title">
-                  <p>How We Operate</p>
+                  <p style={{ margin: 0, fontWeight: '600', fontSize: '15px', color: '#1f2937' }}>How We Operate</p>
                 </div>
               </div>
               <h2 className="fw-7 font-cardo wow fadeInUp">

@@ -60,12 +60,32 @@ export default function Facts() {
           </div>
           <div className="col-lg-5">
             <div className="content-wrap">
-              <div className="box-sub-tag wow fadeInUp" data-wow-delay="0.1s">
-                <div className="sub-tag-icon">
-                  <i className="icon-flash" />
+              <div className="box-sub-tag wow fadeInUp" data-wow-delay="0.1s" style={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(109, 40, 217, 0.05) 100%)',
+                border: '1px solid rgba(139, 92, 246, 0.15)',
+                borderRadius: '12px',
+                padding: '12px 20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(109, 40, 217, 0.1) 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1.5px solid rgba(139, 92, 246, 0.2)'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
                 <div className="sub-tag-title">
-                  <p>Industry-Leading Education</p>
+                  <p style={{ margin: 0, fontWeight: '600', fontSize: '15px', color: '#1f2937' }}>Industry-Leading Education</p>
                 </div>
               </div>
               <h2
