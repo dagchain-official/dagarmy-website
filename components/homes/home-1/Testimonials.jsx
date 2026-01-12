@@ -49,23 +49,24 @@ export default function Testimonials({
   };
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
-    <section className={`${parentClass}`}>
+    <section className={`${parentClass}`} style={{ background: '#fafafa', paddingTop: '80px', paddingBottom: '80px' }}>
       <div className="tf-container">
         <div className="row justify-center">
           <div className="col-xl-10 col-sm-12">
-            <div className="heading-section text-center">
+            <div className="heading-section text-center" style={{ marginBottom: '60px' }}>
               <h2
                 className={`fw-7 ${titleFont} wow fadeInUp`}
                 data-wow-delay="0s"
+                style={{ fontSize: '42px', color: '#1f2937', marginBottom: '20px' }}
               >
-                What Clients Are Saying
+                Student Success Stories
               </h2>
-              <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
-                Lorem ipsum dolor sit amet elit
+              <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s" style={{ color: '#6b7280', maxWidth: '700px', margin: '0 auto', fontSize: '16px', lineHeight: '1.6' }}>
+                Hear from learners who transformed their careers with DAGARMY's cutting-edge tech education
               </div>
             </div>
             <div className="gallery">
-              <div className="swiper-button-prev widget-saying-button">
+              <div className="swiper-button-prev widget-saying-button" style={{ color: '#8b5cf6' }}>
                 <svg
                   width={35}
                   height={34}
@@ -73,14 +74,14 @@ export default function Testimonials({
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M35 16.9832H2.02708" stroke="black" />
+                  <path d="M35 16.9832H2.02708" stroke="#8b5cf6" />
                   <path
                     d="M8.96808 24.7926C7.02916 20.5253 5.49308 18.7339 1.66599 16.9949C5.57849 15.0692 7.09716 13.2712 8.96808 9.17383"
-                    stroke="black"
+                    stroke="#8b5cf6"
                   />
                 </svg>
               </div>
-              <div className="swiper-button-next widget-saying-button">
+              <div className="swiper-button-next widget-saying-button" style={{ color: '#8b5cf6' }}>
                 <svg
                   width={35}
                   height={34}
@@ -88,10 +89,10 @@ export default function Testimonials({
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M0 16.9832H32.9729" stroke="black" />
+                  <path d="M0 16.9832H32.9729" stroke="#8b5cf6" />
                   <path
                     d="M26.0319 24.7926C27.9708 20.5253 29.5069 18.7339 33.334 16.9949C29.4215 15.0692 27.9028 13.2712 26.0319 9.17383"
-                    stroke="black"
+                    stroke="#8b5cf6"
                   />
                 </svg>
               </div>
@@ -129,9 +130,9 @@ export default function Testimonials({
                           <span className="name">{testimonial.name}</span>
                         </a>
                         <span>{testimonial.role}</span>
-                        <div className="ratings">
+                        <div className="ratings" style={{ color: '#8b5cf6' }}>
                           {[...Array(testimonial.rating)].map((_, i) => (
-                            <i key={i} className="icon-star-1" />
+                            <i key={i} className="icon-star-1" style={{ color: '#8b5cf6' }} />
                           ))}
                         </div>
                       </div>
