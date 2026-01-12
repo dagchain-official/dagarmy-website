@@ -69,35 +69,35 @@ export default function CourseList5() {
 
     if (selectedInstractors.length) {
       const filteredByInstractors = [...dagarmyCourses].filter((elm) =>
-        selectedInstractors.some((el) => elm.instractors.includes(el))
+        selectedInstractors.some((el) => elm.instractors?.includes(el))
       );
       filteredArrays = [...filteredArrays, filteredByInstractors];
     }
 
     if (selectedLevels.length) {
       const filteredByLevel = [...dagarmyCourses].filter((elm) =>
-        selectedLevels.every((el) => elm.level.includes(el))
+        selectedLevels.every((el) => elm.level?.includes(el))
       );
       filteredArrays = [...filteredArrays, filteredByLevel];
     }
 
     if (selectedLanguages.length) {
       const filteredByLanguage = [...dagarmyCourses].filter((elm) =>
-        selectedLanguages.some((el) => elm.language.includes(el))
+        selectedLanguages.some((el) => elm.language?.includes(el))
       );
       filteredArrays = [...filteredArrays, filteredByLanguage];
     }
 
     if (selectedDurations.length) {
       const filteredByDuration = [...dagarmyCourses].filter((elm) =>
-        selectedDurations.every((el) => elm.duration.includes(el))
+        selectedDurations.every((el) => elm.duration?.includes(el))
       );
       filteredArrays = [...filteredArrays, filteredByDuration];
     }
 
     if (selectedFeatures.length) {
       const filteredByFeatures = [...dagarmyCourses].filter((elm) =>
-        selectedFeatures.every((el) => elm.features.includes(el))
+        selectedFeatures.every((el) => elm.features?.includes(el))
       );
       filteredArrays = [...filteredArrays, filteredByFeatures];
     }
