@@ -55,9 +55,38 @@ export default function DownloadApp() {
                   data-wow-delay="0.4s"
                   style={{ fontSize: '16px', height: '52px', minWidth: '200px' }}
                 />
-                <a href="#" className="tf-btn style-secondary wow fadeInUp" data-wow-delay="0.45s">
-                  View All Courses
-                  <i className="icon-arrow-top-right" />
+                <a
+                  href="#"
+                  className="wow fadeInUp relative flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                  data-wow-delay="0.45s"
+                  style={{ textDecoration: 'none', height: '52px', minWidth: '220px', justifyContent: 'center' }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="absolute w-6 fill-white z-[20] transition-all duration-700 ease-in-out -left-1/4 group-hover:left-4 group-hover:fill-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                    ></path>
+                  </svg>
+                  <span
+                    className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-3 group-hover:translate-x-3"
+                  >
+                    View All Courses
+                  </span>
+                  <span
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
+                  ></span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="absolute w-6 fill-white z-[20] transition-all duration-700 ease-in-out right-4 group-hover:-right-1/4 group-hover:fill-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                    ></path>
+                  </svg>
                 </a>
               </div>
             </div>

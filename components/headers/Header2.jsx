@@ -60,27 +60,35 @@ export default function Header2() {
             />
             <Link
               href={`/register`}
-              style={{
-                height: '42px',
-                padding: '0 24px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: '600',
-                color: '#8b5cf6',
-                background: '#fff',
-                border: '1px solid #8b5cf6',
-                cursor: 'pointer',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                whiteSpace: 'nowrap',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#f5f3ff'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; }}
+              className="relative flex items-center gap-1 bg-[#8b5cf6] px-6 py-2 border-2 border-[#8b5cf6] text-sm rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+              style={{ textDecoration: 'none', height: '42px', minWidth: '140px', justifyContent: 'center' }}
             >
-              For Business
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute w-5 fill-white z-[20] transition-all duration-700 ease-in-out -left-1/4 group-hover:left-3 group-hover:fill-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                ></path>
+              </svg>
+              <span
+                className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-2 group-hover:translate-x-2"
+              >
+                For Business
+              </span>
+              <span
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[150px] group-hover:h-[150px] group-hover:opacity-100 z-[0]"
+              ></span>
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute w-5 fill-white z-[20] transition-all duration-700 ease-in-out right-3 group-hover:-right-1/4 group-hover:fill-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                ></path>
+              </svg>
             </Link>
           </div>
 
