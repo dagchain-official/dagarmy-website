@@ -107,9 +107,20 @@ export default function Instractors() {
                       <p className="short-description">
                         {instructor.description}
                       </p>
-                      <div className="ratings">
-                        <div className="number">{instructor.rating}</div>
-                        <i className="icon-star-1" style={{ color: '#8b5cf6' }} />
+                      <div className="ratings" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
+                        <div className="number" style={{ fontWeight: '600', fontSize: '15px', color: '#1f2937' }}>{instructor.rating}</div>
+                        <div style={{ display: 'flex', gap: '2px' }}>
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <i
+                              key={star}
+                              className="icon-star-1"
+                              style={{
+                                color: star <= Math.floor(instructor.rating) ? '#8b5cf6' : '#e5e7eb',
+                                fontSize: '14px'
+                              }}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

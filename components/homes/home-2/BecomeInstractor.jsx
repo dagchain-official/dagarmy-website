@@ -29,16 +29,16 @@ export default function BecomeInstractor() {
                       width: '60px',
                       height: '60px',
                       borderRadius: '12px',
-                      background: 'rgba(139, 92, 246, 0.1)',
+                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(109, 40, 217, 0.1) 100%)',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      border: '2px solid rgba(139, 92, 246, 0.2)'
                     }}>
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M2 3h20"></path>
-                        <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"></path>
-                        <path d="M12 16v5"></path>
-                        <path d="M8 21h8"></path>
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="8" r="6" stroke="#8b5cf6" strokeWidth="2" />
+                        <path d="M12 14v8m-4 0h8" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M9 8l1.5 1.5L13 7" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                     <span style={{ fontWeight: '700', fontSize: '18px', color: '#1f2937' }}>Join Elite Trainers</span>
