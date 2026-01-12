@@ -264,8 +264,8 @@ export default function CourseList5() {
                                     <p>{elm.hours} hours</p>
                                   </div>
                                 </div>
-                                <div className="h5 price fw-5">
-                                  ${elm.price}
+                                <div className="h5 fw-5" style={{ color: '#8b5cf6' }}>
+                                  FREE
                                 </div>
                               </div>
                               <h5 className="fw-5 line-clamp-2">
@@ -274,9 +274,8 @@ export default function CourseList5() {
                                 </Link>
                               </h5>
                               <p className="short-description">
-                                Become a Full-Stack Web Developer with just ONE
-                                course. HTML, CSS, Javascript, Node, <br />
-                                React, PostgreSQL, Web3 and DApps
+                                Master cutting-edge technology skills with hands-on projects. <br />
+                                Join the global army of future-ready tech leaders.
                               </p>
                               <div className="ratings">
                                 <div className="number">{elm.rating}</div>

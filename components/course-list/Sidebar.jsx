@@ -256,36 +256,6 @@ export default function Sidebar(props) {
       </div>
       <div className="sidebar-item widget wg-categorie tf-collapse-item">
         <div className="sidebar-title tf-collapse-title">
-          <h5 className="fw-5">Price</h5>
-          <i className="tf-collapse-icon icon-arrow-top" />
-        </div>
-        <ul className="tf-collapse-content">
-          {prices.map((elm, index) => (
-            <li key={index} className="checkbox-item">
-              <label>
-                <p>{elm}</p>
-                <input
-                  readOnly
-                  onClick={(event) => {
-                    event.stopPropagation(); // Prevent event bubbling
-                    setSelectedPrices((pre) =>
-                      pre.includes(elm)
-                        ? pre.filter((el) => el !== elm)
-                        : [...pre, elm]
-                    );
-                  }}
-                  checked={selectedPrices.includes(elm)}
-                  type="radio"
-                />
-                <span className="btn-checkbox" />
-              </label>
-              <span>({elm == "Free" ? 0 : dagarmyCourses.length})</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="sidebar-item widget wg-categorie tf-collapse-item">
-        <div className="sidebar-title tf-collapse-title">
           <h5 className="fw-5">Language</h5>
           <i className="tf-collapse-icon icon-arrow-top" />
         </div>
