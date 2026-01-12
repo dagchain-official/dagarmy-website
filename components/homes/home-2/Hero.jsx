@@ -14,7 +14,7 @@ export default function Hero() {
     const style = document.createElement('style');
     style.innerHTML = `
       .page-title-home2,
-      .page-title-home2 *:not(.tf-btn):not(span):not(i):not(.btn-premium):not(.bg):not(.wrap):not(.content):not(.icon):not(.char),
+      .page-title-home2 *:not(.tf-btn):not(.custom-explore-btn):not(span):not(i):not(.btn-premium):not(.bg):not(.wrap):not(.content):not(.icon):not(.char):not(svg):not(path),
       .wrap-brand,
       .wrap-brand *,
       .slide-brand,
@@ -103,22 +103,35 @@ export default function Hero() {
                   />
                   <a
                     href="#"
-                    style={{
-                      padding: '14px 32px',
-                      background: '#fff',
-                      color: '#8b5cf6',
-                      border: '2px solid #8b5cf6',
-                      borderRadius: '8px',
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}
+                    className="custom-explore-btn relative flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                    style={{ textDecoration: 'none', height: '52px', minWidth: '200px', justifyContent: 'center' }}
                   >
-                    Explore courses
-                    <i className="icon-arrow-top-right" />
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="absolute w-6 fill-white z-[20] transition-all duration-700 ease-in-out -left-1/4 group-hover:left-4 group-hover:fill-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                      ></path>
+                    </svg>
+                    <span
+                      className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-3 group-hover:translate-x-3"
+                    >
+                      Explore courses
+                    </span>
+                    <span
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
+                    ></span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="absolute w-6 fill-white z-[20] transition-all duration-700 ease-in-out right-4 group-hover:-right-1/4 group-hover:fill-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                      ></path>
+                    </svg>
                   </a>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ display: 'flex', gap: '4px' }}>
@@ -126,7 +139,7 @@ export default function Hero() {
                         <span key={star} style={{ color: '#8b5cf6', fontSize: '16px' }}>★</span>
                       ))}
                     </div>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#621e6dff', whiteSpace: 'nowrap' }}>
                       35k+ happy students
                     </div>
                   </div>
