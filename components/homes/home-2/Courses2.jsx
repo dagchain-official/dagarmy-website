@@ -218,26 +218,6 @@ export default function Courses2() {
                             </a>
                           </div>
                           <div className="bottom">
-
-                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                              {course.badges && course.badges.map((badge, idx) => (
-                                <div
-                                  key={idx}
-                                  className="badge-container"
-                                >
-                                  <Image
-                                    src={`/images/badges/${badge}.svg`}
-                                    alt={badge === 'dag-soldier' ? 'DAG Soldier Badge' : badge === 'dag-lieutenant' ? 'DAG Lieutenant Badge' : `${badge} Badge`}
-                                    width={60}
-                                    height={60}
-                                    style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-                                  />
-                                  <span className="tooltip-text">
-                                    {badge === 'dag-soldier' ? 'DAG Soldier' : 'DAG Lieutenant'}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
                             <Link
                               href={`/course-single-v1/${course.id}`}
                               className="tf-btn-arrow"
