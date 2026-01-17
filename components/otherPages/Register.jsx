@@ -36,6 +36,8 @@ export default function Register() {
   };
 
   const handleConnectWallet = () => {
+    // Clear logout flag to allow fresh registration
+    sessionStorage.removeItem('dagarmy_logged_out');
     if (typeof window !== 'undefined' && window.modal) {
       window.modal.open();
     }
