@@ -1,7 +1,11 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
+
 export default function Setttings() {
+  const { userProfile, address, userRole } = useAuth();
+
   return (
     <div className="col-xl-9 col-lg-12">
       <div className="section-setting-right section-right">
@@ -14,6 +18,60 @@ export default function Setttings() {
             </ul>
             <div className="widget-content-tab">
               <div className="widget-content-inner active">
+                {/* Login Information Section */}
+                <div className="row mb-4">
+                  <div className="col-12">
+                    <div style={{
+                      background: '#f9fafb',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      padding: '20px',
+                      marginBottom: '20px'
+                    }}>
+                      <h5 className="fw-6 mb-3">Login Information</h5>
+                      <div className="row">
+                        <div className="col-md-6 mb-3">
+                          <p className="fs-14 text-muted mb-1">Login Method</p>
+                          <p className="fs-15 fw-5">
+                            {userProfile?.loginMethod || 'Wallet'}
+                          </p>
+                        </div>
+                        <div className="col-md-6 mb-3">
+                          <p className="fs-14 text-muted mb-1">Account Type</p>
+                          <p className="fs-15 fw-5" style={{ textTransform: 'capitalize' }}>
+                            {userRole || 'Not Set'}
+                          </p>
+                        </div>
+                        {userProfile?.email && (
+                          <div className="col-md-6 mb-3">
+                            <p className="fs-14 text-muted mb-1">Email Address</p>
+                            <p className="fs-15 fw-5">{userProfile.email}</p>
+                          </div>
+                        )}
+                        {address && (
+                          <div className="col-md-6 mb-3">
+                            <p className="fs-14 text-muted mb-1">Wallet Address</p>
+                            <p className="fs-15 fw-5" style={{ 
+                              fontFamily: 'monospace',
+                              wordBreak: 'break-all'
+                            }}>
+                              {address.slice(0, 6)}...{address.slice(-4)}
+                            </p>
+                          </div>
+                        )}
+                        {userProfile?.timestamp && (
+                          <div className="col-md-6 mb-3">
+                            <p className="fs-14 text-muted mb-1">Member Since</p>
+                            <p className="fs-15 fw-5">
+                              {new Date(userProfile.timestamp).toLocaleDateString()}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="row">
                   <div className="profile-wrap">
                     <div className="profile-img">
