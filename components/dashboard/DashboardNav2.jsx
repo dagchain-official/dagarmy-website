@@ -25,11 +25,6 @@ const dashboardItems = [
     iconClass: "flaticon-heart",
     label: "Wishlist",
   },
-  {
-    href: "/student-quizzes",
-    iconClass: "flaticon-question",
-    label: "Quizzes",
-  },
   { 
     href: "/student-order", 
     iconClass: "flaticon-bag", 
