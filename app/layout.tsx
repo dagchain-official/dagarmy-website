@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "react-modal-video/css/modal-video.css";
 import Context from "@/context/Context";
+import { Web3Provider } from "@/context/Web3Provider";
 import { usePathname } from "next/navigation";
 
 export default function RootLayout({
@@ -34,7 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="counter-scroll">
-        <Context>{children}</Context>
+        <Web3Provider>
+          <Context>{children}</Context>
+        </Web3Provider>
       </body>
     </html>
   );
