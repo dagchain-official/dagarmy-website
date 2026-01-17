@@ -278,7 +278,7 @@ export default function Header2() {
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
-            <Link href="/blogs" style={{
+            <Link href="/blog" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
@@ -299,7 +299,7 @@ export default function Header2() {
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '0%';
               }}>
-              Blogs
+              Blog
               <span className="nav-underline" style={{
                 position: 'absolute',
                 bottom: '0',
