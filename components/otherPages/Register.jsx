@@ -14,8 +14,12 @@ export default function Register() {
   const [showRoleSelection, setShowRoleSelection] = useState(false);
 
   useEffect(() => {
-    if (isConnected && address && !isAuthenticated) {
+    // Only show role selection if connected AND not logged out
+    const hasLoggedOut = sessionStorage.getItem('dagarmy_logged_out') === 'true';
+    if (isConnected && address && !isAuthenticated && !hasLoggedOut) {
       setShowRoleSelection(true);
+    } else if (hasLoggedOut) {
+      setShowRoleSelection(false);
     }
   }, [isConnected, address, isAuthenticated]);
 

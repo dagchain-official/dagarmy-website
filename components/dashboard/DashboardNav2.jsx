@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const dashboardItems = [
   {
@@ -35,15 +36,17 @@ const dashboardItems = [
     iconClass: "flaticon-setting-1",
     label: "Settings",
   },
-  { 
-    href: "/", 
-    iconClass: "flaticon-export", 
-    label: "Logout" 
-  },
 ];
 
 export default function DashboardNav2() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
   
   useEffect(() => {
     const toggleElement = document.querySelector(
@@ -93,6 +96,22 @@ export default function DashboardNav2() {
           {item.label}
         </Link>
       ))}
+      <button
+        onClick={handleLogout}
+        className="dashboard-item"
+        style={{
+          background: 'none',
+          border: 'none',
+          width: '100%',
+          textAlign: 'left',
+          cursor: 'pointer',
+          padding: '0',
+          font: 'inherit'
+        }}
+      >
+        <i className="flaticon-export" />
+        Logout
+      </button>
     </>
   );
 }
