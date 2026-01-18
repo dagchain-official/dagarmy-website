@@ -1,6 +1,7 @@
 .hover-img {
   .image-wrap {
     overflow: hidden;
+
     img {
       width: 100%;
       height: 100%;
@@ -10,6 +11,7 @@
       transition: transform 500ms ease;
     }
   }
+
   &:hover {
     .image-wrap {
       img {
@@ -26,15 +28,19 @@
   @include flex(center, flex-start);
   gap: 10px;
   flex-wrap: wrap;
+
   .meta-item {
     position: relative;
     @include flex(center, flex-start);
     gap: 7px;
+
     i {
       font-size: 16px;
     }
+
     &:not(:last-child) {
       padding-right: 10px;
+
       &::after {
         position: absolute;
         content: "";
@@ -45,6 +51,7 @@
       }
     }
   }
+
   a:hover {
     color: var(--Secondary) !important;
   }
@@ -54,81 +61,110 @@
   @include d-flex();
   flex-direction: column;
   gap: 11px;
+
   .article-thumb {
     border-radius: 4px;
     width: 100%;
     height: 260px;
   }
+
   .article-content {
     @include d-flex();
     flex-direction: column;
     gap: 4px;
   }
+
   .article-label {
     color: var(--Soft-Text);
   }
+
   h3 {
     line-height: 36px;
+
+    a {
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: var(--Secondary);
+      }
+    }
   }
+
   &.style-row {
     flex-direction: row;
     gap: 40px;
+
     .article-thumb {
       height: 350px;
       width: 450px;
       flex-shrink: 0;
       width: 47.9%;
     }
+
     .article-content {
       padding-top: 26px;
       gap: 13px;
       flex-grow: 1;
-      > p {
+
+      >p {
         font-size: 15px;
       }
-      > a {
+
+      >a {
         margin-top: 5px;
       }
     }
+
     .meta-item {
       color: var(--Soft-Text);
     }
   }
+
   &.style-large {
     gap: 31px;
+
     .article-thumb {
       height: unset;
     }
+
     .article-content {
       gap: 12px;
+
       .meta {
         margin: 4px 0 5px;
       }
     }
+
     .meta-item {
       color: var(--Soft-Text);
     }
   }
+
   &.padding-content {
     border: 1px solid var(--Border);
     border-radius: 12px;
     overflow: hidden;
+
     .article-thumb {
       border-radius: 0;
     }
+
     .article-content {
       padding: 0 19px 12px;
     }
   }
+
   &.style-2 {
     overflow: hidden;
     background-color: var(--White);
     border-radius: 12px;
     box-shadow: 0px 1px 4px 0px rgba(64, 79, 104, 0.05);
     gap: 0;
+
     .article-thumb {
       border-radius: 0px;
     }
+
     .article-content {
       padding: 12px 20px;
     }

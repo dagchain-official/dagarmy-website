@@ -1,165 +1,172 @@
 "use client";
 import React from "react";
-import Pagination from "../common/Pagination";
-import Image from "next/image";
-import { dagarmyCourses } from "@/data/dagarmy-courses";
 
 export default function Dashboard2() {
-  const enrolledCourses = dagarmyCourses.slice(0, 4);
-  const totalEnrolled = 12;
-  const completedCourses = 5;
-  const inProgressCourses = 7;
+    const stats = [
+        {
+            icon: "icon-book",
+            number: "12",
+            label: "Enrolled Courses",
+            color: "#8b5cf6",
+        },
+        {
+            icon: "icon-clock",
+            number: "48h",
+            label: "Learning Hours",
+            color: "#6d28d9",
+        },
+        {
+            icon: "icon-award",
+            number: "8",
+            label: "Certificates",
+            color: "#7c3aed",
+        },
+        {
+            icon: "icon-users",
+            number: "156",
+            label: "Study Group",
+            color: "#8b5cf6",
+        },
+    ];
 
-  return (
-    <div className="col-xl-9 col-lg-12">
-      <div className="section-dashboard-right">
-        <div className="section-icons">
-          <div className="row">
-            <div className="icons-items">
-              <div className="icons-box style-4 wow fadeInUp">
-                <div className="icons">
-                  <i className="flaticon-play-2" />
+    return (
+        <div className="col-xl-9 col-lg-12">
+            <div className="dashboard-content">
+                {/* Welcome Section */}
+                <div
+                    style={{
+                        background: "#ffffff",
+                        borderRadius: "12px",
+                        padding: "32px",
+                        marginBottom: "24px",
+                        border: "1px solid rgba(139, 92, 246, 0.08)",
+                        boxShadow: "0 2px 20px rgba(0, 0, 0, 0.06)",
+                    }}
+                >
+                    <h3
+                        style={{
+                            fontSize: "28px",
+                            fontWeight: "700",
+                            color: "#1f2937",
+                            marginBottom: "8px",
+                        }}
+                    >
+                        Welcome Back! 👋
+                    </h3>
+                    <p style={{ color: "#6b7280", fontSize: "15px", margin: 0 }}>
+                        Continue your learning journey with DAGARMY
+                    </p>
                 </div>
-                <div className="content">
-                  <h6>Enrolled Courses</h6>
-                  <span className="num-count fs-26 fw-5">{totalEnrolled}</span>
-                </div>
-              </div>
-              <div
-                className="icons-box style-4 wow fadeInUp"
-                data-wow-delay="0.1s"
-              >
-                <div className="icons">
-                  <i className="flaticon-alarm" />
-                </div>
-                <div className="content">
-                  <h6>Completed</h6>
-                  <span className="num-count fs-26 fw-5">{completedCourses}</span>
-                </div>
-              </div>
-              <div
-                className="icons-box style-4 wow fadeInUp"
-                data-wow-delay="0.2s"
-              >
-                <div className="icons">
-                  <i className="flaticon-video" />
-                </div>
-                <div className="content">
-                  <h6>In Progress</h6>
-                  <span className="num-count fs-26 fw-5">{inProgressCourses}</span>
-                </div>
-              </div>
-            </div>
-            <div className="icons-items">
-              <div className="icons-box style-4 wow fadeInUp">
-                <div className="icons">
-                  <i className="flaticon-user" />
-                </div>
-                <div className="content">
-                  <h6>Total Hours</h6>
-                  <span className="num-count fs-26 fw-5">156</span>
-                </div>
-              </div>
-              <div
-                className="icons-box style-4 wow fadeInUp"
-                data-wow-delay="0.1s"
-              >
-                <div className="icons">
-                  <i className="flaticon-user-2" />
-                </div>
-                <div className="content">
-                  <h6>Certificates</h6>
-                  <span className="num-count fs-26 fw-5">{completedCourses}</span>
-                </div>
-              </div>
-              <div
-                className="icons-box style-4 wow fadeInUp"
-                data-wow-delay="0.2s"
-              >
-                <div className="icons">
-                  <i className="flaticon-graduation" />
-                </div>
-                <div className="content">
-                  <h6>Achievements</h6>
-                  <span className="num-count fs-26 fw-5">8</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* section-learn */}
-        <div className="section-learn">
-          <div className="heading-section flex justify-between items-center">
-            <h6 className="fw-5 fs-22 wow fadeInUp">My Enrolled Courses</h6>
-            <a
-              href="/courses"
-              className="tf-btn-arrow wow fadeInUp"
-              data-wow-delay="0.1s"
-            >
-              View All <i className="icon-arrow-top-right" />
-            </a>
-          </div>
-          <div className="wg-box">
-            <div className="table-selling-course wow fadeInUp">
-              <div className="head">
-                <div className="item">
-                  <div className="fs-15 fw-5">Course Name</div>
-                </div>
-                <div className="item">
-                  <div className="fs-15 fw-5">Progress</div>
-                </div>
-                <div className="item">
-                  <div className="fs-15 fw-5">Status</div>
-                </div>
-                <div className="item">
-                  <div className="fs-15 fw-5">Action</div>
-                </div>
-              </div>
-              <ul>
-                {enrolledCourses.map((course, index) => (
-                  <li key={course.id}>
-                    <div className="selling-course-item item my-20 ptable-20 border-bottom">
-                      <div className="image">
-                        <Image
-                          className="lazyload"
-                          src={course.imgSrc}
-                          alt={course.title}
-                          width={520}
-                          height={380}
-                        />
-                      </div>
-                      <div className="title">
-                        <a className="fs-15 fw-5" href={`/course-single-v1/${course.id}`}>
-                          {course.title}
-                        </a>
-                      </div>
-                      <div>
-                        <p className="fs-15 fw-5">{index === 0 ? '100%' : index === 1 ? '75%' : index === 2 ? '45%' : '20%'}</p>
-                      </div>
-                      <div>
-                        <span className={`badge ${index === 0 ? 'bg-success' : 'bg-warning'}`}>
-                          {index === 0 ? 'Completed' : 'In Progress'}
-                        </span>
-                      </div>
-                      <div>
-                        <div className="selling-course-btn btn-style-2">
-                          <a href={`/course-single-v1/${course.id}`} className="btn-edit btn">
-                            <i className="flaticon-play-2" />
-                          </a>
+
+                {/* Stats Grid */}
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                        gap: "20px",
+                        marginBottom: "24px",
+                    }}
+                >
+                    {stats.map((stat, index) => (
+                        <div
+                            key={index}
+                            style={{
+                                background: "#ffffff",
+                                borderRadius: "12px",
+                                padding: "24px",
+                                border: "1px solid rgba(139, 92, 246, 0.08)",
+                                boxShadow: "0 2px 20px rgba(0, 0, 0, 0.06)",
+                                transition: "all 0.3s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = "translateY(-5px)";
+                                e.currentTarget.style.boxShadow =
+                                    "0 8px 30px rgba(139, 92, 246, 0.15)";
+                                e.currentTarget.style.borderColor = "rgba(139, 92, 246, 0.2)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow =
+                                    "0 2px 20px rgba(0, 0, 0, 0.06)";
+                                e.currentTarget.style.borderColor =
+                                    "rgba(139, 92, 246, 0.08)";
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "16px",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        width: "60px",
+                                        height: "60px",
+                                        borderRadius: "12px",
+                                        background: `linear-gradient(135deg, ${stat.color}15 0%, ${stat.color}08 100%)`,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <i
+                                        className={stat.icon}
+                                        style={{ fontSize: "28px", color: stat.color }}
+                                    />
+                                </div>
+                                <div>
+                                    <h4
+                                        style={{
+                                            fontSize: "32px",
+                                            fontWeight: "700",
+                                            color: "#1f2937",
+                                            margin: 0,
+                                            marginBottom: "4px",
+                                        }}
+                                    >
+                                        {stat.number}
+                                    </h4>
+                                    <p
+                                        style={{
+                                            color: "#6b7280",
+                                            fontSize: "14px",
+                                            margin: 0,
+                                        }}
+                                    >
+                                        {stat.label}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                    ))}
+                </div>
+
+                {/* Recent Activity */}
+                <div
+                    style={{
+                        background: "#ffffff",
+                        borderRadius: "12px",
+                        padding: "32px",
+                        border: "1px solid rgba(139, 92, 246, 0.08)",
+                        boxShadow: "0 2px 20px rgba(0, 0, 0, 0.06)",
+                    }}
+                >
+                    <h4
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "700",
+                            color: "#1f2937",
+                            marginBottom: "20px",
+                        }}
+                    >
+                        Recent Activity
+                    </h4>
+                    <div style={{ color: "#6b7280", fontSize: "15px" }}>
+                        <p>Your recent learning activities will appear here.</p>
                     </div>
-                  </li>
-                ))}
-              </ul>
+                </div>
             </div>
-          </div>
-          <ul className="wg-pagination justify-center pt-0">
-            <Pagination />
-          </ul>
         </div>
-      </div>
-      {/* section-learn */}
-    </div>
-  );
+    );
 }
