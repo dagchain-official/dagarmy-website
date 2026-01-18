@@ -25,7 +25,7 @@ export default function StudentWishlistPage() {
                     <div className="dropbtn">
                       <i className="icon-home" /> Dashboard Navigation
                     </div>
-                    <div className="instructors-dashboard">
+                    <div className="instructors-dashboard student-dashboard-sidebar">
                       <div className="dashboard-title">
                         STUDENT DASHBOARD
                         <DashboardNav2 />

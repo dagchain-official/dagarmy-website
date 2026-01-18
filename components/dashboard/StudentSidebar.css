@@ -1,0 +1,64 @@
+/* Student Sidebar Light Theme */
+.student-dashboard-sidebar.instructors-dashboard {
+    background-color: #ffffff !important;
+    border: 1px solid #f1f5f9 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    padding-bottom: 30px !important;
+}
+
+.student-dashboard-sidebar .dashboard-title {
+    color: #94a3b8 !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    padding-bottom: 20px !important;
+    text-transform: uppercase;
+}
+
+.student-dashboard-sidebar .dashboard-item {
+    color: #64748b !important;
+    transition: all 0.2s ease !important;
+    padding: 12px 30px !important;
+}
+
+.student-dashboard-sidebar .dashboard-item i {
+    color: #94a3b8 !important;
+    font-size: 18px !important;
+    transition: all 0.2s ease !important;
+}
+
+.student-dashboard-sidebar .dashboard-item:hover {
+    background: #f8fafc !important;
+    color: #1e293b !important;
+}
+
+.student-dashboard-sidebar .dashboard-item:hover i {
+    color: #1e293b !important;
+}
+
+.student-dashboard-sidebar .dashboard-item.active {
+    background: #eef2ff !important;
+    color: #4f46e5 !important;
+}
+
+.student-dashboard-sidebar .dashboard-item.active i {
+    color: #4f46e5 !important;
+}
+
+.student-dashboard-sidebar .dashboard-item::before {
+    background-color: #4f46e5 !important;
+    width: 3px !important;
+    left: 0 !important;
+}
+
+.student-dashboard-sidebar .dashboard-item.active::before {
+    height: 100% !important;
+}
+
+/* Specific button styling to override inline styles if possible */
+.student-dashboard-sidebar button.dashboard-item {
+    background: none !important;
+    border: none !important;
+    width: 100% !important;
+    text-align: left !important;
+}
