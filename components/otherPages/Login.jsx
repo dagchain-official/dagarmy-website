@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { useAuth } from "@/context/AuthContext";
 import "./SocialLogin.css";
+import "./LoginOverride.css";
 
 export default function Login() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function Login() {
 
   return (
     <div className="main-content page-login" style={{ background: "#F4F2FB !important" }}>
-      <section className="section-page-login login-wrap" style={{ padding: "80px 0", backgroundColor: "#f5eeffff" }}>
+      <section className="section-page-login login-wrap" style={{ padding: "80px 0", backgroundColor: "#f5eeffff", overflow: "hidden", position: "relative" }}>
         <div className="tf-container">
           <div className="row" style={{ gap: "40px 0" }}>
             {/* Left Side - Hero Section */}
@@ -251,8 +252,8 @@ export default function Login() {
 
                 {!isConnected ? (
                   <>
-                    <div className="wow fadeInUp" data-wow-delay="0s" style={{ 
-                      maxWidth: "340px", 
+                    <div className="wow fadeInUp" data-wow-delay="0s" style={{
+                      maxWidth: "340px",
                       margin: "0 auto",
                       display: "flex",
                       flexDirection: "column",
@@ -261,7 +262,7 @@ export default function Login() {
                       <p className="fs-15 mb-3" style={{ color: "#6b7280", textAlign: "center", fontSize: "14px" }}>
                         Connect your wallet or use social login to continue
                       </p>
- 
+
                       {/* Connect Wallet Button */}
                       <button
                         className="relative flex items-center justify-center gap-1 bg-[#8b5cf6] border-2 border-[#8b5cf6] text-sm font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white group hover:transition-all hover:duration-700 px-10 mb-3 w-full"
@@ -330,9 +331,9 @@ export default function Login() {
                           className="social-btn google"
                         >
                           <div className="btn-main-icon">
-                            <img 
-                              src="/images/loginpage/google-g-2015.svg" 
-                              alt="Google" 
+                            <img
+                              src="/images/loginpage/google-g-2015.svg"
+                              alt="Google"
                             />
                           </div>
                           <span className="btn-hover-text">Google</span>
