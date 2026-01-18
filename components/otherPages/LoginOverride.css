@@ -1,0 +1,21 @@
+.section-page-login::before,
+.section-page-login::after,
+.login-wrap::before,
+.login-wrap::after,
+.page-login::before,
+.page-login::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Hide any absolutely positioned decorative elements in top right */
+.section-page-login>*:not(.tf-container),
+.login-wrap>*:not(.tf-container) {
+    display: none !important;
+}
+
+/* Ensure section doesn't show overflow */
+.section-page-login,
+.login-wrap {
+    overflow: hidden !important;
+}
