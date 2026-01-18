@@ -1,0 +1,147 @@
+/* Social Login Buttons Redesign */
+
+.login-social {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+}
+
+.social-btn, .wallet-btn {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    padding: 0 16px;
+    border: 1px solid #DADCE0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-family: inherit;
+}
+
+.social-btn {
+    background: #ffffff;
+}
+
+.wallet-btn {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    border-color: #7c3aed;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}
+
+.social-btn .btn-main-icon, .wallet-btn .btn-main-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.social-btn .btn-hover-text, .wallet-btn .btn-hover-text {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #3C4043;
+    font-weight: 500;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-left: 36px;
+}
+
+.wallet-btn .btn-hover-text {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Hover State - Shared */
+.social-btn:hover, .wallet-btn:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.wallet-btn:hover {
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+}
+
+.social-btn:hover .btn-main-icon, .wallet-btn:hover .btn-main-icon {
+    left: 40px;
+    transform: translateX(-50%);
+}
+
+.social-btn:hover .btn-hover-text, .wallet-btn:hover .btn-hover-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Google Specifics */
+.social-btn.google {
+    background: linear-gradient(to bottom, #FFFFFF, #F8F9FA);
+}
+
+.social-btn.google:hover {
+    background: linear-gradient(to bottom, #F8F9FA, #F1F3F4);
+    border-color: #BDC1C6;
+}
+
+/* Facebook Specifics */
+.social-btn.facebook:hover {
+    background: #1877F2;
+    border-color: #1877F2;
+    color: #ffffff;
+}
+
+.social-btn.facebook:hover .btn-hover-text {
+    color: #ffffff;
+}
+
+.social-btn.facebook i {
+    color: #1877F2;
+}
+
+.social-btn.facebook:hover i {
+    color: #ffffff;
+}
+
+/* Apple Specifics */
+.social-btn.apple:hover {
+    background: #000000;
+    border-color: #000000;
+    color: #ffffff;
+}
+
+.social-btn.apple:hover .btn-hover-text {
+    color: #ffffff;
+}
+
+.social-btn.apple i {
+    color: #000000;
+}
+
+.social-btn.apple:hover i {
+    color: #ffffff;
+}
+
+/* Ensure icons have proper sizes */
+.social-btn i, .wallet-btn i {
+    font-size: 24px;
+}
+
+.social-btn .btn-main-icon img {
+    width: 26px;
+    height: 26px;
+}

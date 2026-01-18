@@ -41,21 +41,34 @@ export default function Dashboard2() {
                         marginBottom: "24px",
                         border: "1px solid rgba(139, 92, 246, 0.08)",
                         boxShadow: "0 2px 20px rgba(0, 0, 0, 0.06)",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        overflow: "hidden",
                     }}
                 >
-                    <h3
-                        style={{
-                            fontSize: "28px",
-                            fontWeight: "700",
-                            color: "#1f2937",
-                            marginBottom: "8px",
-                        }}
-                    >
-                        Welcome Back! 👋
-                    </h3>
-                    <p style={{ color: "#6b7280", fontSize: "15px", margin: 0 }}>
-                        Continue your learning journey with DAGARMY
-                    </p>
+                    <div>
+                        <h3
+                            style={{
+                                fontSize: "28px",
+                                fontWeight: "700",
+                                color: "#1f2937",
+                                marginBottom: "8px",
+                            }}
+                        >
+                            Welcome Back! 👋
+                        </h3>
+                        <p style={{ color: "#6b7280", fontSize: "15px", margin: 0 }}>
+                            Continue your learning journey with DAGARMY
+                        </p>
+                    </div>
+                    <div style={{ width: "200px", marginRight: "-10px" }}>
+                        <img 
+                            src="/images/dashboard-illustration.png" 
+                            alt="Welcome" 
+                            style={{ width: "100%", height: "auto" }}
+                        />
+                    </div>
                 </div>
 
                 {/* Stats Grid */}
