@@ -69,6 +69,7 @@ export async function GET(request) {
         const job = {
           id: jobId,
           company: null,
+          companyLogo: null,
           jobTitle: null,
           level: null,
           location: null,
@@ -78,10 +79,14 @@ export async function GET(request) {
           scrapedAt: new Date().toISOString()
         };
 
-        // Extract company name
+        // Extract company name and logo
         try {
-          job.company = $job('div.top-card-layout__card').find('a').find('img').attr('alt') || 
-                        $job('div.top-card-layout__card').find('a').text().trim();
+          const companyImg = $job('div.top-card-layout__card').find('img').first();
+          job.companyLogo = companyImg.attr('data-delayed-url') || companyImg.attr('src');
+          job.company = companyImg.attr('alt') || 
+                        $job('div.top-card-layout__card').find('a').text().trim() ||
+                        $job('.topcard__org-name-link').text().trim() ||
+                        $job('.topcard__flavor').first().text().trim();
         } catch (e) {
           console.error(`Error extracting company for job ${jobId}:`, e.message);
         }
@@ -109,10 +114,11 @@ export async function GET(request) {
           console.error(`Error extracting location for job ${jobId}:`, e.message);
         }
 
-        // Extract description (first 500 chars)
+        // Extract full description
         try {
-          const desc = $job('div.show-more-less-html__markup').text().trim();
-          job.description = desc.substring(0, 500) + (desc.length > 500 ? '...' : '');
+          job.description = $job('div.show-more-less-html__markup').html() || 
+                           $job('div.description__text').html() ||
+                           $job('div.show-more-less-html__markup').text().trim();
         } catch (e) {
           console.error(`Error extracting description for job ${jobId}:`, e.message);
         }
