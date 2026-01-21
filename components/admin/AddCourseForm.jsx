@@ -43,12 +43,10 @@ export default function AddCourseForm() {
     setSuccess(false);
 
     try {
-      // Validate required fields
       if (!formData.title || !formData.instructor) {
         throw new Error("Title and Instructor are required");
       }
 
-      // Generate unique ID
       const newCourse = {
         ...formData,
         id: Date.now(),
@@ -64,7 +62,6 @@ export default function AddCourseForm() {
         duration: `${formData.hours} hours`
       };
 
-      // Send to API
       const response = await fetch('/api/admin/courses', {
         method: 'POST',
         headers: {
@@ -80,8 +77,7 @@ export default function AddCourseForm() {
       }
 
       setSuccess(true);
-      
-      // Redirect after 2 seconds
+
       setTimeout(() => {
         router.push('/admin/courses');
       }, 2000);
@@ -97,10 +93,16 @@ export default function AddCourseForm() {
     <div>
       {/* Header */}
       <div className="mb-4">
-        <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+        <h1 style={{
+          fontSize: '28px',
+          fontWeight: '700',
+          color: '#111827',
+          marginBottom: '6px',
+          letterSpacing: '-0.02em'
+        }}>
           Add New Course
         </h1>
-        <p style={{ fontSize: '16px', color: '#6b7280', margin: 0 }}>
+        <p style={{ fontSize: '15px', color: '#6b7280', margin: 0 }}>
           Create a new course for the DAGARMY platform
         </p>
       </div>
@@ -111,10 +113,11 @@ export default function AddCourseForm() {
           style={{
             background: '#dcfce7',
             border: '1px solid #86efac',
-            borderRadius: '12px',
-            padding: '16px 20px',
-            marginBottom: '24px',
-            color: '#166534'
+            borderRadius: '10px',
+            padding: '14px 18px',
+            marginBottom: '20px',
+            color: '#166534',
+            fontSize: '14px'
           }}
         >
           <strong>✓ Success!</strong> Course created successfully. Redirecting...
@@ -127,10 +130,11 @@ export default function AddCourseForm() {
           style={{
             background: '#fee2e2',
             border: '1px solid #fca5a5',
-            borderRadius: '12px',
-            padding: '16px 20px',
-            marginBottom: '24px',
-            color: '#991b1b'
+            borderRadius: '10px',
+            padding: '14px 18px',
+            marginBottom: '20px',
+            color: '#991b1b',
+            fontSize: '14px'
           }}
         >
           <strong>✗ Error:</strong> {error}
@@ -141,16 +145,16 @@ export default function AddCourseForm() {
       <form onSubmit={handleSubmit}>
         <div
           style={{
-            background: '#fff',
-            borderRadius: '12px',
-            padding: '32px',
+            background: '#ffffff',
+            borderRadius: '10px',
+            padding: '28px',
             border: '1px solid #e5e7eb'
           }}
         >
           <div className="row g-4">
             {/* Course Title */}
             <div className="col-12">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Course Title *
               </label>
               <input
@@ -162,17 +166,18 @@ export default function AddCourseForm() {
                 placeholder="e.g., Advanced Machine Learning Techniques"
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  outline: 'none'
                 }}
               />
             </div>
 
             {/* Category */}
             <div className="col-md-6">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Category *
               </label>
               <select
@@ -182,11 +187,12 @@ export default function AddCourseForm() {
                 required
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  outline: 'none'
                 }}
               >
                 {categories.map(cat => (
@@ -197,7 +203,7 @@ export default function AddCourseForm() {
 
             {/* Instructor */}
             <div className="col-md-6">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Instructor Name *
               </label>
               <input
@@ -209,17 +215,18 @@ export default function AddCourseForm() {
                 placeholder="e.g., Dr. Sarah Johnson"
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  outline: 'none'
                 }}
               />
             </div>
 
             {/* Level */}
             <div className="col-md-4">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Level
               </label>
               <select
@@ -228,11 +235,12 @@ export default function AddCourseForm() {
                 onChange={handleChange}
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  outline: 'none'
                 }}
               >
                 {levels.map(level => (
@@ -243,7 +251,7 @@ export default function AddCourseForm() {
 
             {/* Language */}
             <div className="col-md-4">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Language
               </label>
               <select
@@ -252,11 +260,12 @@ export default function AddCourseForm() {
                 onChange={handleChange}
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  outline: 'none'
                 }}
               >
                 {languages.map(lang => (
@@ -267,7 +276,7 @@ export default function AddCourseForm() {
 
             {/* Access Level */}
             <div className="col-md-4">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Access Level
               </label>
               <select
@@ -276,11 +285,12 @@ export default function AddCourseForm() {
                 onChange={handleChange}
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  outline: 'none'
                 }}
               >
                 {accessLevels.map(level => (
@@ -291,7 +301,7 @@ export default function AddCourseForm() {
 
             {/* Price */}
             <div className="col-md-4">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Price ($)
               </label>
               <input
@@ -303,20 +313,21 @@ export default function AddCourseForm() {
                 step="1"
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  outline: 'none'
                 }}
               />
-              <small style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', display: 'block' }}>
+              <small style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', display: 'block' }}>
                 Set to 0 for free courses
               </small>
             </div>
 
             {/* Lessons */}
             <div className="col-md-4">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Number of Lessons
               </label>
               <input
@@ -328,17 +339,18 @@ export default function AddCourseForm() {
                 required
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  outline: 'none'
                 }}
               />
             </div>
 
             {/* Duration (Hours) */}
             <div className="col-md-4">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Duration (Hours)
               </label>
               <input
@@ -351,17 +363,18 @@ export default function AddCourseForm() {
                 required
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  outline: 'none'
                 }}
               />
             </div>
 
             {/* Image URL */}
             <div className="col-12">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Course Image URL
               </label>
               <input
@@ -372,20 +385,21 @@ export default function AddCourseForm() {
                 placeholder="/images/courses/your-image.jpg"
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  outline: 'none'
                 }}
               />
-              <small style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', display: 'block' }}>
+              <small style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', display: 'block' }}>
                 Upload image to /public/images/courses/ folder first
               </small>
             </div>
 
             {/* Description */}
             <div className="col-12">
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px', display: 'block' }}>
                 Course Description
               </label>
               <textarea
@@ -396,11 +410,12 @@ export default function AddCourseForm() {
                 placeholder="Enter a detailed description of the course..."
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  resize: 'vertical'
+                  resize: 'vertical',
+                  outline: 'none'
                 }}
               />
             </div>
@@ -412,15 +427,25 @@ export default function AddCourseForm() {
               type="submit"
               disabled={isSubmitting}
               style={{
-                padding: '12px 32px',
-                borderRadius: '10px',
-                background: isSubmitting ? '#9ca3af' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: '#fff',
+                padding: '10px 28px',
+                borderRadius: '8px',
+                background: isSubmitting ? '#9ca3af' : '#8b5cf6',
+                color: '#ffffff',
                 fontSize: '14px',
                 fontWeight: '600',
                 border: 'none',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                if (!isSubmitting) {
+                  e.currentTarget.style.background = '#7c3aed';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSubmitting) {
+                  e.currentTarget.style.background = '#8b5cf6';
+                }
               }}
             >
               {isSubmitting ? 'Creating Course...' : 'Create Course'}
@@ -430,14 +455,25 @@ export default function AddCourseForm() {
               onClick={() => router.push('/admin/courses')}
               disabled={isSubmitting}
               style={{
-                padding: '12px 32px',
-                borderRadius: '10px',
-                background: '#fff',
+                padding: '10px 28px',
+                borderRadius: '8px',
+                background: '#ffffff',
                 color: '#6b7280',
                 fontSize: '14px',
                 fontWeight: '600',
                 border: '1px solid #e5e7eb',
-                cursor: isSubmitting ? 'not-allowed' : 'pointer'
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                if (!isSubmitting) {
+                  e.currentTarget.style.background = '#f9fafb';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSubmitting) {
+                  e.currentTarget.style.background = '#ffffff';
+                }
               }}
             >
               Cancel

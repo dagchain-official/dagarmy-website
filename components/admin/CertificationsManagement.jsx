@@ -51,30 +51,44 @@ export default function CertificationsManagement() {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+          <h1 style={{
+            fontSize: '28px',
+            fontWeight: '700',
+            color: '#111827',
+            marginBottom: '6px',
+            letterSpacing: '-0.02em'
+          }}>
             Certification Management
           </h1>
-          <p style={{ fontSize: '16px', color: '#6b7280', margin: 0 }}>
+          <p style={{ fontSize: '15px', color: '#6b7280', margin: 0 }}>
             Issue, track, and verify certificates
           </p>
         </div>
         <button
           style={{
-            padding: '12px 24px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: '#fff',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            background: '#8b5cf6',
+            color: '#ffffff',
             fontSize: '14px',
             fontWeight: '600',
             border: 'none',
             cursor: 'pointer',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '8px',
-            boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+            gap: '6px',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#7c3aed';
+            e.currentTarget.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = '#8b5cf6';
+            e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
-          <span style={{ fontSize: '18px' }}>+</span>
+          <span style={{ fontSize: '16px' }}>+</span>
           Issue Certificate
         </button>
       </div>
@@ -82,27 +96,27 @@ export default function CertificationsManagement() {
       {/* Stats */}
       <div className="row g-3 mb-4">
         <div className="col-md-3">
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Total Issued</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#111827' }}>1,234</div>
+          <div style={{ background: '#ffffff', borderRadius: '10px', padding: '16px', border: '1px solid #e5e7eb' }}>
+            <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>Total Issued</div>
+            <div style={{ fontSize: '24px', fontWeight: '700', color: '#111827', letterSpacing: '-0.02em' }}>1,234</div>
           </div>
         </div>
         <div className="col-md-3">
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>This Month</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#10b981' }}>156</div>
+          <div style={{ background: '#ffffff', borderRadius: '10px', padding: '16px', border: '1px solid #e5e7eb' }}>
+            <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>This Month</div>
+            <div style={{ fontSize: '24px', fontWeight: '700', color: '#10b981', letterSpacing: '-0.02em' }}>156</div>
           </div>
         </div>
         <div className="col-md-3">
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Pending</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#f59e0b' }}>23</div>
+          <div style={{ background: '#ffffff', borderRadius: '10px', padding: '16px', border: '1px solid #e5e7eb' }}>
+            <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>Pending</div>
+            <div style={{ fontSize: '24px', fontWeight: '700', color: '#f59e0b', letterSpacing: '-0.02em' }}>23</div>
           </div>
         </div>
         <div className="col-md-3">
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Verified Today</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#8b5cf6' }}>45</div>
+          <div style={{ background: '#ffffff', borderRadius: '10px', padding: '16px', border: '1px solid #e5e7eb' }}>
+            <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>Verified Today</div>
+            <div style={{ fontSize: '24px', fontWeight: '700', color: '#8b5cf6', letterSpacing: '-0.02em' }}>45</div>
           </div>
         </div>
       </div>
@@ -110,14 +124,15 @@ export default function CertificationsManagement() {
       {/* Certificate Verification Tool */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: '12px',
-          padding: '32px',
-          marginBottom: '24px',
-          color: '#fff'
+          background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+          borderRadius: '10px',
+          padding: '28px',
+          marginBottom: '20px',
+          color: '#ffffff',
+          border: '1px solid rgba(139, 92, 246, 0.2)'
         }}
       >
-        <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '14px', letterSpacing: '-0.01em' }}>
           🔍 Verify Certificate
         </h3>
         <div className="row g-3 align-items-end">
@@ -127,11 +142,12 @@ export default function CertificationsManagement() {
               placeholder="Enter verification code (e.g., ML-2024-JD-001)"
               style={{
                 width: '100%',
-                padding: '14px 20px',
+                padding: '12px 16px',
                 border: 'none',
-                borderRadius: '10px',
+                borderRadius: '8px',
                 fontSize: '14px',
-                background: 'rgba(255,255,255,0.95)'
+                background: 'rgba(255,255,255,0.95)',
+                outline: 'none'
               }}
             />
           </div>
@@ -139,14 +155,21 @@ export default function CertificationsManagement() {
             <button
               style={{
                 width: '100%',
-                padding: '14px 20px',
-                borderRadius: '10px',
-                background: '#fff',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                background: '#ffffff',
                 color: '#8b5cf6',
                 fontSize: '14px',
                 fontWeight: '600',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f9fafb';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#ffffff';
               }}
             >
               Verify Certificate
@@ -158,11 +181,11 @@ export default function CertificationsManagement() {
       {/* Filters */}
       <div
         style={{
-          background: '#fff',
-          borderRadius: '12px',
-          padding: '24px',
+          background: '#ffffff',
+          borderRadius: '10px',
+          padding: '20px',
           border: '1px solid #e5e7eb',
-          marginBottom: '24px'
+          marginBottom: '20px'
         }}
       >
         <div className="row g-3">
@@ -174,10 +197,11 @@ export default function CertificationsManagement() {
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
-                padding: '12px 16px',
+                padding: '10px 14px',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                fontSize: '14px'
+                fontSize: '14px',
+                outline: 'none'
               }}
             />
           </div>
@@ -187,11 +211,12 @@ export default function CertificationsManagement() {
               onChange={(e) => setFilterStatus(e.target.value)}
               style={{
                 width: '100%',
-                padding: '12px 16px',
+                padding: '10px 14px',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 fontSize: '14px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                outline: 'none'
               }}
             >
               {statuses.map((status) => (
@@ -202,134 +227,160 @@ export default function CertificationsManagement() {
         </div>
       </div>
 
-      {/* Certifications Table */}
-      <div
-        style={{
-          background: '#fff',
-          borderRadius: '12px',
-          border: '1px solid #e5e7eb',
-          overflow: 'hidden'
-        }}
-      >
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-              <th style={{ padding: '16px 24px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Certificate ID
-              </th>
-              <th style={{ padding: '16px 24px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Student
-              </th>
-              <th style={{ padding: '16px 24px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Course
-              </th>
-              <th style={{ padding: '16px 24px', textAlign: 'center', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Score
-              </th>
-              <th style={{ padding: '16px 24px', textAlign: 'center', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Issue Date
-              </th>
-              <th style={{ padding: '16px 24px', textAlign: 'center', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Status
-              </th>
-              <th style={{ padding: '16px 24px', textAlign: 'center', fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' }}>
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {certifications.map((cert) => (
-              <tr key={cert.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                <td style={{ padding: '16px 24px' }}>
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '4px' }}>
-                      {cert.id}
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#6b7280', fontFamily: 'monospace' }}>
-                      {cert.verificationCode}
-                    </div>
-                  </div>
-                </td>
-                <td style={{ padding: '16px 24px' }}>
-                  <span style={{ fontSize: '14px', color: '#4b5563' }}>
-                    {cert.studentName}
-                  </span>
-                </td>
-                <td style={{ padding: '16px 24px' }}>
-                  <span style={{ fontSize: '14px', color: '#4b5563' }}>
-                    {cert.courseName}
-                  </span>
-                </td>
-                <td style={{ padding: '16px 24px', textAlign: 'center' }}>
-                  <div
+      {/* Certifications Table - Card Style */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {certifications.map((cert) => (
+          <div
+            key={cert.id}
+            style={{
+              background: '#ffffff',
+              borderRadius: '10px',
+              border: '1px solid #e5e7eb',
+              padding: '20px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.08)';
+              e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = '#e5e7eb';
+            }}
+          >
+            <div className="row align-items-center">
+              {/* Certificate ID & Code */}
+              <div className="col-md-3">
+                <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
+                  Certificate ID
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '4px' }}>
+                  {cert.id}
+                </div>
+                <div style={{
+                  fontSize: '11px',
+                  color: '#6b7280',
+                  fontFamily: 'monospace',
+                  background: '#f9fafb',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  display: 'inline-block'
+                }}>
+                  {cert.verificationCode}
+                </div>
+              </div>
+
+              {/* Student & Course */}
+              <div className="col-md-4">
+                <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
+                  Student & Course
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '2px' }}>
+                  {cert.studentName}
+                </div>
+                <div style={{ fontSize: '13px', color: '#6b7280' }}>
+                  {cert.courseName}
+                </div>
+              </div>
+
+              {/* Score */}
+              <div className="col-md-2 text-center">
+                <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
+                  Score
+                </div>
+                <div
+                  style={{
+                    display: 'inline-block',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    background: cert.score >= 90 ? '#dcfce7' : '#fef3c7',
+                    color: cert.score >= 90 ? '#16a34a' : '#ca8a04',
+                    fontSize: '14px',
+                    fontWeight: '700'
+                  }}
+                >
+                  {cert.score}%
+                </div>
+              </div>
+
+              {/* Issue Date & Status */}
+              <div className="col-md-2 text-center">
+                <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
+                  Issued
+                </div>
+                <div style={{ fontSize: '13px', color: '#4b5563', marginBottom: '6px', fontWeight: '500' }}>
+                  {new Date(cert.issueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </div>
+                <span
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    background: cert.status === 'Issued' ? '#dcfce7' : '#fef3c7',
+                    color: cert.status === 'Issued' ? '#16a34a' : '#ca8a04'
+                  }}
+                >
+                  {cert.status}
+                </span>
+              </div>
+
+              {/* Actions */}
+              <div className="col-md-1 text-end">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <button
                     style={{
-                      display: 'inline-block',
-                      padding: '4px 12px',
-                      borderRadius: '20px',
-                      background: cert.score >= 90 ? '#dcfce7' : '#fef3c7',
-                      color: cert.score >= 90 ? '#16a34a' : '#ca8a04',
-                      fontSize: '13px',
-                      fontWeight: '600'
-                    }}
-                  >
-                    {cert.score}%
-                  </div>
-                </td>
-                <td style={{ padding: '16px 24px', textAlign: 'center' }}>
-                  <span style={{ fontSize: '14px', color: '#4b5563' }}>
-                    {new Date(cert.issueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                  </span>
-                </td>
-                <td style={{ padding: '16px 24px', textAlign: 'center' }}>
-                  <span
-                    style={{
-                      padding: '4px 12px',
-                      borderRadius: '20px',
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      border: '1px solid #e5e7eb',
+                      background: '#ffffff',
                       fontSize: '12px',
                       fontWeight: '600',
-                      background: cert.status === 'Issued' ? '#dcfce7' : '#fef3c7',
-                      color: cert.status === 'Issued' ? '#16a34a' : '#ca8a04'
+                      color: '#6b7280',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      width: '100%'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f9fafb';
+                      e.currentTarget.style.color = '#111827';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#ffffff';
+                      e.currentTarget.style.color = '#6b7280';
                     }}
                   >
-                    {cert.status}
-                  </span>
-                </td>
-                <td style={{ padding: '16px 24px' }}>
-                  <div className="d-flex justify-content-center gap-2">
-                    <button
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: '6px',
-                        border: '1px solid #e5e7eb',
-                        background: '#fff',
-                        fontSize: '12px',
-                        fontWeight: '600',
-                        color: '#6b7280',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      View
-                    </button>
-                    <button
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: '6px',
-                        border: '1px solid #e5e7eb',
-                        background: '#fff',
-                        fontSize: '12px',
-                        fontWeight: '600',
-                        color: '#6b7280',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Download
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    View
+                  </button>
+                  <button
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      border: '1px solid #e5e7eb',
+                      background: '#ffffff',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#6b7280',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      width: '100%'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f9fafb';
+                      e.currentTarget.style.color = '#111827';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#ffffff';
+                      e.currentTarget.style.color = '#6b7280';
+                    }}
+                  >
+                    Download
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
