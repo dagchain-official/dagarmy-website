@@ -4,329 +4,253 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function AdminLayout({ children }) {
-  const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+    const pathname = usePathname();
+    const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const menuItems = [
-    {
-      title: "Dashboard",
-      icon: "📊",
-      path: "/admin/dashboard",
-      description: "Overview & Analytics",
-      badge: null
-    },
-    {
-      title: "Courses",
-      icon: "📚",
-      path: "/admin/courses",
-      description: "Manage Courses",
-      badge: "36"
-    },
-    {
-      title: "Users",
-      icon: "👥",
-      path: "/admin/users",
-      description: "User Management",
-      badge: "1.2K"
-    },
-    {
-      title: "Certifications",
-      icon: "🎓",
-      path: "/admin/certifications",
-      description: "Issue & Track Certificates",
-      badge: "23"
-    },
-    {
-      title: "Jobs",
-      icon: "💼",
-      path: "/admin/jobs",
-      description: "Job Postings",
-      badge: null
-    },
-    {
-      title: "Mentorship",
-      icon: "🤝",
-      path: "/admin/mentorship",
-      description: "Mentor Programs",
-      badge: null
-    },
-    {
-      title: "Hackathons",
-      icon: "🏆",
-      path: "/admin/hackathons",
-      description: "Events & Competitions",
-      badge: null
-    }
-  ];
-
-  return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#fafafa' }}>
-      <style jsx>{`
-        @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-20px); }
-          to { opacity: 1; transform: translateX(0); }
+    const menuItems = [
+        {
+            title: "Dashboard",
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
+            ),
+            path: "/admin/dashboard",
+            badge: null
+        },
+        {
+            title: "Courses",
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+            ),
+            path: "/admin/courses",
+            badge: "36"
+        },
+        {
+            title: "Users",
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+            ),
+            path: "/admin/users",
+            badge: "1.2K"
+        },
+        {
+            title: "Certifications",
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="8" r="7" />
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                </svg>
+            ),
+            path: "/admin/certifications",
+            badge: "23"
+        },
+        {
+            title: "Jobs",
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+            ),
+            path: "/admin/jobs",
+            badge: null
         }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          * { animation: none !important; transition: none !important; }
-        }
-      `}</style>
+    ];
 
-      {/* Sidebar */}
-      <aside
-        style={{
-          width: sidebarOpen ? '280px' : '72px',
-          background: '#ffffff',
-          borderRight: '1px solid #e5e7eb',
-          transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          position: 'fixed',
-          height: '100vh',
-          zIndex: 1000,
-          boxShadow: '2px 0 8px rgba(0,0,0,0.02)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowX: 'hidden'
-        }}
-      >
-        {/* Header */}
-        <div style={{
-          padding: '24px 20px',
-          borderBottom: '1px solid #e5e7eb',
-          background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-          flexShrink: 0
-        }}>
-          {/* Gradient Accent */}
-          <div style={{
-            position: 'absolute',
-            top: '-50%',
-            right: '-20%',
-            width: '200px',
-            height: '200px',
-            background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
-            borderRadius: '50%',
-            pointerEvents: 'none'
-          }} />
-
-          <div className="d-flex align-items-center justify-content-between" style={{ position: 'relative', zIndex: 1 }}>
-            {sidebarOpen && (
-              <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-                <h3 style={{
-                  fontSize: '22px',
-                  fontWeight: '700',
-                  marginBottom: '2px',
-                  color: '#ffffff',
-                  letterSpacing: '-0.02em'
+    return (
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
+            {/* Sidebar */}
+            <aside
+                style={{
+                    width: sidebarOpen ? '240px' : '70px',
+                    background: '#ffffff',
+                    borderRight: '1px solid #e9ecef',
+                    transition: 'width 0.3s ease',
+                    position: 'fixed',
+                    height: '100vh',
+                    zIndex: 1000,
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}
+            >
+                {/* Header */}
+                <div style={{
+                    padding: '20px',
+                    borderBottom: '1px solid #e9ecef',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
                 }}>
-                  DAGARMY
-                </h3>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', margin: 0, fontWeight: '500' }}>Admin Panel</p>
-              </div>
-            )}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                borderRadius: '8px',
-                width: '36px',
-                height: '36px',
-                cursor: 'pointer',
-                color: '#ffffff',
-                fontSize: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              {sidebarOpen ? '←' : '→'}
-            </button>
-          </div>
-        </div>
-
-        {/* Navigation - Scrollable */}
-        <nav style={{
-          padding: '16px 12px',
-          flex: 1,
-          overflowY: 'auto',
-          overflowX: 'hidden'
-        }}>
-          {menuItems.map((item, index) => {
-            const isActive = pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                href={item.path}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '12px 14px',
-                  borderRadius: '10px',
-                  marginBottom: '6px',
-                  background: isActive ? 'linear-gradient(135deg, #f3f0ff 0%, #faf5ff 100%)' : 'transparent',
-                  border: isActive ? '1px solid #e9d5ff' : '1px solid transparent',
-                  color: isActive ? '#7c3aed' : '#6b7280',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  animation: `slideInLeft 0.4s ease-out ${index * 0.05}s backwards`
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.background = '#fafafa';
-                    e.currentTarget.style.color = '#111827';
-                    e.currentTarget.style.transform = 'translateX(4px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = '#6b7280';
-                    e.currentTarget.style.transform = 'translateX(0)';
-                  }
-                }}
-              >
-                {/* Active Indicator */}
-                {isActive && (
-                  <div style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '3px',
-                    height: '60%',
-                    background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)',
-                    borderRadius: '0 3px 3px 0'
-                  }} />
-                )}
-
-                <span style={{
-                  fontSize: '22px',
-                  flexShrink: 0,
-                  transition: 'transform 0.3s ease'
-                }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                >
-                  {item.icon}
-                </span>
-
-                {sidebarOpen && (
-                  <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '2px' }}>
-                        {item.title}
-                      </div>
-                      <div style={{ fontSize: '11px', opacity: 0.7 }}>
-                        {item.description}
-                      </div>
-                    </div>
-                    {item.badge && (
-                      <span style={{
-                        padding: '2px 8px',
-                        borderRadius: '6px',
-                        background: isActive ? '#8b5cf6' : '#f3f4f6',
-                        color: isActive ? '#ffffff' : '#6b7280',
-                        fontSize: '11px',
-                        fontWeight: '600',
-                        marginLeft: '8px'
-                      }}>
-                        {item.badge}
-                      </span>
+                    {sidebarOpen && (
+                        <div>
+                            <h3 style={{
+                                fontSize: '18px',
+                                fontWeight: '600',
+                                margin: 0,
+                                color: '#212529'
+                            }}>
+                                DAGARMY
+                            </h3>
+                            <p style={{ fontSize: '11px', color: '#6c757d', margin: 0 }}>Admin Panel</p>
+                        </div>
                     )}
-                  </div>
+                    <button
+                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                        style={{
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: '#6c757d',
+                            padding: '4px'
+                        }}
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+
+                {/* Navigation */}
+                <nav style={{
+                    padding: '16px 12px',
+                    flex: 1,
+                    overflowY: 'auto'
+                }}>
+                    {menuItems.map((item) => {
+                        const isActive = pathname === item.path;
+                        return (
+                            <Link
+                                key={item.path}
+                                href={item.path}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    padding: '10px 12px',
+                                    borderRadius: '8px',
+                                    marginBottom: '4px',
+                                    background: isActive ? '#f8f5ff' : 'transparent',
+                                    color: isActive ? '#7c3aed' : '#6c757d',
+                                    textDecoration: 'none',
+                                    transition: 'all 0.2s ease',
+                                    cursor: 'pointer',
+                                    position: 'relative'
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isActive) {
+                                        e.currentTarget.style.background = '#f8f9fa';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isActive) {
+                                        e.currentTarget.style.background = 'transparent';
+                                    }
+                                }}
+                            >
+                                {isActive && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        width: '3px',
+                                        height: '20px',
+                                        background: '#7c3aed',
+                                        borderRadius: '0 3px 3px 0'
+                                    }} />
+                                )}
+
+                                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                                    {item.icon}
+                                </div>
+
+                                {sidebarOpen && (
+                                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <span style={{ fontSize: '14px', fontWeight: '500' }}>
+                                            {item.title}
+                                        </span>
+                                        {item.badge && (
+                                            <span style={{
+                                                padding: '2px 6px',
+                                                borderRadius: '4px',
+                                                background: isActive ? '#7c3aed' : '#e9ecef',
+                                                color: isActive ? '#ffffff' : '#6c757d',
+                                                fontSize: '10px',
+                                                fontWeight: '600'
+                                            }}>
+                                                {item.badge}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                {/* Footer */}
+                {sidebarOpen && (
+                    <div style={{
+                        padding: '16px',
+                        borderTop: '1px solid #e9ecef'
+                    }}>
+                        <div style={{ fontSize: '10px', color: '#adb5bd', marginBottom: '8px', textTransform: 'uppercase' }}>
+                            Logged in as
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px'
+                        }}>
+                            <div style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '8px',
+                                background: 'linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '12px',
+                                fontWeight: '600',
+                                color: '#ffffff'
+                            }}>
+                                A
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '13px', fontWeight: '500', color: '#212529' }}>Admin</div>
+                                <div style={{ fontSize: '11px', color: '#6c757d' }}>admin@dagarmy.com</div>
+                            </div>
+                        </div>
+                    </div>
                 )}
-              </Link>
-            );
-          })}
-        </nav>
+            </aside>
 
-        {/* Footer */}
-        {sidebarOpen && (
-          <div style={{
-            padding: '20px',
-            borderTop: '1px solid #e5e7eb',
-            background: '#ffffff',
-            animation: 'fadeIn 0.3s ease-out',
-            flexShrink: 0
-          }}>
-            <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
-              Logged in as
-            </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '12px',
-              borderRadius: '10px',
-              background: '#fafafa',
-              border: '1px solid #e5e7eb',
-              transition: 'all 0.2s ease'
-            }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#f3f0ff';
-                e.currentTarget.style.borderColor = '#e9d5ff';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#fafafa';
-                e.currentTarget.style.borderColor = '#e5e7eb';
-              }}
-            >
-              <div
+            {/* Main Content */}
+            <main
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '18px',
-                  fontWeight: '700',
-                  color: '#ffffff',
-                  flexShrink: 0
+                    flex: 1,
+                    marginLeft: sidebarOpen ? '240px' : '70px',
+                    transition: 'margin-left 0.3s ease',
+                    padding: '32px',
+                    minHeight: '100vh'
                 }}
-              >
-                A
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '2px' }}>Admin</div>
-                <div style={{ fontSize: '11px', color: '#6b7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>admin@dagarmy.com</div>
-              </div>
-            </div>
-          </div>
-        )}
-      </aside>
-
-      {/* Main Content */}
-      <main
-        style={{
-          flex: 1,
-          marginLeft: sidebarOpen ? '280px' : '72px',
-          transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          padding: '32px',
-          minHeight: '100vh'
-        }}
-      >
-        {children}
-      </main>
-    </div>
-  );
+            >
+                {children}
+            </main>
+        </div>
+    );
 }
