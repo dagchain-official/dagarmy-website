@@ -11,11 +11,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' http://localhost:* https://*.pages.dev https://*.vercel.app https://*.ngrok-free.app https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org https://secure.walletconnect.org https://secure.walletconnect.com https://*.dagarmy.network https://dagarmy.network",
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: "frame-src 'self' https://*.walletconnect.com https://*.walletconnect.org https://verify.walletconnect.com https://verify.walletconnect.org https://secure.walletconnect.com https://secure.walletconnect.org https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org",
           },
         ],
       },
