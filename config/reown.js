@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 
 // 1. Get projectId from https://cloud.reown.com
-const projectId = '285b799f9c4339cca03ed377a49e56ba'
+const projectId = 'ba3751e293e717d7fd71426e6c862e79'
 
 // 2. Create a metadata object - optional
 const metadata = {
@@ -34,13 +34,23 @@ export const modal = createAppKit({
   features: {
     analytics: true,
     email: true,
-    socials: ['google', 'x', 'github', 'discord', 'apple', 'facebook'],
-    emailShowWallets: true
+    socials: ['google', 'apple', 'facebook'], // Only Google, Apple, Facebook
+    emailShowWallets: false,
+    allWallets: false,
+    collapseWallets: true,
+    connectMethodsOrder: ['email', 'social'],
+    onramp: false,
+    swaps: false,
+    smartSessions: false
   },
+  enableWallets: false, // Disable wallet connections entirely
   themeMode: 'light',
   themeVariables: {
-    '--w3m-accent': '#7C3AED',
-    '--w3m-border-radius-master': '8px'
+    '--w3m-font-family': 'Inter, sans-serif',
+    '--w3m-accent': '#3B82F6',
+    '--w3m-border-radius-master': '12px',
+    '--w3m-color-mix': '#FFFFFF',
+    '--w3m-color-mix-strength': 10
   }
 })
 

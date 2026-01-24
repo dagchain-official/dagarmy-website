@@ -4,15 +4,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { useAuth } from "@/context/AuthContext";
+import ProfileCompletion from "./ProfileCompletion";
 import "./SocialLogin.css";
 import "./LoginOverride.css";
 
 export default function Login() {
   const router = useRouter();
   const { address, isConnected } = useAccount();
-  const { login, isAuthenticated, userRole } = useAuth();
+  const { login, isAuthenticated, userRole, userProfile } = useAuth();
   const [selectedRole, setSelectedRole] = useState("");
   const [showRoleSelection, setShowRoleSelection] = useState(false);
+  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
+  const [socialEmail, setSocialEmail] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [storedWalletAddress, setStoredWalletAddress] = useState(null);
 
   useEffect(() => {
     const hasLoggedOut = sessionStorage.getItem('dagarmy_logged_out') === 'true';
@@ -24,7 +29,9 @@ export default function Login() {
   }, [isConnected, address, isAuthenticated]);
 
   useEffect(() => {
-    if (isAuthenticated && userRole) {
+    // Redirect authenticated users to dashboard
+    // BUT NOT if profile completion form is showing
+    if (isAuthenticated && userRole && !showProfileCompletion) {
       if (userRole === 'student') {
         router.push('/student-dashboard');
       } else if (userRole === 'trainer') {
@@ -32,12 +39,60 @@ export default function Login() {
         router.push('/student-dashboard'); // Temporary redirect
       }
     }
-  }, [isAuthenticated, userRole, router]);
+  }, [isAuthenticated, userRole, showProfileCompletion, router]);
 
-  const handleRoleSelection = () => {
+  const handleRoleSelection = async () => {
     if (selectedRole && address) {
-      login(selectedRole);
+      // Store wallet address before it potentially becomes undefined
+      console.log('💾 Storing wallet address:', address);
+      setStoredWalletAddress(address);
+      
+      // First, save user to Supabase WITHOUT authenticating yet
+      try {
+        const response = await fetch('/api/auth/user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            wallet_address: address,
+            role: selectedRole,
+          }),
+        });
+        
+        const data = await response.json();
+        console.log('📋 User data from API:', data);
+        
+        if (data.user) {
+          setSocialEmail(data.user.email);
+          setCurrentUserId(data.user.id);
+          
+          // Check if profile is already completed
+          if (!data.user.profile_completed) {
+            console.log('📝 Profile not completed, showing profile completion form');
+            setShowProfileCompletion(true);
+            setShowRoleSelection(false);
+            // DON'T call login() yet - wait for profile completion
+            return;
+          } else {
+            console.log('✅ Profile already completed, proceeding with login');
+          }
+        }
+      } catch (error) {
+        console.error('Error checking profile status:', error);
+      }
+      
+      // Profile is completed (or check failed), proceed with normal login
+      await login(selectedRole);
     }
+  };
+
+  const handleProfileComplete = async (userData) => {
+    console.log('✅ Profile completed, now authenticating user');
+    setShowProfileCompletion(false);
+    
+    // Now authenticate the user
+    await login(selectedRole);
+    
+    // The useEffect will handle redirect to dashboard after authentication
   };
 
   const handleConnectWallet = () => {
@@ -224,163 +279,244 @@ export default function Login() {
                 <h2
                   className="login-title fw-7 wow fadeInUp"
                   data-wow-delay="0s"
-                  style={{ marginBottom: "10px", fontSize: "32px", color: "#1f2937" }}
+                  style={{ marginBottom: "40px", fontSize: "32px", color: "#1f2937" }}
                 >
-                  Sign In To Your Account
+                  Sign In
                 </h2>
 
-                <div className="register" style={{ marginBottom: "32px" }}>
-                  <p className="fw-5 fs-15 wow fadeInUp" data-wow-delay="0s" style={{ display: "inline", marginRight: "6px", color: "#6b7280" }}>
-                    Don't have an account?
-                  </p>
-                  <Link
-                    href="/register"
-                    className="fw-5 fs-15 wow fadeInUp"
-                    data-wow-delay="0s"
-                    style={{
-                      color: "#8b5cf6",
-                      fontWeight: "600",
-                      textDecoration: "none",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#7c3aed"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#8b5cf6"}
-                  >
-                    Join here
-                  </Link>
-                </div>
+                {/* Removed "Don't have an account?" link - Sign In handles both new and returning users */}
 
                 {!isConnected ? (
                   <>
                     <div className="wow fadeInUp" data-wow-delay="0s" style={{
-                      maxWidth: "340px",
+                      maxWidth: "520px",
                       margin: "0 auto",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center"
+                      background: "#ffffff",
+                      borderRadius: "16px",
+                      padding: "40px",
+                      boxShadow: "0 4px 20px rgba(139, 92, 246, 0.1)",
+                      border: "1px solid #e5e7eb"
                     }}>
-                      <p className="fs-15 mb-3" style={{ color: "#6b7280", textAlign: "center", fontSize: "14px" }}>
-                        Connect your wallet or use social login to continue
-                      </p>
+                      {/* Email Input */}
+                      <div style={{ marginBottom: "24px" }}>
+                        <div style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "14px",
+                          padding: "14px 18px",
+                          background: "#f9fafb",
+                          borderRadius: "10px",
+                          border: "1px solid #e5e7eb"
+                        }}>
+                          <i className="icon-mail" style={{ color: "#6b7280", fontSize: "18px" }} />
+                          <input
+                            type="email"
+                            placeholder="Email"
+                            style={{
+                              flex: 1,
+                              background: "transparent",
+                              border: "none",
+                              outline: "none",
+                              color: "#1f2937",
+                              fontSize: "14px"
+                            }}
+                          />
+                        </div>
+                      </div>
 
-                      {/* Connect Wallet Button */}
+                      {/* Continue with Google */}
                       <button
-                        className="relative flex items-center justify-center gap-1 bg-[#8b5cf6] border-2 border-[#8b5cf6] text-sm font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white group hover:transition-all hover:duration-700 px-10 mb-3 w-full"
-                        type="button"
                         onClick={handleConnectWallet}
                         style={{
-                          height: "52px",
-                          borderRadius: "8px",
-                          transition: "all 0.3s ease",
-                          fontSize: "15px",
-                          fontWeight: "600",
-                          background: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
+                          width: "100%",
+                          padding: "14px 18px",
+                          background: "#ffffff",
+                          border: "1px solid #e5e7eb",
+                          borderRadius: "10px",
+                          color: "#1f2937",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "12px",
+                          marginBottom: "18px",
+                          transition: "all 0.2s"
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = "translateY(-2px)";
-                          e.currentTarget.style.boxShadow = "0 8px 20px rgba(139, 92, 246, 0.3)";
+                          e.currentTarget.style.background = "#f9fafb";
+                          e.currentTarget.style.borderColor = "#8b5cf6";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = "translateY(0)";
-                          e.currentTarget.style.boxShadow = "none";
+                          e.currentTarget.style.background = "#ffffff";
+                          e.currentTarget.style.borderColor = "#e5e7eb";
                         }}
                       >
-                        <svg
-                          viewBox="0 0 80 24"
-                          className="absolute w-14 text-white fill-none stroke-current stroke-[5] z-[20] transition-all duration-700 ease-in-out -left-1/3 group-hover:left-3"
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{ strokeLinecap: "round", strokeLinejoin: "round" }}
-                        >
-                          <line x1="4" y1="12" x2="74" y2="12"></line>
-                          <path d="M66 6l8 6-8 6"></path>
-                        </svg>
-                        <span className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-2 group-hover:translate-x-2" style={{ fontFamily: "'Nasalization', sans-serif", letterSpacing: "1.5px", textTransform: "uppercase", fontSize: "14px" }}>
-                          Connect Wallet
-                        </span>
-                        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[400px] group-hover:h-[400px] group-hover:opacity-100 z-[0]"></span>
-                        <svg
-                          viewBox="0 0 80 24"
-                          className="absolute w-14 text-white fill-none stroke-current stroke-[5] z-[20] transition-all duration-700 ease-in-out right-3 group-hover:-right-1/3"
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{ strokeLinecap: "round", strokeLinejoin: "round" }}
-                        >
-                          <line x1="4" y1="12" x2="74" y2="12"></line>
-                          <path d="M66 6l8 6-8 6"></path>
-                        </svg>
+                        <img src="/images/loginpage/google-g-2015.svg" alt="Google" style={{ width: "18px", height: "18px" }} />
+                        Continue with google
                       </button>
+
+                      {/* Social Icons Row */}
+                      <div style={{
+                        display: "flex",
+                        gap: "14px",
+                        marginBottom: "24px"
+                      }}>
+                        <button
+                          onClick={handleConnectWallet}
+                          style={{
+                            flex: 1,
+                            padding: "14px",
+                            background: "#ffffff",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "10px",
+                            color: "#1f2937",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#f9fafb";
+                            e.currentTarget.style.borderColor = "#8b5cf6";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#ffffff";
+                            e.currentTarget.style.borderColor = "#e5e7eb";
+                          }}
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                          </svg>
+                        </button>
+                        <button
+                          onClick={handleConnectWallet}
+                          style={{
+                            flex: 1,
+                            padding: "14px",
+                            background: "#ffffff",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "10px",
+                            color: "#1f2937",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#f9fafb";
+                            e.currentTarget.style.borderColor = "#8b5cf6";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#ffffff";
+                            e.currentTarget.style.borderColor = "#e5e7eb";
+                          }}
+                        >
+                          <i className="icon-apple" style={{ fontSize: "20px" }} />
+                        </button>
+                        <button
+                          onClick={handleConnectWallet}
+                          style={{
+                            flex: 1,
+                            padding: "14px",
+                            background: "#ffffff",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "10px",
+                            color: "#1f2937",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#f9fafb";
+                            e.currentTarget.style.borderColor = "#8b5cf6";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#ffffff";
+                            e.currentTarget.style.borderColor = "#e5e7eb";
+                          }}
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                          </svg>
+                        </button>
+                        <button
+                          onClick={handleConnectWallet}
+                          style={{
+                            flex: 1,
+                            padding: "14px",
+                            background: "#1877f2",
+                            border: "1px solid #1877f2",
+                            borderRadius: "10px",
+                            color: "#ffffff",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#1565d8";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#1877f2";
+                          }}
+                        >
+                          <i className="flaticon-facebook-1" style={{ fontSize: "20px" }} />
+                        </button>
+                      </div>
 
                       {/* Divider */}
                       <div style={{
                         display: "flex",
                         alignItems: "center",
-                        margin: "20px 0",
-                        gap: "16px",
-                        width: "100%"
+                        margin: "24px 0",
+                        gap: "16px"
                       }}>
                         <div style={{ flex: 1, height: "1px", background: "#e5e7eb" }}></div>
-                        <p className="fs-15" style={{ color: "#9ca3af", margin: 0, fontWeight: "500", fontSize: "13px" }}>
-                          OR
-                        </p>
+                        <p style={{ color: "#9ca3af", margin: 0, fontSize: "13px" }}>or</p>
                         <div style={{ flex: 1, height: "1px", background: "#e5e7eb" }}></div>
                       </div>
 
-                      {/* Social Login Buttons */}
-                      <div className="login-social">
-                        <button
-                          onClick={handleConnectWallet}
-                          className="social-btn google"
-                        >
-                          <div className="btn-main-icon">
-                            <img
-                              src="/images/loginpage/google-g-2015.svg"
-                              alt="Google"
-                            />
-                          </div>
-                          <span className="btn-hover-text">Google</span>
-                        </button>
-
-                        <button
-                          onClick={handleConnectWallet}
-                          className="social-btn facebook"
-                        >
-                          <div className="btn-main-icon">
-                            <i className="flaticon-facebook-1" />
-                          </div>
-                          <span className="btn-hover-text">Facebook</span>
-                        </button>
-
-                        <button
-                          onClick={handleConnectWallet}
-                          className="social-btn apple"
-                        >
-                          <div className="btn-main-icon">
-                            <i className="icon-apple" />
-                          </div>
-                          <span className="btn-hover-text">Apple</span>
-                        </button>
-                      </div>
-
-                      {/* Trust Indicators */}
-                      <div style={{
-                        marginTop: "32px",
-                        padding: "16px",
-                        background: "#f9fafb",
-                        borderRadius: "10px",
-                        border: "1px solid #e5e7eb",
-                        width: "100%"
-                      }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-                          <i className="icon-shield" style={{ fontSize: "20px", color: "#8b5cf6" }} />
-                          <div>
-                            <p style={{ margin: 0, fontWeight: "600", fontSize: "13px", color: "#111827" }}>
-                              Secure & Encrypted
-                            </p>
-                            <p style={{ margin: 0, fontSize: "12px", color: "#6b7280" }}>
-                              Your data is protected with encryption
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                      {/* Continue with Wallet */}
+                      <button
+                        onClick={handleConnectWallet}
+                        style={{
+                          width: "100%",
+                          padding: "14px 18px",
+                          background: "#ffffff",
+                          border: "1px solid #e5e7eb",
+                          borderRadius: "10px",
+                          color: "#1f2937",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "12px",
+                          transition: "all 0.2s"
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "#f9fafb";
+                          e.currentTarget.style.borderColor = "#8b5cf6";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "#ffffff";
+                          e.currentTarget.style.borderColor = "#e5e7eb";
+                        }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="2" y="5" width="20" height="14" rx="2"/>
+                          <line x1="2" y1="10" x2="22" y2="10"/>
+                        </svg>
+                        Continue with a wallet
+                      </button>
                     </div>
                   </>
                 ) : showRoleSelection && !isAuthenticated ? (
@@ -516,6 +652,15 @@ export default function Login() {
           </div>
         </div>
       </section>
+
+      {/* Profile Completion Modal */}
+      {showProfileCompletion && (
+        <ProfileCompletion
+          userAddress={storedWalletAddress || address}
+          socialEmail={socialEmail}
+          onComplete={handleProfileComplete}
+        />
+      )}
     </div>
   );
 }

@@ -15,24 +15,22 @@ export default function StudentSettingPage() {
     <>
       <div id="wrapper">
         <Header2 />
-        <PageTitle2 />
         <div className="main-content pt-0">
-          <div className="page-inner tf-spacing-1">
-            <div className="tf-container">
-              <div className="row">
-                <div className="col-xl-3 col-lg-12">
-                  <div className="dashboard_navigationbar">
-                    <div className="dropbtn">
-                      <i className="icon-home" /> Dashboard Navigation
-                    </div>
-                    <div className="instructors-dashboard student-dashboard-sidebar">
-                      <div className="dashboard-title">
-                        STUDENT DASHBOARD
-                        <DashboardNav2 />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <div className="page-inner" style={{ padding: "0" }}>
+            <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
+              <div style={{ 
+                width: "240px", 
+                flexShrink: 0,
+                background: "#1a1f36",
+                padding: "32px 16px",
+                position: "sticky",
+                top: "0",
+                height: "100vh",
+                overflowY: "auto"
+              }}>
+                <DashboardNav2 />
+              </div>
+              <div style={{ flex: 1 }}>
                 <Setttings />
               </div>
             </div>
