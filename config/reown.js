@@ -11,8 +11,8 @@ const projectId = 'ba3751e293e717d7fd71426e6c862e79'
 const metadata = {
   name: 'DAGARMY',
   description: 'Master AI, Blockchain & Data Visualization - Join the Global Army of Vibe Coders',
-  url: 'https://dagarmy-website-8d8b5ce-vinod-kumars-projects-8d8e52ce.vercel.app',
-  icons: ['https://dagarmy-website-8d8b5ce-vinod-kumars-projects-8d8e52ce.vercel.app/icon.png']
+  url: 'https://dagarmy.network',
+  icons: ['https://dagarmy.network/icon.png']
 }
 
 // 3. Set the networks
