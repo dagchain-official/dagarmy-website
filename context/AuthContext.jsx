@@ -1,11 +1,39 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
+import { useAppKitAccount, useAppKitState } from '@reown/appkit/react';
 
 const AuthContext = createContext();
 
+// Helper function to save user to Supabase
+async function saveUserToSupabase(userData) {
+  try {
+    const response = await fetch('/api/auth/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      console.error('API Error Response:', errorData);
+      throw new Error(errorData.error || 'Failed to save user to Supabase');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error saving user to Supabase:', error);
+    throw error;
+  }
+}
+
 export function AuthProvider({ children }) {
   const { address, isConnected, connector } = useAccount();
+  const { caipAddress, isConnected: isAppKitConnected, embeddedWalletInfo } = useAppKitAccount();
+  const appKitState = useAppKitState();
   const { disconnect } = useDisconnect();
   const [userRole, setUserRole] = useState(null); // 'student' or 'trainer'
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,19 +51,11 @@ export function AuthProvider({ children }) {
       return;
     }
 
-    if (isConnected && address && !hasLoggedOut) {
-      // Check if user has a role stored in localStorage
-      const storedRole = localStorage.getItem(`dagarmy_role_${address}`);
-      const storedProfile = localStorage.getItem(`dagarmy_profile_${address}`);
-      
-      if (storedRole) {
-        setUserRole(storedRole);
-        setIsAuthenticated(true);
-        if (storedProfile) {
-          setUserProfile(JSON.parse(storedProfile));
-        }
-      }
-    } else if (!isConnected) {
+    // REMOVED: Auto-authentication logic
+    // Users must now select their role every time they sign in
+    // This allows multiple family members to use the same device with different accounts
+    
+    if (!isConnected) {
       setUserRole(null);
       setIsAuthenticated(false);
       setUserProfile(null);
@@ -46,6 +66,10 @@ export function AuthProvider({ children }) {
     if (address && (role === 'student' || role === 'trainer')) {
       localStorage.setItem(`dagarmy_role_${address}`, role);
       
+      console.log('🔍 Login Debug - Connector:', connector?.name);
+      console.log('🔍 Login Debug - CAIP Address:', caipAddress);
+      console.log('🔍 Embedded Wallet Info:', embeddedWalletInfo);
+      
       // Try to get user profile info from connector
       const profile = {
         address: address,
@@ -54,17 +78,69 @@ export function AuthProvider({ children }) {
         timestamp: new Date().toISOString()
       };
 
-      // Try to get email if available (for social logins)
+      // Get email and name from embeddedWalletInfo (for social logins)
+      let userEmail = null;
+      let userName = null;
+      let userAvatar = null;
+
       try {
-        if (connector?.name?.toLowerCase().includes('auth')) {
-          const user = await connector?.getUser?.();
-          if (user?.email) {
-            profile.email = user.email;
-            profile.name = user.name || user.email.split('@')[0];
-          }
+        // For social logins, embeddedWalletInfo contains user email and username
+        if (embeddedWalletInfo) {
+          console.log('✅ Found embeddedWalletInfo:', embeddedWalletInfo);
+          
+          userEmail = embeddedWalletInfo.user?.email || null;
+          
+          // Try to get a proper name - username might just be the email prefix
+          // For now, we'll use username as that's what Reown provides
+          // In the future, you could add a profile completion step to get the actual name
+          userName = embeddedWalletInfo.user?.username || 
+                    embeddedWalletInfo.user?.name ||
+                    (userEmail ? userEmail.split('@')[0] : null);
+          
+          console.log('✅ Extracted from embeddedWalletInfo:');
+          console.log('   Email:', userEmail);
+          console.log('   Username:', userName);
+          console.log('   Auth Provider:', embeddedWalletInfo.authProvider);
+          console.log('   Note: Username is what Reown provides. For full name, consider adding a profile completion step.');
+        } else {
+          console.log('⚠️ No embeddedWalletInfo - this is expected for wallet-only logins');
+        }
+
+        if (userEmail) {
+          profile.email = userEmail;
+          profile.name = userName;
+          profile.avatar = userAvatar;
+          profile.authProvider = embeddedWalletInfo?.authProvider;
+          console.log('✅ User profile complete with email:', userEmail);
         }
       } catch (error) {
         console.log('Could not fetch user profile:', error);
+      }
+
+      // Save user to Supabase
+      try {
+        const supabaseData = {
+          wallet_address: address,
+          email: profile.email || null,
+          role: role,
+          full_name: profile.name || null,
+          avatar_url: profile.avatar || null,
+          auth_provider: profile.authProvider || 'wallet',
+        };
+
+        console.log('📤 Sending to Supabase:', supabaseData);
+
+        const result = await saveUserToSupabase(supabaseData);
+        
+        if (result.success) {
+          console.log('✅ User saved to Supabase:', result.user);
+          // Update profile with Supabase user ID
+          profile.supabaseId = result.user.id;
+          profile.isNewUser = result.isNewUser;
+        }
+      } catch (error) {
+        console.error('❌ Failed to save user to Supabase:', error);
+        // Continue with local auth even if Supabase fails
       }
 
       localStorage.setItem(`dagarmy_profile_${address}`, JSON.stringify(profile));

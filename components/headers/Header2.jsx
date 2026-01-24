@@ -1,17 +1,38 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MobileNav from "./MobileNav";
-import PremiumButton from "../homes/home-2/PremiumButton";
+import LoginModal from "../auth/LoginModal";
+import { useAuth } from "@/context/AuthContext";
+
 export default function Header2() {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  // Close modal if user becomes authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowLoginModal(false);
+    }
+  }, [isAuthenticated]);
+
+  const handleSignInClick = () => {
+    sessionStorage.removeItem('dagarmy_logged_out');
+    setShowLoginModal(true);
+    // Open Reown modal
+    if (typeof window !== 'undefined' && window.modal) {
+      window.modal.open();
+    }
+  };
   return (
-    <header id="header_main" className="header style-2" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '8px 0' }}>
+    <header id="header_main" className="header style-2" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 0' }}>
       <div className="header-inner">
-        {/* Top Row: Logo, Search, Buttons */}
-        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
-          {/* Logo Section - Left */}
-          <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: '200px' }}>
+        {/* Single Row: Logo - Search - Menu - Login - Register */}
+        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '32px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
+          
+          {/* Logo Section */}
+          <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: '180px' }}>
             <Link href={`/`} rel="home" className="flex items-center gap-3">
               <Image
                 id="logo-header"
@@ -24,18 +45,18 @@ export default function Header2() {
             </Link>
           </div>
 
-          {/* Search Bar - Center */}
-          <div style={{ flex: '1', maxWidth: '600px', margin: '0 40px' }}>
+          {/* Search Bar - Reduced Width */}
+          <div style={{ width: '280px' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '12px',
-              padding: '10px 16px',
+              gap: '10px',
+              padding: '8px 14px',
               border: '1px solid #e5e7eb',
-              borderRadius: '24px',
-              background: '#fff'
+              borderRadius: '20px',
+              background: '#f9fafb'
             }}>
-              <i className="icon-search" style={{ color: '#6b7280', fontSize: '20px', flexShrink: 0 }} />
+              <i className="icon-search" style={{ color: '#6b7280', fontSize: '16px', flexShrink: 0 }} />
               <input
                 type="text"
                 placeholder="Search Opportunities"
@@ -44,79 +65,19 @@ export default function Header2() {
                   border: 'none',
                   outline: 'none',
                   background: 'transparent',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   color: '#1f2937'
                 }}
               />
             </div>
           </div>
 
-          {/* Buttons - Right */}
-          <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <PremiumButton
-              text="Login"
-              href="/login"
-              style={{ minWidth: '100px', height: '42px', fontSize: '14px' }}
-            />
-            <Link
-              href={`/register`}
-              className="relative flex items-center gap-1 bg-[#8b5cf6] px-6 py-2 border-2 border-[#8b5cf6] text-sm rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
-              style={{ textDecoration: 'none', height: '42px', minWidth: '140px', justifyContent: 'center' }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="absolute w-5 fill-white z-[20] transition-all duration-700 ease-in-out -left-1/4 group-hover:left-3 group-hover:fill-white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-              <span
-                className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-2 group-hover:translate-x-2"
-              >
-                Register
-              </span>
-              <span
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[150px] group-hover:h-[150px] group-hover:opacity-100 z-[0]"
-              ></span>
-              <svg
-                viewBox="0 0 24 24"
-                className="absolute w-5 fill-white z-[20] transition-all duration-700 ease-in-out right-3 group-hover:-right-1/4 group-hover:fill-white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-            </Link>
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <a
-            className="mobile-nav-toggler mobile-button d-lg-none flex"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasMenu"
-            aria-controls="offcanvasMenu"
-            style={{ marginLeft: '12px' }}
-          />
-        </div>
-
-        {/* Bottom Row: Navigation Menu */}
-        <div style={{
-          borderTop: '1px solid #f3f4f6',
-          background: '#fff'
-        }}>
+          {/* Navigation Menu */}
           <nav style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
-            padding: '0 24px',
             display: 'flex',
-            gap: '24px',
+            gap: '28px',
             alignItems: 'center',
-            justifyContent: 'center',
-            height: '38px'
+            flex: 1
           }}>
             <Link href="/about" style={{
               fontSize: '14px',
@@ -126,7 +87,7 @@ export default function Header2() {
               transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
               position: 'relative',
-              paddingBottom: '6px',
+              paddingBottom: '4px',
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
@@ -158,7 +119,7 @@ export default function Header2() {
               transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
               position: 'relative',
-              paddingBottom: '6px',
+              paddingBottom: '4px',
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
@@ -190,7 +151,7 @@ export default function Header2() {
               transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
               position: 'relative',
-              paddingBottom: '6px',
+              paddingBottom: '4px',
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
@@ -222,7 +183,7 @@ export default function Header2() {
               transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
               position: 'relative',
-              paddingBottom: '6px',
+              paddingBottom: '4px',
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
@@ -254,7 +215,7 @@ export default function Header2() {
               transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
               position: 'relative',
-              paddingBottom: '6px',
+              paddingBottom: '4px',
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
@@ -286,7 +247,7 @@ export default function Header2() {
               transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
               position: 'relative',
-              paddingBottom: '6px',
+              paddingBottom: '4px',
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
@@ -311,9 +272,87 @@ export default function Header2() {
               }} />
             </Link>
           </nav>
+
+          {/* Sign In Button */}
+          <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <button
+              onClick={handleSignInClick}
+              style={{
+                minWidth: '90px',
+                height: '38px',
+                fontSize: '13px',
+                padding: '0 20px',
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 2px 8px rgba(139, 92, 246, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.2)';
+              }}
+            >
+              Sign In
+            </button>
+            {/* Register button commented out - using Sign In for both new and returning users */}
+            {/* <Link
+              href={`/register`}
+              className="relative flex items-center gap-1 bg-[#8b5cf6] px-5 py-2 border-2 border-[#8b5cf6] text-sm rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+              style={{ textDecoration: 'none', height: '38px', minWidth: '120px', justifyContent: 'center' }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute w-4 fill-white z-[20] transition-all duration-700 ease-in-out -left-1/4 group-hover:left-2 group-hover:fill-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                ></path>
+              </svg>
+              <span
+                className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-2 group-hover:translate-x-2"
+              >
+                Register
+              </span>
+              <span
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[150px] group-hover:h-[150px] group-hover:opacity-100 z-[0]"
+              ></span>
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute w-4 fill-white z-[20] transition-all duration-700 ease-in-out right-2 group-hover:-right-1/4 group-hover:fill-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                ></path>
+              </svg>
+            </Link> */}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <a
+            className="mobile-nav-toggler mobile-button d-lg-none flex"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasMenu"
+            aria-controls="offcanvasMenu"
+            style={{ marginLeft: '12px' }}
+          />
         </div>
       </div>
       <MobileNav />
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
     </header>
   );
 }
