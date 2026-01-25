@@ -147,7 +147,18 @@ export function AuthProvider({ children }) {
       }
 
       localStorage.setItem(`dagarmy_profile_${address}`, JSON.stringify(profile));
+      localStorage.setItem('dagarmy_role', role);
+      localStorage.setItem('dagarmy_authenticated', 'true');
+      localStorage.setItem('dagarmy_user', JSON.stringify({
+        email: profile.email,
+        full_name: profile.name,
+        wallet_address: address
+      }));
       sessionStorage.removeItem('dagarmy_logged_out');
+      
+      // Set cookies for middleware authentication
+      document.cookie = `dagarmy_role=${role}; path=/; max-age=2592000`; // 30 days
+      document.cookie = `dagarmy_authenticated=true; path=/; max-age=2592000`; // 30 days
       
       setUserRole(role);
       setIsAuthenticated(true);
