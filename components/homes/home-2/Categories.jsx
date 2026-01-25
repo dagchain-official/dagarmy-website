@@ -4,9 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 const dagarmyCategories = [
-  // AI Track subcategories
   {
-    title: "AI & No-Code Development",
+    title: "Intelligent Systems and No Code Development",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
@@ -23,7 +22,7 @@ const dagarmyCategories = [
     ),
   },
   {
-    title: "AI Creative Tools",
+    title: "Creative Tools",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
@@ -34,7 +33,7 @@ const dagarmyCategories = [
     ),
   },
   {
-    title: "AI Automation & Agents",
+    title: "Automation and Agent Systems",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="3"></circle>
@@ -42,9 +41,8 @@ const dagarmyCategories = [
       </svg>
     ),
   },
-  // Blockchain Track subcategories
   {
-    title: "Blockchain Fundamentals",
+    title: "Distributed Ledger Foundations",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -53,7 +51,7 @@ const dagarmyCategories = [
     ),
   },
   {
-    title: "DeFi & Crypto Trading",
+    title: "Decentralized Finance Markets",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -62,7 +60,7 @@ const dagarmyCategories = [
     ),
   },
   {
-    title: "NFTs & Web3 Marketing",
+    title: "Web3 Growth Strategies",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -71,9 +69,8 @@ const dagarmyCategories = [
       </svg>
     ),
   },
-  // Data Visualisation Track subcategories
   {
-    title: "Excel & Data Analysis",
+    title: "Excel and Data Analysis",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -85,7 +82,7 @@ const dagarmyCategories = [
     ),
   },
   {
-    title: "Power BI & Tableau",
+    title: "Power BI and Tableau",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="18" y1="20" x2="18" y2="10"></line>
@@ -117,7 +114,7 @@ export default function Categories() {
           </h2>
           <div className="flex items-center justify-between flex-wrap gap-10">
             <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
-              Choose your path to becoming a future-ready tech leader
+              Choose a Direction That Matches Your Goals
             </div>
             <Link
               href={`/categories`}
