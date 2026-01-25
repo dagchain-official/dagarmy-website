@@ -9,17 +9,32 @@ export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState('');
+  const [userName, setUserName] = useState('Admin');
 
   useEffect(() => {
     // Check authentication
     const checkAuth = () => {
       const userRole = localStorage.getItem('dagarmy_role');
       const authenticated = localStorage.getItem('dagarmy_authenticated');
+      const storedUser = localStorage.getItem('dagarmy_user');
       
       if (!authenticated || authenticated !== 'true' || userRole !== 'admin') {
         // Not authenticated or not admin, redirect to login
         router.push('/login?redirect=' + encodeURIComponent(pathname));
         return;
+      }
+      
+      // Get user data
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          setUserEmail(user.email || 'admin@dagarmy.network');
+          setUserName(user.full_name || 'Admin');
+        } catch (e) {
+          setUserEmail('admin@dagarmy.network');
+          setUserName('Admin');
+        }
       }
       
       setIsAuthenticated(true);
@@ -28,6 +43,21 @@ export default function AdminLayout({ children }) {
 
     checkAuth();
   }, [pathname, router]);
+
+  const handleLogout = () => {
+    // Clear all authentication data
+    localStorage.removeItem('dagarmy_role');
+    localStorage.removeItem('dagarmy_authenticated');
+    localStorage.removeItem('dagarmy_user');
+    localStorage.removeItem('dagarmy_wallet');
+    
+    // Clear cookies
+    document.cookie = 'dagarmy_role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'dagarmy_authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    
+    // Redirect to login
+    router.push('/login');
+  };
 
   if (isLoading) {
     return (
@@ -250,7 +280,8 @@ export default function AdminLayout({ children }) {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px'
+              gap: '10px',
+              marginBottom: '12px'
             }}>
               <div style={{
                 width: '32px',
@@ -264,13 +295,49 @@ export default function AdminLayout({ children }) {
                 fontWeight: '600',
                 color: '#ffffff'
               }}>
-                A
+                {userName.charAt(0).toUpperCase()}
               </div>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '500', color: '#212529' }}>Admin</div>
-                <div style={{ fontSize: '11px', color: '#6c757d' }}>admin@dagarmy.com</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '13px', fontWeight: '500', color: '#212529', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userName}</div>
+                <div style={{ fontSize: '11px', color: '#6c757d', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userEmail}</div>
               </div>
             </div>
+            <button
+              onClick={handleLogout}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef',
+                background: '#ffffff',
+                color: '#dc3545',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#dc3545';
+                e.currentTarget.style.color = '#ffffff';
+                e.currentTarget.style.borderColor = '#dc3545';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#ffffff';
+                e.currentTarget.style.color = '#dc3545';
+                e.currentTarget.style.borderColor = '#e9ecef';
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Logout
+            </button>
           </div>
         )}
       </aside>

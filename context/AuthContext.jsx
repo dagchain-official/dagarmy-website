@@ -64,6 +64,9 @@ export function AuthProvider({ children }) {
 
   const login = async (role) => {
     if (address && (role === 'student' || role === 'trainer')) {
+      // Clear the logged out flag on successful login
+      sessionStorage.removeItem('dagarmy_logged_out');
+      
       localStorage.setItem(`dagarmy_role_${address}`, role);
       
       console.log('🔍 Login Debug - Connector:', connector?.name);
