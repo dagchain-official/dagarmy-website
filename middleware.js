@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // Protect all admin routes
-  if (pathname.startsWith('/admin')) {
+  // Protect all admin routes except the root /admin path
+  // The root /admin page will handle its own redirect
+  if (pathname.startsWith('/admin') && pathname !== '/admin') {
     // Check if user is authenticated
     const userRole = request.cookies.get('dagarmy_role')?.value;
     const isAuthenticated = request.cookies.get('dagarmy_authenticated')?.value;
@@ -29,5 +30,6 @@ export function middleware(request) {
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/admin',
   ],
 };
