@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS custom_permissions (
 );
 
 -- Create index
-CREATE INDEX idx_custom_permissions_module ON custom_permissions(module_key);
-CREATE INDEX idx_custom_permissions_active ON custom_permissions(is_active);
+CREATE INDEX IF NOT EXISTS idx_custom_permissions_module ON custom_permissions(module_key);
+CREATE INDEX IF NOT EXISTS idx_custom_permissions_active ON custom_permissions(is_active);
 
 -- Add comment
 COMMENT ON TABLE custom_permissions IS 'Custom permission types created by master admin';
