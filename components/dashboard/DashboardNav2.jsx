@@ -128,6 +128,7 @@ export default function DashboardNav2() {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
+      minHeight: '100%',
       height: '100%',
     }}>
       {/* Logo Section */}
@@ -161,7 +162,7 @@ export default function DashboardNav2() {
       </div>
 
       {/* Navigation Items */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '4px', overflow: 'visible' }}>
         {dashboardItems.map((item, index) => {
           const isActive = pathname === item.href;
           return (
@@ -219,6 +220,7 @@ export default function DashboardNav2() {
         marginTop: 'auto',
         paddingTop: '16px',
         borderTop: '1px solid rgba(255,255,255,0.08)',
+        flexShrink: 0,
       }}>
         <div
           onClick={handleLogout}
