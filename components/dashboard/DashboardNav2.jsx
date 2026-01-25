@@ -213,15 +213,8 @@ export default function DashboardNav2() {
             </div>
           );
         })}
-      </div>
-
-      {/* Logout Section */}
-      <div style={{
-        marginTop: 'auto',
-        paddingTop: '16px',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
-        flexShrink: 0,
-      }}>
+        
+        {/* Logout Item */}
         <div
           onClick={handleLogout}
           style={{
