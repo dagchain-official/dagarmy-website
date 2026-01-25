@@ -20,8 +20,8 @@ export default function AdminLayout({ children }) {
       const storedUser = localStorage.getItem('dagarmy_user');
       
       if (!authenticated || authenticated !== 'true' || userRole !== 'admin') {
-        // Not authenticated or not admin, redirect to register/login page
-        router.push('/register?redirect=' + encodeURIComponent(pathname));
+        // Not authenticated or not admin, redirect to home page
+        router.push('/');
         return;
       }
       
@@ -55,8 +55,8 @@ export default function AdminLayout({ children }) {
     document.cookie = 'dagarmy_role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'dagarmy_authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     
-    // Redirect to register/login page
-    router.push('/register');
+    // Redirect to home page
+    router.push('/');
   };
 
   if (isLoading) {

@@ -196,6 +196,16 @@ export function AuthProvider({ children }) {
       localStorage.removeItem(`dagarmy_profile_${address}`);
     }
     
+    // Clear all authentication data
+    localStorage.removeItem('dagarmy_role');
+    localStorage.removeItem('dagarmy_authenticated');
+    localStorage.removeItem('dagarmy_user');
+    localStorage.removeItem('dagarmy_wallet');
+    
+    // Clear cookies
+    document.cookie = 'dagarmy_role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'dagarmy_authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    
     // Set session flag to prevent auto-login
     sessionStorage.setItem('dagarmy_logged_out', 'true');
     
@@ -203,6 +213,8 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
     setUserProfile(null);
     setHasLoggedOut(true);
+    setIsAdmin(false);
+    setIsMasterAdmin(false);
     
     // Disconnect wallet/social connection
     await disconnect();

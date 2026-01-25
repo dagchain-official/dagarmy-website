@@ -34,23 +34,13 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   }, [isConnected, address, isAuthenticated, isOpen, login]);
 
-  // When authenticated, close modal and redirect to dashboard
+  // When authenticated, close modal (AuthContext handles redirect)
   useEffect(() => {
     if (isAuthenticated && userRole && !showProfileCompletion) {
-      // Close modal first
       setShowRoleSelection(false);
       onClose();
-      
-      // Then redirect after a brief delay to ensure modal closes
-      setTimeout(() => {
-        if (userRole === 'student') {
-          router.push('/student-dashboard');
-        } else if (userRole === 'trainer') {
-          router.push('/student-dashboard'); // Temporary
-        }
-      }, 100);
     }
-  }, [isAuthenticated, userRole, showProfileCompletion, router, onClose]);
+  }, [isAuthenticated, userRole, showProfileCompletion, onClose]);
 
   const handleRoleSelection = async () => {
     if (selectedRole && address) {
