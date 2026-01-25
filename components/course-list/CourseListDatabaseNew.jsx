@@ -128,9 +128,9 @@ export default function CourseListDatabaseNew() {
   }
 
   return (
-    <div className="main-content pt-0" style={{ background: '#f9fafb' }}>
-      <div className="page-inner tf-spacing-1 pt-0">
-        <div className="tf-container">
+    <div className="main-content pt-0" style={{ background: '#ffffff' }}>
+      <div className="page-inner" style={{ padding: '0' }}>
+        <div style={{ maxWidth: '1600px', margin: '0 auto', width: '100%' }}>
           {courses.map((course, index) => (
             <div
               key={course.id}
