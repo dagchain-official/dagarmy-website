@@ -1,276 +1,382 @@
 "use client";
-import { dagarmyCourses } from "@/data/dagarmy-courses";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useContextElement } from "@/context/Context";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-const categories = [
-  "Artificial Intelligence",
-  "Blockchain",
-  "Data Visualisation",
-];
-export default function Courses() {
-  const { toggleWishlist, isAddedtoWishlist } = useContextElement();
-  const [allProducts, setallProducts] = useState(dagarmyCourses);
-  const [currentCategory, setCurrentCategory] = useState(categories[0]);
-  const [filtered, setFiltered] = useState(allProducts);
+
+const ProgressiveInfoCards = () => {
+  const [activeCard, setActiveCard] = useState(0);
+
+  const cards = [
+    {
+      id: 0,
+      label: 'Understanding',
+      heading: 'What Learners Build Understanding In',
+      items: [
+        'AI-driven interfaces and natural language systems',
+        'Full-stack product logic and deployment fundamentals',
+        'Autonomous agents and workflow automation',
+        'Blockchain mechanics, wallets, and trust verification',
+        'Smart contracts, token systems, and security principles',
+        'Ethical and career-ready application of emerging technologies',
+        'Data engineering, visual storytelling, and dashboards',
+        'Business intelligence and cloud-based decision systems'
+      ]
+    },
+    {
+      id: 1,
+      label: "Who It's For",
+      heading: 'Who This Program Is For',
+      items: [
+        'Students preparing beyond placements',
+        'Professionals upgrading relevance and confidence',
+        'Creators and freelancers building independent capability',
+        'Business owners understanding modern digital systems',
+        'Non-technical learners seeking structured fluency'
+      ]
+    },
+    {
+      id: 2,
+      label: 'Outcomes',
+      heading: 'Outcome Focus',
+      items: [
+        'Practical understanding instead of surface familiarity',
+        'Portfolio-backed credibility',
+        'Clear connection between skills and real-world use',
+        'Confidence to operate across modern tech environments'
+      ]
+    }
+  ];
+
   useEffect(() => {
-    setFiltered(
-      allProducts.filter((elm) =>
-        elm.filterCategories.includes(currentCategory)
-      )
-    );
-  }, [currentCategory, allProducts]);
+    const interval = setInterval(() => {
+      setActiveCard((prev) => (prev + 1) % cards.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <section className="section-popular-course tf-spacing-6 pt-0" style={{ paddingTop: '0 !important' }}>
-      <style jsx global>{`
-        .badge-container {
-          position: relative;
-          display: inline-block;
-        }
-        .badge-container:hover .tooltip-text {
-          visibility: visible !important;
-          opacity: 1 !important;
-        }
-        .badge-container:hover img {
-          transform: scale(1.1);
-        }
-        .tooltip-text {
-          visibility: hidden;
-          position: absolute;
-          bottom: -40px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
-          color: #ffffff;
-          text-align: center;
-          padding: 8px 14px;
-          border-radius: 6px;
-          font-size: 13px;
-          font-weight: 600;
-          white-space: nowrap;
-          z-index: 9999;
-          opacity: 0;
-          transition: opacity 0.3s, visibility 0.3s;
-          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4), 0 0 20px rgba(168, 85, 247, 0.3);
-        }
-        .tooltip-text::after {
-          content: "";
-          position: absolute;
-          top: -5px;
-          left: 50%;
-          margin-left: -5px;
-          border-width: 0 5px 5px 5px;
-          border-style: solid;
-          border-color: transparent transparent #7c3aed transparent;
-        }
-        .swiper-button-prev::after,
-        .swiper-button-next::after {
-          display: none !important;
+    <div style={{ marginTop: '-48px' }}>
+      {/* Main Heading */}
+      <h3 style={{
+        fontSize: '32px',
+        fontWeight: '700',
+        color: '#1f2937',
+        marginBottom: '16px',
+        lineHeight: '1.3',
+        marginTop: '0'
+      }}>
+        A Unified Program Designed Around Real Capability
+      </h3>
+
+      {/* Body Text */}
+      <p style={{
+        fontSize: '16px',
+        lineHeight: '1.65',
+        color: '#4b5563',
+        marginBottom: '24px'
+      }}>
+        Instead of scattered courses and disconnected tools, DAG Army offers one integrated learning journey that brings together modern technology skills into a single, structured experience. This program is built for learners who want clarity, relevance, and confidence in how systems actually work together in real environments.
+      </p>
+
+      {/* Navigation Indicators - Moved Above Card */}
+      <div style={{
+        display: 'flex',
+        gap: '32px',
+        marginBottom: '20px',
+        borderBottom: '1px solid #e5e7eb'
+      }}>
+        {cards.map((card) => (
+          <button
+            key={card.id}
+            onClick={() => setActiveCard(card.id)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '12px 0',
+              fontSize: '14px',
+              fontWeight: activeCard === card.id ? '600' : '500',
+              color: activeCard === card.id ? '#8b5cf6' : '#6b7280',
+              borderBottom: activeCard === card.id ? '2px solid #8b5cf6' : '2px solid transparent',
+              marginBottom: '-1px',
+              transition: 'all 0.3s ease',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {card.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Card Container - Fixed Height */}
+      <div style={{
+        position: 'relative',
+        minHeight: '460px',
+        marginBottom: '0'
+      }}>
+        {cards.map((card) => (
+          <div
+            key={card.id}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              background: '#fff',
+              borderRadius: '16px',
+              padding: '36px',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
+              border: '1px solid #e5e7eb',
+              opacity: activeCard === card.id ? 1 : 0,
+              transform: activeCard === card.id ? 'translateY(0)' : 'translateY(12px)',
+              transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out',
+              pointerEvents: activeCard === card.id ? 'auto' : 'none'
+            }}
+          >
+            {/* Card Heading */}
+            <h4 style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: '#1f2937',
+              marginBottom: '14px'
+            }}>
+              {card.heading}
+            </h4>
+
+            {/* Divider */}
+            <div style={{
+              width: '60px',
+              height: '3px',
+              background: '#8b5cf6',
+              marginBottom: '24px'
+            }} />
+
+            {/* Bullet List */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px'
+            }}>
+              {card.items.map((item, index) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px'
+                }}>
+                  <span style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: '#8b5cf6',
+                    marginTop: '8px',
+                    flexShrink: 0
+                  }} />
+                  <span style={{
+                    fontSize: '15px',
+                    color: '#4b5563',
+                    lineHeight: '1.6'
+                  }}>
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+};
+
+export default function Courses() {
+
+  return (
+    <section className="section-popular-program" style={{ 
+      padding: '80px 0 80px',
+      background: '#fff'
+    }}>
+      <style jsx>{`
+        @media (min-width: 992px) {
+          .program-grid {
+            grid-template-columns: 40% 60% !important;
+          }
         }
       `}</style>
       <div className="tf-container">
-        <div className="row">
-          <div className="col-12">
-            <div className="tabs-with-filter style-small">
-              <div className="heading-section">
-                <h2
-                  className="letter-spacing-1 wow fadeInUp"
-                  data-wow-delay="0s"
-                >
-                  Popular Courses
-                </h2>
-                <div className="flex items-center justify-between flex-wrap gap-10">
-                  <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
-                    Explore our industry-focused training programs
-                  </div>
-                  <ul
-                    className="widget-menu-tab overflow-x-auto wow fadeInUp no-tab"
-                    data-wow-delay="0.3s"
-                  >
-                    {categories.map((category, index) => (
-                      <li
-                        key={index}
-                        onClick={() => setCurrentCategory(category)}
-                        className={`item-title ${currentCategory === category ? "active" : ""
-                          }`}
-                      >
-                        {category}
-                      </li>
-                    ))}
-                  </ul>
+        {/* Section Title - Left Aligned */}
+        <div style={{ marginBottom: '48px' }}>
+          <h2 style={{
+            fontSize: '42px',
+            fontWeight: '700',
+            color: '#1f2937',
+            marginBottom: '0',
+            letterSpacing: '-0.02em'
+          }}>
+            Popular Program
+          </h2>
+        </div>
+
+        {/* Two Column Layout */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gap: '40px',
+          alignItems: 'start'
+        }}
+        className="program-grid">
+
+          {/* LEFT SIDE: Flagship Program Card */}
+          <div style={{
+            background: '#fff',
+            borderRadius: '16px',
+            padding: '0',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
+            border: '1px solid #e5e7eb',
+            transition: 'box-shadow 0.3s ease',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.12)'}
+          onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.08)'}>
+            
+            {/* Image Placeholder */}
+            <div style={{
+              width: '100%',
+              height: '180px',
+              background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderBottom: '1px solid #e5e7eb'
+            }}>
+              <div style={{
+                textAlign: 'center',
+                color: '#9ca3af'
+              }}>
+                <div style={{
+                  fontSize: '48px',
+                  marginBottom: '8px'
+                }}>
+                  📐
                 </div>
-              </div>
-              <div
-                className="widget-content-tab wow fadeInUp"
-                data-wow-delay="0.4s"
-              >
-                <div className="widget-content-inner active">
-                  <div style={{ position: 'relative', paddingLeft: '60px', paddingRight: '60px' }}>
-                    <Swiper
-                      modules={[Navigation, Pagination]}
-                      spaceBetween={30}
-                      slidesPerView={5}
-                      navigation={{
-                        prevEl: '.courses-prev',
-                        nextEl: '.courses-next',
-                      }}
-                      pagination={{ 
-                        clickable: true,
-                        el: '.courses-pagination',
-                      }}
-                      breakpoints={{
-                        0: {
-                          slidesPerView: 1,
-                        },
-                        768: {
-                          slidesPerView: 2,
-                        },
-                        1024: {
-                          slidesPerView: 3,
-                        },
-                        1200: {
-                          slidesPerView: 4,
-                        },
-                        1400: {
-                          slidesPerView: 5,
-                        },
-                      }}
-                    >
-                      {filtered.map((elm, i) => (
-                        <SwiperSlide key={i}>
-                          <div className="course-item h240 hover-img">
-                        <div className="features image-wrap">
-                          <Image
-                            className="lazyload"
-                            alt=""
-                            src={elm.imgSrc}
-                            width={520}
-                            height={380}
-                          />
-                          <div
-                            className={`box-wishlist tf-action-btns ${isAddedtoWishlist(elm.id) ? "active" : ""
-                              } `}
-                            onClick={() => toggleWishlist(elm.id)}
-                          >
-                            <i className="flaticon-heart" />
-                          </div>
-                        </div>
-                        <div className="content">
-                          <div className="meta">
-                            <div className="meta-item">
-                              <i className="flaticon-calendar" />
-                              <p>{elm.lessons}</p>
-                            </div>
-                            <a href="#" className="meta-item">
-                              <i className="flaticon-user" />
-                              <p>{elm.students}</p>
-                            </a>
-                            <div className="meta-item">
-                              <i className="flaticon-clock" />
-                              <p>{elm.duration}</p>
-                            </div>
-                          </div>
-                          <h5 className="fw-5 line-clamp-2">
-                            <Link href={`/course-single-v1/${elm.id}`}>
-                              {elm.title}
-                            </Link>
-                          </h5>
-                          <div className="ratings pb-30">
-                            <div className="number">{elm.rating}</div>
-                            <i className="icon-star-1" />
-                            <i className="icon-star-1" />
-                            <i className="icon-star-1" />
-                            <i className="icon-star-1" />
-                            <svg
-                              width={12}
-                              height={11}
-                              viewBox="0 0 12 11"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M3.54831 7.10382L3.58894 6.85477L3.41273 6.67416L1.16841 4.37373L4.24914 3.90314L4.51288 3.86286L4.62625 3.62134L5.99989 0.694982L7.37398 3.62182L7.48735 3.86332L7.75108 3.9036L10.8318 4.37419L8.58749 6.67462L8.41128 6.85523L8.4519 7.10428L8.98079 10.3465L6.24201 8.8325L6.00014 8.69879L5.75826 8.83247L3.01941 10.3461L3.54831 7.10382ZM11.0444 4.15626L11.0442 4.15651L11.0444 4.15626Z"
-                                stroke="#131836"
-                              />
-                            </svg>
-                            <div className="total">({elm.reviews})</div>
-                          </div>
-                          <div className="author">
-                            By:
-                            <a href="#" className="author">
-                              {" "}
-                              {elm.author}
-                            </a>
-                          </div>
-                          <div className="bottom">
-                            <Link
-                              href={`/course-single-v1/${elm.id}`}
-                              className="tf-btn-arrow"
-                            >
-                              <span className="fw-5 h6">Enroll Course</span>
-                              <i className="icon-arrow-top-right" />
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                    <div className="courses-prev" style={{
-                      position: 'absolute',
-                      left: '0',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      width: '50px',
-                      height: '50px',
-                      background: '#8b5cf6',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      zIndex: 10,
-                      color: '#fff',
-                      fontSize: '20px',
-                      transition: 'all 0.3s',
-                    }}>
-                      <i className="icon-arrow-left" />
-                    </div>
-                    <div className="courses-next" style={{
-                      position: 'absolute',
-                      right: '0',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      width: '50px',
-                      height: '50px',
-                      background: '#8b5cf6',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      zIndex: 10,
-                      color: '#fff',
-                      fontSize: '20px',
-                      transition: 'all 0.3s',
-                    }}>
-                      <i className="icon-arrow-right" />
-                    </div>
-                  </div>
-                  <div className="courses-pagination" style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '40px',
-                    gap: '8px',
-                  }}></div>
+                <div style={{
+                  fontSize: '13px',
+                  fontWeight: '500'
+                }}>
+                  Program Visual
                 </div>
               </div>
             </div>
+
+            {/* Card Content */}
+            <div style={{ padding: '28px' }}>
+              {/* Program Name */}
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#1f2937',
+                marginBottom: '12px',
+                lineHeight: '1.3'
+              }}>
+                The Next-Gen Tech Architect Program
+              </h3>
+
+              {/* Subtitle */}
+              <p style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                marginBottom: '18px',
+                lineHeight: '1.5'
+              }}>
+                One Unified Journey Across AI, Blockchain, and Data Visualisation
+              </p>
+
+              {/* Divider */}
+              <div style={{
+                height: '1px',
+                background: '#e5e7eb',
+                marginBottom: '18px'
+              }} />
+
+              {/* Program Meta */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                marginBottom: '24px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Total Duration:</span>
+                  <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>32 Hours</span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Structure:</span>
+                  <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>8 Integrated Modules</span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Format:</span>
+                  <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600', textAlign: 'right' }}>Guided learning, applied drills, live sessions</span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingTop: '8px',
+                  borderTop: '1px solid #f3f4f6'
+                }}>
+                  <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Rating:</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ color: '#8b5cf6', fontSize: '14px' }}>★★★★★</span>
+                    <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>4.9</span>
+                    <span style={{ fontSize: '13px', color: '#6b7280' }}>(3,000+ reviews)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <Link
+                href="#"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '16px 24px',
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  color: '#fff',
+                  textAlign: 'center',
+                  borderRadius: '10px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(139, 92, 246, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                }}
+              >
+                Enrol in the Next-Gen Tech Architect Program
+              </Link>
+            </div>
           </div>
+
+          {/* RIGHT SIDE: Progressive Information Cards */}
+          <ProgressiveInfoCards />
         </div>
       </div>
     </section>

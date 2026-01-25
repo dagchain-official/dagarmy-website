@@ -1,11 +1,103 @@
 "use client";
 import { brandLogos } from "@/data/brands";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Autoplay, FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import ModalVideo from "react-modal-video";
 import PremiumButton from "./PremiumButton";
+
+const AnimatedNoText = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const phrases = [
+    'background filters.',
+    'location limits.',
+    'shortcuts promised.'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % phrases.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      marginBottom: '24px',
+      height: '50px',
+      overflow: 'hidden'
+    }}>
+      <style jsx>{`
+        @keyframes slideUp {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          10% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          90% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+        }
+        .animated-text {
+          animation: slideUp 3s ease-in-out;
+        }
+      `}</style>
+      
+      <span style={{
+        fontSize: '42px',
+        fontWeight: '800',
+        background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        letterSpacing: '-0.02em',
+        lineHeight: '1'
+      }}>
+        NO
+      </span>
+      
+      <div style={{
+        position: 'relative',
+        flex: 1,
+        height: '50px',
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        {phrases.map((phrase, index) => (
+          <span
+            key={index}
+            className={index === currentIndex ? 'animated-text' : ''}
+            style={{
+              position: 'absolute',
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#1f2937',
+              opacity: index === currentIndex ? 1 : 0,
+              transform: index === currentIndex ? 'translateY(0)' : 'translateY(100%)',
+              transition: 'none',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {phrase}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function Hero() {
   const [isOpen, setOpen] = useState(false);
 
@@ -82,17 +174,24 @@ export default function Hero() {
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     fontWeight: '700'
-                  }}>Global Army</span> of Vibe Coders & Tech Leaders
+                  }}>Global Army</span> of Skill Builders and Technology Creators
                 </h1>
-                <h6 className="wow fadeInUp" data-wow-delay="0.3s" style={{
-                  fontSize: '18px',
-                  lineHeight: '1.6',
-                  color: '#4b5563',
-                  marginBottom: '32px',
-                  fontWeight: '400'
-                }}>
-                  No Talent Left Behind. Master AI, Blockchain, and Cyber Security. Turn your skills into startups, your potential into placements—from Tier 3 cities to Silicon Valley.
-                </h6>
+                <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ marginBottom: '32px' }}>
+                  {/* Animated "NO" statement */}
+                  <AnimatedNoText />
+                  
+                  {/* Main description paragraph */}
+                  <p style={{
+                    fontSize: '17px',
+                    lineHeight: '1.7',
+                    color: '#4b5563',
+                    marginBottom: '0',
+                    fontWeight: '400',
+                    maxWidth: '540px'
+                  }}>
+                    DAG Army brings together learners, builders, and professionals who want skills that lead to real outcomes. From early learners in Tier 3 cities to teams collaborating across continents, this is a place where capability grows through steady effort and structured learning.
+                  </p>
+                </div>
                 <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
                   <PremiumButton
                     text="Get Started"
@@ -118,7 +217,7 @@ export default function Hero() {
                     <span
                       className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-3 group-hover:translate-x-3"
                     >
-                      Explore courses
+                      Explore the Program
                     </span>
                     <span
                       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
@@ -140,7 +239,7 @@ export default function Hero() {
                       ))}
                     </div>
                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#621e6dff', whiteSpace: 'nowrap' }}>
-                      35k+ happy students
+                      35,000+ verified learners worldwide
                     </div>
                   </div>
                 </div>
