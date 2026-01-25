@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
-import AddCourseForm from "@/components/admin/AddCourseForm";
+import AddCourseWizard from "@/components/admin/AddCourseWizard";
 
 export default function AddCoursePage() {
   return (
     <AdminLayout>
-      <AddCourseForm />
+      <AddCourseWizard />
     </AdminLayout>
   );
 }

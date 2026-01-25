@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
-import AdminDashboard2 from "@/components/admin/AdminDashboard2";
+import AdminRoleAssignment3 from "@/components/admin/AdminRoleAssignment3";
 
-export default function AdminDashboard() {
+export default function AdminRolesPage() {
   return (
     <AdminLayout>
-      <AdminDashboard2 />
+      <AdminRoleAssignment3 />
     </AdminLayout>
   );
 }
