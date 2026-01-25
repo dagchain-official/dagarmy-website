@@ -10,9 +10,9 @@ export function middleware(request) {
     const userRole = request.cookies.get('dagarmy_role')?.value;
     const isAuthenticated = request.cookies.get('dagarmy_authenticated')?.value;
 
-    // If not authenticated, redirect to login
+    // If not authenticated, redirect to register/login page
     if (!isAuthenticated || isAuthenticated !== 'true') {
-      const loginUrl = new URL('/login', request.url);
+      const loginUrl = new URL('/register', request.url);
       loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl);
     }
