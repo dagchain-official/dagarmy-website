@@ -35,10 +35,12 @@ export function AuthProvider({ children }) {
   const { caipAddress, isConnected: isAppKitConnected, embeddedWalletInfo } = useAppKitAccount();
   const appKitState = useAppKitState();
   const { disconnect } = useDisconnect();
-  const [userRole, setUserRole] = useState(null); // 'student' or 'trainer'
+  const [userRole, setUserRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const [hasLoggedOut, setHasLoggedOut] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isMasterAdmin, setIsMasterAdmin] = useState(false);
 
   useEffect(() => {
     // Check if user explicitly logged out
@@ -48,26 +50,24 @@ export function AuthProvider({ children }) {
       setUserRole(null);
       setIsAuthenticated(false);
       setUserProfile(null);
+      setIsAdmin(false);
+      setIsMasterAdmin(false);
       return;
     }
-
-    // REMOVED: Auto-authentication logic
-    // Users must now select their role every time they sign in
-    // This allows multiple family members to use the same device with different accounts
     
     if (!isConnected) {
       setUserRole(null);
       setIsAuthenticated(false);
       setUserProfile(null);
+      setIsAdmin(false);
+      setIsMasterAdmin(false);
     }
   }, [isConnected, address, hasLoggedOut]);
 
-  const login = async (role) => {
-    if (address && (role === 'student' || role === 'trainer')) {
+  const login = async () => {
+    if (address) {
       // Clear the logged out flag on successful login
       sessionStorage.removeItem('dagarmy_logged_out');
-      
-      localStorage.setItem(`dagarmy_role_${address}`, role);
       
       console.log('🔍 Login Debug - Connector:', connector?.name);
       console.log('🔍 Login Debug - CAIP Address:', caipAddress);
@@ -87,26 +87,18 @@ export function AuthProvider({ children }) {
       let userAvatar = null;
 
       try {
-        // For social logins, embeddedWalletInfo contains user email and username
         if (embeddedWalletInfo) {
           console.log('✅ Found embeddedWalletInfo:', embeddedWalletInfo);
           
           userEmail = embeddedWalletInfo.user?.email || null;
-          
-          // Try to get a proper name - username might just be the email prefix
-          // For now, we'll use username as that's what Reown provides
-          // In the future, you could add a profile completion step to get the actual name
           userName = embeddedWalletInfo.user?.username || 
                     embeddedWalletInfo.user?.name ||
                     (userEmail ? userEmail.split('@')[0] : null);
           
-          console.log('✅ Extracted from embeddedWalletInfo:');
-          console.log('   Email:', userEmail);
-          console.log('   Username:', userName);
-          console.log('   Auth Provider:', embeddedWalletInfo.authProvider);
-          console.log('   Note: Username is what Reown provides. For full name, consider adding a profile completion step.');
+          console.log('✅ Extracted email:', userEmail);
+          console.log('✅ Extracted name:', userName);
         } else {
-          console.log('⚠️ No embeddedWalletInfo - this is expected for wallet-only logins');
+          console.log('⚠️ No embeddedWalletInfo - wallet-only login');
         }
 
         if (userEmail) {
@@ -114,7 +106,27 @@ export function AuthProvider({ children }) {
           profile.name = userName;
           profile.avatar = userAvatar;
           profile.authProvider = embeddedWalletInfo?.authProvider;
-          console.log('✅ User profile complete with email:', userEmail);
+          
+          // Check admin access based on email
+          console.log('🔍 Checking admin access for:', userEmail);
+          const roleResponse = await fetch('/api/auth/check-role', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: userEmail })
+          });
+          
+          if (roleResponse.ok) {
+            const roleData = await roleResponse.json();
+            console.log('✅ Role check result:', roleData);
+            
+            profile.isAdmin = roleData.isAdmin;
+            profile.isMasterAdmin = roleData.isMasterAdmin;
+            profile.adminRole = roleData.role;
+            profile.permissions = roleData.permissions;
+            
+            setIsAdmin(roleData.isAdmin);
+            setIsMasterAdmin(roleData.isMasterAdmin);
+          }
         }
       } catch (error) {
         console.log('Could not fetch user profile:', error);
@@ -122,13 +134,16 @@ export function AuthProvider({ children }) {
 
       // Save user to Supabase
       try {
+        const finalRole = profile.isAdmin ? 'admin' : 'student';
         const supabaseData = {
           wallet_address: address,
           email: profile.email || null,
-          role: role,
+          role: finalRole,
           full_name: profile.name || null,
           avatar_url: profile.avatar || null,
           auth_provider: profile.authProvider || 'wallet',
+          is_admin: profile.isAdmin || false,
+          is_master_admin: profile.isMasterAdmin || false
         };
 
         console.log('📤 Sending to Supabase:', supabaseData);
@@ -137,33 +152,41 @@ export function AuthProvider({ children }) {
         
         if (result.success) {
           console.log('✅ User saved to Supabase:', result.user);
-          // Update profile with Supabase user ID
           profile.supabaseId = result.user.id;
           profile.isNewUser = result.isNewUser;
         }
       } catch (error) {
         console.error('❌ Failed to save user to Supabase:', error);
-        // Continue with local auth even if Supabase fails
       }
 
+      const finalRole = profile.isAdmin ? 'admin' : 'student';
+      
       localStorage.setItem(`dagarmy_profile_${address}`, JSON.stringify(profile));
-      localStorage.setItem('dagarmy_role', role);
+      localStorage.setItem('dagarmy_role', finalRole);
       localStorage.setItem('dagarmy_authenticated', 'true');
       localStorage.setItem('dagarmy_user', JSON.stringify({
         email: profile.email,
         full_name: profile.name,
-        wallet_address: address
+        wallet_address: address,
+        is_admin: profile.isAdmin,
+        is_master_admin: profile.isMasterAdmin
       }));
       sessionStorage.removeItem('dagarmy_logged_out');
       
-      // Set cookies for middleware authentication
-      document.cookie = `dagarmy_role=${role}; path=/; max-age=2592000`; // 30 days
-      document.cookie = `dagarmy_authenticated=true; path=/; max-age=2592000`; // 30 days
+      // Set cookies
+      document.cookie = `dagarmy_role=${finalRole}; path=/; max-age=2592000`;
+      document.cookie = `dagarmy_authenticated=true; path=/; max-age=2592000`;
       
-      setUserRole(role);
+      setUserRole(finalRole);
       setIsAuthenticated(true);
       setUserProfile(profile);
       setHasLoggedOut(false);
+      
+      // Auto-redirect to appropriate dashboard
+      console.log('🚀 Redirecting to', profile.isAdmin ? 'admin' : 'student', 'dashboard');
+      if (typeof window !== 'undefined') {
+        window.location.href = profile.isAdmin ? '/admin/dashboard' : '/student-dashboard';
+      }
     }
   };
 
@@ -191,6 +214,8 @@ export function AuthProvider({ children }) {
     userRole,
     isAuthenticated,
     userProfile,
+    isAdmin,
+    isMasterAdmin,
     login,
     logout,
   };

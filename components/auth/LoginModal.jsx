@@ -17,10 +17,11 @@ export default function LoginModal({ isOpen, onClose }) {
   const [socialEmail, setSocialEmail] = useState(null);
   const [storedWalletAddress, setStoredWalletAddress] = useState(null);
 
-  // When wallet connects, show role selection
+  // When wallet connects, auto-login (no role selection needed)
   useEffect(() => {
     if (isConnected && address && !isAuthenticated && isOpen) {
-      setShowRoleSelection(true);
+      // Auto-login - role will be determined by email
+      login();
       
       // Close any Reown popup windows that might be stuck open
       if (typeof window !== 'undefined' && window.modal) {
@@ -31,7 +32,7 @@ export default function LoginModal({ isOpen, onClose }) {
         }
       }
     }
-  }, [isConnected, address, isAuthenticated, isOpen]);
+  }, [isConnected, address, isAuthenticated, isOpen, login]);
 
   // When authenticated, close modal and redirect to dashboard
   useEffect(() => {
