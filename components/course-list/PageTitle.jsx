@@ -58,7 +58,7 @@ export default function PageTitle({
                   letterSpacing: '-0.02em'
                 }}
               >
-                Master Future-Ready Tech Skills
+                Explore Our Course
               </h2>
 
               {/* Supporting Description */}

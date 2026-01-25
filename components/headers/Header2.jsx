@@ -132,7 +132,7 @@ export default function Header2() {
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '0%';
               }}>
-              Courses
+              Course
               <span className="nav-underline" style={{
                 position: 'absolute',
                 bottom: '0',
