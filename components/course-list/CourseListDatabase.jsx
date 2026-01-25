@@ -7,6 +7,7 @@ export default function CourseListDatabase() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedCourse, setExpandedCourse] = useState(null);
 
   useEffect(() => {
     fetchCourses();
@@ -23,6 +24,10 @@ export default function CourseListDatabase() {
       
       const data = await response.json();
       setCourses(data.courses || []);
+      // Auto-expand first course
+      if (data.courses && data.courses.length > 0) {
+        setExpandedCourse(data.courses[0].id);
+      }
     } catch (err) {
       console.error('Error fetching courses:', err);
       setError(err.message);

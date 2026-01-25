@@ -1,5 +1,4 @@
-import CourseListDatabase from "@/components/course-list/CourseListDatabase";
-import PageTitle from "@/components/course-list/PageTitle";
+import CourseListDatabaseNew from "@/components/course-list/CourseListDatabaseNew";
 import Footer1 from "@/components/footers/Footer1";
 import Header2 from "@/components/headers/Header2";
 import React from "react";
@@ -14,8 +13,7 @@ export default function CoursesPage() {
     <>
       <div id="wrapper">
         <Header2 />
-        <PageTitle parentClass="page-title style-2 has-tags-bg-white" />
-        <CourseListDatabase />
+        <CourseListDatabaseNew />
         <Footer1 />
       </div>
     </>
