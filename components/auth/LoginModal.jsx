@@ -21,7 +21,7 @@ export default function LoginModal({ isOpen, onClose }) {
   // When wallet connects, check if user needs profile completion
   useEffect(() => {
     const checkUserProfile = async () => {
-      if (isConnected && address && !isAuthenticated && isOpen && !isCheckingProfile) {
+      if (isConnected && address && !isAuthenticated && isOpen && !isCheckingProfile && !showProfileCompletion) {
         console.log('🔍 Checking user profile for:', address);
         setIsCheckingProfile(true);
         
