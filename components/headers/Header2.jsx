@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Header2() {
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userRole, isAdmin } = useAuth();
+  const router = useRouter();
 
   // Close modal if user becomes authenticated
   useEffect(() => {
@@ -23,6 +25,15 @@ export default function Header2() {
     // Open Reown modal
     if (typeof window !== 'undefined' && window.modal) {
       window.modal.open();
+    }
+  };
+
+  const handleDashboardClick = () => {
+    // Navigate to appropriate dashboard based on role
+    if (isAdmin) {
+      router.push('/admin/dashboard');
+    } else {
+      router.push('/student-dashboard');
     }
   };
   return (
@@ -273,10 +284,10 @@ export default function Header2() {
             </Link>
           </nav>
 
-          {/* Sign In Button */}
+          {/* Sign In / Dashboard Button */}
           <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
-              onClick={handleSignInClick}
+              onClick={isAuthenticated ? handleDashboardClick : handleSignInClick}
               style={{
                 minWidth: '90px',
                 height: '38px',
@@ -302,7 +313,7 @@ export default function Header2() {
                 e.currentTarget.style.background = '#1f2937';
               }}
             >
-              Sign In
+              {isAuthenticated ? 'Dashboard' : 'Sign In'}
             </button>
             {/* Register button commented out - using Sign In for both new and returning users */}
             {/* <Link
