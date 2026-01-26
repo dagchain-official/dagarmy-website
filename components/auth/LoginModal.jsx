@@ -16,12 +16,14 @@ export default function LoginModal({ isOpen, onClose }) {
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [socialEmail, setSocialEmail] = useState(null);
   const [storedWalletAddress, setStoredWalletAddress] = useState(null);
+  const [isCheckingProfile, setIsCheckingProfile] = useState(false);
 
   // When wallet connects, check if user needs profile completion
   useEffect(() => {
     const checkUserProfile = async () => {
-      if (isConnected && address && !isAuthenticated && isOpen) {
+      if (isConnected && address && !isAuthenticated && isOpen && !isCheckingProfile) {
         console.log('🔍 Checking user profile for:', address);
+        setIsCheckingProfile(true);
         
         try {
           // Check if user exists and if profile is completed
@@ -39,10 +41,12 @@ export default function LoginModal({ isOpen, onClose }) {
               // Show profile completion form for existing users without completed profile
               console.log('📝 Profile not completed, showing profile completion form');
               setShowProfileCompletion(true);
+              setIsCheckingProfile(false);
               return;
             } else {
               // Profile completed, proceed with login
               console.log('✅ Profile already completed, proceeding with login');
+              setIsCheckingProfile(false);
               await login();
             }
           } else {
@@ -50,10 +54,12 @@ export default function LoginModal({ isOpen, onClose }) {
             console.log('🆕 New user detected, showing profile completion form');
             setStoredWalletAddress(address);
             setShowProfileCompletion(true);
+            setIsCheckingProfile(false);
             return;
           }
         } catch (error) {
           console.error('Error checking user profile:', error);
+          setIsCheckingProfile(false);
           // On error, try to login anyway
           await login();
         }
@@ -70,7 +76,7 @@ export default function LoginModal({ isOpen, onClose }) {
     };
     
     checkUserProfile();
-  }, [isConnected, address, isAuthenticated, isOpen, login]);
+  }, [isConnected, address, isAuthenticated, isOpen, login, isCheckingProfile]);
 
   // When authenticated, close modal (AuthContext handles redirect)
   useEffect(() => {
@@ -146,8 +152,8 @@ export default function LoginModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  // Only show modal if there's actual content to display
-  const shouldShowModal = showRoleSelection || showProfileCompletion;
+  // Only show modal if there's actual content to display or checking profile
+  const shouldShowModal = showRoleSelection || showProfileCompletion || isCheckingProfile;
   
   if (!shouldShowModal) return null;
 
@@ -168,8 +174,42 @@ export default function LoginModal({ isOpen, onClose }) {
         onClick={handleClose}
       />
 
+      {/* Loading Modal */}
+      {isCheckingProfile && !showProfileCompletion && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 9999,
+          width: '90%',
+          maxWidth: '400px',
+          backgroundColor: 'white',
+          borderRadius: '16px',
+          padding: '40px',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+          textAlign: 'center'
+        }}>
+          <div style={{
+            width: '60px',
+            height: '60px',
+            margin: '0 auto 20px',
+            border: '4px solid #f3f4f6',
+            borderTop: '4px solid #1f2937',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', marginBottom: '8px' }}>
+            Checking Profile...
+          </h3>
+          <p style={{ fontSize: '14px', color: '#6b7280' }}>
+            Please wait while we verify your account
+          </p>
+        </div>
+      )}
+
       {/* Role Selection Modal */}
-      {showRoleSelection && !showProfileCompletion && (
+      {showRoleSelection && !showProfileCompletion && !isCheckingProfile && (
         <div style={{
           position: 'fixed',
           top: '50%',
@@ -440,6 +480,14 @@ export default function LoginModal({ isOpen, onClose }) {
           to {
             opacity: 1;
             transform: translate(-50%, -50%);
+          }
+        }
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
           }
         }
       `}</style>
