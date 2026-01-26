@@ -13,6 +13,8 @@ export default function Dashboard2() {
         total_points_earned: 0
     });
     const [copySuccess, setCopySuccess] = useState(false);
+    const [dagPoints, setDagPoints] = useState(0);
+    const [userTier, setUserTier] = useState('DAG_SOLDIER');
     
     useEffect(() => {
         async function fetchUserData() {
@@ -31,6 +33,14 @@ export default function Dashboard2() {
                     
                     if (data.user.avatar_url) {
                         setUserAvatar(data.user.avatar_url);
+                    }
+                    
+                    // Set DAG Points and tier from user data
+                    if (data.user.dag_points !== undefined) {
+                        setDagPoints(data.user.dag_points);
+                    }
+                    if (data.user.tier) {
+                        setUserTier(data.user.tier);
                     }
                 }
             } catch (error) {
@@ -149,7 +159,9 @@ export default function Dashboard2() {
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <h3 style={{ fontSize: "14px", fontWeight: "700", color: "#1a1f36", margin: 0 }}>Your Profile</h3>
-                                    <p style={{ fontSize: "11px", color: "#6b7280", margin: 0 }}>DAGARMY Member</p>
+                                    <p style={{ fontSize: "13px", color: userTier === 'DAG_LIEUTENANT' ? "#1f2937" : "#1f2937", margin: 0, fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                                        {userTier === 'DAG_LIEUTENANT' ? 'DAG LIEUTENANT' : 'DAG SOLDIER'}
+                                    </p>
                                 </div>
                             </div>
                             
@@ -180,40 +192,6 @@ export default function Dashboard2() {
                             </div>
                         </div>
 
-                        {/* DAG Points */}
-                        <div style={{
-                            background: "#ffffff",
-                            borderRadius: "16px",
-                            padding: "24px",
-                            border: "1px solid #e5e7eb",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "20px",
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                        }}>
-                            <div style={{ 
-                                width: "56px", 
-                                height: "56px", 
-                                background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
-                                borderRadius: "12px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center"
-                            }}>
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: "32px", fontWeight: "800", color: "#1a1f36", lineHeight: "1", marginBottom: "6px" }}>2400</div>
-                                <div style={{ fontSize: "18px", fontWeight: "700", color: "#1a1f36", lineHeight: "1", marginBottom: "4px" }}>DAG POINTS</div>
-                                <div style={{ fontSize: "12px", color: "#6b7280", fontWeight: "500" }}>Reward Points</div>
-                            </div>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                                <button style={{ padding: "8px 20px", background: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "8px", fontSize: "13px", fontWeight: "600", color: "#6b7280", cursor: "pointer", whiteSpace: "nowrap" }}>Redeem</button>
-                                <button style={{ padding: "8px 20px", background: "#10b981", border: "none", borderRadius: "8px", fontSize: "13px", fontWeight: "600", color: "#ffffff", cursor: "pointer", whiteSpace: "nowrap" }}>Collect</button>
-                            </div>
-                        </div>
 
                         {/* Learning Activity - Below DAG Points */}
                         <div>
@@ -366,11 +344,20 @@ export default function Dashboard2() {
                             <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "16px", lineHeight: "1.6" }}>
                                 Invite friends and earn rewards! Share your unique referral code.
                             </p>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "12px", marginBottom: "16px" }}>
+                                <div style={{ background: "#f3f4f6", borderRadius: "8px", padding: "12px", textAlign: "center" }}>
+                                    <div style={{ fontSize: "20px", fontWeight: "700", marginBottom: "4px", color: "#6366f1" }}>{referralStats.total_referrals || 0}</div>
+                                    <div style={{ color: "#6b7280" }}>Referrals</div>
+                                </div>
+                                <div style={{ background: "#f3f4f6", borderRadius: "8px", padding: "12px", textAlign: "center" }}>
+                                    <div style={{ fontSize: "20px", fontWeight: "700", marginBottom: "4px", color: "#1f2937" }}>{dagPoints.toLocaleString()}</div>
+                                    <div style={{ color: "#6b7280" }}>DAG Points</div>
+                                </div>
+                            </div>
                             <div style={{
                                 background: "linear-gradient(135deg, #6366f1 0%, #1f2937 100%)",
                                 borderRadius: "12px",
                                 padding: "16px",
-                                marginBottom: "16px",
                             }}>
                                 <div style={{ fontSize: "11px", color: "#ffffff", opacity: 0.9, marginBottom: "8px", fontWeight: "600" }}>YOUR REFERRAL CODE</div>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -399,16 +386,6 @@ export default function Dashboard2() {
                                     >
                                         {copySuccess ? "Copied!" : "Copy"}
                                     </button>
-                                </div>
-                            </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "12px" }}>
-                                <div style={{ background: "#f3f4f6", borderRadius: "8px", padding: "12px", textAlign: "center" }}>
-                                    <div style={{ fontSize: "20px", fontWeight: "700", marginBottom: "4px", color: "#6366f1" }}>{referralStats.total_referrals || 0}</div>
-                                    <div style={{ color: "#6b7280" }}>Referrals</div>
-                                </div>
-                                <div style={{ background: "#f3f4f6", borderRadius: "8px", padding: "12px", textAlign: "center" }}>
-                                    <div style={{ fontSize: "20px", fontWeight: "700", marginBottom: "4px", color: "#1f2937" }}>{referralStats.total_points_earned || 0}</div>
-                                    <div style={{ color: "#6b7280" }}>DAG Points</div>
                                 </div>
                             </div>
                         </div>
