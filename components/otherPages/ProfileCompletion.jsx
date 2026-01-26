@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
+import CountryCodeDropdown from '@/components/common/CountryCodeDropdown';
 
 export default function ProfileCompletion({ userAddress, socialEmail, onComplete }) {
   const router = useRouter();
@@ -256,48 +257,44 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
               color: '#333',
               fontSize: '14px'
             }}>
+              Country Code *
+            </label>
+            <CountryCodeDropdown
+              value={formData.countryCode}
+              onChange={(code) => setFormData(prev => ({ ...prev, countryCode: code }))}
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              fontWeight: '600',
+              color: '#333',
+              fontSize: '14px'
+            }}>
               WhatsApp Number *
             </label>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <input
-                type="text"
-                name="countryCode"
-                value={formData.countryCode}
-                onChange={handleChange}
-                placeholder="+91"
-                style={{
-                  width: '80px',
-                  padding: '12px 16px',
-                  border: '2px solid #e0e0e0',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  outline: 'none',
-                  transition: 'border-color 0.2s',
-                  textAlign: 'center'
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#1f2937'}
-                onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
-              />
-              <input
-                type="tel"
-                name="whatsappNumber"
-                value={formData.whatsappNumber}
-                onChange={handleChange}
-                placeholder="Enter WhatsApp number"
-                required
-                style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  border: '2px solid #e0e0e0',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  outline: 'none',
-                  transition: 'border-color 0.2s',
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#1f2937'}
-                onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
-              />
-            </div>
+            <input
+              type="tel"
+              name="whatsappNumber"
+              value={formData.whatsappNumber}
+              onChange={handleChange}
+              placeholder="1234567890"
+              required
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '2px solid #e0e0e0',
+                borderRadius: '8px',
+                fontSize: '16px',
+                outline: 'none',
+                transition: 'border-color 0.2s',
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#1f2937'}
+              onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+            />
           </div>
 
           <button
