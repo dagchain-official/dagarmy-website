@@ -17,21 +17,59 @@ export default function LoginModal({ isOpen, onClose }) {
   const [socialEmail, setSocialEmail] = useState(null);
   const [storedWalletAddress, setStoredWalletAddress] = useState(null);
 
-  // When wallet connects, auto-login (no role selection needed)
+  // When wallet connects, check if user needs profile completion
   useEffect(() => {
-    if (isConnected && address && !isAuthenticated && isOpen) {
-      // Auto-login - role will be determined by email
-      login();
-      
-      // Close any Reown popup windows that might be stuck open
-      if (typeof window !== 'undefined' && window.modal) {
+    const checkUserProfile = async () => {
+      if (isConnected && address && !isAuthenticated && isOpen) {
+        console.log('🔍 Checking user profile for:', address);
+        
         try {
-          window.modal.close();
-        } catch (e) {
-          console.log('Could not close modal:', e);
+          // Check if user exists and if profile is completed
+          const response = await fetch(`/api/auth/user?wallet=${address}`);
+          const data = await response.json();
+          
+          console.log('📋 User data from API:', data);
+          
+          if (data.user) {
+            // User exists
+            setSocialEmail(data.user.email);
+            setStoredWalletAddress(address);
+            
+            if (!data.user.profile_completed) {
+              // Show profile completion form for existing users without completed profile
+              console.log('📝 Profile not completed, showing profile completion form');
+              setShowProfileCompletion(true);
+              return;
+            } else {
+              // Profile completed, proceed with login
+              console.log('✅ Profile already completed, proceeding with login');
+              await login();
+            }
+          } else {
+            // New user - show profile completion form
+            console.log('🆕 New user detected, showing profile completion form');
+            setStoredWalletAddress(address);
+            setShowProfileCompletion(true);
+            return;
+          }
+        } catch (error) {
+          console.error('Error checking user profile:', error);
+          // On error, try to login anyway
+          await login();
+        }
+        
+        // Close any Reown popup windows that might be stuck open
+        if (typeof window !== 'undefined' && window.modal) {
+          try {
+            window.modal.close();
+          } catch (e) {
+            console.log('Could not close modal:', e);
+          }
         }
       }
-    }
+    };
+    
+    checkUserProfile();
   }, [isConnected, address, isAuthenticated, isOpen, login]);
 
   // When authenticated, close modal (AuthContext handles redirect)
@@ -84,7 +122,8 @@ export default function LoginModal({ isOpen, onClose }) {
   const handleProfileComplete = async (userData) => {
     console.log('✅ Profile completed, now authenticating user');
     setShowProfileCompletion(false);
-    await login(selectedRole);
+    // Login without role parameter - role will be determined automatically
+    await login();
   };
 
   const handleClose = () => {
