@@ -78,6 +78,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
 
     const requestBody = {
       wallet_address: userAddress,
+      email: socialEmail || null,
       first_name: formData.firstName.trim(),
       last_name: formData.lastName.trim(),
       country_code: formData.countryCode,

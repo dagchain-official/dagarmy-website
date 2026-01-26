@@ -17,6 +17,7 @@ export async function POST(request) {
 
     const { 
       wallet_address, 
+      email,
       first_name, 
       last_name, 
       country_code,
@@ -43,6 +44,7 @@ export async function POST(request) {
     // Use upsert to handle both create and update cases
     const userData = {
       wallet_address: wallet_address ? wallet_address.toLowerCase() : null,
+      email: email || null,
       first_name,
       last_name,
       country_code: country_code || '+91',

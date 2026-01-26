@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
+import { useAppKitAccount } from "@reown/appkit/react";
 import { useAuth } from "@/context/AuthContext";
 import ProfileCompletion from "../otherPages/ProfileCompletion";
 import "../otherPages/SocialLogin.css";
@@ -10,6 +11,7 @@ import "../otherPages/LoginOverride.css";
 export default function LoginModal({ isOpen, onClose }) {
   const router = useRouter();
   const { address, isConnected } = useAccount();
+  const { embeddedWalletInfo } = useAppKitAccount();
   const { login, isAuthenticated, userRole } = useAuth();
   const [selectedRole, setSelectedRole] = useState("");
   const [showRoleSelection, setShowRoleSelection] = useState(false);
@@ -52,6 +54,15 @@ export default function LoginModal({ isOpen, onClose }) {
           } else {
             // New user - show profile completion form
             console.log('🆕 New user detected, showing profile completion form');
+            
+            // Extract email from embeddedWalletInfo for social logins
+            if (embeddedWalletInfo?.user?.email) {
+              console.log('✅ Extracted email from social login:', embeddedWalletInfo.user.email);
+              setSocialEmail(embeddedWalletInfo.user.email);
+            } else {
+              console.log('⚠️ No email found in embeddedWalletInfo');
+            }
+            
             setStoredWalletAddress(address);
             setShowProfileCompletion(true);
             setIsCheckingProfile(false);
