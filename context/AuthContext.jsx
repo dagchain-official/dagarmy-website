@@ -42,6 +42,20 @@ export function AuthProvider({ children }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isMasterAdmin, setIsMasterAdmin] = useState(false);
 
+  // Check authentication cookie on mount
+  useEffect(() => {
+    const checkAuthCookie = () => {
+      const cookies = document.cookie.split(';');
+      const authCookie = cookies.find(c => c.trim().startsWith('dagarmy_authenticated='));
+      return authCookie ? authCookie.split('=')[1] === 'true' : false;
+    };
+
+    const isAuthenticatedFromCookie = checkAuthCookie();
+    if (isAuthenticatedFromCookie && isConnected) {
+      setIsAuthenticated(true);
+    }
+  }, [isConnected]);
+
   useEffect(() => {
     // Check if user explicitly logged out
     const loggedOut = sessionStorage.getItem('dagarmy_logged_out');
@@ -56,11 +70,16 @@ export function AuthProvider({ children }) {
     }
     
     if (!isConnected) {
-      setUserRole(null);
-      setIsAuthenticated(false);
-      setUserProfile(null);
-      setIsAdmin(false);
-      setIsMasterAdmin(false);
+      // Only clear auth if no auth cookie exists
+      const cookies = document.cookie.split(';');
+      const authCookie = cookies.find(c => c.trim().startsWith('dagarmy_authenticated='));
+      if (!authCookie) {
+        setUserRole(null);
+        setIsAuthenticated(false);
+        setUserProfile(null);
+        setIsAdmin(false);
+        setIsMasterAdmin(false);
+      }
     }
   }, [isConnected, address, hasLoggedOut]);
 
