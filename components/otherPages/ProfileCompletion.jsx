@@ -52,7 +52,6 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       wallet_address: userAddress,
       first_name: formData.firstName.trim(),
       last_name: formData.lastName.trim(),
-      user_provided_email: socialEmail || null,
       country_code: formData.countryCode,
       whatsapp_number: formData.whatsappNumber.trim(),
     };

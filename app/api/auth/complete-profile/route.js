@@ -19,7 +19,6 @@ export async function POST(request) {
       wallet_address, 
       first_name, 
       last_name, 
-      user_provided_email,
       country_code,
       whatsapp_number 
     } = body;
@@ -28,13 +27,6 @@ export async function POST(request) {
     if (!first_name || !last_name) {
       return NextResponse.json(
         { error: 'First name and last name are required' },
-        { status: 400 }
-      );
-    }
-
-    if (!user_provided_email || !user_provided_email.includes('@')) {
-      return NextResponse.json(
-        { error: 'Valid email is required' },
         { status: 400 }
       );
     }
@@ -51,7 +43,6 @@ export async function POST(request) {
       wallet_address: wallet_address || null,
       first_name,
       last_name,
-      user_provided_email,
       country_code: country_code || '+91',
       whatsapp_number,
       profile_completed: true,
@@ -95,44 +86,6 @@ export async function POST(request) {
           .single();
         data = result.data;
         error = result.error;
-      }
-    } else {
-      // For email-based users, try to find existing user first
-      const { data: existing } = await supabase
-        .from('users')
-        .select('id')
-        .eq('user_provided_email', user_provided_email)
-        .maybeSingle();
-
-      if (existing) {
-        // Update existing user
-        const result = await supabase
-          .from('users')
-          .update(userData)
-          .eq('id', existing.id)
-          .select()
-          .single();
-        data = result.data;
-        error = result.error;
-      } else {
-        // Create new user - need to get auth user id
-        const { data: { users } } = await supabase.auth.admin.listUsers();
-        const authUser = users?.find(u => u.email === user_provided_email);
-        
-        if (authUser) {
-          const result = await supabase
-            .from('users')
-            .insert({ ...userData, id: authUser.id, role: 'student' })
-            .select()
-            .single();
-          data = result.data;
-          error = result.error;
-        } else {
-          return NextResponse.json(
-            { error: 'Authentication session not found. Please refresh and try again.' },
-            { status: 400 }
-          );
-        }
       }
     }
 
