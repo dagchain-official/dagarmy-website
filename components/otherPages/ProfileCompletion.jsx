@@ -41,8 +41,10 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       setError('Last name is required');
       return;
     }
-    if (!formData.whatsappNumber.trim() || formData.whatsappNumber.length < 10) {
-      setError('Valid WhatsApp number is required (minimum 10 digits)');
+    // Remove any non-digit characters for validation
+    const digitsOnly = formData.whatsappNumber.replace(/\D/g, '');
+    if (!formData.whatsappNumber.trim() || digitsOnly.length < 7 || digitsOnly.length > 15) {
+      setError('Valid WhatsApp number is required (7-15 digits)');
       return;
     }
 

@@ -31,9 +31,11 @@ export async function POST(request) {
       );
     }
 
-    if (!whatsapp_number || whatsapp_number.length < 10) {
+    // Remove any non-digit characters for validation
+    const digitsOnly = whatsapp_number ? whatsapp_number.replace(/\D/g, '') : '';
+    if (!whatsapp_number || digitsOnly.length < 7 || digitsOnly.length > 15) {
       return NextResponse.json(
-        { error: 'Valid WhatsApp number is required' },
+        { error: 'Valid WhatsApp number is required (7-15 digits)' },
         { status: 400 }
       );
     }
