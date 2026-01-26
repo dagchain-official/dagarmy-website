@@ -80,12 +80,21 @@ export async function POST(request) {
         data = result.data;
         error = result.error;
       } else {
-        // This shouldn't happen as /api/auth/user should have created the user
-        console.error('❌ User not found by wallet_address:', wallet_address);
-        return NextResponse.json(
-          { error: 'User record not found. Please try logging in again.' },
-          { status: 404 }
-        );
+        // Create new user record
+        console.log('🆕 Creating new user record for wallet:', wallet_address);
+        const result = await supabase
+          .from('users')
+          .insert({
+            ...userData,
+            role: 'student',
+            tier: 'DAG_SOLDIER',
+            dag_points: 0, // Will be set by trigger
+            created_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+        data = result.data;
+        error = result.error;
       }
     } else {
       // For email-based users, try to find existing user first
