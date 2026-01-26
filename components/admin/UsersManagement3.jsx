@@ -623,34 +623,34 @@ export default function UsersManagement3() {
             icon: Users,
             color: '#1f2937',
             bgGradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
-            lightBg: '#f5f3ff'
+            lightBg: '#f8fafc'
           },
           { 
             title: 'Active Users', 
             value: loading ? '...' : stats.activeUsers.toLocaleString(),
             change: `${stats.totalUsers > 0 ? Math.round((stats.activeUsers / stats.totalUsers) * 100) : 0}% of total`,
             icon: Activity,
-            color: '#10b981',
-            bgGradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-            lightBg: '#f0fdf4'
+            color: '#374151',
+            bgGradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
+            lightBg: '#f8fafc'
           },
           { 
             title: 'Instructors', 
             value: loading ? '...' : (stats.usersByRole?.instructor || 0).toString(),
             change: `${stats.usersByRole?.instructor || 0} active instructors`,
             icon: GraduationCap,
-            color: '#f59e0b',
-            bgGradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-            lightBg: '#fffbeb'
+            color: '#4b5563',
+            bgGradient: 'linear-gradient(135deg, #4b5563 0%, #374151 100%)',
+            lightBg: '#f8fafc'
           },
           { 
             title: 'New This Week', 
             value: loading ? '...' : stats.newUsersThisWeek.toString(),
             change: `+${stats.newUsersThisWeek} new registrations`,
             icon: TrendingUp,
-            color: '#3b82f6',
-            bgGradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-            lightBg: '#eff6ff'
+            color: '#6b7280',
+            bgGradient: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+            lightBg: '#f8fafc'
           }
         ].map((stat, index) => {
           const Icon = stat.icon;
