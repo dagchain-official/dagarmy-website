@@ -106,7 +106,24 @@ export function AuthProvider({ children }) {
       let userAvatar = null;
 
       try {
-        if (embeddedWalletInfo) {
+        // First, check if user exists in database (for returning users)
+        console.log('🔍 Checking for existing user with wallet:', address);
+        const existingUserResponse = await fetch(`/api/auth/user?wallet=${address}`);
+        if (existingUserResponse.ok) {
+          const existingUserData = await existingUserResponse.json();
+          if (existingUserData.user) {
+            console.log('✅ Found existing user:', existingUserData.user);
+            userEmail = existingUserData.user.email;
+            userName = existingUserData.user.full_name;
+            userAvatar = existingUserData.user.avatar_url;
+            profile.isAdmin = existingUserData.user.is_admin || false;
+            profile.isMasterAdmin = existingUserData.user.is_master_admin || false;
+            console.log('✅ Existing user admin status:', { isAdmin: profile.isAdmin, isMasterAdmin: profile.isMasterAdmin });
+          }
+        }
+
+        // If no existing user or no email, try to get from embeddedWalletInfo (social login)
+        if (!userEmail && embeddedWalletInfo) {
           console.log('✅ Found embeddedWalletInfo:', embeddedWalletInfo);
           
           userEmail = embeddedWalletInfo.user?.email || null;
@@ -114,19 +131,20 @@ export function AuthProvider({ children }) {
                     embeddedWalletInfo.user?.name ||
                     (userEmail ? userEmail.split('@')[0] : null);
           
-          console.log('✅ Extracted email:', userEmail);
+          console.log('✅ Extracted email from social login:', userEmail);
           console.log('✅ Extracted name:', userName);
-        } else {
+        } else if (!embeddedWalletInfo) {
           console.log('⚠️ No embeddedWalletInfo - wallet-only login');
         }
 
+        // If we have an email, check admin access
         if (userEmail) {
           profile.email = userEmail;
           profile.name = userName;
           profile.avatar = userAvatar;
-          profile.authProvider = embeddedWalletInfo?.authProvider;
+          profile.authProvider = embeddedWalletInfo?.authProvider || 'wallet';
           
-          // Check admin access based on email
+          // Check admin access based on email (this will override any existing values)
           console.log('🔍 Checking admin access for:', userEmail);
           const roleResponse = await fetch('/api/auth/check-role', {
             method: 'POST',
