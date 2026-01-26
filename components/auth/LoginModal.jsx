@@ -152,8 +152,8 @@ export default function LoginModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  // Only show modal if there's actual content to display or checking profile
-  const shouldShowModal = showRoleSelection || showProfileCompletion || isCheckingProfile;
+  // Only show modal if there's actual content to display
+  const shouldShowModal = showRoleSelection || showProfileCompletion;
   
   if (!shouldShowModal) return null;
 
@@ -174,8 +174,8 @@ export default function LoginModal({ isOpen, onClose }) {
         onClick={handleClose}
       />
 
-      {/* Loading Modal */}
-      {isCheckingProfile && !showProfileCompletion && (
+      {/* Loading Modal - Only show if explicitly checking profile */}
+      {isCheckingProfile && !showProfileCompletion && !showRoleSelection && (
         <div style={{
           position: 'fixed',
           top: '50%',
