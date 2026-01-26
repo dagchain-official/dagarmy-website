@@ -1,173 +1,271 @@
 "use client";
-import Pagination from "../common/Pagination";
-import Image from "next/image";
-import SortDropdown from "../common/SortDropdown";
-import { dagarmyCourses } from "@/data/dagarmy-courses";
-import { useEffect, useState } from "react";
-import { useContextElement } from "@/context/Context";
-const categories = ["Enrolled Courses", "Active Courses", "Completed Courses"];
+import { useState } from "react";
+import { nextGenProgram } from "@/data/next-gen-program";
+
 export default function MyCourses() {
-  const { toggleWishlist, isAddedtoWishlist } = useContextElement();
-  const [currentCategory, setcurrentCategory] = useState("Enrolled Courses");
-  const [filtered, setFiltered] = useState(dagarmyCourses);
-  useEffect(() => {
-    if (currentCategory == "Enrolled Courses") {
-      setFiltered(dagarmyCourses);
-    } else {
-      setFiltered(dagarmyCourses.filter((elm) => elm.status == currentCategory));
+  const [expandedModules, setExpandedModules] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const toggleModule = (moduleId) => {
+    setExpandedModules(prev => ({
+      ...prev,
+      [moduleId]: !prev[moduleId]
+    }));
+  };
+
+  const getTrackColor = (track) => {
+    switch(track) {
+      case "Yellow": return "#fbbf24";
+      case "Green": return "#10b981";
+      case "Blue": return "#3b82f6";
+      default: return "#6b7280";
     }
-  }, [currentCategory]);
+  };
 
   return (
-    <div className="col-xl-9 col-lg-12">
-      <div className="section-my-courses-right section-right">
-        <div className="row">
-          <div className="filter">
-            <div className="header-search flex-grow wow fadeInUp">
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="form-search"
-              >
-                <fieldset>
-                  <input
-                    className=""
-                    type="text"
-                    placeholder="Search for anything"
-                    name="text"
-                    tabIndex={2}
-                    defaultValue=""
-                    aria-required="true"
-                    required
-                  />
-                </fieldset>
-                <div className="button-submit">
-                  <button className="" type="submit">
-                    <i className="icon-search fs-20" />
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="sort-by-wrap">
-              <div className="sort-wrap">
-                <SortDropdown />
-              </div>
-            </div>
+    <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+      {/* Program Header */}
+      <div style={{
+        background: "white",
+        borderRadius: "16px",
+        padding: "32px",
+        marginBottom: "32px",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+      }}>
+        <h2 style={{
+          fontSize: "28px",
+          fontWeight: "700",
+          color: "#0f172a",
+          marginBottom: "12px"
+        }}>
+          {nextGenProgram.title}
+        </h2>
+        <p style={{
+          fontSize: "16px",
+          color: "#64748b",
+          marginBottom: "24px"
+        }}>
+          {nextGenProgram.subtitle}
+        </p>
+        
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "16px"
+        }}>
+          <div style={{
+            padding: "16px",
+            background: "#f8fafc",
+            borderRadius: "8px"
+          }}>
+            <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "4px" }}>Total Duration</div>
+            <div style={{ fontSize: "20px", fontWeight: "700", color: "#0f172a" }}>{nextGenProgram.totalDuration}</div>
+          </div>
+          <div style={{
+            padding: "16px",
+            background: "#f8fafc",
+            borderRadius: "8px"
+          }}>
+            <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "4px" }}>Modules</div>
+            <div style={{ fontSize: "20px", fontWeight: "700", color: "#0f172a" }}>{nextGenProgram.totalModules}</div>
+          </div>
+          <div style={{
+            padding: "16px",
+            background: "#f8fafc",
+            borderRadius: "8px"
+          }}>
+            <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "4px" }}>Level</div>
+            <div style={{ fontSize: "20px", fontWeight: "700", color: "#0f172a" }}>{nextGenProgram.level}</div>
+          </div>
+          <div style={{
+            padding: "16px",
+            background: "#f8fafc",
+            borderRadius: "8px"
+          }}>
+            <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "4px" }}>Certificate</div>
+            <div style={{ fontSize: "20px", fontWeight: "700", color: "#10b981" }}>✓ NFT</div>
           </div>
         </div>
-        <div className="row">
-          <div className="tabs-with-filter style-small">
-            <ul className="widget-menu-tab overflow-x-auto pd-40">
-              {categories.map((item, index) => (
-                <li
-                  key={index}
-                  onClick={() => setcurrentCategory(item)}
-                  className={`item-title  ${
-                    currentCategory == item ? "active" : ""
-                  }`}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <div className="widget-content-tab">
-              <div className="widget-content-inner active">
-                <div className="row">
-                  {filtered.slice(0, 6).map((elm, i) => (
-                    <div key={i} className="col-xl-4">
-                      <div className="course-item hover-img wow fadeInUp">
-                        <div className="features image-wrap">
-                          <Image
-                            className="lazyload"
-                            alt=""
-                            src={elm.imgSrc}
-                            width={520}
-                            height={380}
-                          />
-                          <div
-                            className={`box-wishlist tf-action-btns ${
-                              isAddedtoWishlist(elm.id) ? "active" : ""
-                            } `}
-                            onClick={() => toggleWishlist(elm.id)}
-                          >
-                            <i className="flaticon-heart" />
-                          </div>
-                        </div>
-                        <div className="content">
-                          <div className="meta">
-                            <div className="meta-item">
-                              <i className="flaticon-calendar" />
-                              <p>{elm.lessons}</p>
-                            </div>
-                            <div className="meta-item">
-                              <i className="flaticon-clock" />
-                              <p>{elm.duration}</p>
-                            </div>
-                          </div>
-                          <h6 className="fw-5 line-clamp-2">
-                            <a href="#">{elm.title}</a>
-                          </h6>
-                          <div className="ratings pb-30">
-                            <div className="number">4.9</div>
-                            {Array(Math.round(elm.rating))
-                              .fill(0)
-                              .map((_, i2) => (
-                                <i className="icon-star-1" key={i2} />
-                              ))}
-                            {Array(5 - Math.round(elm.rating))
-                              .fill(0)
-                              .map((_, i2) => (
-                                <svg
-                                  key={i2}
-                                  width={12}
-                                  height={11}
-                                  viewBox="0 0 12 11"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M3.54831 7.10382L3.58894 6.85477L3.41273 6.67416L1.16841 4.37373L4.24914 3.90314L4.51288 3.86286L4.62625 3.62134L5.99989 0.694982L7.37398 3.62182L7.48735 3.86332L7.75108 3.9036L10.8318 4.37419L8.58749 6.67462L8.41128 6.85523L8.4519 7.10428L8.98079 10.3465L6.24201 8.8325L6.00014 8.69879L5.75826 8.83247L3.01941 10.3461L3.54831 7.10382ZM11.0444 4.15626L11.0442 4.15651L11.0444 4.15626Z"
-                                    stroke="#131836"
-                                  />
-                                </svg>
-                              ))}
+      </div>
 
-                            <div className="total">({elm.reviews})</div>
-                          </div>
-                          <div className="progress">
-                            <div
-                              className="progress-bar"
-                              style={
-                                elm.status == "Completed Courses"
-                                  ? { width: "100%" }
-                                  : {}
-                              }
-                            ></div>
-                          </div>
-                          <div className="exam-progress">
-                            <span className="fw-5 fs-15">Complete</span>
-                            <span className="fw-5 fs-15">
-                              {" "}
-                              {elm.status == "Completed Courses"
-                                ? "100%"
-                                : "80%"}
-                            </span>
-                          </div>
-                          <a href="#" className="tf-btn style-third w-100">
-                            Download Certificate
-                            <i className="icon-arrow-top-right" />
-                          </a>
-                        </div>
+      {/* Search Bar */}
+      <div style={{ marginBottom: "24px" }}>
+        <input
+          type="text"
+          placeholder="Search modules or lessons..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px 16px",
+            border: "1px solid #e5e7eb",
+            borderRadius: "8px",
+            fontSize: "14px",
+            outline: "none"
+          }}
+          onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
+          onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+        />
+      </div>
+
+      {/* Modules List */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {nextGenProgram.modules.map((module) => (
+          <div
+            key={module.id}
+            style={{
+              background: "white",
+              borderRadius: "12px",
+              overflow: "hidden",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              border: "1px solid #e5e7eb"
+            }}
+          >
+            {/* Module Header */}
+            <div
+              onClick={() => toggleModule(module.id)}
+              style={{
+                padding: "24px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                background: expandedModules[module.id] ? "#f8fafc" : "white",
+                transition: "all 0.2s"
+              }}
+            >
+              <div style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "8px",
+                background: getTrackColor(module.track),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "20px",
+                fontWeight: "700",
+                color: "white",
+                flexShrink: 0
+              }}>
+                {module.number}
+              </div>
+              
+              <div style={{ flex: 1 }}>
+                <div style={{
+                  fontSize: "18px",
+                  fontWeight: "600",
+                  color: "#0f172a",
+                  marginBottom: "4px"
+                }}>
+                  {module.title}
+                </div>
+                <div style={{
+                  fontSize: "14px",
+                  color: "#64748b",
+                  display: "flex",
+                  gap: "16px",
+                  flexWrap: "wrap"
+                }}>
+                  <span>📚 {module.lessons.length} Lessons</span>
+                  <span>⏱️ {module.duration}</span>
+                  <span style={{
+                    padding: "2px 8px",
+                    background: getTrackColor(module.track) + "20",
+                    color: getTrackColor(module.track),
+                    borderRadius: "4px",
+                    fontSize: "12px",
+                    fontWeight: "600"
+                  }}>
+                    {module.track} Track
+                  </span>
+                </div>
+              </div>
+              
+              <div style={{
+                fontSize: "24px",
+                color: "#64748b",
+                transform: expandedModules[module.id] ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.2s"
+              }}>
+                ▼
+              </div>
+            </div>
+
+            {/* Lessons List */}
+            {expandedModules[module.id] && (
+              <div style={{
+                padding: "0 24px 24px 24px",
+                background: "#f8fafc"
+              }}>
+                {module.lessons.map((lesson, idx) => (
+                  <div
+                    key={lesson.id}
+                    style={{
+                      padding: "16px",
+                      background: "white",
+                      borderRadius: "8px",
+                      marginTop: idx === 0 ? "0" : "12px",
+                      border: "1px solid #e5e7eb",
+                      display: "flex",
+                      gap: "16px",
+                      alignItems: "start"
+                    }}
+                  >
+                    <div style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: "#f1f5f9",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      color: "#64748b",
+                      flexShrink: 0
+                    }}>
+                      {idx + 1}
+                    </div>
+                    
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        color: "#0f172a",
+                        marginBottom: "4px"
+                      }}>
+                        {lesson.title}
+                      </div>
+                      <div style={{
+                        fontSize: "14px",
+                        color: "#64748b",
+                        marginBottom: "8px"
+                      }}>
+                        {lesson.description}
+                      </div>
+                      <div style={{
+                        display: "flex",
+                        gap: "12px",
+                        fontSize: "13px",
+                        color: "#64748b"
+                      }}>
+                        <span style={{
+                          padding: "4px 8px",
+                          background: "#f1f5f9",
+                          borderRadius: "4px",
+                          textTransform: "capitalize"
+                        }}>
+                          {lesson.type}
+                        </span>
+                        <span>⏱️ {lesson.duration}</span>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            </div>
-            <ul className="wg-pagination justify-center">
-              <Pagination />
-            </ul>
+            )}
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

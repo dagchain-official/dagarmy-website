@@ -15,25 +15,54 @@ export default function StudentMyCoursesPage() {
     <>
       <div id="wrapper">
         <Header2 />
-        <PageTitle2 />
         <div className="main-content pt-0">
-          <div className="page-inner tf-spacing-1">
-            <div className="tf-container">
-              <div className="row">
-                <div className="col-xl-3 col-lg-12">
-                  <div className="dashboard_navigationbar">
-                    <div className="dropbtn">
-                      <i className="icon-home" /> Dashboard Navigation
-                    </div>
-                    <div className="instructors-dashboard student-dashboard-sidebar">
-                      <div className="dashboard-title">
-                        STUDENT DASHBOARD
-                        <DashboardNav2 />
-                      </div>
-                    </div>
+          <div className="page-inner" style={{ padding: "0" }}>
+            <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
+              {/* Sidebar Navigation */}
+              <div style={{ 
+                width: "240px", 
+                flexShrink: 0,
+                background: "#1a1f36",
+                padding: "32px 16px",
+                position: "sticky",
+                top: "0",
+                height: "100vh",
+                overflowY: "auto"
+              }}>
+                <DashboardNav2 />
+              </div>
+              
+              {/* Main Content */}
+              <div style={{ flex: 1, background: "#f9fafb" }}>
+                {/* Page Title Section */}
+                <div style={{
+                  background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
+                  padding: "60px 40px",
+                  borderBottom: "1px solid #e5e7eb"
+                }}>
+                  <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+                    <h1 style={{
+                      fontSize: "32px",
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      marginBottom: "8px"
+                    }}>
+                      Student Dashboard
+                    </h1>
+                    <p style={{
+                      fontSize: "16px",
+                      color: "#cbd5e1",
+                      margin: 0
+                    }}>
+                      Track your progress and continue your learning journey
+                    </p>
                   </div>
                 </div>
-                <MyCourses />
+                
+                {/* Courses Content */}
+                <div style={{ padding: "40px" }}>
+                  <MyCourses />
+                </div>
               </div>
             </div>
           </div>
