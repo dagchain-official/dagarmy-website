@@ -66,7 +66,7 @@ export default function ProtectedAdminLayout({ children, requireMasterAdmin = fa
             width: '60px',
             height: '60px',
             border: '4px solid #f1f5f9',
-            borderTop: '4px solid #8b5cf6',
+            borderTop: '4px solid #1f2937',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 20px'
@@ -152,7 +152,7 @@ export default function ProtectedAdminLayout({ children, requireMasterAdmin = fa
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',

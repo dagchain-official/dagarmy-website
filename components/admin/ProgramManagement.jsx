@@ -297,7 +297,7 @@ export default function ProgramManagement() {
             <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '8px' }}>
               {program.subtitle}
             </p>
-            <p style={{ fontSize: '14px', color: '#8b5cf6', fontWeight: '600' }}>
+            <p style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>
               {program.mission}
             </p>
           </div>
@@ -305,7 +305,7 @@ export default function ProgramManagement() {
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               fontSize: '14px',
               fontWeight: '600',
@@ -531,7 +531,7 @@ export default function ProgramManagement() {
                             <span style={{
                               fontSize: '12px',
                               fontWeight: '700',
-                              color: '#8b5cf6',
+                              color: '#1f2937',
                               background: 'rgba(139, 92, 246, 0.1)',
                               padding: '2px 8px',
                               borderRadius: '4px'
@@ -633,8 +633,8 @@ export default function ProgramManagement() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = '#f3f4f6';
-                      e.currentTarget.style.borderColor = '#8b5cf6';
-                      e.currentTarget.style.color = '#8b5cf6';
+                      e.currentTarget.style.borderColor = '#1f2937';
+                      e.currentTarget.style.color = '#1f2937';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = '#fafafa';
@@ -669,8 +669,8 @@ export default function ProgramManagement() {
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = '#f3f4f6';
-          e.currentTarget.style.borderColor = '#8b5cf6';
-          e.currentTarget.style.color = '#8b5cf6';
+          e.currentTarget.style.borderColor = '#1f2937';
+          e.currentTarget.style.color = '#1f2937';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.background = '#fafafa';
@@ -756,7 +756,7 @@ export default function ProgramManagement() {
                 Cancel
               </button>
               <button onClick={handleSaveModule}
-                style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#8b5cf6', color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
+                style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#1f2937', color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
                 Save Module
               </button>
             </div>
@@ -840,7 +840,7 @@ export default function ProgramManagement() {
                 Cancel
               </button>
               <button onClick={handleSaveLesson}
-                style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#8b5cf6', color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
+                style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#1f2937', color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
                 Save Lesson
               </button>
             </div>

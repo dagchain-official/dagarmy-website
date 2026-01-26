@@ -292,7 +292,7 @@ export default function Dashboard2() {
                     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                         {/* My Courses */}
                         <div style={{
-                            background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                            background: "linear-gradient(135deg, #6366f1 0%, #1f2937 100%)",
                             borderRadius: "20px",
                             padding: "28px",
                             color: "#ffffff",

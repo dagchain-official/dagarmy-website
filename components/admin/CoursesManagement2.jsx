@@ -72,7 +72,7 @@ export default function CoursesManagement2() {
                 width: '48px',
                 height: '48px',
                 borderRadius: '14px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -94,7 +94,7 @@ export default function CoursesManagement2() {
             <button style={{
               padding: '12px 24px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -129,8 +129,8 @@ export default function CoursesManagement2() {
             value: loading ? '...' : stats.totalCourses.toString(), 
             change: `${courses.length} active`,
             icon: BookOpen,
-            color: '#8b5cf6',
-            bgGradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            color: '#1f2937',
+            bgGradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             lightBg: '#f5f3ff'
           },
           { 
@@ -273,7 +273,7 @@ export default function CoursesManagement2() {
                 background: '#f8fafc'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#8b5cf6';
+                e.currentTarget.style.borderColor = '#1f2937';
                 e.currentTarget.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.1)';
                 e.currentTarget.style.background = '#fff';
               }}
@@ -333,7 +333,7 @@ export default function CoursesManagement2() {
                 padding: '10px 16px',
                 borderRadius: '8px',
                 border: 'none',
-                background: viewMode === 'grid' ? '#8b5cf6' : 'transparent',
+                background: viewMode === 'grid' ? '#1f2937' : 'transparent',
                 color: viewMode === 'grid' ? '#fff' : '#64748b',
                 cursor: 'pointer',
                 display: 'flex',
@@ -352,7 +352,7 @@ export default function CoursesManagement2() {
                 padding: '10px 16px',
                 borderRadius: '8px',
                 border: 'none',
-                background: viewMode === 'list' ? '#8b5cf6' : 'transparent',
+                background: viewMode === 'list' ? '#1f2937' : 'transparent',
                 color: viewMode === 'list' ? '#fff' : '#64748b',
                 cursor: 'pointer',
                 display: 'flex',
@@ -404,7 +404,7 @@ export default function CoursesManagement2() {
             width: '60px',
             height: '60px',
             border: '4px solid #f1f5f9',
-            borderTop: '4px solid #8b5cf6',
+            borderTop: '4px solid #1f2937',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 20px'
@@ -432,7 +432,7 @@ export default function CoursesManagement2() {
             <button style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -461,7 +461,7 @@ export default function CoursesManagement2() {
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-8px)';
               e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
-              e.currentTarget.style.borderColor = '#8b5cf6';
+              e.currentTarget.style.borderColor = '#1f2937';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
@@ -469,7 +469,7 @@ export default function CoursesManagement2() {
               e.currentTarget.style.borderColor = '#e2e8f0';
             }}>
               {/* Course Image */}
-              <div style={{ position: 'relative', paddingTop: '56.25%', background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', overflow: 'hidden' }}>
+              <div style={{ position: 'relative', paddingTop: '56.25%', background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)', overflow: 'hidden' }}>
                 {course.banner_url ? (
                   <img
                     src={course.banner_url}
@@ -580,7 +580,7 @@ export default function CoursesManagement2() {
                       width: '100%',
                       padding: '12px',
                       borderRadius: '10px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                       color: '#fff',
                       border: 'none',
                       fontSize: '13px',
@@ -611,7 +611,7 @@ export default function CoursesManagement2() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = '#fff';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.borderColor = '#1f2937';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = '#f8fafc';
@@ -647,7 +647,7 @@ export default function CoursesManagement2() {
                 width: '80px',
                 height: '80px',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -695,7 +695,7 @@ export default function CoursesManagement2() {
                 <button style={{
                   padding: '10px 20px',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                   color: '#fff',
                   border: 'none',
                   fontSize: '13px',

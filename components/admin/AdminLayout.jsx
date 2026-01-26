@@ -210,7 +210,7 @@ export default function AdminLayout({ children }) {
                   borderRadius: '8px',
                   marginBottom: '4px',
                   background: isActive ? '#f8f5ff' : 'transparent',
-                  color: isActive ? '#7c3aed' : '#6c757d',
+                  color: isActive ? '#111827' : '#6c757d',
                   textDecoration: 'none',
                   transition: 'all 0.2s ease',
                   cursor: 'pointer',
@@ -235,7 +235,7 @@ export default function AdminLayout({ children }) {
                     transform: 'translateY(-50%)',
                     width: '3px',
                     height: '20px',
-                    background: '#7c3aed',
+                    background: '#111827',
                     borderRadius: '0 3px 3px 0'
                   }} />
                 )}
@@ -253,7 +253,7 @@ export default function AdminLayout({ children }) {
                       <span style={{
                         padding: '2px 6px',
                         borderRadius: '4px',
-                        background: isActive ? '#7c3aed' : '#e9ecef',
+                        background: isActive ? '#111827' : '#e9ecef',
                         color: isActive ? '#ffffff' : '#6c757d',
                         fontSize: '10px',
                         fontWeight: '600'
@@ -287,7 +287,7 @@ export default function AdminLayout({ children }) {
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                background: 'linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%)',
+                background: 'linear-gradient(135deg, #111827 0%, #a78bfa 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

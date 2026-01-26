@@ -53,7 +53,7 @@ export default function CourseListDatabase() {
                 width: '50px',
                 height: '50px',
                 border: '4px solid #f3f4f6',
-                borderTop: '4px solid #8b5cf6',
+                borderTop: '4px solid #1f2937',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite'
               }} />
@@ -155,7 +155,7 @@ export default function CourseListDatabase() {
                             <div style={{
                               width: '100%',
                               height: '100%',
-                              background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                              background: 'linear-gradient(135deg, #1f2937 0%, #1f2937 100%)',
                               borderRadius: '12px',
                               display: 'flex',
                               alignItems: 'center',
@@ -188,33 +188,33 @@ export default function CourseListDatabase() {
                           <div className="top" style={{ marginBottom: '16px' }}>
                             <div className="meta mb-0" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                               <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <i className="flaticon-calendar" style={{ color: '#8b5cf6' }} />
+                                <i className="flaticon-calendar" style={{ color: '#1f2937' }} />
                                 <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
                                   {course.stats?.totalModules || 0} Modules
                                 </p>
                               </div>
                               <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <i className="flaticon-play" style={{ color: '#8b5cf6' }} />
+                                <i className="flaticon-play" style={{ color: '#1f2937' }} />
                                 <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
                                   {course.stats?.totalLessons || 0} Lessons
                                 </p>
                               </div>
                               <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <i className="flaticon-user" style={{ color: '#8b5cf6' }} />
+                                <i className="flaticon-user" style={{ color: '#1f2937' }} />
                                 <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
                                   {course.stats?.enrolledStudents || 0} Students
                                 </p>
                               </div>
                               {course.total_duration && (
                                 <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                  <i className="flaticon-clock" style={{ color: '#8b5cf6' }} />
+                                  <i className="flaticon-clock" style={{ color: '#1f2937' }} />
                                   <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
                                     {course.total_duration}
                                   </p>
                                 </div>
                               )}
                             </div>
-                            <div className="h5 fw-5" style={{ color: course.is_free ? '#10b981' : '#8b5cf6', margin: 0 }}>
+                            <div className="h5 fw-5" style={{ color: course.is_free ? '#10b981' : '#1f2937', margin: 0 }}>
                               {course.is_free ? 'FREE' : `${course.currency} ${course.price}`}
                             </div>
                           </div>
@@ -276,7 +276,7 @@ export default function CourseListDatabase() {
                                       justifyContent: 'center',
                                       fontSize: '11px',
                                       fontWeight: '600',
-                                      color: '#8b5cf6'
+                                      color: '#1f2937'
                                     }}>
                                       {idx + 1}
                                     </span>
@@ -289,7 +289,7 @@ export default function CourseListDatabase() {
                                   </li>
                                 ))}
                                 {course.modules.length > 3 && (
-                                  <li style={{ fontSize: '12px', color: '#8b5cf6', fontWeight: '500', marginTop: '4px' }}>
+                                  <li style={{ fontSize: '12px', color: '#1f2937', fontWeight: '500', marginTop: '4px' }}>
                                     +{course.modules.length - 3} more modules
                                   </li>
                                 )}
@@ -300,7 +300,7 @@ export default function CourseListDatabase() {
                           {course.creator && (
                             <div className="author" style={{ marginTop: '16px', fontSize: '13px', color: '#6b7280' }}>
                               By:{" "}
-                              <span className="author" style={{ color: '#8b5cf6', fontWeight: '500' }}>
+                              <span className="author" style={{ color: '#1f2937', fontWeight: '500' }}>
                                 {course.creator.name}
                               </span>
                             </div>

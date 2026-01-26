@@ -58,10 +58,7 @@ const AnimatedNoText = () => {
       <span style={{
         fontSize: '42px',
         fontWeight: '800',
-        background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+        color: '#1f2937',
         letterSpacing: '-0.02em',
         lineHeight: '1'
       }}>
@@ -169,10 +166,7 @@ export default function Hero() {
                   color: '#1f2937'
                 }}>
                   Join the <span style={{
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    color: '#1f2937',
                     fontWeight: '700'
                   }}>Global Army</span> of Skill Builders and Technology Creators
                 </h1>
@@ -202,7 +196,7 @@ export default function Hero() {
                   />
                   <a
                     href="#"
-                    className="custom-explore-btn relative flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                    className="custom-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                     style={{ textDecoration: 'none', height: '52px', minWidth: '200px', justifyContent: 'center' }}
                   >
                     <svg
@@ -235,7 +229,7 @@ export default function Hero() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ display: 'flex', gap: '4px' }}>
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <span key={star} style={{ color: '#8b5cf6', fontSize: '16px' }}>★</span>
+                        <span key={star} style={{ color: '#1f2937', fontSize: '16px' }}>★</span>
                       ))}
                     </div>
                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#621e6dff', whiteSpace: 'nowrap' }}>

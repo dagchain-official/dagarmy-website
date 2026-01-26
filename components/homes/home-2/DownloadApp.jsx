@@ -29,20 +29,20 @@ export default function DownloadApp() {
               </p>
               <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: '25px', marginBottom: '25px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                  <div style={{ padding: '20px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '12px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>36+</h3>
+                  <div style={{ padding: '20px', background: 'rgba(31, 41, 55, 0.1)', borderRadius: '12px', border: '1px solid rgba(31, 41, 55, 0.2)' }}>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', marginBottom: '5px' }}>36+</h3>
                     <p style={{ fontSize: '14px', margin: 0 }}>Expert-Led Courses</p>
                   </div>
-                  <div style={{ padding: '20px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '12px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>2.5K+</h3>
+                  <div style={{ padding: '20px', background: 'rgba(31, 41, 55, 0.1)', borderRadius: '12px', border: '1px solid rgba(31, 41, 55, 0.2)' }}>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', marginBottom: '5px' }}>2.5K+</h3>
                     <p style={{ fontSize: '14px', margin: 0 }}>Active Students</p>
                   </div>
-                  <div style={{ padding: '20px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '12px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>50+</h3>
+                  <div style={{ padding: '20px', background: 'rgba(31, 41, 55, 0.1)', borderRadius: '12px', border: '1px solid rgba(31, 41, 55, 0.2)' }}>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', marginBottom: '5px' }}>50+</h3>
                     <p style={{ fontSize: '14px', margin: 0 }}>Industry Experts</p>
                   </div>
-                  <div style={{ padding: '20px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '12px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>24/7</h3>
+                  <div style={{ padding: '20px', background: 'rgba(31, 41, 55, 0.1)', borderRadius: '12px', border: '1px solid rgba(31, 41, 55, 0.2)' }}>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', marginBottom: '5px' }}>24/7</h3>
                     <p style={{ fontSize: '14px', margin: 0 }}>Learning Access</p>
                   </div>
                 </div>
@@ -57,7 +57,7 @@ export default function DownloadApp() {
                 />
                 <a
                   href="#"
-                  className="wow fadeInUp relative flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                  className="wow fadeInUp relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                   data-wow-delay="0.45s"
                   style={{ textDecoration: 'none', height: '52px', minWidth: '220px', justifyContent: 'center' }}
                 >
@@ -93,7 +93,7 @@ export default function DownloadApp() {
           </div>
           <div className="col-md-6">
             <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ padding: '40px' }}>
-              <div style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)', borderRadius: '20px', padding: '40px', color: 'white' }}>
+              <div style={{ background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)', borderRadius: '20px', padding: '40px', color: 'white' }}>
                 <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>What You'll Get:</h3>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   <li style={{ marginBottom: '15px', display: 'flex', alignItems: 'start' }}>

@@ -196,7 +196,7 @@ export default function CustomPermissionModal({ onClose, onSave }) {
                   fontSize: '14px',
                   outline: 'none'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                 onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
               />
             </div>
@@ -220,7 +220,7 @@ export default function CustomPermissionModal({ onClose, onSave }) {
                   fontFamily: 'inherit',
                   resize: 'vertical'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                 onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
               />
             </div>
@@ -243,7 +243,7 @@ export default function CustomPermissionModal({ onClose, onSave }) {
                   outline: 'none',
                   fontFamily: 'monospace'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                 onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
               />
               <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '6px' }}>
@@ -281,7 +281,7 @@ export default function CustomPermissionModal({ onClose, onSave }) {
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: saving ? '#cbd5e1' : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: saving ? '#cbd5e1' : 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',

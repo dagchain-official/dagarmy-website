@@ -91,7 +91,7 @@ export default function Header2() {
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6';
+                e.currentTarget.style.color = '#1f2937';
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '100%';
               }}
@@ -107,7 +107,7 @@ export default function Header2() {
                 left: '0',
                 width: '0%',
                 height: '2px',
-                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                background: '#1f2937',
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
@@ -123,7 +123,7 @@ export default function Header2() {
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6';
+                e.currentTarget.style.color = '#1f2937';
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '100%';
               }}
@@ -139,7 +139,7 @@ export default function Header2() {
                 left: '0',
                 width: '0%',
                 height: '2px',
-                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                background: '#1f2937',
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
@@ -155,7 +155,7 @@ export default function Header2() {
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6';
+                e.currentTarget.style.color = '#1f2937';
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '100%';
               }}
@@ -171,7 +171,7 @@ export default function Header2() {
                 left: '0',
                 width: '0%',
                 height: '2px',
-                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                background: '#1f2937',
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
@@ -187,7 +187,7 @@ export default function Header2() {
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6';
+                e.currentTarget.style.color = '#1f2937';
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '100%';
               }}
@@ -203,7 +203,7 @@ export default function Header2() {
                 left: '0',
                 width: '0%',
                 height: '2px',
-                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                background: '#1f2937',
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
@@ -219,7 +219,7 @@ export default function Header2() {
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6';
+                e.currentTarget.style.color = '#1f2937';
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '100%';
               }}
@@ -235,7 +235,7 @@ export default function Header2() {
                 left: '0',
                 width: '0%',
                 height: '2px',
-                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                background: '#1f2937',
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
@@ -251,7 +251,7 @@ export default function Header2() {
               display: 'inline-block'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6';
+                e.currentTarget.style.color = '#1f2937';
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '100%';
               }}
@@ -267,7 +267,7 @@ export default function Header2() {
                 left: '0',
                 width: '0%',
                 height: '2px',
-                background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                background: '#1f2937',
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
@@ -282,22 +282,24 @@ export default function Header2() {
                 height: '38px',
                 fontSize: '13px',
                 padding: '0 20px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: '#1f2937',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 2px 8px rgba(139, 92, 246, 0.2)'
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+                e.currentTarget.style.background = '#111827';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.2)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
+                e.currentTarget.style.background = '#1f2937';
               }}
             >
               Sign In
@@ -305,7 +307,7 @@ export default function Header2() {
             {/* Register button commented out - using Sign In for both new and returning users */}
             {/* <Link
               href={`/register`}
-              className="relative flex items-center gap-1 bg-[#8b5cf6] px-5 py-2 border-2 border-[#8b5cf6] text-sm rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+              className="relative flex items-center gap-1 bg-[#1f2937] px-5 py-2 border-2 border-[#1f2937] text-sm rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
               style={{ textDecoration: 'none', height: '38px', minWidth: '120px', justifyContent: 'center' }}
             >
               <svg

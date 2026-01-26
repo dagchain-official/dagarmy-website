@@ -143,10 +143,10 @@ export default function RolesManagement2() {
   const roleConfig = {
     'organization': { 
       icon: Shield, 
-      color: '#8b5cf6', 
+      color: '#1f2937', 
       label: 'Organization', 
       bg: '#f3e8ff',
-      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)'
+      gradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)'
     },
     'trainer': { 
       icon: Users, 
@@ -221,7 +221,7 @@ export default function RolesManagement2() {
                 width: '48px',
                 height: '48px',
                 borderRadius: '14px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -244,7 +244,7 @@ export default function RolesManagement2() {
             style={{
               padding: '12px 24px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -278,8 +278,8 @@ export default function RolesManagement2() {
             value: stats.total.toString(), 
             change: 'All team members',
             icon: Shield,
-            color: '#8b5cf6',
-            bgGradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            color: '#1f2937',
+            bgGradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             lightBg: '#f5f3ff'
           },
           { 
@@ -422,7 +422,7 @@ export default function RolesManagement2() {
                 background: '#f8fafc'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#8b5cf6';
+                e.currentTarget.style.borderColor = '#1f2937';
                 e.currentTarget.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.1)';
                 e.currentTarget.style.background = '#fff';
               }}
@@ -492,7 +492,7 @@ export default function RolesManagement2() {
             width: '60px',
             height: '60px',
             border: '4px solid #f1f5f9',
-            borderTop: '4px solid #8b5cf6',
+            borderTop: '4px solid #1f2937',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 20px'
@@ -521,7 +521,7 @@ export default function RolesManagement2() {
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -673,7 +673,7 @@ export default function RolesManagement2() {
                           border: '1px solid #e2e8f0',
                           fontSize: '11px',
                           fontWeight: '600',
-                          color: '#8b5cf6'
+                          color: '#1f2937'
                         }}>
                           +{creator.expertise.length - 3} more
                         </span>
@@ -719,7 +719,7 @@ export default function RolesManagement2() {
                         flex: 1,
                         padding: '12px',
                         borderRadius: '10px',
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                         color: '#fff',
                         border: 'none',
                         fontSize: '13px',
@@ -848,7 +848,7 @@ export default function RolesManagement2() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -871,7 +871,7 @@ export default function RolesManagement2() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -920,7 +920,7 @@ export default function RolesManagement2() {
                       fontFamily: 'inherit',
                       resize: 'vertical'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -943,7 +943,7 @@ export default function RolesManagement2() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -954,7 +954,7 @@ export default function RolesManagement2() {
                       type="checkbox"
                       checked={creatorForm.is_verified}
                       onChange={(e) => setCreatorForm({ ...creatorForm, is_verified: e.target.checked })}
-                      style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#8b5cf6' }}
+                      style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#1f2937' }}
                     />
                     <span style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>Verified</span>
                   </label>
@@ -964,7 +964,7 @@ export default function RolesManagement2() {
                       type="checkbox"
                       checked={creatorForm.is_active}
                       onChange={(e) => setCreatorForm({ ...creatorForm, is_active: e.target.checked })}
-                      style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#8b5cf6' }}
+                      style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#1f2937' }}
                     />
                     <span style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>Active</span>
                   </label>
@@ -1002,7 +1002,7 @@ export default function RolesManagement2() {
                 style={{
                   padding: '12px 24px',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                   color: '#fff',
                   border: 'none',
                   fontSize: '14px',

@@ -37,10 +37,10 @@ export default function PageTitle({
                 }}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M6 12v5c3 3 9 3 12 0v-5" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 12v5c3 3 9 3 12 0v-5" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span style={{ fontSize: '14px', fontWeight: '600', color: '#8b5cf6' }}>
+                <span style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
                   Career-Focused Learning
                 </span>
               </div>
@@ -112,7 +112,7 @@ export default function PageTitle({
                           transition: 'color 0.3s ease'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.color = '#8b5cf6';
+                          e.currentTarget.style.color = '#1f2937';
                           const underline = e.currentTarget.querySelector('.underline');
                           if (underline) {
                             underline.style.width = '100%';
@@ -135,7 +135,7 @@ export default function PageTitle({
                             left: '0',
                             width: '0%',
                             height: '2px',
-                            background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                            background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                             transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                           }}
                         />

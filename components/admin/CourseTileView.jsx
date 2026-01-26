@@ -105,7 +105,7 @@ export default function CourseTileView() {
           width: '48px',
           height: '48px',
           border: '4px solid #f3f4f6',
-          borderTop: '4px solid #8b5cf6',
+          borderTop: '4px solid #1f2937',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }} />
@@ -263,7 +263,7 @@ export default function CourseTileView() {
                 style={{
                   padding: '14px 28px',
                   borderRadius: '10px',
-                  background: '#8b5cf6',
+                  background: '#1f2937',
                   color: '#fff',
                   border: 'none',
                   fontSize: '15px',
@@ -274,8 +274,8 @@ export default function CourseTileView() {
                   gap: '10px',
                   transition: 'all 0.2s'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#7c3aed'}
-                onMouseLeave={(e) => e.currentTarget.style.background = '#8b5cf6'}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#111827'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#1f2937'}
               >
                 <Plus size={20} />
                 Create New Course
@@ -399,25 +399,25 @@ export default function CourseTileView() {
                     borderTop: '1px solid #f3f4f6'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Layers size={16} style={{ color: '#8b5cf6' }} />
+                      <Layers size={16} style={{ color: '#1f2937' }} />
                       <span style={{ fontSize: '13px', color: '#6b7280' }}>
                         <strong style={{ color: '#111827' }}>{course.total_modules || 0}</strong> modules
                       </span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <BookOpen size={16} style={{ color: '#8b5cf6' }} />
+                      <BookOpen size={16} style={{ color: '#1f2937' }} />
                       <span style={{ fontSize: '13px', color: '#6b7280' }}>
                         <strong style={{ color: '#111827' }}>{course.total_lessons || 0}</strong> lessons
                       </span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Users size={16} style={{ color: '#8b5cf6' }} />
+                      <Users size={16} style={{ color: '#1f2937' }} />
                       <span style={{ fontSize: '13px', color: '#6b7280' }}>
                         <strong style={{ color: '#111827' }}>{course.enrolled_students || 0}</strong> students
                       </span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Clock size={16} style={{ color: '#8b5cf6' }} />
+                      <Clock size={16} style={{ color: '#1f2937' }} />
                       <span style={{ fontSize: '13px', color: '#6b7280' }}>
                         <strong style={{ color: '#111827' }}>{course.total_duration || 'N/A'}</strong>
                       </span>
@@ -519,7 +519,7 @@ export default function CourseTileView() {
               cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#8b5cf6';
+              e.currentTarget.style.borderColor = '#1f2937';
               e.currentTarget.style.background = '#faf5ff';
             }}
             onMouseLeave={(e) => {
@@ -537,7 +537,7 @@ export default function CourseTileView() {
                 justifyContent: 'center',
                 marginBottom: '20px'
               }}>
-                <Plus size={40} style={{ color: '#8b5cf6' }} />
+                <Plus size={40} style={{ color: '#1f2937' }} />
               </div>
               <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
                 Add New Course

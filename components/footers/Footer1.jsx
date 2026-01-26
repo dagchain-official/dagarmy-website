@@ -60,7 +60,7 @@ export default function Footer1({ parentClass = "footer" }) {
         }
         #footer a:hover,
         #footer a:active {
-          color: #8b5cf6 !important;
+          color: #1f2937 !important;
         }
         #footer .footer-menu-list h5 {
           color: #000000 !important;
@@ -77,20 +77,20 @@ export default function Footer1({ parentClass = "footer" }) {
           color: #000000 !important;
         }
         #footer .footer-menu-list ul li a:hover {
-          color: #8b5cf6 !important;
+          color: #1f2937 !important;
         }
         #footer .address li p {
           color: #4a5568 !important;
         }
         #footer .address li i {
-          color: #8b5cf6 !important;
+          color: #1f2937 !important;
         }
         #footer .tf-social-icon a {
           color: #000000 !important;
           background: #f3f4f6 !important;
         }
         #footer .tf-social-icon a:hover {
-          background: #8b5cf6 !important;
+          background: #1f2937 !important;
           color: #ffffff !important;
         }
         #footer .footer-subscribe h5 {
@@ -226,7 +226,7 @@ export default function Footer1({ parentClass = "footer" }) {
                           </button>
                         </div>
                       </form>
-                      <div style={{ marginTop: '30px', padding: '20px', background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)', borderRadius: '12px' }}>
+                      <div style={{ marginTop: '30px', padding: '20px', background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)', borderRadius: '12px' }}>
                         <h5 className="fw-5" style={{ color: 'white', marginBottom: '10px' }}>Ready to Start?</h5>
                         <p style={{ color: 'white', opacity: 0.9, fontSize: '14px', marginBottom: '15px' }}>Transform your career with cutting-edge tech skills</p>
                         <button
@@ -234,7 +234,7 @@ export default function Footer1({ parentClass = "footer" }) {
                           style={{
                             display: 'block',
                             background: '#ffffff',
-                            color: '#8b5cf6',
+                            color: '#1f2937',
                             padding: '14px 24px',
                             borderRadius: '8px',
                             fontWeight: '600',
@@ -246,8 +246,8 @@ export default function Footer1({ parentClass = "footer" }) {
                             fontFamily: 'inherit'
                           }}
                         >
-                          <span style={{ color: '#8b5cf6', fontWeight: '600' }}>Explore Courses</span>
-                          <i className="icon-arrow-top-right" style={{ marginLeft: '8px', color: '#8b5cf6' }} />
+                          <span style={{ color: '#1f2937', fontWeight: '600' }}>Explore Courses</span>
+                          <i className="icon-arrow-top-right" style={{ marginLeft: '8px', color: '#1f2937' }} />
                         </button>
                       </div>
                     </div>

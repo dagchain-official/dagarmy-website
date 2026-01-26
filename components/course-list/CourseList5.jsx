@@ -264,7 +264,7 @@ export default function CourseList5() {
                                     <p>{elm.hours} hours</p>
                                   </div>
                                 </div>
-                                <div className="h5 fw-5" style={{ color: '#8b5cf6' }}>
+                                <div className="h5 fw-5" style={{ color: '#1f2937' }}>
                                   FREE
                                 </div>
                               </div>

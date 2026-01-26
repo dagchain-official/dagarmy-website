@@ -33,12 +33,12 @@ export default function BecomeInstractor() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: '2px solid rgba(139, 92, 246, 0.2)'
+                      border: '2px solid rgba(31, 41, 55, 0.2)'
                     }}>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="8" r="6" stroke="#8b5cf6" strokeWidth="2" />
-                        <path d="M12 14v8m-4 0h8" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" />
-                        <path d="M9 8l1.5 1.5L13 7" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="12" cy="8" r="6" stroke="#1f2937" strokeWidth="2" />
+                        <path d="M12 14v8m-4 0h8" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M9 8l1.5 1.5L13 7" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                     <span style={{ fontWeight: '700', fontSize: '18px', color: '#1f2937' }}>Join Elite Trainers</span>
@@ -57,19 +57,19 @@ export default function BecomeInstractor() {
               <div className="wow fadeInUp" data-wow-delay="0.25s" style={{ marginTop: '20px', marginBottom: '20px' }}>
                 <ul style={{ listStyle: 'none', padding: 0 }}>
                   <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#8b5cf6', marginRight: '10px', fontSize: '20px' }}>✓</span>
+                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
                     <span>Create and monetize your courses on cutting-edge technologies</span>
                   </li>
                   <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#8b5cf6', marginRight: '10px', fontSize: '20px' }}>✓</span>
+                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
                     <span>Access our professional course creation tools and support</span>
                   </li>
                   <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#8b5cf6', marginRight: '10px', fontSize: '20px' }}>✓</span>
+                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
                     <span>Build your personal brand as an industry expert</span>
                   </li>
                   <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#8b5cf6', marginRight: '10px', fontSize: '20px' }}>✓</span>
+                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
                     <span>Earn competitive revenue share from your content</span>
                   </li>
                 </ul>

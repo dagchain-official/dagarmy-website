@@ -432,7 +432,7 @@ export default function CoursePlatformManager() {
   const lessonTypeConfig = {
     'theory': { icon: FileText, label: 'Theory', color: '#3b82f6' },
     'drill': { icon: Zap, label: 'Drill', color: '#f59e0b' },
-    'strategy': { icon: Target, label: 'Strategy', color: '#8b5cf6' },
+    'strategy': { icon: Target, label: 'Strategy', color: '#1f2937' },
     'graduation': { icon: Award, label: 'Graduation', color: '#10b981' },
     'video': { icon: FileText, label: 'Video', color: '#ec4899' },
     'quiz': { icon: Target, label: 'Quiz', color: '#14b8a6' },
@@ -460,7 +460,7 @@ export default function CoursePlatformManager() {
           width: '48px',
           height: '48px',
           border: '4px solid #f3f4f6',
-          borderTop: '4px solid #8b5cf6',
+          borderTop: '4px solid #1f2937',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }} />
@@ -716,7 +716,7 @@ export default function CoursePlatformManager() {
             style={{
               padding: '12px 24px',
               borderRadius: '8px',
-              background: '#8b5cf6',
+              background: '#1f2937',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -905,7 +905,7 @@ export default function CoursePlatformManager() {
                           background: '#fff',
                           fontSize: '13px',
                           fontWeight: '600',
-                          color: '#8b5cf6',
+                          color: '#1f2937',
                           cursor: 'pointer',
                           transition: 'all 0.2s ease',
                           display: 'flex',
@@ -1062,7 +1062,7 @@ export default function CoursePlatformManager() {
                                     background: '#fff',
                                     fontSize: '12px',
                                     fontWeight: '600',
-                                    color: '#8b5cf6',
+                                    color: '#1f2937',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -1243,7 +1243,7 @@ export default function CoursePlatformManager() {
                       style={{
                         padding: '10px 20px',
                         borderRadius: '8px',
-                        background: '#8b5cf6',
+                        background: '#1f2937',
                         color: '#fff',
                         border: 'none',
                         fontSize: '13px',

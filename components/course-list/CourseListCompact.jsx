@@ -56,7 +56,7 @@ export default function CourseListCompact() {
             width: '50px',
             height: '50px',
             border: '4px solid #f3f4f6',
-            borderTop: '4px solid #8b5cf6',
+            borderTop: '4px solid #1f2937',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite'
           }} />
@@ -236,7 +236,7 @@ export default function CourseListCompact() {
 
                   <div style={{
                     marginLeft: 'auto',
-                    background: course.is_free ? '#10b981' : '#8b5cf6',
+                    background: course.is_free ? '#10b981' : '#1f2937',
                     color: '#ffffff',
                     padding: '12px 28px',
                     borderRadius: '8px',
@@ -299,7 +299,7 @@ export default function CourseListCompact() {
                     {course.creator && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontSize: '14px', color: '#6b7280' }}>Instructor</span>
-                        <span style={{ fontSize: '14px', color: '#8b5cf6', fontWeight: '500' }}>
+                        <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '500' }}>
                           {course.creator.name}
                         </span>
                       </div>
@@ -319,7 +319,7 @@ export default function CourseListCompact() {
                       display: 'block',
                       width: '100%',
                       marginTop: '20px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: '#1f2937',
                       color: '#ffffff',
                       padding: '14px 24px',
                       borderRadius: '8px',
@@ -328,16 +328,18 @@ export default function CourseListCompact() {
                       textAlign: 'center',
                       border: 'none',
                       cursor: 'pointer',
-                      boxShadow: '0 4px 6px -1px rgba(139, 92, 246, 0.3)',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
                       transition: 'all 0.3s'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(139, 92, 246, 0.4)';
+                      e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.4)';
+                      e.currentTarget.style.background = '#111827';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(139, 92, 246, 0.3)';
+                      e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.3)';
+                      e.currentTarget.style.background = '#1f2937';
                     }}
                   >
                     {course.is_free ? 'Enroll Now - FREE' : `Enroll - ${course.currency} ${course.price}`}
@@ -440,7 +442,7 @@ export default function CourseListCompact() {
                               borderBottom: '1px solid #e5e7eb',
                               cursor: 'pointer',
                               background: selectedModule[course.id] === module.id ? '#ffffff' : 'transparent',
-                              borderLeft: selectedModule[course.id] === module.id ? '3px solid #8b5cf6' : '3px solid transparent',
+                              borderLeft: selectedModule[course.id] === module.id ? '3px solid #1f2937' : '3px solid transparent',
                               transition: 'all 0.2s'
                             }}
                             onMouseEnter={(e) => {
@@ -458,7 +460,7 @@ export default function CourseListCompact() {
                               <div style={{
                                 width: '32px',
                                 height: '32px',
-                                background: selectedModule[course.id] === module.id ? '#8b5cf6' : '#e5e7eb',
+                                background: selectedModule[course.id] === module.id ? '#1f2937' : '#e5e7eb',
                                 borderRadius: '6px',
                                 display: 'flex',
                                 alignItems: 'center',

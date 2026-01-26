@@ -95,8 +95,8 @@ const ProgressiveInfoCards = () => {
               padding: '12px 0',
               fontSize: '14px',
               fontWeight: activeCard === card.id ? '600' : '500',
-              color: activeCard === card.id ? '#8b5cf6' : '#6b7280',
-              borderBottom: activeCard === card.id ? '2px solid #8b5cf6' : '2px solid transparent',
+              color: activeCard === card.id ? '#1f2937' : '#6b7280',
+              borderBottom: activeCard === card.id ? '2px solid #1f2937' : '2px solid transparent',
               marginBottom: '-1px',
               transition: 'all 0.3s ease',
               whiteSpace: 'nowrap'
@@ -146,7 +146,7 @@ const ProgressiveInfoCards = () => {
             <div style={{
               width: '60px',
               height: '3px',
-              background: '#8b5cf6',
+              background: '#1f2937',
               marginBottom: '24px'
             }} />
 
@@ -166,7 +166,7 @@ const ProgressiveInfoCards = () => {
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: '#8b5cf6',
+                    background: '#1f2937',
                     marginTop: '8px',
                     flexShrink: 0
                   }} />
@@ -337,7 +337,7 @@ export default function Courses() {
                 }}>
                   <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Rating:</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ color: '#8b5cf6', fontSize: '14px' }}>★★★★★</span>
+                    <span style={{ color: '#1f2937', fontSize: '14px' }}>★★★★★</span>
                     <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>4.9</span>
                     <span style={{ fontSize: '13px', color: '#6b7280' }}>(3,000+ reviews)</span>
                   </div>
@@ -351,7 +351,7 @@ export default function Courses() {
                   display: 'block',
                   width: '100%',
                   padding: '16px 24px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: '#1f2937',
                   color: '#fff',
                   textAlign: 'center',
                   borderRadius: '10px',

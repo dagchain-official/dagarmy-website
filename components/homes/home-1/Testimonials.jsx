@@ -66,7 +66,7 @@ export default function Testimonials({
               </div>
             </div>
             <div className="gallery">
-              <div className="swiper-button-prev widget-saying-button" style={{ color: '#8b5cf6' }}>
+              <div className="swiper-button-prev widget-saying-button" style={{ color: '#1f2937' }}>
                 <svg
                   width={35}
                   height={34}
@@ -74,14 +74,14 @@ export default function Testimonials({
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M35 16.9832H2.02708" stroke="#8b5cf6" />
+                  <path d="M35 16.9832H2.02708" stroke="#1f2937" />
                   <path
                     d="M8.96808 24.7926C7.02916 20.5253 5.49308 18.7339 1.66599 16.9949C5.57849 15.0692 7.09716 13.2712 8.96808 9.17383"
-                    stroke="#8b5cf6"
+                    stroke="#1f2937"
                   />
                 </svg>
               </div>
-              <div className="swiper-button-next widget-saying-button" style={{ color: '#8b5cf6' }}>
+              <div className="swiper-button-next widget-saying-button" style={{ color: '#1f2937' }}>
                 <svg
                   width={35}
                   height={34}
@@ -89,10 +89,10 @@ export default function Testimonials({
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M0 16.9832H32.9729" stroke="#8b5cf6" />
+                  <path d="M0 16.9832H32.9729" stroke="#1f2937" />
                   <path
                     d="M26.0319 24.7926C27.9708 20.5253 29.5069 18.7339 33.334 16.9949C29.4215 15.0692 27.9028 13.2712 26.0319 9.17383"
-                    stroke="#8b5cf6"
+                    stroke="#1f2937"
                   />
                 </svg>
               </div>
@@ -130,9 +130,9 @@ export default function Testimonials({
                           <span className="name">{testimonial.name}</span>
                         </a>
                         <span>{testimonial.role}</span>
-                        <div className="ratings" style={{ color: '#8b5cf6' }}>
+                        <div className="ratings" style={{ color: '#1f2937' }}>
                           {[...Array(testimonial.rating)].map((_, i) => (
-                            <i key={i} className="icon-star-1" style={{ color: '#8b5cf6' }} />
+                            <i key={i} className="icon-star-1" style={{ color: '#1f2937' }} />
                           ))}
                         </div>
                       </div>

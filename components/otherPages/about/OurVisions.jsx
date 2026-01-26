@@ -56,9 +56,9 @@ export default function OurVisions() {
                   border: '1.5px solid rgba(139, 92, 246, 0.2)'
                 }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="#8b5cf6" strokeWidth="2" />
-                    <circle cx="12" cy="12" r="6" stroke="#8b5cf6" strokeWidth="2" />
-                    <circle cx="12" cy="12" r="2" fill="#8b5cf6" />
+                    <circle cx="12" cy="12" r="10" stroke="#1f2937" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="6" stroke="#1f2937" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="2" fill="#1f2937" />
                   </svg>
                 </div>
                 <div className="sub-tag-title">
