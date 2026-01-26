@@ -21,7 +21,9 @@ export default function Dashboard2() {
             if (!address) return;
             
             try {
-                const response = await fetch(`/api/auth/user?wallet=${address}`);
+                // Normalize wallet address to lowercase for consistent lookup
+                const normalizedAddress = address.toLowerCase();
+                const response = await fetch(`/api/auth/user?wallet=${normalizedAddress}`);
                 const data = await response.json();
                 
                 if (data.user) {

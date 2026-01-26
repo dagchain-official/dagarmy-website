@@ -42,7 +42,7 @@ export async function POST(request) {
 
     // Use upsert to handle both create and update cases
     const userData = {
-      wallet_address: wallet_address || null,
+      wallet_address: wallet_address ? wallet_address.toLowerCase() : null,
       first_name,
       last_name,
       country_code: country_code || '+91',
@@ -55,11 +55,12 @@ export async function POST(request) {
     let data, error;
     
     if (wallet_address) {
-      // Find user by wallet address
+      // Try to find existing user by wallet address (case-insensitive)
+      const normalizedAddress = wallet_address.toLowerCase();
       const { data: existing } = await supabase
         .from('users')
         .select('id')
-        .eq('wallet_address', wallet_address)
+        .ilike('wallet_address', normalizedAddress)
         .maybeSingle();
 
       if (existing) {
