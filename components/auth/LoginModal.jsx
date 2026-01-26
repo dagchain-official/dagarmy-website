@@ -86,6 +86,15 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   }, [isAuthenticated, userRole, showProfileCompletion, onClose]);
 
+  // Reset state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setShowProfileCompletion(false);
+      setIsCheckingProfile(false);
+      setShowRoleSelection(false);
+    }
+  }, [isOpen]);
+
   const handleRoleSelection = async () => {
     if (selectedRole && address) {
       // Store wallet address before it becomes undefined
