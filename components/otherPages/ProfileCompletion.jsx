@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import CountryCodeDropdown from '@/components/common/CountryCodeDropdown';
 
-export default function ProfileCompletion({ userAddress, socialEmail, onComplete }) {
+export default function ProfileCompletion({ userAddress, socialEmail, onComplete, onClose }) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -19,6 +19,32 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
   useEffect(() => {
     console.log('🔍 ProfileCompletion received userAddress:', userAddress);
   }, [userAddress]);
+
+  // Prevent browser back button during profile completion
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const handleCancel = () => {
+    // Disconnect wallet and close modal if user cancels
+    if (typeof window !== 'undefined' && window.modal) {
+      window.modal.close();
+    }
+    if (onClose) {
+      onClose();
+    }
+    // Redirect to home page
+    router.push('/');
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,8 +135,39 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
         width: '90%',
         maxHeight: '90vh',
         overflowY: 'auto',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+        position: 'relative'
       }}>
+        <button
+          onClick={handleCancel}
+          style={{
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            cursor: 'pointer',
+            color: '#6b7280',
+            width: '32px',
+            height: '32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.color = '#1f2937';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = '#6b7280';
+          }}
+        >
+          ×
+        </button>
         <h2 style={{ 
           fontSize: '28px', 
           fontWeight: 'bold', 
