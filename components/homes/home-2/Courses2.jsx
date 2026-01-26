@@ -57,7 +57,7 @@ export default function Courses2() {
           bottom: -40px;
           left: 50%;
           transform: translateX(-50%);
-          background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+          background: linear-gradient(135deg, #111827 0%, #a855f7 50%, #c084fc 100%);
           color: #ffffff;
           text-align: center;
           padding: 8px 14px;
@@ -78,7 +78,7 @@ export default function Courses2() {
           margin-left: -5px;
           border-width: 0 5px 5px 5px;
           border-style: solid;
-          border-color: transparent transparent #7c3aed transparent;
+          border-color: transparent transparent #111827 transparent;
         }
         .spd3 {
           display: flex !important;
@@ -106,7 +106,7 @@ export default function Courses2() {
         .spd3 :global(.swiper-pagination-bullet-active) {
           width: 24px !important;
           border-radius: 4px !important;
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%) !important;
+          background: linear-gradient(135deg, #1f2937 0%, #a78bfa 100%) !important;
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
         }
         /* Fix tooltip clipping in Swiper */
@@ -256,8 +256,8 @@ export default function Courses2() {
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #1f2937 0%, #a78bfa 100%)';
+                    e.currentTarget.style.borderColor = '#1f2937';
                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
                     e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
                   }}
@@ -293,8 +293,8 @@ export default function Courses2() {
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #1f2937 0%, #a78bfa 100%)';
+                    e.currentTarget.style.borderColor = '#1f2937';
                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
                     e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
                   }}

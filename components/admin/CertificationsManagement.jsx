@@ -62,7 +62,7 @@ export default function CertificationsManagement() {
           style={{
             padding: '12px 24px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             color: '#fff',
             fontSize: '14px',
             fontWeight: '600',
@@ -71,7 +71,7 @@ export default function CertificationsManagement() {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
           }}
         >
           <span style={{ fontSize: '18px' }}>+</span>
@@ -102,7 +102,7 @@ export default function CertificationsManagement() {
         <div className="col-md-3">
           <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
             <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Verified Today</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#8b5cf6' }}>45</div>
+            <div style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937' }}>45</div>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function CertificationsManagement() {
       {/* Certificate Verification Tool */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
           borderRadius: '12px',
           padding: '32px',
           marginBottom: '24px',
@@ -142,7 +142,7 @@ export default function CertificationsManagement() {
                 padding: '14px 20px',
                 borderRadius: '10px',
                 background: '#fff',
-                color: '#8b5cf6',
+                color: '#1f2937',
                 fontSize: '14px',
                 fontWeight: '600',
                 border: 'none',

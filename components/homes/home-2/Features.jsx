@@ -3,7 +3,7 @@ import React from "react";
 export default function Features() {
   return (
     <section className="section-icon" style={{
-      background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%)',
+      background: 'linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%)',
       padding: '40px 0'
     }}>
       <div className="tf-container">

@@ -199,7 +199,7 @@ export default function LoginModal({ isOpen, onClose }) {
               onClick={() => setSelectedRole("student")}
               style={{
                 padding: '20px',
-                border: selectedRole === "student" ? '2px solid #8b5cf6' : '2px solid #e5e7eb',
+                border: selectedRole === "student" ? '2px solid #1f2937' : '2px solid #e5e7eb',
                 borderRadius: '12px',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
@@ -225,7 +225,7 @@ export default function LoginModal({ isOpen, onClose }) {
                 width: '48px',
                 height: '48px',
                 borderRadius: '12px',
-                backgroundColor: selectedRole === "student" ? '#8b5cf6' : '#f3f4f6',
+                backgroundColor: selectedRole === "student" ? '#1f2937' : '#f3f4f6',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -256,7 +256,7 @@ export default function LoginModal({ isOpen, onClose }) {
                   width: '24px',
                   height: '24px',
                   borderRadius: '50%',
-                  backgroundColor: '#8b5cf6',
+                  backgroundColor: '#1f2937',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -272,7 +272,7 @@ export default function LoginModal({ isOpen, onClose }) {
               onClick={() => setSelectedRole("trainer")}
               style={{
                 padding: '20px',
-                border: selectedRole === "trainer" ? '2px solid #8b5cf6' : '2px solid #e5e7eb',
+                border: selectedRole === "trainer" ? '2px solid #1f2937' : '2px solid #e5e7eb',
                 borderRadius: '12px',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
@@ -298,7 +298,7 @@ export default function LoginModal({ isOpen, onClose }) {
                 width: '48px',
                 height: '48px',
                 borderRadius: '12px',
-                backgroundColor: selectedRole === "trainer" ? '#8b5cf6' : '#f3f4f6',
+                backgroundColor: selectedRole === "trainer" ? '#1f2937' : '#f3f4f6',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -329,7 +329,7 @@ export default function LoginModal({ isOpen, onClose }) {
                   width: '24px',
                   height: '24px',
                   borderRadius: '50%',
-                  backgroundColor: '#8b5cf6',
+                  backgroundColor: '#1f2937',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -348,7 +348,7 @@ export default function LoginModal({ isOpen, onClose }) {
             style={{
               width: '100%',
               padding: '14px',
-              backgroundColor: selectedRole ? '#8b5cf6' : '#e5e7eb',
+              backgroundColor: selectedRole ? '#1f2937' : '#e5e7eb',
               color: selectedRole ? 'white' : '#9ca3af',
               border: 'none',
               borderRadius: '10px',
@@ -363,14 +363,14 @@ export default function LoginModal({ isOpen, onClose }) {
             }}
             onMouseEnter={(e) => {
               if (selectedRole) {
-                e.currentTarget.style.backgroundColor = '#7c3aed';
+                e.currentTarget.style.backgroundColor = '#111827';
                 e.currentTarget.style.transform = 'translateY(-1px)';
                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
               }
             }}
             onMouseLeave={(e) => {
               if (selectedRole) {
-                e.currentTarget.style.backgroundColor = '#8b5cf6';
+                e.currentTarget.style.backgroundColor = '#1f2937';
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = 'none';
               }

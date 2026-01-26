@@ -131,13 +131,13 @@ export default function AdminDashboard2() {
     datasets: [{
       label: 'Revenue',
       data: [45000, 52000, 48000, 61000, 58000, 67000],
-      borderColor: '#8b5cf6',
+      borderColor: '#1f2937',
       backgroundColor: 'rgba(139, 92, 246, 0.1)',
       fill: true,
       tension: 0.4,
       borderWidth: 2,
       pointRadius: 4,
-      pointBackgroundColor: '#8b5cf6',
+      pointBackgroundColor: '#1f2937',
       pointBorderColor: '#fff',
       pointBorderWidth: 2
     }]
@@ -159,9 +159,9 @@ export default function AdminDashboard2() {
     datasets: [{
       data: [35, 25, 20, 15, 5],
       backgroundColor: [
-        '#8b5cf6',
-        '#6d28d9',
-        '#7c3aed',
+        '#1f2937',
+        '#1f2937',
+        '#111827',
         '#a78bfa',
         '#c4b5fd'
       ],
@@ -272,7 +272,7 @@ export default function AdminDashboard2() {
           
           {/* Total Revenue Card */}
           <div style={{
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+            background: 'linear-gradient(135deg, #1f2937 0%, #1f2937 100%)',
             borderRadius: '16px',
             padding: '24px',
             color: '#fff',
@@ -374,7 +374,7 @@ export default function AdminDashboard2() {
             <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#111827', marginBottom: '16px' }}>
               Active Users Now
             </h3>
-            <div style={{ fontSize: '48px', fontWeight: '700', color: '#8b5cf6', marginBottom: '8px' }}>
+            <div style={{ fontSize: '48px', fontWeight: '700', color: '#1f2937', marginBottom: '8px' }}>
               {realStats.activeUsers}
             </div>
             <div style={{ fontSize: '13px', color: '#6b7280' }}>
@@ -492,7 +492,7 @@ export default function AdminDashboard2() {
                       width: '40px',
                       height: '40px',
                       borderRadius: '8px',
-                      background: `linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)`,
+                      background: `linear-gradient(135deg, #1f2937 0%, #1f2937 100%)`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -542,9 +542,9 @@ export default function AdminDashboard2() {
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                { title: 'Add Course', icon: '➕', path: '/admin/courses/add', color: '#8b5cf6' },
-                { title: 'Manage Users', icon: '👥', path: '/admin/users', color: '#6d28d9' },
-                { title: 'Issue Certificate', icon: '🎓', path: '/admin/certifications', color: '#7c3aed' },
+                { title: 'Add Course', icon: '➕', path: '/admin/courses/add', color: '#1f2937' },
+                { title: 'Manage Users', icon: '👥', path: '/admin/users', color: '#1f2937' },
+                { title: 'Issue Certificate', icon: '🎓', path: '/admin/certifications', color: '#111827' },
                 { title: 'View Reports', icon: '📊', path: '/admin/reports', color: '#a78bfa' }
               ].map((action, index) => (
                 <Link key={index} href={action.path} style={{
@@ -601,11 +601,11 @@ export default function AdminDashboard2() {
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
-                { icon: '👤', text: 'New user registered', time: '5 min ago', color: '#8b5cf6' },
-                { icon: '📚', text: 'Course published', time: '12 min ago', color: '#6d28d9' },
-                { icon: '🎓', text: 'Certificate issued', time: '25 min ago', color: '#7c3aed' },
+                { icon: '👤', text: 'New user registered', time: '5 min ago', color: '#1f2937' },
+                { icon: '📚', text: 'Course published', time: '12 min ago', color: '#1f2937' },
+                { icon: '🎓', text: 'Certificate issued', time: '25 min ago', color: '#111827' },
                 { icon: '💼', text: 'New job posting', time: '1 hour ago', color: '#a78bfa' },
-                { icon: '✅', text: 'Course completed', time: '2 hours ago', color: '#8b5cf6' }
+                { icon: '✅', text: 'Course completed', time: '2 hours ago', color: '#1f2937' }
               ].map((activity, index) => (
                 <div key={index} style={{
                   display: 'flex',

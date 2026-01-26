@@ -137,7 +137,7 @@ export default function UsersManagement() {
               width: '40px',
               height: '40px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -164,7 +164,7 @@ export default function UsersManagement() {
             style={{
               padding: '10px 20px',
               borderRadius: '8px',
-              background: '#8b5cf6',
+              background: '#1f2937',
               color: '#ffffff',
               fontSize: '14px',
               fontWeight: '600',
@@ -176,11 +176,11 @@ export default function UsersManagement() {
               transition: 'all 0.2s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#7c3aed';
+              e.currentTarget.style.background = '#111827';
               e.currentTarget.style.transform = 'translateY(-1px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#8b5cf6';
+              e.currentTarget.style.background = '#1f2937';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
@@ -206,9 +206,9 @@ export default function UsersManagement() {
       <div className="row g-3 mb-4">
 <<<<<<< HEAD
         {[
-          { title: "Total Users", value: "2,547", icon: "👥", color: "#8b5cf6", change: "+12%" },
+          { title: "Total Users", value: "2,547", icon: "👥", color: "#1f2937", change: "+12%" },
           { title: "Active Users", value: "2,234", icon: "✓", color: "#10b981", change: "+8%" },
-          { title: "Instructors", value: "45", icon: "🎓", color: "#6d28d9", change: "+3" },
+          { title: "Instructors", value: "45", icon: "🎓", color: "#1f2937", change: "+3" },
           { title: "New This Month", value: "156", icon: "📈", color: "#f59e0b", change: "+24%" }
         ].map((stat, index) => (
           <div
@@ -298,7 +298,7 @@ export default function UsersManagement() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ fontSize: '14px', fontWeight: '600', color: '#7c3aed' }}>
+            <div style={{ fontSize: '14px', fontWeight: '600', color: '#111827' }}>
               {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
             </div>
           </div>
@@ -373,7 +373,7 @@ export default function UsersManagement() {
         <div className="col-md-3">
           <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
             <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Instructors</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#8b5cf6' }}>45</div>
+            <div style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937' }}>45</div>
           </div>
         </div>
         <div className="col-md-3">
@@ -425,7 +425,7 @@ export default function UsersManagement() {
                   transition: 'all 0.2s'
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#8b5cf6';
+                  e.currentTarget.style.borderColor = '#1f2937';
                   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
                 }}
                 onBlur={(e) => {
@@ -651,7 +651,7 @@ export default function UsersManagement() {
                         width: '44px',
                         height: '44px',
                         borderRadius: '10px',
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -714,7 +714,7 @@ export default function UsersManagement() {
                       fontWeight: '600',
                       background: user.role === 'Instructor' ? '#ede9fe' : '#dbeafe',
 >>>>>>> ce58dfb9a29404e0e53762f89e30f67778f4a696
-                      color: user.role === 'Instructor' ? '#7c3aed' : '#2563eb'
+                      color: user.role === 'Instructor' ? '#111827' : '#2563eb'
                     }}
                   >
                     {user.role}

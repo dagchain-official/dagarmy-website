@@ -276,7 +276,7 @@ export default function AddCourseWizard() {
             width: '48px',
             height: '48px',
             borderRadius: '14px',
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -307,8 +307,8 @@ export default function AddCourseWizard() {
                   flex: 1,
                   padding: '20px',
                   borderRadius: '16px',
-                  background: isActive ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' : '#fff',
-                  border: `2px solid ${isActive ? '#8b5cf6' : isCompleted ? '#10b981' : '#e2e8f0'}`,
+                  background: isActive ? 'linear-gradient(135deg, #1f2937 0%, #111827 100%)' : '#fff',
+                  border: `2px solid ${isActive ? '#1f2937' : isCompleted ? '#10b981' : '#e2e8f0'}`,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
@@ -383,7 +383,7 @@ export default function AddCourseWizard() {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -406,7 +406,7 @@ export default function AddCourseWizard() {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -431,7 +431,7 @@ export default function AddCourseWizard() {
                     fontFamily: 'inherit',
                     resize: 'vertical'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -453,7 +453,7 @@ export default function AddCourseWizard() {
                 }}
                 onDragOver={(e) => {
                   e.preventDefault();
-                  e.currentTarget.style.borderColor = '#8b5cf6';
+                  e.currentTarget.style.borderColor = '#1f2937';
                   e.currentTarget.style.background = '#faf5ff';
                 }}
                 onDragLeave={(e) => {
@@ -486,7 +486,7 @@ export default function AddCourseWizard() {
                         width: '60px',
                         height: '60px',
                         borderRadius: '12px',
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -610,7 +610,7 @@ export default function AddCourseWizard() {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -632,7 +632,7 @@ export default function AddCourseWizard() {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -643,7 +643,7 @@ export default function AddCourseWizard() {
                     type="checkbox"
                     checked={courseData.is_free}
                     onChange={(e) => handleCourseChange('is_free', e.target.checked)}
-                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#8b5cf6' }}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#1f2937' }}
                   />
                   <span style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>Free Course</span>
                 </label>
@@ -653,7 +653,7 @@ export default function AddCourseWizard() {
                     type="checkbox"
                     checked={courseData.is_featured}
                     onChange={(e) => handleCourseChange('is_featured', e.target.checked)}
-                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#8b5cf6' }}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#1f2937' }}
                   />
                   <span style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>Featured Course</span>
                 </label>
@@ -681,7 +681,7 @@ export default function AddCourseWizard() {
               marginBottom: '24px'
             }}>
               <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Layers size={20} style={{ color: '#8b5cf6' }} />
+                <Layers size={20} style={{ color: '#1f2937' }} />
                 Module #{currentModule.module_number}
               </h3>
 
@@ -704,7 +704,7 @@ export default function AddCourseWizard() {
                       outline: 'none',
                       background: '#fff'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -727,7 +727,7 @@ export default function AddCourseWizard() {
                       outline: 'none',
                       background: '#fff'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -775,7 +775,7 @@ export default function AddCourseWizard() {
                       fontFamily: 'inherit',
                       resize: 'vertical'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -944,7 +944,7 @@ export default function AddCourseWizard() {
                   width: '100%',
                   padding: '14px',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                   color: '#fff',
                   border: 'none',
                   fontSize: '14px',
@@ -1029,7 +1029,7 @@ export default function AddCourseWizard() {
                   <div style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', marginBottom: '4px', textTransform: 'uppercase' }}>
                     Modules
                   </div>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#8b5cf6' }}>
+                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#1f2937' }}>
                     {modules.length + (currentModule.title && currentLessons.length > 0 ? 1 : 0)}
                   </div>
                 </div>
@@ -1119,7 +1119,7 @@ export default function AddCourseWizard() {
             style={{
               padding: '14px 24px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               border: 'none',
               fontSize: '14px',
               fontWeight: '600',

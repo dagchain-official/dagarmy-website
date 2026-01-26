@@ -171,7 +171,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
                 outline: 'none',
                 transition: 'border-color 0.2s',
               }}
-              onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
+              onFocus={(e) => e.target.style.borderColor = '#1f2937'}
               onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
             />
           </div>
@@ -202,7 +202,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
                 outline: 'none',
                 transition: 'border-color 0.2s',
               }}
-              onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
+              onFocus={(e) => e.target.style.borderColor = '#1f2937'}
               onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
             />
           </div>
@@ -233,7 +233,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
                 outline: 'none',
                 transition: 'border-color 0.2s',
               }}
-              onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
+              onFocus={(e) => e.target.style.borderColor = '#1f2937'}
               onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
             />
             {socialEmail && formData.email !== socialEmail && (
@@ -275,7 +275,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
                   transition: 'border-color 0.2s',
                   textAlign: 'center'
                 }}
-                onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
+                onFocus={(e) => e.target.style.borderColor = '#1f2937'}
                 onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
               />
               <input
@@ -294,7 +294,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
                   outline: 'none',
                   transition: 'border-color 0.2s',
                 }}
-                onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
+                onFocus={(e) => e.target.style.borderColor = '#1f2937'}
                 onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
               />
             </div>
@@ -306,7 +306,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
             style={{
               width: '100%',
               padding: '14px',
-              backgroundColor: isSubmitting ? '#d1d5db' : '#8b5cf6',
+              backgroundColor: isSubmitting ? '#d1d5db' : '#1f2937',
               color: 'white',
               border: 'none',
               borderRadius: '8px',
@@ -316,8 +316,8 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
               transition: 'background-color 0.2s',
               marginTop: '10px'
             }}
-            onMouseEnter={(e) => !isSubmitting && (e.target.style.backgroundColor = '#7c3aed')}
-            onMouseLeave={(e) => !isSubmitting && (e.target.style.backgroundColor = '#8b5cf6')}
+            onMouseEnter={(e) => !isSubmitting && (e.target.style.backgroundColor = '#111827')}
+            onMouseLeave={(e) => !isSubmitting && (e.target.style.backgroundColor = '#1f2937')}
           >
             {isSubmitting ? 'Saving...' : 'Complete Profile'}
           </button>

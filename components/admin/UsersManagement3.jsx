@@ -292,7 +292,7 @@ export default function UsersManagement3() {
   const getRoleColor = (role) => {
     const colors = {
       admin: { bg: '#fef3c7', text: '#92400e', icon: Shield, gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)' },
-      instructor: { bg: '#ddd6fe', text: '#5b21b6', icon: GraduationCap, gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)' },
+      instructor: { bg: '#ddd6fe', text: '#5b21b6', icon: GraduationCap, gradient: 'linear-gradient(135deg, #a78bfa 0%, #1f2937 100%)' },
       student: { bg: '#dbeafe', text: '#1e40af', icon: Users, gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)' }
     };
     return colors[role.toLowerCase()] || colors.student;
@@ -367,7 +367,7 @@ export default function UsersManagement3() {
                 width: '48px',
                 height: '48px',
                 borderRadius: '14px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -391,7 +391,7 @@ export default function UsersManagement3() {
               style={{
                 padding: '12px 20px',
                 borderRadius: '12px',
-                background: showDatePicker ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' : '#fff',
+                background: showDatePicker ? 'linear-gradient(135deg, #1f2937 0%, #111827 100%)' : '#fff',
                 color: showDatePicker ? '#fff' : '#475569',
                 border: showDatePicker ? 'none' : '2px solid #e2e8f0',
                 fontSize: '14px',
@@ -405,7 +405,7 @@ export default function UsersManagement3() {
               }}
               onMouseEnter={(e) => {
                 if (!showDatePicker) {
-                  e.currentTarget.style.borderColor = '#8b5cf6';
+                  e.currentTarget.style.borderColor = '#1f2937';
                 }
                 e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = showDatePicker ? '0 6px 16px rgba(139, 92, 246, 0.4)' : '0 4px 12px rgba(139, 92, 246, 0.15)';
@@ -479,7 +479,7 @@ export default function UsersManagement3() {
             <button style={{
               padding: '12px 24px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -512,13 +512,13 @@ export default function UsersManagement3() {
             borderRadius: '16px',
             padding: '24px',
             marginBottom: '24px',
-            border: '2px solid #8b5cf6',
+            border: '2px solid #1f2937',
             boxShadow: '0 4px 12px rgba(139, 92, 246, 0.15)'
           }}>
             <div style={{ marginBottom: '16px', padding: '12px 16px', background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)', borderRadius: '10px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <Calendar size={16} style={{ color: '#8b5cf6' }} />
-                <span style={{ fontSize: '13px', fontWeight: '700', color: '#7c3aed' }}>
+                <Calendar size={16} style={{ color: '#1f2937' }} />
+                <span style={{ fontSize: '13px', fontWeight: '700', color: '#111827' }}>
                   Date Range Required for CSV Export
                 </span>
               </div>
@@ -555,7 +555,7 @@ export default function UsersManagement3() {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -576,7 +576,7 @@ export default function UsersManagement3() {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                 />
               </div>
@@ -621,8 +621,8 @@ export default function UsersManagement3() {
             value: loading ? '...' : stats.totalUsers.toLocaleString(), 
             change: `+${stats.growthRate}% this month`,
             icon: Users,
-            color: '#8b5cf6',
-            bgGradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            color: '#1f2937',
+            bgGradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             lightBg: '#f5f3ff'
           },
           { 
@@ -765,7 +765,7 @@ export default function UsersManagement3() {
                 background: '#f8fafc'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#8b5cf6';
+                e.currentTarget.style.borderColor = '#1f2937';
                 e.currentTarget.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.1)';
                 e.currentTarget.style.background = '#fff';
               }}
@@ -868,7 +868,7 @@ export default function UsersManagement3() {
                 width: '40px',
                 height: '40px',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -879,10 +879,10 @@ export default function UsersManagement3() {
                 {selectedUsers.length}
               </div>
               <div>
-                <div style={{ fontSize: '14px', fontWeight: '700', color: '#7c3aed' }}>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: '#111827' }}>
                   {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
                 </div>
-                <div style={{ fontSize: '12px', color: '#8b5cf6' }}>
+                <div style={{ fontSize: '12px', color: '#1f2937' }}>
                   Bulk actions available
                 </div>
               </div>
@@ -968,7 +968,7 @@ export default function UsersManagement3() {
             type="checkbox"
             checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
             onChange={handleSelectAll}
-            style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#8b5cf6' }}
+            style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#1f2937' }}
           />
           <div style={{ fontSize: '11px', fontWeight: '800', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>
             User Details
@@ -1004,7 +1004,7 @@ export default function UsersManagement3() {
                 width: '60px',
                 height: '60px',
                 border: '4px solid #f1f5f9',
-                borderTop: '4px solid #8b5cf6',
+                borderTop: '4px solid #1f2937',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',
                 margin: '0 auto 20px'
@@ -1032,7 +1032,7 @@ export default function UsersManagement3() {
                 style={{
                   padding: '12px 24px',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                   color: '#fff',
                   border: 'none',
                   fontSize: '14px',
@@ -1074,7 +1074,7 @@ export default function UsersManagement3() {
                     type="checkbox"
                     checked={selectedUsers.includes(user.id)}
                     onChange={() => handleSelectUser(user.id)}
-                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#8b5cf6' }}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#1f2937' }}
                     onClick={(e) => e.stopPropagation()}
                   />
                   
@@ -1155,7 +1155,7 @@ export default function UsersManagement3() {
                       fontWeight: '700',
                       color: '#0f172a'
                     }}>
-                      <BookOpen size={14} style={{ color: '#8b5cf6' }} />
+                      <BookOpen size={14} style={{ color: '#1f2937' }} />
                       {user.courses}
                     </span>
                   </div>
@@ -1186,7 +1186,7 @@ export default function UsersManagement3() {
                   
                   {/* Activity */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Clock size={12} style={{ color: '#8b5cf6', flexShrink: 0 }} />
+                    <Clock size={12} style={{ color: '#1f2937', flexShrink: 0 }} />
                     <span style={{ fontSize: '13px', fontWeight: '600', color: '#475569', whiteSpace: 'nowrap' }}>
                       {user.lastActive}
                     </span>
@@ -1262,7 +1262,7 @@ export default function UsersManagement3() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = '#f8fafc';
-                      e.currentTarget.style.borderColor = '#8b5cf6';
+                      e.currentTarget.style.borderColor = '#1f2937';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = '#fff';
@@ -1318,13 +1318,13 @@ export default function UsersManagement3() {
           boxShadow: '0 4px 12px rgba(0,0,0,0.04)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <BarChart3 size={20} style={{ color: '#8b5cf6' }} />
+            <BarChart3 size={20} style={{ color: '#1f2937' }} />
             <div>
               <div style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>
                 Showing <span style={{ fontWeight: '800', color: '#0f172a' }}>{filteredUsers.length}</span> of <span style={{ fontWeight: '800', color: '#0f172a' }}>{users.length}</span> users
               </div>
               {selectedUsers.length > 0 && (
-                <div style={{ fontSize: '12px', color: '#8b5cf6', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: '#1f2937', marginTop: '2px' }}>
                   {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
                 </div>
               )}
@@ -1483,7 +1483,7 @@ export default function UsersManagement3() {
                       border: '1px solid #e2e8f0'
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                        <Icon size={14} style={{ color: '#8b5cf6' }} />
+                        <Icon size={14} style={{ color: '#1f2937' }} />
                         <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           {field.label}
                         </span>
@@ -1504,7 +1504,7 @@ export default function UsersManagement3() {
                   border: '1px solid #e2e8f0'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <FileText size={14} style={{ color: '#8b5cf6' }} />
+                    <FileText size={14} style={{ color: '#1f2937' }} />
                     <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                       Bio
                     </span>
@@ -1609,7 +1609,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1632,7 +1632,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1655,7 +1655,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1678,7 +1678,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1701,7 +1701,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1725,7 +1725,7 @@ export default function UsersManagement3() {
                       background: '#fff',
                       cursor: 'pointer'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}>
                     <option value="student">Student</option>
                     <option value="instructor">Instructor</option>
@@ -1751,7 +1751,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1774,7 +1774,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1797,7 +1797,7 @@ export default function UsersManagement3() {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>
@@ -1821,7 +1821,7 @@ export default function UsersManagement3() {
                       background: '#fff',
                       cursor: 'pointer'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -1848,7 +1848,7 @@ export default function UsersManagement3() {
                       fontFamily: 'inherit',
                       resize: 'vertical'
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
                   />
                 </div>

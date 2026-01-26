@@ -235,13 +235,13 @@ export default function Register() {
                     className="fw-5 fs-15 wow fadeInUp"
                     data-wow-delay="0s"
                     style={{
-                      color: "#8b5cf6",
+                      color: "#1f2937",
                       fontWeight: "600",
                       textDecoration: "none",
                       transition: "all 0.3s ease",
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#7c3aed"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#8b5cf6"}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#111827"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#1f2937"}
                   >
                     Sign in
                   </Link>
@@ -307,7 +307,7 @@ export default function Register() {
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "#f9fafb";
-                          e.currentTarget.style.borderColor = "#8b5cf6";
+                          e.currentTarget.style.borderColor = "#1f2937";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = "#ffffff";
@@ -341,7 +341,7 @@ export default function Register() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#8b5cf6";
+                            e.currentTarget.style.borderColor = "#1f2937";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "#ffffff";
@@ -369,7 +369,7 @@ export default function Register() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#8b5cf6";
+                            e.currentTarget.style.borderColor = "#1f2937";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "#ffffff";
@@ -395,7 +395,7 @@ export default function Register() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#8b5cf6";
+                            e.currentTarget.style.borderColor = "#1f2937";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "#ffffff";
@@ -461,7 +461,7 @@ export default function Register() {
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "#f9fafb";
-                          e.currentTarget.style.borderColor = "#8b5cf6";
+                          e.currentTarget.style.borderColor = "#1f2937";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = "#ffffff";
@@ -488,7 +488,7 @@ export default function Register() {
                         onClick={() => setSelectedRole('student')}
                         style={{
                           border: '2px solid',
-                          borderColor: selectedRole === 'student' ? '#7C3AED' : '#e5e7eb',
+                          borderColor: selectedRole === 'student' ? '#111827' : '#e5e7eb',
                           padding: '20px',
                           borderRadius: '8px',
                           cursor: 'pointer',
@@ -504,7 +504,7 @@ export default function Register() {
                         onClick={() => setSelectedRole('trainer')}
                         style={{
                           border: '2px solid',
-                          borderColor: selectedRole === 'trainer' ? '#7C3AED' : '#e5e7eb',
+                          borderColor: selectedRole === 'trainer' ? '#111827' : '#e5e7eb',
                           padding: '20px',
                           borderRadius: '8px',
                           cursor: 'pointer',

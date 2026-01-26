@@ -147,7 +147,7 @@ export default function DashboardNav2() {
           <div style={{
             width: '32px',
             height: '32px',
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            background: 'linear-gradient(135deg, #6366f1 0%, #1f2937 100%)',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',

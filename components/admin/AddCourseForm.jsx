@@ -142,7 +142,7 @@ export default function AddCourseForm() {
             width: '40px',
             height: '40px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -330,7 +330,7 @@ export default function AddCourseForm() {
                   width: '100%',
                   padding: '12px 16px',
 <<<<<<< HEAD
-                  border: `1px solid ${focusedField === 'title' ? '#8b5cf6' : '#e5e7eb'}`,
+                  border: `1px solid ${focusedField === 'title' ? '#1f2937' : '#e5e7eb'}`,
                   borderRadius: '10px',
                   fontSize: '14px',
                   outline: 'none',
@@ -370,7 +370,7 @@ export default function AddCourseForm() {
                   width: '100%',
                   padding: '12px 16px',
 <<<<<<< HEAD
-                  border: `1px solid ${focusedField === 'category' ? '#8b5cf6' : '#e5e7eb'}`,
+                  border: `1px solid ${focusedField === 'category' ? '#1f2937' : '#e5e7eb'}`,
                   borderRadius: '10px',
                   fontSize: '14px',
                   cursor: 'pointer',
@@ -417,7 +417,7 @@ export default function AddCourseForm() {
                   width: '100%',
                   padding: '12px 16px',
 <<<<<<< HEAD
-                  border: `1px solid ${focusedField === 'instructor' ? '#8b5cf6' : '#e5e7eb'}`,
+                  border: `1px solid ${focusedField === 'instructor' ? '#1f2937' : '#e5e7eb'}`,
                   borderRadius: '10px',
                   fontSize: '14px',
                   outline: 'none',
@@ -716,7 +716,7 @@ export default function AddCourseForm() {
                   width: '100%',
                   padding: '12px 16px',
 <<<<<<< HEAD
-                  border: `1px solid ${focusedField === 'description' ? '#8b5cf6' : '#e5e7eb'}`,
+                  border: `1px solid ${focusedField === 'description' ? '#1f2937' : '#e5e7eb'}`,
                   borderRadius: '10px',
                   fontSize: '14px',
                   resize: 'vertical',
@@ -744,7 +744,7 @@ export default function AddCourseForm() {
                 padding: '12px 32px',
                 borderRadius: '10px',
 <<<<<<< HEAD
-                background: isSubmitting ? '#9ca3af' : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: isSubmitting ? '#9ca3af' : 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 color: '#ffffff',
 =======
                 background: isSubmitting ? '#9ca3af' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

@@ -250,7 +250,7 @@ export default function ProgramManagement2() {
   const lessonTypeConfig = {
     'theory': { icon: FileText, label: 'Theory', color: '#3b82f6' },
     'drill': { icon: Zap, label: 'Drill', color: '#f59e0b' },
-    'strategy': { icon: Target, label: 'Strategy', color: '#8b5cf6' },
+    'strategy': { icon: Target, label: 'Strategy', color: '#1f2937' },
     'graduation': { icon: Award, label: 'Graduation', color: '#10b981' }
   };
 
@@ -268,7 +268,7 @@ export default function ProgramManagement2() {
           width: '48px',
           height: '48px',
           border: '4px solid #f3f4f6',
-          borderTop: '4px solid #8b5cf6',
+          borderTop: '4px solid #1f2937',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }} />
@@ -745,8 +745,8 @@ export default function ProgramManagement2() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = '#f9fafb';
-                      e.currentTarget.style.borderColor = '#8b5cf6';
-                      e.currentTarget.style.color = '#8b5cf6';
+                      e.currentTarget.style.borderColor = '#1f2937';
+                      e.currentTarget.style.color = '#1f2937';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = '#fff';
@@ -829,7 +829,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -851,7 +851,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -873,7 +873,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -919,7 +919,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -943,7 +943,7 @@ export default function ProgramManagement2() {
                     resize: 'vertical',
                     fontFamily: 'inherit'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -976,7 +976,7 @@ export default function ProgramManagement2() {
                   padding: '12px', 
                   borderRadius: '8px', 
                   border: 'none', 
-                  background: '#8b5cf6', 
+                  background: '#1f2937', 
                   color: '#fff', 
                   fontSize: '14px', 
                   fontWeight: '600', 
@@ -987,8 +987,8 @@ export default function ProgramManagement2() {
                   justifyContent: 'center',
                   gap: '8px'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#7c3aed'}
-                onMouseLeave={(e) => e.currentTarget.style.background = '#8b5cf6'}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#111827'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#1f2937'}
               >
                 <Save size={16} />
                 Save Module
@@ -1063,7 +1063,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -1085,7 +1085,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -1132,7 +1132,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -1156,7 +1156,7 @@ export default function ProgramManagement2() {
                     resize: 'vertical',
                     fontFamily: 'inherit'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -1178,7 +1178,7 @@ export default function ProgramManagement2() {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }} 
-                  onFocus={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -1211,7 +1211,7 @@ export default function ProgramManagement2() {
                   padding: '12px', 
                   borderRadius: '8px', 
                   border: 'none', 
-                  background: '#8b5cf6', 
+                  background: '#1f2937', 
                   color: '#fff', 
                   fontSize: '14px', 
                   fontWeight: '600', 
@@ -1222,8 +1222,8 @@ export default function ProgramManagement2() {
                   justifyContent: 'center',
                   gap: '8px'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#7c3aed'}
-                onMouseLeave={(e) => e.currentTarget.style.background = '#8b5cf6'}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#111827'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#1f2937'}
               >
                 <Save size={16} />
                 Save Lesson

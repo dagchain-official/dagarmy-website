@@ -143,7 +143,7 @@ export default function UsersManagement2() {
           <button style={{
             padding: '12px 24px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             color: '#fff',
             border: 'none',
             fontSize: '14px',
@@ -177,8 +177,8 @@ export default function UsersManagement2() {
             value: loading ? '...' : stats.totalUsers.toLocaleString(), 
             change: `+${stats.growthRate}%`,
             icon: Users,
-            color: '#8b5cf6',
-            bgGradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)'
+            color: '#1f2937',
+            bgGradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)'
           },
           { 
             title: 'Active Now', 
@@ -299,7 +299,7 @@ export default function UsersManagement2() {
                 transition: 'all 0.2s'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#8b5cf6';
+                e.currentTarget.style.borderColor = '#1f2937';
                 e.currentTarget.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.1)';
               }}
               onBlur={(e) => {
@@ -388,7 +388,7 @@ export default function UsersManagement2() {
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-            <div style={{ fontSize: '14px', fontWeight: '600', color: '#7c3aed' }}>
+            <div style={{ fontSize: '14px', fontWeight: '600', color: '#111827' }}>
               {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
             </div>
             <div style={{ display: 'flex', gap: '12px' }}>
@@ -525,7 +525,7 @@ export default function UsersManagement2() {
                       width: '44px',
                       height: '44px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -622,7 +622,7 @@ export default function UsersManagement2() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = '#f9fafb';
-                      e.currentTarget.style.borderColor = '#8b5cf6';
+                      e.currentTarget.style.borderColor = '#1f2937';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = '#fff';

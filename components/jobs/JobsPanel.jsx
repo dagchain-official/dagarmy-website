@@ -320,7 +320,7 @@ export default function JobsPanel() {
                       onClick={() => setSelectedCategory(cat)}
                       style={{
                         padding: '12px 16px',
-                        border: selectedCategory.name === cat.name ? '2px solid #8b5cf6' : '1px solid #e5e7eb',
+                        border: selectedCategory.name === cat.name ? '2px solid #1f2937' : '1px solid #e5e7eb',
                         borderRadius: '8px',
                         background: selectedCategory.name === cat.name ? '#f3e8ff' : '#fff',
                         textAlign: 'left',
@@ -434,7 +434,7 @@ export default function JobsPanel() {
                 disabled={isLoading}
                 className="tf-btn w-100"
                 style={{
-                  background: isLoading ? '#9ca3af' : '#8b5cf6',
+                  background: isLoading ? '#9ca3af' : '#1f2937',
                   color: 'white',
                   padding: '12px',
                   borderRadius: '8px',
@@ -521,11 +521,11 @@ export default function JobsPanel() {
                             }}
                             onError={(e) => {
                               e.target.style.display = 'none';
-                              e.target.parentElement.innerHTML = `<div style="font-size: 24px; font-weight: 700; color: #8b5cf6;">${job.company?.charAt(0) || 'C'}</div>`;
+                              e.target.parentElement.innerHTML = `<div style="font-size: 24px; font-weight: 700; color: #1f2937;">${job.company?.charAt(0) || 'C'}</div>`;
                             }}
                           />
                         ) : (
-                          <div style={{ fontSize: '24px', fontWeight: '700', color: '#8b5cf6' }}>
+                          <div style={{ fontSize: '24px', fontWeight: '700', color: '#1f2937' }}>
                             {job.company?.charAt(0) || 'C'}
                           </div>
                         )}
@@ -543,7 +543,7 @@ export default function JobsPanel() {
                           <span
                             style={{
                               background: '#f3e8ff',
-                              color: '#7c3aed',
+                              color: '#111827',
                               padding: '4px 12px',
                               borderRadius: '6px',
                               fontSize: '12px',
@@ -584,7 +584,7 @@ export default function JobsPanel() {
                     <div className="d-flex flex-wrap gap-4 mb-3" style={{ paddingLeft: '76px' }}>
                       {job.location && (
                         <div className="d-flex align-items-center gap-2">
-                          <i className="flaticon-location" style={{ fontSize: '16px', color: '#8b5cf6' }} />
+                          <i className="flaticon-location" style={{ fontSize: '16px', color: '#1f2937' }} />
                           <span style={{ fontSize: '14px', color: '#4b5563' }}>
                             {cleanText(job.location)}
                           </span>
@@ -592,7 +592,7 @@ export default function JobsPanel() {
                       )}
                       {job.level && (
                         <div className="d-flex align-items-center gap-2">
-                          <i className="flaticon-user-1" style={{ fontSize: '16px', color: '#8b5cf6' }} />
+                          <i className="flaticon-user-1" style={{ fontSize: '16px', color: '#1f2937' }} />
                           <span style={{ fontSize: '14px', color: '#4b5563' }}>
                             {cleanText(job.level)}
                           </span>
@@ -628,9 +628,9 @@ export default function JobsPanel() {
                           flex: 1,
                           padding: '12px 20px',
                           borderRadius: '8px',
-                          border: '2px solid #8b5cf6',
+                          border: '2px solid #1f2937',
                           background: '#fff',
-                          color: '#8b5cf6',
+                          color: '#1f2937',
                           fontSize: '14px',
                           fontWeight: '600',
                           cursor: 'pointer',
@@ -766,11 +766,11 @@ export default function JobsPanel() {
                         }}
                         onError={(e) => {
                           e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = `<div style="font-size: 28px; font-weight: 700; color: #8b5cf6;">${selectedJob.company?.charAt(0) || 'C'}</div>`;
+                          e.target.parentElement.innerHTML = `<div style="font-size: 28px; font-weight: 700; color: #1f2937;">${selectedJob.company?.charAt(0) || 'C'}</div>`;
                         }}
                       />
                     ) : (
-                      <div style={{ fontSize: '28px', fontWeight: '700', color: '#8b5cf6' }}>
+                      <div style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937' }}>
                         {selectedJob.company?.charAt(0) || 'C'}
                       </div>
                     )}
@@ -826,7 +826,7 @@ export default function JobsPanel() {
                 <div className="col-md-6">
                   <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
                     <div className="d-flex align-items-center gap-3">
-                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#1f2937', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <i className="flaticon-location" style={{ fontSize: '18px', color: '#fff' }} />
                       </div>
                       <div>
@@ -855,7 +855,7 @@ export default function JobsPanel() {
                 </div>
               </div>
               <div className="d-flex flex-wrap gap-2">
-                <span style={{ background: '#f3e8ff', color: '#7c3aed', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
+                <span style={{ background: '#f3e8ff', color: '#111827', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
                   {selectedJob.category}
                 </span>
                 <span style={{ background: '#f0fdf4', color: '#15803d', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
@@ -868,7 +868,7 @@ export default function JobsPanel() {
             <div className="mb-4">
               <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                 <h5 className="fw-6 mb-3" style={{ fontSize: '18px', color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '4px', height: '24px', background: '#8b5cf6', borderRadius: '2px' }}></div>
+                  <div style={{ width: '4px', height: '24px', background: '#1f2937', borderRadius: '2px' }}></div>
                   About the job
                 </h5>
                 <div style={{ 

@@ -118,7 +118,7 @@ export default function CoursesManagement() {
               width: '48px',
               height: '48px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -147,7 +147,7 @@ export default function CoursesManagement() {
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#ffffff',
               fontSize: '14px',
               fontWeight: '600',
@@ -219,10 +219,10 @@ export default function CoursesManagement() {
       <div className="row g-3 mb-4">
 <<<<<<< HEAD
         {[
-          { title: "Total Courses", value: stats.total, icon: "📚", color: "#8b5cf6", change: "+3" },
+          { title: "Total Courses", value: stats.total, icon: "📚", color: "#1f2937", change: "+3" },
           { title: "Published", value: stats.published, icon: "✓", color: "#10b981", change: "+2" },
           { title: "Drafts", value: stats.drafts, icon: "📝", color: "#f59e0b", change: "0" },
-          { title: "Total Students", value: stats.totalStudents.toLocaleString(), icon: "👥", color: "#6d28d9", change: "+156" }
+          { title: "Total Students", value: stats.totalStudents.toLocaleString(), icon: "👥", color: "#1f2937", change: "+156" }
         ].map((stat, index) => (
           <div
             key={index}
@@ -332,7 +332,7 @@ export default function CoursesManagement() {
         <div className="col-md-3">
           <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' }}>
             <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Total Students</div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: '#8b5cf6' }}>{stats.totalStudents.toLocaleString()}</div>
+            <div style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937' }}>{stats.totalStudents.toLocaleString()}</div>
           </div>
         </div>
 >>>>>>> ce58dfb9a29404e0e53762f89e30f67778f4a696
@@ -382,7 +382,7 @@ export default function CoursesManagement() {
                   transition: 'all 0.3s ease'
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#8b5cf6';
+                  e.currentTarget.style.borderColor = '#1f2937';
                   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
                 }}
                 onBlur={(e) => {
@@ -643,7 +643,7 @@ export default function CoursesManagement() {
                     backdropFilter: 'blur(10px)',
                     fontSize: '11px',
                     fontWeight: '700',
-                    color: course.price === 'FREE' ? '#10b981' : '#8b5cf6'
+                    color: course.price === 'FREE' ? '#10b981' : '#1f2937'
                   }}>
                     {course.price}
                   </div>
@@ -656,7 +656,7 @@ export default function CoursesManagement() {
                       padding: '4px 10px',
                       borderRadius: '6px',
                       background: 'rgba(139, 92, 246, 0.1)',
-                      color: '#7c3aed',
+                      color: '#111827',
                       fontSize: '11px',
                       fontWeight: '600',
                       textTransform: 'uppercase',
@@ -878,7 +878,7 @@ export default function CoursesManagement() {
                         padding: '10px',
                         borderRadius: '8px',
                         border: 'none',
-                        background: '#8b5cf6',
+                        background: '#1f2937',
                         fontSize: '13px',
                         fontWeight: '600',
                         color: '#ffffff',
@@ -886,11 +886,11 @@ export default function CoursesManagement() {
                         transition: 'all 0.2s'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = '#7c3aed';
+                        e.currentTarget.style.background = '#111827';
                         e.currentTarget.style.transform = 'scale(1.02)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = '#8b5cf6';
+                        e.currentTarget.style.background = '#1f2937';
                         e.currentTarget.style.transform = 'scale(1)';
                       }}
                     >
@@ -960,7 +960,7 @@ export default function CoursesManagement() {
                         padding: '4px 10px',
                         borderRadius: '6px',
                         background: 'rgba(139, 92, 246, 0.1)',
-                        color: '#7c3aed',
+                        color: '#111827',
                         fontSize: '11px',
                         fontWeight: '600'
                       }}>
@@ -1023,15 +1023,15 @@ export default function CoursesManagement() {
                             padding: '6px 12px',
                             borderRadius: '6px',
                             border: 'none',
-                            background: '#8b5cf6',
+                            background: '#1f2937',
                             fontSize: '12px',
                             fontWeight: '600',
                             color: '#ffffff',
                             cursor: 'pointer',
                             transition: 'all 0.2s'
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = '#7c3aed'}
-                          onMouseLeave={(e) => e.currentTarget.style.background = '#8b5cf6'}
+                          onMouseEnter={(e) => e.currentTarget.style.background = '#111827'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = '#1f2937'}
                         >
                           View
                         </button>

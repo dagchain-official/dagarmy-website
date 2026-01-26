@@ -68,7 +68,7 @@ export default function Banner() {
               {/* Explore Courses Button with exact hero section effect */}
               <a
                 href="/course-list"
-                className="wow fadeInUp relative inline-flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                className="wow fadeInUp relative inline-flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                 data-wow-delay="0.2s"
                 style={{
                   textDecoration: 'none',

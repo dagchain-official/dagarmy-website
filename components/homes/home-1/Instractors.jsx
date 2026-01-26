@@ -46,18 +46,18 @@ export default function Instractors() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#8b5cf6',
+                    color: '#1f2937',
                     fontSize: '16px',
                     fontWeight: '600',
                     textDecoration: 'none',
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#6d28d9';
+                    e.currentTarget.style.color = '#1f2937';
                     e.currentTarget.style.gap = '12px';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     e.currentTarget.style.gap = '8px';
                   }}
                 >
@@ -115,7 +115,7 @@ export default function Instractors() {
                               key={star}
                               className="icon-star-1"
                               style={{
-                                color: star <= Math.floor(instructor.rating) ? '#8b5cf6' : '#e5e7eb',
+                                color: star <= Math.floor(instructor.rating) ? '#1f2937' : '#e5e7eb',
                                 fontSize: '14px'
                               }}
                             />

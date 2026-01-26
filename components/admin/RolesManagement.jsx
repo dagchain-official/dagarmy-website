@@ -129,7 +129,7 @@ export default function RolesManagement() {
   };
 
   const roleConfig = {
-    'organization': { icon: Shield, color: '#8b5cf6', label: 'Organization', bg: '#f3e8ff' },
+    'organization': { icon: Shield, color: '#1f2937', label: 'Organization', bg: '#f3e8ff' },
     'trainer': { icon: Users, color: '#3b82f6', label: 'Trainer', bg: '#dbeafe' },
     'mentor': { icon: Award, color: '#10b981', label: 'Mentor', bg: '#d1fae5' },
     'instructor': { icon: BookOpen, color: '#f59e0b', label: 'Instructor', bg: '#fef3c7' }
@@ -155,7 +155,7 @@ export default function RolesManagement() {
           width: '48px',
           height: '48px',
           border: '4px solid #f3f4f6',
-          borderTop: '4px solid #8b5cf6',
+          borderTop: '4px solid #1f2937',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }} />
@@ -339,7 +339,7 @@ export default function RolesManagement() {
             style={{
               padding: '12px 24px',
               borderRadius: '8px',
-              background: '#8b5cf6',
+              background: '#1f2937',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -731,7 +731,7 @@ export default function RolesManagement() {
                   padding: '12px', 
                   borderRadius: '8px', 
                   border: 'none', 
-                  background: '#8b5cf6', 
+                  background: '#1f2937', 
                   color: '#fff', 
                   fontSize: '14px', 
                   fontWeight: '600', 

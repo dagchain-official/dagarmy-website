@@ -6,7 +6,7 @@ export default function PageTitle2() {
     <div
       className="page-title"
       style={{
-        background: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)",
+        background: "linear-gradient(135deg, #1f2937 0%, #1f2937 100%)",
         padding: "60px 0",
         position: "relative",
         overflow: "hidden",

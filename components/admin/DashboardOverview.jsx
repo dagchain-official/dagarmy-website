@@ -31,7 +31,7 @@ export default function DashboardOverview() {
           <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
       ),
-      color: "#7c3aed"
+      color: "#111827"
     },
     {
       label: "ACTIVE COURSES",
@@ -269,7 +269,7 @@ export default function DashboardOverview() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = '#f8f9fa';
-                    e.currentTarget.style.borderColor = '#7c3aed';
+                    e.currentTarget.style.borderColor = '#111827';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = '#ffffff';
@@ -284,7 +284,7 @@ export default function DashboardOverview() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#7c3aed',
+                    color: '#111827',
                     flexShrink: 0
                   }}>
                     {action.icon}
@@ -335,7 +335,7 @@ export default function DashboardOverview() {
                 href="/admin/activity"
                 style={{
                   fontSize: '13px',
-                  color: '#7c3aed',
+                  color: '#111827',
                   textDecoration: 'none',
                   fontWeight: '500'
                 }}

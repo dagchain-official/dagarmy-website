@@ -346,7 +346,7 @@ export default function Login() {
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "#f9fafb";
-                          e.currentTarget.style.borderColor = "#8b5cf6";
+                          e.currentTarget.style.borderColor = "#1f2937";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = "#ffffff";
@@ -380,7 +380,7 @@ export default function Login() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#8b5cf6";
+                            e.currentTarget.style.borderColor = "#1f2937";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "#ffffff";
@@ -408,7 +408,7 @@ export default function Login() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#8b5cf6";
+                            e.currentTarget.style.borderColor = "#1f2937";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "#ffffff";
@@ -434,7 +434,7 @@ export default function Login() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#8b5cf6";
+                            e.currentTarget.style.borderColor = "#1f2937";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "#ffffff";
@@ -504,7 +504,7 @@ export default function Login() {
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "#f9fafb";
-                          e.currentTarget.style.borderColor = "#8b5cf6";
+                          e.currentTarget.style.borderColor = "#1f2937";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = "#ffffff";
@@ -541,7 +541,7 @@ export default function Login() {
                         onClick={() => setSelectedRole("student")}
                         style={{
                           border: "2px solid",
-                          borderColor: selectedRole === "student" ? "#8b5cf6" : "#e5e7eb",
+                          borderColor: selectedRole === "student" ? "#1f2937" : "#e5e7eb",
                           padding: "20px",
                           borderRadius: "10px",
                           cursor: "pointer",
@@ -577,7 +577,7 @@ export default function Login() {
                         onClick={() => setSelectedRole("trainer")}
                         style={{
                           border: "2px solid",
-                          borderColor: selectedRole === "trainer" ? "#8b5cf6" : "#e5e7eb",
+                          borderColor: selectedRole === "trainer" ? "#1f2937" : "#e5e7eb",
                           padding: "20px",
                           borderRadius: "10px",
                           cursor: "pointer",
@@ -617,7 +617,7 @@ export default function Login() {
                       style={{
                         opacity: selectedRole ? 1 : 0.5,
                         cursor: selectedRole ? "pointer" : "not-allowed",
-                        background: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
+                        background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
                         border: "none",
                         color: "#fff",
                         height: "52px",

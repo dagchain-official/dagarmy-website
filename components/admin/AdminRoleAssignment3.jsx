@@ -261,7 +261,7 @@ export default function AdminRoleAssignment3() {
                 width: '48px',
                 height: '48px',
                 borderRadius: '14px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -336,7 +336,7 @@ export default function AdminRoleAssignment3() {
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -366,7 +366,7 @@ export default function AdminRoleAssignment3() {
                         cursor: 'pointer',
                         fontSize: '13px',
                         fontWeight: '600',
-                        color: '#8b5cf6',
+                        color: '#1f2937',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px'
@@ -434,7 +434,7 @@ export default function AdminRoleAssignment3() {
                 background: '#f8fafc'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#8b5cf6';
+                e.currentTarget.style.borderColor = '#1f2937';
                 e.currentTarget.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.1)';
                 e.currentTarget.style.background = '#fff';
               }}
@@ -481,7 +481,7 @@ export default function AdminRoleAssignment3() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = hasAdminRole ? '#dcfce7' : '#fff';
-                      e.currentTarget.style.borderColor = '#8b5cf6';
+                      e.currentTarget.style.borderColor = '#1f2937';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = hasAdminRole ? '#f0fdf4' : '#f8fafc';
@@ -494,7 +494,7 @@ export default function AdminRoleAssignment3() {
                         borderRadius: '10px',
                         background: hasAdminRole 
                           ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
-                          : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                          : 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -612,7 +612,7 @@ export default function AdminRoleAssignment3() {
               borderRadius: '12px',
               background: saving || selectedPermissions.length === 0 
                 ? '#cbd5e1' 
-                : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                : 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               color: '#fff',
               border: 'none',
               fontSize: '14px',
@@ -671,9 +671,9 @@ export default function AdminRoleAssignment3() {
                     transition: 'all 0.2s'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#8b5cf6';
+                    e.currentTarget.style.background = '#1f2937';
                     e.currentTarget.style.color = '#fff';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.borderColor = '#1f2937';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = '#f8fafc';
@@ -732,8 +732,8 @@ export default function AdminRoleAssignment3() {
                   padding: '12px 14px',
                   marginBottom: '6px',
                   borderRadius: '10px',
-                  background: isActive ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' : '#f8fafc',
-                  border: `2px solid ${isActive ? '#8b5cf6' : '#e2e8f0'}`,
+                  background: isActive ? 'linear-gradient(135deg, #1f2937 0%, #111827 100%)' : '#f8fafc',
+                  border: `2px solid ${isActive ? '#1f2937' : '#e2e8f0'}`,
                   cursor: 'pointer',
                   textAlign: 'left',
                   transition: 'all 0.2s',
@@ -803,7 +803,7 @@ export default function AdminRoleAssignment3() {
                     cursor: 'pointer',
                     fontSize: '12px',
                     fontWeight: '600',
-                    color: '#8b5cf6'
+                    color: '#1f2937'
                   }}>
                   Select All
                 </button>

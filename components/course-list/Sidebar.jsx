@@ -99,7 +99,7 @@ export default function Sidebar(props) {
                     margin: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     const underline = e.currentTarget.querySelector('.category-underline');
                     if (underline) underline.style.width = '100%';
                   }}
@@ -118,7 +118,7 @@ export default function Sidebar(props) {
                       left: '0',
                       width: '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                       transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                   />
@@ -234,7 +234,7 @@ export default function Sidebar(props) {
                     margin: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     const underline = e.currentTarget.querySelector('.category-underline');
                     if (underline) underline.style.width = '100%';
                   }}
@@ -253,7 +253,7 @@ export default function Sidebar(props) {
                       left: '0',
                       width: '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                       transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                   />
@@ -304,7 +304,7 @@ export default function Sidebar(props) {
                     margin: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     const underline = e.currentTarget.querySelector('.category-underline');
                     if (underline) underline.style.width = '100%';
                   }}
@@ -323,7 +323,7 @@ export default function Sidebar(props) {
                       left: '0',
                       width: '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                       transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                   />
@@ -371,7 +371,7 @@ export default function Sidebar(props) {
                     margin: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     const underline = e.currentTarget.querySelector('.category-underline');
                     if (underline) underline.style.width = '100%';
                   }}
@@ -390,7 +390,7 @@ export default function Sidebar(props) {
                       left: '0',
                       width: '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                       transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                   />
@@ -440,7 +440,7 @@ export default function Sidebar(props) {
                     margin: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     const underline = e.currentTarget.querySelector('.category-underline');
                     if (underline) underline.style.width = '100%';
                   }}
@@ -459,7 +459,7 @@ export default function Sidebar(props) {
                       left: '0',
                       width: '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                       transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                   />
@@ -504,7 +504,7 @@ export default function Sidebar(props) {
                     margin: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#8b5cf6';
+                    e.currentTarget.style.color = '#1f2937';
                     const underline = e.currentTarget.querySelector('.category-underline');
                     if (underline) underline.style.width = '100%';
                   }}
@@ -523,7 +523,7 @@ export default function Sidebar(props) {
                       left: '0',
                       width: '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(90deg, #1f2937 0%, #1f2937 100%)',
                       transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                   />

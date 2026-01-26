@@ -78,7 +78,7 @@ export default function Blogs2() {
                             <Link
                               href={`/blog-single/${article.id}`}
                               style={{
-                                background: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
+                                background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
                                 color: "#fff",
                                 padding: "6px 14px",
                                 borderRadius: "5px",
@@ -119,7 +119,7 @@ export default function Blogs2() {
                             href={`/blog-single/${article.id}`}
                             className="tf-btn-arrow"
                             style={{
-                              color: "#8b5cf6",
+                              color: "#1f2937",
                               fontWeight: "600",
                               fontSize: "16px",
                             }}
@@ -215,7 +215,7 @@ export default function Blogs2() {
                       <i
                         className={`icon-arrow-top`}
                         style={{
-                          color: "#8b5cf6",
+                          color: "#1f2937",
                           fontSize: "16px",
                           transform: isCategoriesOpen ? "rotate(0deg)" : "rotate(180deg)",
                           transition: "transform 0.3s ease"
@@ -252,7 +252,7 @@ export default function Blogs2() {
                                 display: "inline-block",
                               }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.color = "#8b5cf6";
+                                e.currentTarget.style.color = "#1f2937";
                                 const underline = e.currentTarget.querySelector('.underline');
                                 if (underline) {
                                   underline.style.width = "100%";
@@ -275,7 +275,7 @@ export default function Blogs2() {
                                   left: "0",
                                   width: "0%",
                                   height: "2px",
-                                  background: "linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%)",
+                                  background: "linear-gradient(90deg, #1f2937 0%, #1f2937 100%)",
                                   transition: "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                                 }}
                               />
@@ -328,7 +328,7 @@ export default function Blogs2() {
                       <i
                         className="icon-arrow-top"
                         style={{
-                          color: "#8b5cf6",
+                          color: "#1f2937",
                           fontSize: "16px",
                           transform: isRecentPostsOpen ? "rotate(0deg)" : "rotate(180deg)",
                           transition: "transform 0.3s ease"
@@ -394,7 +394,7 @@ export default function Blogs2() {
                                     overflow: "hidden",
                                     transition: "color 0.2s ease",
                                   }}
-                                  onMouseEnter={(e) => e.currentTarget.style.color = "#8b5cf6"}
+                                  onMouseEnter={(e) => e.currentTarget.style.color = "#1f2937"}
                                   onMouseLeave={(e) => e.currentTarget.style.color = "#111827"}
                                 >
                                   {article.title}
@@ -442,7 +442,7 @@ export default function Blogs2() {
                       <i
                         className="icon-arrow-top"
                         style={{
-                          color: "#8b5cf6",
+                          color: "#1f2937",
                           fontSize: "18px",
                           transform: isTagsOpen ? "rotate(0deg)" : "rotate(180deg)",
                           transition: "transform 0.3s ease"
@@ -479,7 +479,7 @@ export default function Blogs2() {
                                   transition: "all 0.2s ease",
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = "linear-gradient(135deg, #8b5cf6 0%, #8f5fe2ff 100%)";
+                                  e.currentTarget.style.background = "linear-gradient(135deg, #1f2937 0%, #8f5fe2ff 100%)";
                                   e.currentTarget.style.color = "#fff";
                                 }}
                                 onMouseLeave={(e) => {

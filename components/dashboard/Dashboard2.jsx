@@ -367,7 +367,7 @@ export default function Dashboard2() {
                                 Invite friends and earn rewards! Share your unique referral code.
                             </p>
                             <div style={{
-                                background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                                background: "linear-gradient(135deg, #6366f1 0%, #1f2937 100%)",
                                 borderRadius: "12px",
                                 padding: "16px",
                                 marginBottom: "16px",
@@ -407,7 +407,7 @@ export default function Dashboard2() {
                                     <div style={{ color: "#6b7280" }}>Referrals</div>
                                 </div>
                                 <div style={{ background: "#f3f4f6", borderRadius: "8px", padding: "12px", textAlign: "center" }}>
-                                    <div style={{ fontSize: "20px", fontWeight: "700", marginBottom: "4px", color: "#8b5cf6" }}>{referralStats.total_points_earned || 0}</div>
+                                    <div style={{ fontSize: "20px", fontWeight: "700", marginBottom: "4px", color: "#1f2937" }}>{referralStats.total_points_earned || 0}</div>
                                     <div style={{ color: "#6b7280" }}>DAG Points</div>
                                 </div>
                             </div>
@@ -434,7 +434,7 @@ export default function Dashboard2() {
                                         assignments: "4 assignments", 
                                         students: "892 students", 
                                         progress: 45, 
-                                        color: "#8b5cf6" 
+                                        color: "#1f2937" 
                                     }
                                 ].map((course, idx) => (
                                     <div key={idx} style={{
@@ -608,7 +608,7 @@ export default function Dashboard2() {
                                     { day: 8, events: [] }, { day: 9, events: [] }, { day: 10, events: [] }, { day: 11, events: [] },
                                     { day: 12, events: [] }, { day: 13, events: [] }, { day: 14, events: [] }, 
                                     { day: 15, events: [{ title: "AI Workshop", color: "#6366f1", type: "admin" }] }, 
-                                    { day: 16, today: true, events: [{ title: "Study Session", color: "#8b5cf6", type: "user" }] }, 
+                                    { day: 16, today: true, events: [{ title: "Study Session", color: "#1f2937", type: "user" }] }, 
                                     { day: 17, events: [] }, { day: 18, events: [{ title: "Blockchain Quiz", color: "#10b981", type: "admin" }] },
                                     { day: 19, events: [] }, { day: 20, events: [] }, 
                                     { day: 21, events: [{ title: "Data Viz Project", color: "#f59e0b", type: "admin" }] }, 
@@ -662,7 +662,7 @@ export default function Dashboard2() {
                                     <span style={{ color: "#6b7280", fontWeight: "600" }}>Admin Events</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <div style={{ width: "12px", height: "12px", borderRadius: "3px", background: "#8b5cf6" }}></div>
+                                    <div style={{ width: "12px", height: "12px", borderRadius: "3px", background: "#1f2937" }}></div>
                                     <span style={{ color: "#6b7280", fontWeight: "600" }}>User Events</span>
                                 </div>
                             </div>

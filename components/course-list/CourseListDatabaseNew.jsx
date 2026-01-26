@@ -63,7 +63,7 @@ export default function CourseListDatabaseNew() {
                 width: '50px',
                 height: '50px',
                 border: '4px solid #f3f4f6',
-                borderTop: '4px solid #8b5cf6',
+                borderTop: '4px solid #1f2937',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite'
               }} />
@@ -260,7 +260,7 @@ export default function CourseListDatabaseNew() {
 
                     <div style={{
                       marginLeft: 'auto',
-                      background: course.is_free ? '#10b981' : '#8b5cf6',
+                      background: course.is_free ? '#10b981' : '#1f2937',
                       padding: '10px 24px',
                       borderRadius: '8px',
                       fontSize: '18px',
@@ -386,7 +386,7 @@ export default function CourseListDatabaseNew() {
                       <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px', fontWeight: '600', textTransform: 'uppercase' }}>
                         Instructor
                       </div>
-                      <div style={{ fontSize: '15px', color: '#8b5cf6', fontWeight: '500' }}>
+                      <div style={{ fontSize: '15px', color: '#1f2937', fontWeight: '500' }}>
                         {course.creator.name}
                       </div>
                     </div>
@@ -456,7 +456,7 @@ export default function CourseListDatabaseNew() {
                               <div style={{
                                 width: '40px',
                                 height: '40px',
-                                background: '#8b5cf6',
+                                background: '#1f2937',
                                 borderRadius: '8px',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -605,7 +605,7 @@ export default function CourseListDatabaseNew() {
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '12px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(135deg, #1f2937 0%, #1f2937 100%)',
                       color: '#ffffff',
                       padding: '16px 48px',
                       borderRadius: '12px',
