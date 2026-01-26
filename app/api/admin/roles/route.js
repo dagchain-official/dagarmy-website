@@ -66,6 +66,15 @@ export async function POST(request) {
 
       if (error) throw error;
       result = data;
+
+      // Update user's role in users table
+      await supabase
+        .from('users')
+        .update({ 
+          is_admin: true,
+          role: 'admin'
+        })
+        .eq('id', user_id);
     } else {
       // Create new role
       const { data, error } = await supabase
@@ -83,10 +92,13 @@ export async function POST(request) {
       if (error) throw error;
       result = data;
 
-      // Update user's is_admin flag
+      // Update user's is_admin flag and role
       await supabase
         .from('users')
-        .update({ is_admin: true })
+        .update({ 
+          is_admin: true,
+          role: 'admin'
+        })
         .eq('id', user_id);
     }
 
@@ -185,10 +197,13 @@ export async function DELETE(request) {
 
     if (deleteError) throw deleteError;
 
-    // Update user's is_admin flag
+    // Update user's is_admin flag and role
     await supabase
       .from('users')
-      .update({ is_admin: false })
+      .update({ 
+        is_admin: false,
+        role: 'student'
+      })
       .eq('id', user_id);
 
     // Log the action
