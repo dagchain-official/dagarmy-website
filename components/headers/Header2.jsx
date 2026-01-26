@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useDisconnect } from "wagmi";
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
 import { useAuth } from "@/context/AuthContext";
@@ -11,6 +12,7 @@ export default function Header2() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { isAuthenticated, userRole, isAdmin } = useAuth();
   const router = useRouter();
+  const { disconnect } = useDisconnect();
 
   // Close modal if user becomes authenticated
   useEffect(() => {
@@ -19,13 +21,24 @@ export default function Header2() {
     }
   }, [isAuthenticated]);
 
-  const handleSignInClick = () => {
+  const handleSignInClick = async () => {
     sessionStorage.removeItem('dagarmy_logged_out');
-    setShowLoginModal(true);
-    // Open Reown modal
-    if (typeof window !== 'undefined' && window.modal) {
-      window.modal.open();
+    
+    // Disconnect any existing wallet connection to show account selection
+    try {
+      await disconnect();
+    } catch (error) {
+      console.log('No wallet to disconnect:', error);
     }
+    
+    setShowLoginModal(true);
+    
+    // Small delay to ensure disconnect completes before opening modal
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && window.modal) {
+        window.modal.open();
+      }
+    }, 100);
   };
 
   const handleDashboardClick = () => {
