@@ -9,7 +9,6 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: socialEmail || '',
     countryCode: '+91',
     whatsappNumber: ''
   });
@@ -42,10 +41,6 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       setError('Last name is required');
       return;
     }
-    if (!formData.email.trim() || !formData.email.includes('@')) {
-      setError('Valid email is required');
-      return;
-    }
     if (!formData.whatsappNumber.trim() || formData.whatsappNumber.length < 10) {
       setError('Valid WhatsApp number is required (minimum 10 digits)');
       return;
@@ -57,7 +52,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       wallet_address: userAddress,
       first_name: formData.firstName.trim(),
       last_name: formData.lastName.trim(),
-      user_provided_email: formData.email.trim(),
+      user_provided_email: socialEmail || null,
       country_code: formData.countryCode,
       whatsapp_number: formData.whatsappNumber.trim(),
     };
@@ -206,47 +201,6 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
               onFocus={(e) => e.target.style.borderColor = '#1f2937'}
               onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
             />
-          </div>
-
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '8px', 
-              fontWeight: '600',
-              color: '#333',
-              fontSize: '14px'
-            }}>
-              Email Address *
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="your.email@example.com"
-              required
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '16px',
-                outline: 'none',
-                transition: 'border-color 0.2s',
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#1f2937'}
-              onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
-            />
-            {socialEmail && formData.email !== socialEmail && (
-              <p style={{ 
-                fontSize: '12px', 
-                color: '#f59e0b', 
-                marginTop: '6px',
-                fontStyle: 'italic'
-              }}>
-                Note: This email differs from your social login email ({socialEmail})
-              </p>
-            )}
           </div>
 
           <div style={{ marginBottom: '20px' }}>
