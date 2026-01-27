@@ -1,9 +1,5 @@
 "use client";
-import { brandLogos } from "@/data/brands";
 import React, { useState, useEffect } from "react";
-import { Autoplay, FreeMode } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import Image from "next/image";
 import ModalVideo from "react-modal-video";
 import PremiumButton from "./PremiumButton";
 
@@ -98,60 +94,7 @@ const AnimatedNoText = () => {
 export default function Hero() {
   const [isOpen, setOpen] = useState(false);
 
-  // Add global style override for swiper backgrounds
-  React.useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `
-      .page-title-home2,
-      .page-title-home2 *:not(.tf-btn):not(.custom-explore-btn):not(span):not(i):not(.btn-premium):not(.bg):not(.wrap):not(.content):not(.icon):not(.char):not(svg):not(path),
-      .wrap-brand,
-      .wrap-brand *,
-      .slide-brand,
-      .slide-brand *,
-      .swiper-container,
-      .swiper-wrapper,
-      .swiper-slide,
-      .slogan-logo {
-        background: #fff !important;
-        background-color: #fff !important;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
 
-  const options = {
-    spaceBetween: 60,
-    slidesPerView: 2,
-    observer: true,
-    observeParents: true,
-    loop: true,
-    autoplay: {
-      delay: 0,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: false,
-    },
-    speed: 5000,
-    freeMode: true,
-    breakpoints: {
-      450: {
-        slidesPerView: 3,
-        spaceBetween: 60,
-      },
-      768: {
-        slidesPerView: 4,
-        spaceBetween: 60,
-      },
-      868: {
-        slidesPerView: 5,
-        spaceBetween: 60,
-      },
-      1400: {
-        slidesPerView: 6,
-        spaceBetween: 60,
-      },
-    },
-  };
   return (
     <>
       <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '80px' }}>
@@ -264,29 +207,6 @@ export default function Hero() {
                 </video>
               </div>
             </div>
-          </div>
-          <div className="wrap-brand" style={{ background: '#fff !important', backgroundColor: '#fff', padding: '24px 0 0 0' }}>
-            <Swiper
-              {...options}
-              modules={[Autoplay, FreeMode]}
-              className="slide-brand style-2 swiper-container"
-              style={{ background: '#fff' }}
-            >
-              {[...brandLogos, ...brandLogos].map((elm, i) => (
-                <SwiperSlide key={i} className="swiper-slide" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div className="slogan-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60px' }}>
-                    <Image
-                      className="lazyload"
-                      src={elm.imgSrc}
-                      alt={elm.alt}
-                      width={elm.width}
-                      height={elm.height}
-                      style={{ objectFit: 'contain', maxHeight: '50px', width: 'auto' }}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
           </div>
         </div>
       </div>
