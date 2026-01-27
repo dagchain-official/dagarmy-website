@@ -301,32 +301,41 @@ export default function Header2() {
           <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
               onClick={isAuthenticated ? handleDashboardClick : handleSignInClick}
+              className="relative overflow-hidden group"
               style={{
-                minWidth: '90px',
-                height: '38px',
-                fontSize: '13px',
-                padding: '0 20px',
-                background: '#1f2937',
+                minWidth: '100px',
+                height: '42px',
+                fontSize: '14px',
+                padding: '0 24px',
+                background: '#000000',
                 color: 'white',
-                border: 'none',
-                borderRadius: '8px',
+                border: '2px solid #000000',
+                borderRadius: '12px',
                 fontWeight: '600',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                position: 'relative',
+                zIndex: 1
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-                e.currentTarget.style.background = '#111827';
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.25)';
+                e.currentTarget.style.borderRadius = '20px';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
-                e.currentTarget.style.background = '#1f2937';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.borderRadius = '12px';
               }}
             >
-              {isAuthenticated ? 'Dashboard' : 'Sign In'}
+              <span style={{ position: 'relative', zIndex: 10 }}>
+                {isAuthenticated ? 'Dashboard' : 'Sign In'}
+              </span>
+              <span
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 bg-[#1f2937] rounded-full opacity-0 transition-all duration-500 ease-in-out group-hover:w-[200px] group-hover:h-[200px] group-hover:opacity-100"
+                style={{ zIndex: 0 }}
+              />
             </button>
             {/* Register button commented out - using Sign In for both new and returning users */}
             {/* <Link
