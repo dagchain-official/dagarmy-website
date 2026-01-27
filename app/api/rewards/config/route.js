@@ -28,23 +28,26 @@ export async function PUT(request) {
   try {
     const supabase = supabaseAdmin;
     const body = await request.json();
-    const { config_key, config_value } = body;
+    const { config_key, config_value, user_email } = body;
 
-    // Get user ID from request headers (set by middleware/auth)
-    const userId = request.headers.get('x-user-id');
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Check if user email is provided
+    if (!user_email) {
+      return NextResponse.json({ error: 'Unauthorized - Email required' }, { status: 401 });
     }
 
+    // Verify user is master admin via email
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('is_master_admin')
-      .eq('id', userId)
+      .select('id, is_master_admin, email')
+      .eq('email', user_email)
       .single();
 
     if (userError || !userData?.is_master_admin) {
-      return NextResponse.json({ error: 'Forbidden - Master Admin only' }, { status: 403 });
+      console.error('Authorization failed:', { userError, userData });
+      return NextResponse.json({ error: 'Unauthorized - Master Admin access required' }, { status: 403 });
     }
+
+    const userId = userData.id;
 
     // Update config
     const { data, error } = await supabase
