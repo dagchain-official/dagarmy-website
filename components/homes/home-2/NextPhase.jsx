@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function NextPhase() {
   return (
     <section style={{
-      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+      background: '#000000',
       paddingTop: '80px',
       paddingBottom: '80px',
       position: 'relative',
@@ -109,7 +109,7 @@ export default function NextPhase() {
                   gap: '10px',
                   padding: '16px 40px',
                   background: '#ffffff',
-                  color: '#8b5cf6',
+                  color: '#000000',
                   borderRadius: '8px',
                   fontWeight: '700',
                   fontSize: '17px',
