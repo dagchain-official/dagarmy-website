@@ -155,9 +155,9 @@ export default function Categories() {
                         transform: 'translateY(0)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = '#8b5cf6';
+                        e.currentTarget.style.borderColor = '#000000';
                         e.currentTarget.style.transform = 'translateY(-5px)';
-                        e.currentTarget.style.boxShadow = '0 12px 20px -5px rgba(139, 92, 246, 0.15)';
+                        e.currentTarget.style.boxShadow = '0 12px 20px -5px rgba(0, 0, 0, 0.15)';
                         const h5 = e.currentTarget.querySelector('h5');
                         if (h5) h5.style.color = '#000000';
                         const wrap = e.currentTarget.querySelector('.icon-wrapper');
@@ -172,7 +172,7 @@ export default function Categories() {
                         const h5 = e.currentTarget.querySelector('h5');
                         if (h5) h5.style.color = '#1f2937';
                         const wrap = e.currentTarget.querySelector('.icon-wrapper');
-                        if (wrap) wrap.style.background = 'rgba(139, 92, 246, 0.05)';
+                        if (wrap) wrap.style.background = 'rgba(0, 0, 0, 0.05)';
                         const svg = e.currentTarget.querySelector('svg');
                         if (svg) svg.style.stroke = '#6b7280';
                       }}
@@ -181,7 +181,7 @@ export default function Categories() {
                         width: '56px',
                         height: '56px',
                         borderRadius: '16px',
-                        background: 'rgba(139, 92, 246, 0.05)',
+                        background: 'rgba(0, 0, 0, 0.05)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
