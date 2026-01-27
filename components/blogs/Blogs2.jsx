@@ -1,14 +1,40 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Pagination from "../common/Pagination";
 import Link from "next/link";
 import Image from "next/image";
-import { dagarmyBlogs, recentPosts, blogCategories, blogTags } from "@/data/dagarmy-blogs";
+import { blogCategories, blogTags } from "@/data/dagarmy-blogs";
 
 export default function Blogs2() {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
   const [isRecentPostsOpen, setIsRecentPostsOpen] = useState(true);
   const [isTagsOpen, setIsTagsOpen] = useState(true);
+  const [mediumPosts, setMediumPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchMediumPosts();
+  }, []);
+
+  const fetchMediumPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/blog/medium');
+      const data = await response.json();
+      
+      if (data.success && data.posts) {
+        setMediumPosts(data.posts);
+      } else {
+        setError('Failed to load blog posts');
+      }
+    } catch (err) {
+      console.error('Error fetching Medium posts:', err);
+      setError('Failed to load blog posts');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -38,8 +64,44 @@ export default function Blogs2() {
               <div className="page-blog-list">
                 {/* Main Blog List - Expanded Width */}
                 <div className="left">
-                  <div className="wrap-blog-list">
-                    {dagarmyBlogs.map((article, index) => (
+                  {loading ? (
+                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                      <div style={{
+                        width: '60px',
+                        height: '60px',
+                        margin: '0 auto 20px',
+                        border: '4px solid #f3f4f6',
+                        borderTop: '4px solid #1f2937',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite'
+                      }} />
+                      <p style={{ color: '#6b7280', fontSize: '16px' }}>Loading blog posts from Medium...</p>
+                      <style dangerouslySetInnerHTML={{
+                        __html: `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`
+                      }} />
+                    </div>
+                  ) : error ? (
+                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                      <p style={{ color: '#ef4444', fontSize: '16px', marginBottom: '10px' }}>{error}</p>
+                      <button 
+                        onClick={fetchMediumPosts}
+                        style={{
+                          background: '#1f2937',
+                          color: '#fff',
+                          padding: '10px 20px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          fontWeight: '600'
+                        }}
+                      >
+                        Retry
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="wrap-blog-list">
+                      {mediumPosts.map((article, index) => (
                       <div
                         className="blog-article-item style-row hover-img wow fadeInUp"
                         key={index}
@@ -63,40 +125,51 @@ export default function Blogs2() {
                         }}
                       >
                         <div className="article-thumb image-wrap" style={{ marginBottom: "6px" }}>
-                          <Image
-                            className="lazyload"
-                            data-src={article.imgSrc}
-                            alt={article.alt}
-                            src={article.imgSrc}
-                            width={article.width}
-                            height={article.height}
-                            style={{ borderRadius: "8px" }}
+                          <img
+                            src={article.imageUrl}
+                            alt={article.title}
+                            style={{ 
+                              borderRadius: "8px",
+                              width: '100%',
+                              height: 'auto',
+                              maxHeight: '400px',
+                              objectFit: 'cover'
+                            }}
+                            onError={(e) => {
+                              e.target.src = '/images/blog/default-blog.jpg';
+                            }}
                           />
                         </div>
                         <div className="article-content">
-                          <div className="article-label" style={{ marginBottom: "4px" }}>
-                            <Link
-                              href={`/blog-single/${article.id}`}
-                              style={{
-                                background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-                                color: "#fff",
-                                padding: "6px 14px",
-                                borderRadius: "5px",
-                                fontSize: "12px",
-                                fontWeight: "600",
-                                textTransform: "uppercase",
-                                letterSpacing: "0.5px",
-                                textDecoration: "none",
-                                display: "inline-block",
-                              }}
-                            >
-                              {article.category}
-                            </Link>
+                          <div className="article-label" style={{ marginBottom: "4px", display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            {article.categories && article.categories.slice(0, 3).map((cat, idx) => (
+                              <span
+                                key={idx}
+                                style={{
+                                  background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
+                                  color: "#fff",
+                                  padding: "6px 14px",
+                                  borderRadius: "5px",
+                                  fontSize: "12px",
+                                  fontWeight: "600",
+                                  textTransform: "uppercase",
+                                  letterSpacing: "0.5px",
+                                  display: "inline-block",
+                                }}
+                              >
+                                {cat}
+                              </span>
+                            ))}
                           </div>
                           <h3 className="fw-5 font-outfit" style={{ fontSize: "24px", marginBottom: "4px", lineHeight: "1.3" }}>
-                            <Link href={`/blog-single/${article.id}`}>
+                            <a 
+                              href={article.link} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
                               {article.title}
-                            </Link>
+                            </a>
                           </h3>
                           <p style={{ fontSize: "16px", lineHeight: "1.6", marginBottom: "6px", color: "#4b5563" }}>
                             {article.description}
@@ -104,35 +177,32 @@ export default function Blogs2() {
                           <div className="meta" style={{ marginBottom: "6px" }}>
                             <div className="meta-item">
                               <i className="flaticon-calendar" />
-                              <p>{article.date}</p>
+                              <p>{article.pubDate}</p>
                             </div>
                             <div className="meta-item">
-                              <i className="flaticon-message" />
-                              <p>{article.comments}</p>
-                            </div>
-                            <a href="#" className="meta-item">
                               <i className="flaticon-user-1" />
                               <p>{article.author}</p>
-                            </a>
+                            </div>
                           </div>
-                          <Link
-                            href={`/blog-single/${article.id}`}
+                          <a
+                            href={article.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="tf-btn-arrow"
                             style={{
                               color: "#1f2937",
                               fontWeight: "600",
                               fontSize: "16px",
+                              textDecoration: "none",
                             }}
                           >
-                            Read More <i className="icon-arrow-top-right" />
-                          </Link>
+                            Read on Medium <i className="icon-arrow-top-right" />
+                          </a>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                  <ul className="wg-pagination justify-center wow fadeInUp" style={{ marginTop: "30px" }}>
-                    <Pagination />
-                  </ul>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Sidebar - Fixed Width */}
@@ -343,7 +413,7 @@ export default function Blogs2() {
                           margin: 0,
                         }}
                       >
-                        {recentPosts.map((article, index) => (
+                        {mediumPosts.slice(0, 5).map((article, index) => (
                           <li
                             key={article.id}
                             className="recent-item hover-img"
@@ -352,7 +422,7 @@ export default function Blogs2() {
                               gap: "12px",
                               paddingBottom: "14px",
                               marginBottom: "14px",
-                              borderBottom: index < recentPosts.length - 1 ? "1px solid #f3f4f6" : "none",
+                              borderBottom: index < 4 ? "1px solid #f3f4f6" : "none",
                             }}
                           >
                             <div
@@ -363,25 +433,26 @@ export default function Blogs2() {
                                 flexShrink: 0,
                               }}
                             >
-                              <Image
-                                className="lazyload"
-                                data-src={article.imgSrc}
-                                alt=""
-                                src={article.imgSrc}
-                                width={article.imgWidth}
-                                height={article.imgHeight}
+                              <img
+                                src={article.imageUrl}
+                                alt={article.title}
                                 style={{
                                   borderRadius: "6px",
                                   width: "100%",
                                   height: "100%",
                                   objectFit: "cover",
                                 }}
+                                onError={(e) => {
+                                  e.target.src = '/images/blog/default-blog.jpg';
+                                }}
                               />
                             </div>
                             <div className="content" style={{ flex: 1 }}>
                               <div className="font-outfit text-15 fw-5">
-                                <Link
-                                  href={`/blog-single/${article.id}`}
+                                <a
+                                  href={article.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   style={{
                                     textDecoration: "none",
                                     color: "#111827",
@@ -398,14 +469,14 @@ export default function Blogs2() {
                                   onMouseLeave={(e) => e.currentTarget.style.color = "#111827"}
                                 >
                                   {article.title}
-                                </Link>
+                                </a>
                               </div>
                               <p style={{
                                 margin: "6px 0 0 0",
                                 fontSize: "12px",
                                 color: "#9ca3af"
                               }}>
-                                {article.date}
+                                {article.pubDate}
                               </p>
                             </div>
                           </li>
