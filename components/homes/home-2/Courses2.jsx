@@ -66,7 +66,7 @@ export default function Courses2() {
           bottom: -40px;
           left: 50%;
           transform: translateX(-50%);
-          background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+          background: #000000;
           color: #ffffff;
           text-align: center;
           padding: 8px 14px;
@@ -115,8 +115,8 @@ export default function Courses2() {
         .spd3 :global(.swiper-pagination-bullet-active) {
           width: 24px !important;
           border-radius: 4px !important;
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%) !important;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+          background: #000000 !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
         /* Fix tooltip clipping in Swiper */
         :global(.slider-courses-5) {
@@ -168,7 +168,7 @@ export default function Courses2() {
                       alignItems: 'center',
                       gap: '8px',
                       padding: '12px 24px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      background: '#000000',
                       color: '#ffffff',
                       borderRadius: '8px',
                       fontWeight: '600',
@@ -203,23 +203,24 @@ export default function Courses2() {
                     border: '2px solid #e5e7eb',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                    gap: '8px',
+                    padding: '12px 24px',
+                    background: '#000000',
+                    color: '#ffffff',
+                    borderRadius: '8px',
+                    fontWeight: '600',
+                    fontSize: '15px',
                     transition: 'all 0.3s ease',
-                    flexShrink: 0,
-                    marginRight: '20px'
+                    border: 'none',
+                    textDecoration: 'none'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
-                    e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.3)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'white';
-                    e.currentTarget.style.borderColor = '#e5e7eb';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
                     e.currentTarget.querySelector('path').setAttribute('stroke', '#6b7280');
                   }}
                 >
@@ -346,9 +347,9 @@ export default function Courses2() {
                     marginLeft: '20px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                    e.currentTarget.style.background = '#000000';
+                    e.currentTarget.style.borderColor = '#000000';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
                     e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
                   }}
                   onMouseLeave={(e) => {

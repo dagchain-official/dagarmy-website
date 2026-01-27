@@ -113,14 +113,14 @@ export default function Events() {
                   }}
                 >
                   <div style={{
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                    background: '#000000',
                     padding: '24px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                     minWidth: '100px',
-                    borderRight: '1px solid rgba(139, 92, 246, 0.2)'
+                    borderRight: '1px solid rgba(0, 0, 0, 0.2)'
                   }}>
                     <div style={{
                       fontSize: '28px',
@@ -191,7 +191,7 @@ export default function Events() {
                         alignItems: 'center',
                         gap: '8px',
                         padding: '14px 28px',
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        background: '#000000',
                         color: '#ffffff',
                         borderRadius: '10px',
                         fontWeight: '600',

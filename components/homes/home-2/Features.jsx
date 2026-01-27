@@ -101,11 +101,11 @@ export default function Features() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.15)';
-                e.currentTarget.style.borderColor = '#8b5cf6';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.borderColor = '#000000';
                 const icon = e.currentTarget.querySelector('.feature-icon');
                 if (icon) {
-                  icon.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)';
+                  icon.style.background = '#000000';
                   icon.style.color = '#ffffff';
                 }
               }}
@@ -131,7 +131,7 @@ export default function Features() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '16px',
-                  color: '#8b5cf6',
+                  color: '#000000',
                   transition: 'all 0.3s ease'
                 }}
               >

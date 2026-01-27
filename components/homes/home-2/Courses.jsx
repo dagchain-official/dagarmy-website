@@ -403,7 +403,7 @@ export default function Courses() {
                   display: 'block',
                   width: '100%',
                   padding: '16px 24px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: '#000000',
                   color: '#fff',
                   textAlign: 'center',
                   borderRadius: '10px',
