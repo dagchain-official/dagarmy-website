@@ -61,8 +61,8 @@ export default function Facts() {
           <div className="col-lg-5">
             <div className="content-wrap">
               <div className="box-sub-tag wow fadeInUp" data-wow-delay="0.1s" style={{
-                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(109, 40, 217, 0.05) 100%)',
-                border: '1px solid rgba(139, 92, 246, 0.15)',
+                background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.02) 100%)',
+                border: '1px solid rgba(0, 0, 0, 0.1)',
                 borderRadius: '12px',
                 padding: '12px 20px',
                 display: 'inline-flex',
@@ -73,11 +73,11 @@ export default function Facts() {
                   width: '40px',
                   height: '40px',
                   borderRadius: '8px',
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(109, 40, 217, 0.1) 100%)',
+                  background: 'rgba(0, 0, 0, 0.08)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  border: '1.5px solid rgba(0, 0, 0, 0.2)'
+                  border: '1.5px solid rgba(0, 0, 0, 0.15)'
                 }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -180,7 +180,7 @@ export default function Facts() {
               </div>
               <a
                 href="#"
-                className="wow fadeInUp relative flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                className="wow fadeInUp relative flex items-center gap-1 bg-[#000000] px-8 border-2 border-[#000000] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                 data-wow-delay="0.5s"
                 style={{ textDecoration: 'none', height: '52px', width: '280px', justifyContent: 'center' }}
               >
@@ -199,7 +199,7 @@ export default function Facts() {
                   Learn More
                 </span>
                 <span
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#1f2937] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
                 ></span>
                 <svg
                   viewBox="0 0 24 24"

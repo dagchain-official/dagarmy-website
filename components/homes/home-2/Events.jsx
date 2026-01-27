@@ -103,8 +103,8 @@ export default function Events() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(139, 92, 246, 0.15)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15)';
+                    e.currentTarget.style.borderColor = '#000000';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -157,11 +157,11 @@ export default function Events() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           padding: '4px 10px',
-                          background: event.format === 'Online' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                          background: 'rgba(0, 0, 0, 0.08)',
                           borderRadius: '6px',
                           fontSize: '12px',
                           fontWeight: '600',
-                          color: event.format === 'Online' ? '#7c3aed' : '#059669'
+                          color: '#000000'
                         }}>
                           {event.format}
                         </div>
@@ -203,7 +203,7 @@ export default function Events() {
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(139, 92, 246, 0.4)';
+                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.2)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'translateY(0)';
