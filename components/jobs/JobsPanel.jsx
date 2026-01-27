@@ -7,17 +7,36 @@ const techCategories = [
   { 
     name: "Artificial Intelligence", 
     keywords: "Machine Learning OR Artificial Intelligence OR Deep Learning OR Neural Networks OR NLP OR Computer Vision OR AI Engineer",
-    icon: "🤖"
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 16v-4"/>
+        <path d="M12 8h.01"/>
+      </svg>
+    )
   },
   { 
     name: "Blockchain", 
     keywords: "Blockchain OR Web3 OR Smart Contracts OR Solidity OR Ethereum OR Cryptocurrency OR DeFi OR NFT",
-    icon: "⛓️"
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7"/>
+        <rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/>
+      </svg>
+    )
   },
   { 
     name: "Data Visualization", 
     keywords: "Data Visualization OR Tableau OR Power BI OR Data Analytics OR Business Intelligence OR D3.js",
-    icon: "📊"
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+    )
   }
 ];
 
@@ -320,9 +339,10 @@ export default function JobsPanel() {
                       onClick={() => setSelectedCategory(cat)}
                       style={{
                         padding: '12px 16px',
-                        border: selectedCategory.name === cat.name ? '2px solid #1f2937' : '1px solid #e5e7eb',
+                        border: selectedCategory.name === cat.name ? '2px solid #000000' : '1px solid #e5e7eb',
                         borderRadius: '8px',
-                        background: selectedCategory.name === cat.name ? '#f3e8ff' : '#fff',
+                        background: selectedCategory.name === cat.name ? '#000000' : '#fff',
+                        color: selectedCategory.name === cat.name ? '#ffffff' : '#1f2937',
                         textAlign: 'left',
                         cursor: 'pointer',
                         transition: 'all 0.2s',
@@ -330,7 +350,7 @@ export default function JobsPanel() {
                         fontWeight: selectedCategory.name === cat.name ? '600' : '500'
                       }}
                     >
-                      <span style={{ marginRight: '8px' }}>{cat.icon}</span>
+                      <span style={{ marginRight: '8px', display: 'inline-flex', alignItems: 'center' }}>{cat.icon}</span>
                       {cat.name}
                     </button>
                   ))}
@@ -454,7 +474,10 @@ export default function JobsPanel() {
             {/* Results Header */}
             <div className="mb-4 d-flex justify-content-between align-items-center wow fadeInUp">
               <div>
-                <h4 className="fw-6 mb-1">{selectedCategory.icon} {selectedCategory.name} Jobs</h4>
+                <h4 className="fw-6 mb-1" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', color: '#1f2937' }}>{selectedCategory.icon}</span>
+                  {selectedCategory.name} Jobs
+                </h4>
                 <p className="fs-14 text-muted mb-0">
                   {filteredJobs.length} job{filteredJobs.length !== 1 ? 's' : ''} found
                 </p>
@@ -542,8 +565,8 @@ export default function JobsPanel() {
                         <div className="d-flex flex-wrap gap-2">
                           <span
                             style={{
-                              background: '#f3e8ff',
-                              color: '#111827',
+                              background: '#f3f4f6',
+                              color: '#1f2937',
                               padding: '4px 12px',
                               borderRadius: '6px',
                               fontSize: '12px',
@@ -554,8 +577,8 @@ export default function JobsPanel() {
                           </span>
                           <span
                             style={{
-                              background: '#f0fdf4',
-                              color: '#15803d',
+                              background: '#e5e7eb',
+                              color: '#111827',
                               padding: '4px 12px',
                               borderRadius: '6px',
                               fontSize: '12px',
@@ -566,8 +589,8 @@ export default function JobsPanel() {
                           </span>
                           <span
                             style={{
-                              background: '#fef3c7',
-                              color: '#92400e',
+                              background: '#f9fafb',
+                              color: '#4b5563',
                               padding: '4px 12px',
                               borderRadius: '6px',
                               fontSize: '12px',
@@ -637,10 +660,12 @@ export default function JobsPanel() {
                           transition: 'all 0.2s'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#f3e8ff';
+                          e.currentTarget.style.background = '#f3f4f6';
+                          e.currentTarget.style.borderColor = '#000000';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = '#fff';
+                          e.currentTarget.style.borderColor = '#1f2937';
                         }}
                       >
                         View Details
@@ -653,7 +678,7 @@ export default function JobsPanel() {
                           flex: 1,
                           padding: '12px 20px',
                           borderRadius: '8px',
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: '#000000',
                           color: '#fff',
                           fontSize: '14px',
                           fontWeight: '600',
@@ -664,15 +689,17 @@ export default function JobsPanel() {
                           justifyContent: 'center',
                           gap: '8px',
                           transition: 'all 0.3s',
-                          boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.4)';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)';
+                          e.currentTarget.style.background = '#1f2937';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+                          e.currentTarget.style.background = '#000000';
                         }}
                       >
                         Apply Now
@@ -694,7 +721,9 @@ export default function JobsPanel() {
                   </>
                 ) : (
                   <>
-                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>{selectedCategory.icon}</div>
+                    <div style={{ fontSize: '48px', marginBottom: '16px', display: 'flex', justifyContent: 'center', color: '#1f2937' }}>
+                      <div style={{ transform: 'scale(2.4)' }}>{selectedCategory.icon}</div>
+                    </div>
                     <h4 className="fw-6 mb-2">Ready to find {selectedCategory.name} jobs?</h4>
                     <p className="text-muted mb-3">Click "Search Jobs" to find opportunities from LinkedIn</p>
                   </>
@@ -841,7 +870,7 @@ export default function JobsPanel() {
                 <div className="col-md-6">
                   <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
                     <div className="d-flex align-items-center gap-3">
-                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#1f2937', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <i className="flaticon-user-1" style={{ fontSize: '18px', color: '#fff' }} />
                       </div>
                       <div>
@@ -855,10 +884,10 @@ export default function JobsPanel() {
                 </div>
               </div>
               <div className="d-flex flex-wrap gap-2">
-                <span style={{ background: '#f3e8ff', color: '#111827', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
+                <span style={{ background: '#f3f4f6', color: '#1f2937', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
                   {selectedJob.category}
                 </span>
-                <span style={{ background: '#f0fdf4', color: '#15803d', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
+                <span style={{ background: '#e5e7eb', color: '#111827', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
                   {selectedJob.type}
                 </span>
               </div>
@@ -955,7 +984,7 @@ export default function JobsPanel() {
                     flex: 1,
                     padding: '16px 32px',
                     borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: '#000000',
                     color: '#fff',
                     fontSize: '16px',
                     fontWeight: '600',
@@ -966,15 +995,17 @@ export default function JobsPanel() {
                     justifyContent: 'center',
                     gap: '10px',
                     transition: 'all 0.3s',
-                    boxShadow: '0 4px 16px rgba(139, 92, 246, 0.3)'
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.4)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
+                    e.currentTarget.style.background = '#1f2937';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(139, 92, 246, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.2)';
+                    e.currentTarget.style.background = '#000000';
                   }}
                 >
                   <i className="icon-arrow-top-right" />
