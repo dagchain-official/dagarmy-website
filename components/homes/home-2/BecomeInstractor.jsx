@@ -33,12 +33,12 @@ export default function BecomeInstractor() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: '2px solid rgba(31, 41, 55, 0.2)'
+                      border: '2px solid rgba(139, 92, 246, 0.2)'
                     }}>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="8" r="6" stroke="#1f2937" strokeWidth="2" />
-                        <path d="M12 14v8m-4 0h8" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" />
-                        <path d="M9 8l1.5 1.5L13 7" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="12" cy="8" r="6" stroke="#8b5cf6" strokeWidth="2" />
+                        <path d="M12 14v8m-4 0h8" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M9 8l1.5 1.5L13 7" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                     <span style={{ fontWeight: '700', fontSize: '18px', color: '#1f2937' }}>Join Elite Trainers</span>
@@ -48,29 +48,101 @@ export default function BecomeInstractor() {
               <h2
                 className="fw-7 letter-spacing-1 wow fadeInUp"
                 data-wow-delay="0.1s"
+                style={{
+                  fontSize: '36px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '20px',
+                  lineHeight: '1.3'
+                }}
               >
                 Become A Trainer
               </h2>
-              <p className="fz-15 wow fadeInUp" data-wow-delay="0.2s">
-                Share your expertise in AI, Blockchain, or Data Visualisation with thousands of eager learners worldwide. Join DAGARMY's elite community of industry professionals and thought leaders who are shaping the future of tech education.
+              <p className="fz-15 wow fadeInUp" data-wow-delay="0.2s" style={{
+                fontSize: '16px',
+                color: '#6b7280',
+                lineHeight: '1.7',
+                marginBottom: '28px'
+              }}>
+                Share expertise with a global learner base. DAG Army supports professionals who want to teach, guide and build credibility through structured content and learner engagement.
               </p>
-              <div className="wow fadeInUp" data-wow-delay="0.25s" style={{ marginTop: '20px', marginBottom: '20px' }}>
+              <div className="wow fadeInUp" data-wow-delay="0.25s" style={{ marginTop: '20px', marginBottom: '32px' }}>
                 <ul style={{ listStyle: 'none', padding: 0 }}>
-                  <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
-                    <span>Create and monetize your courses on cutting-edge technologies</span>
+                  <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'flex-start' }}>
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <span style={{ fontSize: '15px', color: '#4b5563', lineHeight: '1.6' }}>Create and publish skill based programs</span>
                   </li>
-                  <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
-                    <span>Access our professional course creation tools and support</span>
+                  <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'flex-start' }}>
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <span style={{ fontSize: '15px', color: '#4b5563', lineHeight: '1.6' }}>Access course creation support</span>
                   </li>
-                  <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
-                    <span>Build your personal brand as an industry expert</span>
+                  <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'flex-start' }}>
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <span style={{ fontSize: '15px', color: '#4b5563', lineHeight: '1.6' }}>Build a professional identity</span>
                   </li>
-                  <li style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#1f2937', marginRight: '10px', fontSize: '20px' }}>✓</span>
-                    <span>Earn competitive revenue share from your content</span>
+                  <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'flex-start' }}>
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <span style={{ fontSize: '15px', color: '#4b5563', lineHeight: '1.6' }}>Earn revenue through content contribution</span>
                   </li>
                 </ul>
               </div>

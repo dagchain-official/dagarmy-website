@@ -12,23 +12,32 @@ export default function Courses2() {
   const [swiperInstance, setSwiperInstance] = React.useState(null);
 
   const swiperOptions = {
-    spaceBetween: 25,
+    spaceBetween: 24,
     observer: true,
     observeParents: true,
     onSwiper: setSwiperInstance,
+    slidesPerView: 4,
+    slidesPerGroup: 4,
     breakpoints: {
-      425: {
-        slidesPerView: 1.5,
-        spaceBetween: 15,
+      320: {
+        slidesPerView: 1,
+        slidesPerGroup: 1,
+        spaceBetween: 16,
       },
-      700: {
-        slidesPerView: 2.3,
+      640: {
+        slidesPerView: 2,
+        slidesPerGroup: 2,
+        spaceBetween: 20,
       },
-      1000: {
+      1024: {
         slidesPerView: 3,
+        slidesPerGroup: 3,
+        spaceBetween: 24,
       },
-      1440: {
-        slidesPerView: 5,
+      1280: {
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 24,
       },
     },
     pagination: {
@@ -57,7 +66,7 @@ export default function Courses2() {
           bottom: -40px;
           left: 50%;
           transform: translateX(-50%);
-          background: linear-gradient(135deg, #111827 0%, #a855f7 50%, #c084fc 100%);
+          background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
           color: #ffffff;
           text-align: center;
           padding: 8px 14px;
@@ -78,7 +87,7 @@ export default function Courses2() {
           margin-left: -5px;
           border-width: 0 5px 5px 5px;
           border-style: solid;
-          border-color: transparent transparent #111827 transparent;
+          border-color: transparent transparent #7c3aed transparent;
         }
         .spd3 {
           display: flex !important;
@@ -106,7 +115,7 @@ export default function Courses2() {
         .spd3 :global(.swiper-pagination-bullet-active) {
           width: 24px !important;
           border-radius: 4px !important;
-          background: linear-gradient(135deg, #1f2937 0%, #a78bfa 100%) !important;
+          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%) !important;
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
         }
         /* Fix tooltip clipping in Swiper */
@@ -124,30 +133,114 @@ export default function Courses2() {
         <div className="tf-container">
           <div className="row">
             <div className="col-12">
-              <div className="heading-section">
-                <h2 className="fw-7 font-cardo wow fadeInUp" data-wow-delay="0s">
+              <div className="heading-section" style={{ marginBottom: '48px' }}>
+                <h2 
+                  className="fw-7 font-cardo wow fadeInUp" 
+                  data-wow-delay="0s"
+                  style={{
+                    fontSize: '36px',
+                    fontWeight: '700',
+                    color: '#1a1a1a',
+                    marginBottom: '16px',
+                    lineHeight: '1.3'
+                  }}
+                >
                   Learners Are Viewing
                 </h2>
-                <div className="flex items-center justify-between flex-wrap gap-10 ">
-                  <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
-                    Most popular courses across AI, Blockchain, and Data Visualisation
+                <div className="flex items-center justify-between flex-wrap gap-10">
+                  <div 
+                    className="sub fs-15 wow fadeInUp" 
+                    data-wow-delay="0.2s"
+                    style={{
+                      fontSize: '18px',
+                      color: '#6b7280',
+                      fontWeight: '400'
+                    }}
+                  >
+                    Most Selected Programs Across Technology and Analytics
                   </div>
                   <Link
                     href={`/course-grid-basic`}
                     className="tf-btn-arrow wow fadeInUp"
                     data-wow-delay="0.3s"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '12px 24px',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      color: '#ffffff',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: '15px',
+                      transition: 'all 0.3s ease',
+                      border: 'none',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
                   >
                     Show More Courses <i className="icon-arrow-top-right" />
                   </Link>
                 </div>
               </div>
-              <div style={{ position: 'relative', padding: '0 60px', overflow: 'visible' }}>
-                <Swiper
-                  className="swiper-container slider-courses-5 wow fadeInUp"
-                  data-wow-delay="0.4s"
-                  modules={[Pagination]}
-                  {...swiperOptions}
+              <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {/* Left Arrow */}
+                <button
+                  onClick={() => swiperInstance?.slidePrev()}
+                  style={{
+                    position: 'relative',
+                    width: '52px',
+                    height: '52px',
+                    borderRadius: '12px',
+                    background: 'white',
+                    border: '2px solid #e5e7eb',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                    transition: 'all 0.3s ease',
+                    flexShrink: 0,
+                    marginRight: '20px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)';
+                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                    e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'white';
+                    e.currentTarget.style.borderColor = '#e5e7eb';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                    e.currentTarget.querySelector('path').setAttribute('stroke', '#6b7280');
+                  }}
                 >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 15L7 10L12 5" stroke="#6b7280" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+
+                {/* Swiper Container with Fixed Width */}
+                <div style={{ 
+                  width: '100%',
+                  maxWidth: 'calc(280px * 4 + 24px * 3)',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}>
+                  <Swiper
+                    className="swiper-container slider-courses-5 wow fadeInUp"
+                    data-wow-delay="0.4s"
+                    modules={[Pagination]}
+                    {...swiperOptions}
+                  >
                   {dagarmyCourses.slice(0, 12).map((course, index) => (
                     <SwiperSlide key={index} className="swiper-slide">
                       <div className="course-item hover-img title-small">
@@ -230,58 +323,16 @@ export default function Courses2() {
                       </div>
                     </SwiperSlide>
                   ))}
-                </Swiper>
+                  </Swiper>
+                </div>
 
-
-                <div className="swiper-pagination spd3" />
-
-                <button
-                  onClick={() => swiperInstance?.slidePrev()}
-                  style={{
-                    position: 'absolute',
-                    left: '0',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    zIndex: 10,
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '12px',
-                    background: 'white',
-                    border: '2px solid #e5e7eb',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #1f2937 0%, #a78bfa 100%)';
-                    e.currentTarget.style.borderColor = '#1f2937';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
-                    e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'white';
-                    e.currentTarget.style.borderColor = '#e5e7eb';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                    e.currentTarget.querySelector('path').setAttribute('stroke', '#6b7280');
-                  }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 15L7 10L12 5" stroke="#6b7280" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
+                {/* Right Arrow */}
                 <button
                   onClick={() => swiperInstance?.slideNext()}
                   style={{
-                    position: 'absolute',
-                    right: '0',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    zIndex: 10,
-                    width: '48px',
-                    height: '48px',
+                    position: 'relative',
+                    width: '52px',
+                    height: '52px',
                     borderRadius: '12px',
                     background: 'white',
                     border: '2px solid #e5e7eb',
@@ -290,11 +341,13 @@ export default function Courses2() {
                     justifyContent: 'center',
                     cursor: 'pointer',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    flexShrink: 0,
+                    marginLeft: '20px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #1f2937 0%, #a78bfa 100%)';
-                    e.currentTarget.style.borderColor = '#1f2937';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)';
+                    e.currentTarget.style.borderColor = '#8b5cf6';
                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
                     e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
                   }}
@@ -310,6 +363,9 @@ export default function Courses2() {
                   </svg>
                 </button>
               </div>
+
+              {/* Pagination Dots */}
+              <div className="swiper-pagination spd3" />
             </div>
           </div>
         </div>

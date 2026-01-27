@@ -46,6 +46,10 @@ const ProgressiveInfoCards = () => {
     }
   ];
 
+  // Fixed height to match left card: 180px (image) + 28px (padding top) + content + 28px (padding bottom)
+  // Total left card height is approximately 640px
+  const CARD_FIXED_HEIGHT = 640;
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveCard((prev) => (prev + 1) % cards.length);
@@ -54,7 +58,32 @@ const ProgressiveInfoCards = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: '-48px' }}>
+    <div style={{ 
+      height: `${CARD_FIXED_HEIGHT}px`,
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <style jsx>{`
+        .scrollable-content::-webkit-scrollbar {
+          width: 6px;
+        }
+        .scrollable-content::-webkit-scrollbar-track {
+          background: #f3f4f6;
+          border-radius: 3px;
+        }
+        .scrollable-content::-webkit-scrollbar-thumb {
+          background: #d1d5db;
+          border-radius: 3px;
+        }
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+          background: #9ca3af;
+        }
+        .scrollable-content {
+          scrollbar-width: thin;
+          scrollbar-color: #d1d5db #f3f4f6;
+        }
+      `}</style>
+
       {/* Main Heading */}
       <h3 style={{
         fontSize: '32px',
@@ -62,7 +91,8 @@ const ProgressiveInfoCards = () => {
         color: '#1f2937',
         marginBottom: '16px',
         lineHeight: '1.3',
-        marginTop: '0'
+        marginTop: '0',
+        flexShrink: 0
       }}>
         A Unified Program Designed Around Real Capability
       </h3>
@@ -72,7 +102,8 @@ const ProgressiveInfoCards = () => {
         fontSize: '16px',
         lineHeight: '1.65',
         color: '#4b5563',
-        marginBottom: '24px'
+        marginBottom: '24px',
+        flexShrink: 0
       }}>
         Instead of scattered courses and disconnected tools, DAG Army offers one integrated learning journey that brings together modern technology skills into a single, structured experience. This program is built for learners who want clarity, relevance, and confidence in how systems actually work together in real environments.
       </p>
@@ -82,7 +113,8 @@ const ProgressiveInfoCards = () => {
         display: 'flex',
         gap: '32px',
         marginBottom: '20px',
-        borderBottom: '1px solid #e5e7eb'
+        borderBottom: '1px solid #e5e7eb',
+        flexShrink: 0
       }}>
         {cards.map((card) => (
           <button
@@ -95,8 +127,8 @@ const ProgressiveInfoCards = () => {
               padding: '12px 0',
               fontSize: '14px',
               fontWeight: activeCard === card.id ? '600' : '500',
-              color: activeCard === card.id ? '#1f2937' : '#6b7280',
-              borderBottom: activeCard === card.id ? '2px solid #1f2937' : '2px solid transparent',
+              color: activeCard === card.id ? '#8b5cf6' : '#6b7280',
+              borderBottom: activeCard === card.id ? '2px solid #8b5cf6' : '2px solid transparent',
               marginBottom: '-1px',
               transition: 'all 0.3s ease',
               whiteSpace: 'nowrap'
@@ -107,10 +139,11 @@ const ProgressiveInfoCards = () => {
         ))}
       </div>
 
-      {/* Card Container - Fixed Height */}
+      {/* Card Container - Fixed Height with Overflow */}
       <div style={{
         position: 'relative',
-        minHeight: '460px',
+        flex: '1',
+        minHeight: 0,
         marginBottom: '0'
       }}>
         {cards.map((card) => (
@@ -121,64 +154,83 @@ const ProgressiveInfoCards = () => {
               top: 0,
               left: 0,
               right: 0,
+              bottom: 0,
               background: '#fff',
               borderRadius: '16px',
-              padding: '36px',
               boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
               border: '1px solid #e5e7eb',
               opacity: activeCard === card.id ? 1 : 0,
               transform: activeCard === card.id ? 'translateY(0)' : 'translateY(12px)',
               transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out',
-              pointerEvents: activeCard === card.id ? 'auto' : 'none'
+              pointerEvents: activeCard === card.id ? 'auto' : 'none',
+              display: 'flex',
+              flexDirection: 'column'
             }}
           >
-            {/* Card Heading */}
-            <h4 style={{
-              fontSize: '24px',
-              fontWeight: '700',
-              color: '#1f2937',
-              marginBottom: '14px'
-            }}>
-              {card.heading}
-            </h4>
-
-            {/* Divider */}
+            {/* Fixed Header Section */}
             <div style={{
-              width: '60px',
-              height: '3px',
-              background: '#1f2937',
-              marginBottom: '24px'
-            }} />
-
-            {/* Bullet List */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '14px'
+              padding: '36px 36px 0 36px',
+              flexShrink: 0
             }}>
-              {card.items.map((item, index) => (
-                <div key={index} style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '12px'
-                }}>
-                  <span style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    background: '#1f2937',
-                    marginTop: '8px',
-                    flexShrink: 0
-                  }} />
-                  <span style={{
-                    fontSize: '15px',
-                    color: '#4b5563',
-                    lineHeight: '1.6'
+              {/* Card Heading */}
+              <h4 style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#1f2937',
+                marginBottom: '14px'
+              }}>
+                {card.heading}
+              </h4>
+
+              {/* Divider */}
+              <div style={{
+                width: '60px',
+                height: '3px',
+                background: '#8b5cf6',
+                marginBottom: '24px'
+              }} />
+            </div>
+
+            {/* Scrollable Content Section */}
+            <div 
+              className="scrollable-content"
+              style={{
+                flex: '1',
+                overflowY: 'auto',
+                padding: '0 36px 36px 36px',
+                minHeight: 0
+              }}
+            >
+              {/* Bullet List */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px'
+              }}>
+                {card.items.map((item, index) => (
+                  <div key={index} style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px'
                   }}>
-                    {item}
-                  </span>
-                </div>
-              ))}
+                    <span style={{
+                      width: '6px',
+                      height: '6px',
+                      borderRadius: '50%',
+                      background: '#8b5cf6',
+                      marginTop: '8px',
+                      flexShrink: 0
+                    }} />
+                    <span style={{
+                      fontSize: '15px',
+                      color: '#4b5563',
+                      lineHeight: '1.6'
+                    }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ))}
@@ -221,7 +273,7 @@ export default function Courses() {
           display: 'grid',
           gridTemplateColumns: '1fr',
           gap: '40px',
-          alignItems: 'start'
+          alignItems: 'stretch'
         }}
         className="program-grid">
 
@@ -337,7 +389,7 @@ export default function Courses() {
                 }}>
                   <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Rating:</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ color: '#1f2937', fontSize: '14px' }}>★★★★★</span>
+                    <span style={{ color: '#8b5cf6', fontSize: '14px' }}>★★★★★</span>
                     <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>4.9</span>
                     <span style={{ fontSize: '13px', color: '#6b7280' }}>(3,000+ reviews)</span>
                   </div>
@@ -351,7 +403,7 @@ export default function Courses() {
                   display: 'block',
                   width: '100%',
                   padding: '16px 24px',
-                  background: '#1f2937',
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                   color: '#fff',
                   textAlign: 'center',
                   borderRadius: '10px',
