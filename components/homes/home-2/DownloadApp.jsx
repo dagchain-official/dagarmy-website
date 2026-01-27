@@ -42,15 +42,15 @@ export default function DownloadApp() {
               <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: '25px', marginBottom: '25px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                   <div style={{ padding: '20px', background: '#fafafa', borderRadius: '12px', border: '1px solid #f0f0f0', transition: 'all 0.3s ease' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>2.5K+</h3>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '5px' }}>2.5K+</h3>
                     <p style={{ fontSize: '14px', margin: 0, color: '#4b5563', fontWeight: '500' }}>Active Learners</p>
                   </div>
                   <div style={{ padding: '20px', background: '#fafafa', borderRadius: '12px', border: '1px solid #f0f0f0', transition: 'all 0.3s ease' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>50+</h3>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '5px' }}>50+</h3>
                     <p style={{ fontSize: '14px', margin: 0, color: '#4b5563', fontWeight: '500' }}>Instructors</p>
                   </div>
                   <div style={{ padding: '20px', background: '#fafafa', borderRadius: '12px', border: '1px solid #f0f0f0', transition: 'all 0.3s ease', gridColumn: 'span 2' }}>
-                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>24/7</h3>
+                    <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '5px' }}>24/7</h3>
                     <p style={{ fontSize: '14px', margin: 0, color: '#4b5563', fontWeight: '500' }}>Learning Access</p>
                   </div>
                 </div>
@@ -65,7 +65,7 @@ export default function DownloadApp() {
                 />
                 <a
                   href="#"
-                  className="wow fadeInUp relative flex items-center gap-1 bg-[#8b5cf6] px-8 border-2 border-[#8b5cf6] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                  className="wow fadeInUp relative flex items-center gap-1 bg-[#000000] px-8 border-2 border-[#000000] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                   data-wow-delay="0.45s"
                   style={{ textDecoration: 'none', height: '52px', minWidth: '220px', justifyContent: 'center' }}
                 >
@@ -84,7 +84,7 @@ export default function DownloadApp() {
                     View All Courses
                   </span>
                   <span
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#1f2937] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
                   ></span>
                   <svg
                     viewBox="0 0 24 24"
@@ -109,14 +109,14 @@ export default function DownloadApp() {
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)',
+                      background: 'rgba(0, 0, 0, 0.06)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: '16px',
                       flexShrink: 0
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                       </svg>
@@ -131,14 +131,14 @@ export default function DownloadApp() {
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)',
+                      background: 'rgba(0, 0, 0, 0.06)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: '16px',
                       flexShrink: 0
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
                         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -156,14 +156,14 @@ export default function DownloadApp() {
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)',
+                      background: 'rgba(0, 0, 0, 0.06)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: '16px',
                       flexShrink: 0
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                         <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
                       </svg>
@@ -178,14 +178,14 @@ export default function DownloadApp() {
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)',
+                      background: 'rgba(0, 0, 0, 0.06)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: '16px',
                       flexShrink: 0
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -202,14 +202,14 @@ export default function DownloadApp() {
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)',
+                      background: 'rgba(0, 0, 0, 0.06)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: '16px',
                       flexShrink: 0
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="12" y1="1" x2="12" y2="23"></line>
                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                       </svg>
