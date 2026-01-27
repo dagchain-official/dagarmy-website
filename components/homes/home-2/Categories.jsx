@@ -155,15 +155,15 @@ export default function Categories() {
                         transform: 'translateY(0)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = '#1f2937';
+                        e.currentTarget.style.borderColor = '#8b5cf6';
                         e.currentTarget.style.transform = 'translateY(-5px)';
-                        e.currentTarget.style.boxShadow = '0 12px 20px -5px rgba(31, 41, 55, 0.15)';
+                        e.currentTarget.style.boxShadow = '0 12px 20px -5px rgba(139, 92, 246, 0.15)';
                         const h5 = e.currentTarget.querySelector('h5');
-                        if (h5) h5.style.color = '#1f2937';
+                        if (h5) h5.style.color = '#8b5cf6';
                         const wrap = e.currentTarget.querySelector('.icon-wrapper');
-                        if (wrap) wrap.style.background = '#f3f4f6';
+                        if (wrap) wrap.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)';
                         const svg = e.currentTarget.querySelector('svg');
-                        if (svg) svg.style.stroke = '#1f2937';
+                        if (svg) svg.style.stroke = '#ffffff';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.borderColor = '#f3f4f6';

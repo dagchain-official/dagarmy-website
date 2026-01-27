@@ -73,33 +73,40 @@ const allStories = [
 ];
 
 const StoryCarousel = () => {
-  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const cardsPerGroup = 3;
-  const totalGroups = Math.ceil(allStories.length / cardsPerGroup);
+  // Define slide groups - each slide shows only complete cards
+  const slideGroups = [
+    [0, 1, 2],     // Cards 1, 2, 3
+    [3, 4, 5],     // Cards 4, 5, 6
+    [6, 7, 8],     // Cards 7, 8, 9
+    [9],           // Card 10 (Experience Was Strong...)
+    [10]           // Card 11 (Coming Soon)
+  ];
+
+  const totalSlides = slideGroups.length;
 
   useEffect(() => {
     if (!isAutoPlaying) return;
 
     const interval = setInterval(() => {
-      setCurrentGroupIndex((prev) => (prev + 1) % totalGroups);
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, totalGroups]);
+  }, [isAutoPlaying, totalSlides]);
 
   const handlePrev = () => {
-    setCurrentGroupIndex((prev) => (prev - 1 + totalGroups) % totalGroups);
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
   const handleNext = () => {
-    setCurrentGroupIndex((prev) => (prev + 1) % totalGroups);
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
   };
 
-  const getCurrentGroup = () => {
-    const startIndex = currentGroupIndex * cardsPerGroup;
-    return allStories.slice(startIndex, startIndex + cardsPerGroup);
+  const getCurrentCards = () => {
+    return slideGroups[currentSlide].map(index => allStories[index]);
   };
 
   return (
@@ -140,8 +147,8 @@ const StoryCarousel = () => {
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#1f2937';
-          e.currentTarget.style.borderColor = '#1f2937';
+          e.currentTarget.style.background = '#8b5cf6';
+          e.currentTarget.style.borderColor = '#8b5cf6';
           e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
           const svg = e.currentTarget.querySelector('svg');
           if (svg) svg.style.stroke = '#fff';
@@ -181,8 +188,8 @@ const StoryCarousel = () => {
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#1f2937';
-          e.currentTarget.style.borderColor = '#1f2937';
+          e.currentTarget.style.background = '#8b5cf6';
+          e.currentTarget.style.borderColor = '#8b5cf6';
           e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
           const svg = e.currentTarget.querySelector('svg');
           if (svg) svg.style.stroke = '#fff';
@@ -207,219 +214,236 @@ const StoryCarousel = () => {
           maxWidth: '1092px',
           margin: '0 auto',
           position: 'relative',
-          padding: '20px 0'
+          padding: '20px 0',
+          overflow: 'hidden'
         }}
       >
         <div
           style={{
-            overflow: 'hidden',
+            position: 'relative',
             width: '100%',
-            position: 'relative'
+            minHeight: '380px'
           }}
         >
-          <div 
-            style={{
-              display: 'flex',
-              gap: '24px',
-              transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-              transform: `translateX(-${currentGroupIndex * (340 * 3 + 24 * 2)}px)`,
-              willChange: 'transform'
-            }}
-          >
-        {allStories.map((story, index) => (
-          <div
-            key={`${story.id}-${index}`}
-            className="story-card"
-            style={{
-              minWidth: '340px',
-              maxWidth: '340px',
-              height: '380px',
-              background: '#fff',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-              border: '1px solid #e5e7eb',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer',
-              flexShrink: 0
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.12)';
-              const preview = e.currentTarget.querySelector('.preview-badge');
-              if (preview) preview.style.opacity = '1';
-              if (preview) preview.style.transform = 'translateY(0)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-              const preview = e.currentTarget.querySelector('.preview-badge');
-              if (preview) preview.style.opacity = '0';
-              if (preview) preview.style.transform = 'translateY(-10px)';
-            }}
-          >
-
-            {/* Video View Area */}
-            <div style={{
-              width: '100%',
-              height: '55%',
-              background: story.isComingSoon 
-                ? 'linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%)'
-                : 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative'
-            }}>
-              {/* Play Button or Coming Soon Icon */}
-              {story.isComingSoon ? (
-                <div style={{
-                  fontSize: '48px',
-                  color: '#9ca3af'
-                }}>
-                  ⏳
-                </div>
-              ) : (
-                <div style={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.95)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#1f2937" style={{ marginLeft: '2px' }}>
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </div>
-              )}
-
-              {/* Bottom Badges - Only show for regular videos */}
-              {!story.isComingSoon && (
-                <div style={{
+          {slideGroups.map((group, slideIndex) => {
+            const cardsInSlide = group.map(index => allStories[index]);
+            const isActive = slideIndex === currentSlide;
+            const cardCount = cardsInSlide.length;
+            
+            return (
+              <div
+                key={slideIndex}
+                style={{
                   position: 'absolute',
-                  bottom: '8px',
-                  right: '8px',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
                   display: 'flex',
-                  gap: '8px',
-                  alignItems: 'center'
-                }}>
-                  {/* Preview Badge */}
-                  <div 
-                    className="preview-badge"
+                  gap: '24px',
+                  justifyContent: cardCount === 1 ? 'center' : 'flex-start',
+                  opacity: isActive ? 1 : 0,
+                  transform: isActive ? 'translateX(0)' : `translateX(${slideIndex > currentSlide ? '50px' : '-50px'})`,
+                  transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out',
+                  pointerEvents: isActive ? 'auto' : 'none'
+                }}
+              >
+                {cardsInSlide.map((story, cardIndex) => (
+                  <div
+                    key={`${story.id}-${cardIndex}`}
+                    className="story-card"
                     style={{
-                      background: 'rgba(0, 0, 0, 0.6)',
-                      padding: '4px 10px',
-                      borderRadius: '6px',
-                      fontSize: '11px',
-                      fontWeight: '600',
-                      color: 'rgba(255, 255, 255, 0.9)',
-                      opacity: 0,
-                      transform: 'translateY(-10px)',
-                      transition: 'opacity 0.3s ease, transform 0.3s ease'
-                    }}
-                  >
-                    Preview
-                  </div>
-                  
-                  {/* Duration Badge */}
-                  <div style={{
-                    background: 'rgba(0, 0, 0, 0.6)',
-                    padding: '4px 10px',
-                    borderRadius: '6px',
-                    fontSize: '11px',
-                    fontWeight: '600',
-                    color: 'rgba(255, 255, 255, 0.9)'
-                  }}>
-                    5:30
-                  </div>
-                </div>
-              )}
-
-              {/* Category Tag */}
-              <div style={{
-                position: 'absolute',
-                top: '12px',
-                left: '12px',
-                padding: '6px 12px',
-                background: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '20px',
-                fontSize: '11px',
-                fontWeight: '600',
-                color: '#6b7280'
-              }}>
-                {story.category}
-              </div>
-            </div>
-
-            {/* Card Content */}
-            <div style={{
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              height: '45%'
-            }}>
-              <h4 style={{
-                fontSize: '15px',
-                fontWeight: '700',
-                color: '#1f2937',
-                marginBottom: '8px',
-                lineHeight: '1.4',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical'
-              }}>
-                {story.title}
-              </h4>
-
-              <div>
-                <p style={{
-                  fontSize: '13px',
-                  lineHeight: '1.5',
-                  color: '#6b7280',
-                  marginBottom: '12px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical'
-                }}>
-                  {story.description}
-                </p>
-
-                {!story.isComingSoon && (
-                  <Link
-                    href="#"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      color: '#1f2937',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      textDecoration: 'none',
-                      transition: 'gap 0.2s ease'
+                      width: cardCount === 1 ? '340px' : '340px',
+                      minWidth: '340px',
+                      maxWidth: '340px',
+                      height: '380px',
+                      background: '#fff',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                      border: '1px solid #e5e7eb',
+                      transition: 'all 0.3s ease',
+                      cursor: 'pointer',
+                      flexShrink: 0
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.gap = '8px';
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.12)';
+                      const preview = e.currentTarget.querySelector('.preview-badge');
+                      if (preview) preview.style.opacity = '1';
+                      if (preview) preview.style.transform = 'translateY(0)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.gap = '6px';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                      const preview = e.currentTarget.querySelector('.preview-badge');
+                      if (preview) preview.style.opacity = '0';
+                      if (preview) preview.style.transform = 'translateY(-10px)';
                     }}
                   >
-                    Watch Story →
-                  </Link>
-                )}
+
+                    {/* Video View Area */}
+                    <div style={{
+                      width: '100%',
+                      height: '55%',
+                      background: story.isComingSoon 
+                        ? 'linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%)'
+                        : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative'
+                    }}>
+                      {/* Play Button or Coming Soon Icon */}
+                      {story.isComingSoon ? (
+                        <div style={{
+                          fontSize: '48px',
+                          color: '#9ca3af'
+                        }}>
+                          ⏳
+                        </div>
+                      ) : (
+                        <div style={{
+                          width: '56px',
+                          height: '56px',
+                          borderRadius: '50%',
+                          background: 'rgba(255, 255, 255, 0.95)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                        }}>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="#8b5cf6" style={{ marginLeft: '2px' }}>
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                        </div>
+                      )}
+
+                      {/* Bottom Badges - Only show for regular videos */}
+                      {!story.isComingSoon && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '8px',
+                          right: '8px',
+                          display: 'flex',
+                          gap: '8px',
+                          alignItems: 'center'
+                        }}>
+                          {/* Preview Badge */}
+                          <div 
+                            className="preview-badge"
+                            style={{
+                              background: 'rgba(0, 0, 0, 0.6)',
+                              padding: '4px 10px',
+                              borderRadius: '6px',
+                              fontSize: '11px',
+                              fontWeight: '600',
+                              color: 'rgba(255, 255, 255, 0.9)',
+                              opacity: 0,
+                              transform: 'translateY(-10px)',
+                              transition: 'opacity 0.3s ease, transform 0.3s ease'
+                            }}
+                          >
+                            Preview
+                          </div>
+                          
+                          {/* Duration Badge */}
+                          <div style={{
+                            background: 'rgba(0, 0, 0, 0.6)',
+                            padding: '4px 10px',
+                            borderRadius: '6px',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            color: 'rgba(255, 255, 255, 0.9)'
+                          }}>
+                            5:30
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Category Tag */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                        padding: '6px 12px',
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        borderRadius: '20px',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        color: '#6b7280'
+                      }}>
+                        {story.category}
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div style={{
+                      padding: '20px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      height: '45%'
+                    }}>
+                      <h4 style={{
+                        fontSize: '15px',
+                        fontWeight: '700',
+                        color: '#1f2937',
+                        marginBottom: '8px',
+                        lineHeight: '1.4',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical'
+                      }}>
+                        {story.title}
+                      </h4>
+
+                      <div>
+                        <p style={{
+                          fontSize: '13px',
+                          lineHeight: '1.5',
+                          color: '#6b7280',
+                          marginBottom: '12px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical'
+                        }}>
+                          {story.description}
+                        </p>
+
+                        {!story.isComingSoon && (
+                          <Link
+                            href="#"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              color: '#8b5cf6',
+                              fontSize: '14px',
+                              fontWeight: '600',
+                              textDecoration: 'none',
+                              transition: 'gap 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.gap = '8px';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.gap = '6px';
+                            }}
+                          >
+                            Watch Story →
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
-        ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
