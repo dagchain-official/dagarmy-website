@@ -45,12 +45,23 @@ export default function RewardsManagement() {
 
   const handleSave = async (configKey) => {
     try {
+      // Get user email from localStorage
+      const userStr = localStorage.getItem('dagarmy_user');
+      const user = userStr ? JSON.parse(userStr) : null;
+      const userEmail = user?.email;
+
+      if (!userEmail) {
+        showMessage('error', 'User not authenticated');
+        return;
+      }
+
       const response = await fetch('/api/rewards/config', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           config_key: configKey,
-          config_value: parseInt(editValue)
+          config_value: parseInt(editValue),
+          user_email: userEmail
         })
       });
 
