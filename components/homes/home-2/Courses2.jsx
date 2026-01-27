@@ -203,24 +203,23 @@ export default function Courses2() {
                     border: '2px solid #e5e7eb',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    padding: '12px 24px',
-                    background: '#000000',
-                    color: '#ffffff',
-                    borderRadius: '8px',
-                    fontWeight: '600',
-                    fontSize: '15px',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
                     transition: 'all 0.3s ease',
-                    border: 'none',
-                    textDecoration: 'none'
+                    flexShrink: 0,
+                    marginRight: '20px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.3)';
+                    e.currentTarget.style.background = '#000000';
+                    e.currentTarget.style.borderColor = '#000000';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+                    e.currentTarget.querySelector('path').setAttribute('stroke', 'white');
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.background = 'white';
+                    e.currentTarget.style.borderColor = '#e5e7eb';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
                     e.currentTarget.querySelector('path').setAttribute('stroke', '#6b7280');
                   }}
                 >

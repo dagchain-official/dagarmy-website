@@ -67,9 +67,9 @@ export default function About() {
                   gridRow: '1 / 5',
                   borderRadius: '16px',
                   overflow: 'hidden',
-                  boxShadow: '0 4px 30px rgba(139, 92, 246, 0.12)',
+                  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.08)',
                   background: '#f8f9fa',
-                  border: '1px solid rgba(139, 92, 246, 0.1)'
+                  border: '1px solid rgba(0, 0, 0, 0.05)'
                 }}
               >
                 <Image
@@ -172,8 +172,8 @@ export default function About() {
                   gridRow: '5 / 7',
                   borderRadius: '16px',
                   background: '#ffffff',
-                  boxShadow: '0 4px 30px rgba(139, 92, 246, 0.12)',
-                  border: '2px solid rgba(139, 92, 246, 0.15)',
+                  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.08)',
+                  border: '2px solid rgba(0, 0, 0, 0.1)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -191,7 +191,7 @@ export default function About() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(139, 92, 246, 0.01) 100%)',
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%)',
                   zIndex: 0
                 }} />
 
@@ -200,7 +200,7 @@ export default function About() {
                   width: '50px',
                   height: '50px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.03) 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

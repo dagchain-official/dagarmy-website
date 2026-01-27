@@ -185,8 +185,8 @@ export default function CourseListDatabaseNew() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '6px',
-                        background: '#fbbf24',
-                        color: '#78350f',
+                        background: '#000000',
+                        color: '#ffffff',
                         padding: '6px 14px',
                         borderRadius: '20px',
                         fontSize: '13px',
@@ -260,7 +260,7 @@ export default function CourseListDatabaseNew() {
 
                     <div style={{
                       marginLeft: 'auto',
-                      background: course.is_free ? '#10b981' : '#1f2937',
+                      background: course.is_free ? '#000000' : '#1f2937',
                       padding: '10px 24px',
                       borderRadius: '8px',
                       fontSize: '18px',
@@ -298,22 +298,22 @@ export default function CourseListDatabaseNew() {
                 {/* Course Mission */}
                 {course.mission && (
                   <div style={{
-                    background: '#f0f9ff',
-                    border: '1px solid #bae6fd',
+                    background: '#f9fafb',
+                    border: '1px solid #e5e7eb',
                     borderRadius: '12px',
                     padding: '24px',
                     marginBottom: '32px'
                   }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2" style={{ flexShrink: 0, marginTop: '2px' }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f2937" strokeWidth="2" style={{ flexShrink: 0, marginTop: '2px' }}>
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                         <polyline points="22 4 12 14.01 9 11.01"/>
                       </svg>
                       <div>
-                        <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#0c4a6e', marginBottom: '8px' }}>
+                        <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
                           Course Mission
                         </h4>
-                        <p style={{ fontSize: '14px', lineHeight: '1.6', color: '#075985', margin: 0 }}>
+                        <p style={{ fontSize: '14px', lineHeight: '1.6', color: '#4b5563', margin: 0 }}>
                           {course.mission}
                         </p>
                       </div>

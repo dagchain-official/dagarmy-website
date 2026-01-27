@@ -78,7 +78,7 @@ export default function Instractors() {
               {instructors.map((instructor, index) => (
                 <SwiperSlide className="swiper-slide" key={index}>
                   <div className="instructors-item hover-img style-column">
-                    <div className="image-wrap">
+                    <div className="image-wrap" style={{ borderRadius: '16px', overflow: 'hidden' }}>
                       <Image
                         className="lazyload"
                         data-src={instructor.imgSrc}
