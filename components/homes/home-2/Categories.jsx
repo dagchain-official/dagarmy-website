@@ -159,9 +159,9 @@ export default function Categories() {
                         e.currentTarget.style.transform = 'translateY(-5px)';
                         e.currentTarget.style.boxShadow = '0 12px 20px -5px rgba(139, 92, 246, 0.15)';
                         const h5 = e.currentTarget.querySelector('h5');
-                        if (h5) h5.style.color = '#8b5cf6';
+                        if (h5) h5.style.color = '#000000';
                         const wrap = e.currentTarget.querySelector('.icon-wrapper');
-                        if (wrap) wrap.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)';
+                        if (wrap) wrap.style.background = '#000000';
                         const svg = e.currentTarget.querySelector('svg');
                         if (svg) svg.style.stroke = '#ffffff';
                       }}

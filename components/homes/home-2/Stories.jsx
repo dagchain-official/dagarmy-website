@@ -147,8 +147,8 @@ const StoryCarousel = () => {
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#8b5cf6';
-          e.currentTarget.style.borderColor = '#8b5cf6';
+          e.currentTarget.style.background = '#000000';
+          e.currentTarget.style.borderColor = '#000000';
           e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
           const svg = e.currentTarget.querySelector('svg');
           if (svg) svg.style.stroke = '#fff';
@@ -188,8 +188,8 @@ const StoryCarousel = () => {
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#8b5cf6';
-          e.currentTarget.style.borderColor = '#8b5cf6';
+          e.currentTarget.style.background = '#000000';
+          e.currentTarget.style.borderColor = '#000000';
           e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
           const svg = e.currentTarget.querySelector('svg');
           if (svg) svg.style.stroke = '#fff';
@@ -287,7 +287,7 @@ const StoryCarousel = () => {
                       height: '55%',
                       background: story.isComingSoon 
                         ? 'linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%)'
-                        : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        : '#000000',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -312,7 +312,7 @@ const StoryCarousel = () => {
                           justifyContent: 'center',
                           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
                         }}>
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="#8b5cf6" style={{ marginLeft: '2px' }}>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="#000000" style={{ marginLeft: '2px' }}>
                             <path d="M8 5v14l11-7z"/>
                           </svg>
                         </div>
@@ -421,7 +421,7 @@ const StoryCarousel = () => {
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '6px',
-                              color: '#8b5cf6',
+                              color: '#000000',
                               fontSize: '14px',
                               fontWeight: '600',
                               textDecoration: 'none',
