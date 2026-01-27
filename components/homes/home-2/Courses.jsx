@@ -127,8 +127,8 @@ const ProgressiveInfoCards = () => {
               padding: '12px 0',
               fontSize: '14px',
               fontWeight: activeCard === card.id ? '600' : '500',
-              color: activeCard === card.id ? '#8b5cf6' : '#6b7280',
-              borderBottom: activeCard === card.id ? '2px solid #8b5cf6' : '2px solid transparent',
+              color: activeCard === card.id ? '#000000' : '#6b7280',
+              borderBottom: activeCard === card.id ? '2px solid #000000' : '2px solid transparent',
               marginBottom: '-1px',
               transition: 'all 0.3s ease',
               whiteSpace: 'nowrap'
@@ -186,7 +186,7 @@ const ProgressiveInfoCards = () => {
               <div style={{
                 width: '60px',
                 height: '3px',
-                background: '#8b5cf6',
+                background: '#000000',
                 marginBottom: '24px'
               }} />
             </div>
@@ -217,7 +217,7 @@ const ProgressiveInfoCards = () => {
                       width: '6px',
                       height: '6px',
                       borderRadius: '50%',
-                      background: '#8b5cf6',
+                      background: '#000000',
                       marginTop: '8px',
                       flexShrink: 0
                     }} />
@@ -389,7 +389,7 @@ export default function Courses() {
                 }}>
                   <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Rating:</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ color: '#8b5cf6', fontSize: '14px' }}>★★★★★</span>
+                    <span style={{ color: '#000000', fontSize: '14px' }}>★★★★★</span>
                     <span style={{ fontSize: '14px', color: '#1f2937', fontWeight: '600' }}>4.9</span>
                     <span style={{ fontSize: '13px', color: '#6b7280' }}>(3,000+ reviews)</span>
                   </div>
@@ -411,15 +411,15 @@ export default function Courses() {
                   fontWeight: '600',
                   textDecoration: 'none',
                   transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(139, 92, 246, 0.4)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.4)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
                 }}
               >
                 Enrol in the Next-Gen Tech Architect Program

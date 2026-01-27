@@ -115,8 +115,8 @@ export default function Features() {
                 e.currentTarget.style.borderColor = '#f0f0f0';
                 const icon = e.currentTarget.querySelector('.feature-icon');
                 if (icon) {
-                  icon.style.background = '#f5f3ff';
-                  icon.style.color = '#8b5cf6';
+                  icon.style.background = '#f3f4f6';
+                  icon.style.color = '#000000';
                 }
               }}
             >
@@ -126,7 +126,7 @@ export default function Features() {
                   width: '56px',
                   height: '56px',
                   borderRadius: '12px',
-                  background: '#f5f3ff',
+                  background: '#f3f4f6',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
