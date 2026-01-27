@@ -56,25 +56,51 @@ function parseRSSFeed(xmlText) {
       const linkMatch = item.match(/<link>(.*?)<\/link>/);
       const link = linkMatch ? linkMatch[1] : '';
       
+      console.log(`Processing post ${index + 1}: ${title}`);
+      
       // Extract publication date
       const pubDateMatch = item.match(/<pubDate>(.*?)<\/pubDate>/);
       const pubDate = pubDateMatch ? formatDate(pubDateMatch[1]) : '';
       
       // Extract description/content
       const descriptionMatch = item.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/);
+      const contentMatch = item.match(/<content:encoded><!\[CDATA\[([\s\S]*?)\]\]><\/content:encoded>/);
       let description = '';
       let imageUrl = '';
       
-      if (descriptionMatch) {
-        const content = descriptionMatch[1];
+      // Try to get content from content:encoded first, then description
+      const content = contentMatch ? contentMatch[1] : (descriptionMatch ? descriptionMatch[1] : '');
+      
+      if (content) {
+        // Try multiple methods to extract image
+        // Method 1: Look for img tag with src
+        let imgMatch = content.match(/<img[^>]+src=["']([^"'>]+)["']/i);
         
-        // Extract first image from content
-        const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
+        // Method 2: Look for figure with img
+        if (!imgMatch) {
+          imgMatch = content.match(/<figure[^>]*>[\s\S]*?<img[^>]+src=["']([^"'>]+)["']/i);
+        }
+        
+        // Method 3: Look for any image URL in the content
+        if (!imgMatch) {
+          imgMatch = content.match(/https?:\/\/[^"\s]+\.(?:jpg|jpeg|png|gif|webp)/i);
+        }
+        
         imageUrl = imgMatch ? imgMatch[1] : '/images/blog/default-blog.jpg';
+        
+        console.log(`  Image URL found: ${imageUrl}`);
+        
+        // Clean up Medium CDN URLs if needed
+        if (imageUrl && imageUrl.includes('cdn-images')) {
+          // Keep the URL as is, Medium CDN should work
+          imageUrl = imageUrl.split('?')[0]; // Remove query parameters
+        }
         
         // Extract text content (remove HTML tags)
         const textContent = content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
         description = textContent.substring(0, 200) + '...';
+      } else {
+        console.log('  No content found for image extraction');
       }
       
       // Extract categories/tags
