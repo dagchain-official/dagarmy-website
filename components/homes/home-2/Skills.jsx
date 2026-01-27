@@ -1,10 +1,13 @@
+"use client";
 import React from "react";
-const tags = [
-  "Artificial Intelligence",
-  "Blockchain Technology",
+import Link from "next/link";
+
+const skills = [
+  "Intelligent Systems and Decision Tools",
+  "Distributed Ledger Technology",
   "Cyber Security",
-  "Data Visualization",
-  "Machine Learning",
+  "Data Visualisation",
+  "Predictive Modeling Concepts",
   "Smart Contracts",
   "Cloud Computing",
   "Web3 Development",
@@ -12,29 +15,123 @@ const tags = [
 ];
 export default function Skills() {
   return (
-    <section className="section-search-tags tf-spacing-11">
-      <div className="tf-container">
+    <section className="section-search-tags tf-spacing-11" style={{ background: '#ffffff', paddingTop: '80px', paddingBottom: '80px' }}>
+      <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div className="row">
           <div className="col-12">
-            <div className="heading-section text-center">
-              <h2 className="font-outfit wow fadeInUp" data-wow-delay="0.1s">
-                Master Future-Ready Tech Skills.&nbsp;Build Your Army.
+            <div className="heading-section text-center" style={{ marginBottom: '48px' }}>
+              <h2 
+                className="font-outfit wow fadeInUp" 
+                data-wow-delay="0.1s"
+                style={{
+                  fontSize: '36px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '20px',
+                  lineHeight: '1.3'
+                }}
+              >
+                Build Skills That Stay Relevant<br />Build Your Army
               </h2>
-              <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
-                Master cutting-edge technologies in AI, Blockchain, Cyber Security, Data Visualization and more. Join the global army of Vibe Coders.
+              <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s" style={{
+                fontSize: '16px',
+                color: '#6b7280',
+                maxWidth: '800px',
+                margin: '0 auto 16px',
+                lineHeight: '1.7'
+              }}>
+                Learning matters when it connects to outcomes. DAG Army focuses on skills that are practiced, refined and strengthened through regular participation. Members learn how systems, data and platforms operate together in real working environments.
+              </div>
+              <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.25s" style={{
+                fontSize: '16px',
+                color: '#6b7280',
+                maxWidth: '800px',
+                margin: '0 auto',
+                lineHeight: '1.7'
+              }}>
+                This is a space for learners who want steady progress, clarity and confidence while building skills that remain useful through 2026 and beyond.
               </div>
             </div>
             <div
-              className="tags-list style3 wow fadeInUp"
+              className="wow fadeInUp"
               data-wow-delay="0.3s"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '16px',
+                marginBottom: '48px'
+              }}
             >
-              <ul className="tag-list">
-                {tags.map((tag, index) => (
-                  <li key={index} className="tag-list-item">
-                    <a href="#">{tag}</a>
-                  </li>
-                ))}
-              </ul>
+              {skills.map((skill, index) => (
+                <div
+                  key={index}
+                  style={{
+                    background: '#fafafa',
+                    borderRadius: '12px',
+                    padding: '20px 24px',
+                    border: '1px solid #f0f0f0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(124, 58, 237, 0.03) 100%)';
+                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#fafafa';
+                    e.currentTarget.style.borderColor = '#f0f0f0';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                    flexShrink: 0
+                  }} />
+                  <span style={{
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    color: '#1a1a1a'
+                  }}>
+                    {skill}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="text-center wow fadeInUp" data-wow-delay="0.4s">
+              <Link
+                href="#"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '14px 32px',
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  color: '#ffffff',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  fontSize: '16px',
+                  transition: 'all 0.3s ease',
+                  border: 'none',
+                  textDecoration: 'none'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Join Our Community
+                <i className="icon-arrow-top-right" />
+              </Link>
             </div>
           </div>
         </div>

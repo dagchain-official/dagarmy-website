@@ -9,6 +9,7 @@ import Events from "@/components/homes/home-2/Events";
 import Facts from "@/components/homes/home-2/Facts";
 import Features from "@/components/homes/home-2/Features";
 import Hero from "@/components/homes/home-2/Hero";
+import NextPhase from "@/components/homes/home-2/NextPhase";
 import Skills from "@/components/homes/home-2/Skills";
 import Stories from "@/components/homes/home-2/Stories";
 import React from "react";
@@ -61,6 +62,7 @@ export default function Home() {
           <BecomeInstractor />
           <Skills />
           <DownloadApp />
+          <NextPhase />
           <Footer1 parentClass="footer style-2" />
         </div>
       </div>
