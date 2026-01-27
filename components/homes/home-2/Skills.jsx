@@ -76,8 +76,8 @@ export default function Skills() {
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(124, 58, 237, 0.03) 100%)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.03) 100%)';
+                    e.currentTarget.style.borderColor = '#000000';
                     e.currentTarget.style.transform = 'translateY(-2px)';
                   }}
                   onMouseLeave={(e) => {
@@ -90,7 +90,7 @@ export default function Skills() {
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                    background: '#000000',
                     flexShrink: 0
                   }} />
                   <span style={{
@@ -111,7 +111,7 @@ export default function Skills() {
                   alignItems: 'center',
                   gap: '8px',
                   padding: '14px 32px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: '#000000',
                   color: '#ffffff',
                   borderRadius: '8px',
                   fontWeight: '600',
@@ -122,7 +122,7 @@ export default function Skills() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
