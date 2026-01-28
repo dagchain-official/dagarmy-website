@@ -145,7 +145,9 @@ export default function Categories() {
                 {dagarmyCategories.slice(colIndex * 3, colIndex * 3 + 3).map((elm, i) => {
                   const globalIndex = colIndex * 3 + i;
                   const isHovered = hoveredIndex === globalIndex;
-                  const isThirdRow = globalIndex >= 6; // Items 6, 7, 8 are in the third row
+                  // Pop-up for: Automation (2), Web3 (5), Dashboard (8)
+                  // Pop-down for: Intelligent (0), Creative (1), Distributed (3), DeFi (4), Excel (6), Power BI (7)
+                  const shouldPopUp = globalIndex === 2 || globalIndex === 5 || globalIndex === 8;
                   
                   return (
                     <div
@@ -223,7 +225,7 @@ export default function Categories() {
                       <div
                         style={{
                           position: 'absolute',
-                          ...(isThirdRow ? { bottom: '100%', marginBottom: '8px' } : { top: '100%', marginTop: '8px' }),
+                          ...(shouldPopUp ? { bottom: '100%', marginBottom: '8px' } : { top: '100%', marginTop: '8px' }),
                           left: 0,
                           right: 0,
                           background: 'linear-gradient(135deg, #000000 0%, #1f2937 100%)',
@@ -234,7 +236,7 @@ export default function Categories() {
                           overflow: 'hidden',
                           transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                           boxShadow: isHovered 
-                            ? (isThirdRow ? '0 -20px 40px -10px rgba(0, 0, 0, 0.3)' : '0 20px 40px -10px rgba(0, 0, 0, 0.3)')
+                            ? (shouldPopUp ? '0 -20px 40px -10px rgba(0, 0, 0, 0.3)' : '0 20px 40px -10px rgba(0, 0, 0, 0.3)')
                             : 'none',
                           zIndex: 10,
                           pointerEvents: isHovered ? 'auto' : 'none',
@@ -242,7 +244,7 @@ export default function Categories() {
                         }}
                       >
                         <div style={{
-                          transform: isHovered ? 'translateY(0)' : (isThirdRow ? 'translateY(10px)' : 'translateY(-10px)'),
+                          transform: isHovered ? 'translateY(0)' : (shouldPopUp ? 'translateY(10px)' : 'translateY(-10px)'),
                           transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s',
                           opacity: isHovered ? 1 : 0
                         }}>
