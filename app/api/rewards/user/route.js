@@ -32,11 +32,15 @@ export async function GET(request) {
       );
     }
 
+    // Get or create referral code from referral_codes table
+    const { data: referralCodeData } = await supabase
+      .rpc('get_or_create_referral_code', { p_user_id: user.id });
+
     // Get referral count
     const { count: referralCount } = await supabase
       .from('referrals')
       .select('*', { count: 'exact', head: true })
-      .eq('referrer_user_id', user.id);
+      .eq('referrer_id', user.id);
 
     // Get total USD earned from sales commissions
     const { data: commissions } = await supabase
@@ -50,6 +54,15 @@ export async function GET(request) {
     // Calculate available points (earned - burned)
     const availablePoints = (user.total_points_earned || 0) - (user.total_points_burned || 0);
 
+    // Get ranking system config for DAG SOLDIER
+    const { data: rankingConfig } = await supabase
+      .from('rewards_config')
+      .select('config_value')
+      .eq('config_key', 'ranking_system_enabled_for_soldier')
+      .single();
+
+    const rankingEnabledForSoldier = rankingConfig?.config_value === 1;
+
     // Return user reward data
     return NextResponse.json({
       success: true,
@@ -58,10 +71,11 @@ export async function GET(request) {
         dagPoints: availablePoints,
         totalReferrals: referralCount || 0,
         usdEarned: totalUsdEarned,
-        referralCode: user.referral_code || '',
+        referralCode: referralCodeData || '',
         tier: user.tier || 'DAG SOLDIER',
         totalPointsEarned: user.total_points_earned || 0,
-        totalPointsBurned: user.total_points_burned || 0
+        totalPointsBurned: user.total_points_burned || 0,
+        rankingEnabledForSoldier: rankingEnabledForSoldier
       }
     });
   } catch (error) {

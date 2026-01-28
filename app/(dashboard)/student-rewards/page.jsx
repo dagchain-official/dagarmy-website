@@ -18,7 +18,8 @@ export default function StudentRewardsPage() {
     totalReferrals: 0,
     usdEarned: 0,
     referralCode: '',
-    tier: 'DAG SOLDIER'
+    tier: 'DAG SOLDIER',
+    rankingEnabledForSoldier: false
   });
 
   useEffect(() => {
@@ -326,21 +327,22 @@ export default function StudentRewardsPage() {
                 </div>
               </div>
 
-              {/* Rank Progression */}
-              <div style={{
-                background: '#fff',
-                borderRadius: '16px',
-                padding: '32px',
-                marginBottom: '32px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                  <Trophy size={24} style={{ color: '#f59e0b' }} />
-                  <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
-                    Rank Progression
-                  </h2>
-                </div>
-                {(() => {
+              {/* Rank Progression - Only show for DAG LIEUTENANT or if enabled for DAG SOLDIER */}
+              {(rewardData.tier === 'DAG LIEUTENANT' || (rewardData.tier === 'DAG SOLDIER' && rewardData.rankingEnabledForSoldier)) && (
+                <div style={{
+                  background: '#fff',
+                  borderRadius: '16px',
+                  padding: '32px',
+                  marginBottom: '32px',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                    <Trophy size={24} style={{ color: '#f59e0b' }} />
+                    <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
+                      Rank Progression
+                    </h2>
+                  </div>
+                  {(() => {
                   // Find current rank index
                   const currentRankIndex = rewardData.currentRank === 'None' 
                     ? -1 
@@ -478,7 +480,8 @@ export default function StudentRewardsPage() {
                     </div>
                   );
                 })()}
-              </div>
+                </div>
+              )}
 
               {/* How to Earn Section */}
               <div style={{
