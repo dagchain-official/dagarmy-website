@@ -35,16 +35,14 @@ export default function StudentRewardsPage() {
   const fetchRewardData = async (email) => {
     try {
       setLoading(true);
-      // TODO: Replace with actual API call
-      // For now, using mock data
-      setRewardData({
-        currentRank: 'INITIATOR',
-        dagPoints: 1250,
-        totalReferrals: 3,
-        usdEarned: 45.50,
-        referralCode: 'DAG-12345',
-        tier: 'DAG LIEUTENANT'
-      });
+      const response = await fetch(`/api/rewards/user?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        setRewardData(data.data);
+      } else {
+        console.error('Failed to fetch reward data:', data.error);
+      }
     } catch (error) {
       console.error('Error fetching reward data:', error);
     } finally {
@@ -342,102 +340,144 @@ export default function StudentRewardsPage() {
                     Rank Progression
                   </h2>
                 </div>
-                <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>
-                  Burn DAG Points to unlock higher ranks and increase your commission rates
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {ranksList.map((rank, index) => {
-                    const isAchieved = index === 0; // Mock: Only first rank achieved
-                    const canAchieve = rewardData.dagPoints >= rank.points && !isAchieved;
-                    
+                {(() => {
+                  // Find current rank index
+                  const currentRankIndex = rewardData.currentRank === 'None' 
+                    ? -1 
+                    : ranksList.findIndex(r => r.name === rewardData.currentRank);
+                  
+                  const nextRankIndex = currentRankIndex + 1;
+                  const nextRank = nextRankIndex < ranksList.length ? ranksList[nextRankIndex] : null;
+                  const currentRank = currentRankIndex >= 0 ? ranksList[currentRankIndex] : null;
+                  
+                  if (!nextRank) {
                     return (
-                      <div
-                        key={rank.name}
-                        style={{
+                      <div style={{
+                        padding: '24px',
+                        background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                        borderRadius: '12px',
+                        textAlign: 'center',
+                        color: '#fff'
+                      }}>
+                        <Crown size={48} style={{ margin: '0 auto 16px' }} />
+                        <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>🎉 MYTHIC RANK ACHIEVED!</h3>
+                        <p style={{ fontSize: '14px', opacity: 0.9 }}>You've reached the highest rank. Congratulations!</p>
+                      </div>
+                    );
+                  }
+                  
+                  const pointsNeeded = nextRank.points - rewardData.dagPoints;
+                  const progressPercentage = currentRank 
+                    ? Math.min(100, ((rewardData.dagPoints - currentRank.points) / (nextRank.points - currentRank.points)) * 100)
+                    : Math.min(100, (rewardData.dagPoints / nextRank.points) * 100);
+                  
+                  return (
+                    <div>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '16px'
+                      }}>
+                        <div>
+                          <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>Current Rank</p>
+                          <p style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
+                            {currentRank ? currentRank.name : 'No Rank'}
+                          </p>
+                        </div>
+                        <ChevronRight size={24} style={{ color: '#6b7280' }} />
+                        <div style={{ textAlign: 'right' }}>
+                          <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>Next Rank</p>
+                          <p style={{ fontSize: '20px', fontWeight: '700', color: nextRank.color }}>
+                            {nextRank.name}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Progress Bar */}
+                      <div style={{
+                        width: '100%',
+                        height: '32px',
+                        background: '#f3f4f6',
+                        borderRadius: '16px',
+                        overflow: 'hidden',
+                        position: 'relative',
+                        marginBottom: '16px'
+                      }}>
+                        <div style={{
+                          width: `${progressPercentage}%`,
+                          height: '100%',
+                          background: `linear-gradient(90deg, ${currentRank?.color || '#6b7280'} 0%, ${nextRank.color} 100%)`,
+                          transition: 'width 0.5s ease',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '16px 20px',
-                          background: isAchieved ? '#f0fdf4' : '#f9fafb',
-                          borderRadius: '12px',
-                          border: `2px solid ${isAchieved ? '#10b981' : '#e5e7eb'}`,
-                          opacity: isAchieved ? 1 : 0.7
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                          <div style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '10px',
-                            background: rank.color,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#fff',
-                            fontWeight: '700',
-                            fontSize: '18px'
-                          }}>
-                            {index + 1}
-                          </div>
-                          <div>
-                            <p style={{ fontSize: '16px', fontWeight: '700', color: '#111827', marginBottom: '2px' }}>
-                              {rank.name}
-                            </p>
-                            <p style={{ fontSize: '13px', color: '#6b7280' }}>
-                              {rank.points.toLocaleString()} Points Required
-                            </p>
-                          </div>
+                          justifyContent: 'flex-end',
+                          paddingRight: '12px'
+                        }}>
+                          {progressPercentage > 10 && (
+                            <span style={{ fontSize: '12px', fontWeight: '700', color: '#fff' }}>
+                              {progressPercentage.toFixed(0)}%
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Stats */}
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '16px',
+                        background: '#f9fafb',
+                        borderRadius: '12px'
+                      }}>
+                        <div>
+                          <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Your DAG Points</p>
+                          <p style={{ fontSize: '18px', fontWeight: '700', color: '#111827' }}>
+                            {rewardData.dagPoints.toLocaleString()}
+                          </p>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Points Needed</p>
+                          <p style={{ fontSize: '18px', fontWeight: '700', color: pointsNeeded > 0 ? '#ef4444' : '#10b981' }}>
+                            {pointsNeeded > 0 ? pointsNeeded.toLocaleString() : '0'}
+                          </p>
                         </div>
                         <div>
-                          {isAchieved ? (
-                            <div style={{
-                              padding: '8px 16px',
-                              borderRadius: '8px',
-                              background: '#10b981',
-                              color: '#fff',
-                              fontSize: '13px',
-                              fontWeight: '600',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px'
-                            }}>
-                              <Check size={16} />
-                              Achieved
-                            </div>
-                          ) : canAchieve ? (
+                          {pointsNeeded <= 0 ? (
                             <button style={{
-                              padding: '8px 16px',
+                              padding: '10px 20px',
                               borderRadius: '8px',
-                              background: '#6366f1',
+                              background: nextRank.color,
                               color: '#fff',
                               border: 'none',
-                              fontSize: '13px',
+                              fontSize: '14px',
                               fontWeight: '600',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
-                              gap: '6px'
+                              gap: '8px'
                             }}>
                               <ArrowUp size={16} />
-                              Upgrade
+                              Upgrade to {nextRank.name}
                             </button>
                           ) : (
                             <div style={{
-                              padding: '8px 16px',
+                              padding: '10px 20px',
                               borderRadius: '8px',
                               background: '#e5e7eb',
                               color: '#6b7280',
-                              fontSize: '13px',
+                              fontSize: '14px',
                               fontWeight: '600'
                             }}>
-                              Locked
+                              Keep Earning
                             </div>
                           )}
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* How to Earn Section */}
