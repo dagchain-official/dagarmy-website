@@ -145,6 +145,7 @@ export default function Categories() {
                 {dagarmyCategories.slice(colIndex * 3, colIndex * 3 + 3).map((elm, i) => {
                   const globalIndex = colIndex * 3 + i;
                   const isHovered = hoveredIndex === globalIndex;
+                  const isThirdRow = globalIndex >= 6; // Items 6, 7, 8 are in the third row
                   
                   return (
                     <div
@@ -218,14 +219,13 @@ export default function Categories() {
                         </div>
                       </Link>
                       
-                      {/* Pop-down Description Panel */}
+                      {/* Conditional Pop-up/Pop-down Description Panel */}
                       <div
                         style={{
                           position: 'absolute',
-                          top: '100%',
+                          ...(isThirdRow ? { bottom: '100%', marginBottom: '8px' } : { top: '100%', marginTop: '8px' }),
                           left: 0,
                           right: 0,
-                          marginTop: '8px',
                           background: 'linear-gradient(135deg, #000000 0%, #1f2937 100%)',
                           borderRadius: '16px',
                           padding: isHovered ? '20px 24px' : '0 24px',
@@ -234,7 +234,7 @@ export default function Categories() {
                           overflow: 'hidden',
                           transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                           boxShadow: isHovered 
-                            ? '0 20px 40px -10px rgba(0, 0, 0, 0.3)' 
+                            ? (isThirdRow ? '0 -20px 40px -10px rgba(0, 0, 0, 0.3)' : '0 20px 40px -10px rgba(0, 0, 0, 0.3)')
                             : 'none',
                           zIndex: 10,
                           pointerEvents: isHovered ? 'auto' : 'none',
@@ -242,7 +242,7 @@ export default function Categories() {
                         }}
                       >
                         <div style={{
-                          transform: isHovered ? 'translateY(0)' : 'translateY(-10px)',
+                          transform: isHovered ? 'translateY(0)' : (isThirdRow ? 'translateY(10px)' : 'translateY(-10px)'),
                           transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s',
                           opacity: isHovered ? 1 : 0
                         }}>
