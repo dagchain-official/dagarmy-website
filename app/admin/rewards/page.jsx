@@ -1,15 +1,15 @@
 import AdminLayout from "@/components/admin/AdminLayout";
-import RewardsManagement from "@/components/admin/RewardsManagement";
+import RewardsManagementComprehensive from "@/components/admin/RewardsManagementComprehensive";
 
 export const metadata = {
-  title: "Rewards Management | DAGARMY Admin",
-  description: "Manage DAG Points and tier rewards for DAGARMY members",
+  title: "Comprehensive Rewards Management | DAGARMY Admin",
+  description: "Manage MLM reward system: DAG Points, Referrals, Rankings, and Sales Commissions",
 };
 
 export default function RewardsPage() {
   return (
     <AdminLayout>
-      <RewardsManagement />
+      <RewardsManagementComprehensive />
     </AdminLayout>
   );
 }
