@@ -91,7 +91,7 @@ export default function Banner() {
                 <span
                   className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-3 group-hover:translate-x-3"
                 >
-                  Join DAG CHAIN
+                  Join DAG ARMY
                 </span>
                 <span
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[270px] group-hover:h-[270px] group-hover:opacity-100 z-[0]"
