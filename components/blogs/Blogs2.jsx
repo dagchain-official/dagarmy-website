@@ -115,8 +115,8 @@ export default function Blogs2() {
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.transform = "translateY(-5px)";
-                          e.currentTarget.style.boxShadow = "0 8px 30px rgba(139, 92, 246, 0.15)";
-                          e.currentTarget.style.borderColor = "rgba(139, 92, 246, 0.2)";
+                          e.currentTarget.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.15)";
+                          e.currentTarget.style.borderColor = "#000000";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform = "translateY(0)";
@@ -550,12 +550,16 @@ export default function Blogs2() {
                                   transition: "all 0.2s ease",
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = "linear-gradient(135deg, #1f2937 0%, #8f5fe2ff 100%)";
+                                  e.currentTarget.style.background = "linear-gradient(135deg, #000000 0%, #1f2937 100%)";
                                   e.currentTarget.style.color = "#fff";
+                                  e.currentTarget.style.transform = "translateY(-2px)";
+                                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.background = "#f3f4f6";
                                   e.currentTarget.style.color = "#374151";
+                                  e.currentTarget.style.transform = "translateY(0)";
+                                  e.currentTarget.style.boxShadow = "none";
                                 }}
                               >
                                 {tag}
