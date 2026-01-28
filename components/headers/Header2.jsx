@@ -7,6 +7,7 @@ import { useDisconnect } from "wagmi";
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
 import { useAuth } from "@/context/AuthContext";
+import styles from "./AnimatedSignInButton.module.css";
 
 export default function Header2() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -299,94 +300,9 @@ export default function Header2() {
 
           {/* Sign In / Dashboard Button - Animated */}
           <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <style dangerouslySetInnerHTML={{
-              __html: `
-                .animated-signin-btn {
-                  cursor: pointer;
-                  padding: 10px 20px;
-                  border-radius: 30px;
-                  border: 3px solid #000000;
-                  display: inline-block;
-                  overflow: hidden;
-                  background: #000000;
-                  box-shadow:
-                    inset 4px 4px 8px rgba(255, 255, 255, 0.1),
-                    inset -4px -4px 8px rgba(0, 0, 0, 0.5),
-                    2px 2px 8px rgba(0, 0, 0, 0.3),
-                    -2px -2px 8px rgba(255, 255, 255, 0.05);
-                  transition:
-                    box-shadow 0.3s ease,
-                    transform 0.1s ease;
-                }
-
-                .animated-signin-btn span {
-                  font-weight: 700;
-                  font-size: 16px;
-                  color: #ffffff;
-                  text-shadow:
-                    1px 1px 2px rgba(0, 0, 0, 0.5),
-                    -1px -1px 1px rgba(255, 255, 255, 0.1);
-                  position: relative;
-                  display: inline-block;
-                  transition: transform 0.3s ease-out;
-                  z-index: 1;
-                  padding: 0px 3px;
-                }
-
-                .animated-signin-btn span:nth-child(1) {
-                  transition-delay: 0ms;
-                }
-                .animated-signin-btn span:nth-child(2) {
-                  transition-delay: 50ms;
-                }
-                .animated-signin-btn span:nth-child(3) {
-                  transition-delay: 100ms;
-                }
-                .animated-signin-btn span:nth-child(4) {
-                  transition-delay: 150ms;
-                }
-                .animated-signin-btn span:nth-child(5) {
-                  transition-delay: 200ms;
-                }
-                .animated-signin-btn span:nth-child(6) {
-                  transition-delay: 250ms;
-                }
-                .animated-signin-btn span:nth-child(7) {
-                  transition-delay: 300ms;
-                }
-                .animated-signin-btn span:nth-child(8) {
-                  transition-delay: 350ms;
-                }
-                .animated-signin-btn span:nth-child(9) {
-                  transition-delay: 400ms;
-                }
-
-                .animated-signin-btn:hover span {
-                  color: #f5f5f5;
-                }
-
-                .animated-signin-btn:active span {
-                  color: #ffffff;
-                  text-shadow:
-                    1px 1px 2px rgba(0, 0, 0, 0.6),
-                    -1px -1px 2px rgba(255, 255, 255, 0.15);
-                }
-
-                .animated-signin-btn span:hover {
-                  transform: translateY(-7px);
-                }
-
-                .animated-signin-btn:active {
-                  box-shadow:
-                    inset 2px 2px 4px rgba(0, 0, 0, 0.6),
-                    inset -2px -2px 4px rgba(255, 255, 255, 0.1);
-                  transform: scale(0.98);
-                }
-              `
-            }} />
             <button
               onClick={isAuthenticated ? handleDashboardClick : handleSignInClick}
-              className="animated-signin-btn"
+              className={styles.animatedSigninBtn}
             >
               {isAuthenticated ? (
                 <>
