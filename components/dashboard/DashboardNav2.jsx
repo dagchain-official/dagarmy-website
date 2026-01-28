@@ -29,6 +29,16 @@ const dashboardItems = [
     label: "My Courses",
   },
   {
+    href: "/student-rewards",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="8" r="6" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "Rewards",
+  },
+  {
     href: "/student-reviews",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
