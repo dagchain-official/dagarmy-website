@@ -131,7 +131,7 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
                     backgroundClip: "text",
                     marginBottom: "4px"
                   }}>
-                    250+
+                    50+
                   </div>
                   <div style={{
                     fontSize: "12px",

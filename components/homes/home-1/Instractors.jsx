@@ -39,26 +39,30 @@ export default function Instractors() {
                   Industry experts and thought leaders teaching cutting-edge tech skills
                 </div>
                 <Link
-                  href={`/instructor-list`}
+                  href={`/mentorship`}
                   className="wow fadeInUp"
                   data-wow-delay="0.2s"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#1f2937',
-                    fontSize: '16px',
+                    padding: '12px 24px',
+                    background: '#000000',
+                    color: '#ffffff',
+                    fontSize: '15px',
                     fontWeight: '600',
                     textDecoration: 'none',
-                    transition: 'all 0.3s ease'
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    border: 'none'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#1f2937';
-                    e.currentTarget.style.gap = '12px';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = '#1f2937';
-                    e.currentTarget.style.gap = '8px';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
                   See All Instructors
