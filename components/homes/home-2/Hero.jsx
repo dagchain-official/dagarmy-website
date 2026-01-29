@@ -97,11 +97,11 @@ export default function Hero() {
 
   return (
     <>
-      <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '80px', paddingBottom: '40px' }}>
+      <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '80px', paddingBottom: '0' }}>
         <div className="tf-container" style={{ background: '#fff' }}>
           <div className="row items-center" style={{ alignItems: 'center', minHeight: 'auto' }}>
             <div className="col-lg-6">
-              <div className="content" style={{ paddingTop: '0', paddingBottom: '0' }}>
+              <div className="content" style={{ paddingTop: '0', paddingBottom: '0', marginBottom: '0' }}>
                 <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{
                   fontSize: '64px',
                   lineHeight: '1.2',

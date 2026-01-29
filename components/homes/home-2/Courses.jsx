@@ -244,7 +244,7 @@ export default function Courses() {
 
   return (
     <section className="section-popular-program" style={{ 
-      padding: '40px 0 80px',
+      padding: '64px 0 80px',
       background: '#fff'
     }}>
       <style jsx>{`
