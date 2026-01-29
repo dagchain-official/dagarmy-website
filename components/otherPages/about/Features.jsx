@@ -27,19 +27,19 @@ export default function Features() {
                 background: '#ffffff',
                 borderRadius: '16px',
                 boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                border: '1px solid rgba(139, 92, 246, 0.08)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
                 transition: 'all 0.3s ease',
                 height: '100%'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(139, 92, 246, 0.15)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.2)';
+                e.currentTarget.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.2)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.06)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.08)';
+                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
               }}
             >
               <div className="icons" style={{ marginBottom: '25px' }}>
@@ -48,7 +48,7 @@ export default function Features() {
                   height: '80px',
                   margin: '0 auto',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -79,19 +79,19 @@ export default function Features() {
                 background: '#ffffff',
                 borderRadius: '16px',
                 boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                border: '1px solid rgba(139, 92, 246, 0.08)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
                 transition: 'all 0.3s ease',
                 height: '100%'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(139, 92, 246, 0.15)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.2)';
+                e.currentTarget.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.2)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.06)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.08)';
+                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
               }}
             >
               <div className="icons" style={{ marginBottom: '25px' }}>
@@ -100,7 +100,7 @@ export default function Features() {
                   height: '80px',
                   margin: '0 auto',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -132,19 +132,19 @@ export default function Features() {
                 background: '#ffffff',
                 borderRadius: '16px',
                 boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                border: '1px solid rgba(139, 92, 246, 0.08)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
                 transition: 'all 0.3s ease',
                 height: '100%'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(139, 92, 246, 0.15)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.2)';
+                e.currentTarget.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.2)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.06)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.08)';
+                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
               }}
             >
               <div className="icons" style={{ marginBottom: '25px' }}>
@@ -153,7 +153,7 @@ export default function Features() {
                   height: '80px',
                   margin: '0 auto',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'

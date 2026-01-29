@@ -130,7 +130,8 @@ export default function Hero() {
                   </p>
                 </div>
                 <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
-                  <button
+                  <PremiumButton
+                    text="Get Started"
                     onClick={() => {
                       if (typeof window !== 'undefined' && window.modal) {
                         window.modal.open();
@@ -138,10 +139,8 @@ export default function Hero() {
                     }}
                     className="wow fadeInUp"
                     data-wow-delay="0.4s"
-                    style={{ fontSize: '16px', height: '52px', minWidth: '160px', background: '#000', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '600', cursor: 'pointer', padding: '0 32px' }}
-                  >
-                    Get Started
-                  </button>
+                    style={{ fontSize: '16px', height: '52px', minWidth: '160px' }}
+                  />
                   <a
                     href="/courses"
                     className="custom-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
@@ -180,7 +179,7 @@ export default function Hero() {
                         <span key={star} style={{ color: '#1f2937', fontSize: '16px' }}>★</span>
                       ))}
                     </div>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#621e6dff', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937', whiteSpace: 'nowrap' }}>
                       35,000+ verified learners worldwide
                     </div>
                   </div>
