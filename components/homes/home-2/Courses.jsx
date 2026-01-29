@@ -397,8 +397,12 @@ export default function Courses() {
               </div>
 
               {/* CTA Button */}
-              <Link
-                href="#"
+              <button
+                onClick={() => {
+                  if (typeof window !== 'undefined' && window.modal) {
+                    window.modal.open();
+                  }
+                }}
                 style={{
                   display: 'block',
                   width: '100%',
@@ -409,7 +413,8 @@ export default function Courses() {
                   borderRadius: '10px',
                   fontSize: '16px',
                   fontWeight: '600',
-                  textDecoration: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
                 }}
@@ -423,7 +428,7 @@ export default function Courses() {
                 }}
               >
                 Enrol in the Next-Gen Tech Architect Program
-              </Link>
+              </button>
             </div>
           </div>
 
