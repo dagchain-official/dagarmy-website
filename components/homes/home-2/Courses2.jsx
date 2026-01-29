@@ -160,7 +160,7 @@ export default function Courses2() {
                     Most Selected Programs Across Technology and Analytics
                   </div>
                   <Link
-                    href={`/course-list-v1`}
+                    href={`/courses`}
                     className="tf-btn-arrow wow fadeInUp"
                     data-wow-delay="0.3s"
                     style={{
