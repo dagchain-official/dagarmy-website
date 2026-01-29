@@ -15,7 +15,7 @@ const skills = [
 ];
 export default function Skills() {
   return (
-    <section className="section-search-tags tf-spacing-11" style={{ background: '#ffffff', paddingTop: '80px', paddingBottom: '80px' }}>
+    <section className="section-search-tags tf-spacing-11" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div className="row">
           <div className="col-12">
@@ -102,36 +102,6 @@ export default function Skills() {
                   </span>
                 </div>
               ))}
-            </div>
-            <div className="text-center wow fadeInUp" data-wow-delay="0.4s">
-              <Link
-                href="#"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '14px 32px',
-                  background: '#000000',
-                  color: '#ffffff',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  transition: 'all 0.3s ease',
-                  border: 'none',
-                  textDecoration: 'none'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Join Our Community
-                <i className="icon-arrow-top-right" />
-              </Link>
             </div>
           </div>
         </div>
