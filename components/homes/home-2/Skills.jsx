@@ -58,8 +58,7 @@ export default function Skills() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '16px',
-                marginBottom: '48px'
+                gap: '16px'
               }}
             >
               {skills.map((skill, index) => (
