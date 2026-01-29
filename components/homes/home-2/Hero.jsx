@@ -143,7 +143,7 @@ export default function Hero() {
                     Get Started
                   </button>
                   <a
-                    href="/course-list-v1"
+                    href="/courses"
                     className="custom-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                     style={{ textDecoration: 'none', height: '52px', minWidth: '200px', justifyContent: 'center' }}
                   >
