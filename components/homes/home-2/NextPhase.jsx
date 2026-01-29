@@ -99,8 +99,12 @@ export default function NextPhase() {
                 </p>
               </div>
 
-              <Link
-                href="#"
+              <button
+                onClick={() => {
+                  if (typeof window !== 'undefined' && window.modal) {
+                    window.modal.open();
+                  }
+                }}
                 className="wow fadeInUp"
                 data-wow-delay="0.4s"
                 style={{
@@ -115,7 +119,7 @@ export default function NextPhase() {
                   fontSize: '17px',
                   transition: 'all 0.3s ease',
                   border: 'none',
-                  textDecoration: 'none',
+                  cursor: 'pointer',
                   boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)'
                 }}
                 onMouseEnter={(e) => {
@@ -131,7 +135,7 @@ export default function NextPhase() {
               >
                 Join DAG Army in India
                 <i className="icon-arrow-top-right" />
-              </Link>
+              </button>
             </div>
           </div>
         </div>

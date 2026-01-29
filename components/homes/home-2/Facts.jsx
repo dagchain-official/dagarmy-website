@@ -179,7 +179,7 @@ export default function Facts() {
                 </div>
               </div>
               <a
-                href="#"
+                href="/course-list-v1"
                 className="wow fadeInUp relative flex items-center gap-1 bg-[#000000] px-8 border-2 border-[#000000] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                 data-wow-delay="0.5s"
                 style={{ textDecoration: 'none', height: '52px', width: '280px', justifyContent: 'center' }}

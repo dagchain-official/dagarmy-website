@@ -130,15 +130,20 @@ export default function Hero() {
                   </p>
                 </div>
                 <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
-                  <PremiumButton
-                    text="Get Started"
-                    href="#"
+                  <button
+                    onClick={() => {
+                      if (typeof window !== 'undefined' && window.modal) {
+                        window.modal.open();
+                      }
+                    }}
                     className="wow fadeInUp"
                     data-wow-delay="0.4s"
-                    style={{ fontSize: '16px', height: '52px', minWidth: '160px' }}
-                  />
+                    style={{ fontSize: '16px', height: '52px', minWidth: '160px', background: '#000', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '600', cursor: 'pointer', padding: '0 32px' }}
+                  >
+                    Get Started
+                  </button>
                   <a
-                    href="#"
+                    href="/course-list-v1"
                     className="custom-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                     style={{ textDecoration: 'none', height: '52px', minWidth: '200px', justifyContent: 'center' }}
                   >
