@@ -6,32 +6,34 @@ export default function DownloadApp() {
   return (
     <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
       <div className="tf-container">
-        <div className="row align-items-center">
-          <div className="col-md-6">
-            <div className="content-left">
-              <h2
-                className="fw-7 letter-spacing-1 wow fadeInUp"
-                data-wow-delay="0.2s"
-                style={{
-                  fontSize: '36px',
-                  fontWeight: '700',
-                  color: '#1a1a1a',
-                  marginBottom: '20px',
-                  lineHeight: '1.3'
-                }}
-              >
-                Ready for the Next Step in <br />
-                Your Career Growth
-              </h2>
-              <p className="fs-15 wow fadeInUp" data-wow-delay="0.3s" style={{
-                fontSize: '16px',
-                color: '#6b7280',
-                lineHeight: '1.7',
-                marginBottom: '28px'
-              }}>
-                Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across India.
-              </p>
-              <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: '25px', marginBottom: '25px' }}>
+        <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div className="content-left" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ flex: '0 0 auto' }}>
+                <h2
+                  className="fw-7 letter-spacing-1 wow fadeInUp"
+                  data-wow-delay="0.2s"
+                  style={{
+                    fontSize: '36px',
+                    fontWeight: '700',
+                    color: '#1a1a1a',
+                    marginBottom: '20px',
+                    lineHeight: '1.3'
+                  }}
+                >
+                  Ready for the Next Step in <br />
+                  Your Career Growth
+                </h2>
+                <p className="fs-15 wow fadeInUp" data-wow-delay="0.3s" style={{
+                  fontSize: '16px',
+                  color: '#6b7280',
+                  lineHeight: '1.7',
+                  marginBottom: '40px'
+                }}>
+                  Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across India.
+                </p>
+              </div>
+              <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: 'auto' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                   <div style={{ padding: '20px', background: '#fafafa', borderRadius: '12px', border: '1px solid #f0f0f0', transition: 'all 0.3s ease' }}>
                     <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '5px' }}>2.5K+</h3>
@@ -49,8 +51,8 @@ export default function DownloadApp() {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ padding: '40px' }}>
+          <div style={{ display: 'flex' }}>
+            <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ padding: '40px', width: '100%' }}>
               <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', border: '1px solid #f0f0f0', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)' }}>
                 <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '28px', color: '#1a1a1a' }}>What You Get as a DAG Army Member</h3>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
