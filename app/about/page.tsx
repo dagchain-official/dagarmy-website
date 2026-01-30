@@ -25,7 +25,7 @@ export default function AboutPage() {
           <OurVisions />
           <Testimonials parentClass="tf-spacing-5 widget-saying bg-4 page-about" />
           <div className="tf-spacing-5 pt-0"></div>
-          <Instractors />
+          {/* <Instractors /> */}
           <Banner />
         </div>
 

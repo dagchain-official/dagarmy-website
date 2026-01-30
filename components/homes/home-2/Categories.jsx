@@ -127,14 +127,6 @@ export default function Categories() {
             <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s">
               Choose a Direction That Matches Your Goals
             </div>
-            <Link
-              href={`/categories`}
-              className="tf-btn-arrow wow fadeInUp"
-              data-wow-delay="0.3s"
-            >
-              Show More Categories
-              <i className="icon-arrow-top-right" />
-            </Link>
           </div>
         </div>
         <div className="row">
@@ -267,29 +259,6 @@ export default function Categories() {
                           }}>
                             {elm.description}
                           </p>
-                          
-                          {/* Learn More Link */}
-                          <div style={{
-                            marginTop: '16px',
-                            paddingTop: '16px',
-                            borderTop: '1px solid rgba(255, 255, 255, 0.1)'
-                          }}>
-                            <span style={{
-                              color: '#ffffff',
-                              fontSize: '13px',
-                              fontWeight: '600',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '6px',
-                              transition: 'gap 0.3s ease'
-                            }}>
-                              Explore Category
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="7" y1="17" x2="17" y2="7"></line>
-                                <polyline points="7 7 17 7 17 17"></polyline>
-                              </svg>
-                            </span>
-                          </div>
                         </div>
                       </div>
                     </div>

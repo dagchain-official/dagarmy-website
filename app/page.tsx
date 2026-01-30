@@ -56,7 +56,7 @@ export default function Home() {
           <Stories />
           <Categories />
           <Features />
-          <Courses2 />
+          {/* <Courses2 /> */}
           <Facts />
           <Events />
           <BecomeInstractor />
