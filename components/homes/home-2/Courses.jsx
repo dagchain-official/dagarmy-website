@@ -308,7 +308,7 @@ export default function Courses() {
             {/* Image Carousel */}
             <div style={{
               width: '100%',
-              height: '180px',
+              height: '380px',
               position: 'relative',
               overflow: 'hidden',
               borderBottom: '1px solid #e5e7eb'
@@ -335,13 +335,13 @@ export default function Courses() {
             </div>
 
             {/* Card Content */}
-            <div style={{ padding: '28px' }}>
+            <div style={{ padding: '20px' }}>
               {/* Program Name */}
               <h3 style={{
                 fontSize: '24px',
                 fontWeight: '700',
                 color: '#1f2937',
-                marginBottom: '12px',
+                marginBottom: '8px',
                 lineHeight: '1.3'
               }}>
                 The Next-Gen Tech Architect Program
@@ -351,7 +351,7 @@ export default function Courses() {
               <p style={{
                 fontSize: '15px',
                 color: '#6b7280',
-                marginBottom: '18px',
+                marginBottom: '14px',
                 lineHeight: '1.5'
               }}>
                 One Unified Journey Across AI, Blockchain, and Data Visualisation
@@ -361,15 +361,15 @@ export default function Courses() {
               <div style={{
                 height: '1px',
                 background: '#e5e7eb',
-                marginBottom: '18px'
+                marginBottom: '14px'
               }} />
 
               {/* Program Meta */}
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px',
-                marginBottom: '24px'
+                gap: '10px',
+                marginBottom: '18px'
               }}>
                 <div style={{
                   display: 'flex',
