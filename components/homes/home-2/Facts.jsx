@@ -177,11 +177,32 @@ export default function Facts() {
                   </div>
                   <p style={{ fontSize: '15px', color: '#4b5563', fontWeight: '500' }}>Core Tracks</p>
                 </div>
+                <div
+                  className="number-counter wow fadeInUp"
+                  data-wow-delay="0.5s"
+                >
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                  <div className="counter-content">
+                    <span
+                      className="number"
+                      data-speed={2500}
+                      data-to={100}
+                      data-inviewport="yes"
+                    >
+                      100
+                    </span>
+                    +
+                  </div>
+                  <p style={{ fontSize: '15px', color: '#4b5563', fontWeight: '500' }}>Hands-On Projects</p>
+                </div>
               </div>
               <a
                 href="/mentorship"
                 className="wow fadeInUp relative flex items-center gap-1 bg-[#000000] px-8 border-2 border-[#000000] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
-                data-wow-delay="0.5s"
+                data-wow-delay="0.6s"
                 style={{ textDecoration: 'none', height: '52px', width: '280px', justifyContent: 'center' }}
               >
                 <svg
