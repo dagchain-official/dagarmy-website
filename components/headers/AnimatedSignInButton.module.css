@@ -17,6 +17,7 @@
 }
 
 .animatedSigninBtn span {
+  font-family: 'Nasalization', sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: #ffffff;
@@ -27,7 +28,8 @@
   display: inline-block;
   transition: transform 0.3s ease-out;
   z-index: 1;
-  padding: 0px 3px;
+  padding: 0px 1px;
+  letter-spacing: normal;
 }
 
 .animatedSigninBtn span:nth-child(1) {
