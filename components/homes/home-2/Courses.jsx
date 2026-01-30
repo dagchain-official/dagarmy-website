@@ -46,9 +46,9 @@ const ProgressiveInfoCards = () => {
     }
   ];
 
-  // Fixed height to match left card: 180px (image) + 28px (padding top) + content + 28px (padding bottom)
-  // Total left card height is approximately 640px
-  const CARD_FIXED_HEIGHT = 640;
+  // Fixed height to match left card: 380px (image) + 20px (padding top) + content + 20px (padding bottom)
+  // Total left card height is approximately 620px
+  const CARD_FIXED_HEIGHT = 620;
 
   useEffect(() => {
     const interval = setInterval(() => {
