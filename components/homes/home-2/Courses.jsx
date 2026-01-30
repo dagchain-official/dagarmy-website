@@ -241,6 +241,21 @@ const ProgressiveInfoCards = () => {
 };
 
 export default function Courses() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const programImages = [
+    '/images/courseimage/image1.png',
+    '/images/courseimage/iamge 2.png',
+    '/images/courseimage/iamge 3 .png'
+  ];
+
+  // Image carousel - rotate every 5 seconds
+  useEffect(() => {
+    const imageInterval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % 3);
+    }, 5000);
+    return () => clearInterval(imageInterval);
+  }, []);
 
   return (
     <section className="section-popular-program" style={{ 
@@ -290,33 +305,33 @@ export default function Courses() {
           onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.12)'}
           onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.08)'}>
             
-            {/* Image Placeholder */}
+            {/* Image Carousel */}
             <div style={{
               width: '100%',
               height: '180px',
-              background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden',
               borderBottom: '1px solid #e5e7eb'
             }}>
-              <div style={{
-                textAlign: 'center',
-                color: '#9ca3af'
-              }}>
-                <div style={{
-                  fontSize: '48px',
-                  marginBottom: '8px'
-                }}>
-                  📐
-                </div>
-                <div style={{
-                  fontSize: '13px',
-                  fontWeight: '500'
-                }}>
-                  Program Visual
-                </div>
-              </div>
+              {programImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Program visual ${index + 1}`}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                    opacity: currentImageIndex === index ? 1 : 0,
+                    transition: 'opacity 1s ease-in-out',
+                    pointerEvents: 'none'
+                  }}
+                />
+              ))}
             </div>
 
             {/* Card Content */}
