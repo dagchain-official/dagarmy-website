@@ -48,7 +48,7 @@ const ProgressiveInfoCards = () => {
 
   // Fixed height to match left card: 380px (image) + 20px (padding top) + content + 20px (padding bottom)
   // Total left card height is approximately 620px
-  const CARD_FIXED_HEIGHT = 620;
+  const CARD_FIXED_HEIGHT = 600;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -308,7 +308,7 @@ export default function Courses() {
             {/* Image Carousel */}
             <div style={{
               width: '100%',
-              height: '380px',
+              height: '280px',
               position: 'relative',
               overflow: 'hidden',
               borderBottom: '1px solid #e5e7eb'
