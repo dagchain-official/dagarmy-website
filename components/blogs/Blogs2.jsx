@@ -10,6 +10,12 @@ export default function Blogs2() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Real-time predictive search states
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const searchRef = React.useRef(null);
 
   useEffect(() => {
     fetchMediumPosts();
@@ -35,34 +41,90 @@ export default function Blogs2() {
     }
   };
 
-  // Task 2: Search functionality - filter posts based on search query
-  const handleSearch = (e) => {
-    e.preventDefault();
+  // Real-time search with debouncing
+  useEffect(() => {
     const query = searchQuery.toLowerCase().trim();
     
     if (!query) {
       setFilteredPosts(mediumPosts);
+      setSuggestions([]);
+      setShowSuggestions(false);
       return;
     }
 
-    const filtered = mediumPosts.filter(post => {
-      const titleMatch = post.title?.toLowerCase().includes(query);
-      const contentMatch = post.content?.toLowerCase().includes(query);
-      const descriptionMatch = post.description?.toLowerCase().includes(query);
-      const categoriesMatch = post.categories?.some(cat => cat.toLowerCase().includes(query));
-      
-      return titleMatch || contentMatch || descriptionMatch || categoriesMatch;
-    });
+    // Debounce search - wait 300ms after user stops typing
+    const debounceTimer = setTimeout(() => {
+      const filtered = mediumPosts.filter(post => {
+        const titleMatch = post.title?.toLowerCase().includes(query);
+        const contentMatch = post.content?.toLowerCase().includes(query);
+        const descriptionMatch = post.description?.toLowerCase().includes(query);
+        const categoriesMatch = post.categories?.some(cat => cat.toLowerCase().includes(query));
+        
+        return titleMatch || contentMatch || descriptionMatch || categoriesMatch;
+      });
 
-    setFilteredPosts(filtered);
+      setFilteredPosts(filtered);
+      
+      // Show top 5 suggestions
+      const topSuggestions = filtered.slice(0, 5);
+      setSuggestions(topSuggestions);
+      setShowSuggestions(topSuggestions.length > 0);
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery, mediumPosts]);
+
+  // Handle suggestion selection
+  const handleSuggestionClick = (post) => {
+    window.open(post.link, '_blank', 'noopener,noreferrer');
+    setSearchQuery("");
+    setShowSuggestions(false);
+    setSuggestions([]);
+    setSelectedSuggestionIndex(-1);
   };
 
-  // Update filtered posts when search query changes
-  useEffect(() => {
-    if (searchQuery === "") {
-      setFilteredPosts(mediumPosts);
+  // Keyboard navigation
+  const handleKeyDown = (e) => {
+    if (!showSuggestions || suggestions.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionClick(suggestions[selectedSuggestionIndex]);
+        }
+        break;
+      case 'Escape':
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+        break;
+      default:
+        break;
     }
-  }, [searchQuery, mediumPosts]);
+  };
+
+  // Click outside to close suggestions
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <>
@@ -261,8 +323,9 @@ export default function Blogs2() {
 
                 {/* Sidebar - Fixed Width */}
                 <div className="right tf-sidebar" style={{ padding: "12px" }}>
-                  {/* Search Box - Fully Functional */}
+                  {/* Search Box - Real-Time Predictive Search */}
                   <div
+                    ref={searchRef}
                     className="sidebar-search wow fadeInUp"
                     data-wow-delay="0s"
                     style={{
@@ -271,29 +334,142 @@ export default function Blogs2() {
                       padding: "18px",
                       marginBottom: "20px",
                       border: "2px solid #e5e7eb",
+                      position: "relative",
                     }}
                   >
                     <h5 className="fw-6" style={{ fontSize: "17px", marginBottom: "12px", color: "#111827", fontWeight: "700" }}>
                       Search
                     </h5>
-                    <form onSubmit={handleSearch}>
-                      <fieldset>
-                        <input
-                          type="text"
-                          placeholder="Search articles..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type="text"
+                        placeholder="Search articles..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        onFocus={() => searchQuery && suggestions.length > 0 && setShowSuggestions(true)}
+                        style={{
+                          width: "100%",
+                          padding: "12px 14px",
+                          borderRadius: "8px",
+                          border: showSuggestions ? "2px solid #1f2937" : "2px solid #e5e7eb",
+                          fontSize: "14px",
+                          outline: "none",
+                          transition: "border-color 0.2s ease",
+                        }}
+                      />
+                      
+                      {/* Search Suggestions Dropdown */}
+                      {showSuggestions && suggestions.length > 0 && (
+                        <div
                           style={{
-                            width: "100%",
-                            padding: "12px 14px",
+                            position: "absolute",
+                            top: "calc(100% + 8px)",
+                            left: 0,
+                            right: 0,
+                            background: "#ffffff",
                             borderRadius: "8px",
+                            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.15)",
                             border: "2px solid #e5e7eb",
-                            fontSize: "14px",
-                            outline: "none",
+                            maxHeight: "400px",
+                            overflowY: "auto",
+                            zIndex: 1000,
+                            animation: "slideDown 0.2s ease-out",
                           }}
-                        />
-                      </fieldset>
-                    </form>
+                        >
+                          <div style={{ padding: "8px 0" }}>
+                            {suggestions.map((post, index) => (
+                              <div
+                                key={post.id || index}
+                                onClick={() => handleSuggestionClick(post)}
+                                onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                                style={{
+                                  padding: "12px 16px",
+                                  cursor: "pointer",
+                                  background: selectedSuggestionIndex === index ? "#f3f4f6" : "transparent",
+                                  borderLeft: selectedSuggestionIndex === index ? "3px solid #1f2937" : "3px solid transparent",
+                                  transition: "all 0.15s ease",
+                                  display: "flex",
+                                  gap: "12px",
+                                  alignItems: "flex-start",
+                                }}
+                              >
+                                {post.imageUrl && (
+                                  <img
+                                    src={post.imageUrl}
+                                    alt={post.title}
+                                    style={{
+                                      width: "50px",
+                                      height: "50px",
+                                      borderRadius: "6px",
+                                      objectFit: "cover",
+                                      flexShrink: 0,
+                                    }}
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
+                                    }}
+                                  />
+                                )}
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                  <div
+                                    style={{
+                                      fontSize: "14px",
+                                      fontWeight: "600",
+                                      color: "#111827",
+                                      marginBottom: "4px",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: 2,
+                                      WebkitBoxOrient: "vertical",
+                                      lineHeight: "1.4",
+                                    }}
+                                  >
+                                    {post.title}
+                                  </div>
+                                  {post.pubDate && (
+                                    <div
+                                      style={{
+                                        fontSize: "12px",
+                                        color: "#9ca3af",
+                                      }}
+                                    >
+                                      {post.pubDate}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <div
+                            style={{
+                              padding: "8px 16px",
+                              borderTop: "1px solid #e5e7eb",
+                              fontSize: "12px",
+                              color: "#6b7280",
+                              textAlign: "center",
+                            }}
+                          >
+                            Press ↑↓ to navigate, Enter to select, Esc to close
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <style dangerouslySetInnerHTML={{
+                      __html: `
+                        @keyframes slideDown {
+                          from {
+                            opacity: 0;
+                            transform: translateY(-10px);
+                          }
+                          to {
+                            opacity: 1;
+                            transform: translateY(0);
+                          }
+                        }
+                      `
+                    }} />
                   </div>
 
                   {/* Recent Posts - Collapsible */}
