@@ -3,13 +3,11 @@ import React, { useState, useEffect } from "react";
 import Pagination from "../common/Pagination";
 import Link from "next/link";
 import Image from "next/image";
-import { blogCategories, blogTags } from "@/data/dagarmy-blogs";
-
 export default function Blogs2() {
-  const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
   const [isRecentPostsOpen, setIsRecentPostsOpen] = useState(true);
-  const [isTagsOpen, setIsTagsOpen] = useState(true);
   const [mediumPosts, setMediumPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,6 +23,7 @@ export default function Blogs2() {
       
       if (data.success && data.posts) {
         setMediumPosts(data.posts);
+        setFilteredPosts(data.posts);
       } else {
         setError('Failed to load blog posts');
       }
@@ -35,6 +34,35 @@ export default function Blogs2() {
       setLoading(false);
     }
   };
+
+  // Task 2: Search functionality - filter posts based on search query
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const query = searchQuery.toLowerCase().trim();
+    
+    if (!query) {
+      setFilteredPosts(mediumPosts);
+      return;
+    }
+
+    const filtered = mediumPosts.filter(post => {
+      const titleMatch = post.title?.toLowerCase().includes(query);
+      const contentMatch = post.content?.toLowerCase().includes(query);
+      const descriptionMatch = post.description?.toLowerCase().includes(query);
+      const categoriesMatch = post.categories?.some(cat => cat.toLowerCase().includes(query));
+      
+      return titleMatch || contentMatch || descriptionMatch || categoriesMatch;
+    });
+
+    setFilteredPosts(filtered);
+  };
+
+  // Update filtered posts when search query changes
+  useEffect(() => {
+    if (searchQuery === "") {
+      setFilteredPosts(mediumPosts);
+    }
+  }, [searchQuery, mediumPosts]);
 
   return (
     <>
@@ -99,9 +127,35 @@ export default function Blogs2() {
                         Retry
                       </button>
                     </div>
+                  ) : filteredPosts.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 20px', display: 'block' }}>
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                      </svg>
+                      <h3 style={{ color: '#374151', fontSize: '20px', marginBottom: '10px', fontWeight: '600' }}>No Results Found</h3>
+                      <p style={{ color: '#9ca3af', fontSize: '15px', marginBottom: '20px' }}>
+                        No blog posts match your search for "<strong>{searchQuery}</strong>"
+                      </p>
+                      <button 
+                        onClick={() => setSearchQuery("")}
+                        style={{
+                          background: '#1f2937',
+                          color: '#fff',
+                          padding: '10px 24px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          fontWeight: '600'
+                        }}
+                      >
+                        Clear Search
+                      </button>
+                    </div>
                   ) : (
                     <div className="wrap-blog-list">
-                      {mediumPosts.map((article, index) => (
+                      {filteredPosts.map((article, index) => (
                       <div
                         className="blog-article-item style-row hover-img wow fadeInUp"
                         key={index}
@@ -207,7 +261,7 @@ export default function Blogs2() {
 
                 {/* Sidebar - Fixed Width */}
                 <div className="right tf-sidebar" style={{ padding: "12px" }}>
-                  {/* Search Box - No Icon */}
+                  {/* Search Box - Fully Functional */}
                   <div
                     className="sidebar-search wow fadeInUp"
                     data-wow-delay="0s"
@@ -219,30 +273,16 @@ export default function Blogs2() {
                       border: "2px solid #e5e7eb",
                     }}
                   >
-                    <h5
-                      className="fw-6"
-                      style={{
-                        fontSize: "17px",
-                        marginBottom: "12px",
-                        color: "#111827",
-                        fontWeight: "700"
-                      }}
-                    >
+                    <h5 className="fw-6" style={{ fontSize: "17px", marginBottom: "12px", color: "#111827", fontWeight: "700" }}>
                       Search
                     </h5>
-                    <form
-                      onSubmit={(e) => e.preventDefault()}
-                      className="form-search"
-                    >
+                    <form onSubmit={handleSearch}>
                       <fieldset>
                         <input
                           type="text"
                           placeholder="Search articles..."
-                          name="text"
-                          tabIndex={2}
-                          defaultValue=""
-                          aria-required="true"
-                          required
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
                           style={{
                             width: "100%",
                             padding: "12px 14px",
@@ -254,119 +294,6 @@ export default function Blogs2() {
                         />
                       </fieldset>
                     </form>
-                  </div>
-
-                  {/* Categories - Collapsible */}
-                  <div
-                    className="sidebar-item sidebar-categories wow fadeInUp"
-                    data-wow-delay="0.1s"
-                    style={{
-                      background: "#ffffff",
-                      borderRadius: "10px",
-                      padding: "18px",
-                      marginBottom: "20px",
-                      border: "2px solid #e5e7eb",
-                    }}
-                  >
-                    <div
-                      className="sidebar-title"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "12px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                    >
-                      <h5 className="fw-6" style={{ fontSize: "17px", margin: 0, color: "#111827", fontWeight: "700" }}>
-                        Categories
-                      </h5>
-                      <i
-                        className={`icon-arrow-top`}
-                        style={{
-                          color: "#1f2937",
-                          fontSize: "16px",
-                          transform: isCategoriesOpen ? "rotate(0deg)" : "rotate(180deg)",
-                          transition: "transform 0.3s ease"
-                        }}
-                      />
-                    </div>
-                    {isCategoriesOpen && (
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      >
-                        {blogCategories.map((category, index) => (
-                          <li
-                            key={index}
-                            className="flex items-center justify-between"
-                            style={{
-                              padding: "10px 0",
-                              borderBottom: index < blogCategories.length - 1 ? "1px solid #f3f4f6" : "none",
-                            }}
-                          >
-                            <a
-                              href="#"
-                              className="fs-15"
-                              style={{
-                                textDecoration: "none",
-                                color: "#374151",
-                                fontSize: "14px",
-                                transition: "color 0.3s ease",
-                                position: "relative",
-                                paddingBottom: "4px",
-                                display: "inline-block",
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.color = "#1f2937";
-                                const underline = e.currentTarget.querySelector('.underline');
-                                if (underline) {
-                                  underline.style.width = "100%";
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.color = "#374151";
-                                const underline = e.currentTarget.querySelector('.underline');
-                                if (underline) {
-                                  underline.style.width = "0%";
-                                }
-                              }}
-                            >
-                              {category.name}
-                              <span
-                                className="underline"
-                                style={{
-                                  position: "absolute",
-                                  bottom: "0",
-                                  left: "0",
-                                  width: "0%",
-                                  height: "2px",
-                                  background: "linear-gradient(90deg, #1f2937 0%, #1f2937 100%)",
-                                  transition: "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                                }}
-                              />
-                            </a>
-                            <div
-                              className="number"
-                              style={{
-                                background: "#f3f4f6",
-                                color: "#6b7280",
-                                padding: "6px 14px",
-                                borderRadius: "6px",
-                                fontSize: "13px",
-                                fontWeight: "600",
-                              }}
-                            >
-                              ({category.count})
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </div>
 
                   {/* Recent Posts - Collapsible */}
@@ -482,92 +409,6 @@ export default function Blogs2() {
                           </li>
                         ))}
                       </ul>
-                    )}
-                  </div>
-
-                  {/* Tags - Collapsible */}
-                  <div
-                    className="sidebar-item wow fadeInUp"
-                    data-wow-delay="0.3s"
-                    style={{
-                      background: "#ffffff",
-                      borderRadius: "10px",
-                      padding: "24px",
-                      border: "2px solid #e5e7eb",
-                    }}
-                  >
-                    <div
-                      className="sidebar-title"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "20px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setIsTagsOpen(!isTagsOpen)}
-                    >
-                      <h5 className="fw-6" style={{ fontSize: "20px", margin: 0, color: "#111827", fontWeight: "700" }}>
-                        Tags
-                      </h5>
-                      <i
-                        className="icon-arrow-top"
-                        style={{
-                          color: "#1f2937",
-                          fontSize: "18px",
-                          transform: isTagsOpen ? "rotate(0deg)" : "rotate(180deg)",
-                          transition: "transform 0.3s ease"
-                        }}
-                      />
-                    </div>
-                    {isTagsOpen && (
-                      <div>
-                        <ul
-                          className="tags-list"
-                          style={{
-                            listStyle: "none",
-                            padding: 0,
-                            margin: 0,
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "8px",
-                          }}
-                        >
-                          {blogTags.map((tag, index) => (
-                            <li key={index}>
-                              <a
-                                href="#"
-                                className="tags-item"
-                                style={{
-                                  display: "inline-block",
-                                  background: "#f3f4f6",
-                                  color: "#374151",
-                                  borderRadius: "5px",
-                                  padding: "8px 14px",
-                                  fontSize: "13px",
-                                  fontWeight: "500",
-                                  textDecoration: "none",
-                                  transition: "all 0.2s ease",
-                                }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = "linear-gradient(135deg, #000000 0%, #1f2937 100%)";
-                                  e.currentTarget.style.color = "#fff";
-                                  e.currentTarget.style.transform = "translateY(-2px)";
-                                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = "#f3f4f6";
-                                  e.currentTarget.style.color = "#374151";
-                                  e.currentTarget.style.transform = "translateY(0)";
-                                  e.currentTarget.style.boxShadow = "none";
-                                }}
-                              >
-                                {tag}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
                     )}
                   </div>
                 </div>
