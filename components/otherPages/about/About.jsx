@@ -46,7 +46,7 @@ export default function About() {
                 }}
               >
                 <Image
-                  src="/images/about  us/image1.png"
+                  src="/images/about  us/herosectionimages/imageabout.png"
                   alt="DAGARMY Team Collaboration"
                   width={600}
                   height={400}

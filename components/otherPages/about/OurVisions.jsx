@@ -20,9 +20,9 @@ export default function OurVisions() {
             >
               <Image
                 className="lazyload"
-                data-src="/images/about  us/herosectionimages/imageabout.png"
+                data-src="/images/about  us/herosectionimages/image1 .png"
                 alt="DAGARMY Training Ground - Future Tech Leaders"
-                src="/images/about  us/herosectionimages/imageabout.png"
+                src="/images/about  us/herosectionimages/image1 .png"
                 width={1372}
                 height={1101}
                 style={{
