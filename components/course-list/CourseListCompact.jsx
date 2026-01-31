@@ -9,6 +9,19 @@ export default function CourseListCompact() {
   const [error, setError] = useState(null);
   const [selectedModule, setSelectedModule] = useState({});
 
+  // Function to render course title with Nasalization font for 'Next-Gen Tech'
+  const renderCourseTitle = (title) => {
+    if (title && title.includes('Next-Gen Tech')) {
+      const parts = title.split('Next-Gen Tech');
+      return (
+        <>
+          {parts[0]}<span style={{ fontFamily: 'Nasalization, sans-serif' }}>Next-Gen Tech</span>{parts[1]}
+        </>
+      );
+    }
+    return title;
+  };
+
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -176,7 +189,7 @@ export default function CourseListCompact() {
                   marginBottom: '16px',
                   lineHeight: '1.2'
                 }}>
-                  {course.title}
+                  {renderCourseTitle(course.title)}
                 </h1>
 
                 {course.subtitle && (
