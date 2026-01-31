@@ -5,6 +5,7 @@ import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 import { menuItems, socialLinks } from "@/data/footerLinks";
+
 export default function Footer1({ parentClass = "footer" }) {
   const formRef = useRef();
   const [success, setSuccess] = useState(true);
@@ -36,239 +37,310 @@ export default function Footer1({ parentClass = "footer" }) {
   };
   return (
     <>
-      <style jsx global>{`
-        #footer {
-          background: #ffffff !important;
-        }
-        #footer .footer-body {
-          background: #ffffff !important;
-        }
-        #footer .footer-wrap {
-          background: #ffffff !important;
-        }
-        #footer h5 {
-          color: #000000 !important;
-        }
-        #footer p {
-          color: #4a5568 !important;
-        }
-        #footer a,
-        #footer a:link,
-        #footer a:visited {
-          color: #000000 !important;
-          text-decoration: none !important;
-        }
-        #footer a:hover,
-        #footer a:active {
-          color: #1f2937 !important;
-        }
-        #footer .footer-menu-list h5 {
-          color: #000000 !important;
-        }
-        #footer .footer-menu-list ul {
-          list-style: none !important;
-        }
-        #footer .footer-menu-list ul li {
-          margin-bottom: 8px !important;
-        }
-        #footer .footer-menu-list ul li a,
-        #footer .footer-menu-list ul li a:link,
-        #footer .footer-menu-list ul li a:visited {
-          color: #000000 !important;
-        }
-        #footer .footer-menu-list ul li a:hover {
-          color: #1f2937 !important;
-        }
-        #footer .address li p {
-          color: #4a5568 !important;
-        }
-        #footer .address li i {
-          color: #1f2937 !important;
-        }
-        #footer .tf-social-icon a {
-          color: #000000 !important;
-          background: #f3f4f6 !important;
-        }
-        #footer .tf-social-icon a:hover {
-          background: #1f2937 !important;
-          color: #ffffff !important;
-        }
-        #footer .footer-subscribe h5 {
-          color: #000000 !important;
-        }
-        #footer .footer-subscribe p {
-          color: #4a5568 !important;
-        }
-        #footer .footer-subscribe > div h5,
-        #footer .footer-subscribe > div p {
-          color: #ffffff !important;
-        }
-        #footer .footer-bottom {
-          background: #ffffff !important;
-          border-top: 1px solid #e5e7eb !important;
-        }
-        #footer .footer-bottom p {
-          color: #6b7280 !important;
-        }
-      `}</style>
-      <footer id="footer" className={parentClass} style={{ background: '#ffffff', borderTop: '1px solid #e5e7eb' }}>
-        <div className="footer-wrap" style={{ background: '#ffffff' }}>
-          <div className="footer-body">
-            <div className="tf-container">
-              <div className="row">
-                <div className="col-12">
-                  <div className="footer-body-wrap flex justify-between">
-                    <div
-                      className="footer-more-infor wow fadeInUp"
-                      data-wow-delay="0s"
-                    >
-                      <div className="footer-logo">
-                        <Link href={`/`}>
-                          <Image
-                            alt="DAGARMY"
-                            src="/images/logo/logo.png"
-                            width={62}
-                            height={18}
-                          />
-                        </Link>
-                      </div>
-                      <ul className="address">
-                        <li className="flex gap-10 items-center">
-                          <div className="icon">
-                            <i className="flaticon-call" />
-                          </div>
-                          <p>+1 (555) 789-0123</p>
-                        </li>
-                        <li className="flex gap-10 items-center">
-                          <div className="icon">
-                            <i className="flaticon-call" />
-                          </div>
-                          <p>+44 (20) 7946-0958</p>
-                        </li>
-                        <li className="flex gap-10 items-center">
-                          <div className="icon">
-                            <i className="flaticon-mail-1" />
-                          </div>
-                          <p>careers@dagchin.network</p>
-                        </li>
-                      </ul>
-                      <ul className="tf-social-icon flex items-center gap-10">
-                        {socialLinks.map((link, index) => (
-                          <li key={index}>
-                            <a href={link.href}>
-                              <i className={link.icon} />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    {menuItems.map((menu, index) => (
-                      <div
-                        key={index}
-                        className="footer-menu-list wow fadeInUp"
-                        data-wow-delay={menu.delay}
-                      >
-                        <h5 className="fw-5">{menu.title}</h5>
-                        <ul>
-                          {menu.links.map((link, linkIndex) => (
-                            <li key={linkIndex}>
-                              {link.href.startsWith("/") ? (
-                                <Link href={link.href}>{link.name}</Link>
-                              ) : (
-                                <a href={link.href}>{link.name}</a>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                    <div
-                      className="footer-subscribe wow fadeInUp"
-                      data-wow-delay="0.5s"
-                    >
-                      <h5 className="fw-5">Subscribe</h5>
-                      <p>
-                        Join 2,500+ learners mastering AI, Blockchain, and Data Visualisation. Subscribe for exclusive updates and course launches!
-                      </p>
-                      <div
-                        className={`tfSubscribeMsg ${showMessage ? "active" : ""
-                          }`}
-                      >
-                        {success ? (
-                          <p style={{ color: "rgb(52, 168, 83)" }}>
-                            You have successfully subscribed.
-                          </p>
-                        ) : (
-                          <p style={{ color: "red" }}>Something went wrong</p>
-                        )}
-                      </div>
-                      <form
-                        className="form-subscribe style-line-bottom"
-                        onSubmit={sendMail}
-                        ref={formRef}
-                      >
-                        <fieldset className="email">
-                          <input
-                            type="email"
-                            placeholder="Your e-mail"
-                            className="style-default"
-                            name="email"
-                            tabIndex={2}
-                            defaultValue=""
-                            aria-required="true"
-                            required
-                          />
-                        </fieldset>
-                        <div className="button-submit">
-                          <button className="tf-btn-arrow" type="submit">
-                            Send
-                            <i className="icon-arrow-top-right" />
-                          </button>
-                        </div>
-                      </form>
-                      <div style={{ marginTop: '30px', padding: '20px', background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)', borderRadius: '12px' }}>
-                        <h5 className="fw-5" style={{ color: 'white', marginBottom: '10px' }}>Ready to Start?</h5>
-                        <p style={{ color: 'white', opacity: 0.9, fontSize: '14px', marginBottom: '15px' }}>Transform your career with cutting-edge tech skills</p>
-                        <button
-                          onClick={() => window.location.href = '#'}
-                          style={{
-                            display: 'block',
-                            background: '#ffffff',
-                            color: '#1f2937',
-                            padding: '14px 24px',
-                            borderRadius: '8px',
-                            fontWeight: '600',
-                            fontSize: '15px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            width: '100%',
-                            textAlign: 'center',
-                            fontFamily: 'inherit'
-                          }}
-                        >
-                          <span style={{ color: '#1f2937', fontWeight: '600' }}>Explore Courses</span>
-                          <i className="icon-arrow-top-right" style={{ marginLeft: '8px', color: '#1f2937' }} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+      <footer style={{
+        background: '#ffffff',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Main Footer Container */}
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '60px 40px 40px 40px'
+        }}>
+          {/* Top Section: Logo + Contact Info on Left, Link Columns on Right */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1fr 1fr 1fr',
+            gap: '60px',
+            marginBottom: '48px'
+          }}>
+            {/* Logo and Contact Info Section */}
+            <div>
+              <Link href="/" style={{ display: 'inline-block', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Image
+                    alt="DAGARMY"
+                    src="/images/logo/logo.png"
+                    width={48}
+                    height={48}
+                  />
+                  <span style={{
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    color: '#000000',
+                    fontFamily: 'Nasalization, sans-serif',
+                    letterSpacing: '0.5px'
+                  }}>
+                    DAGARMY
+                  </span>
                 </div>
+              </Link>
+              
+              {/* Phone Numbers */}
+              <div style={{ marginBottom: '16px' }}>
+                <p style={{
+                  fontSize: '14px',
+                  color: '#6b7280',
+                  lineHeight: '1.7',
+                  marginBottom: '4px'
+                }}>
+                  +1 (555) 789-0123
+                </p>
+                <p style={{
+                  fontSize: '14px',
+                  color: '#6b7280',
+                  lineHeight: '1.7'
+                }}>
+                  +44 (20) 7946-0958
+                </p>
               </div>
+
+              {/* Address */}
+              <p style={{
+                fontSize: '14px',
+                color: '#6b7280',
+                lineHeight: '1.7',
+                marginBottom: '16px'
+              }}>
+                Meydan Grandstand, 6th Floor, Meydan Road<br />
+                Nad Al Sheba, United Arab Emirates
+              </p>
+
+              {/* Email */}
+              <a href="mailto:careers@dagchin.network" style={{
+                fontSize: '14px',
+                color: '#4b5563',
+                textDecoration: 'none',
+                transition: 'color 0.2s ease',
+                display: 'inline-block'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                careers@dagchin.network
+              </a>
+            </div>
+
+            {/* Company Links */}
+            <div>
+              <h5 style={{
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '20px',
+                letterSpacing: '-0.01em'
+              }}>
+                Company
+              </h5>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {menuItems[0].links.map((link, index) => (
+                  <li key={index} style={{ marginBottom: '12px' }}>
+                    <Link href={link.href} style={{
+                      fontSize: '14px',
+                      color: '#4b5563',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Advance Links */}
+            <div>
+              <h5 style={{
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '20px',
+                letterSpacing: '-0.01em'
+              }}>
+                Advance
+              </h5>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {menuItems[1].links.map((link, index) => (
+                  <li key={index} style={{ marginBottom: '12px' }}>
+                    <Link href={link.href} style={{
+                      fontSize: '14px',
+                      color: '#4b5563',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <h5 style={{
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '20px',
+                letterSpacing: '-0.01em'
+              }}>
+                Legal
+              </h5>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {menuItems[2].links.map((link, index) => (
+                  <li key={index} style={{ marginBottom: '12px' }}>
+                    <Link href={link.href} style={{
+                      fontSize: '14px',
+                      color: '#4b5563',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-          <div className="footer-bottom wow fadeInUp" data-wow-delay="0s">
-            <div className="tf-container">
-              <div className="row">
-                <div className="col-12">
-                  <div className="footer-bottom-wrap flex justify-center items-center">
-                    <p>©&nbsp;2026&nbsp;DAGARMY. All Rights Reserved</p>
-                  </div>
-                </div>
-              </div>
+
+          {/* Bottom Section: Social Icons and Newsletter */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '40px'
+          }}>
+            {/* Social Media Icons */}
+            <div style={{
+              display: 'flex',
+              gap: '16px'
+            }}>
+              {socialLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: '#f3f4f6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#000000',
+                    transition: 'all 0.2s ease',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#000000';
+                    e.currentTarget.style.color = '#ffffff';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#f3f4f6';
+                    e.currentTarget.style.color = '#000000';
+                  }}
+                >
+                  <i className={link.icon} style={{ fontSize: '16px' }} />
+                </a>
+              ))}
+            </div>
+
+            {/* Newsletter Subscribe */}
+            <div style={{ flex: 1, maxWidth: '400px' }}>
+              <form
+                onSubmit={sendMail}
+                ref={formRef}
+                style={{
+                  display: 'flex',
+                  gap: '8px',
+                  alignItems: 'center'
+                }}
+              >
+                <input
+                  type="email"
+                  placeholder="Subscribe to newsletter"
+                  name="email"
+                  required
+                  style={{
+                    flex: 1,
+                    padding: '10px 16px',
+                    fontSize: '14px',
+                    color: '#1f2937',
+                    background: '#f9fafb',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.border = '1px solid #000000';
+                    e.currentTarget.style.background = '#ffffff';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.border = '1px solid #e5e7eb';
+                    e.currentTarget.style.background = '#f9fafb';
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    padding: '10px 20px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    background: '#000000',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s ease',
+                    whiteSpace: 'nowrap'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#1f2937'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#000000'}
+                >
+                  Subscribe
+                </button>
+              </form>
+              {showMessage && (
+                <p style={{
+                  fontSize: '12px',
+                  marginTop: '8px',
+                  color: success ? '#10b981' : '#ef4444'
+                }}>
+                  {success ? 'Successfully subscribed!' : 'Something went wrong'}
+                </p>
+              )}
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Backdrop DAGARMY Text */}
+      <div style={{
+        background: '#ffffff',
+        padding: '40px 0',
+        textAlign: 'center',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          fontSize: 'clamp(80px, 15vw, 180px)',
+          fontWeight: '900',
+          color: '#f3f4f6',
+          fontFamily: 'Nasalization, sans-serif',
+          letterSpacing: '0.05em',
+          lineHeight: '1',
+          userSelect: 'none',
+          pointerEvents: 'none'
+        }}>
+          DAGARMY
+        </div>
+      </div>
     </>
   );
 }
