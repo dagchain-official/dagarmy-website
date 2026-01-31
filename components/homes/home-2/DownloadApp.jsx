@@ -1,8 +1,29 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import PremiumButton from "./PremiumButton";
+
 export default function DownloadApp() {
+  const [userCountry, setUserCountry] = useState("your country");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        if (data && data.country_name) {
+          setUserCountry(data.country_name);
+        }
+      } catch (error) {
+        console.log('Could not detect country, using default');
+        setUserCountry("your country");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    detectCountry();
+  }, []);
   return (
     <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
       <div className="tf-container">
@@ -30,7 +51,11 @@ export default function DownloadApp() {
                   lineHeight: '1.7',
                   marginBottom: '40px'
                 }}>
-                  Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across India.
+                  {isLoading ? (
+                    "Thousands of learners continue building credibility through structured programs, guided sessions and shared learning globally."
+                  ) : (
+                    `Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across ${userCountry}.`
+                  )}
                 </p>
               </div>
               <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: 'auto' }}>
