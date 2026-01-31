@@ -1,8 +1,33 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function NextPhase() {
+  const [userCountry, setUserCountry] = useState("your country");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Detect user's country using IP geolocation
+    const detectCountry = async () => {
+      try {
+        // Using ipapi.co for free IP geolocation
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        
+        if (data && data.country_name) {
+          setUserCountry(data.country_name);
+        }
+      } catch (error) {
+        console.log('Could not detect country, using default');
+        // Fallback to default if geolocation fails
+        setUserCountry("your country");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    detectCountry();
+  }, []);
   return (
     <section style={{
       background: '#000000',
@@ -86,7 +111,13 @@ export default function NextPhase() {
                   lineHeight: '1.8',
                   marginBottom: '16px'
                 }}>
-                  People from <strong>India</strong> are already building skills with intention. Professionals across <strong>India</strong> are giving new definition to their direction. Learners from <strong>India</strong> securing steady growth commitment through <strong>2026</strong> and beyond.
+                  {isLoading ? (
+                    "People from around the world are already building skills with intention. Professionals globally are giving new definition to their direction. Learners securing steady growth commitment through 2026 and beyond."
+                  ) : (
+                    <>
+                      People from <strong>{userCountry}</strong> are already building skills with intention. Professionals across <strong>{userCountry}</strong> are giving new definition to their direction. Learners from <strong>{userCountry}</strong> securing steady growth commitment through <strong>2026</strong> and beyond.
+                    </>
+                  )}
                 </p>
                 <p style={{
                   fontSize: '17px',
@@ -133,7 +164,7 @@ export default function NextPhase() {
                   e.currentTarget.style.background = '#ffffff';
                 }}
               >
-                Join DAG Army in India
+                {isLoading ? "Join DAG Army" : `Join DAG Army in ${userCountry}`}
                 <i className="icon-arrow-top-right" />
               </button>
             </div>
