@@ -10,14 +10,42 @@ export default function DownloadApp() {
   useEffect(() => {
     const detectCountry = async () => {
       try {
-        const response = await fetch('https://ipapi.co/json/');
+        const response = await fetch('https://ipapi.co/json/', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API responded with status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        
         if (data && data.country_name) {
           setUserCountry(data.country_name);
+          setIsLoading(false);
+          return;
         }
+        
+        throw new Error('Country name not found in response');
+        
       } catch (error) {
-        console.log('Could not detect country, using default');
-        setUserCountry("your country");
+        console.error('Primary geolocation failed:', error);
+        
+        try {
+          const fallbackResponse = await fetch('http://ip-api.com/json/');
+          const fallbackData = await fallbackResponse.json();
+          
+          if (fallbackData && fallbackData.country) {
+            setUserCountry(fallbackData.country);
+            setIsLoading(false);
+            return;
+          }
+        } catch (fallbackError) {
+          console.error('Fallback geolocation also failed:', fallbackError);
+        }
+        
+        setUserCountry("India");
       } finally {
         setIsLoading(false);
       }
