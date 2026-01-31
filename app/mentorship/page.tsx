@@ -86,12 +86,13 @@ export default function MentorshipComingSoon() {
 
           {/* Supporting Subtitle */}
           <p style={{
-            fontSize: '16px',
-            color: '#6b7280',
-            lineHeight: '1.6',
-            marginBottom: '40px',
+            fontSize: '17px',
+            color: '#4b5563',
+            lineHeight: '1.65',
+            marginBottom: '48px',
             maxWidth: '580px',
-            margin: '0 auto 40px auto'
+            margin: '0 auto 48px auto',
+            fontWeight: '400'
           }}>
             A structured mentorship initiative designed to guide builders, professionals, and early-stage innovators through real-world problem-solving and career clarity.
           </p>
@@ -99,117 +100,125 @@ export default function MentorshipComingSoon() {
           {/* Content Sections */}
           <div style={{
             textAlign: 'left',
-            marginBottom: '40px'
+            marginBottom: '48px'
           }}>
             {/* Why Mentorship at DAGARMY */}
-            <div style={{ marginBottom: '32px' }}>
+            <div style={{ marginBottom: '40px' }}>
               <h2 style={{
-                fontSize: '20px',
+                fontSize: '22px',
                 fontWeight: '700',
                 color: '#000000',
-                marginBottom: '12px'
+                marginBottom: '16px',
+                letterSpacing: '-0.02em'
               }}>
                 Why Mentorship at DAGARMY
               </h2>
               <p style={{
                 fontSize: '15px',
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '8px'
+                color: '#4b5563',
+                lineHeight: '1.7',
+                marginBottom: '12px'
               }}>
-                DAGARMY mentorship is not generic advice or motivational coaching. It is a structured guidance program focused on:
+                DAGARMY mentorship is <span style={{ fontWeight: '600', color: '#1f2937' }}>not generic advice or motivational coaching</span>. It is a structured guidance program focused on:
               </p>
               <ul style={{
                 fontSize: '15px',
-                color: '#6b7280',
-                lineHeight: '1.8',
+                color: '#4b5563',
+                lineHeight: '1.9',
                 paddingLeft: '20px',
-                margin: '0'
+                margin: '0 0 12px 0',
+                listStyleType: 'disc'
               }}>
-                <li>Practical decision-making</li>
-                <li>Technical clarity</li>
+                <li style={{ marginBottom: '6px' }}>Practical decision-making</li>
+                <li style={{ marginBottom: '6px' }}>Technical clarity</li>
                 <li>Career direction in modern tech ecosystems</li>
               </ul>
               <p style={{
                 fontSize: '15px',
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginTop: '8px'
+                color: '#1f2937',
+                lineHeight: '1.7',
+                fontWeight: '600'
               }}>
                 Mentors are practitioners, not influencers.
               </p>
             </div>
 
             {/* What the Mentorship Covers */}
-            <div style={{ marginBottom: '32px' }}>
+            <div style={{ marginBottom: '40px' }}>
               <h2 style={{
-                fontSize: '20px',
+                fontSize: '22px',
                 fontWeight: '700',
                 color: '#000000',
-                marginBottom: '12px'
+                marginBottom: '16px',
+                letterSpacing: '-0.02em'
               }}>
                 What the Mentorship Covers
               </h2>
               <ul style={{
                 fontSize: '15px',
-                color: '#6b7280',
-                lineHeight: '1.8',
+                color: '#4b5563',
+                lineHeight: '1.9',
                 paddingLeft: '20px',
-                margin: '0'
+                margin: '0',
+                listStyleType: 'disc'
               }}>
-                <li>Career roadmap alignment (tech, product, AI, Web3)</li>
-                <li>Project and portfolio reviews</li>
-                <li>System-level thinking and architecture guidance</li>
-                <li>Transition support for students and early professionals</li>
+                <li style={{ marginBottom: '6px' }}>Career roadmap alignment (tech, product, AI, Web3)</li>
+                <li style={{ marginBottom: '6px' }}>Project and portfolio reviews</li>
+                <li style={{ marginBottom: '6px' }}>System-level thinking and architecture guidance</li>
+                <li style={{ marginBottom: '6px' }}>Transition support for students and early professionals</li>
                 <li>Strategic feedback on learning paths and execution</li>
               </ul>
             </div>
 
             {/* Who This Is For */}
-            <div style={{ marginBottom: '32px' }}>
+            <div style={{ marginBottom: '40px' }}>
               <h2 style={{
-                fontSize: '20px',
+                fontSize: '22px',
                 fontWeight: '700',
                 color: '#000000',
-                marginBottom: '12px'
+                marginBottom: '16px',
+                letterSpacing: '-0.02em'
               }}>
                 Who This Is For
               </h2>
               <ul style={{
                 fontSize: '15px',
-                color: '#6b7280',
-                lineHeight: '1.8',
+                color: '#4b5563',
+                lineHeight: '1.9',
                 paddingLeft: '20px',
-                margin: '0'
+                margin: '0',
+                listStyleType: 'disc'
               }}>
-                <li>Students preparing beyond traditional placements</li>
-                <li>Early professionals stuck in execution-only roles</li>
-                <li>Builders seeking architectural clarity</li>
+                <li style={{ marginBottom: '6px' }}>Students preparing beyond traditional placements</li>
+                <li style={{ marginBottom: '6px' }}>Early professionals stuck in execution-only roles</li>
+                <li style={{ marginBottom: '6px' }}>Builders seeking architectural clarity</li>
                 <li>Non-technical founders understanding digital systems</li>
               </ul>
             </div>
 
             {/* Program Structure */}
-            <div style={{ marginBottom: '32px' }}>
+            <div style={{ marginBottom: '40px' }}>
               <h2 style={{
-                fontSize: '20px',
+                fontSize: '22px',
                 fontWeight: '700',
                 color: '#000000',
-                marginBottom: '12px'
+                marginBottom: '16px',
+                letterSpacing: '-0.02em'
               }}>
                 Program Structure (Preview)
               </h2>
               <ul style={{
                 fontSize: '15px',
-                color: '#6b7280',
-                lineHeight: '1.8',
+                color: '#4b5563',
+                lineHeight: '1.9',
                 paddingLeft: '20px',
-                margin: '0'
+                margin: '0',
+                listStyleType: 'disc'
               }}>
-                <li>1:1 and small-group mentorship sessions</li>
-                <li>Fixed mentorship cycles</li>
-                <li>Clear problem statements per session</li>
-                <li>Actionable feedback, not theory</li>
+                <li style={{ marginBottom: '6px' }}>1:1 and small-group mentorship sessions</li>
+                <li style={{ marginBottom: '6px' }}>Fixed mentorship cycles</li>
+                <li style={{ marginBottom: '6px' }}>Clear problem statements per session</li>
+                <li style={{ marginBottom: '6px' }}><span style={{ fontWeight: '600', color: '#1f2937' }}>Actionable feedback, not theory</span></li>
                 <li>Limited slots to maintain quality</li>
               </ul>
             </div>
@@ -218,9 +227,10 @@ export default function MentorshipComingSoon() {
           {/* CTA Text */}
           <p style={{
             fontSize: '15px',
-            color: '#6b7280',
-            lineHeight: '1.6',
-            marginBottom: '24px'
+            color: '#4b5563',
+            lineHeight: '1.7',
+            marginBottom: '28px',
+            textAlign: 'center'
           }}>
             Stay informed. Early access will be announced soon.
           </p>
