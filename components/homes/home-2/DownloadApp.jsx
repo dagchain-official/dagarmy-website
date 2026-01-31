@@ -33,11 +33,11 @@ export default function DownloadApp() {
         console.error('Primary geolocation failed:', error);
         
         try {
-          const fallbackResponse = await fetch('http://ip-api.com/json/');
+          const fallbackResponse = await fetch('https://geolocation-db.com/json/');
           const fallbackData = await fallbackResponse.json();
           
-          if (fallbackData && fallbackData.country) {
-            setUserCountry(fallbackData.country);
+          if (fallbackData && fallbackData.country_name) {
+            setUserCountry(fallbackData.country_name);
             setIsLoading(false);
             return;
           }

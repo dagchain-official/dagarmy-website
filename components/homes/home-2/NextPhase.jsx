@@ -37,14 +37,14 @@ export default function NextPhase() {
       } catch (error) {
         console.error('Primary geolocation failed:', error);
         
-        // Try fallback API: ip-api.com
+        // Try fallback API: geolocation-db.com
         try {
-          const fallbackResponse = await fetch('http://ip-api.com/json/');
+          const fallbackResponse = await fetch('https://geolocation-db.com/json/');
           const fallbackData = await fallbackResponse.json();
           console.log('Fallback API response:', fallbackData);
           
-          if (fallbackData && fallbackData.country) {
-            setUserCountry(fallbackData.country);
+          if (fallbackData && fallbackData.country_name) {
+            setUserCountry(fallbackData.country_name);
             setIsLoading(false);
             return;
           }
