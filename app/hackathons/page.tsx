@@ -81,7 +81,7 @@ export default function HackathonComingSoon() {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Preparing Our Hackathon Program.
+            Preparing Our <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Hackathon</span> Program.
           </h1>
 
           {/* Supporting Subtitle */}
