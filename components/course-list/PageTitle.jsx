@@ -58,7 +58,7 @@ export default function PageTitle({
                   letterSpacing: '-0.02em'
                 }}
               >
-                Explore Our Course
+                Explore Our <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Next-Gen Tech</span> Course
               </h2>
 
               {/* Supporting Description */}

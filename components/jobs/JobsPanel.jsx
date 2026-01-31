@@ -291,7 +291,7 @@ export default function JobsPanel() {
       <div className="tf-container">
         {/* Header */}
         <div className="text-center mb-5 wow fadeInUp">
-          <h2 className="font-cardo fw-7 mb-2" style={{ fontFamily: 'Nasalization, sans-serif' }}>Find Your Dream Tech Job</h2>
+          <h2 className="font-cardo fw-7 mb-2">Find Your Dream <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Tech Job</span></h2>
           <p className="fs-16 text-muted">
             Search for opportunities in AI, Blockchain, and Data Visualization
           </p>

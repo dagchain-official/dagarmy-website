@@ -1,12 +1,12 @@
 import React from "react";
 
 export default function PageTitle({ title = "DAGARMY Blog" }) {
-  // Split title to apply Nasalization only to DAGARMY
+  // Split title to apply Nasalization to DAGARMY and Blog
   const renderTitle = () => {
     if (title === "DAGARMY Blog") {
       return (
         <>
-          <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span> Blog
+          <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span> <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Blog</span>
         </>
       );
     }
