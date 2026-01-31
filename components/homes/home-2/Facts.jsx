@@ -3,50 +3,28 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function Facts() {
-  const [userCountry, setUserCountry] = useState("your country");
-  const [isLoading, setIsLoading] = useState(true);
+  const [userCountry, setUserCountry] = useState("India");
 
   useEffect(() => {
     const detectCountry = async () => {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
         const response = await fetch('https://ipapi.co/json/', {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
+          signal: controller.signal
         });
         
-        if (!response.ok) {
-          throw new Error(`API responded with status: ${response.status}`);
-        }
+        clearTimeout(timeoutId);
         
-        const data = await response.json();
-        
-        if (data && data.country_name) {
-          setUserCountry(data.country_name);
-          setIsLoading(false);
-          return;
-        }
-        
-        throw new Error('Country name not found in response');
-        
-      } catch (error) {
-        console.error('Primary geolocation failed:', error);
-        
-        try {
-          const fallbackResponse = await fetch('https://geolocation-db.com/json/');
-          const fallbackData = await fallbackResponse.json();
-          
-          if (fallbackData && fallbackData.country_name) {
-            setUserCountry(fallbackData.country_name);
-            setIsLoading(false);
-            return;
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.country_name) {
+            setUserCountry(data.country_name);
           }
-        } catch (fallbackError) {
-          console.error('Fallback geolocation also failed:', fallbackError);
         }
-        
-        setUserCountry("India");
-      } finally {
-        setIsLoading(false);
+      } catch (error) {
+        // Silently fail and keep default country
       }
     };
     detectCountry();
@@ -159,11 +137,7 @@ export default function Facts() {
                 lineHeight: '1.7',
                 marginBottom: '16px'
               }}>
-                {isLoading ? (
-                  "Mentors supporting learners globally with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs."
-                ) : (
-                  `Mentors supporting learners across ${userCountry} with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs.`
-                )}
+                Mentors supporting learners across {userCountry} with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs.
               </p>
               <div className="counter style-2">
                 <div
