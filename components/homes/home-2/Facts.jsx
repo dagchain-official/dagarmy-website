@@ -1,6 +1,28 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+
 export default function Facts() {
+  const [userCountry, setUserCountry] = useState("your country");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        if (data && data.country_name) {
+          setUserCountry(data.country_name);
+        }
+      } catch (error) {
+        console.log('Could not detect country, using default');
+        setUserCountry("your country");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    detectCountry();
+  }, []);
   return (
     <section className="section-about-box tf-spacing-1 pt-0" style={{ paddingBottom: '60px' }}>
       <div className="tf-container">
@@ -109,7 +131,11 @@ export default function Facts() {
                 lineHeight: '1.7',
                 marginBottom: '16px'
               }}>
-                Mentors supporting learners across India with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs.
+                {isLoading ? (
+                  "Mentors supporting learners globally with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs."
+                ) : (
+                  `Mentors supporting learners across ${userCountry} with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs.`
+                )}
               </p>
               <div className="counter style-2">
                 <div

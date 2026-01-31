@@ -1,7 +1,27 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Features() {
+  const [userCountry, setUserCountry] = useState("your country");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        if (data && data.country_name) {
+          setUserCountry(data.country_name);
+        }
+      } catch (error) {
+        console.log('Could not detect country, using default');
+        setUserCountry("your country");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    detectCountry();
+  }, []);
   const features = [
     {
       icon: (
@@ -43,7 +63,7 @@ export default function Features() {
           <line x1="12" y1="22.08" x2="12" y2="12"></line>
         </svg>
       ),
-      title: "Learners from India continue learning through 2026 with full access",
+      title: isLoading ? "Learners continue learning through 2026 with full access" : `Learners from ${userCountry} continue learning through 2026 with full access`,
       description: "Join thousands of active learners building their future"
     }
   ];
