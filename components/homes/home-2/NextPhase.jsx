@@ -10,17 +10,51 @@ export default function NextPhase() {
     // Detect user's country using IP geolocation
     const detectCountry = async () => {
       try {
-        // Using ipapi.co for free IP geolocation
-        const response = await fetch('https://ipapi.co/json/');
+        // Try primary API: ipapi.co
+        const response = await fetch('https://ipapi.co/json/', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API responded with status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('Geolocation API response:', data);
         
         if (data && data.country_name) {
           setUserCountry(data.country_name);
+          setIsLoading(false);
+          return;
         }
+        
+        // If country_name not found, try alternative API
+        throw new Error('Country name not found in response');
+        
       } catch (error) {
-        console.log('Could not detect country, using default');
-        // Fallback to default if geolocation fails
-        setUserCountry("your country");
+        console.error('Primary geolocation failed:', error);
+        
+        // Try fallback API: ip-api.com
+        try {
+          const fallbackResponse = await fetch('http://ip-api.com/json/');
+          const fallbackData = await fallbackResponse.json();
+          console.log('Fallback API response:', fallbackData);
+          
+          if (fallbackData && fallbackData.country) {
+            setUserCountry(fallbackData.country);
+            setIsLoading(false);
+            return;
+          }
+        } catch (fallbackError) {
+          console.error('Fallback geolocation also failed:', fallbackError);
+        }
+        
+        // If both APIs fail, use India as default (most common user base)
+        console.log('Using default country: India');
+        setUserCountry("India");
       } finally {
         setIsLoading(false);
       }
