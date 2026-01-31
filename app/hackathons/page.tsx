@@ -81,25 +81,190 @@ export default function HackathonComingSoon() {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Preparing Our Hackathon.
+            Preparing Our Hackathon Program.
           </h1>
 
-          {/* Description */}
+          {/* Supporting Subtitle */}
           <p style={{
             fontSize: '16px',
             color: '#6b7280',
             lineHeight: '1.6',
-            marginBottom: '12px'
+            marginBottom: '40px',
+            maxWidth: '580px',
+            margin: '0 auto 40px auto'
           }}>
-            We are going to launch our hackathon event Very Soon.
+            A problem-first hackathon series focused on building real solutions, not demo projects.
           </p>
-          <p style={{
-            fontSize: '16px',
-            color: '#6b7280',
-            lineHeight: '1.6',
+
+          {/* Content Sections */}
+          <div style={{
+            textAlign: 'left',
             marginBottom: '40px'
           }}>
-            Stay Tune.
+            {/* Why DAGARMY Hackathons */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                Why DAGARMY Hackathons
+              </h2>
+              <p style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.6',
+                marginBottom: '8px'
+              }}>
+                Most hackathons reward speed and surface-level ideas. DAGARMY hackathons are designed to:
+              </p>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>Encourage deep thinking</li>
+                <li>Solve realistic problems</li>
+                <li>Simulate real-world constraints</li>
+              </ul>
+              <p style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.6',
+                marginTop: '8px'
+              }}>
+                Output matters more than presentation.
+              </p>
+            </div>
+
+            {/* What Participants Will Build */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                What Participants Will Build
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>AI-driven tools and workflows</li>
+                <li>Full-stack systems and applications</li>
+                <li>Automation agents</li>
+                <li>Blockchain-backed verification or utility layers</li>
+                <li>Data dashboards and analytical systems</li>
+              </ul>
+            </div>
+
+            {/* How It Works */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                How It Works
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0 0 8px 0'
+              }}>
+                <li>Clearly defined problem statements</li>
+                <li>Individual or team participation</li>
+                <li>Time-bound execution with checkpoints</li>
+                <li>Mentorship support during the hackathon</li>
+              </ul>
+              <p style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.6',
+                marginBottom: '4px'
+              }}>
+                Final evaluation based on:
+              </p>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '40px',
+                margin: '0'
+              }}>
+                <li>Logic</li>
+                <li>Architecture</li>
+                <li>Practical usefulness</li>
+              </ul>
+            </div>
+
+            {/* Who Should Participate */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                Who Should Participate
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>Students and early-stage developers</li>
+                <li>Builders looking to test real skills</li>
+                <li>Professionals exploring new domains</li>
+                <li>Teams validating technical ideas</li>
+              </ul>
+            </div>
+
+            {/* Outcomes */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                Outcomes
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>Real project artifacts</li>
+                <li>Public proof of work</li>
+                <li>Feedback from experienced reviewers</li>
+                <li>Potential pathway into DAGARMY programs</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* CTA Text */}
+          <p style={{
+            fontSize: '15px',
+            color: '#6b7280',
+            lineHeight: '1.6',
+            marginBottom: '24px'
+          }}>
+            Get notified when the first hackathon opens.
           </p>
 
           {/* Email Input with Notify Button */}

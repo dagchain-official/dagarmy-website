@@ -84,22 +84,145 @@ export default function MentorshipComingSoon() {
             Launching Our Mentorship Program.
           </h1>
 
-          {/* Description */}
+          {/* Supporting Subtitle */}
           <p style={{
             fontSize: '16px',
             color: '#6b7280',
             lineHeight: '1.6',
-            marginBottom: '12px'
+            marginBottom: '40px',
+            maxWidth: '580px',
+            margin: '0 auto 40px auto'
           }}>
-            We are going to launch our mentorship program Very Soon.
+            A structured mentorship initiative designed to guide builders, professionals, and early-stage innovators through real-world problem-solving and career clarity.
           </p>
-          <p style={{
-            fontSize: '16px',
-            color: '#6b7280',
-            lineHeight: '1.6',
+
+          {/* Content Sections */}
+          <div style={{
+            textAlign: 'left',
             marginBottom: '40px'
           }}>
-            Stay Tune.
+            {/* Why Mentorship at DAGARMY */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                Why Mentorship at DAGARMY
+              </h2>
+              <p style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.6',
+                marginBottom: '8px'
+              }}>
+                DAGARMY mentorship is not generic advice or motivational coaching. It is a structured guidance program focused on:
+              </p>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>Practical decision-making</li>
+                <li>Technical clarity</li>
+                <li>Career direction in modern tech ecosystems</li>
+              </ul>
+              <p style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.6',
+                marginTop: '8px'
+              }}>
+                Mentors are practitioners, not influencers.
+              </p>
+            </div>
+
+            {/* What the Mentorship Covers */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                What the Mentorship Covers
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>Career roadmap alignment (tech, product, AI, Web3)</li>
+                <li>Project and portfolio reviews</li>
+                <li>System-level thinking and architecture guidance</li>
+                <li>Transition support for students and early professionals</li>
+                <li>Strategic feedback on learning paths and execution</li>
+              </ul>
+            </div>
+
+            {/* Who This Is For */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                Who This Is For
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>Students preparing beyond traditional placements</li>
+                <li>Early professionals stuck in execution-only roles</li>
+                <li>Builders seeking architectural clarity</li>
+                <li>Non-technical founders understanding digital systems</li>
+              </ul>
+            </div>
+
+            {/* Program Structure */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '12px'
+              }}>
+                Program Structure (Preview)
+              </h2>
+              <ul style={{
+                fontSize: '15px',
+                color: '#6b7280',
+                lineHeight: '1.8',
+                paddingLeft: '20px',
+                margin: '0'
+              }}>
+                <li>1:1 and small-group mentorship sessions</li>
+                <li>Fixed mentorship cycles</li>
+                <li>Clear problem statements per session</li>
+                <li>Actionable feedback, not theory</li>
+                <li>Limited slots to maintain quality</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* CTA Text */}
+          <p style={{
+            fontSize: '15px',
+            color: '#6b7280',
+            lineHeight: '1.6',
+            marginBottom: '24px'
+          }}>
+            Stay informed. Early access will be announced soon.
           </p>
 
           {/* Email Input with Notify Button */}
