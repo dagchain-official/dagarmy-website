@@ -81,7 +81,7 @@ export default function MentorshipComingSoon() {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Launching Our Mentorship Program.
+            Launching Our <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Mentorship</span> Program.
           </h1>
 
           {/* Supporting Subtitle */}

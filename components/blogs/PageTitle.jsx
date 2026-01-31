@@ -1,6 +1,18 @@
 import React from "react";
 
 export default function PageTitle({ title = "DAGARMY Blog" }) {
+  // Split title to apply Nasalization only to DAGARMY
+  const renderTitle = () => {
+    if (title === "DAGARMY Blog") {
+      return (
+        <>
+          <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span> Blog
+        </>
+      );
+    }
+    return title;
+  };
+
   return (
     <div
       className="section-blog-hero"
@@ -85,7 +97,7 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
                   letterSpacing: "-0.02em",
                 }}
               >
-                {title}
+                {renderTitle()}
               </h1>
 
               {/* Subtitle */}
