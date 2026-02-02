@@ -8,7 +8,7 @@ export default function About() {
           <div className="col-lg-7">
             <div className="heading-content">
               <h2 className="font-cardo wow fadeInUp" style={{ marginTop: 0 }}>
-                We Are Building a Global Army of "Vibe Coders," Technical Experts, and Visionary Entrepreneurs
+                We Are Building a <span style={{ fontFamily: 'Nasalization, sans-serif' }}>GLOBAL ARMY</span> of "Vibe Coders," Technical Experts, and Visionary Entrepreneurs
               </h2>
             </div>
           </div>
