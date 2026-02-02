@@ -123,7 +123,7 @@ export const avatars = [
   },
   {
     id: 18,
-    src: "/images/studentavatar/smiling-indian-man-casual-close-with-laptop-backpack-pastel-wall.jpg",
+    src: "/images/studentavatar/front-view-male-student-wearing-black-backpack-holding-copybook-files-using-his-phone-light-blue-wall.jpg",
     alt: "Aditya Kumar",
     width: 240,
     height: 240,
@@ -137,7 +137,7 @@ export const avatars = [
   },
   {
     id: 20,
-    src: "/images/studentavatar/portrait-indian-happy-businessman-using-laptop-computer-office.jpg",
+    src: "/images/studentavatar/new image/portrait-indian-happy-businessman-using-laptop-computer-office.jpg",
     alt: "Rohan Desai",
     width: 240,
     height: 240,
