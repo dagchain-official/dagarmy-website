@@ -1,2 +1,0 @@
-2026-02-02T21:52:18.928Z [console][warn] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-2026-02-02T21:52:19.011Z [console][warn] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
