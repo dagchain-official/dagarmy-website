@@ -294,7 +294,7 @@ export default function Courses() {
             {/* Primary Hero Image */}
             <div style={{
               width: '100%',
-              height: '280px',
+              height: '290px',
               position: 'relative',
               overflow: 'hidden',
               borderBottom: '1px solid #e5e7eb'
