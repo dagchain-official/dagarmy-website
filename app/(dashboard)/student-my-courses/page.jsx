@@ -22,8 +22,7 @@ export default function StudentMyCoursesPage() {
               <div style={{ 
                 width: "240px", 
                 flexShrink: 0,
-                background: "#1a1f36",
-                padding: "32px 16px",
+                padding: "24px 16px",
                 position: "sticky",
                 top: "0",
                 height: "100vh",
@@ -34,31 +33,6 @@ export default function StudentMyCoursesPage() {
               
               {/* Main Content */}
               <div style={{ flex: 1, background: "#f9fafb" }}>
-                {/* Page Title Section */}
-                <div style={{
-                  background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
-                  padding: "60px 40px",
-                  borderBottom: "1px solid #e5e7eb"
-                }}>
-                  <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-                    <h1 style={{
-                      fontSize: "32px",
-                      fontWeight: "700",
-                      color: "#ffffff",
-                      marginBottom: "8px"
-                    }}>
-                      Student Dashboard
-                    </h1>
-                    <p style={{
-                      fontSize: "16px",
-                      color: "#cbd5e1",
-                      margin: 0
-                    }}>
-                      Track your progress and continue your learning journey
-                    </p>
-                  </div>
-                </div>
-                
                 {/* Courses Content */}
                 <div style={{ padding: "40px" }}>
                   <MyCourses />
