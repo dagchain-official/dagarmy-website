@@ -241,21 +241,8 @@ const ProgressiveInfoCards = () => {
 };
 
 export default function Courses() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-  const programImages = [
-    '/images/courseimage/image1.png',
-    '/images/courseimage/iamge 2.png',
-    '/images/courseimage/iamge 3 .png'
-  ];
-
-  // Image carousel - rotate every 5 seconds
-  useEffect(() => {
-    const imageInterval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % 3);
-    }, 5000);
-    return () => clearInterval(imageInterval);
-  }, []);
+  // Single primary image - no carousel needed
+  const primaryImage = '/images/courseimage/image1.png';
 
   return (
     <section className="section-popular-program" style={{ 
@@ -283,7 +270,7 @@ export default function Courses() {
           </h2>
         </div>
 
-        {/* Two Column Layout */}
+        {/* Two Column Layout - Equal Height Cards */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr',
@@ -300,12 +287,15 @@ export default function Courses() {
             boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
             border: '1px solid #e5e7eb',
             transition: 'box-shadow 0.3s ease',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
           }}
           onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.12)'}
           onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.08)'}>
             
-            {/* Image Carousel */}
+            {/* Primary Hero Image */}
             <div style={{
               width: '100%',
               height: '280px',
@@ -313,29 +303,25 @@ export default function Courses() {
               overflow: 'hidden',
               borderBottom: '1px solid #e5e7eb'
             }}>
-              {programImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`Program visual ${index + 1}`}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center',
-                    opacity: currentImageIndex === index ? 1 : 0,
-                    transition: 'opacity 1s ease-in-out',
-                    pointerEvents: 'none'
-                  }}
-                />
-              ))}
+              <img
+                src={primaryImage}
+                alt="The Next-Gen Tech Architect Program"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center'
+                }}
+              />
             </div>
 
             {/* Card Content */}
-            <div style={{ padding: '20px' }}>
+            <div style={{ 
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1'
+            }}>
               {/* Program Name */}
               <h3 style={{
                 fontSize: '24px',
@@ -369,7 +355,8 @@ export default function Courses() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '10px',
-                marginBottom: '18px'
+                marginBottom: '18px',
+                flex: '1'
               }}>
                 <div style={{
                   display: 'flex',
