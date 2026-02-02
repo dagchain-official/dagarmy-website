@@ -13,7 +13,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
   console.error('Missing Supabase credentials in .env.local');
   process.exit(1);
 }
-
+//test
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function runMigration() {
