@@ -110,6 +110,13 @@ export default function Testimonials({
                       alt={avatar.alt}
                       width={avatar.width}
                       height={avatar.height}
+                      style={{
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        width: '100px',
+                        height: '100px',
+                        border: 'none'
+                      }}
                     />
                   </SwiperSlide>
                 ))}
