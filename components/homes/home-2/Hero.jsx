@@ -50,7 +50,6 @@ const AnimatedNoText = () => {
           animation: slideUp 3s ease-in-out;
         }
       `}</style>
-      
       <span style={{
         fontSize: '42px',
         fontWeight: '800',
@@ -103,15 +102,20 @@ export default function Hero() {
             <div className="col-lg-6">
               <div className="content" style={{ paddingTop: '0', paddingBottom: '0', marginBottom: '0' }}>
                 <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{
-                  fontSize: '64px',
+                  fontSize: '58px',
                   lineHeight: '1.2',
                   marginBottom: '24px',
                   color: '#1f2937'
                 }}>
-                  Join the <span style={{
+                  <span style={{ whiteSpace: 'nowrap' }}>Join the <span style={{
                     color: '#1f2937',
-                    fontWeight: '700'
-                  }}>Global Army</span> of Skill Builders and Technology Creators
+                    fontWeight: '700',
+                    fontFamily: 'Nasalization, sans-serif'
+                  }}>GLOBAL ARMY</span></span>
+                  <br />
+                  of Skill Builders and
+                  <br />
+                  Technology Creators
                 </h1>
                 <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ marginBottom: '32px' }}>
                   {/* Animated "NO" statement */}
