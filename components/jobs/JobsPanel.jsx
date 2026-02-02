@@ -7,36 +7,17 @@ const techCategories = [
   { 
     name: "Artificial Intelligence", 
     keywords: "Machine Learning OR Artificial Intelligence OR Deep Learning OR Neural Networks OR NLP OR Computer Vision OR AI Engineer",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 16v-4"/>
-        <path d="M12 8h.01"/>
-      </svg>
-    )
+    iconPath: "/images/courses/AIsymbol.svg"
   },
   { 
     name: "Blockchain", 
     keywords: "Blockchain OR Web3 OR Smart Contracts OR Solidity OR Ethereum OR Cryptocurrency OR DeFi OR NFT",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="7" height="7"/>
-        <rect x="14" y="3" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/>
-        <rect x="3" y="14" width="7" height="7"/>
-      </svg>
-    )
+    iconPath: "/images/courses/BlockchainSymbol.svg"
   },
   { 
     name: "Data Visualization", 
     keywords: "Data Visualization OR Tableau OR Power BI OR Data Analytics OR Business Intelligence OR D3.js",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="18" y1="20" x2="18" y2="10"/>
-        <line x1="12" y1="20" x2="12" y2="4"/>
-        <line x1="6" y1="20" x2="6" y2="14"/>
-      </svg>
-    )
+    iconPath: "/images/courses/DataVisualizationSymbol.svg"
   }
 ];
 
@@ -350,7 +331,18 @@ export default function JobsPanel() {
                         fontWeight: selectedCategory.name === cat.name ? '600' : '500'
                       }}
                     >
-                      <span style={{ marginRight: '8px', display: 'inline-flex', alignItems: 'center' }}>{cat.icon}</span>
+                      <span style={{ marginRight: '10px', display: 'inline-flex', alignItems: 'center', verticalAlign: 'middle' }}>
+                        <Image 
+                          src={cat.iconPath} 
+                          alt={`${cat.name} icon`}
+                          width={20}
+                          height={20}
+                          style={{ 
+                            filter: selectedCategory.name === cat.name ? 'brightness(0) invert(1)' : 'brightness(0)',
+                            transition: 'filter 0.2s'
+                          }}
+                        />
+                      </span>
                       {cat.name}
                     </button>
                   ))}
