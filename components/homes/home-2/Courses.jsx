@@ -46,10 +46,6 @@ const ProgressiveInfoCards = () => {
     }
   ];
 
-  // Fixed height to match left card: 380px (image) + 20px (padding top) + content + 20px (padding bottom)
-  // Total left card height is approximately 620px
-  const CARD_FIXED_HEIGHT = 600;
-
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveCard((prev) => (prev + 1) % cards.length);
@@ -59,9 +55,9 @@ const ProgressiveInfoCards = () => {
 
   return (
     <div style={{ 
-      height: `${CARD_FIXED_HEIGHT}px`,
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      height: '100%'
     }}>
       <style jsx>{`
         .scrollable-content::-webkit-scrollbar {
