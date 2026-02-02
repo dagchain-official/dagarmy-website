@@ -108,7 +108,7 @@ export default function Footer1({ parentClass = "footer" }) {
               </p>
 
               {/* Email */}
-              <a href="mailto:careers@dagchin.network" style={{
+              <a href="mailto:" style={{
                 fontSize: '14px',
                 color: '#4b5563',
                 textDecoration: 'none',
@@ -117,7 +117,7 @@ export default function Footer1({ parentClass = "footer" }) {
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
-                careers@dagchin.network
+                careers@dagchain.network
               </a>
             </div>
 
