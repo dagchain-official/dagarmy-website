@@ -51,7 +51,7 @@ export const testimonials = [
   {
     id: 8,
     name: "Aditya Kumar",
-    role: "Mobile Developer",
+    role: "Mobile App Developer",
     rating: 5,
     text: "From struggling to find opportunities to building apps used by millions—DAGARMY made it happen. Their practical, project-based learning is exactly what the industry needs.",
   },
