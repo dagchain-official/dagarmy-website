@@ -85,7 +85,8 @@ export default function StudentRewardsPage() {
                 position: "sticky",
                 top: "0",
                 height: "100vh",
-                overflowY: "auto"
+                overflowY: "auto",
+                background: "#fff"
               }}>
                 <DashboardNav2 />
               </div>
@@ -112,7 +113,7 @@ export default function StudentRewardsPage() {
             <div style={{ 
               width: "240px", 
               flexShrink: 0,
-              background: "#1a1f36",
+              background: "#fff",
               padding: "32px 16px",
               position: "sticky",
               top: "0",

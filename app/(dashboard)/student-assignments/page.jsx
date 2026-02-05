@@ -1,60 +1,88 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
-import { FileText, Clock, CheckCircle, AlertCircle, Calendar, Download } from "lucide-react";
+import { 
+  FileText, Clock, CheckCircle, AlertCircle, Calendar, Download, 
+  Upload, File, X, Check, BookOpen, Code, Database, Cloud, Loader
+} from "lucide-react";
 
 export default function StudentAssignmentsPage() {
+  const { userProfile } = useAuth();
   const [filter, setFilter] = useState('all');
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [submissionNotes, setSubmissionNotes] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const assignments = [
-    {
-      id: 1,
-      title: "Build a Neural Network from Scratch",
-      course: "AI & Machine Learning",
-      dueDate: "2026-02-10",
-      status: "pending",
-      priority: "high",
-      points: 100,
-      description: "Create a basic neural network using Python and NumPy",
-      submitted: false,
-    },
-    {
-      id: 2,
-      title: "Smart Contract Development",
-      course: "Blockchain Basics",
-      dueDate: "2026-02-08",
-      status: "in-progress",
-      priority: "medium",
-      points: 80,
-      description: "Develop and deploy a simple smart contract on Ethereum testnet",
-      submitted: false,
-    },
-    {
-      id: 3,
-      title: "Data Visualization Dashboard",
-      course: "Data Visualization",
-      dueDate: "2026-02-15",
-      status: "pending",
-      priority: "low",
-      points: 60,
-      description: "Create an interactive dashboard using D3.js or Chart.js",
-      submitted: false,
-    },
-    {
-      id: 4,
-      title: "Machine Learning Model Evaluation",
-      course: "AI & Machine Learning",
-      dueDate: "2026-01-28",
-      status: "completed",
-      priority: "high",
-      points: 100,
-      description: "Evaluate different ML models and compare their performance",
-      submitted: true,
-      grade: 95,
-    },
-  ];
+  // Fetch assignments from database
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      if (!userProfile?.email) return;
+
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/assignments/student?email=${encodeURIComponent(userProfile.email)}`);
+        const data = await response.json();
+
+        if (data.success && data.data.assignments) {
+          // Transform assignments to match UI format
+          const transformedAssignments = data.data.assignments.map(assignment => ({
+            id: assignment.id,
+            title: assignment.title,
+            module: assignment.modules?.title || 'General',
+            moduleNumber: assignment.modules?.module_number,
+            track: assignment.modules?.track,
+            course: assignment.courses?.title,
+            batch: assignment.batches?.batch_name,
+            dueDate: assignment.due_date,
+            status: assignment.submission?.status || 'pending',
+            priority: getDaysRemaining(assignment.due_date) <= 3 ? 'high' : getDaysRemaining(assignment.due_date) <= 7 ? 'medium' : 'low',
+            points: assignment.total_points,
+            description: assignment.description,
+            requirements: assignment.requirements || [],
+            acceptedFormats: assignment.accepted_formats || [".pdf", ".zip", ".docx"],
+            submitted: assignment.has_submitted,
+            submission: assignment.submission,
+            icon: getModuleIcon(assignment.modules?.track)
+          }));
+          setAssignments(transformedAssignments);
+        } else {
+          setError(data.error || 'Failed to fetch assignments');
+        }
+      } catch (err) {
+        console.error('Error fetching assignments:', err);
+        setError('Failed to load assignments');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, [userProfile]);
+
+  const getModuleIcon = (track) => {
+    switch(track?.toLowerCase()) {
+      case 'cloud': return <Cloud size={24} />;
+      case 'code': return <Code size={24} />;
+      case 'database': return <Database size={24} />;
+      default: return <BookOpen size={24} />;
+    }
+  };
+
+  const getDaysRemaining = (dueDate) => {
+    const today = new Date();
+    const due = new Date(dueDate);
+    const diffTime = due - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
   const filteredAssignments = filter === 'all' 
     ? assignments 
@@ -63,7 +91,8 @@ export default function StudentAssignmentsPage() {
   const getStatusColor = (status) => {
     switch(status) {
       case 'completed': return '#10b981';
-      case 'in-progress': return '#f59e0b';
+      case 'submitted': return '#3b82f6';
+      case 'graded': return '#8b5cf6';
       case 'pending': return '#6b7280';
       default: return '#6b7280';
     }
@@ -78,12 +107,157 @@ export default function StudentAssignmentsPage() {
     }
   };
 
-  const getDaysRemaining = (dueDate) => {
-    const today = new Date();
-    const due = new Date(dueDate);
-    const diffTime = due - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    addFiles(files);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    addFiles(files);
+  };
+
+  const addFiles = (files) => {
+    const validFiles = files.filter(file => {
+      const ext = '.' + file.name.split('.').pop().toLowerCase();
+      return selectedAssignment.acceptedFormats.includes(ext);
+    });
+
+    const newFiles = validFiles.map(file => ({
+      file,
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      id: Math.random().toString(36).substr(2, 9)
+    }));
+
+    setUploadedFiles([...uploadedFiles, ...newFiles]);
+  };
+
+  const removeFile = (fileId) => {
+    setUploadedFiles(uploadedFiles.filter(f => f.id !== fileId));
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+
+  const handleSubmit = async () => {
+    if (uploadedFiles.length === 0) {
+      alert('Please upload at least one file');
+      return;
+    }
+
+    if (!userProfile?.email) {
+      alert('Please log in to submit assignments.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Upload files to Supabase Storage
+      const uploadedFileData = [];
+      
+      for (const fileObj of uploadedFiles) {
+        const formData = new FormData();
+        formData.append('file', fileObj.file);
+        formData.append('assignmentId', selectedAssignment.id);
+        formData.append('studentEmail', userProfile.email);
+
+        const uploadResponse = await fetch('/api/assignments/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const uploadData = await uploadResponse.json();
+        
+        if (uploadData.success) {
+          uploadedFileData.push(uploadData.data);
+        } else {
+          throw new Error(`Failed to upload ${fileObj.name}: ${uploadData.error}`);
+        }
+      }
+
+      // Extract URLs, names, and sizes from uploaded files
+      const fileUrls = uploadedFileData.map(f => f.url);
+      const fileNames = uploadedFileData.map(f => f.fileName);
+      const fileSizes = uploadedFileData.map(f => f.fileSize);
+
+      const response = await fetch('/api/assignments/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assignment_id: selectedAssignment.id,
+          student_email: userProfile.email,
+          submission_notes: submissionNotes,
+          file_urls: fileUrls,
+          file_names: fileNames,
+          file_sizes: fileSizes
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert('Assignment submitted successfully! Your trainer will review it soon.');
+        setSelectedAssignment(null);
+        setUploadedFiles([]);
+        setSubmissionNotes('');
+        
+        // Refresh assignments to show updated status
+        const refreshResponse = await fetch(`/api/assignments/student?email=${encodeURIComponent(userProfile.email)}`);
+        const refreshData = await refreshResponse.json();
+        if (refreshData.success && refreshData.data.assignments) {
+          const transformedAssignments = refreshData.data.assignments.map(assignment => ({
+            id: assignment.id,
+            title: assignment.title,
+            module: assignment.modules?.title || 'General',
+            moduleNumber: assignment.modules?.module_number,
+            track: assignment.modules?.track,
+            course: assignment.courses?.title,
+            batch: assignment.batches?.batch_name,
+            dueDate: assignment.due_date,
+            status: assignment.submission?.status || 'pending',
+            priority: getDaysRemaining(assignment.due_date) <= 3 ? 'high' : getDaysRemaining(assignment.due_date) <= 7 ? 'medium' : 'low',
+            points: assignment.total_points,
+            description: assignment.description,
+            requirements: assignment.requirements || [],
+            acceptedFormats: assignment.accepted_formats || [".pdf", ".zip", ".docx"],
+            submitted: assignment.has_submitted,
+            submission: assignment.submission,
+            icon: getModuleIcon(assignment.modules?.track)
+          }));
+          setAssignments(transformedAssignments);
+        }
+      } else {
+        alert(`Submission failed: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error submitting assignment:', error);
+      alert('Failed to submit assignment. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -99,7 +273,8 @@ export default function StudentAssignmentsPage() {
               position: "sticky",
               top: "0",
               height: "100vh",
-              overflowY: "auto"
+              overflowY: "auto",
+              background: "#fff"
             }}>
               <DashboardNav2 />
             </div>
@@ -210,9 +385,64 @@ export default function StudentAssignmentsPage() {
                 ))}
               </div>
 
+              {/* Loading State */}
+              {loading && (
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  padding: '60px 20px',
+                  background: '#fff',
+                  borderRadius: '16px',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <Loader size={48} style={{ color: '#6366f1', animation: 'spin 1s linear infinite' }} />
+                  <p style={{ marginTop: '16px', fontSize: '16px', color: '#6b7280' }}>Loading assignments...</p>
+                </div>
+              )}
+
+              {/* Error State */}
+              {error && !loading && (
+                <div style={{ 
+                  padding: '40px',
+                  background: '#fee2e2',
+                  borderRadius: '16px',
+                  border: '1px solid #fecaca',
+                  textAlign: 'center'
+                }}>
+                  <AlertCircle size={48} style={{ color: '#ef4444', margin: '0 auto 16px' }} />
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#991b1b', marginBottom: '8px' }}>
+                    Failed to Load Assignments
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#dc2626' }}>{error}</p>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!loading && !error && filteredAssignments.length === 0 && (
+                <div style={{ 
+                  padding: '60px 20px',
+                  background: '#fff',
+                  borderRadius: '16px',
+                  border: '2px dashed #d1d5db',
+                  textAlign: 'center'
+                }}>
+                  <FileText size={64} style={{ color: '#d1d5db', margin: '0 auto 24px' }} />
+                  <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+                    No Assignments Yet
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#6b7280' }}>
+                    {filter === 'all' 
+                      ? 'Your trainer hasn\'t assigned any assignments yet. Check back later!'
+                      : `No ${filter.replace('-', ' ')} assignments found.`}
+                  </p>
+                </div>
+              )}
+
               {/* Assignments List */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {filteredAssignments.map((assignment) => {
+                {!loading && !error && filteredAssignments.map((assignment) => {
                   const daysRemaining = getDaysRemaining(assignment.dueDate);
                   const isOverdue = daysRemaining < 0 && assignment.status !== 'completed';
                   
@@ -317,65 +547,59 @@ export default function StudentAssignmentsPage() {
                         </div>
                       </div>
                       
-                      <div style={{ display: 'flex', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #f3f4f6' }}>
-                        {assignment.status !== 'completed' && (
-                          <>
-                            <button style={{
-                              flex: 1,
-                              padding: '12px',
-                              borderRadius: '10px',
-                              border: '1px solid #e5e7eb',
-                              background: '#fff',
-                              color: '#6b7280',
-                              fontSize: '14px',
-                              fontWeight: '600',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '8px'
-                            }}>
-                              <Download size={16} />
-                              Download Materials
-                            </button>
-                            <button style={{
-                              flex: 1,
-                              padding: '12px',
-                              borderRadius: '10px',
-                              border: 'none',
-                              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                              color: '#fff',
-                              fontSize: '14px',
-                              fontWeight: '600',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s',
-                              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.25)'
-                            }}>
-                              {assignment.status === 'in-progress' ? 'Continue Working' : 'Start Assignment'}
-                            </button>
-                          </>
-                        )}
-                        {assignment.status === 'completed' && (
-                          <button style={{
+                      {/* Requirements List */}
+                      <div style={{ 
+                        marginTop: '16px', 
+                        padding: '16px', 
+                        background: '#f9fafb', 
+                        borderRadius: '12px',
+                        border: '1px solid #e5e7eb'
+                      }}>
+                        <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
+                          Requirements:
+                        </h4>
+                        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#6b7280' }}>
+                          {assignment.requirements.map((req, idx) => (
+                            <li key={idx} style={{ marginBottom: '6px' }}>{req}</li>
+                          ))}
+                        </ul>
+                        <div style={{ marginTop: '12px', fontSize: '12px', color: '#9ca3af' }}>
+                          <strong>Accepted formats:</strong> {assignment.acceptedFormats.join(', ')}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                        <button 
+                          onClick={() => setSelectedAssignment(assignment)}
+                          style={{
                             flex: 1,
-                            padding: '12px',
+                            padding: '14px',
                             borderRadius: '10px',
                             border: 'none',
-                            background: '#f3f4f6',
-                            color: '#6b7280',
-                            fontSize: '14px',
-                            fontWeight: '600',
+                            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                            color: '#fff',
+                            fontSize: '15px',
+                            fontWeight: '700',
                             cursor: 'pointer',
+                            transition: 'all 0.2s',
+                            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px'
-                          }}>
-                            <CheckCircle size={16} />
-                            View Submission
-                          </button>
-                        )}
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(99, 102, 241, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.3)';
+                          }}
+                        >
+                          <Upload size={18} />
+                          Submit Assignment
+                        </button>
                       </div>
                     </div>
                   );
@@ -385,6 +609,332 @@ export default function StudentAssignmentsPage() {
           </div>
         </div>
       </div>
+
+      {/* File Upload Modal */}
+      {selectedAssignment && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}
+        onClick={() => {
+          setSelectedAssignment(null);
+          setUploadedFiles([]);
+          setSubmissionNotes('');
+        }}
+        >
+          <div 
+            style={{
+              background: '#fff',
+              borderRadius: '20px',
+              maxWidth: '800px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div style={{
+              padding: '32px',
+              borderBottom: '1px solid #e5e7eb',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'start'
+            }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                  {selectedAssignment.icon}
+                  <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', margin: 0 }}>
+                    Submit Assignment
+                  </h2>
+                </div>
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#6366f1', margin: '8px 0' }}>
+                  {selectedAssignment.title}
+                </h3>
+                <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                  {selectedAssignment.description}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedAssignment(null);
+                  setUploadedFiles([]);
+                  setSubmissionNotes('');
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '8px',
+                  color: '#6b7280',
+                  transition: 'color 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#111827'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '32px' }}>
+              {/* Requirements */}
+              <div style={{ 
+                marginBottom: '24px',
+                padding: '20px',
+                background: '#f9fafb',
+                borderRadius: '12px',
+                border: '1px solid #e5e7eb'
+              }}>
+                <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
+                  📋 Requirements:
+                </h4>
+                <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#6b7280', lineHeight: '1.8' }}>
+                  {selectedAssignment.requirements.map((req, idx) => (
+                    <li key={idx}>{req}</li>
+                  ))}
+                </ul>
+                <div style={{ 
+                  marginTop: '16px', 
+                  padding: '12px',
+                  background: '#fff',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  color: '#6b7280'
+                }}>
+                  <strong style={{ color: '#111827' }}>Accepted formats:</strong> {selectedAssignment.acceptedFormats.join(', ')}
+                </div>
+              </div>
+
+              {/* File Upload Area */}
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
+                  📎 Upload Files
+                </h4>
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  style={{
+                    border: `2px dashed ${isDragging ? '#6366f1' : '#d1d5db'}`,
+                    borderRadius: '12px',
+                    padding: '40px',
+                    textAlign: 'center',
+                    background: isDragging ? '#eef2ff' : '#f9fafb',
+                    transition: 'all 0.2s',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => document.getElementById('fileInput').click()}
+                >
+                  <Upload size={48} style={{ color: '#6366f1', margin: '0 auto 16px' }} />
+                  <p style={{ fontSize: '16px', fontWeight: '600', color: '#111827', marginBottom: '8px' }}>
+                    Drop files here or click to browse
+                  </p>
+                  <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                    Supports: {selectedAssignment.acceptedFormats.join(', ')}
+                  </p>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    multiple
+                    accept={selectedAssignment.acceptedFormats.join(',')}
+                    onChange={handleFileSelect}
+                    style={{ display: 'none' }}
+                  />
+                </div>
+              </div>
+
+              {/* Uploaded Files List */}
+              {uploadedFiles.length > 0 && (
+                <div style={{ marginBottom: '24px' }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
+                    📁 Uploaded Files ({uploadedFiles.length})
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {uploadedFiles.map((file) => (
+                      <div
+                        key={file.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '16px',
+                          background: '#f9fafb',
+                          borderRadius: '12px',
+                          border: '1px solid #e5e7eb'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+                          <div style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '8px',
+                            background: '#6366f1',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#fff'
+                          }}>
+                            <File size={20} />
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{ 
+                              fontSize: '14px', 
+                              fontWeight: '600', 
+                              color: '#111827', 
+                              margin: 0,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
+                            }}>
+                              {file.name}
+                            </p>
+                            <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>
+                              {formatFileSize(file.size)}
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeFile(file.id)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '8px',
+                            color: '#ef4444',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#fee2e2';
+                            e.currentTarget.style.borderRadius = '8px';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'none';
+                          }}
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Submission Notes */}
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
+                  💬 Additional Notes (Optional)
+                </h4>
+                <textarea
+                  value={submissionNotes}
+                  onChange={(e) => setSubmissionNotes(e.target.value)}
+                  placeholder="Add any notes or comments about your submission..."
+                  style={{
+                    width: '100%',
+                    minHeight: '120px',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: '1px solid #d1d5db',
+                    fontSize: '14px',
+                    fontFamily: 'inherit',
+                    resize: 'vertical',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                  onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button
+                  onClick={() => {
+                    setSelectedAssignment(null);
+                    setUploadedFiles([]);
+                    setSubmissionNotes('');
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: '1px solid #d1d5db',
+                    background: '#fff',
+                    color: '#6b7280',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#f9fafb';
+                    e.currentTarget.style.borderColor = '#6b7280';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#fff';
+                    e.currentTarget.style.borderColor = '#d1d5db';
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || uploadedFiles.length === 0}
+                  style={{
+                    flex: 2,
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: uploadedFiles.length === 0 ? '#d1d5db' : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                    color: '#fff',
+                    fontSize: '15px',
+                    fontWeight: '700',
+                    cursor: uploadedFiles.length === 0 ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    boxShadow: uploadedFiles.length > 0 ? '0 4px 12px rgba(99, 102, 241, 0.3)' : 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (uploadedFiles.length > 0) {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(99, 102, 241, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (uploadedFiles.length > 0) {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.3)';
+                    }
+                  }}
+                >
+                  {isSubmitting ? (
+                    <>Processing...</>
+                  ) : (
+                    <>
+                      <Check size={20} />
+                      Submit Assignment
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer1 />
     </div>
   );

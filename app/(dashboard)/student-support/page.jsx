@@ -102,7 +102,8 @@ export default function StudentSupportPage() {
               position: "sticky",
               top: "0",
               height: "100vh",
-              overflowY: "auto"
+              overflowY: "auto",
+              background: "#fff"
             }}>
               <DashboardNav2 />
             </div>

@@ -123,6 +123,44 @@ export default function AdminLayout({ children }) {
       badge: null
     },
     {
+      title: "Manage Admins",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <line x1="23" y1="11" x2="17" y2="11" />
+          <line x1="20" y1="8" x2="20" y2="14" />
+        </svg>
+      ),
+      path: "/admin/manage-admins",
+      badge: null
+    },
+    {
+      title: "Assignments",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+      ),
+      path: "/admin/assignments",
+      badge: "New"
+    },
+    {
+      title: "Notifications",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+      ),
+      path: "/admin/notifications",
+      badge: null
+    },
+    {
       title: "Certifications",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -158,50 +196,105 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
       {/* Sidebar */}
       <aside
         style={{
-          width: sidebarOpen ? '240px' : '70px',
+          width: sidebarOpen ? '280px' : '80px',
           background: '#ffffff',
-          borderRight: '1px solid #e9ecef',
-          transition: 'width 0.3s ease',
+          boxShadow: '2px 0 20px rgba(0, 0, 0, 0.06)',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           position: 'fixed',
           height: '100vh',
           zIndex: 1000,
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          borderRight: '1px solid #e2e8f0'
         }}
       >
         {/* Header */}
         <div style={{
-          padding: '20px',
-          borderBottom: '1px solid #e9ecef',
+          padding: sidebarOpen ? '28px 24px' : '28px 16px',
+          borderBottom: '1px solid #e2e8f0',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: sidebarOpen ? 'space-between' : 'center',
+          transition: 'all 0.4s ease',
+          background: 'linear-gradient(135deg, #fafbfc 0%, #f8f9fa 100%)'
         }}>
           {sidebarOpen && (
-            <div>
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: '600',
-                margin: 0,
-                color: '#212529'
+            <div style={{ 
+              animation: 'fadeIn 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 8px 20px rgba(99, 102, 241, 0.35)'
               }}>
-                DAGARMY
-              </h3>
-              <p style={{ fontSize: '11px', color: '#6c757d', margin: 0 }}>Admin Panel</p>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <div>
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: '800',
+                  margin: 0,
+                  background: 'linear-gradient(135deg, #1e293b 0%, #6366f1 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '-0.5px'
+                }}>
+                  DAGARMY
+                </h3>
+                <p style={{ 
+                  fontSize: '11px', 
+                  color: '#64748b', 
+                  margin: 0,
+                  fontWeight: '600',
+                  letterSpacing: '0.5px'
+                }}>
+                  ADMIN PANEL
+                </p>
+              </div>
             </div>
           )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             style={{
-              background: 'transparent',
-              border: 'none',
+              width: '40px',
+              height: '40px',
+              background: '#f1f5f9',
+              border: '1px solid #e2e8f0',
+              borderRadius: '10px',
               cursor: 'pointer',
-              color: '#6c757d',
-              padding: '4px'
+              color: '#64748b',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#e2e8f0';
+              e.currentTarget.style.borderColor = '#cbd5e1';
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.color = '#1e293b';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#f1f5f9';
+              e.currentTarget.style.borderColor = '#e2e8f0';
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.color = '#64748b';
             }}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -214,11 +307,14 @@ export default function AdminLayout({ children }) {
 
         {/* Navigation */}
         <nav style={{
-          padding: '16px 12px',
+          padding: sidebarOpen ? '20px 16px' : '20px 12px',
           flex: 1,
-          overflowY: 'auto'
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#cbd5e1 transparent'
         }}>
-          {menuItems.map((item) => {
+          {menuItems.map((item, index) => {
             const isActive = pathname === item.path;
             return (
               <Link
@@ -227,25 +323,36 @@ export default function AdminLayout({ children }) {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
-                  padding: '10px 12px',
-                  borderRadius: '8px',
-                  marginBottom: '4px',
-                  background: isActive ? '#f8f5ff' : 'transparent',
-                  color: isActive ? '#111827' : '#6c757d',
+                  gap: '14px',
+                  padding: sidebarOpen ? '14px 16px' : '14px 12px',
+                  borderRadius: '12px',
+                  marginBottom: '6px',
+                  background: isActive 
+                    ? 'linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%)' 
+                    : 'transparent',
+                  color: isActive ? '#6366f1' : '#64748b',
                   textDecoration: 'none',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   cursor: 'pointer',
-                  position: 'relative'
+                  position: 'relative',
+                  border: isActive ? '1px solid #c7d2fe' : '1px solid transparent',
+                  boxShadow: isActive ? '0 4px 16px rgba(99, 102, 241, 0.15)' : 'none',
+                  justifyContent: sidebarOpen ? 'flex-start' : 'center'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.background = '#f8f9fa';
+                    e.currentTarget.style.background = '#f8fafc';
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.color = '#1e293b';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                    e.currentTarget.style.borderColor = 'transparent';
+                    e.currentTarget.style.color = '#64748b';
                   }
                 }}
               >
@@ -255,30 +362,52 @@ export default function AdminLayout({ children }) {
                     left: 0,
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '3px',
-                    height: '20px',
-                    background: '#111827',
-                    borderRadius: '0 3px 3px 0'
+                    width: '4px',
+                    height: '60%',
+                    background: 'linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%)',
+                    borderRadius: '0 4px 4px 0',
+                    boxShadow: '0 0 12px rgba(99, 102, 241, 0.5)'
                   }} />
                 )}
 
-                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                <div style={{ 
+                  flexShrink: 0, 
+                  display: 'flex', 
+                  alignItems: 'center',
+                  width: '24px',
+                  height: '24px',
+                  justifyContent: 'center'
+                }}>
                   {item.icon}
                 </div>
 
                 {sidebarOpen && (
-                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '14px', fontWeight: '500' }}>
+                  <div style={{ 
+                    flex: 1, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'space-between',
+                    animation: 'fadeIn 0.3s ease'
+                  }}>
+                    <span style={{ 
+                      fontSize: '14px', 
+                      fontWeight: isActive ? '600' : '500',
+                      letterSpacing: '-0.2px'
+                    }}>
                       {item.title}
                     </span>
                     {item.badge && (
                       <span style={{
-                        padding: '2px 6px',
-                        borderRadius: '4px',
-                        background: isActive ? '#111827' : '#e9ecef',
-                        color: isActive ? '#ffffff' : '#6c757d',
-                        fontSize: '10px',
-                        fontWeight: '600'
+                        padding: '4px 10px',
+                        borderRadius: '8px',
+                        background: isActive 
+                          ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' 
+                          : '#f1f5f9',
+                        color: isActive ? '#ffffff' : '#64748b',
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        boxShadow: isActive ? '0 2px 8px rgba(99, 102, 241, 0.3)' : 'none',
+                        border: isActive ? 'none' : '1px solid #e2e8f0'
                       }}>
                         {item.badge}
                       </span>
@@ -293,67 +422,103 @@ export default function AdminLayout({ children }) {
         {/* Footer */}
         {sidebarOpen && (
           <div style={{
-            padding: '16px',
-            borderTop: '1px solid #e9ecef'
+            padding: '20px',
+            borderTop: '1px solid #e2e8f0',
+            background: 'linear-gradient(135deg, #fafbfc 0%, #f8f9fa 100%)'
           }}>
-            <div style={{ fontSize: '10px', color: '#adb5bd', marginBottom: '8px', textTransform: 'uppercase' }}>
+            <div style={{ 
+              fontSize: '10px', 
+              color: '#94a3b8', 
+              marginBottom: '12px', 
+              textTransform: 'uppercase',
+              fontWeight: '700',
+              letterSpacing: '1px'
+            }}>
               Logged in as
             </div>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              marginBottom: '12px'
+              gap: '12px',
+              marginBottom: '16px',
+              padding: '12px',
+              background: '#ffffff',
+              borderRadius: '12px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
             }}>
               <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #111827 0%, #a78bfa 100%)',
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#ffffff'
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#ffffff',
+                boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
               }}>
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '13px', fontWeight: '500', color: '#212529', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userName}</div>
-                <div style={{ fontSize: '11px', color: '#6c757d', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userEmail}</div>
+                <div style={{ 
+                  fontSize: '14px', 
+                  fontWeight: '600', 
+                  color: '#1e293b', 
+                  overflow: 'hidden', 
+                  textOverflow: 'ellipsis', 
+                  whiteSpace: 'nowrap',
+                  marginBottom: '2px'
+                }}>
+                  {userName}
+                </div>
+                <div style={{ 
+                  fontSize: '11px', 
+                  color: '#64748b', 
+                  overflow: 'hidden', 
+                  textOverflow: 'ellipsis', 
+                  whiteSpace: 'nowrap'
+                }}>
+                  {userEmail}
+                </div>
               </div>
             </div>
             <button
               onClick={handleLogout}
               style={{
                 width: '100%',
-                padding: '8px 12px',
-                borderRadius: '8px',
-                border: '1px solid #e9ecef',
-                background: '#ffffff',
-                color: '#dc3545',
-                fontSize: '13px',
+                padding: '12px 16px',
+                borderRadius: '10px',
+                border: '1px solid #fecaca',
+                background: '#fef2f2',
+                color: '#dc2626',
+                fontSize: '14px',
                 fontWeight: '600',
                 cursor: 'pointer',
-                transition: 'all 0.2s',
+                transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '6px'
+                gap: '8px'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#dc3545';
+                e.currentTarget.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
                 e.currentTarget.style.color = '#ffffff';
-                e.currentTarget.style.borderColor = '#dc3545';
+                e.currentTarget.style.borderColor = '#ef4444';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 16px rgba(239, 68, 68, 0.3)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#ffffff';
-                e.currentTarget.style.color = '#dc3545';
-                e.currentTarget.style.borderColor = '#e9ecef';
+                e.currentTarget.style.background = '#fef2f2';
+                e.currentTarget.style.color = '#dc2626';
+                e.currentTarget.style.borderColor = '#fecaca';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />
                 <line x1="21" y1="12" x2="9" y2="12" />
@@ -368,8 +533,8 @@ export default function AdminLayout({ children }) {
       <main
         style={{
           flex: 1,
-          marginLeft: sidebarOpen ? '240px' : '70px',
-          transition: 'margin-left 0.3s ease',
+          marginLeft: sidebarOpen ? '280px' : '80px',
+          transition: 'margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           padding: '32px',
           minHeight: '100vh'
         }}

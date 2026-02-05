@@ -1,84 +1,109 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
-import { Bell, CheckCircle, AlertCircle, Info, Award, BookOpen, Users, Settings, Trash2 } from "lucide-react";
+import { Bell, CheckCircle, AlertCircle, Info, Award, BookOpen, Users, Settings, Trash2, Megaphone, AlertTriangle } from "lucide-react";
 
 export default function StudentNotificationsPage() {
+  const { userProfile } = useAuth();
   const [filter, setFilter] = useState('all');
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'success',
-      title: 'Assignment Submitted Successfully',
-      message: 'Your "Neural Network Project" has been submitted and is under review.',
-      time: '5 minutes ago',
-      read: false,
-      icon: CheckCircle,
-      color: '#10b981'
-    },
-    {
-      id: 2,
-      type: 'info',
-      title: 'New Course Material Available',
-      message: 'Week 5 materials for "Blockchain Development" are now available.',
-      time: '1 hour ago',
-      read: false,
-      icon: BookOpen,
-      color: '#6366f1'
-    },
-    {
-      id: 3,
-      type: 'achievement',
-      title: 'Achievement Unlocked!',
-      message: 'You earned the "Quick Learner" badge for completing 5 courses.',
-      time: '3 hours ago',
-      read: false,
-      icon: Award,
-      color: '#f59e0b'
-    },
-    {
-      id: 4,
-      type: 'warning',
-      title: 'Assignment Due Soon',
-      message: 'Your "Smart Contract Development" assignment is due in 2 days.',
-      time: '5 hours ago',
-      read: true,
-      icon: AlertCircle,
-      color: '#f59e0b'
-    },
-    {
-      id: 5,
-      type: 'info',
-      title: 'New Discussion Reply',
-      message: 'Sarah Johnson replied to your question in "AI Fundamentals" forum.',
-      time: '1 day ago',
-      read: true,
-      icon: Users,
-      color: '#6366f1'
-    },
-    {
-      id: 6,
-      type: 'success',
-      title: 'Grade Posted',
-      message: 'Your grade for "Machine Learning Model Evaluation" is now available: 95%',
-      time: '2 days ago',
-      read: true,
-      icon: CheckCircle,
-      color: '#10b981'
-    },
-    {
-      id: 7,
-      type: 'info',
-      title: 'Live Session Reminder',
-      message: 'Live Q&A session for "Data Visualization" starts in 30 minutes.',
-      time: '3 days ago',
-      read: true,
-      icon: Info,
-      color: '#6366f1'
-    },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Call fetchNotifications on mount - it will handle getting the email
+    fetchNotifications();
+  }, [userProfile]);
+
+  const fetchNotifications = async () => {
+    // Get email from userProfile or localStorage
+    let email = userProfile?.email;
+    
+    if (!email) {
+      try {
+        const storedUser = localStorage.getItem('dagarmy_user');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          email = userData.email;
+        }
+      } catch (error) {
+        console.error('Error reading localStorage:', error);
+      }
+    }
+
+    if (!email) {
+      console.error('No email available to fetch notifications');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // Fetching notifications
+      const response = await fetch(`/api/notifications/user?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+      
+      console.log('Notifications API response:', data);
+      
+      if (data.success) {
+        // Transform API data to match UI format
+        const transformedNotifications = data.data.notifications.map(item => ({
+          id: item.id,
+          recipientId: item.id,
+          type: item.notification.type,
+          title: item.notification.title,
+          message: item.notification.message,
+          time: getTimeAgo(item.created_at),
+          read: item.is_read,
+          icon: getNotificationIcon(item.notification.type),
+          color: getNotificationColor(item.notification.type),
+          actionUrl: item.notification.action_url,
+          actionLabel: item.notification.action_label
+        }));
+        setNotifications(transformedNotifications);
+      } else {
+        console.error('API returned error:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getNotificationIcon = (type) => {
+    switch(type) {
+      case 'success': return CheckCircle;
+      case 'warning': return AlertTriangle;
+      case 'error': return AlertCircle;
+      case 'announcement': return Megaphone;
+      default: return Info;
+    }
+  };
+
+  const getNotificationColor = (type) => {
+    switch(type) {
+      case 'success': return '#10b981';
+      case 'warning': return '#f59e0b';
+      case 'error': return '#ef4444';
+      case 'announcement': return '#8b5cf6';
+      default: return '#6366f1';
+    }
+  };
+
+  const getTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+    
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
+    return date.toLocaleDateString();
+  };
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -88,18 +113,125 @@ export default function StudentNotificationsPage() {
     ? notifications.filter(n => !n.read)
     : notifications.filter(n => n.type === filter);
 
-  const markAsRead = (id) => {
-    setNotifications(notifications.map(n => 
-      n.id === id ? { ...n, read: true } : n
-    ));
+  const markAsRead = async (recipientId) => {
+    // Get email from userProfile or localStorage
+    let email = userProfile?.email;
+    if (!email) {
+      try {
+        const storedUser = localStorage.getItem('dagarmy_user');
+        if (storedUser) {
+          email = JSON.parse(storedUser).email;
+        }
+      } catch (error) {
+        console.error('Error reading localStorage:', error);
+      }
+    }
+
+    if (!email) {
+      console.error('No email available to mark notification as read');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/notifications/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipient_id: recipientId,
+          action: 'read',
+          user_email: email
+        })
+      });
+
+      if (response.ok) {
+        setNotifications(notifications.map(n => 
+          n.recipientId === recipientId ? { ...n, read: true } : n
+        ));
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
+  const markAllAsRead = async () => {
+    // Get email from userProfile or localStorage
+    let email = userProfile?.email;
+    if (!email) {
+      try {
+        const storedUser = localStorage.getItem('dagarmy_user');
+        if (storedUser) {
+          email = JSON.parse(storedUser).email;
+        }
+      } catch (error) {
+        console.error('Error reading localStorage:', error);
+      }
+    }
+
+    if (!email) {
+      console.error('No email available to mark all as read');
+      return;
+    }
+
+    try {
+      const unreadNotifications = notifications.filter(n => !n.read);
+      
+      // Mark all unread notifications as read
+      await Promise.all(
+        unreadNotifications.map(n => 
+          fetch('/api/notifications/user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              recipient_id: n.recipientId,
+              action: 'read',
+              user_email: email
+            })
+          })
+        )
+      );
+
+      setNotifications(notifications.map(n => ({ ...n, read: true })));
+    } catch (error) {
+      console.error('Error marking all as read:', error);
+    }
   };
 
-  const deleteNotification = (id) => {
-    setNotifications(notifications.filter(n => n.id !== id));
+  const deleteNotification = async (recipientId) => {
+    // Get email from userProfile or localStorage
+    let email = userProfile?.email;
+    if (!email) {
+      try {
+        const storedUser = localStorage.getItem('dagarmy_user');
+        if (storedUser) {
+          email = JSON.parse(storedUser).email;
+        }
+      } catch (error) {
+        console.error('Error reading localStorage:', error);
+      }
+    }
+
+    if (!email) {
+      console.error('No email available to delete notification');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/notifications/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipient_id: recipientId,
+          action: 'dismiss',
+          user_email: email
+        })
+      });
+
+      if (response.ok) {
+        setNotifications(notifications.filter(n => n.recipientId !== recipientId));
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
   };
 
   return (
@@ -115,7 +247,8 @@ export default function StudentNotificationsPage() {
               position: "sticky",
               top: "0",
               height: "100vh",
-              overflowY: "auto"
+              overflowY: "auto",
+              background: "#fff"
             }}>
               <DashboardNav2 />
             </div>
@@ -225,7 +358,17 @@ export default function StudentNotificationsPage() {
               </div>
 
               {/* Notifications List */}
-              {filteredNotifications.length === 0 ? (
+              {loading ? (
+                <div style={{
+                  background: '#fff',
+                  borderRadius: '16px',
+                  padding: '60px',
+                  textAlign: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+                }}>
+                  <div style={{ fontSize: '16px', color: '#6b7280' }}>Loading notifications...</div>
+                </div>
+              ) : filteredNotifications.length === 0 ? (
                 <div style={{
                   background: '#fff',
                   borderRadius: '16px',
@@ -258,7 +401,7 @@ export default function StudentNotificationsPage() {
                           cursor: 'pointer',
                           position: 'relative'
                         }}
-                        onClick={() => !notification.read && markAsRead(notification.id)}
+                        onClick={() => !notification.read && markAsRead(notification.recipientId)}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
                           e.currentTarget.style.transform = 'translateY(-2px)';
@@ -324,7 +467,7 @@ export default function StudentNotificationsPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              deleteNotification(notification.id);
+                              deleteNotification(notification.recipientId);
                             }}
                             style={{
                               padding: '8px',

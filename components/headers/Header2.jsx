@@ -7,6 +7,7 @@ import { useDisconnect } from "wagmi";
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
 import { useAuth } from "@/context/AuthContext";
+import NotificationBell from "@/components/dashboard/NotificationBell";
 import styles from "./AnimatedSignInButton.module.css";
 
 export default function Header2() {
@@ -300,6 +301,9 @@ export default function Header2() {
 
           {/* Sign In / Dashboard Button - Animated */}
           <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            {/* Notification Bell - Only show for authenticated users */}
+            {isAuthenticated && <NotificationBell />}
+            
             <button
               onClick={isAuthenticated ? handleDashboardClick : handleSignInClick}
               className={styles.animatedSigninBtn}

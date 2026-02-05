@@ -24,15 +24,24 @@ export default function LoginModal({ isOpen, onClose }) {
   useEffect(() => {
     const checkUserProfile = async () => {
       if (isConnected && address && !isAuthenticated && isOpen && !isCheckingProfile && !showProfileCompletion) {
-        console.log('🔍 Checking user profile for:', address);
         setIsCheckingProfile(true);
+        
+        // Force close Reown modal immediately to prevent "Retrieving user data" stuck state
+        if (typeof window !== 'undefined' && window.modal) {
+          try {
+            window.modal.close();
+          } catch (e) {
+            // Modal already closed
+          }
+        }
+        
+        // Add a small delay to ensure wallet info is available
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         try {
           // Check if user exists and if profile is completed
           const response = await fetch(`/api/auth/user?wallet=${address}`);
           const data = await response.json();
-          
-          console.log('📋 User data from API:', data);
           
           if (data.user) {
             // User exists
@@ -41,26 +50,20 @@ export default function LoginModal({ isOpen, onClose }) {
             
             if (!data.user.profile_completed) {
               // Show profile completion form for existing users without completed profile
-              console.log('📝 Profile not completed, showing profile completion form');
               setShowProfileCompletion(true);
               setIsCheckingProfile(false);
               return;
             } else {
               // Profile completed, proceed with login
-              console.log('✅ Profile already completed, proceeding with login');
               setIsCheckingProfile(false);
               await login();
             }
           } else {
             // New user - show profile completion form
-            console.log('🆕 New user detected, showing profile completion form');
             
             // Extract email from embeddedWalletInfo for social logins
             if (embeddedWalletInfo?.user?.email) {
-              console.log('✅ Extracted email from social login:', embeddedWalletInfo.user.email);
               setSocialEmail(embeddedWalletInfo.user.email);
-            } else {
-              console.log('⚠️ No email found in embeddedWalletInfo');
             }
             
             setStoredWalletAddress(address);
@@ -74,20 +77,11 @@ export default function LoginModal({ isOpen, onClose }) {
           // On error, try to login anyway
           await login();
         }
-        
-        // Close any Reown popup windows that might be stuck open
-        if (typeof window !== 'undefined' && window.modal) {
-          try {
-            window.modal.close();
-          } catch (e) {
-            console.log('Could not close modal:', e);
-          }
-        }
       }
     };
     
     checkUserProfile();
-  }, [isConnected, address, isAuthenticated, isOpen, login, isCheckingProfile]);
+  }, [isConnected, address, isAuthenticated, isOpen, login, isCheckingProfile, embeddedWalletInfo]);
 
   // When authenticated, close modal (AuthContext handles redirect)
   useEffect(() => {

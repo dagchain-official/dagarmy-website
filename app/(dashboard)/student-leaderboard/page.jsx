@@ -1,38 +1,120 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase/client";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
-import { Trophy, TrendingUp, Award, Crown, Zap, Star, Medal } from "lucide-react";
+import { Trophy, Award, Star } from "lucide-react";
 
 export default function StudentLeaderboardPage() {
   const [timeFilter, setTimeFilter] = useState('all-time');
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [error, setError] = useState(null);
 
-  const leaderboardData = [
-    { rank: 1, name: "Alex Chen", avatar: "AC", points: 15420, courses: 12, badges: 28, trend: "up", change: 2 },
-    { rank: 2, name: "Sarah Johnson", avatar: "SJ", points: 14890, courses: 11, badges: 25, trend: "up", change: 1 },
-    { rank: 3, name: "Michael Brown", avatar: "MB", points: 13750, courses: 10, badges: 22, trend: "down", change: -1 },
-    { rank: 4, name: "Emma Wilson", avatar: "EW", points: 12980, courses: 9, badges: 20, trend: "same", change: 0 },
-    { rank: 5, name: "David Lee", avatar: "DL", points: 12340, courses: 10, badges: 19, trend: "up", change: 3 },
-    { rank: 6, name: "Vinod Kumar", avatar: "VK", points: 11850, courses: 8, badges: 18, trend: "same", change: 0, isCurrentUser: true },
-    { rank: 7, name: "Lisa Anderson", avatar: "LA", points: 11200, courses: 8, badges: 16, trend: "down", change: -2 },
-    { rank: 8, name: "James Taylor", avatar: "JT", points: 10890, courses: 7, badges: 15, trend: "up", change: 1 },
-    { rank: 9, name: "Maria Garcia", avatar: "MG", points: 10450, courses: 7, badges: 14, trend: "same", change: 0 },
-    { rank: 10, name: "Robert Martinez", avatar: "RM", points: 9980, courses: 6, badges: 13, trend: "up", change: 2 },
-  ];
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
-  const getRankColor = (rank) => {
-    if (rank === 1) return 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)';
-    if (rank === 2) return 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%)';
-    if (rank === 3) return 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)';
-    return '#6b7280';
+  const fetchCurrentUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      setCurrentUserId(session?.user?.id || null);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      setCurrentUserId(null);
+    }
   };
 
-  const getRankIcon = (rank) => {
-    if (rank === 1) return <Crown size={24} style={{ color: '#fbbf24' }} />;
-    if (rank === 2) return <Medal size={24} style={{ color: '#9ca3af' }} />;
-    if (rank === 3) return <Award size={24} style={{ color: '#f97316' }} />;
-    return null;
+  const fetchLeaderboard = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Create abort controller for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      const response = await fetch(
+        `/api/leaderboard?filter=${timeFilter}&userId=${currentUserId || ''}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-store',
+          signal: controller.signal
+        }
+      );
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(`API returned ${response.status}: ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Leaderboard data received:', data);
+      setLeaderboardData(data.leaderboard || []);
+      setError(null);
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.error('Request timeout - leaderboard took too long to load');
+        setError('Request timeout. Please try again.');
+      } else {
+        console.error('Error fetching leaderboard:', error.message || error);
+        setError(error.message || 'Failed to load leaderboard');
+      }
+      setLeaderboardData([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [timeFilter, currentUserId]);
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, [fetchLeaderboard]);
+
+  const maxPoints = leaderboardData.length > 0 
+    ? Math.max(...leaderboardData.map(s => s.points))
+    : 20000;
+  const goalPoints = 10000;
+
+  const getRankBadgeStyle = (rank) => {
+    if (rank === 1) return { bg: 'linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%)', icon: '🏆' };
+    if (rank === 2) return { bg: 'linear-gradient(135deg, #D1D5DB 0%, #9CA3AF 100%)', icon: '🥈' };
+    if (rank === 3) return { bg: 'linear-gradient(135deg, #FDBA74 0%, #F97316 100%)', icon: '🥉' };
+    return { bg: '#F3F4F6', icon: null };
+  };
+
+  // Get rank badge based on DAG Points burned
+  const getRankBadge = (points) => {
+    if (points >= 50000) return { name: 'MYTHIC', color: '#9333EA', icon: '👑' };
+    if (points >= 40000) return { name: 'PARAGON', color: '#DC2626', icon: '🔥' };
+    if (points >= 30000) return { name: 'CONQUEROR', color: '#EA580C', icon: '⚔️' };
+    if (points >= 20000) return { name: 'CHAMPION', color: '#D97706', icon: '🏆' };
+    if (points >= 15000) return { name: 'COMMANDER', color: '#CA8A04', icon: '⭐' };
+    if (points >= 10000) return { name: 'INVOKER', color: '#65A30D', icon: '✨' };
+    if (points >= 7000) return { name: 'STRIKER', color: '#16A34A', icon: '⚡' };
+    if (points >= 3200) return { name: 'GUARDIAN', color: '#0891B2', icon: '🛡️' };
+    if (points >= 1500) return { name: 'VANGUARD', color: '#0284C7', icon: '🎯' };
+    if (points >= 700) return { name: 'INITIATOR', color: '#2563EB', icon: '🌟' };
+    return { name: 'UNRANKED', color: '#6B7280', icon: '—' };
+  };
+
+  // Generate random badge counts for display (since we don't track this yet)
+  const getRandomBadges = (rank) => {
+    if (rank === 1) return { gold: 10, silver: 10, bronze: 5 };
+    if (rank === 2) return { gold: 8, silver: 8, bronze: 5 };
+    if (rank === 3) return { gold: 5, silver: 7, bronze: 7 };
+    return { 
+      gold: Math.max(0, 8 - rank), 
+      silver: Math.max(0, 5 - Math.floor(rank / 2)), 
+      bronze: Math.max(0, 3 - Math.floor(rank / 3)) 
+    };
   };
 
   return (
@@ -73,326 +155,410 @@ export default function StudentLeaderboardPage() {
                 </p>
               </div>
 
-              {/* Time Filter */}
-              <div style={{
-                display: 'flex',
-                gap: '12px',
-                marginBottom: '32px',
-                background: '#fff',
-                padding: '8px',
-                borderRadius: '12px',
-                width: 'fit-content',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-              }}>
-                {['all-time', 'this-month', 'this-week'].map((filter) => (
+              {/* Loading State */}
+              {loading && (
+                <div style={{
+                  background: '#fff',
+                  borderRadius: '20px',
+                  padding: '60px',
+                  textAlign: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  border: '1px solid #F3F4F6'
+                }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    border: '4px solid #F3F4F6',
+                    borderTop: '4px solid #6366F1',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    margin: '0 auto 16px'
+                  }} />
+                  <p style={{ fontSize: '16px', color: '#6B7280' }}>Loading leaderboard...</p>
+                  <style jsx>{`
+                    @keyframes spin {
+                      0% { transform: rotate(0deg); }
+                      100% { transform: rotate(360deg); }
+                    }
+                  `}</style>
+                </div>
+              )}
+
+              {/* Error State */}
+              {!loading && error && (
+                <div style={{
+                  background: '#fff',
+                  borderRadius: '20px',
+                  padding: '60px',
+                  textAlign: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  border: '1px solid #FEE2E2'
+                }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    background: '#FEE2E2',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 16px',
+                    fontSize: '32px'
+                  }}>
+                    ⚠️
+                  </div>
+                  <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#DC2626', marginBottom: '8px' }}>
+                    Failed to Load Leaderboard
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#6B7280', marginBottom: '16px' }}>
+                    {error}
+                  </p>
                   <button
-                    key={filter}
-                    onClick={() => setTimeFilter(filter)}
+                    onClick={fetchLeaderboard}
                     style={{
                       padding: '10px 20px',
                       borderRadius: '8px',
                       border: 'none',
-                      background: timeFilter === filter ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : 'transparent',
-                      color: timeFilter === filter ? '#fff' : '#6b7280',
+                      background: '#6366F1',
+                      color: '#fff',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Try Again
+                  </button>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!loading && !error && leaderboardData.length === 0 && (
+                <div style={{
+                  background: '#fff',
+                  borderRadius: '20px',
+                  padding: '60px',
+                  textAlign: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  border: '1px solid #F3F4F6'
+                }}>
+                  <Trophy size={64} style={{ color: '#D1D5DB', margin: '0 auto 16px' }} />
+                  <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+                    No Rankings Yet
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#6B7280' }}>
+                    Be the first to earn DAG Points and climb the leaderboard!
+                  </p>
+                </div>
+              )}
+
+              {/* Main Leaderboard Container */}
+              {!loading && leaderboardData.length > 0 && (
+                <div style={{
+                  background: '#fff',
+                  borderRadius: '20px',
+                  padding: '0',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  border: '1px solid #F3F4F6',
+                  overflow: 'hidden'
+                }}>
+                {/* Header Section with Filters */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)',
+                  padding: '30px 40px',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  {/* All Time Button */}
+                  <button
+                    onClick={() => setTimeFilter('all-time')}
+                    style={{
+                      padding: '10px 20px',
+                      borderRadius: '8px',
+                      border: '1px solid #D1D5DB',
+                      background: timeFilter === 'all-time' ? '#fff' : 'transparent',
+                      color: timeFilter === 'all-time' ? '#4F46E5' : '#6B7280',
                       fontSize: '14px',
                       fontWeight: '600',
                       cursor: 'pointer',
                       transition: 'all 0.2s',
-                      textTransform: 'capitalize'
+                      boxShadow: timeFilter === 'all-time' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
                     }}
                   >
-                    {filter.replace('-', ' ')}
+                    All Time
                   </button>
-                ))}
-              </div>
 
-              {/* Top 3 Podium */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gap: '20px',
-                marginBottom: '32px',
-                alignItems: 'end'
-              }}>
-                {/* 2nd Place */}
-                <div style={{
-                  background: '#fff',
-                  borderRadius: '16px',
-                  padding: '24px',
-                  textAlign: 'center',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                  border: '2px solid #d1d5db',
-                  position: 'relative',
-                  paddingTop: '40px'
-                }}>
-                  <div style={{
-                    position: 'absolute',
-                    top: '-20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '48px',
-                    height: '48px',
-                    background: 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '24px',
-                    fontWeight: '800',
-                    color: '#fff',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                  }}>
-                    2
-                  </div>
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    background: 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '32px',
-                    fontWeight: '800',
-                    color: '#fff',
-                    margin: '0 auto 16px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
-                  }}>
-                    {leaderboardData[1].avatar}
-                  </div>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
-                    {leaderboardData[1].name}
-                  </h3>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#6366f1', marginBottom: '8px' }}>
-                    {leaderboardData[1].points.toLocaleString()}
-                  </div>
-                  <div style={{ fontSize: '13px', color: '#6b7280' }}>DAG Points</div>
+                  {/* Week Dropdown */}
+                  <select
+                    value={timeFilter.startsWith('week-') ? timeFilter : ''}
+                    onChange={(e) => setTimeFilter(e.target.value)}
+                    style={{
+                      padding: '10px 16px',
+                      borderRadius: '8px',
+                      border: '1px solid #D1D5DB',
+                      background: timeFilter.startsWith('week-') ? '#fff' : 'transparent',
+                      color: timeFilter.startsWith('week-') ? '#4F46E5' : '#6B7280',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      boxShadow: timeFilter.startsWith('week-') ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+                      outline: 'none'
+                    }}
+                  >
+                    <option value="">Select Week</option>
+                    <option value="week-1">This Week</option>
+                    <option value="week-2">Last Week</option>
+                    <option value="week-3">2 Weeks Ago</option>
+                    <option value="week-4">3 Weeks Ago</option>
+                  </select>
+
+                  {/* Month Dropdown */}
+                  <select
+                    value={timeFilter.startsWith('month-') ? timeFilter : ''}
+                    onChange={(e) => setTimeFilter(e.target.value)}
+                    style={{
+                      padding: '10px 16px',
+                      borderRadius: '8px',
+                      border: '1px solid #D1D5DB',
+                      background: timeFilter.startsWith('month-') ? '#fff' : 'transparent',
+                      color: timeFilter.startsWith('month-') ? '#4F46E5' : '#6B7280',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      boxShadow: timeFilter.startsWith('month-') ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+                      outline: 'none'
+                    }}
+                  >
+                    <option value="">Select Month</option>
+                    <option value="month-1">This Month</option>
+                    <option value="month-2">Last Month</option>
+                    <option value="month-3">2 Months Ago</option>
+                  </select>
                 </div>
 
-                {/* 1st Place */}
-                <div style={{
-                  background: '#fff',
-                  borderRadius: '16px',
-                  padding: '32px 24px',
-                  textAlign: 'center',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                  border: '3px solid #fbbf24',
-                  position: 'relative',
-                  paddingTop: '48px'
-                }}>
-                  <div style={{
-                    position: 'absolute',
-                    top: '-24px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '56px',
-                    height: '56px',
-                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '28px',
-                    fontWeight: '800',
-                    color: '#fff',
-                    boxShadow: '0 8px 24px rgba(251, 191, 36, 0.4)'
-                  }}>
-                    <Crown size={32} />
-                  </div>
-                  <div style={{
-                    width: '100px',
-                    height: '100px',
-                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '40px',
-                    fontWeight: '800',
-                    color: '#fff',
-                    margin: '0 auto 20px',
-                    boxShadow: '0 12px 32px rgba(251, 191, 36, 0.3)'
-                  }}>
-                    {leaderboardData[0].avatar}
-                  </div>
-                  <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#111827', marginBottom: '12px' }}>
-                    {leaderboardData[0].name}
-                  </h3>
-                  <div style={{ fontSize: '32px', fontWeight: '900', color: '#6366f1', marginBottom: '8px' }}>
-                    {leaderboardData[0].points.toLocaleString()}
-                  </div>
-                  <div style={{ fontSize: '14px', color: '#6b7280', fontWeight: '600' }}>DAG Points</div>
-                </div>
 
-                {/* 3rd Place */}
+                {/* Modern Table Design with All Columns - Full Width */}
                 <div style={{
-                  background: '#fff',
-                  borderRadius: '16px',
-                  padding: '24px',
-                  textAlign: 'center',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                  border: '2px solid #f97316',
-                  position: 'relative',
-                  paddingTop: '40px'
+                  padding: '0 40px 40px',
+                  width: '100%',
+                  maxWidth: '100%',
+                  overflow: 'auto'
                 }}>
+                  {/* Table Header */}
                   <div style={{
-                    position: 'absolute',
-                    top: '-20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '48px',
-                    height: '48px',
-                    background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '24px',
-                    fontWeight: '800',
-                    color: '#fff',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 2fr 1.2fr 1.5fr 1.5fr 1.5fr 1.5fr',
+                    gap: '24px',
+                    padding: '24px 32px',
+                    background: '#F9FAFB',
+                    borderRadius: '12px 12px 0 0',
+                    fontSize: '13px',
+                    fontWeight: '700',
+                    color: '#6B7280',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
                   }}>
-                    3
+                    <div style={{ textAlign: 'center' }}>S.NO</div>
+                    <div>USER NAME</div>
+                    <div>TIER</div>
+                    <div>RANK</div>
+                    <div style={{ textAlign: 'right' }}>TOTAL EARNED</div>
+                    <div style={{ textAlign: 'right' }}>BURNED</div>
+                    <div style={{ textAlign: 'right' }}>REDEEMED</div>
                   </div>
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '32px',
-                    fontWeight: '800',
-                    color: '#fff',
-                    margin: '0 auto 16px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
-                  }}>
-                    {leaderboardData[2].avatar}
-                  </div>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
-                    {leaderboardData[2].name}
-                  </h3>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#6366f1', marginBottom: '8px' }}>
-                    {leaderboardData[2].points.toLocaleString()}
-                  </div>
-                  <div style={{ fontSize: '13px', color: '#6b7280' }}>DAG Points</div>
-                </div>
-              </div>
 
-              {/* Full Leaderboard Table */}
-              <div style={{
-                background: '#fff',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                border: '1px solid #e5e7eb'
-              }}>
-                <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827', marginBottom: '20px' }}>
-                  Full Rankings
-                </h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {leaderboardData.map((student) => (
-                    <div
-                      key={student.rank}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '16px',
-                        borderRadius: '12px',
-                        background: student.isCurrentUser ? 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)' : '#f9fafb',
-                        border: student.isCurrentUser ? '2px solid #8b5cf6' : '1px solid #e5e7eb',
-                        transition: 'all 0.2s',
-                        cursor: 'pointer'
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!student.isCurrentUser) {
-                          e.currentTarget.style.background = '#f3f4f6';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!student.isCurrentUser) {
-                          e.currentTarget.style.background = '#f9fafb';
-                        }
-                      }}
-                    >
-                      <div style={{ 
-                        width: '48px',
-                        fontSize: '20px',
-                        fontWeight: '800',
-                        color: student.rank <= 3 ? getRankColor(student.rank) : '#6b7280',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        {student.rank <= 3 ? getRankIcon(student.rank) : `#${student.rank}`}
-                      </div>
+                  {/* Table Body */}
+                  <div style={{
+                    border: '1px solid #E5E7EB',
+                    borderTop: 'none',
+                    borderRadius: '0 0 12px 12px',
+                    overflow: 'hidden'
+                  }}>
+                    {leaderboardData.map((student, index) => {
+                      const isTop3 = student.rank <= 3;
+                      const rankBadge = getRankBadge(student.points);
+                      // For now, using points as earned, and calculating burned/redeemed as 0
+                      // You'll need to update the API to return these values from database
+                      const totalEarned = student.points || 0;
+                      const burned = 0; // TODO: Get from database
+                      const redeemed = 0; // TODO: Get from database
                       
-                      <div style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '50%',
-                        background: student.rank <= 3 ? getRankColor(student.rank) : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '18px',
-                        fontWeight: '700',
-                        color: '#fff',
-                        marginRight: '16px'
-                      }}>
-                        {student.avatar}
-                      </div>
-                      
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '16px', fontWeight: '700', color: '#111827', marginBottom: '4px' }}>
-                          {student.name}
-                          {student.isCurrentUser && (
-                            <span style={{
-                              marginLeft: '8px',
-                              padding: '2px 8px',
-                              borderRadius: '6px',
-                              background: '#8b5cf6',
-                              color: '#fff',
-                              fontSize: '11px',
+                      return (
+                        <div
+                          key={student.rank}
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 2fr 1.2fr 1.5fr 1.5fr 1.5fr 1.5fr',
+                            gap: '24px',
+                            alignItems: 'center',
+                            padding: '20px 32px',
+                            borderBottom: index < leaderboardData.length - 1 ? '1px solid #F3F4F6' : 'none',
+                            background: student.isCurrentUser 
+                              ? 'linear-gradient(90deg, #EFF6FF 0%, #DBEAFE 50%, #EFF6FF 100%)' 
+                              : '#fff',
+                            transition: 'all 0.2s',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!student.isCurrentUser) {
+                              e.currentTarget.style.background = '#F9FAFB';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!student.isCurrentUser) {
+                              e.currentTarget.style.background = '#fff';
+                            }
+                          }}
+                        >
+                          {/* S.No */}
+                          <div style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: isTop3 ? '#4F46E5' : '#6B7280',
+                            textAlign: 'center'
+                          }}>
+                            {student.rank}
+                          </div>
+
+                          {/* User Name with Avatar */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+                            <img
+                              src={student.avatar}
+                              alt={student.name}
+                              style={{
+                                width: '52px',
+                                height: '52px',
+                                borderRadius: '50%',
+                                border: '2px solid #E5E7EB',
+                                flexShrink: 0
+                              }}
+                            />
+                            <div style={{ minWidth: 0, flex: 1 }}>
+                              <div style={{
+                                fontSize: '16px',
+                                fontWeight: '700',
+                                color: '#111827',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap'
+                              }}>
+                                {student.name}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Tier */}
+                          <div>
+                            <div style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              padding: '6px 14px',
+                              borderRadius: '8px',
+                              background: student.tier === 'DAG_LIEUTENANT' ? '#10B98115' : '#6B728015',
+                              border: `1.5px solid ${student.tier === 'DAG_LIEUTENANT' ? '#10B98130' : '#6B728030'}`,
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              color: student.tier === 'DAG_LIEUTENANT' ? '#10B981' : '#6B7280',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.5px'
+                            }}>
+                              <img 
+                                src={student.tier === 'DAG_LIEUTENANT' ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'}
+                                alt={student.tier === 'DAG_LIEUTENANT' ? 'Lieutenant Badge' : 'Soldier Badge'}
+                                style={{
+                                  width: '20px',
+                                  height: '20px',
+                                  flexShrink: 0
+                                }}
+                              />
+                              {student.tier === 'DAG_LIEUTENANT' ? 'LIEUTENANT' : 'SOLDIER'}
+                            </div>
+                          </div>
+
+                          {/* Rank Badge */}
+                          <div>
+                            <div style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              padding: '6px 14px',
+                              borderRadius: '8px',
+                              background: `${rankBadge.color}15`,
+                              border: `1.5px solid ${rankBadge.color}30`,
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              color: rankBadge.color,
+                              letterSpacing: '0.5px'
+                            }}>
+                              <span style={{ fontSize: '15px' }}>{rankBadge.icon}</span>
+                              {rankBadge.name}
+                            </div>
+                          </div>
+
+                          {/* Total Earned */}
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{
+                              fontSize: '18px',
+                              fontWeight: '700',
+                              color: '#111827'
+                            }}>
+                              {totalEarned.toLocaleString()}
+                            </div>
+                            <div style={{
+                              fontSize: '12px',
+                              color: '#9CA3AF',
                               fontWeight: '600'
                             }}>
-                              YOU
-                            </span>
-                          )}
+                              Points
+                            </div>
+                          </div>
+
+                          {/* Burned */}
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{
+                              fontSize: '18px',
+                              fontWeight: '700',
+                              color: '#DC2626'
+                            }}>
+                              {burned.toLocaleString()}
+                            </div>
+                            <div style={{
+                              fontSize: '12px',
+                              color: '#9CA3AF',
+                              fontWeight: '600'
+                            }}>
+                              Burned
+                            </div>
+                          </div>
+
+                          {/* Redeemed */}
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{
+                              fontSize: '18px',
+                              fontWeight: '700',
+                              color: '#10B981'
+                            }}>
+                              {redeemed.toLocaleString()}
+                            </div>
+                            <div style={{
+                              fontSize: '12px',
+                              color: '#9CA3AF',
+                              fontWeight: '600'
+                            }}>
+                              Redeemed
+                            </div>
+                          </div>
                         </div>
-                        <div style={{ fontSize: '13px', color: '#6b7280' }}>
-                          {student.courses} courses • {student.badges} badges
-                        </div>
-                      </div>
-                      
-                      <div style={{ textAlign: 'right', marginRight: '24px' }}>
-                        <div style={{ fontSize: '20px', fontWeight: '800', color: '#6366f1' }}>
-                          {student.points.toLocaleString()}
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#6b7280' }}>points</div>
-                      </div>
-                      
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        padding: '6px 12px',
-                        borderRadius: '8px',
-                        background: student.trend === 'up' ? '#dcfce7' : student.trend === 'down' ? '#fee2e2' : '#f3f4f6',
-                        color: student.trend === 'up' ? '#16a34a' : student.trend === 'down' ? '#dc2626' : '#6b7280',
-                        fontSize: '13px',
-                        fontWeight: '600'
-                      }}>
-                        {student.trend === 'up' && <TrendingUp size={16} />}
-                        {student.trend === 'down' && <TrendingUp size={16} style={{ transform: 'rotate(180deg)' }} />}
-                        {student.change !== 0 && Math.abs(student.change)}
-                        {student.change === 0 && '—'}
-                      </div>
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
+              )}
             </div>
           </div>
         </div>
