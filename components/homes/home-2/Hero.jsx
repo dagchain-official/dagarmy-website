@@ -193,11 +193,13 @@ export default function Hero() {
             <div className="col-lg-6">
               <div style={{
                 width: '100%',
-                height: '500px',
+                maxWidth: '500px',
+                aspectRatio: '1 / 1',
                 borderRadius: '24px',
                 overflow: 'hidden',
                 border: '1px solid #e5e7eb',
-                position: 'relative'
+                position: 'relative',
+                margin: '0 auto'
               }}>
                 <video
                   autoPlay
@@ -210,7 +212,7 @@ export default function Hero() {
                     objectFit: 'cover'
                   }}
                 >
-                  <source src="/images/courses/hero.mp4" type="video/mp4" />
+                  <source src="https://ik.imagekit.io/e2juffvsf/DagArmy%20vision1.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
