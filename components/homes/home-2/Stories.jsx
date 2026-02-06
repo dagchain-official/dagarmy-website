@@ -7,61 +7,71 @@ const allStories = [
     id: 1,
     title: "From Self Doubt to Clear Direction",
     description: "Small-town learner who stopped waiting and started building skills with clarity.",
-    category: "Career Reset"
+    category: "Career Reset",
+    videoUrl: "https://dagarmy1.b-cdn.net/From%20Self%20Doubt%20to%20Clear%20Direction.mp4"
   },
   {
     id: 2,
     title: "When Career Experience Needed a Reset",
     description: "Working professional who chose learning over stagnation.",
-    category: "Professional Growth"
+    category: "Professional Growth",
+    videoUrl: "https://dagarmy1.b-cdn.net/When%20Career%20Experience%20Needed%20a%20Reset.mp4"
   },
   {
     id: 3,
     title: "Teaching Story was Missing out on Growth",
     description: "Educator who transformed herself to become more relevant and valuable.",
-    category: "Education Evolution"
+    category: "Education Evolution",
+    videoUrl: "https://dagarmy1.b-cdn.net/Teaching%20Story%20was%20Missing%20out%20on%20Growth.mp4"
   },
   {
     id: 4,
     title: "Finding Independence Without Changing Responsibilities",
     description: "Homemaker who built confidence and income on her own schedule.",
-    category: "Personal Independence"
+    category: "Personal Independence",
+    videoUrl: "https://dagarmy1.b-cdn.net/Finding%20Independence%20Without%20Changing%20Responsibilities.mp4"
   },
   {
     id: 5,
     title: "College Life Was Clear but the Future Was Not",
     description: "Student who prepared early instead of depending only on placements.",
-    category: "Student Journey"
+    category: "Student Journey",
+    videoUrl: "https://dagarmy1.b-cdn.net/College%20Life%20Was%20Clear%20but%20the%20Future%20Was%20Not.mp4"
   },
   {
     id: 6,
     title: "A Local Business Facing Slow Decline",
     description: "Shop owner who learned smarter ways to reach customers.",
-    category: "Business Revival"
+    category: "Business Revival",
+    videoUrl: "https://dagarmy1.b-cdn.net/A%20Local%20Business%20Facing%20Slow%20Decline.mp4"
   },
   {
     id: 7,
     title: "Busy Days with No Personal Time Left",
     description: "Freelancer who reduced chaos and gained control over work hours.",
-    category: "Work-Life Balance"
+    category: "Work-Life Balance",
+    videoUrl: "https://dagarmy1.b-cdn.net/Busy%20Days%20with%20No%20Personal%20Time%20Left.mp4"
   },
   {
     id: 8,
     title: "Rejections That Forced a Skill Upgrade",
     description: "Job seeker who replaced uncertainty with preparation.",
-    category: "Job Preparation"
+    category: "Job Preparation",
+    videoUrl: "https://dagarmy1.b-cdn.net/Rejections%20That%20Forced%20a%20Skill%20Upgrade.mp4"
   },
   {
     id: 9,
     title: "Small City Limiting My Bigger Ambitions",
     description: "Learner no longer limited by birthplace through proper skill building.",
-    category: "Breaking Barriers"
+    category: "Breaking Barriers",
+    videoUrl: "https://dagarmy1.b-cdn.net/Small%20City%20Limiting%20My%20Bigger%20Ambitions.mp4"
   },
   {
     id: 10,
     title: "Experience Was Strong but Confidence Was Shaking",
     description: "Professional who proved growth does not depend on age.",
-    category: "Age-Defying Growth"
+    category: "Age-Defying Growth",
+    videoUrl: "https://dagarmy1.b-cdn.net/Experience%20Was%20Strong%20but%20Confidence%20Was%20Shaking.mp4"
   },
   {
     id: 11,
@@ -75,6 +85,8 @@ const allStories = [
 const StoryCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
+  const [popupVideoUrl, setPopupVideoUrl] = useState('');
 
   // Define slide groups - each slide shows only complete cards
   const slideGroups = [
@@ -265,6 +277,12 @@ const StoryCarousel = () => {
                       cursor: 'pointer',
                       flexShrink: 0
                     }}
+                    onClick={() => {
+                      if (story.videoUrl && !story.isComingSoon) {
+                        setPopupVideoUrl(story.videoUrl);
+                        setIsVideoPopupOpen(true);
+                      }
+                    }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-4px)';
                       e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.12)';
@@ -291,13 +309,34 @@ const StoryCarousel = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      position: 'relative'
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}>
+                      {/* Video Thumbnail Preview */}
+                      {story.videoUrl && !story.isComingSoon && (
+                        <video
+                          src={story.videoUrl}
+                          muted
+                          playsInline
+                          preload="metadata"
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            pointerEvents: 'none'
+                          }}
+                        />
+                      )}
+                      
                       {/* Play Button or Coming Soon Icon */}
                       {story.isComingSoon ? (
                         <div style={{
                           fontSize: '48px',
-                          color: '#9ca3af'
+                          color: '#9ca3af',
+                          zIndex: 2
                         }}>
                           ⏳
                         </div>
@@ -310,70 +349,15 @@ const StoryCarousel = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                          zIndex: 2,
+                          position: 'relative'
                         }}>
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="#000000" style={{ marginLeft: '2px' }}>
                             <path d="M8 5v14l11-7z"/>
                           </svg>
                         </div>
                       )}
-
-                      {/* Bottom Badges - Only show for regular videos */}
-                      {!story.isComingSoon && (
-                        <div style={{
-                          position: 'absolute',
-                          bottom: '8px',
-                          right: '8px',
-                          display: 'flex',
-                          gap: '8px',
-                          alignItems: 'center'
-                        }}>
-                          {/* Preview Badge */}
-                          <div 
-                            className="preview-badge"
-                            style={{
-                              background: 'rgba(0, 0, 0, 0.6)',
-                              padding: '4px 10px',
-                              borderRadius: '6px',
-                              fontSize: '11px',
-                              fontWeight: '600',
-                              color: 'rgba(255, 255, 255, 0.9)',
-                              opacity: 0,
-                              transform: 'translateY(-10px)',
-                              transition: 'opacity 0.3s ease, transform 0.3s ease'
-                            }}
-                          >
-                            Preview
-                          </div>
-                          
-                          {/* Duration Badge */}
-                          <div style={{
-                            background: 'rgba(0, 0, 0, 0.6)',
-                            padding: '4px 10px',
-                            borderRadius: '6px',
-                            fontSize: '11px',
-                            fontWeight: '600',
-                            color: 'rgba(255, 255, 255, 0.9)'
-                          }}>
-                            5:30
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Category Tag */}
-                      <div style={{
-                        position: 'absolute',
-                        top: '12px',
-                        left: '12px',
-                        padding: '6px 12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        borderRadius: '20px',
-                        fontSize: '11px',
-                        fontWeight: '600',
-                        color: '#6b7280'
-                      }}>
-                        {story.category}
-                      </div>
                     </div>
 
                     {/* Card Content */}
@@ -446,6 +430,50 @@ const StoryCarousel = () => {
           })}
         </div>
       </div>
+
+      {/* Video Popup Modal */}
+      {isVideoPopupOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '20px'
+          }}
+          onClick={() => setIsVideoPopupOpen(false)}
+        >
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '900px',
+              aspectRatio: '16 / 9',
+              background: '#000'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              src={popupVideoUrl}
+              controls
+              autoPlay
+              controlsList="nodownload nofullscreen"
+              disablePictureInPicture
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
