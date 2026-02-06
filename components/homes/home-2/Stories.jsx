@@ -330,31 +330,14 @@ const StoryCarousel = () => {
                         />
                       )}
                       
-                      {/* Play Button or Coming Soon Icon */}
-                      {story.isComingSoon ? (
+                      {/* Coming Soon Icon */}
+                      {story.isComingSoon && (
                         <div style={{
                           fontSize: '48px',
                           color: '#9ca3af',
                           zIndex: 2
                         }}>
                           ⏳
-                        </div>
-                      ) : (
-                        <div style={{
-                          width: '56px',
-                          height: '56px',
-                          borderRadius: '50%',
-                          background: 'rgba(255, 255, 255, 0.95)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                          zIndex: 2,
-                          position: 'relative'
-                        }}>
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="#000000" style={{ marginLeft: '2px' }}>
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
                         </div>
                       )}
                     </div>
