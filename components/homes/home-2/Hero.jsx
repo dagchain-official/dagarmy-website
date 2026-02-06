@@ -212,7 +212,7 @@ export default function Hero() {
                     objectFit: 'cover'
                   }}
                 >
-                  <source src="https://ik.imagekit.io/e2juffvsf/DagArmy%20vision1.mp4" type="video/mp4" />
+                  <source src="/herosection/Vision & Mission dagamry.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
