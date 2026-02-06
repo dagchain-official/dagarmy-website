@@ -93,8 +93,7 @@ const StoryCarousel = () => {
     [0, 1, 2],     // Cards 1, 2, 3
     [3, 4, 5],     // Cards 4, 5, 6
     [6, 7, 8],     // Cards 7, 8, 9
-    [9],           // Card 10 (Experience Was Strong...)
-    [10]           // Card 11 (Coming Soon)
+    [9, 10]        // Card 10 (Experience Was Strong...) + Card 11 (Coming Soon)
   ];
 
   const totalSlides = slideGroups.length;
