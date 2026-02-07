@@ -124,14 +124,13 @@ export default function Events() {
                     borderRight: '1px solid #e5e7eb'
                   }}>
                     <Image
-                      src="/calender.gif"
+                      src="/images/events/calendar_18571573.png"
                       alt="Calendar"
-                      width={60}
-                      height={60}
+                      width={50}
+                      height={50}
                       style={{
                         objectFit: 'contain'
                       }}
-                      unoptimized
                     />
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: '1', minWidth: '300px', padding: '24px' }}>
