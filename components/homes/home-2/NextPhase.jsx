@@ -1,33 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 
 export default function NextPhase() {
-  const [userCountry, setUserCountry] = useState("India");
+  const [userCountry, setUserCountry] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Detect user's country using IP geolocation
+    // Detect user's country using multi-source geo-location
     const detectCountry = async () => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
-        
-        const response = await fetch('https://ipapi.co/json/', {
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.country_name) {
-            setUserCountry(data.country_name);
-          }
-        }
-      } catch (error) {
-        // Silently fail and keep default country
-        // No console errors to avoid cluttering console
-      }
+      const result = await detectUserCountry();
+      setUserCountry(result.country);
+      setIsLoading(false);
     };
 
     detectCountry();
@@ -115,7 +100,7 @@ export default function NextPhase() {
                   lineHeight: '1.8',
                   marginBottom: '16px'
                 }}>
-                  People from <strong>{userCountry}</strong> are already building skills with intention. Professionals across <strong>{userCountry}</strong> are giving new definition to their direction. Learners from <strong>{userCountry}</strong> securing steady growth commitment through <strong>2026</strong> and beyond.
+                  People from <strong>{getDisplayCountry(userCountry)}</strong> are already building skills with intention. Professionals across <strong>{getDisplayCountry(userCountry)}</strong> are giving new definition to their direction. Learners from <strong>{getDisplayCountry(userCountry)}</strong> securing steady growth commitment through <strong>2026</strong> and beyond.
                 </p>
                 <p style={{
                   fontSize: '17px',
@@ -162,7 +147,7 @@ export default function NextPhase() {
                   e.currentTarget.style.background = '#ffffff';
                 }}
               >
-                Join DAG Army in {userCountry}
+                {userCountry ? `Join DAG Army in ${userCountry}` : 'Join DAG Army'}
                 <i className="icon-arrow-top-right" />
               </button>
             </div>
