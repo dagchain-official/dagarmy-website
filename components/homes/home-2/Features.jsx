@@ -1,30 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 
 export default function Features() {
-  const [userCountry, setUserCountry] = useState("India");
+  const [userCountry, setUserCountry] = useState(null);
 
   useEffect(() => {
     const detectCountry = async () => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
-        
-        const response = await fetch('https://ipapi.co/json/', {
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.country_name) {
-            setUserCountry(data.country_name);
-          }
-        }
-      } catch (error) {
-        // Silently fail and keep default country
-      }
+      const result = await detectUserCountry();
+      setUserCountry(result.country);
     };
     detectCountry();
   }, []);
@@ -69,7 +53,7 @@ export default function Features() {
           <line x1="12" y1="22.08" x2="12" y2="12"></line>
         </svg>
       ),
-      title: `Learners from ${userCountry} continue learning through 2026 with full access`,
+      title: `Learners from ${getDisplayCountry(userCountry)} continue learning through 2026 with full access`,
       description: "Join thousands of active learners building their future"
     }
   ];

@@ -1,31 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 
 export default function Facts() {
-  const [userCountry, setUserCountry] = useState("India");
+  const [userCountry, setUserCountry] = useState(null);
 
   useEffect(() => {
     const detectCountry = async () => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
-        
-        const response = await fetch('https://ipapi.co/json/', {
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.country_name) {
-            setUserCountry(data.country_name);
-          }
-        }
-      } catch (error) {
-        // Silently fail and keep default country
-      }
+      const result = await detectUserCountry();
+      setUserCountry(result.country);
     };
     detectCountry();
   }, []);
@@ -137,7 +121,7 @@ export default function Facts() {
                 lineHeight: '1.7',
                 marginBottom: '16px'
               }}>
-                Mentors supporting learners across {userCountry} with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs.
+                Mentors supporting learners across {getDisplayCountry(userCountry)} with practical guidance and insight. Build practical knowledge across technology and data fields through structured projects and guided programs.
               </p>
               <div className="counter style-2">
                 <div
