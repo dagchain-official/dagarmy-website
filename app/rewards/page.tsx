@@ -1,43 +1,50 @@
 "use client";
 import React from "react";
+import Header2 from "@/components/headers/Header2";
+import Footer1 from "@/components/footers/Footer1";
 
 export default function RewardsPage() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section style={{ 
-        background: 'linear-gradient(135deg, #fafafa 0%, #ffffff 100%)',
-        padding: '100px 0 80px',
-        position: 'relative'
-      }}>
-        <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h1 style={{
-              fontSize: '48px',
-              fontWeight: '700',
-              color: '#1a1a1a',
-              marginBottom: '24px',
-              lineHeight: '1.2'
-            }}>
-              DAG Army Reward System
-            </h1>
-            <p style={{
-              fontSize: '20px',
-              color: '#6b7280',
-              maxWidth: '800px',
-              margin: '0 auto',
-              lineHeight: '1.7'
-            }}>
-              An ecosystem participation program designed to reward responsible contribution rather than speculation or hype
-            </p>
-          </div>
-        </div>
-      </section>
+    <>
+      <div id="wrapper">
+        <Header2 />
+        
+        <div className="main-content pt-0">
+          {/* Hero Section */}
+          <section style={{ 
+            background: 'linear-gradient(135deg, #fafafa 0%, #ffffff 100%)',
+            padding: '60px 0 40px',
+            position: 'relative'
+          }}>
+            <div className="tf-container">
+              <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                <h1 className="font-cardo" style={{
+                  fontSize: 'clamp(36px, 5vw, 52px)',
+                  fontWeight: '700',
+                  color: '#1f2937',
+                  marginBottom: '20px',
+                  lineHeight: '1.3'
+                }}>
+                  DAG Army Reward System
+                </h1>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#6b7280',
+                  maxWidth: '700px',
+                  margin: '0 auto',
+                  lineHeight: '1.7',
+                  fontWeight: '400'
+                }}>
+                  An ecosystem participation program designed to reward responsible contribution rather than speculation or hype
+                </p>
+              </div>
+            </div>
+          </section>
 
       {/* Section 1: What is DAG Army */}
-      <section style={{ padding: '80px 0', background: '#ffffff' }}>
-        <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}>
+      <section style={{ padding: '60px 0', background: '#ffffff' }}>
+        <div className="tf-container">
+          <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
             <div>
               <div style={{
                 background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.02) 100%)',
@@ -69,10 +76,10 @@ export default function RewardsPage() {
                 <p style={{ margin: 0, fontWeight: '600', fontSize: '15px', color: '#1f2937' }}>Ecosystem Participation</p>
               </div>
               
-              <h2 style={{
-                fontSize: '36px',
+              <h2 className="font-cardo" style={{
+                fontSize: '42px',
                 fontWeight: '700',
-                color: '#1a1a1a',
+                color: '#1f2937',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>
@@ -83,7 +90,8 @@ export default function RewardsPage() {
                 fontSize: '16px',
                 color: '#6b7280',
                 lineHeight: '1.7',
-                marginBottom: '24px'
+                marginBottom: '24px',
+                fontWeight: '400'
               }}>
                 An ecosystem participation program designed to reward responsible contribution rather than speculation or hype.
               </p>
@@ -141,23 +149,24 @@ export default function RewardsPage() {
       </section>
 
       {/* Section 2: Why a Reward System Exists */}
-      <section style={{ padding: '80px 0', background: '#fafafa' }}>
+      <section style={{ padding: '60px 0', background: '#fafafa' }}>
         <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 style={{
-              fontSize: '36px',
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h2 className="font-cardo" style={{
+              fontSize: '42px',
               fontWeight: '700',
-              color: '#1a1a1a',
-              marginBottom: '16px',
+              color: '#1f2937',
+              marginBottom: '20px',
               lineHeight: '1.3'
             }}>
               Why a Reward System Exists
             </h2>
             <p style={{
-              fontSize: '18px',
+              fontSize: '16px',
               color: '#6b7280',
               maxWidth: '700px',
-              margin: '0 auto'
+              margin: '0 auto',
+              lineHeight: '1.6'
             }}>
               Aligning individual effort with collective ecosystem growth
             </p>
@@ -248,29 +257,30 @@ export default function RewardsPage() {
       </section>
 
       {/* Section 3: Contribution Over Recruitment */}
-      <section style={{ padding: '80px 0', background: '#ffffff' }}>
+      <section style={{ padding: '60px 0', background: '#ffffff' }}>
         <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 style={{
-              fontSize: '36px',
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h2 className="font-cardo" style={{
+              fontSize: '42px',
               fontWeight: '700',
-              color: '#1a1a1a',
-              marginBottom: '16px',
+              color: '#1f2937',
+              marginBottom: '20px',
               lineHeight: '1.3'
             }}>
               Contribution Over Recruitment
             </h2>
             <p style={{
-              fontSize: '18px',
+              fontSize: '16px',
               color: '#6b7280',
               maxWidth: '700px',
-              margin: '0 auto'
+              margin: '0 auto',
+              lineHeight: '1.6'
             }}>
               Building trust through responsible contribution, not hype
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
             <div style={{
               background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
               borderRadius: '16px',
@@ -407,29 +417,30 @@ export default function RewardsPage() {
       </section>
 
       {/* Section 4: Core Design Principles */}
-      <section style={{ padding: '80px 0', background: '#fafafa' }}>
+      <section style={{ padding: '60px 0', background: '#fafafa' }}>
         <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 style={{
-              fontSize: '36px',
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h2 className="font-cardo" style={{
+              fontSize: '42px',
               fontWeight: '700',
-              color: '#1a1a1a',
-              marginBottom: '16px',
+              color: '#1f2937',
+              marginBottom: '20px',
               lineHeight: '1.3'
             }}>
               Core Design Principles
             </h2>
             <p style={{
-              fontSize: '18px',
+              fontSize: '16px',
               color: '#6b7280',
               maxWidth: '700px',
-              margin: '0 auto'
+              margin: '0 auto',
+              lineHeight: '1.6'
             }}>
               The foundation of our reward system
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
             <div style={{
               background: '#ffffff',
               borderRadius: '12px',
@@ -555,7 +566,7 @@ export default function RewardsPage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             <div style={{
               background: '#ffffff',
               borderRadius: '12px',
@@ -643,7 +654,7 @@ export default function RewardsPage() {
       </section>
 
       {/* CTA Section */}
-      <section style={{ padding: '80px 0', background: '#ffffff' }}>
+      <section style={{ padding: '60px 0 80px', background: '#ffffff' }}>
         <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <div style={{
             background: 'linear-gradient(135deg, #000000 0%, #1f2937 100%)',
@@ -726,6 +737,10 @@ export default function RewardsPage() {
           </div>
         </div>
       </section>
-    </main>
+        </div>
+        
+        <Footer1 />
+      </div>
+    </>
   );
 }
