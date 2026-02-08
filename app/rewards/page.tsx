@@ -19,11 +19,12 @@ export default function RewardsPage() {
             <div className="tf-container">
               <div style={{ textAlign: 'center', marginBottom: '40px' }}>
                 <h1 className="font-cardo" style={{
-                  fontSize: 'clamp(36px, 5vw, 52px)',
-                  fontWeight: '700',
+                  fontSize: 'clamp(42px, 6vw, 58px)',
+                  fontWeight: '800',
                   color: '#1f2937',
                   marginBottom: '20px',
-                  lineHeight: '1.3'
+                  lineHeight: '1.2',
+                  letterSpacing: '-0.02em'
                 }}>
                   DAG Army Reward System
                 </h1>
@@ -77,11 +78,12 @@ export default function RewardsPage() {
               </div>
               
               <h2 className="font-cardo" style={{
-                fontSize: '42px',
-                fontWeight: '700',
+                fontSize: '48px',
+                fontWeight: '800',
                 color: '#1f2937',
                 marginBottom: '20px',
-                lineHeight: '1.3'
+                lineHeight: '1.2',
+                letterSpacing: '-0.02em'
               }}>
                 What is DAG Army?
               </h2>
@@ -150,14 +152,15 @@ export default function RewardsPage() {
 
       {/* Section 2: Why a Reward System Exists */}
       <section style={{ padding: '60px 0', background: '#fafafa' }}>
-        <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="tf-container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <h2 className="font-cardo" style={{
-              fontSize: '42px',
-              fontWeight: '700',
+              fontSize: '48px',
+              fontWeight: '800',
               color: '#1f2937',
               marginBottom: '20px',
-              lineHeight: '1.3'
+              lineHeight: '1.2',
+              letterSpacing: '-0.02em'
             }}>
               Why a Reward System Exists
             </h2>
@@ -258,14 +261,15 @@ export default function RewardsPage() {
 
       {/* Section 3: Contribution Over Recruitment */}
       <section style={{ padding: '60px 0', background: '#ffffff' }}>
-        <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="tf-container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <h2 className="font-cardo" style={{
-              fontSize: '42px',
-              fontWeight: '700',
+              fontSize: '48px',
+              fontWeight: '800',
               color: '#1f2937',
               marginBottom: '20px',
-              lineHeight: '1.3'
+              lineHeight: '1.2',
+              letterSpacing: '-0.02em'
             }}>
               Contribution Over Recruitment
             </h2>
@@ -418,14 +422,15 @@ export default function RewardsPage() {
 
       {/* Section 4: Core Design Principles */}
       <section style={{ padding: '60px 0', background: '#fafafa' }}>
-        <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="tf-container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <h2 className="font-cardo" style={{
-              fontSize: '42px',
-              fontWeight: '700',
+              fontSize: '48px',
+              fontWeight: '800',
               color: '#1f2937',
               marginBottom: '20px',
-              lineHeight: '1.3'
+              lineHeight: '1.2',
+              letterSpacing: '-0.02em'
             }}>
               Core Design Principles
             </h2>
@@ -655,7 +660,7 @@ export default function RewardsPage() {
 
       {/* CTA Section */}
       <section style={{ padding: '60px 0 80px', background: '#ffffff' }}>
-        <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="tf-container">
           <div style={{
             background: 'linear-gradient(135deg, #000000 0%, #1f2937 100%)',
             borderRadius: '24px',
