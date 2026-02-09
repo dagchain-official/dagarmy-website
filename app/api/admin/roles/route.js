@@ -68,13 +68,18 @@ export async function POST(request) {
       result = data;
 
       // Update user's role in users table
-      await supabase
+      const { error: userUpdateError } = await supabase
         .from('users')
         .update({ 
           is_admin: true,
           role: 'admin'
         })
         .eq('id', user_id);
+
+      if (userUpdateError) {
+        console.error('Error updating user role:', userUpdateError);
+        throw new Error(`Failed to update user role: ${userUpdateError.message}`);
+      }
     } else {
       // Create new role
       const { data, error } = await supabase
@@ -93,13 +98,18 @@ export async function POST(request) {
       result = data;
 
       // Update user's is_admin flag and role
-      await supabase
+      const { error: userUpdateError } = await supabase
         .from('users')
         .update({ 
           is_admin: true,
           role: 'admin'
         })
         .eq('id', user_id);
+
+      if (userUpdateError) {
+        console.error('Error updating user role:', userUpdateError);
+        throw new Error(`Failed to update user role: ${userUpdateError.message}`);
+      }
     }
 
     // Log the action
@@ -116,7 +126,8 @@ export async function POST(request) {
     return NextResponse.json({ 
       success: true, 
       role: result,
-      message: existingRole ? 'Admin role updated successfully' : 'Admin role assigned successfully'
+      message: existingRole ? 'Admin role updated successfully' : 'Admin role assigned successfully',
+      requiresReauth: true // Flag to indicate user needs to log back in
     });
   } catch (error) {
     console.error('Error assigning admin role:', error);

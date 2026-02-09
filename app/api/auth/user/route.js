@@ -16,7 +16,7 @@ export async function POST(request) {
 
     // Validate required fields
     if (!wallet_address && !email) {
-      console.log('❌ Validation failed: Missing wallet_address and email')
+      // Validation failed: Missing required fields
       return NextResponse.json(
         { error: 'Either wallet_address or email is required' },
         { status: 400 }

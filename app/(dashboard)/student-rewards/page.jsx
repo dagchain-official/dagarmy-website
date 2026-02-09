@@ -81,12 +81,12 @@ export default function StudentRewardsPage() {
               <div style={{ 
                 width: "240px", 
                 flexShrink: 0,
-                background: "#1a1f36",
-                padding: "32px 16px",
+                padding: "24px 16px",
                 position: "sticky",
                 top: "0",
                 height: "100vh",
-                overflowY: "auto"
+                overflowY: "auto",
+                background: "#fff"
               }}>
                 <DashboardNav2 />
               </div>
@@ -113,7 +113,7 @@ export default function StudentRewardsPage() {
             <div style={{ 
               width: "240px", 
               flexShrink: 0,
-              background: "#1a1f36",
+              background: "#fff",
               padding: "32px 16px",
               position: "sticky",
               top: "0",
@@ -142,13 +142,65 @@ export default function StudentRewardsPage() {
                 </p>
               </div>
 
-              {/* Stats Cards */}
+              {/* Stats Cards - Including Referral Program */}
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                 gap: '20px',
                 marginBottom: '32px'
               }}>
+                {/* Referral Program Card */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #6366f1 0%, #1f2937 100%)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  color: '#fff',
+                  boxShadow: '0 4px 6px rgba(99, 102, 241, 0.3)',
+                  gridColumn: 'span 2'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'rgba(255,255,255,0.2)',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Users size={24} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: '14px', opacity: 0.9, marginBottom: '4px' }}>Referral Program</p>
+                      <p style={{ fontSize: '24px', fontWeight: '700', lineHeight: '1', fontFamily: 'monospace', letterSpacing: '2px' }}>
+                        {rewardData.referralCode}
+                      </p>
+                    </div>
+                    <button 
+                      onClick={copyReferralCode}
+                      style={{
+                        background: copied ? 'rgba(34, 197, 94, 0.9)' : 'rgba(255, 255, 255, 0.2)',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '10px 20px',
+                        color: '#ffffff',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!copied) e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!copied) e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                      }}
+                    >
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '13px', opacity: 0.8 }}>Share your unique referral code and earn rewards</p>
+                </div>
                 {/* DAG Points Card */}
                 <div style={{
                   background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
@@ -259,71 +311,6 @@ export default function StudentRewardsPage() {
                     </div>
                   </div>
                   <p style={{ fontSize: '13px', opacity: 0.8 }}>From sales commissions</p>
-                </div>
-              </div>
-
-              {/* Referral Code Section */}
-              <div style={{
-                background: '#fff',
-                borderRadius: '16px',
-                padding: '32px',
-                marginBottom: '32px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                  <Gift size={24} style={{ color: '#6366f1' }} />
-                  <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
-                    Your Referral Code
-                  </h2>
-                </div>
-                <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '16px' }}>
-                  Share your unique referral link and earn rewards when your friends join DAGARMY
-                </p>
-                <div style={{
-                  display: 'flex',
-                  gap: '12px',
-                  alignItems: 'center',
-                  padding: '16px',
-                  background: '#f9fafb',
-                  borderRadius: '12px',
-                  border: '2px solid #e5e7eb'
-                }}>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Referral Link</p>
-                    <p style={{ fontSize: '14px', fontWeight: '600', color: '#111827', wordBreak: 'break-all' }}>
-                      https://dagarmy.network/signup?ref={rewardData.referralCode}
-                    </p>
-                  </div>
-                  <button
-                    onClick={copyReferralCode}
-                    style={{
-                      padding: '12px 20px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: copied ? '#10b981' : '#6366f1',
-                      color: '#fff',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      transition: 'all 0.3s ease',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    {copied ? (
-                      <>
-                        <Check size={16} />
-                        Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={16} />
-                        Copy Link
-                      </>
-                    )}
-                  </button>
                 </div>
               </div>
 

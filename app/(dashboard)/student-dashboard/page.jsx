@@ -21,8 +21,7 @@ export default function StudentDashboardPage() {
               <div style={{ 
                 width: "240px", 
                 flexShrink: 0,
-                background: "#1a1f36",
-                padding: "32px 16px",
+                padding: "24px 16px",
                 position: "sticky",
                 top: "0",
                 height: "100vh",

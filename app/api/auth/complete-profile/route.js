@@ -53,45 +53,39 @@ export async function POST(request) {
       updated_at: new Date().toISOString(),
     };
 
-    // Find existing user and update, or create if not found
+    // Use email as primary identifier (upsert based on email)
     let data, error;
     
-    if (wallet_address) {
-      // Try to find existing user by wallet address (case-insensitive)
-      const normalizedAddress = wallet_address.toLowerCase();
-      const { data: existing } = await supabase
+    if (email) {
+      // Use upsert with email as the unique identifier
+      const result = await supabase
         .from('users')
-        .select('id')
-        .ilike('wallet_address', normalizedAddress)
-        .maybeSingle();
-
-      if (existing) {
-        // Update existing user
-        const result = await supabase
-          .from('users')
-          .update(userData)
-          .eq('id', existing.id)
-          .select()
-          .single();
-        data = result.data;
-        error = result.error;
-      } else {
-        // Create new user record
-        console.log('🆕 Creating new user record for wallet:', wallet_address);
-        const result = await supabase
-          .from('users')
-          .insert({
-            ...userData,
-            role: 'student',
-            tier: 'DAG_SOLDIER',
-            dag_points: 0, // Will be set by trigger
-            created_at: new Date().toISOString()
-          })
-          .select()
-          .single();
-        data = result.data;
-        error = result.error;
-      }
+        .upsert({
+          email: email,
+          wallet_address: wallet_address ? wallet_address.toLowerCase() : null,
+          first_name,
+          last_name,
+          country_code: country_code || '+91',
+          whatsapp_number,
+          profile_completed: true,
+          role: 'student',
+          tier: 'DAG_SOLDIER',
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'email',
+          ignoreDuplicates: false
+        })
+        .select()
+        .single();
+      
+      data = result.data;
+      error = result.error;
+    } else {
+      // No email provided - this shouldn't happen with social login
+      return NextResponse.json(
+        { error: 'Email is required for profile completion' },
+        { status: 400 }
+      );
     }
 
     if (error) {
@@ -103,6 +97,20 @@ export async function POST(request) {
     }
 
     console.log('✅ Profile completed successfully:', data);
+
+    // Send welcome email asynchronously (don't wait for it)
+    if (data.email) {
+      fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/emails/welcome`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          name: `${data.first_name} ${data.last_name}`
+        })
+      }).catch(err => {
+        console.error('⚠️ Failed to send welcome email (non-blocking):', err);
+      });
+    }
 
     return NextResponse.json({
       success: true,

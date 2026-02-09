@@ -5,8 +5,10 @@ import {
   ChevronDown, ChevronUp, AlertCircle, Trash2, Edit3
 } from "lucide-react";
 import { PERMISSIONS, ROLE_TEMPLATES } from "@/lib/permissions";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AdminRoleAssignment() {
+  const { userProfile } = useAuth();
   const [users, setUsers] = useState([]);
   const [adminRoles, setAdminRoles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -129,25 +131,34 @@ export default function AdminRoleAssignment() {
 
     try {
       setSaving(true);
+      
+      // Get current admin's user ID from localStorage
+      const storedUser = localStorage.getItem('dagarmy_user');
+      const currentAdminId = storedUser ? JSON.parse(storedUser).id : null;
+      
       const response = await fetch('/api/admin/roles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: selectedUser.id,
           role_name: roleName,
-          permissions: selectedPermissions
+          permissions: selectedPermissions,
+          assigned_by: currentAdminId
         })
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setNotification({ type: 'success', message: 'Admin role assigned successfully!' });
+        setNotification({ 
+          type: 'success', 
+          message: 'Admin role assigned successfully! User must log out and log back in for changes to take effect.' 
+        });
         setTimeout(() => {
           setNotification(null);
           setShowModal(false);
           fetchAdminRoles();
-        }, 2000);
+        }, 5000); // Increased timeout to give time to read the message
       } else {
         setNotification({ type: 'error', message: data.error || 'Failed to assign role' });
         setTimeout(() => setNotification(null), 3000);
