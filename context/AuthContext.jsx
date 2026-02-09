@@ -41,6 +41,7 @@ export function AuthProvider({ children }) {
   const [hasLoggedOut, setHasLoggedOut] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isMasterAdmin, setIsMasterAdmin] = useState(false);
+  const hasUpdatedEmailRef = React.useRef(false);
 
   // Check authentication cookie on mount
   useEffect(() => {
@@ -91,6 +92,11 @@ export function AuthProvider({ children }) {
         return;
       }
 
+      // Check if we've already updated email for this session to prevent infinite loop
+      if (hasUpdatedEmailRef.current) {
+        return;
+      }
+
       // embeddedWalletInfo became available
 
       // Try to extract email
@@ -113,6 +119,9 @@ export function AuthProvider({ children }) {
       // Email extracted from embeddedWalletInfo
 
       if (email) {
+        // Mark that we're updating to prevent duplicate calls
+        hasUpdatedEmailRef.current = true;
+        
         // Update user in database with email
         try {
           // Updating user email in database
@@ -161,6 +170,8 @@ export function AuthProvider({ children }) {
           }
         } catch (error) {
           console.error('❌ Failed to update user email:', error);
+          // Reset flag on error so it can retry
+          hasUpdatedEmailRef.current = false;
         }
       } else {
         // No email found in embeddedWalletInfo
