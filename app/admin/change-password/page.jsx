@@ -1,9 +1,17 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Shield, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function AdminChangePasswordPage() {
+  return (
+    <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}><p>Loading...</p></div>}>
+      <AdminChangePasswordInner />
+    </Suspense>
+  );
+}
+
+function AdminChangePasswordInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isForced = searchParams.get('force') === 'true';
