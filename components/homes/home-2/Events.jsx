@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Events() {
   const upcomingEvents = [
@@ -113,33 +114,24 @@ export default function Events() {
                   }}
                 >
                   <div style={{
-                    background: '#000000',
-                    padding: '24px',
+                    background: '#ffffff',
+                    padding: '20px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                     minWidth: '100px',
-                    borderRight: '1px solid rgba(0, 0, 0, 0.2)'
+                    borderRight: '1px solid #e5e7eb'
                   }}>
-                    <div style={{
-                      fontSize: '28px',
-                      fontWeight: '700',
-                      color: '#ffffff',
-                      lineHeight: '1',
-                      marginBottom: '4px'
-                    }}>
-                      {event.date.split(' ')[1]}
-                    </div>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      color: 'rgba(255, 255, 255, 0.9)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
-                    }}>
-                      {event.date.split(' ')[0]}
-                    </div>
+                    <Image
+                      src="/images/events/calendar_18571573.png"
+                      alt="Calendar"
+                      width={50}
+                      height={50}
+                      style={{
+                        objectFit: 'contain'
+                      }}
+                    />
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: '1', minWidth: '300px', padding: '24px' }}>
                     <div style={{ flex: '1' }}>
@@ -169,53 +161,36 @@ export default function Events() {
                       <p style={{
                         fontSize: '14px',
                         color: '#6b7280',
-                        margin: '0 0 10px 0',
+                        margin: '0',
                         lineHeight: '1.5'
                       }}>
                         {event.description}
                       </p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#9ca3af', fontSize: '14px' }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <span>{event.time}</span>
-                      </div>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '24px' }}>
-                    <Link
-                      href="#"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '14px 28px',
-                        background: '#000000',
-                        color: '#ffffff',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontSize: '15px',
-                        transition: 'all 0.3s ease',
-                        border: 'none',
-                        textDecoration: 'none',
-                        whiteSpace: 'nowrap'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.2)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = 'none';
-                      }}
-                    >
-                      Get Ticket
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '14px 28px',
+                      background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+                      color: '#ffffff',
+                      borderRadius: '10px',
+                      fontWeight: '600',
+                      fontSize: '15px',
+                      whiteSpace: 'nowrap',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
                       </svg>
-                    </Link>
+                      Coming Soon
+                    </div>
                   </div>
                 </div>
               ))}

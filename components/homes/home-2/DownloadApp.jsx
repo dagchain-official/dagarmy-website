@@ -2,31 +2,15 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import PremiumButton from "./PremiumButton";
+import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 
 export default function DownloadApp() {
-  const [userCountry, setUserCountry] = useState("India");
+  const [userCountry, setUserCountry] = useState(null);
 
   useEffect(() => {
     const detectCountry = async () => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
-        
-        const response = await fetch('https://ipapi.co/json/', {
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.country_name) {
-            setUserCountry(data.country_name);
-          }
-        }
-      } catch (error) {
-        // Silently fail and keep default country
-      }
+      const result = await detectUserCountry();
+      setUserCountry(result.country);
     };
     detectCountry();
   }, []);
@@ -57,7 +41,7 @@ export default function DownloadApp() {
                   lineHeight: '1.7',
                   marginBottom: '40px'
                 }}>
-                  Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across {userCountry}.
+                  Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across {getDisplayCountry(userCountry)}.
                 </p>
               </div>
               <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: 'auto' }}>

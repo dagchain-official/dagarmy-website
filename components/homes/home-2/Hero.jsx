@@ -92,6 +92,8 @@ const AnimatedNoText = () => {
 
 export default function Hero() {
   const [isOpen, setOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = React.useRef(null);
 
 
   return (
@@ -202,9 +204,10 @@ export default function Hero() {
                 margin: '0 auto'
               }}>
                 <video
+                  ref={videoRef}
                   autoPlay
                   loop
-                  muted
+                  muted={isMuted}
                   playsInline
                   style={{
                     width: '100%',
@@ -212,9 +215,50 @@ export default function Hero() {
                     objectFit: 'cover'
                   }}
                 >
-                  <source src="https://ik.imagekit.io/e2juffvsf/DagArmy%20vision1.mp4" type="video/mp4" />
+                  <source src="/herosection/Vision & Mission dagamry.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
+                
+                {/* Mute/Unmute Button */}
+                <button
+                  onClick={() => {
+                    setIsMuted(!isMuted);
+                    if (videoRef.current) {
+                      videoRef.current.muted = !isMuted;
+                    }
+                  }}
+                  style={{
+                    position: 'absolute',
+                    bottom: '12px',
+                    right: '12px',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '8px',
+                    background: 'rgba(0, 0, 0, 0.6)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 10,
+                    padding: 0
+                  }}
+                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                >
+                  {isMuted ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <line x1="23" y1="9" x2="17" y2="15"></line>
+                      <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
           </div>

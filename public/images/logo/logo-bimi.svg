@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny-ps" viewBox="0 0 512 512">
+  <title>DAGARMY</title>
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#ffffff"/>
+  <!-- Main D shape - black -->
+  <path d="M64 64 L64 448 L320 448 C320 448 320 384 320 384 L128 384 L128 128 L320 128 L320 64 Z" fill="#0a0a0a"/>
+  <!-- Bottom bar -->
+  <path d="M128 320 L320 320 L320 448 L256 448 L256 384 L128 384 Z" fill="#0a0a0a"/>
+  <!-- Blue square -->
+  <rect x="160" y="192" width="128" height="128" rx="24" fill="#3b82f6"/>
+  <!-- Connector curve - gradient -->
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+  </defs>
+  <!-- Top right flowing shape -->
+  <path d="M320 64 L320 192 C320 192 340 240 360 240 C380 240 400 192 400 192 L400 64 Z" fill="url(#g1)"/>
+  <!-- Pink/purple rounded square top right -->
+  <rect x="352" y="32" width="128" height="96" rx="24" fill="#c084fc" opacity="0.7"/>
+</svg>
