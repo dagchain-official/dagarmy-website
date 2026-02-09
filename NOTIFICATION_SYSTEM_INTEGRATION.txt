@@ -1,0 +1,133 @@
+# Notification System - Integration Guide
+
+## ✅ COMPLETED COMPONENTS
+
+### 1. Database Schema
+File: supabase/migrations/017_notification_system.sql
+- notifications table (stores all notifications)
+- notification_recipients table (tracks who received and read each notification)
+- Automatic recipient creation via triggers
+- RLS policies for security
+
+### 2. API Endpoints
+- POST /api/notifications/send - Send notifications (admin only)
+- GET /api/notifications/user - Fetch user's notifications
+- POST /api/notifications/user - Mark as read/dismissed
+- GET /api/notifications/admin - Fetch all notifications (admin)
+- DELETE /api/notifications/admin - Delete notification
+- PUT /api/notifications/admin - Update notification status
+
+### 3. Admin Dashboard
+- Page: /admin/notifications
+- Component: components/admin/NotificationManagement.jsx
+- Features:
+  * Send global notifications
+  * Send to specific roles (student, trainer, admin)
+  * Send to individual users by email
+  * Set priority (low, normal, high, urgent)
+  * Set type (info, success, warning, error, announcement)
+  * Add action buttons with URLs
+  * Set expiration dates
+  * View notification history
+  * Track read/unread statistics
+  * Activate/deactivate notifications
+  * Delete notifications
+
+### 4. Student Notification Bell
+Component: components/dashboard/NotificationBell.jsx
+- Real-time notification badge
+- Dropdown with latest 5 notifications
+- Mark as read functionality
+- Dismiss notifications
+- Auto-refresh every 30 seconds
+- Action buttons for notifications
+
+## 🚀 SETUP INSTRUCTIONS
+
+### Step 1: Run Database Migration
+In Supabase SQL Editor, run:
+supabase/migrations/017_notification_system.sql
+
+### Step 2: Add NotificationBell to Student Dashboard
+Add this to your student dashboard header/navigation:
+
+```jsx
+import NotificationBell from '@/components/dashboard/NotificationBell';
+
+// In your header component:
+<NotificationBell />
+```
+
+Common locations:
+- components/dashboard/DashboardNav2.jsx
+- components/headers/Header2.jsx (if used in student pages)
+- Any student dashboard layout component
+
+### Step 3: Access Admin Panel
+Navigate to: http://localhost:3000/admin/notifications
+
+## 📋 USAGE EXAMPLES
+
+### Send Global Notification
+1. Go to /admin/notifications
+2. Select "All Users"
+3. Fill in title and message
+4. Click "Send Notification"
+
+### Send to Students Only
+1. Select "Specific Role"
+2. Choose "Students" from dropdown
+3. Fill in details
+4. Send
+
+### Send to Individual User
+1. Select "Individual User"
+2. Enter user's email
+3. Fill in details
+4. Send
+
+### Add Action Button
+1. Fill in "Action URL" (e.g., /student-assignments)
+2. Fill in "Action Label" (e.g., "View Assignment")
+3. Students will see a clickable button in the notification
+
+## 🎯 FEATURES
+
+✅ Global notifications to all users
+✅ Role-based notifications (students, trainers, admins)
+✅ Individual user notifications
+✅ Priority levels (urgent, high, normal, low)
+✅ Notification types (info, success, warning, error, announcement)
+✅ Action buttons with custom URLs
+✅ Expiration dates
+✅ Read/unread tracking
+✅ Dismiss functionality
+✅ Real-time updates (30-second polling)
+✅ Notification history for admins
+✅ Analytics (total recipients, read count)
+✅ Activate/deactivate notifications
+✅ Delete notifications
+
+## 📊 DATABASE STRUCTURE
+
+notifications:
+- id, title, message, type, priority
+- is_global, target_user_id, target_role
+- sender_id, sender_name
+- action_url, action_label
+- created_at, expires_at, is_active
+- total_recipients, total_read
+
+notification_recipients:
+- id, notification_id, user_id
+- is_read, read_at
+- is_dismissed, dismissed_at
+- created_at
+
+## 🔒 SECURITY
+
+- Only admins can send notifications
+- RLS policies enforce user access
+- Users can only see their own notifications
+- Admins can see all notifications
+- Automatic recipient creation via database triggers

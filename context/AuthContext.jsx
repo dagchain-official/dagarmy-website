@@ -83,14 +83,98 @@ export function AuthProvider({ children }) {
     }
   }, [isConnected, address, hasLoggedOut]);
 
+  // Watch for embeddedWalletInfo to become available and update user email
+  useEffect(() => {
+    const updateUserEmail = async () => {
+      // Only proceed if we have wallet connected and embeddedWalletInfo
+      if (!address || !embeddedWalletInfo || !isConnected) {
+        return;
+      }
+
+      // embeddedWalletInfo became available
+
+      // Try to extract email
+      const email = embeddedWalletInfo.user?.email || 
+                   embeddedWalletInfo.email ||
+                   embeddedWalletInfo.user?.emailAddress ||
+                   null;
+
+      const name = embeddedWalletInfo.user?.username || 
+                  embeddedWalletInfo.user?.name ||
+                  embeddedWalletInfo.user?.displayName ||
+                  embeddedWalletInfo.name ||
+                  (email ? email.split('@')[0] : null);
+
+      const avatar = embeddedWalletInfo.user?.avatar ||
+                    embeddedWalletInfo.user?.picture ||
+                    embeddedWalletInfo.user?.profileImage ||
+                    null;
+
+      // Email extracted from embeddedWalletInfo
+
+      if (email) {
+        // Update user in database with email
+        try {
+          // Updating user email in database
+          const response = await fetch('/api/auth/user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              wallet_address: address,
+              email: email,
+              role: 'student', // Default role for new users
+              full_name: name,
+              avatar_url: avatar,
+              auth_provider: embeddedWalletInfo.authProvider || 'social'
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            // User email updated successfully
+
+            // Update userProfile state
+            setUserProfile(prev => ({
+              ...prev,
+              email: email,
+              name: name,
+              avatar: avatar,
+              profile_completed: data.user?.profile_completed || false
+            }));
+
+            // Update localStorage
+            const storedUser = localStorage.getItem('dagarmy_user');
+            if (storedUser) {
+              const userData = JSON.parse(storedUser);
+              userData.email = email;
+              userData.full_name = name;
+              userData.profile_completed = data.user?.profile_completed || false;
+              localStorage.setItem('dagarmy_user', JSON.stringify(userData));
+            }
+
+            // DON'T redirect automatically - let LoginModal handle profile completion flow
+            // Only redirect if profile is already completed
+            if (data.user?.profile_completed && window.location.href.includes('reown') || window.location.href.includes('walletconnect')) {
+              console.log('🔄 Profile completed, redirecting from OAuth page to dashboard...');
+              window.location.href = '/dashboard';
+            }
+          }
+        } catch (error) {
+          console.error('❌ Failed to update user email:', error);
+        }
+      } else {
+        // No email found in embeddedWalletInfo
+      }
+    };
+
+    updateUserEmail();
+  }, [embeddedWalletInfo, address, isConnected]);
+
   const login = async () => {
     if (address) {
       // Clear the logged out flag on successful login
       sessionStorage.removeItem('dagarmy_logged_out');
-      
-      console.log('🔍 Login Debug - Connector:', connector?.name);
-      console.log('🔍 Login Debug - CAIP Address:', caipAddress);
-      console.log('🔍 Embedded Wallet Info:', embeddedWalletInfo);
+          // Login initiated
       
       // Try to get user profile info from connector
       const profile = {
@@ -107,34 +191,49 @@ export function AuthProvider({ children }) {
 
       try {
         // First, check if user exists in database (for returning users)
-        console.log('🔍 Checking for existing user with wallet:', address);
+        // Checking for existing user
         const existingUserResponse = await fetch(`/api/auth/user?wallet=${address}`);
         if (existingUserResponse.ok) {
           const existingUserData = await existingUserResponse.json();
           if (existingUserData.user) {
-            console.log('✅ Found existing user:', existingUserData.user);
+            // Found existing user
             userEmail = existingUserData.user.email;
             userName = existingUserData.user.full_name;
             userAvatar = existingUserData.user.avatar_url;
             profile.isAdmin = existingUserData.user.is_admin || false;
             profile.isMasterAdmin = existingUserData.user.is_master_admin || false;
-            console.log('✅ Existing user admin status:', { isAdmin: profile.isAdmin, isMasterAdmin: profile.isMasterAdmin });
+            // Existing user admin status loaded
           }
         }
 
         // If no existing user or no email, try to get from embeddedWalletInfo (social login)
-        if (!userEmail && embeddedWalletInfo) {
-          console.log('✅ Found embeddedWalletInfo:', embeddedWalletInfo);
+        if (!userEmail) {
+          // Attempting to extract email from Reown/AppKit
           
-          userEmail = embeddedWalletInfo.user?.email || null;
-          userName = embeddedWalletInfo.user?.username || 
-                    embeddedWalletInfo.user?.name ||
-                    (userEmail ? userEmail.split('@')[0] : null);
-          
-          console.log('✅ Extracted email from social login:', userEmail);
-          console.log('✅ Extracted name:', userName);
-        } else if (!embeddedWalletInfo) {
-          console.log('⚠️ No embeddedWalletInfo - wallet-only login');
+          if (embeddedWalletInfo) {
+            // Found embeddedWalletInfo
+            
+            // Try multiple paths to get email
+            userEmail = embeddedWalletInfo.user?.email || 
+                       embeddedWalletInfo.email ||
+                       embeddedWalletInfo.user?.emailAddress ||
+                       null;
+            
+            userName = embeddedWalletInfo.user?.username || 
+                      embeddedWalletInfo.user?.name ||
+                      embeddedWalletInfo.user?.displayName ||
+                      embeddedWalletInfo.name ||
+                      (userEmail ? userEmail.split('@')[0] : null);
+            
+            userAvatar = embeddedWalletInfo.user?.avatar ||
+                        embeddedWalletInfo.user?.picture ||
+                        embeddedWalletInfo.user?.profileImage ||
+                        null;
+            
+            // Extracted email and name from embeddedWalletInfo
+          } else {
+            // No embeddedWalletInfo available - wallet-only login
+          }
         }
 
         // If we have an email, check admin access
@@ -145,7 +244,7 @@ export function AuthProvider({ children }) {
           profile.authProvider = embeddedWalletInfo?.authProvider || 'wallet';
           
           // Check admin access based on email (this will override any existing values)
-          console.log('🔍 Checking admin access for:', userEmail);
+          // Checking admin access
           const roleResponse = await fetch('/api/auth/check-role', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -154,7 +253,7 @@ export function AuthProvider({ children }) {
           
           if (roleResponse.ok) {
             const roleData = await roleResponse.json();
-            console.log('✅ Role check result:', roleData);
+            // Role check completed
             
             profile.isAdmin = roleData.isAdmin;
             profile.isMasterAdmin = roleData.isMasterAdmin;
@@ -183,12 +282,12 @@ export function AuthProvider({ children }) {
           is_master_admin: profile.isMasterAdmin || false
         };
 
-        console.log('📤 Sending to Supabase:', supabaseData);
+        // Saving user to database
 
         const result = await saveUserToSupabase(supabaseData);
         
         if (result.success) {
-          console.log('✅ User saved to Supabase:', result.user);
+          // User saved to database
           profile.supabaseId = result.user.id;
           profile.isNewUser = result.isNewUser;
         }
@@ -202,6 +301,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('dagarmy_role', finalRole);
       localStorage.setItem('dagarmy_authenticated', 'true');
       localStorage.setItem('dagarmy_user', JSON.stringify({
+        id: profile.supabaseId,
         email: profile.email,
         full_name: profile.name,
         wallet_address: address,

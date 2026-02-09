@@ -21,10 +21,15 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
   }, [userAddress]);
 
   // Prevent browser back button during profile completion
+  const [isCompleting, setIsCompleting] = useState(false);
+  
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      e.preventDefault();
-      e.returnValue = '';
+      // Only show warning if form is not being submitted
+      if (!isCompleting) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -32,7 +37,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [isCompleting]);
 
   const handleCancel = () => {
     // Disconnect wallet and close modal if user cancels
@@ -75,6 +80,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
     }
 
     setIsSubmitting(true);
+    setIsCompleting(true); // Disable beforeunload warning
 
     const requestBody = {
       wallet_address: userAddress,
@@ -104,6 +110,9 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
 
       console.log('✅ Profile completed:', data);
       
+      // Remove beforeunload listener before redirecting
+      window.onbeforeunload = null;
+      
       // Call the onComplete callback
       if (onComplete) {
         onComplete(data.user);
@@ -112,6 +121,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       console.error('Error completing profile:', err);
       setError(err.message || 'Failed to save profile. Please try again.');
       setIsSubmitting(false);
+      setIsCompleting(false); // Re-enable warning on error
     }
   };
 

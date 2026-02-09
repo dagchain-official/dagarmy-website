@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const dashboardItems = [
+  // Main Section
   {
     href: "/student-dashboard",
     icon: (
@@ -16,7 +17,6 @@ const dashboardItems = [
       </svg>
     ),
     label: "Dashboard",
-    active: true,
   },
   {
     href: "/student-my-courses",
@@ -29,6 +29,19 @@ const dashboardItems = [
     label: "My Courses",
   },
   {
+    href: "/student-assignments",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round"/>
+        <polyline points="14 2 14 8 20 8" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="16" y1="13" x2="8" y2="13" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="16" y1="17" x2="8" y2="17" strokeLinecap="round" strokeLinejoin="round"/>
+        <polyline points="10 9 9 9 8 9" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "Assignments",
+  },
+  {
     href: "/student-rewards",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -39,32 +52,61 @@ const dashboardItems = [
     label: "Rewards",
   },
   {
-    href: "/student-reviews",
+    href: "/student-leaderboard",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M16 16v-3a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="3" y="10" width="18" height="12" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M7 10V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    label: "Reviews",
+    label: "Leaderboard",
+    divider: true,
+  },
+  // Analytics Section
+  {
+    href: "/student-analytics",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <line x1="12" y1="20" x2="12" y2="10" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="18" y1="20" x2="18" y2="4" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="6" y1="20" x2="6" y2="16" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "Analytics",
   },
   {
-    href: "/student-wishlist",
+    href: "/student-notifications",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    label: "Wishlist",
+    label: "Notifications",
+    divider: true,
+  },
+  // Support Section
+  {
+    href: "/student-support",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="12" y1="17" x2="12.01" y2="17" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "Support",
   },
   {
     href: "/student-setting",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    label: "Settings",
+    label: "Settings/Profile",
   },
 ];
 
@@ -129,87 +171,71 @@ export default function DashboardNav2() {
       flexDirection: 'column',
       minHeight: '100%',
       height: '100%',
+      background: '#ffffff',
+      borderRight: '1px solid #e5e7eb',
     }}>
-      {/* Logo Section */}
-      <div style={{
-        marginBottom: '32px',
-      }}>
-        <div style={{
-          fontSize: '18px',
-          fontWeight: '700',
-          color: '#ffffff',
-          letterSpacing: '0.5px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-        }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            background: 'linear-gradient(135deg, #6366f1 0%, #1f2937 100%)',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px',
-            fontWeight: '800',
-          }}>
-            D
-          </div>
-          DAGARMY
-        </div>
-      </div>
-
       {/* Navigation Items */}
-      <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '4px', overflow: 'visible' }}>
+      <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'visible' }}>
         {dashboardItems.map((item, index) => {
           const isActive = pathname === item.href;
           return (
-            <div
-              key={index}
-              onClick={() => handleNavigation(item.href, item.label)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '12px 16px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                background: isActive ? '#6366f1' : 'transparent',
-                color: isActive ? '#ffffff' : 'rgba(255,255,255,0.6)',
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-                  e.currentTarget.style.color = '#ffffff';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.6)';
-                }
-              }}
-            >
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '18px',
-                height: '18px',
-                opacity: isActive ? 1 : 0.8,
-              }}>
-                {item.icon}
+            <React.Fragment key={index}>
+              <div
+                onClick={() => handleNavigation(item.href, item.label)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '11px 14px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  background: isActive ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : 'transparent',
+                  color: isActive ? '#ffffff' : '#6b7280',
+                  position: 'relative',
+                  boxShadow: isActive ? '0 4px 12px rgba(99, 102, 241, 0.25)' : 'none',
+                  transform: isActive ? 'translateX(2px)' : 'translateX(0)',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = '#f9fafb';
+                    e.currentTarget.style.color = '#111827';
+                    e.currentTarget.style.transform = 'translateX(2px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#6b7280';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                  }
+                }}
+              >
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '20px',
+                  height: '20px',
+                }}>
+                  {item.icon}
+                </div>
+                <span style={{ 
+                  fontSize: '14px', 
+                  fontWeight: isActive ? '600' : '500',
+                  letterSpacing: '-0.2px',
+                }}>
+                  {item.label}
+                </span>
               </div>
-              <span style={{ 
-                fontSize: '13px', 
-                fontWeight: isActive ? '600' : '500',
-              }}>
-                {item.label}
-              </span>
-            </div>
+              {item.divider && (
+                <div style={{
+                  height: '1px',
+                  background: '#f3f4f6',
+                  margin: '12px 0',
+                }} />
+              )}
+            </React.Fragment>
           );
         })}
         
@@ -220,38 +246,42 @@ export default function DashboardNav2() {
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
-            padding: '12px 16px',
-            borderRadius: '8px',
+            padding: '11px 14px',
+            borderRadius: '10px',
             cursor: 'pointer',
-            transition: 'all 0.15s ease',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
             background: 'transparent',
-            color: 'rgba(239, 68, 68, 0.9)',
+            color: '#ef4444',
+            marginTop: '8px',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
-            e.currentTarget.style.color = '#ef4444';
+            e.currentTarget.style.background = '#fef2f2';
+            e.currentTarget.style.color = '#dc2626';
+            e.currentTarget.style.transform = 'translateX(2px)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = 'rgba(239, 68, 68, 0.9)';
+            e.currentTarget.style.color = '#ef4444';
+            e.currentTarget.style.transform = 'translateX(0)';
           }}
         >
           <div style={{ 
             display: 'flex', 
             alignItems: 'center',
             justifyContent: 'center',
-            width: '18px',
-            height: '18px',
+            width: '20px',
+            height: '20px',
           }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" strokeLinecap="round" strokeLinejoin="round"/>
               <polyline points="16 17 21 12 16 7" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="21" y1="12" x2="9" y2="12" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
           <span style={{ 
-            fontSize: '13px', 
+            fontSize: '14px', 
             fontWeight: '500',
+            letterSpacing: '-0.2px',
           }}>
             Logout
           </span>
