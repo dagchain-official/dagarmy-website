@@ -75,10 +75,17 @@ const allStories = [
   },
   {
     id: 11,
-    title: "More Videos Coming Soon",
-    description: "We're working on bringing you more inspiring stories of transformation and growth.",
-    category: "Coming Soon",
-    isComingSoon: true
+    title: "When the Idea Was Ready but the Tech Was Not",
+    description: "Innovator who bridged the gap between concept and execution through shared expertise.",
+    category: "Innovation Journey",
+    videoUrl: "https://dagarmy1.b-cdn.net/Dagarmy%20Website%20Video%2011.mp4"
+  },
+  {
+    id: 12,
+    title: "Turning Contribution into Career Growth",
+    description: "Professional who realized that helping others was the fastest way to help himself.",
+    category: "Career Development",
+    videoUrl: "https://dagarmy1.b-cdn.net/Dagarmy%20Website%20Video%2012.mp4"
   }
 ];
 
@@ -93,7 +100,7 @@ const StoryCarousel = () => {
     [0, 1, 2],     // Cards 1, 2, 3
     [3, 4, 5],     // Cards 4, 5, 6
     [6, 7, 8],     // Cards 7, 8, 9
-    [9, 10]        // Card 10 (Experience Was Strong...) + Card 11 (Coming Soon)
+    [9, 10, 11]    // Cards 10, 11, 12
   ];
 
   const totalSlides = slideGroups.length;
