@@ -23,7 +23,7 @@ export default function PDFViewer() {
     const updateWidth = () => {
       const container = document.getElementById('pdf-container');
       if (container) {
-        setPageWidth(Math.min(container.offsetWidth - 40, 1000));
+        setPageWidth(Math.min(container.offsetWidth - 30, 1050));
       }
     };
     
@@ -40,22 +40,29 @@ export default function PDFViewer() {
           textAlign: 'center', 
           marginBottom: '50px'
         }}>
-          <h1 className="font-cardo" style={{
-            fontSize: '52px',
-            fontWeight: '800',
-            color: '#111827',
-            marginBottom: '12px',
-            lineHeight: '1.1',
-            letterSpacing: '-0.03em'
+          <h1 style={{
+            fontSize: '58px',
+            fontWeight: '700',
+            color: '#1f2937',
+            marginBottom: '16px',
+            lineHeight: '1.2',
+            letterSpacing: '-0.02em'
           }}>
-            DAG Army Reward System
+             <span style={{
+              fontFamily: 'Nasalization, sans-serif',
+              fontWeight: '700',
+              color: '#1f2937'
+            }}>DAGARMY REWARD </span> System
           </h1>
           <p style={{
-            fontSize: '18px',
-            color: '#6b7280',
+            fontSize: '20px',
+            color: '#4b5563',
             margin: 0,
-            lineHeight: '1.6',
-            fontWeight: '400'
+            lineHeight: '1.7',
+            fontWeight: '400',
+            maxWidth: '600px',
+            marginLeft: 'auto',
+            marginRight: 'auto'
           }}>
             Complete Documentation & Framework
           </p>
@@ -69,7 +76,8 @@ export default function PDFViewer() {
             borderRadius: '20px',
             overflow: 'hidden',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-            border: '1px solid #e5e7eb'
+            border: '1px solid #e5e7eb',
+            padding: '40px 0'
           }}
         >
           <div style={{
@@ -155,34 +163,41 @@ export default function PDFViewer() {
         }}>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="back-to-top-btn"
             style={{
-              padding: '14px 28px',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+              padding: '16px 32px',
+              background: '#1f2937',
               color: '#ffffff',
-              border: 'none',
-              borderRadius: '10px',
-              fontSize: '15px',
+              border: '2px solid #1f2937',
+              borderRadius: '12px',
+              fontSize: '16px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
+              gap: '10px',
+              transition: 'all 0.4s ease',
+              boxShadow: '0 4px 12px rgba(31, 41, 55, 0.2)',
+              position: 'relative',
+              overflow: 'hidden'
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.4)';
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 8px 20px rgba(31, 41, 55, 0.3)';
+              e.currentTarget.style.background = '#111827';
+              e.currentTarget.style.borderColor = '#111827';
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(31, 41, 55, 0.2)';
+              e.currentTarget.style.background = '#1f2937';
+              e.currentTarget.style.borderColor = '#1f2937';
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="18 15 12 9 6 15"></polyline>
             </svg>
-            Back to Top
+            <span style={{ letterSpacing: '0.02em' }}>Back to Top</span>
           </button>
         </div>
       </div>

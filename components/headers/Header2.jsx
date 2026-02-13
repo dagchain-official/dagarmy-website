@@ -10,6 +10,179 @@ import { useAuth } from "@/context/AuthContext";
 import NotificationBell from "@/components/dashboard/NotificationBell";
 import styles from "./AnimatedSignInButton.module.css";
 
+// Rewards Dropdown Component
+function RewardsDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState(null);
+  const router = useRouter();
+
+  const handleNavigation = (path) => {
+    setIsOpen(false);
+    router.push(path);
+  };
+
+  const handleMouseEnter = () => {
+    if (hoverTimeout) clearTimeout(hoverTimeout);
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsOpen(false);
+    }, 300);
+    setHoverTimeout(timeout);
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div 
+      style={{ position: 'relative' }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div 
+        onClick={toggleDropdown}
+        style={{
+          fontSize: '14px',
+          fontWeight: '500',
+          color: isOpen ? '#1f2937' : '#4b5563',
+          textDecoration: 'none',
+          transition: 'color 0.3s ease',
+          whiteSpace: 'nowrap',
+          position: 'relative',
+          paddingBottom: '4px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '4px',
+          cursor: 'pointer'
+        }}>
+        Rewards
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{
+          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+          transition: 'transform 0.3s ease'
+        }}>
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <span className="nav-underline" style={{
+          position: 'absolute',
+          bottom: '0',
+          left: '0',
+          width: isOpen ? '100%' : '0%',
+          height: '2px',
+          background: '#1f2937',
+          transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+        }} />
+      </div>
+      
+      {isOpen && (
+        <div 
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: '0',
+            marginTop: '8px',
+            background: '#ffffff',
+            borderRadius: '12px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #e5e7eb',
+            minWidth: '220px',
+            padding: '8px',
+            zIndex: 1000,
+            animation: 'slideDown 0.2s ease-out'
+          }}>
+          <div 
+            onClick={() => handleNavigation('/rewards')}
+            style={{
+              display: 'block',
+              padding: '10px 16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#4b5563',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#f9fafb';
+              e.currentTarget.style.color = '#1f2937';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#4b5563';
+            }}>
+            Rewards Documentation
+          </div>
+          <div 
+            onClick={() => handleNavigation('/rewardstest')}
+            style={{
+              display: 'block',
+              padding: '10px 16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#4b5563',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#f9fafb';
+              e.currentTarget.style.color = '#1f2937';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#4b5563';
+            }}>
+            Rewards Test
+          </div>
+          <div 
+            onClick={() => handleNavigation('/rewardstest3')}
+            style={{
+              display: 'block',
+              padding: '10px 16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#4b5563',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#f9fafb';
+              e.currentTarget.style.color = '#1f2937';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#4b5563';
+            }}>
+            Rewards Test 3
+          </div>
+        </div>
+      )}
+      
+      <style jsx>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function Header2() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { isAuthenticated, userRole, isAdmin } = useAuth();
@@ -67,7 +240,7 @@ export default function Header2() {
                 width={62}
                 height={18}
               />
-              <span className="fw-7 fs-20" style={{ color: '#1f2937', fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span>
+              <span className="fw-7" style={{ color: '#1f2937', fontFamily: 'Nasalization, sans-serif', fontSize: '25px' }}>DAGARMY</span>
             </Link>
           </div>
 
@@ -233,70 +406,7 @@ export default function Header2() {
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
-            <Link href="/rewards" style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#4b5563',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
-            }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
-              }}>
-              Rewards
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
-            </Link>
-            <Link href="/rewardstest" style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#4b5563',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
-            }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
-              }}>
-              RewardsTest
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
-            </Link>
+            <RewardsDropdown />
             <Link href="/hackathons" style={{
               fontSize: '14px',
               fontWeight: '500',

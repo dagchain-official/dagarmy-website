@@ -61,9 +61,17 @@ export default function LoginModal({ isOpen, onClose }) {
           } else {
             // New user - show profile completion form
             
-            // Extract email from embeddedWalletInfo for social logins
-            if (embeddedWalletInfo?.user?.email) {
-              setSocialEmail(embeddedWalletInfo.user.email);
+            // Extract email from embeddedWalletInfo for social logins (check multiple paths)
+            const extractedEmail = embeddedWalletInfo?.user?.email || 
+                                  embeddedWalletInfo?.email ||
+                                  embeddedWalletInfo?.user?.emailAddress ||
+                                  null;
+            
+            if (extractedEmail) {
+              console.log('📧 Extracted email from embeddedWalletInfo:', extractedEmail);
+              setSocialEmail(extractedEmail);
+            } else {
+              console.log('⚠️ No email found in embeddedWalletInfo');
             }
             
             setStoredWalletAddress(address);

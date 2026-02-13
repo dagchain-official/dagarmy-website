@@ -53,7 +53,7 @@ export async function POST(request) {
       updated_at: new Date().toISOString(),
     };
 
-    // Use email as primary identifier (upsert based on email)
+    // Use email or wallet_address as identifier (upsert based on available identifier)
     let data, error;
     
     if (email) {
@@ -80,10 +80,34 @@ export async function POST(request) {
       
       data = result.data;
       error = result.error;
+    } else if (wallet_address) {
+      // No email - use wallet_address as identifier (wallet-only login)
+      const result = await supabase
+        .from('users')
+        .upsert({
+          wallet_address: wallet_address.toLowerCase(),
+          email: null,
+          first_name,
+          last_name,
+          country_code: country_code || '+91',
+          whatsapp_number,
+          profile_completed: true,
+          role: 'student',
+          tier: 'DAG_SOLDIER',
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'wallet_address',
+          ignoreDuplicates: false
+        })
+        .select()
+        .single();
+      
+      data = result.data;
+      error = result.error;
     } else {
-      // No email provided - this shouldn't happen with social login
+      // Neither email nor wallet_address provided
       return NextResponse.json(
-        { error: 'Email is required for profile completion' },
+        { error: 'Either email or wallet address is required for profile completion' },
         { status: 400 }
       );
     }
