@@ -3,6 +3,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
+import RewardsOverview from "@/components/rewards/RewardsOverview";
 
 const PDFViewer = dynamic(() => import("@/components/PDFViewer"), {
   ssr: false,
@@ -46,7 +47,13 @@ export default function RewardsPage() {
         <Header2 />
         
         <div className="main-content pt-0">
-          <PDFViewer />
+          {/* Rewards Overview Section */}
+          <RewardsOverview />
+          
+          {/* PDF Documentation Section */}
+          <div id="rewards-documentation">
+            <PDFViewer />
+          </div>
         </div>
         
         <Footer1 />

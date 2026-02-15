@@ -33,7 +33,7 @@ export default function RootLayout({
   }, [pathname]);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="counter-scroll">
         <Web3Provider>
           <Context>{children}</Context>
