@@ -12,6 +12,8 @@ export default function StudentRewardsPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
+  const [upgradeMessage, setUpgradeMessage] = useState(null);
   const [rewardData, setRewardData] = useState({
     currentRank: 'None',
     dagPoints: 0,
@@ -48,6 +50,37 @@ export default function StudentRewardsPage() {
       console.error('Error fetching reward data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRankUpgrade = async (nextRankName, burnCost) => {
+    if (!user?.email) return;
+    const confirmed = window.confirm(
+      `Burn ${burnCost.toLocaleString()} DAG Points to upgrade to ${nextRankName}?\n\nThis action cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    try {
+      setUpgrading(true);
+      setUpgradeMessage(null);
+      const res = await fetch('/api/rewards/rank-upgrade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_email: user.email })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUpgradeMessage({ type: 'success', text: `Upgraded to ${data.newRank}! Burned ${data.pointsBurned.toLocaleString()} DAG Points.` });
+        fetchRewardData(user.email);
+      } else {
+        setUpgradeMessage({ type: 'error', text: data.error || 'Upgrade failed' });
+      }
+    } catch (err) {
+      console.error('Rank upgrade error:', err);
+      setUpgradeMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setUpgrading(false);
+      setTimeout(() => setUpgradeMessage(null), 5000);
     }
   };
 
@@ -349,122 +382,152 @@ export default function StudentRewardsPage() {
                         color: '#fff'
                       }}>
                         <Crown size={48} style={{ margin: '0 auto 16px' }} />
-                        <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>🎉 MYTHIC RANK ACHIEVED!</h3>
+                        <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>MYTHIC RANK ACHIEVED!</h3>
                         <p style={{ fontSize: '14px', opacity: 0.9 }}>You've reached the highest rank. Congratulations!</p>
                       </div>
                     );
                   }
                   
-                  const pointsNeeded = nextRank.points - rewardData.dagPoints;
+                  const burnCost = nextRank.points;
+                  const canUpgrade = rewardData.dagPoints >= burnCost;
                   const progressPercentage = currentRank 
                     ? Math.min(100, ((rewardData.dagPoints - currentRank.points) / (nextRank.points - currentRank.points)) * 100)
                     : Math.min(100, (rewardData.dagPoints / nextRank.points) * 100);
                   
                   return (
-                    <div>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '16px'
-                      }}>
-                        <div>
-                          <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>Current Rank</p>
-                          <p style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
-                            {currentRank ? currentRank.name : 'No Rank'}
-                          </p>
-                        </div>
-                        <ChevronRight size={24} style={{ color: '#6b7280' }} />
-                        <div style={{ textAlign: 'right' }}>
-                          <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>Next Rank</p>
-                          <p style={{ fontSize: '20px', fontWeight: '700', color: nextRank.color }}>
-                            {nextRank.name}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      {/* Progress Bar */}
-                      <div style={{
-                        width: '100%',
-                        height: '32px',
-                        background: '#f3f4f6',
-                        borderRadius: '16px',
-                        overflow: 'hidden',
-                        position: 'relative',
-                        marginBottom: '16px'
-                      }}>
+                    <>
+                      <div>
                         <div style={{
-                          width: `${progressPercentage}%`,
-                          height: '100%',
-                          background: `linear-gradient(90deg, ${currentRank?.color || '#6b7280'} 0%, ${nextRank.color} 100%)`,
-                          transition: 'width 0.5s ease',
                           display: 'flex',
+                          justifyContent: 'space-between',
                           alignItems: 'center',
-                          justifyContent: 'flex-end',
-                          paddingRight: '12px'
+                          marginBottom: '16px'
                         }}>
-                          {progressPercentage > 10 && (
-                            <span style={{ fontSize: '12px', fontWeight: '700', color: '#fff' }}>
-                              {progressPercentage.toFixed(0)}%
-                            </span>
-                          )}
+                          <div>
+                            <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>Current Rank</p>
+                            <p style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
+                              {currentRank ? currentRank.name : 'No Rank'}
+                            </p>
+                          </div>
+                          <ChevronRight size={24} style={{ color: '#6b7280' }} />
+                          <div style={{ textAlign: 'right' }}>
+                            <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>Next Rank</p>
+                            <p style={{ fontSize: '20px', fontWeight: '700', color: nextRank.color }}>
+                              {nextRank.name}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* Progress Bar */}
+                        <div style={{
+                          width: '100%',
+                          height: '32px',
+                          background: '#f3f4f6',
+                          borderRadius: '16px',
+                          overflow: 'hidden',
+                          position: 'relative',
+                          marginBottom: '16px'
+                        }}>
+                          <div style={{
+                            width: `${progressPercentage}%`,
+                            height: '100%',
+                            background: `linear-gradient(90deg, ${currentRank?.color || '#6b7280'} 0%, ${nextRank.color} 100%)`,
+                            transition: 'width 0.5s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            paddingRight: '12px'
+                          }}>
+                            {progressPercentage > 10 && (
+                              <span style={{ fontSize: '12px', fontWeight: '700', color: '#fff' }}>
+                                {progressPercentage.toFixed(0)}%
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Stats */}
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '16px',
+                          background: '#f9fafb',
+                          borderRadius: '12px'
+                        }}>
+                          <div>
+                            <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Your DAG Points</p>
+                            <p style={{ fontSize: '18px', fontWeight: '700', color: '#111827' }}>
+                              {rewardData.dagPoints.toLocaleString()}
+                            </p>
+                          </div>
+                          <div style={{ textAlign: 'center' }}>
+                            <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Burn Cost</p>
+                            <p style={{ fontSize: '18px', fontWeight: '700', color: '#f59e0b' }}>
+                              {burnCost.toLocaleString()}
+                            </p>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Deficit</p>
+                            <p style={{ fontSize: '18px', fontWeight: '700', color: canUpgrade ? '#10b981' : '#ef4444' }}>
+                              {canUpgrade ? 'Ready' : (burnCost - rewardData.dagPoints).toLocaleString()}
+                            </p>
+                          </div>
+                          <div>
+                            {canUpgrade ? (
+                              <button
+                                onClick={() => handleRankUpgrade(nextRank.name, burnCost)}
+                                disabled={upgrading}
+                                style={{
+                                  padding: '10px 20px',
+                                  borderRadius: '8px',
+                                  background: upgrading ? '#9ca3af' : nextRank.color,
+                                  color: '#fff',
+                                  border: 'none',
+                                  fontSize: '14px',
+                                  fontWeight: '600',
+                                  cursor: upgrading ? 'not-allowed' : 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '8px',
+                                  opacity: upgrading ? 0.7 : 1
+                                }}>
+                                <ArrowUp size={16} />
+                                {upgrading ? 'Upgrading...' : `Burn & Upgrade to ${nextRank.name}`}
+                              </button>
+                            ) : (
+                              <div style={{
+                                padding: '10px 20px',
+                                borderRadius: '8px',
+                                background: '#e5e7eb',
+                                color: '#6b7280',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                              }}>
+                                Keep Earning
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      
-                      {/* Stats */}
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '16px',
-                        background: '#f9fafb',
-                        borderRadius: '12px'
-                      }}>
-                        <div>
-                          <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Your DAG Points</p>
-                          <p style={{ fontSize: '18px', fontWeight: '700', color: '#111827' }}>
-                            {rewardData.dagPoints.toLocaleString()}
-                          </p>
+
+                      {/* Upgrade message */}
+                      {upgradeMessage && (
+                        <div style={{
+                          marginTop: '12px',
+                          padding: '12px 16px',
+                          borderRadius: '8px',
+                          background: upgradeMessage.type === 'success' ? '#f0fdf4' : '#fef2f2',
+                          border: `1px solid ${upgradeMessage.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
+                          color: upgradeMessage.type === 'success' ? '#166534' : '#991b1b',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          textAlign: 'center'
+                        }}>
+                          {upgradeMessage.text}
                         </div>
-                        <div style={{ textAlign: 'right' }}>
-                          <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Points Needed</p>
-                          <p style={{ fontSize: '18px', fontWeight: '700', color: pointsNeeded > 0 ? '#ef4444' : '#10b981' }}>
-                            {pointsNeeded > 0 ? pointsNeeded.toLocaleString() : '0'}
-                          </p>
-                        </div>
-                        <div>
-                          {pointsNeeded <= 0 ? (
-                            <button style={{
-                              padding: '10px 20px',
-                              borderRadius: '8px',
-                              background: nextRank.color,
-                              color: '#fff',
-                              border: 'none',
-                              fontSize: '14px',
-                              fontWeight: '600',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px'
-                            }}>
-                              <ArrowUp size={16} />
-                              Upgrade to {nextRank.name}
-                            </button>
-                          ) : (
-                            <div style={{
-                              padding: '10px 20px',
-                              borderRadius: '8px',
-                              background: '#e5e7eb',
-                              color: '#6b7280',
-                              fontSize: '14px',
-                              fontWeight: '600'
-                            }}>
-                              Keep Earning
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                      )}
+                    </>
                   );
                 })()}
                 </div>

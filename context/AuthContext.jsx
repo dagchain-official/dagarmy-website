@@ -84,6 +84,18 @@ export function AuthProvider({ children }) {
     }
   }, [isConnected, address, hasLoggedOut]);
 
+  // Guard to prevent repeated API calls from embeddedWalletInfo effect
+  const emailUpdateDoneRef = React.useRef(false);
+  const lastAddressRef = React.useRef(null);
+
+  // Reset guard when address changes
+  useEffect(() => {
+    if (address !== lastAddressRef.current) {
+      emailUpdateDoneRef.current = false;
+      lastAddressRef.current = address;
+    }
+  }, [address]);
+
   // Watch for embeddedWalletInfo to become available and update user email
   useEffect(() => {
     const updateUserEmail = async () => {
@@ -121,7 +133,7 @@ export function AuthProvider({ children }) {
       if (email) {
         // Mark that we're updating to prevent duplicate calls
         hasUpdatedEmailRef.current = true;
-        
+
         // Update user in database with email
         try {
           // Updating user email in database
@@ -211,9 +223,10 @@ export function AuthProvider({ children }) {
             userEmail = existingUserData.user.email;
             userName = existingUserData.user.full_name;
             userAvatar = existingUserData.user.avatar_url;
-            profile.isAdmin = existingUserData.user.is_admin || false;
-            profile.isMasterAdmin = existingUserData.user.is_master_admin || false;
-            // Existing user admin status loaded
+            // NOTE: Do NOT trust is_admin from users table here.
+            // Admin status is determined solely by check-role API below.
+            profile.isAdmin = false;
+            profile.isMasterAdmin = false;
           }
         }
 

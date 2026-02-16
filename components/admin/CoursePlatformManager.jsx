@@ -25,7 +25,7 @@ import {
   EyeOff,
   UserCheck,
   Package
-} from "lucide-react";
+ from "lucide-react";
 
 export default function CoursePlatformManager() {
   const [courses, setCourses] = useState([]);

@@ -2,46 +2,48 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
 /**
- * POST /api/referral/complete
- * Award referral join points to the upline when a new user signs up via referral.
+ * POST /api/referral/upgrade-reward
+ * Award referral upgrade points to the upline when a referred user upgrades to DAG LIEUTENANT.
  * 
  * Scenarios handled:
- *   Scenario 1: Upline is DAG SOLDIER -> base join bonus (soldier_refers_soldier_join)
- *   Scenario 3: Upline is DAG LIEUTENANT -> base join bonus + 20% LT bonus (bifurcated)
+ *   Scenario 2: Upline is DAG SOLDIER -> base upgrade bonus (soldier_refers_soldier_upgrade)
+ *   Scenario 4: Upline is DAG LIEUTENANT -> base upgrade bonus + 20% LT bonus (bifurcated)
  * 
- * Body: { referredUserId }
+ * Body: { upgradedUserId }
  */
 export async function POST(request) {
   try {
     const supabase = supabaseAdmin;
-    const { referredUserId } = await request.json();
+    const { upgradedUserId } = await request.json();
 
-    if (!referredUserId) {
+    if (!upgradedUserId) {
       return NextResponse.json(
-        { error: 'referredUserId is required' },
+        { error: 'upgradedUserId is required' },
         { status: 400 }
       );
     }
 
-    // Get the referral record for this referred user
+    // Get the referral record where this user was referred
     const { data: referral, error: fetchError } = await supabase
       .from('referrals')
-      .select('id, referrer_id, referred_id, referral_code, points_earned_on_join')
-      .eq('referred_id', referredUserId)
+      .select('id, referrer_id, referred_id, referral_code, points_earned_on_upgrade, referred_user_upgraded')
+      .eq('referred_id', upgradedUserId)
       .single();
 
     if (fetchError || !referral) {
-      return NextResponse.json(
-        { error: 'Referral record not found' },
-        { status: 404 }
-      );
-    }
-
-    // Skip if already awarded join points
-    if (referral.points_earned_on_join > 0) {
+      // No referral record — user wasn't referred, nothing to do
       return NextResponse.json({
         success: true,
-        message: 'Join points already awarded',
+        message: 'No referral record found for this user',
+        noReferral: true
+      });
+    }
+
+    // Skip if already awarded upgrade points
+    if (referral.referred_user_upgraded || referral.points_earned_on_upgrade > 0) {
+      return NextResponse.json({
+        success: true,
+        message: 'Upgrade points already awarded',
         alreadyAwarded: true
       });
     }
@@ -70,43 +72,43 @@ export async function POST(request) {
     const { data: configs } = await supabase
       .from('rewards_config')
       .select('config_key, config_value')
-      .in('config_key', ['soldier_refers_soldier_join', 'lieutenant_bonus_rate', ...rankBonusKeys]);
+      .in('config_key', ['soldier_refers_soldier_upgrade', 'lieutenant_bonus_rate', ...rankBonusKeys]);
 
     const configMap = {};
     configs?.forEach(c => { configMap[c.config_key] = c.config_value; });
 
-    const baseJoinBonus = configMap.soldier_refers_soldier_join || 500;
+    const baseUpgradeBonus = configMap.soldier_refers_soldier_upgrade || 2500;
     const bonusRate = configMap.lieutenant_bonus_rate || 20;
     const isLieutenant = referrer.tier === 'DAG_LIEUTENANT';
 
     let totalPointsAwarded = 0;
     const transactions = [];
 
-    // Award base join bonus to referrer
+    // Award base upgrade bonus to referrer
     const { error: baseErr } = await supabase.rpc('add_dag_points', {
       p_user_id: referrer.id,
-      p_points: baseJoinBonus,
-      p_transaction_type: 'referral_join_base',
-      p_description: `Referral join bonus - Base (${baseJoinBonus} DAG Points)`,
+      p_points: baseUpgradeBonus,
+      p_transaction_type: 'referral_upgrade_base',
+      p_description: `Referral upgrade bonus - Base (${baseUpgradeBonus} DAG Points) - Referral upgraded to DAG LIEUTENANT`,
       p_reference_id: referral.id
     });
-    if (baseErr) console.error('Error awarding base join bonus:', baseErr);
-    totalPointsAwarded += baseJoinBonus;
-    transactions.push({ type: 'referral_join_base', amount: baseJoinBonus });
+    if (baseErr) console.error('Error awarding base upgrade bonus:', baseErr);
+    totalPointsAwarded += baseUpgradeBonus;
+    transactions.push({ type: 'referral_upgrade_base', amount: baseUpgradeBonus });
 
     // If referrer is DAG LIEUTENANT, award 20% bonus as separate transaction
     if (isLieutenant) {
-      const bonusAmount = Math.round((baseJoinBonus * bonusRate) / 100);
+      const bonusAmount = Math.round((baseUpgradeBonus * bonusRate) / 100);
       const { error: bonusErr } = await supabase.rpc('add_dag_points', {
         p_user_id: referrer.id,
         p_points: bonusAmount,
-        p_transaction_type: 'referral_join_lieutenant_bonus',
-        p_description: `Referral join bonus - ${bonusRate}% Lieutenant Bonus on ${baseJoinBonus} (${bonusAmount} DAG Points)`,
+        p_transaction_type: 'referral_upgrade_lieutenant_bonus',
+        p_description: `Referral upgrade bonus - ${bonusRate}% Lieutenant Bonus on ${baseUpgradeBonus} (${bonusAmount} DAG Points)`,
         p_reference_id: referral.id
       });
-      if (bonusErr) console.error('Error awarding LT join bonus:', bonusErr);
+      if (bonusErr) console.error('Error awarding LT upgrade bonus:', bonusErr);
       totalPointsAwarded += bonusAmount;
-      transactions.push({ type: 'referral_join_lieutenant_bonus', amount: bonusAmount });
+      transactions.push({ type: 'referral_upgrade_lieutenant_bonus', amount: bonusAmount });
     }
 
     // If referrer is DAG LIEUTENANT with a rank, award rank bonus on base amount
@@ -114,39 +116,42 @@ export async function POST(request) {
       const rankKey = 'rank_upgrade_bonus_' + referrer.current_rank.toLowerCase();
       const rankBonusRate = configMap[rankKey] || 0;
       if (rankBonusRate > 0) {
-        const rankBonusAmount = Math.round((baseJoinBonus * rankBonusRate) / 100);
+        const rankBonusAmount = Math.round((baseUpgradeBonus * rankBonusRate) / 100);
         const { error: rankErr } = await supabase.rpc('add_dag_points', {
           p_user_id: referrer.id,
           p_points: rankBonusAmount,
-          p_transaction_type: 'referral_join_rank_bonus',
-          p_description: `Referral join bonus - ${rankBonusRate}% ${referrer.current_rank} Rank Bonus on ${baseJoinBonus} (${rankBonusAmount} DAG Points)`,
+          p_transaction_type: 'referral_upgrade_rank_bonus',
+          p_description: `Referral upgrade bonus - ${rankBonusRate}% ${referrer.current_rank} Rank Bonus on ${baseUpgradeBonus} (${rankBonusAmount} DAG Points)`,
           p_reference_id: referral.id
         });
-        if (rankErr) console.error('Error awarding rank join bonus:', rankErr);
+        if (rankErr) console.error('Error awarding rank upgrade bonus:', rankErr);
         totalPointsAwarded += rankBonusAmount;
-        transactions.push({ type: 'referral_join_rank_bonus', amount: rankBonusAmount, rank: referrer.current_rank, rate: rankBonusRate });
+        transactions.push({ type: 'referral_upgrade_rank_bonus', amount: rankBonusAmount, rank: referrer.current_rank, rate: rankBonusRate });
       }
     }
 
-    // Update referral record with points earned on join
+    // Update referral record
+    const existingTotal = referral.points_earned_on_join || 0;
     await supabase
       .from('referrals')
       .update({
-        points_earned_on_join: totalPointsAwarded,
-        total_points_earned: totalPointsAwarded
+        points_earned_on_upgrade: totalPointsAwarded,
+        total_points_earned: existingTotal + totalPointsAwarded,
+        referred_user_upgraded: true,
+        upgrade_date: new Date().toISOString()
       })
       .eq('id', referral.id);
 
     return NextResponse.json({
       success: true,
-      message: 'Referral join points awarded',
+      message: 'Referral upgrade points awarded to upline',
       referrerTier: referrer.tier,
       totalPointsAwarded,
       transactions
     });
 
   } catch (error) {
-    console.error('Exception in referral complete API:', error);
+    console.error('Exception in referral upgrade-reward API:', error);
     return NextResponse.json(
       { error: 'Internal server error', details: error.message },
       { status: 500 }

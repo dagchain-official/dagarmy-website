@@ -37,6 +37,20 @@ export async function POST(request) {
 
     if (upgradeError) throw upgradeError;
 
+    // Award referral upgrade points to the upline (Scenario 2 or 4)
+    // This is a fire-and-forget call — don't block the upgrade response
+    try {
+      const baseUrl = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'localhost:3000';
+      const protocol = request.headers.get('x-forwarded-proto') || 'http';
+      await fetch(`${protocol}://${baseUrl}/api/referral/upgrade-reward`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ upgradedUserId: userId })
+      });
+    } catch (refErr) {
+      console.error('Non-blocking: Failed to award referral upgrade points:', refErr);
+    }
+
     // Fetch updated user data
     const { data: updatedUser, error: fetchError } = await supabase
       .from('users')
