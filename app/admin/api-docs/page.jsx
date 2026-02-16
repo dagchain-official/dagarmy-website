@@ -792,6 +792,16 @@ const API_ENDPOINTS = [
     response: '{ success, previousRank, newRank, pointsBurned, availablePoints }'
   },
 
+  {
+    category: "Users",
+    method: "PUT",
+    path: "/api/admin/users/update-upline",
+    description: "Change a user's upline (referrer) by providing a new referral code. Pass empty newReferralCode to remove the upline entirely. Validates referral code exists and is active, prevents self-referral.",
+    auth: "Admin",
+    body: '{ userId, newReferralCode }',
+    response: '{ success, message, userId, newReferrer: { id, name, email, referralCode } }'
+  },
+
   // ─── Jobs ───
   {
     category: "Jobs",

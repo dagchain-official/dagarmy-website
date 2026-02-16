@@ -22,6 +22,39 @@ export async function GET(request) {
       );
     }
 
+    // Fetch all referral relationships to attach upline info
+    const { data: referrals } = await supabase
+      .from('referrals')
+      .select('referrer_id, referred_id, referral_code');
+
+    // Build a map: referred_id -> { referrer_id, referral_code }
+    const referralMap = {};
+    referrals?.forEach(r => {
+      referralMap[r.referred_id] = { referrer_id: r.referrer_id, referral_code: r.referral_code };
+    });
+
+    // Build a map: user_id -> user basic info (for referrer lookup)
+    const userMap = {};
+    users.forEach(u => {
+      userMap[u.id] = { full_name: u.full_name, email: u.email };
+    });
+
+    // Attach upline info to each user
+    users.forEach(u => {
+      const ref = referralMap[u.id];
+      if (ref) {
+        const referrer = userMap[ref.referrer_id];
+        u.upline = {
+          referrer_id: ref.referrer_id,
+          referrer_name: referrer?.full_name || referrer?.email || 'Unknown',
+          referrer_email: referrer?.email || 'N/A',
+          referral_code: ref.referral_code
+        };
+      } else {
+        u.upline = null;
+      }
+    });
+
     // Calculate statistics
     const totalUsers = users.length;
     const activeUsers = users.filter(user => {
