@@ -323,30 +323,54 @@ export default function UsersManagement3() {
       whatsapp_number: user.whatsapp_number || '',
       bio: user.bio || '',
       skill_occupation: user.skill_occupation || '',
-      is_active: user.is_active !== undefined ? user.is_active : true
+      is_active: user.is_active !== undefined ? user.is_active : true,
+      upline_referral_code: user.upline?.referral_code || ''
     });
   };
 
   const handleSaveUser = async () => {
     try {
       setSaving(true);
+
+      // 1. Update user profile fields
       const response = await fetch('/api/admin/users/update', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editFormData),
       });
-
       const data = await response.json();
 
-      if (response.ok) {
-        setNotification({ type: 'success', message: 'User updated successfully!' });
-        setEditUserModal(null);
-        fetchUsers(); // Refresh the user list
-      } else {
+      if (!response.ok) {
         setNotification({ type: 'error', message: data.error || 'Failed to update user' });
+        return;
       }
+
+      // 2. Update upline if changed
+      const originalUplineCode = editUserModal?.upline?.referral_code || '';
+      const newUplineCode = (editFormData.upline_referral_code || '').trim();
+
+      if (newUplineCode !== originalUplineCode) {
+        const uplineRes = await fetch('/api/admin/users/update-upline', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: editFormData.id,
+            newReferralCode: newUplineCode
+          }),
+        });
+        const uplineData = await uplineRes.json();
+
+        if (!uplineRes.ok) {
+          setNotification({ type: 'error', message: `User saved but upline update failed: ${uplineData.error}` });
+          fetchUsers();
+          setEditUserModal(null);
+          return;
+        }
+      }
+
+      setNotification({ type: 'success', message: 'User updated successfully!' });
+      setEditUserModal(null);
+      fetchUsers();
     } catch (error) {
       console.error('Error updating user:', error);
       setNotification({ type: 'error', message: 'An error occurred while updating user' });
@@ -1472,7 +1496,10 @@ export default function UsersManagement3() {
                   { label: 'Courses Enrolled', value: viewUserModal.courses || 0, icon: BookOpen },
                   { label: 'Completion Rate', value: `${viewUserModal.completionRate}%`, icon: Target },
                   { label: 'Created At', value: new Date(viewUserModal.created_at).toLocaleString(), icon: Calendar },
-                  { label: 'Last Active', value: viewUserModal.lastActive, icon: Clock }
+                  { label: 'Last Active', value: viewUserModal.lastActive, icon: Clock },
+                  { label: 'Upline (Referrer)', value: viewUserModal.upline ? viewUserModal.upline.referrer_name : 'No upline', icon: Users },
+                  { label: 'Upline Email', value: viewUserModal.upline ? viewUserModal.upline.referrer_email : 'N/A', icon: Mail },
+                  { label: 'Upline Referral Code', value: viewUserModal.upline ? viewUserModal.upline.referral_code : 'N/A', icon: Target }
                 ].map((field, index) => {
                   const Icon = field.icon;
                   return (
@@ -1826,6 +1853,52 @@ export default function UsersManagement3() {
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                   </select>
+                </div>
+
+                {/* Upline Referral Code - Full Width */}
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', marginBottom: '8px', display: 'block' }}>
+                    Upline Referral Code
+                  </label>
+                  {editUserModal?.upline && (
+                    <div style={{
+                      marginBottom: '8px',
+                      padding: '10px 14px',
+                      background: '#f0fdf4',
+                      borderRadius: '8px',
+                      border: '1px solid #bbf7d0',
+                      fontSize: '12px',
+                      color: '#166534',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <Users size={14} />
+                      Current upline: <strong>{editUserModal.upline.referrer_name}</strong> ({editUserModal.upline.referrer_email})
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="e.g. DAG-XXXXX-YYYY (leave empty to remove upline)"
+                    value={editFormData.upline_referral_code}
+                    onChange={(e) => setEditFormData({ ...editFormData, upline_referral_code: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      border: '2px solid #e2e8f0',
+                      borderRadius: '10px',
+                      fontSize: '14px',
+                      fontFamily: 'monospace',
+                      letterSpacing: '1px',
+                      outline: 'none',
+                      transition: 'all 0.2s'
+                    }}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
+                    onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                  />
+                  <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '6px' }}>
+                    Enter a valid referral code to assign or change this user's upline. Clear the field to remove the upline.
+                  </p>
                 </div>
 
                 {/* Bio - Full Width */}
