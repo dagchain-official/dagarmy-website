@@ -38,6 +38,14 @@ export async function POST(request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Only DAG LIEUTENANT can burn points for rank upgrades
+    if (user.tier !== 'DAG_LIEUTENANT' && user.tier !== 'DAG LIEUTENANT') {
+      return NextResponse.json({
+        error: 'Rank upgrades via DAG Point burn are only available for DAG LIEUTENANTs. Please upgrade your tier first.',
+        requiresTierUpgrade: true
+      }, { status: 403 });
+    }
+
     // Determine next rank
     const currentRank = user.current_rank || 'None';
     const currentRankIndex = currentRank === 'None' ? -1 : RANK_ORDER.indexOf(currentRank);

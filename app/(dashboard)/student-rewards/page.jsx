@@ -347,9 +347,8 @@ export default function StudentRewardsPage() {
                 </div>
               </div>
 
-              {/* Rank Progression - Only show for DAG LIEUTENANT or if enabled for DAG SOLDIER */}
-              {(rewardData.tier === 'DAG LIEUTENANT' || (rewardData.tier === 'DAG SOLDIER' && rewardData.rankingEnabledForSoldier)) && (
-                <div style={{
+              {/* Rank Progression */}
+              <div style={{
                   background: '#fff',
                   borderRadius: '16px',
                   padding: '32px',
@@ -474,42 +473,97 @@ export default function StudentRewardsPage() {
                             </p>
                           </div>
                           <div>
-                            {canUpgrade ? (
-                              <button
-                                onClick={() => handleRankUpgrade(nextRank.name, burnCost)}
-                                disabled={upgrading}
-                                style={{
+                            {rewardData.tier === 'DAG LIEUTENANT' || rewardData.tier === 'DAG_LIEUTENANT' ? (
+                              canUpgrade ? (
+                                <button
+                                  onClick={() => handleRankUpgrade(nextRank.name, burnCost)}
+                                  disabled={upgrading}
+                                  style={{
+                                    padding: '10px 20px',
+                                    borderRadius: '8px',
+                                    background: upgrading ? '#9ca3af' : nextRank.color,
+                                    color: '#fff',
+                                    border: 'none',
+                                    fontSize: '14px',
+                                    fontWeight: '600',
+                                    cursor: upgrading ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    opacity: upgrading ? 0.7 : 1
+                                  }}>
+                                  <ArrowUp size={16} />
+                                  {upgrading ? 'Upgrading...' : `Burn & Upgrade to ${nextRank.name}`}
+                                </button>
+                              ) : (
+                                <div style={{
                                   padding: '10px 20px',
                                   borderRadius: '8px',
-                                  background: upgrading ? '#9ca3af' : nextRank.color,
-                                  color: '#fff',
-                                  border: 'none',
+                                  background: '#e5e7eb',
+                                  color: '#6b7280',
                                   fontSize: '14px',
-                                  fontWeight: '600',
-                                  cursor: upgrading ? 'not-allowed' : 'pointer',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '8px',
-                                  opacity: upgrading ? 0.7 : 1
+                                  fontWeight: '600'
                                 }}>
-                                <ArrowUp size={16} />
-                                {upgrading ? 'Upgrading...' : `Burn & Upgrade to ${nextRank.name}`}
-                              </button>
+                                  Keep Earning
+                                </div>
+                              )
                             ) : (
                               <div style={{
                                 padding: '10px 20px',
                                 borderRadius: '8px',
-                                background: '#e5e7eb',
-                                color: '#6b7280',
-                                fontSize: '14px',
-                                fontWeight: '600'
+                                background: '#fef3c7',
+                                color: '#92400e',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                textAlign: 'center',
+                                maxWidth: '180px'
                               }}>
-                                Keep Earning
+                                Upgrade to DAG LIEUTENANT to unlock rank burns
                               </div>
                             )}
                           </div>
                         </div>
                       </div>
+
+                      {/* Soldier upgrade prompt */}
+                      {rewardData.tier !== 'DAG LIEUTENANT' && rewardData.tier !== 'DAG_LIEUTENANT' && (
+                        <div style={{
+                          marginTop: '16px',
+                          padding: '16px 20px',
+                          borderRadius: '12px',
+                          background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                          border: '1px solid #f59e0b',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '16px'
+                        }}>
+                          <div>
+                            <p style={{ fontSize: '15px', fontWeight: '700', color: '#92400e', marginBottom: '4px' }}>
+                              Unlock Rank Upgrades
+                            </p>
+                            <p style={{ fontSize: '13px', color: '#a16207' }}>
+                              Upgrade from DAG SOLDIER to DAG LIEUTENANT to burn DAG Points and climb the ranks.
+                            </p>
+                          </div>
+                          <a href="/register?upgrade=lieutenant" style={{
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            background: '#f59e0b',
+                            color: '#fff',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px'
+                          }}>
+                            <ArrowUp size={16} />
+                            Upgrade Tier
+                          </a>
+                        </div>
+                      )}
 
                       {/* Upgrade message */}
                       {upgradeMessage && (
@@ -531,7 +585,6 @@ export default function StudentRewardsPage() {
                   );
                 })()}
                 </div>
-              )}
 
               {/* How to Earn Section */}
               <div style={{
