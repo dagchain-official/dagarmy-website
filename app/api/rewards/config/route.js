@@ -49,17 +49,16 @@ export async function PUT(request) {
 
     const userId = userData.id;
 
-    // Update config
+    // Upsert config (insert if missing, update if exists)
     const { data, error } = await supabase
       .from('rewards_config')
-      .update({ 
+      .upsert({ 
+        config_key,
         config_value,
         updated_at: new Date().toISOString(),
         updated_by: userId
-      })
-      .eq('config_key', config_key)
-      .select()
-      .single();
+      }, { onConflict: 'config_key' })
+      .select();
 
     if (error) throw error;
 

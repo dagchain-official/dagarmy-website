@@ -346,6 +346,58 @@ const API_ENDPOINTS = [
     params: "?id=uuid"
   },
 
+  // ─── Admin Events ───
+  {
+    category: "Admin Events",
+    method: "GET",
+    path: "/api/admin/events",
+    description: "Fetch all events (including unpublished drafts). Supports pagination.",
+    auth: "Admin",
+    body: "None",
+    response: '{ events: [...], total, page, totalPages }',
+    params: "?page=1&limit=50"
+  },
+  {
+    category: "Admin Events",
+    method: "POST",
+    path: "/api/admin/events",
+    description: "Create a new event. Requires title and event_date. Supports event types: workshop, quiz, project, meeting, deadline.",
+    auth: "Admin",
+    body: '{ title, description, event_date, event_time, end_time, event_type, location, is_online, meeting_link, is_published }',
+    response: '{ success, event: { id, title, ... } }'
+  },
+  {
+    category: "Admin Events",
+    method: "PUT",
+    path: "/api/admin/events",
+    description: "Update an existing event by ID. Supports partial updates (only send fields to change).",
+    auth: "Admin",
+    body: '{ id, title?, description?, event_date?, event_time?, end_time?, event_type?, location?, is_online?, meeting_link?, is_published? }',
+    response: '{ success, event: { id, ... } }'
+  },
+  {
+    category: "Admin Events",
+    method: "DELETE",
+    path: "/api/admin/events",
+    description: "Permanently delete an event by ID.",
+    auth: "Admin",
+    body: "None",
+    response: '{ success }',
+    params: "?id=uuid"
+  },
+
+  // ─── Events (Public) ───
+  {
+    category: "Events",
+    method: "GET",
+    path: "/api/events",
+    description: "Fetch published events for a given month. Used by the Student Dashboard calendar. Returns events within a +/-7 day window around the requested month.",
+    auth: "None",
+    body: "None",
+    response: '{ events: [{ id, title, description, event_date, event_time, end_time, event_type, color, location, is_online, meeting_link }] }',
+    params: "?year=2026&month=2"
+  },
+
   // ─── User Auth ───
   {
     category: "User Auth",
@@ -531,10 +583,28 @@ const API_ENDPOINTS = [
     category: "Emails",
     method: "POST",
     path: "/api/emails/welcome",
-    description: "Send a welcome email to a new user via Resend API.",
+    description: "Send a welcome email to a new user. Triggered automatically after profile completion.",
     auth: "Internal",
     body: '{ email, name }',
     response: '{ success, id }'
+  },
+  {
+    category: "Emails",
+    method: "POST",
+    path: "/api/emails/send",
+    description: "Send custom emails to one or more recipients. Supports HTML body, CTA buttons, and bulk sending. Used by admin for announcements.",
+    auth: "Admin",
+    body: '{ recipients: ["email@..."], subject, title, body, ctaText?, ctaUrl?, senderName?, senderEmail? }',
+    response: '{ success, results: [...] }'
+  },
+  {
+    category: "Emails",
+    method: "GET",
+    path: "/api/emails/verify",
+    description: "Verify SMTP connection is working. Returns connection status for email service health check.",
+    auth: "Admin",
+    body: "None",
+    response: '{ connected, message }'
   },
 
   // ─── Leaderboard ───
@@ -712,6 +782,15 @@ const API_ENDPOINTS = [
     body: '{ user_id }',
     response: '{ success, newTier }'
   },
+  {
+    category: "Rewards",
+    method: "POST",
+    path: "/api/rewards/rank-upgrade",
+    description: "Burn DAG Points to upgrade user rank. Sequential progression: None -> INITIATOR -> ... -> MYTHIC. Fetches burn cost from rewards_config, validates balance, burns points via add_dag_points, updates current_rank.",
+    auth: "Authenticated User",
+    body: '{ user_email }',
+    response: '{ success, previousRank, newRank, pointsBurned, availablePoints }'
+  },
 
   // ─── Jobs ───
   {
@@ -734,6 +813,84 @@ const API_ENDPOINTS = [
     auth: "Authenticated User",
     body: "FormData: { file, folder? }",
     response: '{ url, filename }'
+  },
+
+  // ─── Social Tasks ───
+  {
+    category: "Social Tasks",
+    method: "GET",
+    path: "/api/social-tasks",
+    description: "List all social tasks. By default returns only active tasks. Set active=false to include inactive.",
+    auth: "None",
+    body: "None",
+    response: '{ success, tasks: [{ id, platform, task_type, title, description, points, target_url, is_active, ... }] }',
+    params: "?active=false"
+  },
+  {
+    category: "Social Tasks",
+    method: "POST",
+    path: "/api/social-tasks",
+    description: "Create a new social media task with platform, type, points, and optional target URL and expiry.",
+    auth: "Master Admin",
+    body: '{ user_email, platform, task_type, title, description?, points, target_url?, max_completions_per_user?, expires_at? }',
+    response: '{ success, task: { id, ... } }'
+  },
+  {
+    category: "Social Tasks",
+    method: "PUT",
+    path: "/api/social-tasks/[id]",
+    description: "Update an existing social task (title, points, active status, etc).",
+    auth: "Master Admin",
+    body: '{ user_email, platform?, task_type?, title?, points?, is_active?, ... }',
+    response: '{ success, task: { id, ... } }'
+  },
+  {
+    category: "Social Tasks",
+    method: "DELETE",
+    path: "/api/social-tasks/[id]",
+    description: "Delete a social task and all its submissions.",
+    auth: "Master Admin",
+    body: "None",
+    response: '{ success, message }',
+    params: "?user_email=admin@example.com"
+  },
+  {
+    category: "Social Tasks",
+    method: "POST",
+    path: "/api/social-tasks/submit",
+    description: "User submits proof (URL or screenshot) for a social task. Validates task is active, not expired, and user hasn't exceeded max completions.",
+    auth: "Authenticated User",
+    body: '{ task_id, user_email, proof_url?, proof_screenshot_url? }',
+    response: '{ success, submission: { id, status, ... } }'
+  },
+  {
+    category: "Social Tasks",
+    method: "GET",
+    path: "/api/social-tasks/submissions",
+    description: "Admin: fetch all submissions, optionally filtered by status (pending, approved, rejected).",
+    auth: "Admin",
+    body: "None",
+    response: '{ success, submissions: [{ id, task, user, status, proof_url, ... }] }',
+    params: "?user_email=admin@example.com&status=pending"
+  },
+  {
+    category: "Social Tasks",
+    method: "PUT",
+    path: "/api/social-tasks/submissions/[id]",
+    description: "Admin approves or rejects a submission. On approval, DAG points are awarded via add_dag_points (with 20% DAG LIEUTENANT bonus if applicable).",
+    auth: "Admin",
+    body: '{ user_email, status: "approved"|"rejected", admin_notes? }',
+    response: '{ success, submission, points_awarded, message }'
+  },
+  {
+    category: "Social Tasks",
+    method: "GET",
+    path: "/api/social-tasks/user",
+    description: "Fetch all active tasks with the user's submission status (available, pending, completed, expired) and stats.",
+    auth: "Authenticated User",
+    body: "None",
+    response: '{ success, tasks: [...], stats: { total_tasks, completed, pending, available, total_points_earned }, is_lieutenant, lt_bonus_rate }',
+    params: "?user_email=user@example.com"
   }
 ];
 
@@ -816,6 +973,8 @@ export default function ApiDocsPage() {
     'Admin Users': { icon: svgIcon(<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>, '#2563eb'), color: '#2563eb', bg: '#dbeafe' },
     'Admin Roles': { icon: svgIcon(<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>, '#1d4ed8'), color: '#1d4ed8', bg: '#dbeafe' },
     'Admin Permissions': { icon: svgIcon(<><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></>, '#1e40af'), color: '#1e40af', bg: '#dbeafe' },
+    'Admin Events': { icon: svgIcon(<><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="15" r="2"/></>, '#6366f1'), color: '#6366f1', bg: '#ede9fe' },
+    'Events': { icon: svgIcon(<><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>, '#10b981'), color: '#10b981', bg: '#dcfce7' },
     'User Auth': { icon: svgIcon(<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>, '#059669'), color: '#059669', bg: '#ecfdf5' },
     'Reown': { icon: svgIcon(<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>, '#0891b2'), color: '#0891b2', bg: '#cffafe' },
     'Assignments': { icon: svgIcon(<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></>, '#d97706'), color: '#d97706', bg: '#fef3c7' },
@@ -828,7 +987,8 @@ export default function ApiDocsPage() {
     'Referral': { icon: svgIcon(<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></>, '#0284c7'), color: '#0284c7', bg: '#e0f2fe' },
     'Rewards': { icon: svgIcon(<><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></>, '#c026d3'), color: '#c026d3', bg: '#fae8ff' },
     'Jobs': { icon: svgIcon(<><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></>, '#475569'), color: '#475569', bg: '#f1f5f9' },
-    'Upload': { icon: svgIcon(<><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></>, '#64748b'), color: '#64748b', bg: '#f1f5f9' }
+    'Upload': { icon: svgIcon(<><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></>, '#64748b'), color: '#64748b', bg: '#f1f5f9' },
+    'Social Tasks': { icon: svgIcon(<><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>, '#f59e0b'), color: '#f59e0b', bg: '#fef3c7' }
   };
 
   const copyToClipboard = (text, index) => {

@@ -29,7 +29,7 @@ export default function StudentDashboardPage() {
               }}>
                 <DashboardNav2 />
               </div>
-              <div style={{ flex: 1, padding: "40px", background: "#f9fafb" }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <Dashboard2 />
               </div>
             </div>

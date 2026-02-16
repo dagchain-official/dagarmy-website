@@ -1,5 +1,4 @@
-// Script to run database migration
-const { createClient } = require('@supabase/supabase-js');
+// Script to run database migrations via Supabase REST SQL endpoint
 const fs = require('fs');
 const path = require('path');
 
@@ -13,41 +12,74 @@ if (!supabaseUrl || !supabaseServiceKey) {
   console.error('Missing Supabase credentials in .env.local');
   process.exit(1);
 }
-//test
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+async function runSQL(sql) {
+  const res = await fetch(`${supabaseUrl}/rest/v1/rpc/`, {
+    method: 'POST',
+    headers: {
+      'apikey': supabaseServiceKey,
+      'Authorization': `Bearer ${supabaseServiceKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query: sql })
+  });
+  return res;
+}
 
 async function runMigration() {
-  try {
-    console.log('Running migration: 003_add_profile_fields.sql');
-    
-    const migrationPath = path.join(__dirname, '..', 'supabase', 'migrations', '003_add_profile_fields.sql');
-    const sql = fs.readFileSync(migrationPath, 'utf8');
-    
-    // Split by semicolon and run each statement
-    const statements = sql.split(';').filter(s => s.trim().length > 0);
-    
-    for (const statement of statements) {
-      const trimmed = statement.trim();
-      if (trimmed) {
-        console.log('Executing:', trimmed.substring(0, 100) + '...');
-        const { error } = await supabase.rpc('exec_sql', { sql_query: trimmed });
-        
-        if (error) {
-          console.error('Error executing statement:', error);
-          // Try direct query if RPC fails
-          const { error: directError } = await supabase.from('_migrations').insert({ statement: trimmed });
-          if (directError) {
-            console.error('Direct query also failed:', directError);
-          }
-        }
-      }
-    }
-    
-    console.log('✅ Migration completed successfully!');
-  } catch (error) {
-    console.error('❌ Migration failed:', error);
+  const migrationFile = process.argv[2] || '002_events_table.sql';
+  const migrationPath = path.join(__dirname, '..', 'supabase', 'migrations', migrationFile);
+
+  if (!fs.existsSync(migrationPath)) {
+    console.error(`Migration file not found: ${migrationPath}`);
     process.exit(1);
   }
+
+  console.log(`Running migration: ${migrationFile}`);
+  const sql = fs.readFileSync(migrationPath, 'utf8');
+
+  // Split into individual statements (handle multi-line statements properly)
+  const statements = sql
+    .split(/;\s*$/m)
+    .map(s => s.trim())
+    .filter(s => s.length > 0 && !s.startsWith('--'));
+
+  const { createClient } = require('@supabase/supabase-js');
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+  for (let i = 0; i < statements.length; i++) {
+    const stmt = statements[i];
+    const preview = stmt.replace(/\s+/g, ' ').substring(0, 80);
+    console.log(`[${i + 1}/${statements.length}] ${preview}...`);
+
+    try {
+      const { data, error } = await supabase.rpc('exec_sql', { sql_query: stmt });
+      if (error) {
+        // If RPC doesn't exist, fall back to direct fetch
+        console.log('  RPC not available, trying direct SQL endpoint...');
+        const res = await fetch(`${supabaseUrl}/rest/v1/`, {
+          method: 'POST',
+          headers: {
+            'apikey': supabaseServiceKey,
+            'Authorization': `Bearer ${supabaseServiceKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({})
+        });
+        console.log('  Note: DDL via REST may not be supported. Use Supabase Dashboard SQL Editor.');
+        console.log(`  Error: ${error.message}`);
+      } else {
+        console.log('  OK');
+      }
+    } catch (err) {
+      console.error(`  Failed: ${err.message}`);
+    }
+  }
+
+  console.log('\nMigration script finished.');
+  console.log('If any statements failed, please run them manually in the Supabase Dashboard SQL Editor.');
+  console.log(`File: ${migrationPath}`);
 }
 
 runMigration();
