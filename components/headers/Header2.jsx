@@ -46,7 +46,7 @@ function RewardsDropdown() {
       <div 
         onClick={toggleDropdown}
         style={{
-          fontSize: '14px',
+          fontSize: '15px',
           fontWeight: '500',
           color: isOpen ? '#1f2937' : '#4b5563',
           textDecoration: 'none',
@@ -228,7 +228,7 @@ export default function Header2() {
     <header id="header_main" className="header style-2" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 0' }}>
       <div className="header-inner">
         {/* Single Row: Logo - Search - Menu - Login - Register */}
-        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '32px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
+        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '80px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
           
           {/* Logo Section */}
           <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: '180px' }}>
@@ -244,42 +244,15 @@ export default function Header2() {
             </Link>
           </div>
 
-          {/* Search Bar - Reduced Width */}
-          <div style={{ width: '280px' }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '8px 14px',
-              border: '1px solid #e5e7eb',
-              borderRadius: '20px',
-              background: '#f9fafb'
-            }}>
-              <i className="icon-search" style={{ color: '#6b7280', fontSize: '16px', flexShrink: 0 }} />
-              <input
-                type="text"
-                placeholder="Search Opportunities"
-                style={{
-                  flex: 1,
-                  border: 'none',
-                  outline: 'none',
-                  background: 'transparent',
-                  fontSize: '13px',
-                  color: '#1f2937'
-                }}
-              />
-            </div>
-          </div>
-
           {/* Navigation Menu */}
           <nav style={{
             display: 'flex',
-            gap: '28px',
+            gap: '32px',
             alignItems: 'center',
             flex: 1
           }}>
             <Link href="/about" style={{
-              fontSize: '14px',
+              fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
@@ -311,7 +284,7 @@ export default function Header2() {
               }} />
             </Link>
             <Link href="/courses" style={{
-              fontSize: '14px',
+              fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
@@ -342,8 +315,40 @@ export default function Header2() {
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
+            <Link href="/bootcamp" style={{
+              fontSize: '15px',
+              fontWeight: '500',
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '4px',
+              display: 'inline-block'
+            }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#1f2937';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
+              Bootcamp
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: '#1f2937',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
+            </Link>
             <Link href="/jobs" style={{
-              fontSize: '14px',
+              fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
@@ -375,7 +380,7 @@ export default function Header2() {
               }} />
             </Link>
             <Link href="/mentorship" style={{
-              fontSize: '14px',
+              fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
@@ -408,7 +413,7 @@ export default function Header2() {
             </Link>
             <RewardsDropdown />
             <Link href="/hackathons" style={{
-              fontSize: '14px',
+              fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
@@ -440,7 +445,7 @@ export default function Header2() {
               }} />
             </Link>
             <Link href="/blog" style={{
-              fontSize: '14px',
+              fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
