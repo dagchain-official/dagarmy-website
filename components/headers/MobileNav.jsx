@@ -30,9 +30,8 @@ export default function MobileNav() {
           <li><a href="/jobs">Jobs</a></li>
           <li><a href="/mentorship">Mentorship</a></li>
           <li><a href="/rewards">Rewards</a></li>
-          <li><a href="/rewardstest">RewardsTest</a></li>
           <li><a href="/hackathons">Hackathons</a></li>
-          <li><a href="/contact">Contact</a></li>
+          <li><a href="/blog">Blog</a></li>
         </ul>
       </div>
     </div>
