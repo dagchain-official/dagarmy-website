@@ -1,0 +1,249 @@
+/* ─────────────────────────────────────────────────────────
+   UDAAN — Exact source CSS, scoped under .udaan-page
+   to prevent Bootstrap/SCSS interference from DAGARMY
+───────────────────────────────────────────────────────── */
+
+/* CSS variables scoped to udaan-page */
+.udaan-page {
+  --bg:      #ffffff;
+  --bg2:     #f7f7f9;
+  --bg3:     #efeff4;
+  --bg4:     #e5e5ee;
+  --ink:     #0c0c14;
+  --ink2:    #1c1c28;
+  --sub:     #5a5a72;
+  --sub2:    #9494aa;
+  --sub3:    #b8b8cc;
+  --line:    rgba(12,12,20,0.08);
+  --line2:   rgba(12,12,20,0.04);
+  --v:       #5b4bec;
+  --v2:      #7c6cf4;
+  --v3:      #a89ff7;
+  --vbg:     rgba(91,75,236,0.07);
+  --vbg2:    rgba(91,75,236,0.14);
+  --green:   #10b981;
+  --amber:   #f59e0b;
+  --red:     #ef4444;
+  --r:       20px;
+  --r2:      14px;
+  --r3:      10px;
+
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-dm, 'DM Sans', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* Re-establish 16px rem base — Bootstrap sets html to 62.5% which breaks rem */
+  font-size: 16px;
+}
+
+/* Hard reset inside udaan-page to undo Bootstrap */
+.udaan-page *, .udaan-page *::before, .udaan-page *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.udaan-page a { text-decoration: none; color: inherit; }
+.udaan-page button { font-family: inherit; cursor: pointer; }
+
+.udaan-page h1,
+.udaan-page h2,
+.udaan-page h3,
+.udaan-page h4,
+.udaan-page h5,
+.udaan-page h6 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.udaan-page p { margin: 0; padding: 0; }
+.udaan-page ul, .udaan-page ol { list-style: none; margin: 0; padding: 0; }
+.udaan-page img { max-width: 100%; display: block; }
+
+/* ─── layout ── */
+.udaan-page .wrap {
+  display: block !important;
+  width: 100% !important;
+  max-width: 1160px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+}
+@media (max-width: 900px) { .udaan-page .wrap { padding-left: 28px !important; padding-right: 28px !important; } }
+@media (max-width: 480px) { .udaan-page .wrap { padding-left: 18px !important; padding-right: 18px !important; } }
+
+/* ─── type scale (exact from source) ── */
+.udaan-page .t-giant,
+.udaan-page h1.t-giant {
+  font-family: var(--font-fraunces, 'Fraunces', serif) !important;
+  font-style: italic !important;
+  font-weight: 900 !important;
+  font-size: clamp(52px, 5.5vw, 88px) !important;
+  letter-spacing: -0.04em !important;
+  line-height: 0.92 !important;
+  color: inherit !important;
+}
+.udaan-page .t-xl {
+  font-size: clamp(42px, 5.5vw, 96px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 0.9 !important;
+}
+.udaan-page .t-lg {
+  font-size: clamp(32px, 4vw, 64px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 0.92 !important;
+}
+.udaan-page .t-md {
+  font-size: clamp(22px, 2.5vw, 35px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+}
+.udaan-page .t-card {
+  font-size: clamp(16px, 1.5vw, 22px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.2 !important;
+}
+.udaan-page .t-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase !important;
+  color: var(--sub2) !important;
+}
+.udaan-page .t-body {
+  font-size: clamp(14px, 1.1vw, 16px) !important;
+  line-height: 1.75 !important;
+  color: var(--sub) !important;
+}
+.udaan-page .t-serif {
+  font-family: var(--font-fraunces, 'Fraunces', serif) !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+}
+.udaan-page .t-section {
+  font-size: clamp(44px, 5.5vw, 80px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.0 !important;
+}
+.udaan-page .reality-headline {
+  font-size: clamp(40px, 5.5vw, 80px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.05 !important;
+  font-family: var(--font-dm, 'DM Sans', sans-serif) !important;
+}
+
+/* ─── gradient text ── */
+.udaan-page .gv,
+.udaan-page .grad-v {
+  background: linear-gradient(130deg, #5b4bec 0%, #9b8ef8 60%, #5b4bec 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+.udaan-page .gwarm,
+.udaan-page .grad-warm {
+  background: linear-gradient(130deg, #f59e0b 0%, #ef4444 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+.udaan-page .ggreen {
+  background: linear-gradient(130deg, #10b981 0%, #059669 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* ─── pills ── */
+.udaan-page .pill {
+  display: inline-flex !important; align-items: center !important; gap: 6px !important;
+  padding: 5px 14px !important; border-radius: 999px !important;
+  font-size: 10px !important; font-weight: 700 !important; letter-spacing: 0.09em !important; text-transform: uppercase !important;
+  border: 1px solid var(--line) !important; background: var(--bg2) !important; color: var(--sub) !important;
+  white-space: nowrap !important;
+}
+.udaan-page .pill-v   { background: var(--vbg) !important;  border-color: rgba(91,75,236,0.2) !important; color: var(--v) !important; }
+.udaan-page .pill-g,
+.udaan-page .pill-green { background: rgba(16,185,129,0.07) !important; border-color: rgba(16,185,129,0.2) !important; color: var(--green) !important; }
+.udaan-page .pill-a,
+.udaan-page .pill-amber { background: rgba(245,158,11,0.08) !important; border-color: rgba(245,158,11,0.2) !important; color: var(--amber) !important; }
+.udaan-page .pill-r,
+.udaan-page .pill-red   { background: rgba(239,68,68,0.07) !important;  border-color: rgba(239,68,68,0.2) !important;  color: var(--red) !important; }
+
+/* ─── buttons ── */
+.udaan-page .btn {
+  display: inline-flex !important; align-items: center !important; gap: 8px !important;
+  padding: 13px 28px !important; border-radius: 999px !important;
+  font-size: 14px !important; font-weight: 600 !important; letter-spacing: -0.01em !important;
+  border: none !important; cursor: pointer !important; transition: all 0.2s cubic-bezier(0.4,0,0.2,1) !important;
+  white-space: nowrap !important; font-family: inherit !important; text-decoration: none !important;
+}
+.udaan-page .btn-v { background: var(--v) !important; color: #fff !important; box-shadow: 0 2px 18px rgba(91,75,236,0.3) !important; }
+.udaan-page .btn-v:hover { background: var(--v2) !important; box-shadow: 0 6px 32px rgba(91,75,236,0.42) !important; transform: translateY(-1px) !important; }
+.udaan-page .btn-dark,
+.udaan-page .btn-ink { background: var(--ink) !important; color: #fff !important; }
+.udaan-page .btn-dark:hover,
+.udaan-page .btn-ink:hover { background: var(--ink2) !important; transform: translateY(-1px) !important; }
+.udaan-page .btn-line,
+.udaan-page .btn-ghost { background: transparent !important; color: var(--sub) !important; border: 1.5px solid var(--line) !important; }
+.udaan-page .btn-line:hover,
+.udaan-page .btn-ghost:hover { border-color: var(--v3) !important; color: var(--v) !important; background: var(--vbg) !important; }
+.udaan-page .btn-white { background: #fff !important; color: var(--ink) !important; box-shadow: 0 2px 14px rgba(0,0,0,0.1) !important; }
+.udaan-page .btn-white:hover { box-shadow: 0 6px 26px rgba(0,0,0,0.16) !important; transform: translateY(-1px) !important; }
+
+/* ─── surfaces ── */
+.udaan-page .card,
+.udaan-page .surface  { background: var(--bg) !important;  border: 1px solid var(--line) !important; border-radius: var(--r) !important; }
+.udaan-page .card2,
+.udaan-page .surface2 { background: var(--bg2) !important; border: 1px solid var(--line) !important; border-radius: var(--r) !important; }
+.udaan-page .card-dark,
+.udaan-page .surface-ink { background: var(--ink) !important; border-radius: var(--r) !important; color: #fff !important; }
+.udaan-page .card-v { background: var(--v) !important; border-radius: var(--r) !important; }
+
+/* ─── dividers ── */
+.udaan-page .hr,
+.udaan-page .rule { width: 100% !important; height: 1px !important; background: var(--line) !important; }
+
+/* ─── background textures ── */
+.udaan-page .dot-bg {
+  background-image: radial-gradient(circle, rgba(12,12,20,0.05) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+}
+.udaan-page .grid-bg {
+  background-image:
+    linear-gradient(rgba(12,12,20,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12,12,20,0.04) 1px, transparent 1px) !important;
+  background-size: 64px 64px !important;
+}
+
+/* ─── animations ── */
+@keyframes udaan-float-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+.udaan-page .float { animation: udaan-float-y 6s ease-in-out infinite !important; }
+
+@keyframes udaan-anim-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+.udaan-page .anim-float { animation: udaan-anim-float 5s ease-in-out infinite !important; }
+
+@keyframes udaan-marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.udaan-page .marquee-wrap { overflow: hidden !important; width: 100% !important; }
+.udaan-page .marquee-track {
+  display: flex !important; width: max-content !important;
+  animation: udaan-marquee-left 36s linear infinite !important;
+}
+

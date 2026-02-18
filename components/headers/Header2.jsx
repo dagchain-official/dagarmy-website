@@ -216,6 +216,13 @@ export default function Header2() {
     }, 100);
   };
 
+  // Listen for sign-in trigger from other components (e.g. Pledge modal)
+  useEffect(() => {
+    const handler = () => handleSignInClick();
+    window.addEventListener("dagarmy:open-signin", handler);
+    return () => window.removeEventListener("dagarmy:open-signin", handler);
+  }, [handleSignInClick]);
+
   const handleDashboardClick = () => {
     // Navigate to appropriate dashboard based on role
     if (isAdmin) {
@@ -347,6 +354,65 @@ export default function Header2() {
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
+            <Link href="/udaan" className="udaan-menu-item" style={{
+              fontSize: '15px',
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%)',
+              backgroundSize: '300% 300%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '4px',
+              display: 'inline-block',
+              animation: 'udaanGlow 4s ease infinite, udaanFloat 2s ease-in-out infinite',
+              filter: 'drop-shadow(0 0 8px rgba(102, 126, 234, 0.4))'
+            }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.1) translateY(-2px)';
+                e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(102, 126, 234, 0.6))';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                e.currentTarget.style.filter = 'drop-shadow(0 0 8px rgba(102, 126, 234, 0.4))';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
+              Udaan
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #667eea, #764ba2, #f093fb)',
+                boxShadow: '0 0 8px rgba(102, 126, 234, 0.5)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
+            </Link>
+            <style jsx>{`
+              @keyframes udaanGlow {
+                0%, 100% {
+                  background-position: 0% 50%;
+                }
+                50% {
+                  background-position: 100% 50%;
+                }
+              }
+              @keyframes udaanFloat {
+                0%, 100% {
+                  transform: translateY(0px);
+                }
+                50% {
+                  transform: translateY(-3px);
+                }
+              }
+            `}</style>
             <Link href="/jobs" style={{
               fontSize: '15px',
               fontWeight: '500',

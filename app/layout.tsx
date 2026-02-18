@@ -9,6 +9,22 @@ import "react-modal-video/css/modal-video.css";
 import Context from "@/context/Context";
 import { Web3Provider } from "@/context/Web3Provider";
 import { usePathname } from "next/navigation";
+import { DM_Sans, Fraunces } from "next/font/google";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm",
+  display: "swap",
+  weight: ["300","400","500","600","700","800","900"],
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  style: ["normal", "italic"],
+  weight: ["300","400","500","700","900"],
+});
 
 export default function RootLayout({
   children,
@@ -33,7 +49,7 @@ export default function RootLayout({
   }, [pathname]);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${dmSans.variable} ${fraunces.variable}`}>
       <body className="counter-scroll">
         <Web3Provider>
           <Context>{children}</Context>
