@@ -1,34 +1,13 @@
 "use client";
 import React from 'react';
+import AnimatedDownloadButton from './AnimatedDownloadButton';
 
 export default function RewardsOverview() {
-  const [isDownloading, setIsDownloading] = React.useState(false);
-
   const scrollToDocs = () => {
     const docsSection = document.getElementById('rewards-documentation');
     if (docsSection) {
       docsSection.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const handleDownloadPDF = () => {
-    setIsDownloading(true);
-    
-    // Simulate download preparation
-    setTimeout(() => {
-      // Create download link
-      const link = document.createElement('a');
-      link.href = '/DAGARMY REWARD/DAG Army Reward System .pdf';
-      link.download = 'DAG-Army-Reward-System.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Reset button state
-      setTimeout(() => {
-        setIsDownloading(false);
-      }, 300);
-    }, 500);
   };
 
   return (
@@ -121,78 +100,8 @@ export default function RewardsOverview() {
                   View Full Documentation
                 </button>
 
-                {/* Secondary Button - Download PDF */}
-                <button
-                  onClick={handleDownloadPDF}
-                  disabled={isDownloading}
-                  style={{
-                    padding: '14px 28px',
-                    background: isDownloading ? '#f3f4f6' : '#ffffff',
-                    color: isDownloading ? '#9ca3af' : '#000000',
-                    border: `1px solid ${isDownloading ? '#e5e7eb' : '#000000'}`,
-                    borderRadius: '8px',
-                    fontSize: '15px',
-                    fontWeight: '500',
-                    cursor: isDownloading ? 'not-allowed' : 'pointer',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    whiteSpace: 'nowrap',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isDownloading) {
-                      e.currentTarget.style.background = '#000000';
-                      e.currentTarget.style.color = '#ffffff';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isDownloading) {
-                      e.currentTarget.style.background = '#ffffff';
-                      e.currentTarget.style.color = '#000000';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }
-                  }}
-                >
-                  {/* Download Icon */}
-                  <svg 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                    style={{
-                      transition: 'transform 0.3s ease',
-                      transform: isDownloading ? 'translateY(2px)' : 'translateY(0)'
-                    }}
-                  >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
-                  {isDownloading ? 'Preparing Download...' : 'Download PDF'}
-                  
-                  {/* Loading progress bar */}
-                  {isDownloading && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      height: '2px',
-                      background: '#000000',
-                      animation: 'progressBar 0.5s ease-in-out',
-                      width: '100%'
-                    }} />
-                  )}
-                </button>
+                {/* Animated Download Button */}
+                <AnimatedDownloadButton />
               </div>
             </div>
 
