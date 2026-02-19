@@ -54,20 +54,23 @@ const AnimatedDownloadButton = () => {
         >
           <span 
             style={{
-              content: '""',
               position: 'absolute',
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              backgroundColor: '#c3c1c1ff',
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
               width: '8px',
               height: '8px',
-              transition: 'all 0.4s ease',
-              borderRadius: '100%',
+              borderRadius: '50%',
               margin: 'auto',
               opacity: 0,
               visibility: 'hidden',
+              transition: 'all 0.4s ease',
+              boxShadow: `
+                0 0 12px rgba(124, 92, 255, 0.25),
+                0 0 22px rgba(124, 92, 255, 0.18)
+              `,
               animation: isChecked ? 'rotate 3s ease-in-out 0.4s forwards' : 'none'
             }}
           />
@@ -145,6 +148,26 @@ const AnimatedDownloadButton = () => {
           </span>
           
           <p 
+            style={{
+              fontSize: '17.5px',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              transition: 'all 0.4s ease',
+              position: 'absolute',
+              right: '20px',
+              bottom: '14px',
+              textAlign: 'center',
+              margin: 0,
+              opacity: isChecked ? 0 : 1,
+              visibility: isChecked ? 'hidden' : 'visible'
+            }}
+          >
+            Download
+          </p>
+     <p 
   style={{
     fontSize: '17px',
     fontWeight: 700,
@@ -152,37 +175,23 @@ const AnimatedDownloadButton = () => {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
+    letterSpacing: '0.4px',
     transition: 'all 0.4s ease',
     position: 'absolute',
-    right: '20px',
+    right: '18px',
     bottom: '14px',
     textAlign: 'center',
     margin: 0,
-    opacity: isChecked ? 0 : 1,
-    visibility: isChecked ? 'hidden' : 'visible'
+    opacity: 0,
+    visibility: 'hidden',
+    animation: isChecked 
+      ? 'showInstalledMessage 0.4s ease 3.5s forwards' 
+      : 'none'
   }}
 >
-  Download
+  Open
 </p>
 
-
-          <p 
-            style={{
-              fontSize: '17px',
-              color: '#fff',
-              transition: 'all 0.4s ease',
-              position: 'absolute',
-              right: '18px',
-              bottom: '14px',
-              textAlign: 'center',
-              margin: 0,
-              opacity: 0,
-              visibility: 'hidden',
-              animation: isChecked ? 'showInstalledMessage 0.4s ease 3.5s forwards' : 'none'
-            }}
-          >
-            Open
-          </p>
         </label>
       </div>
 
