@@ -12,7 +12,7 @@ const AnimatedDownloadButton = () => {
     // Trigger download after 3s (when installing animation completes)
     setTimeout(() => {
       const link = document.createElement("a");
-      link.href = "/DAGARMY REWARD/DAG Army Reward System .pdf";
+      link.href = "/images/dagarmyrewardspdf/Understanding the DAG Army Reward System (1) (3).pdf";
       link.download = "DAG-Army-Reward-System.pdf";
       document.body.appendChild(link);
       link.click();
