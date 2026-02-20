@@ -11,12 +11,38 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 export default function PDFViewer() {
   const [pageWidth, setPageWidth] = useState(null);
 
-  // PDF files are numbered 02.pdf through 30.pdf (28 files total)
-  const totalPages = 28;
-  const pdfFiles = Array.from({ length: totalPages }, (_, i) => {
-    const pageNum = i + 2; // Start from 02
-    return `/pdfs/rewards/${pageNum.toString().padStart(2, '0')}.pdf`;
-  });
+  // PDF files are numbered 02.pdf through 30.pdf (27 files total, 06.pdf is missing)
+  const pdfFiles = [
+    '/pdfs/rewards/02.pdf',
+    '/pdfs/rewards/03.pdf',
+    '/pdfs/rewards/04.pdf',
+    '/pdfs/rewards/05.pdf',
+    // 06.pdf is missing - skip it
+    '/pdfs/rewards/07.pdf',
+    '/pdfs/rewards/08.pdf',
+    '/pdfs/rewards/09.pdf',
+    '/pdfs/rewards/10.pdf',
+    '/pdfs/rewards/11.pdf',
+    '/pdfs/rewards/12.pdf',
+    '/pdfs/rewards/13.pdf',
+    '/pdfs/rewards/14.pdf',
+    '/pdfs/rewards/15.pdf',
+    '/pdfs/rewards/16.pdf',
+    '/pdfs/rewards/17.pdf',
+    '/pdfs/rewards/18.pdf',
+    '/pdfs/rewards/19.pdf',
+    '/pdfs/rewards/20.pdf',
+    '/pdfs/rewards/21.pdf',
+    '/pdfs/rewards/22.pdf',
+    '/pdfs/rewards/23.pdf',
+    '/pdfs/rewards/24.pdf',
+    '/pdfs/rewards/25.pdf',
+    '/pdfs/rewards/26.pdf',
+    '/pdfs/rewards/27.pdf',
+    '/pdfs/rewards/28.pdf',
+    '/pdfs/rewards/29.pdf',
+    '/pdfs/rewards/30.pdf',
+  ];
 
   React.useEffect(() => {
     // Set initial width based on container

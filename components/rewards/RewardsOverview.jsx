@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import { motion } from 'framer-motion';
 import AnimatedDownloadButton from './AnimatedDownloadButton';
 
 export default function RewardsOverview() {
@@ -863,248 +864,225 @@ export default function RewardsOverview() {
         </div>
       </section>
 
-      {/* Protocol Selection Cards */}
-      <section style={{ padding: '80px 0', background: '#FFFFFF' }}>
+      {/* Choose Your Path */}
+      <section className="bg-white" style={{ paddingTop: '48px', paddingBottom: '48px' }}>
         <div className="tf-container">
-          <div style={{ maxWidth: '1350px', margin: '0 auto', textAlign: 'center' }}>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            style={{ textAlign: 'center', marginBottom: '40px' }}
+          >
+            <p style={{
+              fontSize: '10px',
+              fontWeight: '700',
+              color: '#6366f1',
+              textTransform: 'uppercase',
+              letterSpacing: '1.5px',
+              marginBottom: '14px'
+            }}>
+              OPERATIONAL MODES
+            </p>
             <h2 style={{
               fontFamily: 'Georgia, serif',
               fontSize: '48px',
               fontWeight: '700',
               color: '#000000',
-              marginBottom: '20px',
-              letterSpacing: '-0.02em'
+              marginBottom: '18px',
+              letterSpacing: '-0.02em',
+              lineHeight: '1.2'
             }}>
-              Choose Your Protocol
+              Choose Your Path
             </h2>
-            
             <p style={{
               fontSize: '18px',
-              lineHeight: '1.7',
+              lineHeight: '1.8',
               color: '#4b5563',
-              marginBottom: '48px',
-              maxWidth: '800px',
-              margin: '0 auto 48px'
+              maxWidth: '700px',
+              margin: '0 auto 16px',
+              paddingTop: '4px'
             }}>
-              You can enter the ecosystem at a pace that matches your goals. We offer two distinct operational modes.
+              Two Roles. One Mission. <span className="text-purple-600" style={{ fontWeight: '600' }}>Building 100,000 AI Founders by 2030.</span>
             </p>
-            
-            {/* Horizontal Progression Layout */}
             <div style={{
+              width: '500px',
+              height: '2.5px',
+              background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
+              margin: '0 auto',
+              borderRadius: '2.5px'
+            }} />
+          </motion.div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px', marginBottom: '60px', maxWidth: '1250px', margin: '0 auto 60px' }}>
+            {/* Card 1: The Standard Protocol */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="border border-gray-200 bg-white rounded-2xl transition-all duration-300"
+              style={{ padding: '28px', display: 'flex', flexDirection: 'column', minHeight: '500px', boxShadow: '0 10px 40px rgba(0, 0, 0, 0.05)' }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.08)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.05)'}
+            >
+              {/* Badge Image */}
+              <div className="flex justify-center mb-5">
+                <img 
+                  src="/images/dagbadges/DAG SOLDIER.svg" 
+                  alt="DAG Soldier Badge"
+                  className="w-32 h-32 object-contain"
+                />
+              </div>
+              
+              {/* Header */}
+              <h3 className="font-serif text-3xl font-bold text-black text-center mb-2">
+                DAG Soldier
+              </h3>
+              
+              {/* Focus */}
+              <p className="text-center text-base font-semibold" style={{ marginBottom: '10px', letterSpacing: '0.3px' }}>
+                <span style={{ color: '#9ca3af', fontWeight: '500' }}>Focus:</span> <span className="text-blue-600">Skill Development</span>
+              </p>
+              
+              {/* Description */}
+              <p className="text-gray-600 text-center leading-relaxed" style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.55' }}>
+                The foundational entry point for members building practical AI capability. Access the ecosystem to understand business logic and automation.
+              </p>
+              
+              {/* List */}
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
+                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Open Learning Sessions</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
+                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>AI Business & Automation Fundamentals</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
+                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Contribution-Based Reputation Growth</span>
+                </li>
+              </ul>
+              
+              {/* Footer */}
+              <div className="-mx-8 -mb-8 rounded-b-2xl" style={{ background: 'rgba(0, 0, 0, 0.02)', borderTop: '1px solid rgba(0, 0, 0, 0.06)', padding: '16px 24px', marginTop: 'auto' }}>
+                <p className="text-sm text-gray-700 text-center" style={{ fontWeight: '500', lineHeight: '1.5', margin: 0 }}>
+                  Transition from Learner to Builder through consistent action.
+                </p>
+              </div>
+            </motion.div>
+            
+            {/* Progression Arrow */}
+            <div style={{ 
+              position: 'relative',
+              flex: '0 0 80px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '40px'
+              justifyContent: 'center'
             }}>
-              {/* DAG Soldier */}
               <div style={{
-                flex: '0 0 600px',
-                background: '#ffffff',
-                borderRadius: '16px',
-                padding: '32px',
-                border: '1px solid #e5e7eb',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-                transition: 'all 0.3s ease',
-                textAlign: 'center'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.08)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)';
+                width: '100%',
+                height: '2px',
+                background: 'linear-gradient(90deg, #e5e7eb 0%, #6366f1 100%)',
+                position: 'relative'
               }}>
-                {/* SVG Container */}
                 <div style={{
-                  width: '120px',
-                  height: '120px',
-                  margin: '0 auto 20px',
-                  background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)'
-                }}>
-                  <img 
-                    src="/images/dagbadges/DAG SOLDIER.svg" 
-                    alt="DAG Soldier"
-                    style={{ width: '80px', height: '80px', objectFit: 'contain' }}
-                  />
-                </div>
-                
-                <h3 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '32px',
-                  fontWeight: '700',
-                  color: '#000000',
-                  marginBottom: '10px',
-                  letterSpacing: '-0.01em',
-                  lineHeight: '1.2'
-                }}>
-                  The Standard Protocol
-                </h3>
-                
-                <p style={{ 
-                  fontSize: '11px', 
-                  color: '#9ca3af', 
-                  marginBottom: '20px', 
-                  fontWeight: '700',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1.2px'
-                }}>
-                  DAG SOLDIER
-                </p>
-                
-                <div style={{
-                  width: '60px',
-                  height: '1px',
-                  background: '#e5e7eb',
-                  margin: '0 auto 16px'
+                  position: 'absolute',
+                  right: '-6px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '0',
+                  height: '0',
+                  borderLeft: '8px solid #6366f1',
+                  borderTop: '6px solid transparent',
+                  borderBottom: '6px solid transparent'
                 }} />
-                
-                <p style={{ 
-                  fontSize: '15px', 
-                  color: '#000000', 
-                  marginBottom: '16px', 
-                  fontWeight: '600'
-                }}>
-                  Focus: <span style={{ color: '#6366f1', fontWeight: '600' }}>Skill Acquisition.</span>
-                </p>
-                
-                <p style={{ 
-                  fontSize: '15px', 
-                  color: '#6b7280', 
-                  lineHeight: '1.6',
-                  textAlign: 'left',
-                  maxWidth: '520px',
-                  margin: '0 auto'
-                }}>
-                  This is the foundational entry point. You enter on equal footing with full access to educational resources and the ability to earn reputation points through standard community tasks. It is free and designed for students focusing primarily on learning.
-                </p>
-              </div>
-              
-              {/* Progression Indicator */}
-              <div style={{ 
-                position: 'relative',
-                flex: '0 0 100px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <div style={{
-                  width: '100%',
-                  height: '2px',
-                  background: 'linear-gradient(90deg, #e5e7eb 0%, #6366f1 100%)',
-                  position: 'relative'
-                }}>
-                  <div style={{
-                    position: 'absolute',
-                    right: '-6px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '0',
-                    height: '0',
-                    borderLeft: '8px solid #6366f1',
-                    borderTop: '6px solid transparent',
-                    borderBottom: '6px solid transparent'
-                  }} />
-                </div>
-              </div>
-              
-              {/* DAG Lieutenant */}
-              <div style={{
-                flex: '0 0 600px',
-                background: '#ffffff',
-                borderRadius: '16px',
-                padding: '32px',
-                border: '1px solid #6366f1',
-                boxShadow: '0 2px 8px rgba(99, 102, 241, 0.08)',
-                position: 'relative',
-                transition: 'all 0.3s ease',
-                textAlign: 'center'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(99, 102, 241, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(99, 102, 241, 0.08)';
-              }}>
-                
-                
-                {/* SVG Container */}
-                <div style={{
-                  width: '120px',
-                  height: '120px',
-                  margin: '0 auto 20px',
-                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 16px rgba(99, 102, 241, 0.12)'
-                }}>
-                  <img 
-                    src="/images/dagbadges/DAG LIEUTENANT.svg" 
-                    alt="DAG Lieutenant"
-                    style={{ width: '80px', height: '80px', objectFit: 'contain' }}
-                  />
-                </div>
-                
-                <h3 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '32px',
-                  fontWeight: '700',
-                  color: '#000000',
-                  marginBottom: '10px',
-                  letterSpacing: '-0.01em',
-                  lineHeight: '1.2'
-                }}>
-                  The Leadership Protocol
-                </h3>
-                
-                <p style={{ 
-                  fontSize: '11px', 
-                  color: '#9ca3af', 
-                  marginBottom: '20px', 
-                  fontWeight: '700',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1.2px'
-                }}>
-                  DAG LIEUTENANT
-                </p>
-                
-                <div style={{
-                  width: '60px',
-                  height: '1px',
-                  background: '#6366f1',
-                  margin: '0 auto 16px'
-                }} />
-                
-                <p style={{ 
-                  fontSize: '15px', 
-                  color: '#000000', 
-                  marginBottom: '16px', 
-                  fontWeight: '600'
-                }}>
-                  Focus: <span style={{ color: '#6366f1', fontWeight: '600' }}>Community Stewardship.</span>
-                </p>
-                
-                <p style={{ 
-                  fontSize: '15px', 
-                  color: '#6b7280', 
-                  lineHeight: '1.6',
-                  textAlign: 'left',
-                  maxWidth: '520px',
-                  margin: '0 auto'
-                }}>
-                  Designed for serious builders ready to take on immediate responsibility. This status signals a higher level of commitment, granting you Accelerated Progression Status from Day One. It is the preferred route for those aiming for "Campus Ambassador" roles and faster rank advancement.
-                </p>
               </div>
             </div>
+            
+            {/* Card 2: The Leadership Protocol */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="relative rounded-2xl transition-all duration-300"
+              style={{
+                padding: '28px',
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '500px',
+                boxShadow: '0 15px 45px rgba(124, 92, 255, 0.12)',
+                background: 'rgba(239, 246, 255, 0.3)',
+                border: '2px solid transparent',
+                backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #3b82f6, #a855f7)',
+                backgroundOrigin: 'border-box',
+                backgroundClip: 'padding-box, border-box'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 20px 55px rgba(124, 92, 255, 0.18)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 15px 45px rgba(124, 92, 255, 0.12)'}
+            >
+              {/* Badge Image */}
+              <div className="flex justify-center mb-5">
+                <img 
+                  src="/images/dagbadges/DAG LIEUTENANT.svg" 
+                  alt="DAG Lieutenant Badge"
+                  className="w-32 h-32 object-contain"
+                />
+              </div>
+              
+              {/* Header */}
+              <h3 className="font-serif text-3xl font-bold text-black text-center mb-2">
+                DAG Lieutenant
+              </h3>
+              
+              {/* Focus */}
+              <p className="text-center text-base font-semibold" style={{ marginBottom: '10px', letterSpacing: '0.3px' }}>
+                <span style={{ color: '#9ca3af', fontWeight: '500' }}>Focus:</span> <span className="text-purple-600">Building & Contribution</span>
+              </p>
+              
+              {/* Description */}
+              <p className="text-gray-600 text-center leading-relaxed" style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.55' }}>
+                The advanced operating mode for builders ready to launch, execute, and lead within the ecosystem.
+              </p>
+              
+              {/* List */}
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Launch & Validate Real AI Projects</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Access to Structured Builder Sprints</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Eligible for Demo Day & Startup Tracks</span>
+                </li>
+              </ul>
+              
+              {/* Footer */}
+              <div className="-mx-8 -mb-8 rounded-b-2xl" style={{ background: 'rgba(124, 92, 255, 0.06)', borderTop: '1px solid rgba(124, 92, 255, 0.2)', padding: '16px 24px', marginTop: 'auto' }}>
+                <p className="text-sm text-gray-700 text-center" style={{ fontWeight: '500', lineHeight: '1.5', margin: 0 }}>
+                  Lieutenant status reflects commitment to execution, not entitlement. Advancement is earned through real-world output.
+                </p>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
