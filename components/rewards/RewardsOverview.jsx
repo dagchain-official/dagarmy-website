@@ -610,7 +610,7 @@ export default function RewardsOverview() {
               maxWidth: '800px',
               margin: '0 auto 12px'
             }}>
-              Collecting points is good, but <span style={{ fontWeight: '600', color: '#000000' }}>Rank</span> is better. To move up the ladder—from Initiator to Mythic—you must make a choice.
+              Collecting points is good, but <span style={{ fontWeight: '600', color: '#000000' }}>Rank</span> is better. To move up the ladder—from Starter to Mythic—you must make a choice.
             </p>
             
             <p style={{
@@ -637,7 +637,7 @@ export default function RewardsOverview() {
               position: 'relative',
               marginBottom: '40px'
             }}>
-              {/* Initiator Rank */}
+              {/* Starter Rank */}
               <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
                 <div style={{
                   width: '140px',
@@ -646,8 +646,8 @@ export default function RewardsOverview() {
                   filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.08))'
                 }}>
                   <img 
-                    src="/images/ranks svgs/INITIATOR.svg" 
-                    alt="Initiator Rank"
+                    src="/BADGES  and  RANK png+svg/DAGARMY RANKS/STARTER RANK.svg" 
+                    alt="Starter Rank"
                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                   />
                 </div>
@@ -657,7 +657,7 @@ export default function RewardsOverview() {
                   color: '#000000',
                   marginBottom: '6px'
                 }}>
-                  Initiator
+                  Starter
                 </h4>
                 <p style={{ fontSize: '13px', color: '#9ca3af' }}>Starting Point</p>
               </div>
@@ -1169,7 +1169,7 @@ export default function RewardsOverview() {
                     margin: 0,
                     maxWidth: '320px'
                   }}>
-                    Your rank dictates your resource access. As you progress from Initiator to Mythic, the ecosystem unlocks higher efficiency tiers, ensuring that long-term contributors receive a larger share of the value they generate.
+                    Your rank dictates your resource access. As you progress from Starter to Mythic, the ecosystem unlocks higher efficiency tiers, ensuring that long-term contributors receive a larger share of the value they generate.
                   </p>
                 </div>
                 
