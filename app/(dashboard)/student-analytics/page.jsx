@@ -58,8 +58,7 @@ export default function StudentAnalyticsPage() {
               position: "sticky",
               top: "0",
               height: "100vh",
-              overflowY: "auto",
-              background: "#fff"
+              overflowY: "auto"
             }}>
               <DashboardNav2 />
             </div>
