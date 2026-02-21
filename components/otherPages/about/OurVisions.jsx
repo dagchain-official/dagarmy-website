@@ -20,9 +20,9 @@ export default function OurVisions() {
             >
               <Image
                 className="lazyload"
-                data-src="/images/about  us/herosectionimages/image1 .png"
+                data-src="/images/about  us/The Training Ground for Future Tech Leaders/The Training Ground for Future Tech Leaders.png"
                 alt="DAGARMY Training Ground - Future Tech Leaders"
-                src="/images/about  us/herosectionimages/image1 .png"
+                src="/images/about  us/The Training Ground for Future Tech Leaders/The Training Ground for Future Tech Leaders.png"
                 width={1372}
                 height={1101}
                 style={{
@@ -31,6 +31,7 @@ export default function OurVisions() {
                   height: '100%',
                   maxHeight: '500px'
                 }}
+                unoptimized
               />
             </div>
           </div>
