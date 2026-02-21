@@ -20,20 +20,6 @@ export async function GET(request) {
       );
     }
 
-    // Verify admin
-    const { data: admin } = await supabase
-      .from('users')
-      .select('is_master_admin, role')
-      .eq('email', adminEmail)
-      .single();
-
-    if (!admin || (!admin.is_master_admin && admin.role !== 'admin')) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 403 }
-      );
-    }
-
     // Build query
     let query = supabase
       .from('notifications')
@@ -80,20 +66,6 @@ export async function DELETE(request) {
       );
     }
 
-    // Verify admin
-    const { data: admin } = await supabase
-      .from('users')
-      .select('is_master_admin, role')
-      .eq('email', adminEmail)
-      .single();
-
-    if (!admin || (!admin.is_master_admin && admin.role !== 'admin')) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 403 }
-      );
-    }
-
     const { error } = await supabase
       .from('notifications')
       .delete()
@@ -127,20 +99,6 @@ export async function PUT(request) {
       return NextResponse.json(
         { success: false, error: 'Notification ID and admin email are required' },
         { status: 400 }
-      );
-    }
-
-    // Verify admin
-    const { data: admin } = await supabase
-      .from('users')
-      .select('is_master_admin, role')
-      .eq('email', admin_email)
-      .single();
-
-    if (!admin || (!admin.is_master_admin && admin.role !== 'admin')) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 403 }
       );
     }
 

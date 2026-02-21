@@ -3,7 +3,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Award, Save, Edit2, Check, X, Users, Trophy, DollarSign, Crown, Settings,
   Gift, Shield, Lock, Unlock, ArrowRight, Plus, Equal, Sparkles,
-  Zap, TrendingUp, Target, Layers, Star, Info, ChevronRight, ArrowDown
+  Zap, TrendingUp, Target, Layers, Star, Info, ChevronRight, ArrowDown,
+  FileText, Search, Copy, ShoppingCart
 } from "lucide-react";
 
 export default function RewardsManagementComprehensive() {
@@ -16,7 +17,28 @@ export default function RewardsManagementComprehensive() {
   const [activeTab, setActiveTab] = useState('signup');
   const [mounted, setMounted] = useState(false);
 
+  // Points Ledger state
+  const [ledger, setLedger] = useState([]);
+  const [ledgerLoading, setLedgerLoading] = useState(false);
+  const [ledgerSearch, setLedgerSearch] = useState('');
+  const [ledgerPage, setLedgerPage] = useState(1);
+  const LEDGER_PAGE_SIZE = 50;
+
   useEffect(() => { fetchConfig(); setTimeout(() => setMounted(true), 50); }, []);
+
+  useEffect(() => {
+    if (activeTab === 'ledger' && ledger.length === 0) fetchLedger();
+  }, [activeTab]);
+
+  const fetchLedger = async () => {
+    try {
+      setLedgerLoading(true);
+      const res = await fetch('/api/admin/points-ledger');
+      const data = await res.json();
+      if (data.transactions) setLedger(data.transactions);
+    } catch (e) { console.error(e); }
+    finally { setLedgerLoading(false); }
+  };
 
   const fetchConfig = async () => {
     try {
@@ -37,7 +59,7 @@ export default function RewardsManagementComprehensive() {
     const ev = {};
     Object.keys(config).forEach(k => { ev[k] = String(config[k] ?? ''); });
     // Ensure all keys have defaults even if missing from DB
-    const defaults = { soldier_signup_bonus: '500', lieutenant_upgrade_base: '2500', lieutenant_bonus_rate: '20', lieutenant_self_upgrade_bonus: '3000', soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '2500', lieutenant_refers_soldier_join: '600', lieutenant_refers_soldier_upgrade: '3000', ranking_system_enabled_for_soldier: '0', max_commission_levels: '3', rank_upgrade_bonus_initiator: '10', rank_upgrade_bonus_vanguard: '20', rank_upgrade_bonus_guardian: '30', rank_upgrade_bonus_striker: '40', rank_upgrade_bonus_invoker: '50', rank_upgrade_bonus_commander: '60', rank_upgrade_bonus_champion: '70', rank_upgrade_bonus_conqueror: '80', rank_upgrade_bonus_paragon: '90', rank_upgrade_bonus_mythic: '100', social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50', social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20', incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1', incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1', incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2', soldier_direct_sales_commission: '7' };
+    const defaults = { soldier_signup_bonus: '500', lieutenant_upgrade_base: '2500', lieutenant_bonus_rate: '20', lieutenant_self_upgrade_bonus: '3000', soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '2500', lieutenant_refers_soldier_join: '600', lieutenant_refers_soldier_upgrade: '3000', ranking_system_enabled_for_soldier: '0', max_commission_levels: '3', rank_upgrade_bonus_initiator: '10', rank_upgrade_bonus_vanguard: '20', rank_upgrade_bonus_guardian: '30', rank_upgrade_bonus_striker: '40', rank_upgrade_bonus_invoker: '50', rank_upgrade_bonus_commander: '60', rank_upgrade_bonus_champion: '70', rank_upgrade_bonus_conqueror: '80', rank_upgrade_bonus_paragon: '90', rank_upgrade_bonus_mythic: '100', social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50', social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20', incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1', incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1', incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2', soldier_direct_sales_commission: '7', self_sale_dag_points_per_dollar: '25', referral_sale_dag_points_per_dollar: '25', sale_dag_points_lieutenant_bonus: '20' };
     Object.keys(defaults).forEach(k => { if (!ev[k] && ev[k] !== '0') ev[k] = defaults[k]; });
     setEditValues(ev);
   };
@@ -78,6 +100,8 @@ export default function RewardsManagementComprehensive() {
         keys = ['rank_commission_initiator','rank_commission_vanguard','rank_commission_guardian','rank_commission_striker','rank_commission_invoker','rank_commission_commander','rank_commission_champion','rank_commission_conqueror','rank_commission_paragon','rank_commission_mythic'];
       } else if (section === 'incentive_pools') {
         keys = ['incentive_discretionary_pool_pct','incentive_discretionary_sales_threshold','incentive_discretionary_enabled','incentive_lifestyle_pool_pct','incentive_lifestyle_sales_threshold','incentive_lifestyle_enabled','incentive_executive_pool_pct','incentive_executive_sales_threshold','incentive_executive_enabled'];
+      } else if (section === 'sales_dag_points') {
+        keys = ['self_sale_dag_points_per_dollar','referral_sale_dag_points_per_dollar','sale_dag_points_lieutenant_bonus'];
       } else if (section === 'system') {
         keys = ['ranking_system_enabled_for_soldier','max_commission_levels'];
       }
@@ -118,14 +142,38 @@ export default function RewardsManagementComprehensive() {
     {...props}>{children}</div>
   ), [mounted]);
 
-  /* ── Editable input (plain function, NOT a component, to avoid focus loss) ── */
-  const ri = (configKey, w) => (
-    <input key={configKey} type="number" value={editValues[configKey] ?? ''} onChange={e => ov(configKey, e.target.value)}
-      style={{ width: w || '90px', padding: '8px 12px', border: '2px solid #e2e8f0', borderRadius: '10px', fontSize: '15px', fontWeight: '800', textAlign: 'right', color: '#0f172a', outline: 'none', background: '#f8fafc', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-      onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.1)'; e.target.style.background = '#fff'; }}
-      onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.boxShadow = 'none'; e.target.style.background = '#f8fafc'; }}
-    />
-  );
+  /* ── Editable input with spinner arrows and current-value pre-fill ── */
+  const ri = (configKey, w) => {
+    const currentVal = config[configKey] ?? '';
+    const displayVal = editValues[configKey] !== undefined ? editValues[configKey] : String(currentVal);
+    return (
+      <div key={configKey} style={{ display: 'flex', alignItems: 'center', gap: '0', border: '2px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden', background: '#f8fafc', width: w || '120px', transition: 'border-color 0.2s, box-shadow 0.2s' }}
+        onFocusCapture={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
+        onBlurCapture={e => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
+      >
+        <input
+          type="number"
+          value={displayVal}
+          min="0"
+          step="1"
+          onChange={e => ov(configKey, e.target.value)}
+          style={{ flex: 1, padding: '8px 10px', border: 'none', fontSize: '15px', fontWeight: '800', textAlign: 'right', color: '#0f172a', outline: 'none', background: 'transparent', minWidth: 0 }}
+        />
+        <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '1px solid #e2e8f0', flexShrink: 0 }}>
+          <button type="button" onClick={() => ov(configKey, String((parseInt(displayVal) || 0) + 1))}
+            style={{ padding: '3px 8px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748b', fontSize: '10px', lineHeight: 1, borderBottom: '1px solid #e2e8f0' }}
+            onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >&#9650;</button>
+          <button type="button" onClick={() => ov(configKey, String(Math.max(0, (parseInt(displayVal) || 0) - 1)))}
+            style={{ padding: '3px 8px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748b', fontSize: '10px', lineHeight: 1 }}
+            onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >&#9660;</button>
+        </div>
+      </div>
+    );
+  };
 
   if (loading) return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f6f8fb' }}>
@@ -151,6 +199,8 @@ export default function RewardsManagementComprehensive() {
     { id: 'rank_commissions', label: 'Rank Commissions', icon: Crown },
     { id: 'incentive_pools', label: 'Incentive Pools', icon: Layers },
     { id: 'system', label: 'System', icon: Settings },
+    { id: 'sales_dag_points', label: 'Sales DAG Points', icon: ShoppingCart },
+    { id: 'ledger', label: 'Points Ledger', icon: FileText },
   ];
 
   /* ── Section header with edit/save ── */
@@ -1185,6 +1235,232 @@ export default function RewardsManagementComprehensive() {
           </B>
         </div>
       </>)}
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* SALES DAG POINTS TAB                               */}
+      {/* ═══════════════════════════════════════════════════ */}
+      {activeTab === 'sales_dag_points' && (<>
+        <SH title="Sales DAG Points" desc="DAG Points awarded per $ of sale amount — auto-triggered when a sale is marked paid" section="sales_dag_points" />
+
+        {/* How it works banner */}
+        <B style={{ marginBottom: '20px', background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)', border: '1.5px solid #a7f3d0' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ShoppingCart size={18} color="#fff" />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#065f46', margin: '0 0 6px' }}>How Sales DAG Points Work</h4>
+              <p style={{ fontSize: '12px', color: '#047857', margin: 0, lineHeight: 1.6 }}>
+                When a sale is recorded and marked as <strong>paid</strong>, the seller automatically receives DAG Points based on the sale amount.
+                DAG LIEUTENANT members receive a bonus on top of the base rate. Points are recorded in the transaction ledger with a unique Txn ID.
+              </p>
+            </div>
+          </div>
+        </B>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+          {/* Self Sale */}
+          <B>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <DollarSign size={18} style={{ color: '#10b981' }} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Self Sale DAG Points</h4>
+                <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Points per $ when user makes their own sale</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {editingSection === 'sales_dag_points' ? ri('self_sale_dag_points_per_dollar') : <Val v={config.self_sale_dag_points_per_dollar || 25} suffix="pts/$" />}
+            </div>
+          </B>
+
+          {/* Direct Referral Sale */}
+          <B>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Users size={18} style={{ color: '#3b82f6' }} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Direct Referral Sale DAG Points</h4>
+                <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Points per $ when a direct referral makes a sale</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {editingSection === 'sales_dag_points' ? ri('referral_sale_dag_points_per_dollar') : <Val v={config.referral_sale_dag_points_per_dollar || 25} suffix="pts/$" />}
+            </div>
+          </B>
+        </div>
+
+        {/* LT Bonus */}
+        <B>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Crown size={18} style={{ color: '#f59e0b' }} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', margin: 0 }}>DAG LIEUTENANT Bonus Rate</h4>
+              <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Extra % on top of base rate for LT members (same as other reward bonuses)</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {editingSection === 'sales_dag_points' ? ri('sale_dag_points_lieutenant_bonus') : <Val v={config.sale_dag_points_lieutenant_bonus || 20} suffix="%" />}
+            <div style={{ flex: 1, padding: '12px 16px', background: '#fffbeb', borderRadius: '10px', border: '1px solid #fde68a' }}>
+              <p style={{ fontSize: '12px', color: '#92400e', margin: 0, fontWeight: '500' }}>
+                Example: $100 sale → <strong>{(100 * (config.self_sale_dag_points_per_dollar || 25)).toLocaleString()} pts</strong> (Soldier) &nbsp;|&nbsp;
+                <strong>{Math.floor(100 * (config.self_sale_dag_points_per_dollar || 25) * (1 + (config.sale_dag_points_lieutenant_bonus || 20) / 100)).toLocaleString()} pts</strong> (Lieutenant)
+              </p>
+            </div>
+          </div>
+        </B>
+
+        {/* Trigger info */}
+        <div style={{ marginTop: '16px', padding: '14px 18px', borderRadius: '12px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Info size={14} style={{ color: '#94a3b8', flexShrink: 0 }} />
+          <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
+            Points are granted automatically via a database trigger when a sale's <code style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>payment_status</code> is set to <strong>paid</strong>.
+            Each grant creates a transaction record with type <code style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>sale_points</code> visible in the Points Ledger.
+          </p>
+        </div>
+      </>)}
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* POINTS LEDGER TAB                                  */}
+      {/* ═══════════════════════════════════════════════════ */}
+      {activeTab === 'ledger' && (() => {
+        const q = ledgerSearch.trim().toLowerCase();
+        const filtered = ledger.filter(tx =>
+          !q ||
+          (tx.transaction_id || '').toLowerCase().includes(q) ||
+          (tx.user_name || '').toLowerCase().includes(q) ||
+          (tx.user_email || '').toLowerCase().includes(q) ||
+          (tx.transaction_type || '').toLowerCase().includes(q) ||
+          (tx.description || '').toLowerCase().includes(q)
+        );
+        const totalPages = Math.max(1, Math.ceil(filtered.length / LEDGER_PAGE_SIZE));
+        const page = Math.min(ledgerPage, totalPages);
+        const rows = filtered.slice((page - 1) * LEDGER_PAGE_SIZE, page * LEDGER_PAGE_SIZE);
+
+        return (
+          <>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+              <div>
+                <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>Points Ledger</h2>
+                <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0' }}>All DAG Points transactions across all users — searchable by Txn ID, user, or type</p>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button onClick={fetchLedger} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '12px', fontWeight: '600', cursor: 'pointer', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                  Refresh
+                </button>
+                <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500' }}>{filtered.length.toLocaleString()} transactions</span>
+              </div>
+            </div>
+
+            {/* Search bar */}
+            <div style={{ position: 'relative', marginBottom: '16px' }}>
+              <Search size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+              <input
+                type="text"
+                placeholder="Search by Txn ID, user name, email, or type..."
+                value={ledgerSearch}
+                onChange={e => { setLedgerSearch(e.target.value); setLedgerPage(1); }}
+                style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '13px', color: '#0f172a', outline: 'none', background: '#fff', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            {/* Table */}
+            <B style={{ padding: '0', overflow: 'hidden' }}>
+              {/* Header row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '190px 160px 1fr 130px 100px 130px', padding: '10px 16px', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                {['Txn ID', 'User', 'Description', 'Type', 'Points', 'Date'].map((h, i) => (
+                  <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: i >= 4 ? 'right' : 'left' }}>{h}</span>
+                ))}
+              </div>
+
+              {ledgerLoading ? (
+                <div style={{ padding: '48px', textAlign: 'center' }}>
+                  <div style={{ width: '28px', height: '28px', border: '3px solid #f1f5f9', borderTop: '3px solid #6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
+                  <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>Loading transactions...</p>
+                  <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+                </div>
+              ) : rows.length === 0 ? (
+                <div style={{ padding: '48px', textAlign: 'center', color: '#94a3b8' }}>
+                  <FileText size={32} style={{ margin: '0 auto 10px', opacity: 0.3, display: 'block' }} />
+                  <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>{q ? 'No matching transactions' : 'No transactions yet'}</p>
+                </div>
+              ) : (
+                rows.map((tx, idx) => {
+                  const isSale    = tx.transaction_type === 'sale_points';
+                  const isBurned  = tx.points < 0 && tx.transaction_type === 'rank_burn';
+                  const isRedeemed= tx.points < 0 && !isBurned;
+                  const isEarned  = tx.points > 0 && !isSale;
+                  const typeColor = isSale ? '#0d9488' : isEarned ? '#10b981' : isBurned ? '#ef4444' : '#6366f1';
+                  const typeBg    = isSale ? '#f0fdfa' : isEarned ? '#ecfdf5' : isBurned ? '#fef2f2' : '#eef2ff';
+                  const typeBorder= isSale ? '#99f6e4' : isEarned ? '#a7f3d0' : isBurned ? '#fecaca' : '#c7d2fe';
+                  const typeLabel = isSale ? 'Sale' : isEarned ? 'Earned' : isBurned ? 'Burned' : 'Redeemed';
+                  const dateStr   = new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                  const txnId     = tx.transaction_id || '—';
+                  return (
+                    <div
+                      key={tx.id || idx}
+                      style={{ display: 'grid', gridTemplateColumns: '190px 160px 1fr 130px 100px 130px', padding: '11px 16px', alignItems: 'center', borderBottom: idx < rows.length - 1 ? '1px solid #f8fafc' : 'none', background: '#fff' }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                      onMouseLeave={e => e.currentTarget.style.background = '#fff'}
+                    >
+                      {/* Txn ID */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: '700', color: '#475569', letterSpacing: '0.2px' }}>{txnId}</span>
+                        {txnId !== '—' && (
+                          <button
+                            onClick={() => navigator.clipboard.writeText(txnId)}
+                            title="Copy"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', color: '#cbd5e1', display: 'flex', alignItems: 'center' }}
+                            onMouseEnter={e => e.currentTarget.style.color = '#6366f1'}
+                            onMouseLeave={e => e.currentTarget.style.color = '#cbd5e1'}
+                          >
+                            <Copy size={10} />
+                          </button>
+                        )}
+                      </div>
+                      {/* User */}
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.user_name || 'Unknown'}</div>
+                        <div style={{ fontSize: '10px', color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.user_email || ''}</div>
+                      </div>
+                      {/* Description */}
+                      <span style={{ fontSize: '12px', color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', paddingRight: '8px' }}>{tx.description || tx.transaction_type}</span>
+                      {/* Type badge */}
+                      <div>
+                        <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '5px', background: typeBg, color: typeColor, border: `1px solid ${typeBorder}`, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{typeLabel}</span>
+                      </div>
+                      {/* Points */}
+                      <span style={{ fontSize: '13px', fontWeight: '800', color: typeColor, textAlign: 'right', letterSpacing: '-0.3px' }}>
+                        {isEarned ? '+' : '−'}{Math.abs(tx.points).toLocaleString()}
+                      </span>
+                      {/* Date */}
+                      <span style={{ fontSize: '11px', color: '#94a3b8', textAlign: 'right', fontWeight: '500' }}>{dateStr}</span>
+                    </div>
+                  );
+                })
+              )}
+            </B>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '14px' }}>
+                <span style={{ fontSize: '12px', color: '#94a3b8' }}>Page {page} of {totalPages} ({filtered.length} results)</span>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button onClick={() => setLedgerPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ padding: '6px 14px', borderRadius: '7px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '12px', fontWeight: '600', cursor: page === 1 ? 'not-allowed' : 'pointer', color: page === 1 ? '#cbd5e1' : '#64748b' }}>Prev</button>
+                  <button onClick={() => setLedgerPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ padding: '6px 14px', borderRadius: '7px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '12px', fontWeight: '600', cursor: page === totalPages ? 'not-allowed' : 'pointer', color: page === totalPages ? '#cbd5e1' : '#64748b' }}>Next</button>
+                </div>
+              </div>
+            )}
+          </>
+        );
+      })()}
+
     </div>
   );
 }

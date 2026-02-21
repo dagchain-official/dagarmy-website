@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { API_ENDPOINT_COUNT } from "@/data/api-endpoint-count";
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
@@ -11,6 +12,14 @@ export default function AdminLayout({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState('');
   const [userName, setUserName] = useState('Admin');
+  const [sideCounts, setSideCounts] = useState({ users: null, courses: null, certifications: null, events: null, logs: null, notifications: null, assignments: null });
+
+  useEffect(() => {
+    fetch('/api/admin/counts')
+      .then(r => r.json())
+      .then(d => { if (!d.error) setSideCounts(d); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     // Check authentication
@@ -96,7 +105,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/courses",
-      badge: "36"
+      badge: sideCounts.courses !== null ? String(sideCounts.courses) : '...'
     },
     {
       title: "Users",
@@ -109,7 +118,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/users",
-      badge: "1.2K"
+      badge: sideCounts.users !== null ? (sideCounts.users >= 1000 ? (sideCounts.users / 1000).toFixed(1) + 'K' : String(sideCounts.users)) : '...'
     },
     {
       title: "Manage Admins",
@@ -136,7 +145,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/assignments",
-      badge: "New"
+      badge: sideCounts.assignments !== null ? String(sideCounts.assignments) : '...'
     },
     {
       title: "Event Planner",
@@ -150,7 +159,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/event-planner",
-      badge: null
+      badge: sideCounts.events !== null ? String(sideCounts.events) : '...'
     },
     {
       title: "Notifications",
@@ -161,7 +170,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/notifications",
-      badge: null
+      badge: sideCounts.notifications !== null ? String(sideCounts.notifications) : '...'
     },
     {
       title: "Certifications",
@@ -172,7 +181,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/certifications",
-      badge: "23"
+      badge: sideCounts.certifications !== null ? String(sideCounts.certifications) : '...'
     },
     {
       title: "Rewards",
@@ -196,6 +205,20 @@ export default function AdminLayout({ children }) {
       badge: "New"
     },
     {
+      title: "Logs",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <line x1="10" y1="9" x2="8" y2="9" />
+        </svg>
+      ),
+      path: "/admin/logs",
+      badge: sideCounts.logs !== null ? String(sideCounts.logs) : '...'
+    },
+    {
       title: "API Docs",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -206,7 +229,7 @@ export default function AdminLayout({ children }) {
         </svg>
       ),
       path: "/admin/api-docs",
-      badge: "81"
+      badge: String(API_ENDPOINT_COUNT)
     }
   ];
 

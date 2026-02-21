@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
 import { 
   Bell, Send, Users, User, Globe, AlertCircle, CheckCircle, 
   Info, AlertTriangle, Megaphone, Trash2, Eye, EyeOff, Calendar,
@@ -8,7 +7,6 @@ import {
 } from 'lucide-react';
 
 export default function NotificationManagement() {
-  const { userProfile, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('send'); // send, history
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,35 +14,21 @@ export default function NotificationManagement() {
   const [authLoading, setAuthLoading] = useState(true);
   const [userEmail, setUserEmail] = useState(null);
 
-  // Wait for auth to load and get email
+  // Read admin email directly from localStorage (admin session, not student wallet auth)
   useEffect(() => {
-    // Try to get email from userProfile first
-    if (userProfile?.email) {
-      setUserEmail(userProfile.email);
-      setAuthLoading(false);
-    } 
-    // Fallback to localStorage
-    else if (isAuthenticated) {
-      try {
-        const storedUser = localStorage.getItem('dagarmy_user');
-        if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          console.log('📦 Loaded user from localStorage:', userData);
-          if (userData.email) {
-            setUserEmail(userData.email);
-            setAuthLoading(false);
-            return;
-          }
+    try {
+      const storedUser = localStorage.getItem('dagarmy_user');
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        if (userData.email) {
+          setUserEmail(userData.email);
         }
-      } catch (error) {
-        console.error('Error reading localStorage:', error);
       }
-      // If still no email after 2 seconds, stop loading
-      setTimeout(() => setAuthLoading(false), 2000);
-    } else {
-      setAuthLoading(false);
+    } catch (e) {
+      console.error('Error reading admin user from localStorage:', e);
     }
-  }, [userProfile, isAuthenticated]);
+    setAuthLoading(false);
+  }, []);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -61,10 +45,10 @@ export default function NotificationManagement() {
   });
 
   useEffect(() => {
-    if (activeTab === 'history') {
+    if (activeTab === 'history' && userEmail) {
       fetchNotifications();
     }
-  }, [activeTab]);
+  }, [activeTab, userEmail]);
 
   const fetchNotifications = async () => {
     if (!userEmail) return;
