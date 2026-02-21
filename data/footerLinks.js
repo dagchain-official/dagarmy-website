@@ -29,8 +29,28 @@ export const menuItems = [
 ];
 
 export const socialLinks = [
-  { icon: "flaticon-facebook-1", href: "#" },
-  { icon: "icon-twitter", href: "#" },
-  { icon: "flaticon-instagram", href: "#" },
-  { icon: "flaticon-linkedin-1", href: "#" },
+  { 
+    name: "Facebook", 
+    href: "https://www.facebook.com/profile.php?id=61587859905614" 
+  },
+  { 
+    name: "X", 
+    href: "https://x.com/dagarmy_network" 
+  },
+  { 
+    name: "Instagram", 
+    href: "https://www.instagram.com/dagarmy.network/" 
+  },
+  { 
+    name: "LinkedIn", 
+    href: "https://www.linkedin.com/company/dag-army" 
+  },
+  { 
+    name: "YouTube", 
+    href: "https://www.youtube.com/channel/UCmDPRCQf8-SvEf5OBLqHRFQ" 
+  },
+  { 
+    name: "TikTok", 
+    href: "https://www.tiktok.com/@dagarmy_dagchain" 
+  },
 ];
