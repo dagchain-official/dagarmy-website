@@ -32,9 +32,9 @@ export default function StudentMyCoursesPage() {
               </div>
               
               {/* Main Content */}
-              <div style={{ flex: 1, background: "#f6f8fb" }}>
+              <div style={{ flex: 1, background: "#f9fafb" }}>
                 {/* Courses Content */}
-                <div style={{ padding: "28px 24px" }}>
+                <div style={{ padding: "40px" }}>
                   <MyCourses />
                 </div>
               </div>
