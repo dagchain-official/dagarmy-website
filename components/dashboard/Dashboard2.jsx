@@ -50,6 +50,7 @@ export default function Dashboard2() {
     const [copySuccess, setCopySuccess] = useState(false);
     const [dagPoints, setDagPoints] = useState(0);
     const [userTier, setUserTier] = useState('DAG_SOLDIER');
+    const [currentRank, setCurrentRank] = useState('None');
     const [mounted, setMounted] = useState(false);
     const [greeting, setGreeting] = useState('');
     const [currentTime, setCurrentTime] = useState(null);
@@ -95,6 +96,9 @@ export default function Dashboard2() {
                     }
                     if (data.user.tier) {
                         setUserTier(data.user.tier);
+                    }
+                    if (data.user.current_rank !== undefined) {
+                        setCurrentRank(data.user.current_rank || 'None');
                     }
                 }
             } catch (error) {
@@ -202,6 +206,29 @@ export default function Dashboard2() {
     const nextMonth = () => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1));
 
     const tierLabel = userTier === 'DAG_LIEUTENANT' ? 'DAG LIEUTENANT' : 'DAG SOLDIER';
+
+    const RANKS = [
+        { name: 'INITIATOR',  cost: 700,   color: '#6b7280' },
+        { name: 'VANGUARD',   cost: 1500,  color: '#10b981' },
+        { name: 'GUARDIAN',   cost: 3200,  color: '#3b82f6' },
+        { name: 'STRIKER',    cost: 7000,  color: '#8b5cf6' },
+        { name: 'INVOKER',    cost: 10000, color: '#ec4899' },
+        { name: 'COMMANDER',  cost: 15000, color: '#f59e0b' },
+        { name: 'CHAMPION',   cost: 20000, color: '#ef4444' },
+        { name: 'CONQUEROR',  cost: 30000, color: '#dc2626' },
+        { name: 'PARAGON',    cost: 40000, color: '#7c3aed' },
+        { name: 'MYTHIC',     cost: 50000, color: '#fbbf24' },
+    ];
+    const isLieutenant = userTier === 'DAG_LIEUTENANT' || userTier === 'DAG LIEUTENANT';
+    const currentRankIdx = currentRank === 'None' ? -1 : RANKS.findIndex(r => r.name === currentRank);
+    const nextRankIdx = currentRankIdx + 1;
+    const nextRankData = nextRankIdx < RANKS.length ? RANKS[nextRankIdx] : null;
+    const currentRankData = currentRankIdx >= 0 ? RANKS[currentRankIdx] : null;
+    const rankProgress = nextRankData
+        ? (currentRankData
+            ? Math.min(100, Math.max(0, ((dagPoints - currentRankData.cost) / (nextRankData.cost - currentRankData.cost)) * 100))
+            : Math.min(100, Math.max(0, (dagPoints / nextRankData.cost) * 100)))
+        : 100;
 
     /* ─── BentoCard (matches Admin Dashboard) ─── */
     const BentoCard = useCallback(({ children, span = '1', rowSpan = '1', style = {}, hover = true, ...props }) => (
@@ -354,6 +381,137 @@ export default function Dashboard2() {
                         </div>
                     </div>
                     <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '500' }}>Avg Progress</span>
+                </BentoCard>
+
+                {/* ━━━ ROW 1.5: Rank Progression Strip ━━━ */}
+                <BentoCard span="12" hover={false} style={{ padding: '16px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+
+                        {/* Left label */}
+                        <div style={{ flexShrink: 0, minWidth: '110px' }}>
+                            <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '4px' }}>Rank</div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: currentRankData?.color || '#cbd5e1', flexShrink: 0 }} />
+                                <span style={{ fontSize: '13px', fontWeight: '800', color: currentRankData?.color || '#94a3b8', letterSpacing: '0.3px' }}>
+                                    {currentRank === 'None' ? 'STARTER' : currentRank}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Rank journey: current → next → mystery */}
+                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0' }}>
+
+                            {/* Current rank node */}
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                                <div style={{
+                                    width: '28px', height: '28px', borderRadius: '50%',
+                                    background: currentRankData ? currentRankData.color : '#cbd5e1',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    boxShadow: currentRankData ? `0 0 0 3px ${currentRankData.color}20, 0 2px 8px ${currentRankData.color}40` : 'none',
+                                    border: currentRankData ? `3px solid ${currentRankData.color}` : '2px solid #e2e8f0',
+                                }}>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                </div>
+                                <span style={{ fontSize: '8px', fontWeight: '700', color: currentRankData?.color || '#94a3b8', whiteSpace: 'nowrap' }}>
+                                    {currentRank === 'None' ? 'STARTER' : currentRank}
+                                </span>
+                            </div>
+
+                            {/* Progress bar connector */}
+                            <div style={{ flex: 1, padding: '0 10px', marginBottom: '14px' }}>
+                                <div style={{ height: '3px', background: '#f1f5f9', borderRadius: '2px', overflow: 'hidden' }}>
+                                    <div style={{
+                                        height: '100%', borderRadius: '2px',
+                                        background: nextRankData
+                                            ? `linear-gradient(90deg, ${currentRankData?.color || '#6366f1'}, ${nextRankData.color})`
+                                            : '#fbbf24',
+                                        width: `${rankProgress}%`,
+                                        transition: 'width 1.2s cubic-bezier(0.4,0,0.2,1)'
+                                    }} />
+                                </div>
+                            </div>
+
+                            {/* Next rank node */}
+                            {nextRankData && (
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                                    <div style={{
+                                        width: '22px', height: '22px', borderRadius: '50%',
+                                        background: '#fff', border: `2px dashed ${nextRankData.color}60`,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: nextRankData.color }} />
+                                    </div>
+                                    <span style={{ fontSize: '8px', fontWeight: '700', color: nextRankData.color, whiteSpace: 'nowrap' }}>{nextRankData.name}</span>
+                                </div>
+                            )}
+
+                            {/* Mystery dots */}
+                            {nextRankData && (
+                                <>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '0 10px', marginBottom: '14px' }}>
+                                        {[0,1,2].map(d => (
+                                            <div key={d} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#e2e8f0', opacity: 1 - d * 0.25 }} />
+                                        ))}
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                                        <div style={{
+                                            width: '22px', height: '22px', borderRadius: '50%',
+                                            background: '#f8fafc', border: '2px solid #e2e8f0',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        }}>
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                                        </div>
+                                        <span style={{ fontSize: '8px', fontWeight: '600', color: '#cbd5e1', whiteSpace: 'nowrap' }}>???</span>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Right: progress to next */}
+                        <div style={{ flexShrink: 0, minWidth: '160px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            {nextRankData ? (
+                                <>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                                            <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '600' }}>{dagPoints.toLocaleString()} pts</span>
+                                            <span style={{ fontSize: '10px', fontWeight: '700', color: nextRankData.color }}>{nextRankData.cost.toLocaleString()}</span>
+                                        </div>
+                                        <div style={{ height: '5px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden' }}>
+                                            <div style={{
+                                                height: '100%', borderRadius: '3px',
+                                                background: `linear-gradient(90deg, ${currentRankData?.color || '#6366f1'}, ${nextRankData.color})`,
+                                                width: `${rankProgress}%`,
+                                                transition: 'width 1.2s cubic-bezier(0.4,0,0.2,1)'
+                                            }} />
+                                        </div>
+                                        <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px', fontWeight: '500' }}>
+                                            Next: <span style={{ color: nextRankData.color, fontWeight: '700' }}>{nextRankData.name}</span>
+                                        </div>
+                                    </div>
+                                    {dagPoints >= nextRankData.cost ? (
+                                        <a href="/student-rewards" style={{
+                                            padding: '7px 14px', borderRadius: '8px', fontSize: '11px', fontWeight: '700',
+                                            background: nextRankData.color, color: '#fff', textDecoration: 'none',
+                                            whiteSpace: 'nowrap', flexShrink: 0,
+                                            boxShadow: `0 3px 10px ${nextRankData.color}40`
+                                        }}>Upgrade</a>
+                                    ) : (
+                                        <a href="/student-rewards" style={{
+                                            padding: '7px 14px', borderRadius: '8px', fontSize: '11px', fontWeight: '700',
+                                            background: '#f8fafc', color: '#64748b', textDecoration: 'none',
+                                            border: '1px solid #e2e8f0', whiteSpace: 'nowrap', flexShrink: 0
+                                        }}>Details</a>
+                                    )}
+                                </>
+                            ) : (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fbbf24' }} />
+                                    <span style={{ fontSize: '12px', fontWeight: '800', color: '#f59e0b' }}>MYTHIC ACHIEVED</span>
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
                 </BentoCard>
 
                 {/* ━━━ ROW 2: Calendar (8 cols) + Sidebar (4 cols) ━━━ */}
@@ -538,6 +696,7 @@ export default function Dashboard2() {
                         </div>
                     </BentoCard>
                 </div>
+
             </div>
 
             {/* ─── Event Detail Modal ─── */}

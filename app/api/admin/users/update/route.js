@@ -14,7 +14,6 @@ export async function PUT(request) {
       full_name,
       first_name,
       last_name,
-      user_provided_email,
       wallet_address,
       role,
       country_code,
@@ -33,13 +32,12 @@ export async function PUT(request) {
     }
 
     // Update user in database
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('users')
       .update({
         full_name,
         first_name,
         last_name,
-        user_provided_email,
         wallet_address,
         role,
         country_code,
@@ -49,9 +47,7 @@ export async function PUT(request) {
         is_active,
         updated_at: new Date().toISOString()
       })
-      .eq('id', id)
-      .select()
-      .single();
+      .eq('id', id);
 
     if (error) {
       console.error('Error updating user:', error);
@@ -63,7 +59,6 @@ export async function PUT(request) {
 
     return NextResponse.json({
       success: true,
-      user: data,
       message: 'User updated successfully'
     });
 

@@ -33,6 +33,9 @@ export default function UsersManagement3() {
   const [editFormData, setEditFormData] = useState({});
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [pointsForm, setPointsForm] = useState({ amount: '', reason: '' });
+  const [addingPoints, setAddingPoints] = useState(false);
+  const [pointsMsg, setPointsMsg] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -50,7 +53,7 @@ export default function UsersManagement3() {
           ...user,
           // Add computed display fields
           name: user.full_name || user.email?.split('@')[0] || 'Unknown User',
-          displayEmail: user.email || user.user_provided_email || 'N/A',
+          displayEmail: user.email || 'N/A',
           status: isUserActive(user.last_sign_in_at || user.created_at) ? 'Active' : 'Inactive',
           courses: 0,
           joined: new Date(user.created_at).toLocaleDateString(),
@@ -213,7 +216,6 @@ export default function UsersManagement3() {
       'First Name',
       'Last Name',
       'Email (Login)',
-      'Email (User Provided)',
       'Wallet Address',
       'Role',
       'Status',
@@ -244,7 +246,6 @@ export default function UsersManagement3() {
       user.first_name || '',
       user.last_name || '',
       user.email || '',
-      user.user_provided_email || '',
       user.wallet_address || '',
       user.role || '',
       user.status || '',
@@ -316,7 +317,6 @@ export default function UsersManagement3() {
       first_name: user.first_name || '',
       last_name: user.last_name || '',
       email: user.email || '',
-      user_provided_email: user.user_provided_email || '',
       wallet_address: user.wallet_address || '',
       role: user.role || 'student',
       country_code: user.country_code || '',
@@ -326,6 +326,41 @@ export default function UsersManagement3() {
       is_active: user.is_active !== undefined ? user.is_active : true,
       upline_referral_code: user.upline?.referral_code || ''
     });
+  };
+
+  const handleAddPoints = async () => {
+    const amount = parseInt(pointsForm.amount, 10);
+    if (!amount || amount === 0) {
+      setPointsMsg({ type: 'error', text: 'Enter a non-zero point amount.' });
+      return;
+    }
+    if (!pointsForm.reason.trim()) {
+      setPointsMsg({ type: 'error', text: 'Reason is required for audit trail.' });
+      return;
+    }
+    try {
+      setAddingPoints(true);
+      const res = await fetch('/api/admin/users/add-points', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: editUserModal.id,
+          amount,
+          reason: pointsForm.reason.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      setPointsMsg({ type: 'success', text: `${amount > 0 ? '+' : ''}${amount} pts added. Txn: ${data.transaction_id}` });
+      setPointsForm({ amount: '', reason: '' });
+      // Update the balance shown in the modal header without closing it
+      setEditUserModal(prev => prev ? { ...prev, dag_points: (prev.dag_points || 0) + amount } : prev);
+    } catch (e) {
+      setPointsMsg({ type: 'error', text: e.message });
+    } finally {
+      setAddingPoints(false);
+      setTimeout(() => setPointsMsg(null), 6000);
+    }
   };
 
   const handleSaveUser = async () => {
@@ -1482,7 +1517,6 @@ export default function UsersManagement3() {
                   { label: 'First Name', value: viewUserModal.first_name || 'N/A', icon: Users },
                   { label: 'Last Name', value: viewUserModal.last_name || 'N/A', icon: Users },
                   { label: 'Email (Login)', value: viewUserModal.email || 'N/A', icon: Mail },
-                  { label: 'Email (User Provided)', value: viewUserModal.user_provided_email || 'N/A', icon: Mail },
                   { label: 'Wallet Address', value: viewUserModal.wallet_address || 'N/A', icon: Shield },
                   { label: 'Role', value: viewUserModal.role, icon: Shield },
                   { label: 'Status', value: viewUserModal.status, icon: Activity },
@@ -1687,27 +1721,27 @@ export default function UsersManagement3() {
                   />
                 </div>
 
-                {/* User Provided Email */}
+                {/* Email (read-only) */}
                 <div>
                   <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', marginBottom: '8px', display: 'block' }}>
-                    Email (User Provided)
+                    Email Address
                   </label>
-                  <input
-                    type="email"
-                    value={editFormData.user_provided_email}
-                    onChange={(e) => setEditFormData({ ...editFormData, user_provided_email: e.target.value })}
-                    style={{
-                      width: '100%',
-                      padding: '12px 16px',
-                      border: '2px solid #e2e8f0',
-                      borderRadius: '10px',
-                      fontSize: '14px',
-                      outline: 'none',
-                      transition: 'all 0.2s'
-                    }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#1f2937'}
-                    onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
-                  />
+                  <div style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    border: '2px solid #f1f5f9',
+                    borderRadius: '10px',
+                    fontSize: '14px',
+                    background: '#f8fafc',
+                    color: '#64748b',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxSizing: 'border-box'
+                  }}>
+                    <Mail size={14} style={{ color: '#94a3b8', flexShrink: 0 }} />
+                    {editUserModal?.email || 'N/A'}
+                  </div>
                 </div>
 
                 {/* Wallet Address */}
@@ -1929,6 +1963,109 @@ export default function UsersManagement3() {
             </div>
 
             {/* Modal Footer */}
+            {/* ── DAG Points Admin Grant ── */}
+            <div style={{ padding: '0 32px 28px' }}>
+              <div style={{
+                borderRadius: '16px',
+                border: '1.5px solid #e0e7ff',
+                background: 'linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%)',
+                overflow: 'hidden'
+              }}>
+                {/* Section header */}
+                <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #e0e7ff', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Award size={16} color="#fff" />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: '800', color: '#3730a3' }}>Admin DAG Points Grant</div>
+                    <div style={{ fontSize: '11px', color: '#6366f1', fontWeight: '500' }}>
+                      Current balance: <strong>{editUserModal?.dag_points ?? '—'} pts</strong> — every grant is logged with a transaction ID
+                    </div>
+                  </div>
+                </div>
+
+                {/* Form */}
+                <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: '140px 1fr auto', gap: '10px', alignItems: 'flex-end' }}>
+                  {/* Amount */}
+                  <div>
+                    <label style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>
+                      Points (+ or -)
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="e.g. 500 or -100"
+                      value={pointsForm.amount}
+                      onChange={e => setPointsForm(f => ({ ...f, amount: e.target.value }))}
+                      style={{
+                        width: '100%', padding: '10px 12px', borderRadius: '9px',
+                        border: '1.5px solid #c7d2fe', fontSize: '14px', fontWeight: '700',
+                        color: '#0f172a', outline: 'none', background: '#fff', boxSizing: 'border-box'
+                      }}
+                      onFocus={e => e.currentTarget.style.borderColor = '#6366f1'}
+                      onBlur={e => e.currentTarget.style.borderColor = '#c7d2fe'}
+                    />
+                  </div>
+
+                  {/* Reason */}
+                  <div>
+                    <label style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>
+                      Reason (required for audit log)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Compensation for missed signup bonus"
+                      value={pointsForm.reason}
+                      onChange={e => setPointsForm(f => ({ ...f, reason: e.target.value }))}
+                      style={{
+                        width: '100%', padding: '10px 12px', borderRadius: '9px',
+                        border: '1.5px solid #c7d2fe', fontSize: '13px',
+                        color: '#0f172a', outline: 'none', background: '#fff', boxSizing: 'border-box'
+                      }}
+                      onFocus={e => e.currentTarget.style.borderColor = '#6366f1'}
+                      onBlur={e => e.currentTarget.style.borderColor = '#c7d2fe'}
+                    />
+                  </div>
+
+                  {/* Submit */}
+                  <button
+                    onClick={handleAddPoints}
+                    disabled={addingPoints}
+                    style={{
+                      padding: '10px 20px', borderRadius: '9px', border: 'none',
+                      background: addingPoints ? '#a5b4fc' : 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                      color: '#fff', fontSize: '13px', fontWeight: '700',
+                      cursor: addingPoints ? 'not-allowed' : 'pointer',
+                      whiteSpace: 'nowrap', boxShadow: addingPoints ? 'none' : '0 3px 10px rgba(99,102,241,0.35)',
+                      display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s'
+                    }}
+                  >
+                    <Zap size={14} />
+                    {addingPoints ? 'Applying...' : 'Apply Points'}
+                  </button>
+                </div>
+
+                {/* Feedback message */}
+                {pointsMsg && (
+                  <div style={{
+                    margin: '0 20px 16px',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: pointsMsg.type === 'success' ? '#f0fdf4' : '#fef2f2',
+                    border: `1px solid ${pointsMsg.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
+                    color: pointsMsg.type === 'success' ? '#166534' : '#991b1b',
+                    fontSize: '12px', fontWeight: '600',
+                    display: 'flex', alignItems: 'center', gap: '8px'
+                  }}>
+                    {pointsMsg.type === 'success'
+                      ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    }
+                    {pointsMsg.text}
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div style={{
               padding: '24px 32px',
               borderTop: '2px solid #f1f5f9',

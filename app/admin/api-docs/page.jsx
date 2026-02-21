@@ -271,10 +271,39 @@ const API_ENDPOINTS = [
     category: "Admin Users",
     method: "PUT",
     path: "/api/admin/users/update",
-    description: "Update a user's profile data (name, email, role, country, etc.).",
+    description: "Update a user's profile data (name, role, wallet, country, whatsapp, bio, skill, is_active). Does not accept dropped columns like user_provided_email.",
     auth: "Admin",
-    body: '{ id, full_name, first_name, last_name, user_provided_email, wallet_address, role, country_code, ... }',
-    response: '{ user: { id, ... } }'
+    body: '{ id, full_name, first_name, last_name, wallet_address, role, country_code, whatsapp_number, bio, skill_occupation, is_active }',
+    response: '{ success, message }'
+  },
+  {
+    category: "Admin Users",
+    method: "POST",
+    path: "/api/admin/users/add-points",
+    description: "Manually grant or deduct DAG Points for a specific user. Logged with transaction type admin_grant and a unique transaction ID.",
+    auth: "Master Admin",
+    body: '{ userId, amount, reason }',
+    response: '{ success, transaction_id, new_balance }'
+  },
+  {
+    category: "Admin Users",
+    method: "GET",
+    path: "/api/admin/points-ledger",
+    description: "Fetch all points transactions across all users with user details. Supports search by user name, email, transaction type, or transaction ID.",
+    auth: "Admin",
+    body: "None",
+    response: '{ transactions: [{ id, user_name, user_email, points, transaction_type, transaction_id, description, created_at }] }',
+    params: "?search=keyword"
+  },
+
+  {
+    category: "Admin Users",
+    method: "GET",
+    path: "/api/admin/counts",
+    description: "Fetch live counts for sidebar badges in a single request: users, courses, certifications, events, and activity_logs. Uses Supabase count:exact head queries for efficiency.",
+    auth: "Admin",
+    body: "None",
+    response: '{ users, courses, certifications, events, logs }'
   },
 
   // ─── Admin Roles ───
@@ -607,16 +636,6 @@ const API_ENDPOINTS = [
     response: '{ connected, message }'
   },
 
-  // ─── Leaderboard ───
-  {
-    category: "Leaderboard",
-    method: "GET",
-    path: "/api/leaderboard",
-    description: "Fetch the platform leaderboard with user rankings.",
-    auth: "None",
-    body: "None",
-    response: '{ leaderboard: [...] }'
-  },
 
   // ─── Notifications ───
   {
@@ -786,20 +805,75 @@ const API_ENDPOINTS = [
     category: "Rewards",
     method: "POST",
     path: "/api/rewards/rank-upgrade",
-    description: "Burn DAG Points to upgrade user rank. Sequential progression: None -> INITIATOR -> ... -> MYTHIC. Fetches burn cost from rewards_config, validates balance, burns points via add_dag_points, updates current_rank.",
+    description: "Burn DAG Points to upgrade user rank. Sequential progression: Starter -> INITIATOR -> ... -> MYTHIC. Fetches burn cost from rewards_config, validates balance, burns points via add_dag_points, updates current_rank.",
     auth: "Authenticated User",
     body: '{ user_email }',
     response: '{ success, previousRank, newRank, pointsBurned, availablePoints }'
   },
-
   {
-    category: "Users",
-    method: "PUT",
-    path: "/api/admin/users/update-upline",
-    description: "Change a user's upline (referrer) by providing a new referral code. Pass empty newReferralCode to remove the upline entirely. Validates referral code exists and is active, prevents self-referral.",
+    category: "Rewards",
+    method: "POST",
+    path: "/api/rewards/redeem",
+    description: "Redeem DAG Points for DAGGPT Credits or DAGCHAIN Gas Coins. Validates user has sufficient balance, deducts points, records transaction.",
+    auth: "Authenticated User",
+    body: '{ user_email, redeem_type: "daggpt"|"dagcoin", dag_points_amount }',
+    response: '{ success, points_spent, credits_received, new_balance }'
+  },
+
+  // ─── Referral (additional) ───
+  {
+    category: "Referral",
+    method: "POST",
+    path: "/api/referral/upgrade-reward",
+    description: "Award referral upgrade points to the upline when a referred user upgrades to DAG LIEUTENANT. Applies 20% LT bonus if upline is a Lieutenant.",
+    auth: "Internal",
+    body: '{ userId }',
+    response: '{ success, pointsAwarded, referrerId }'
+  },
+
+  // ─── Hall of Fame ───
+  {
+    category: "Hall of Fame",
+    method: "GET",
+    path: "/api/hall-of-fame",
+    description: "Fetch top performers for a given month across 3 categories: DAG Points earned, Sales commissions, and Referrals. Returns champion data with user profile and avatar.",
+    auth: "None",
+    body: "None",
+    response: '{ champions: { points: {...}, sales: {...}, referrals: {...} } }',
+    params: "?month=2026-02"
+  },
+
+  // ─── Leaderboard (full) ───
+  {
+    category: "Leaderboard",
+    method: "GET",
+    path: "/api/leaderboard",
+    description: "Fetch platform leaderboard. Supports type filter (points, sales, referrals), date range, and pagination. Returns ranked users with points_earned, points_burned, points_redeemed, commission totals.",
+    auth: "None",
+    body: "None",
+    response: '{ leaderboard: [{ rank, user_id, name, avatar, points_earned, points_burned, ... }], total, page }',
+    params: "?type=points&dateFrom=2026-01-01&dateTo=2026-12-31&page=1&limit=50"
+  },
+
+  // ─── Activity Logs ───
+  {
+    category: "Activity Logs",
+    method: "GET",
+    path: "/api/admin/logs",
+    description: "Fetch paginated activity logs with filters. Every platform event is captured automatically via DB triggers (user_signup, points_earned, sale_paid, rank_upgrade, etc.).",
     auth: "Admin",
-    body: '{ userId, newReferralCode }',
-    response: '{ success, message, userId, newReferrer: { id, name, email, referralCode } }'
+    body: "None",
+    response: '{ logs: [{ id, event_type, category, actor_name, actor_email, description, metadata, severity, created_at }], total, page, pages }',
+    params: "?page=1&limit=50&category=rewards&severity=info&search=keyword&from=2026-01-01&to=2026-12-31"
+  },
+  {
+    category: "Activity Logs",
+    method: "POST",
+    path: "/api/admin/logs",
+    description: "Manually insert an activity log entry. Used for API-level events not covered by DB triggers.",
+    auth: "Admin",
+    body: '{ event_type, category, description, severity?, metadata?, actor_email?, actor_name?, target_id?, ip_address? }',
+    response: '{ success, log: { id, ... } }'
   },
 
   // ─── Jobs ───
@@ -998,7 +1072,9 @@ export default function ApiDocsPage() {
     'Rewards': { icon: svgIcon(<><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></>, '#c026d3'), color: '#c026d3', bg: '#fae8ff' },
     'Jobs': { icon: svgIcon(<><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></>, '#475569'), color: '#475569', bg: '#f1f5f9' },
     'Upload': { icon: svgIcon(<><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></>, '#64748b'), color: '#64748b', bg: '#f1f5f9' },
-    'Social Tasks': { icon: svgIcon(<><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>, '#f59e0b'), color: '#f59e0b', bg: '#fef3c7' }
+    'Social Tasks': { icon: svgIcon(<><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>, '#f59e0b'), color: '#f59e0b', bg: '#fef3c7' },
+    'Hall of Fame': { icon: svgIcon(<><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></>, '#ca8a04'), color: '#ca8a04', bg: '#fef9c3' },
+    'Activity Logs': { icon: svgIcon(<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></>, '#1e293b'), color: '#1e293b', bg: '#f1f5f9' }
   };
 
   const copyToClipboard = (text, index) => {
@@ -1154,7 +1230,7 @@ export default function ApiDocsPage() {
                   {endpoints.map((ep, idx) => {
                     const mc = METHOD_COLORS[ep.method] || METHOD_COLORS.GET;
                     const ac = AUTH_COLORS[ep.auth] || AUTH_COLORS['None'];
-                    const uniqueKey = `${category}-${ep.method}-${ep.path}`;
+                    const uniqueKey = `${category}-${ep.method}-${ep.path}-${idx}`;
                     const isExpanded = expandedIndex === uniqueKey;
                     const globalIndex = API_ENDPOINTS.indexOf(ep);
 

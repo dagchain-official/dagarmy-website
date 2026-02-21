@@ -70,6 +70,15 @@ const dashboardItems = [
       </svg>
     ),
     label: "Leaderboard",
+  },
+  {
+    href: "/student-hall-of-fame",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M2 19h20v2H2zM2 17l4-10 6 6 4-8 4 12H2z"/>
+      </svg>
+    ),
+    label: "Hall of Fame",
     divider: true,
   },
   // Analytics Section
@@ -248,6 +257,105 @@ export default function DashboardNav2() {
           );
         })}
         
+        {/* Ecosystem Links */}
+        <div style={{ margin: '16px 0 8px', padding: '0 2px' }}>
+          <div style={{
+            fontSize: '10px',
+            fontWeight: '700',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#9ca3af',
+            marginBottom: '8px',
+            paddingLeft: '4px',
+          }}>
+            Explore Ecosystem
+          </div>
+          {/* DAGCHAIN */}
+          <a
+            href="https://dagchain.network"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 12px',
+              borderRadius: '10px',
+              marginBottom: '6px',
+              textDecoration: 'none',
+              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+              border: '1px solid rgba(99,102,241,0.2)',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(99,102,241,0.25)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            <div style={{
+              width: '28px', height: '28px', borderRadius: '7px',
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: '700', color: '#f1f5f9', letterSpacing: '-0.2px' }}>DAGCHAIN</div>
+              <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '1px' }}>dagchain.network</div>
+            </div>
+            <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" strokeLinecap="round" strokeLinejoin="round"/>
+              <polyline points="15 3 21 3 21 9" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+          {/* DAGGPT */}
+          <a
+            href="https://daggpt.network"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 12px',
+              borderRadius: '10px',
+              textDecoration: 'none',
+              background: 'linear-gradient(135deg, #0c1a0f 0%, #14291a 100%)',
+              border: '1px solid rgba(34,197,94,0.2)',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(34,197,94,0.2)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            <div style={{
+              width: '28px', height: '28px', borderRadius: '7px',
+              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5">
+                <path d="M12 2a10 10 0 1 0 10 10" strokeLinecap="round"/>
+                <path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 2l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M22 2v4h-4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: '700', color: '#f1f5f9', letterSpacing: '-0.2px' }}>DAGGPT</div>
+              <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '1px' }}>daggpt.network</div>
+            </div>
+            <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" strokeLinecap="round" strokeLinejoin="round"/>
+              <polyline points="15 3 21 3 21 9" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
         {/* Logout Item */}
         <div
           onClick={handleLogout}

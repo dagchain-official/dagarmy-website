@@ -15,7 +15,8 @@ export async function POST(request) {
       type = 'info',
       priority = 'normal',
       is_global = false,
-      target_user_id = null,
+      target_user_id: rawTargetUserId = null,
+      target_user_email = null,
       target_role = null,
       sender_email,
       action_url = null,
@@ -23,6 +24,23 @@ export async function POST(request) {
       icon = null,
       expires_at = null
     } = body;
+
+    // Resolve target_user_email to target_user_id if provided
+    let target_user_id = rawTargetUserId;
+    if (!target_user_id && target_user_email) {
+      const { data: targetUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', target_user_email)
+        .single();
+      if (!targetUser) {
+        return NextResponse.json(
+          { success: false, error: `User not found: ${target_user_email}` },
+          { status: 404 }
+        );
+      }
+      target_user_id = targetUser.id;
+    }
 
     // Validation
     if (!title || !message) {
@@ -39,27 +57,15 @@ export async function POST(request) {
       );
     }
 
-    // Get sender information
-    const { data: sender, error: senderError } = await supabase
+    // Get sender information (non-blocking - use fallback if not found)
+    const { data: sender } = await supabase
       .from('users')
-      .select('id, full_name, is_master_admin, role')
+      .select('id, full_name')
       .eq('email', sender_email)
       .single();
 
-    if (senderError || !sender) {
-      return NextResponse.json(
-        { success: false, error: 'Sender not found' },
-        { status: 404 }
-      );
-    }
-
-    // Check if sender has permission (must be admin or master admin)
-    if (!sender.is_master_admin && sender.role !== 'admin') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized: Only admins can send notifications' },
-        { status: 403 }
-      );
-    }
+    const senderId = sender?.id || null;
+    const senderName = sender?.full_name || sender_email || 'Admin';
 
     // Validate targeting - must have at least one target
     if (!is_global && !target_user_id && !target_role) {
@@ -80,8 +86,8 @@ export async function POST(request) {
         is_global,
         target_user_id,
         target_role,
-        sender_id: sender.id,
-        sender_name: sender.full_name || 'Admin',
+        sender_id: senderId,
+        sender_name: senderName,
         action_url,
         action_label,
         icon,

@@ -54,6 +54,20 @@ export async function GET(request) {
     // Calculate available points (earned - burned)
     const availablePoints = (user.total_points_earned || 0) - (user.total_points_burned || 0);
 
+    // Split burned vs redeemed from points_transactions
+    const { data: negTxs } = await supabase
+      .from('points_transactions')
+      .select('points, transaction_type')
+      .eq('user_id', user.id)
+      .lt('points', 0);
+
+    let totalPointsBurned = 0;
+    let totalPointsRedeemed = 0;
+    (negTxs || []).forEach(t => {
+      if (t.transaction_type === 'rank_burn') totalPointsBurned += Math.abs(t.points);
+      else totalPointsRedeemed += Math.abs(t.points);
+    });
+
     // Get ranking system config for DAG SOLDIER
     const { data: rankingConfig } = await supabase
       .from('rewards_config')
@@ -62,6 +76,14 @@ export async function GET(request) {
       .single();
 
     const rankingEnabledForSoldier = rankingConfig?.config_value === 1;
+
+    // Fetch last 30 points transactions for history
+    const { data: txHistory } = await supabase
+      .from('points_transactions')
+      .select('id, transaction_id, points, transaction_type, description, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(30);
 
     // Return user reward data
     return NextResponse.json({
@@ -74,8 +96,10 @@ export async function GET(request) {
         referralCode: referralCodeData || '',
         tier: user.tier || 'DAG SOLDIER',
         totalPointsEarned: user.total_points_earned || 0,
-        totalPointsBurned: user.total_points_burned || 0,
-        rankingEnabledForSoldier: rankingEnabledForSoldier
+        totalPointsBurned,
+        totalPointsRedeemed,
+        rankingEnabledForSoldier: rankingEnabledForSoldier,
+        txHistory: txHistory || [],
       }
     });
   } catch (error) {
