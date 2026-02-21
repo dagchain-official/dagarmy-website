@@ -17,6 +17,7 @@ export default function BecomeInstractor() {
                 width={841}
                 height={1003}
                 style={{ objectFit: 'cover', borderRadius: '12px' }}
+                unoptimized
               />
             </div>
           </div>

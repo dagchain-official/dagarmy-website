@@ -108,6 +108,7 @@ export default function About() {
                     height: '100%',
                     objectFit: 'cover'
                   }}
+                  unoptimized
                 />
               </div>
 
@@ -134,6 +135,7 @@ export default function About() {
                     height: '100%',
                     objectFit: 'cover'
                   }}
+                  unoptimized
                 />
               </div>
 
@@ -160,6 +162,7 @@ export default function About() {
                     height: '100%',
                     objectFit: 'cover'
                   }}
+                  unoptimized
                 />
               </div>
 
