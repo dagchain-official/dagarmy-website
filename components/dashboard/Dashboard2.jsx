@@ -282,6 +282,20 @@ export default function Dashboard2() {
                     </p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {!isLieutenant && (
+                        <a
+                            href="https://wa.me/message/DAGARMY"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 16px', borderRadius: '10px', border: '1.5px solid #e0e7ff', background: '#fff', color: '#4f46e5', fontSize: '13px', fontWeight: '700', textDecoration: 'none', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(99,102,241,0.08)', transition: 'all 0.2s ease' }}
+                            onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e0e7ff'; }}
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 4l3 12h14l3-12" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 4v8m-4-4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                            Upgrade to Lieutenant
+                            <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 6px', borderRadius: '5px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
+                        </a>
+                    )}
                     <div style={{
                         padding: '10px 18px', background: '#fff', borderRadius: '14px',
                         boxShadow: '0 1px 3px rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.06)',

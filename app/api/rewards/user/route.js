@@ -51,6 +51,40 @@ export async function GET(request) {
 
     const totalUsdEarned = commissions?.reduce((sum, c) => sum + parseFloat(c.commission_amount || 0), 0) || 0;
 
+    // Current month direct sales (for Discretionary + Lifestyle pools)
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    const { data: monthSales } = await supabase
+      .from('sales_commissions')
+      .select('sale_amount')
+      .eq('user_id', user.id)
+      .eq('commission_level', 1)
+      .gte('created_at', monthStart);
+    const monthDirectSales = monthSales?.reduce((sum, c) => sum + parseFloat(c.sale_amount || 0), 0) || 0;
+
+    // Current quarter direct sales (for Executive pool)
+    const quarterMonth = Math.floor(now.getMonth() / 3) * 3;
+    const quarterStart = new Date(now.getFullYear(), quarterMonth, 1).toISOString();
+    const { data: quarterSales } = await supabase
+      .from('sales_commissions')
+      .select('sale_amount')
+      .eq('user_id', user.id)
+      .eq('commission_level', 1)
+      .gte('created_at', quarterStart);
+    const quarterDirectSales = quarterSales?.reduce((sum, c) => sum + parseFloat(c.sale_amount || 0), 0) || 0;
+
+    // Incentive pool config
+    const { data: incentiveConfig } = await supabase
+      .from('rewards_config')
+      .select('config_key, config_value')
+      .in('config_key', [
+        'incentive_discretionary_pool_pct', 'incentive_discretionary_sales_threshold', 'incentive_discretionary_enabled',
+        'incentive_lifestyle_pool_pct', 'incentive_lifestyle_sales_threshold', 'incentive_lifestyle_enabled',
+        'incentive_executive_pool_pct', 'incentive_executive_sales_threshold', 'incentive_executive_enabled',
+      ]);
+    const ic = {};
+    (incentiveConfig || []).forEach(r => { ic[r.config_key] = r.config_value; });
+
     // Calculate available points (earned - burned)
     const availablePoints = (user.total_points_earned || 0) - (user.total_points_burned || 0);
 
@@ -100,6 +134,31 @@ export async function GET(request) {
         totalPointsRedeemed,
         rankingEnabledForSoldier: rankingEnabledForSoldier,
         txHistory: txHistory || [],
+        monthDirectSales,
+        quarterDirectSales,
+        incentivePools: {
+          discretionary: {
+            enabled: parseInt(ic.incentive_discretionary_enabled ?? 1) === 1,
+            poolPct: parseFloat(ic.incentive_discretionary_pool_pct ?? 3),
+            threshold: parseFloat(ic.incentive_discretionary_sales_threshold ?? 1000),
+            currentSales: monthDirectSales,
+            period: 'monthly',
+          },
+          lifestyle: {
+            enabled: parseInt(ic.incentive_lifestyle_enabled ?? 1) === 1,
+            poolPct: parseFloat(ic.incentive_lifestyle_pool_pct ?? 3),
+            threshold: parseFloat(ic.incentive_lifestyle_sales_threshold ?? 2000),
+            currentSales: monthDirectSales,
+            period: 'monthly',
+          },
+          executive: {
+            enabled: parseInt(ic.incentive_executive_enabled ?? 1) === 1,
+            poolPct: parseFloat(ic.incentive_executive_pool_pct ?? 2),
+            threshold: parseFloat(ic.incentive_executive_sales_threshold ?? 10000),
+            currentSales: quarterDirectSales,
+            period: 'quarterly',
+          },
+        },
       }
     });
   } catch (error) {

@@ -830,6 +830,16 @@ const API_ENDPOINTS = [
     body: '{ userId }',
     response: '{ success, pointsAwarded, referrerId }'
   },
+  {
+    category: "Referral",
+    method: "GET",
+    path: "/api/referral/tree",
+    description: "Returns the full referral downline tree for a user. Each node contains user details (name, email, tier, rank, join date) and their children recursively. Max depth: 6 levels.",
+    auth: "Authenticated User",
+    body: "None",
+    response: '{ success, tree: { id, name, email, tier, rank, joinedAt, depth, children: [...] }, meta: { totalDownline, maxDepth } }',
+    params: "?userId=<uuid>"
+  },
 
   // ─── Hall of Fame ───
   {

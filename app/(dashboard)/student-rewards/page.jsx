@@ -4,15 +4,14 @@ import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
 import { 
-  Award, Users, DollarSign, Copy, Check, 
-  ChevronRight, Trophy, Zap, Crown, ArrowUp, Flame, Shield, Lock, ShoppingCart
+  Award, DollarSign, 
+  ChevronRight, Trophy, Zap, Crown, ArrowUp, Flame, Shield, Lock
 } from "lucide-react";
 
 export default function StudentRewardsPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeMessage, setUpgradeMessage] = useState(null);
 
@@ -28,15 +27,16 @@ export default function StudentRewardsPage() {
   const [rewardData, setRewardData] = useState({
     currentRank: 'None',
     dagPoints: 0,
-    totalReferrals: 0,
     usdEarned: 0,
-    referralCode: '',
     tier: 'DAG SOLDIER',
     rankingEnabledForSoldier: false,
     totalPointsEarned: 0,
     totalPointsBurned: 0,
     totalPointsRedeemed: 0,
     txHistory: [],
+    monthDirectSales: 0,
+    quarterDirectSales: 0,
+    incentivePools: null,
   });
 
   useEffect(() => {
@@ -129,13 +129,6 @@ export default function StudentRewardsPage() {
     } finally {
       setRedeeming(false);
     }
-  };
-
-  const copyReferralCode = () => {
-    const referralLink = `https://dagarmy.network/signup?ref=${rewardData.referralCode}`;
-    navigator.clipboard.writeText(referralLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   const ranksList = [
@@ -248,7 +241,7 @@ export default function StudentRewardsPage() {
                     My Rewards
                   </h1>
                   <p style={{ fontSize: '14px', color: '#94a3b8', margin: '8px 0 0 52px', fontWeight: '450' }}>
-                    Track your DAG Points, referrals, and earnings
+                    Track your DAG Points, ranks, and earnings
                   </p>
                 </div>
                 {/* Action Buttons */}
@@ -260,11 +253,25 @@ export default function StudentRewardsPage() {
                     <ArrowUp size={15} />
                     Redeem DAG Points
                   </button>
+                  {rewardData.tier !== 'DAG_LIEUTENANT' && rewardData.tier !== 'DAG LIEUTENANT' && (
+                    <a
+                      href="https://wa.me/message/DAGARMY"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 18px', borderRadius: '10px', border: '1.5px solid #e0e7ff', background: '#fff', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.2px', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(99,102,241,0.08)' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e0e7ff'; }}
+                    >
+                      <Crown size={15} />
+                      Upgrade to DAG Lieutenant
+                      <span style={{ fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '6px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
+                    </a>
+                  )}
                 </div>
               </div>
 
               {/* Top Stats Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
 
                 {/* DAG Points */}
                 <BentoCard delay={50} style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none' }}>
@@ -296,19 +303,8 @@ export default function StudentRewardsPage() {
                   </div>
                 </BentoCard>
 
-                {/* Referrals */}
-                <BentoCard delay={150}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Referrals</span>
-                  </div>
-                  <p style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>
-                    {rewardData.totalReferrals}
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '8px' }}>Team members</p>
-                </BentoCard>
-
                 {/* USD Earned */}
-                <BentoCard delay={200}>
+                <BentoCard delay={150}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>USD Earned</span>
                   </div>
@@ -333,65 +329,112 @@ export default function StudentRewardsPage() {
                 ))}
               </div>
 
-              {/* Referral Code Bar */}
-              <BentoCard delay={250} style={{ marginBottom: '20px', padding: '20px 28px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Users size={20} color="#fff" />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Your Referral Code</p>
-                    <p style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace', letterSpacing: '3px', margin: 0 }}>
-                      {rewardData.referralCode}
-                    </p>
-                  </div>
-                  <button
-                    onClick={copyReferralCode}
-                    style={{
-                      background: copied ? '#10b981' : '#6366f1',
-                      border: 'none',
-                      borderRadius: '12px',
-                      padding: '12px 24px',
-                      color: '#fff',
-                      fontSize: '13px',
-                      fontWeight: '700',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      letterSpacing: '0.3px'
-                    }}
-                  >
-                    {copied ? <Check size={16} /> : <Copy size={16} />}
-                    {copied ? 'Copied!' : 'Copy Link'}
-                  </button>
-                </div>
-              </BentoCard>
-
-              {/* Sales DAG Points Info Card */}
-              <BentoCard delay={280} hover={false} style={{ marginBottom: '20px', padding: '20px 28px', background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)', border: '1.5px solid #a7f3d0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '13px', background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}>
-                    <ShoppingCart size={20} color="#fff" />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#065f46', margin: '0 0 4px' }}>Earn DAG Points on Every Sale</h3>
-                    <p style={{ fontSize: '12px', color: '#047857', margin: 0, lineHeight: 1.5 }}>
-                      You earn <strong>25 DAG Points per $</strong> on your own sales and on sales made by your direct referrals.
-                      {(rewardData.tier === 'DAG_LIEUTENANT' || rewardData.tier === 'DAG LIEUTENANT') && (
-                        <span> As a <strong>DAG LIEUTENANT</strong>, you receive a <strong>+20% bonus</strong> — earning <strong>30 pts/$</strong>.</span>
-                      )}
-                    </p>
-                  </div>
-                  <div style={{ flexShrink: 0, textAlign: 'right' }}>
-                    <div style={{ fontSize: '22px', fontWeight: '900', color: '#10b981', letterSpacing: '-1px' }}>
-                      {(rewardData.tier === 'DAG_LIEUTENANT' || rewardData.tier === 'DAG LIEUTENANT') ? '30' : '25'}
+              {/* ══ INCENTIVE POOLS SECTION ══ */}
+              {(() => {
+                const pools = rewardData.incentivePools;
+                if (!pools) return null;
+                const POOL_META = [
+                  {
+                    key: 'discretionary',
+                    title: 'Discretionary Incentive',
+                    subtitle: 'Monthly pool — resets every month',
+                    desc: 'Earn a share of the company revenue pool by hitting your monthly direct sales target.',
+                    color: '#10b981', bg: '#f0fdf4', border: '#a7f3d0', light: '#ecfdf5',
+                    iconPath: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
+                  },
+                  {
+                    key: 'lifestyle',
+                    title: 'Lifestyle Bonus',
+                    subtitle: 'Monthly pool — Car / Travel / Home',
+                    desc: 'Qualify for the lifestyle allowance pool covering car, travel, and home expenses.',
+                    color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe', light: '#f5f3ff',
+                    iconPath: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10',
+                  },
+                  {
+                    key: 'executive',
+                    title: 'Executive Performance Incentive',
+                    subtitle: 'Quarterly pool — resets every quarter',
+                    desc: 'Top performers who hit the quarterly sales target share the executive incentive pool.',
+                    color: '#d97706', bg: '#fefce8', border: '#fde68a', light: '#fffbeb',
+                    iconPath: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
+                  },
+                ];
+                return (
+                  <div style={{ marginBottom: '20px' }}>
+                    <div style={{ marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'linear-gradient(135deg,#d97706,#f59e0b)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                      </div>
+                      <div>
+                        <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>Incentive Pool Programs</h2>
+                        <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Monthly &amp; quarterly revenue pools — qualify by hitting direct sales targets</p>
+                      </div>
                     </div>
-                    <div style={{ fontSize: '10px', fontWeight: '700', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.5px' }}>pts per $</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+                      {POOL_META.map(pm => {
+                        const pool = pools[pm.key];
+                        if (!pool) return null;
+                        const pct = Math.min(100, pool.threshold > 0 ? (pool.currentSales / pool.threshold) * 100 : 0);
+                        const qualified = pool.currentSales >= pool.threshold;
+                        const remaining = Math.max(0, pool.threshold - pool.currentSales);
+                        return (
+                          <div key={pm.key} style={{ background: '#fff', borderRadius: '18px', border: `1.5px solid ${qualified ? pm.border : '#e2e8f0'}`, overflow: 'hidden', opacity: pool.enabled ? 1 : 0.55, transition: 'all 0.3s' }}>
+                            {/* Card header */}
+                            <div style={{ background: qualified ? pm.bg : '#f8fafc', padding: '18px 20px', borderBottom: `1px solid ${qualified ? pm.border : '#f1f5f9'}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: qualified ? pm.color : '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={pm.iconPath}/></svg>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a', lineHeight: 1.2 }}>{pm.title}</div>
+                                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>{pm.subtitle}</div>
+                                </div>
+                              </div>
+                              <div style={{ flexShrink: 0 }}>
+                                {!pool.enabled ? (
+                                  <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: '#f1f5f9', color: '#94a3b8', textTransform: 'uppercase' }}>Disabled</span>
+                                ) : qualified ? (
+                                  <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: pm.bg, color: pm.color, border: `1px solid ${pm.border}`, textTransform: 'uppercase' }}>Qualified</span>
+                                ) : (
+                                  <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: '#fef3c7', color: '#d97706', border: '1px solid #fde68a', textTransform: 'uppercase' }}>In Progress</span>
+                                )}
+                              </div>
+                            </div>
+                            {/* Progress */}
+                            <div style={{ padding: '16px 20px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                                <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                                  {pool.period === 'quarterly' ? 'This Quarter' : 'This Month'}
+                                </span>
+                                <span style={{ fontSize: '12px', fontWeight: '800', color: qualified ? pm.color : '#0f172a' }}>
+                                  ${pool.currentSales.toFixed(0)} <span style={{ fontWeight: '500', color: '#94a3b8', fontSize: '11px' }}>/ ${pool.threshold.toLocaleString()}</span>
+                                </span>
+                              </div>
+                              <div style={{ height: '6px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+                                <div style={{ height: '100%', borderRadius: '3px', background: qualified ? pm.color : `linear-gradient(90deg,${pm.color}80,${pm.color})`, width: `${pct}%`, transition: 'width 1s ease' }} />
+                              </div>
+                              {qualified ? (
+                                <div style={{ fontSize: '12px', color: pm.color, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                  You qualify for the {pool.poolPct}% revenue pool this {pool.period === 'quarterly' ? 'quarter' : 'month'}!
+                                </div>
+                              ) : (
+                                <div style={{ fontSize: '11px', color: '#64748b', lineHeight: 1.5 }}>
+                                  <strong style={{ color: '#0f172a' }}>${remaining.toFixed(0)} more</strong> in direct sales to qualify for the <strong style={{ color: pm.color }}>{pool.poolPct}%</strong> revenue pool
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {/* Info strip */}
+                    <div style={{ marginTop: '10px', padding: '12px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '12px', color: '#64748b', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#0f172a' }}>How it works:</strong> A percentage of company net revenue is pooled each period. Everyone who meets the direct sales threshold shares the pool equally. Sales targets reset fresh each month (or quarter for Executive).
+                    </div>
                   </div>
-                </div>
-              </BentoCard>
+                );
+              })()}
 
               {/* Rank Progression Section */}
               <BentoCard delay={300} hover={false} style={{ marginBottom: '20px', padding: '28px 32px' }}>

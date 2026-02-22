@@ -12,7 +12,7 @@ export default function AdminLayout({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState('');
   const [userName, setUserName] = useState('Admin');
-  const [sideCounts, setSideCounts] = useState({ users: null, courses: null, certifications: null, events: null, logs: null, notifications: null, assignments: null });
+  const [sideCounts, setSideCounts] = useState({ users: null, courses: null, certifications: null, events: null, logs: null, notifications: null, assignments: null, support_open: null });
 
   useEffect(() => {
     fetch('/api/admin/counts')
@@ -217,6 +217,16 @@ export default function AdminLayout({ children }) {
       ),
       path: "/admin/logs",
       badge: sideCounts.logs !== null ? String(sideCounts.logs) : '...'
+    },
+    {
+      title: "Support",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+      ),
+      path: "/admin/support",
+      badge: sideCounts.support_open !== null ? (sideCounts.support_open > 0 ? String(sideCounts.support_open) : null) : '...'
     },
     {
       title: "API Docs",
