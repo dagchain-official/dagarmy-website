@@ -47,7 +47,7 @@ export async function GET(request) {
       .from('sales_commissions')
       .select('commission_amount')
       .eq('user_id', user.id)
-      .eq('status', 'paid');
+      .eq('payment_status', 'paid');
 
     const totalUsdEarned = commissions?.reduce((sum, c) => sum + parseFloat(c.commission_amount || 0), 0) || 0;
 

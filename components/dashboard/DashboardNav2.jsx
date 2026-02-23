@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const dashboardItems = [
@@ -41,28 +41,7 @@ const dashboardItems = [
     ),
     label: "Assignments",
   },
-  {
-    href: "/student-rewards",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="8" r="6" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    label: "Rewards",
-  },
-  {
-    href: "/student-referral",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="9" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    label: "Referral",
-  },
+  { type: 'myteam' },
   {
     href: "/student-tasks",
     icon: (
@@ -140,10 +119,38 @@ const dashboardItems = [
   },
 ];
 
+const MY_TEAM_ITEMS = [
+  {
+    href: "/student-referral",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="9" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "Referral",
+  },
+  {
+    href: "/student-rewards",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="8" r="6" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "Rewards",
+  },
+];
+
 export default function DashboardNav2() {
   const pathname = usePathname();
   const router = useRouter();
   const { logout } = useAuth();
+
+  const isMyTeamActive = pathname === '/student-rewards' || pathname === '/student-referral';
+  const [myTeamOpen, setMyTeamOpen] = useState(isMyTeamActive);
 
   const handleLogout = async () => {
     await logout();
@@ -207,6 +214,117 @@ export default function DashboardNav2() {
       {/* Navigation Items */}
       <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'visible' }}>
         {dashboardItems.map((item, index) => {
+          if (item.type === 'myteam') {
+            return (
+              <React.Fragment key={index}>
+                {/* My Team parent row */}
+                <div
+                  onClick={() => setMyTeamOpen(o => !o)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '11px 14px',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    background: isMyTeamActive && !myTeamOpen ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : myTeamOpen ? '#f0f0ff' : 'transparent',
+                    color: isMyTeamActive && !myTeamOpen ? '#ffffff' : myTeamOpen ? '#6366f1' : '#6b7280',
+                    boxShadow: isMyTeamActive && !myTeamOpen ? '0 4px 12px rgba(99,102,241,0.25)' : 'none',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isMyTeamActive || myTeamOpen) {
+                      e.currentTarget.style.background = myTeamOpen ? '#e8e8ff' : '#f9fafb';
+                      e.currentTarget.style.color = myTeamOpen ? '#4f46e5' : '#111827';
+                      e.currentTarget.style.transform = 'translateX(2px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isMyTeamActive || myTeamOpen) {
+                      e.currentTarget.style.background = myTeamOpen ? '#f0f0ff' : 'transparent';
+                      e.currentTarget.style.color = myTeamOpen ? '#6366f1' : '#6b7280';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }
+                  }}
+                >
+                  {/* My Team icon */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="9" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <span style={{ fontSize: '14px', fontWeight: myTeamOpen || isMyTeamActive ? '600' : '500', letterSpacing: '-0.2px', flex: 1 }}>
+                    My Team
+                  </span>
+                  {/* Chevron */}
+                  <svg
+                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                    style={{ flexShrink: 0, transition: 'transform 0.2s ease', transform: myTeamOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                  >
+                    <polyline points="6 9 12 15 18 9" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+
+                {/* Sub-items */}
+                {myTeamOpen && (
+                  <div style={{ paddingLeft: '14px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {/* Vertical guide line */}
+                    <div style={{ position: 'relative' }}>
+                      <div style={{ position: 'absolute', left: '9px', top: '0', bottom: '0', width: '1.5px', background: '#e5e7eb', borderRadius: '2px' }} />
+                      {MY_TEAM_ITEMS.map((sub) => {
+                        const isSubActive = pathname === sub.href;
+                        return (
+                          <div
+                            key={sub.href}
+                            onClick={() => handleNavigation(sub.href, sub.label)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              padding: '9px 12px 9px 28px',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                              background: isSubActive ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : 'transparent',
+                              color: isSubActive ? '#ffffff' : '#6b7280',
+                              boxShadow: isSubActive ? '0 4px 12px rgba(99,102,241,0.25)' : 'none',
+                              transform: isSubActive ? 'translateX(2px)' : 'translateX(0)',
+                              position: 'relative',
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!isSubActive) {
+                                e.currentTarget.style.background = '#f9fafb';
+                                e.currentTarget.style.color = '#111827';
+                                e.currentTarget.style.transform = 'translateX(2px)';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!isSubActive) {
+                                e.currentTarget.style.background = 'transparent';
+                                e.currentTarget.style.color = '#6b7280';
+                                e.currentTarget.style.transform = 'translateX(0)';
+                              }
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '16px', height: '16px', flexShrink: 0 }}>
+                              {sub.icon}
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: isSubActive ? '600' : '500', letterSpacing: '-0.2px' }}>
+                              {sub.label}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          }
+
           const isActive = pathname === item.href;
           return (
             <React.Fragment key={index}>

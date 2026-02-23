@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { requirePermission } from '@/lib/admin-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -8,6 +9,8 @@ const supabase = createClient(
 
 // GET /api/admin/support/tickets?status=&priority=&category=&search=&page=&limit=
 export async function GET(request) {
+  const guard = await requirePermission(request, 'support.read');
+  if (guard) return guard;
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || '';

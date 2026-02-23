@@ -36,9 +36,22 @@ export default function UsersManagement3() {
   const [pointsForm, setPointsForm] = useState({ amount: '', reason: '' });
   const [addingPoints, setAddingPoints] = useState(false);
   const [pointsMsg, setPointsMsg] = useState(null);
+  const [usdForm, setUsdForm] = useState({ amount: '', reason: '' });
+  const [addingUsd, setAddingUsd] = useState(false);
+  const [usdMsg, setUsdMsg] = useState(null);
+  const [canManageRewards, setCanManageRewards] = useState(false);
 
   useEffect(() => {
     fetchUsers();
+    fetch('/api/admin/auth/me')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d) return;
+        const isMaster = d.admin?.is_master;
+        const hasRewards = (d.admin?.permissions || []).includes('rewards.write');
+        setCanManageRewards(isMaster || hasRewards);
+      })
+      .catch(() => {});
   }, []);
 
   const fetchUsers = async () => {
@@ -326,6 +339,40 @@ export default function UsersManagement3() {
       is_active: user.is_active !== undefined ? user.is_active : true,
       upline_referral_code: user.upline?.referral_code || ''
     });
+  };
+
+  const handleAddUsd = async () => {
+    const amount = parseFloat(usdForm.amount);
+    if (!amount || amount <= 0) {
+      setUsdMsg({ type: 'error', text: 'Enter a positive USD amount.' });
+      return;
+    }
+    if (!usdForm.reason.trim()) {
+      setUsdMsg({ type: 'error', text: 'Reason is required for audit trail.' });
+      return;
+    }
+    try {
+      setAddingUsd(true);
+      const res = await fetch('/api/admin/users/add-usd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: editUserModal.id,
+          amount,
+          reason: usdForm.reason.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      setUsdMsg({ type: 'success', text: `$${amount.toFixed(2)} credited. Commission ID: ${data.commission_id?.slice(0,8)}...` });
+      setUsdForm({ amount: '', reason: '' });
+      setEditUserModal(prev => prev ? { ...prev, usd_earned: data.new_balance_est } : prev);
+    } catch (e) {
+      setUsdMsg({ type: 'error', text: e.message });
+    } finally {
+      setAddingUsd(false);
+      setTimeout(() => setUsdMsg(null), 6000);
+    }
   };
 
   const handleAddPoints = async () => {
@@ -1964,7 +2011,7 @@ export default function UsersManagement3() {
 
             {/* Modal Footer */}
             {/* ── DAG Points Admin Grant ── */}
-            <div style={{ padding: '0 32px 28px' }}>
+            {canManageRewards && <div style={{ padding: '0 32px 28px' }}>
               <div style={{
                 borderRadius: '16px',
                 border: '1.5px solid #e0e7ff',
@@ -2064,7 +2111,112 @@ export default function UsersManagement3() {
                   </div>
                 )}
               </div>
-            </div>
+            </div>}
+
+            {/* ── USD Admin Credit ── */}
+            {canManageRewards && <div style={{ padding: '0 32px 28px' }}>
+              <div style={{
+                borderRadius: '16px',
+                border: '1.5px solid #a7f3d0',
+                background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+                overflow: 'hidden'
+              }}>
+                {/* Section header */}
+                <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #a7f3d0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: '800', color: '#065f46' }}>Admin USD Credit</div>
+                    <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '500' }}>
+                      Current balance: <strong>${(editUserModal?.usd_earned ?? 0).toFixed(2)}</strong> — credited instantly via sales_commissions trigger
+                    </div>
+                  </div>
+                </div>
+
+                {/* Form */}
+                <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: '140px 1fr auto', gap: '10px', alignItems: 'flex-end' }}>
+                  {/* Amount */}
+                  <div>
+                    <label style={{ fontSize: '11px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>
+                      Amount (USD)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="e.g. 25.00"
+                      value={usdForm.amount}
+                      onChange={e => setUsdForm(f => ({ ...f, amount: e.target.value }))}
+                      style={{
+                        width: '100%', padding: '10px 12px', borderRadius: '9px',
+                        border: '1.5px solid #a7f3d0', fontSize: '14px', fontWeight: '700',
+                        color: '#0f172a', outline: 'none', background: '#fff', boxSizing: 'border-box'
+                      }}
+                      onFocus={e => e.currentTarget.style.borderColor = '#10b981'}
+                      onBlur={e => e.currentTarget.style.borderColor = '#a7f3d0'}
+                    />
+                  </div>
+
+                  {/* Reason */}
+                  <div>
+                    <label style={{ fontSize: '11px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>
+                      Reason (required for audit log)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Manual commission adjustment for Feb 2026"
+                      value={usdForm.reason}
+                      onChange={e => setUsdForm(f => ({ ...f, reason: e.target.value }))}
+                      style={{
+                        width: '100%', padding: '10px 12px', borderRadius: '9px',
+                        border: '1.5px solid #a7f3d0', fontSize: '13px',
+                        color: '#0f172a', outline: 'none', background: '#fff', boxSizing: 'border-box'
+                      }}
+                      onFocus={e => e.currentTarget.style.borderColor = '#10b981'}
+                      onBlur={e => e.currentTarget.style.borderColor = '#a7f3d0'}
+                    />
+                  </div>
+
+                  {/* Submit */}
+                  <button
+                    onClick={handleAddUsd}
+                    disabled={addingUsd}
+                    style={{
+                      padding: '10px 20px', borderRadius: '9px', border: 'none',
+                      background: addingUsd ? '#6ee7b7' : 'linear-gradient(135deg, #10b981, #059669)',
+                      color: '#fff', fontSize: '13px', fontWeight: '700',
+                      cursor: addingUsd ? 'not-allowed' : 'pointer',
+                      whiteSpace: 'nowrap', boxShadow: addingUsd ? 'none' : '0 3px 10px rgba(16,185,129,0.35)',
+                      display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s'
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    {addingUsd ? 'Crediting...' : 'Credit USD'}
+                  </button>
+                </div>
+
+                {/* Feedback message */}
+                {usdMsg && (
+                  <div style={{
+                    margin: '0 20px 16px',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: usdMsg.type === 'success' ? '#f0fdf4' : '#fef2f2',
+                    border: `1px solid ${usdMsg.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
+                    color: usdMsg.type === 'success' ? '#166534' : '#991b1b',
+                    fontSize: '12px', fontWeight: '600',
+                    display: 'flex', alignItems: 'center', gap: '8px'
+                  }}>
+                    {usdMsg.type === 'success'
+                      ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    }
+                    {usdMsg.text}
+                  </div>
+                )}
+              </div>
+            </div>}
 
             <div style={{
               padding: '24px 32px',

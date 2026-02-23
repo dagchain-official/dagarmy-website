@@ -9,6 +9,18 @@ export default function Setttings() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [paymentSaving, setPaymentSaving] = useState(false);
+  const [paymentSaved, setPaymentSaved] = useState(false);
+  const [paymentError, setPaymentError] = useState('');
+  const [paymentForm, setPaymentForm] = useState({
+    preferred_payout: 'bank',
+    bep20_address: '',
+    bank_account_name: '',
+    bank_account_number: '',
+    bank_name: '',
+    bank_branch: '',
+    bank_swift_iban: '',
+  });
   
   // Randomly select default images
   const getRandomBanner = () => {
@@ -44,16 +56,46 @@ export default function Setttings() {
     website: ''
   });
 
+  const profileEmail = userProfile?.email;
+
   // Fetch user data from Supabase
   useEffect(() => {
     async function fetchUserData() {
-      if (!address) {
+      // Try to resolve identity: wallet address → userProfile email → localStorage
+      let fetchUrl = null;
+      if (address) {
+        fetchUrl = `/api/auth/user?wallet=${address}`;
+      } else if (profileEmail) {
+        fetchUrl = `/api/auth/user?email=${encodeURIComponent(profileEmail)}`;
+      } else {
+        // Fallback: read from localStorage (set during login for social users)
+        try {
+          const stored = localStorage.getItem('dagarmy_user');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed?.id) {
+              // We have the Supabase ID directly — fetch by id via email or set userData directly
+              // Use email if available, otherwise we already have the id
+              if (parsed.email) {
+                fetchUrl = `/api/auth/user?email=${encodeURIComponent(parsed.email)}`;
+              } else {
+                // Set userData directly from localStorage so handlePaymentSubmit gets the id
+                setUserData(parsed);
+                setLoading(false);
+                return;
+              }
+            }
+          }
+        } catch (_) {}
+      }
+
+      if (!fetchUrl) {
         setLoading(false);
         return;
       }
-      
+
       try {
-        const response = await fetch(`/api/auth/user?wallet=${address}`);
+        const response = await fetch(fetchUrl);
         const data = await response.json();
         
         if (data.user) {
@@ -77,6 +119,17 @@ export default function Setttings() {
             setBannerPreview(data.user.banner_url);
           }
 
+          // Load payment info
+          setPaymentForm({
+            preferred_payout: data.user.preferred_payout || 'bank',
+            bep20_address: data.user.bep20_address || '',
+            bank_account_name: data.user.bank_account_name || '',
+            bank_account_number: data.user.bank_account_number || '',
+            bank_name: data.user.bank_name || '',
+            bank_branch: data.user.bank_branch || '',
+            bank_swift_iban: data.user.bank_swift_iban || '',
+          });
+
           // Load social links from Supabase
           if (data.user.social_links) {
             setSocialLinks({
@@ -97,7 +150,7 @@ export default function Setttings() {
     }
     
     fetchUserData();
-  }, [address]);
+  }, [address, profileEmail]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -195,6 +248,44 @@ export default function Setttings() {
       alert('Failed to update social links');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handlePaymentChange = (e) => {
+    const { name, value } = e.target;
+    setPaymentForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+    setPaymentSaving(true);
+    setPaymentError('');
+    setPaymentSaved(false);
+    try {
+      let userId = userData?.id;
+      if (!userId) {
+        try {
+          const stored = localStorage.getItem('dagarmy_user');
+          if (stored) userId = JSON.parse(stored)?.id;
+        } catch (_) {}
+      }
+      if (!userId) { setPaymentError('User not found. Please refresh.'); return; }
+      const res = await fetch('/api/user/payment-info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, ...paymentForm }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPaymentSaved(true);
+        setTimeout(() => setPaymentSaved(false), 3000);
+      } else {
+        setPaymentError(data.error || 'Failed to save payment info');
+      }
+    } catch (err) {
+      setPaymentError('Network error. Please try again.');
+    } finally {
+      setPaymentSaving(false);
     }
   };
 
@@ -1034,6 +1125,141 @@ export default function Setttings() {
             </div>
           </div>
         </div>
+
+        {/* ── Payment & Withdrawal Section ── */}
+        <div style={{ marginTop: '32px' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+            {/* Header */}
+            <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="2" y1="10" x2="22" y2="10" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1f36', margin: 0 }}>Payment &amp; Withdrawal</h2>
+                <p style={{ fontSize: '13px', color: '#6b7280', margin: '3px 0 0' }}>Choose how you want to receive your USD rewards. Minimum withdrawal: $10.</p>
+              </div>
+            </div>
+
+            <form onSubmit={handlePaymentSubmit} style={{ padding: '28px' }}>
+              {/* Payout Method Toggle */}
+              <div style={{ marginBottom: '28px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '12px' }}>
+                  Preferred Payout Method
+                </label>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  {[
+                    { value: 'bank', label: 'Bank Transfer', desc: 'Credited on 10th of following month', icon: 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6zm0 4h18' },
+                    { value: 'crypto', label: 'USDT (BEP20)', desc: 'Sent within 24hrs of approval', icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' },
+                  ].map(opt => (
+                    <label key={opt.value} style={{
+                      flex: 1, display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '16px',
+                      border: `2px solid ${paymentForm.preferred_payout === opt.value ? '#10b981' : '#e5e7eb'}`,
+                      borderRadius: '12px', cursor: 'pointer',
+                      background: paymentForm.preferred_payout === opt.value ? '#f0fdf4' : '#fff',
+                      transition: 'all 0.2s',
+                    }}>
+                      <input type="radio" name="preferred_payout" value={opt.value}
+                        checked={paymentForm.preferred_payout === opt.value}
+                        onChange={handlePaymentChange}
+                        style={{ marginTop: '2px', accentColor: '#10b981' }}
+                      />
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#1a1f36', marginBottom: '3px' }}>{opt.label}</div>
+                        <div style={{ fontSize: '12px', color: '#6b7280' }}>{opt.desc}</div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Crypto Fields */}
+              {paymentForm.preferred_payout === 'crypto' && (
+                <div style={{ marginBottom: '24px', padding: '20px', background: '#f0fdf4', borderRadius: '12px', border: '1px solid #a7f3d0' }}>
+                  <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#065f46', margin: '0 0 16px' }}>BEP20 Wallet Address</h3>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+                      USDT BEP20 Address <span style={{ color: '#ef4444' }}>*</span>
+                    </label>
+                    <input
+                      type="text" name="bep20_address" value={paymentForm.bep20_address}
+                      onChange={handlePaymentChange} placeholder="0x..."
+                      style={{ width: '100%', padding: '10px 14px', border: '1px solid #a7f3d0', borderRadius: '8px', fontSize: '13px', fontFamily: 'monospace', background: '#fff', outline: 'none', boxSizing: 'border-box' }}
+                      onFocus={e => e.target.style.borderColor = '#10b981'}
+                      onBlur={e => e.target.style.borderColor = '#a7f3d0'}
+                    />
+                    <p style={{ fontSize: '11px', color: '#047857', marginTop: '6px' }}>
+                      Only BEP20 (BSC) network addresses are accepted. Sending to wrong network will result in permanent loss.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Bank Fields */}
+              {paymentForm.preferred_payout === 'bank' && (
+                <div style={{ marginBottom: '24px', padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#1a1f36', margin: '0 0 16px' }}>Bank Account Details</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    {[
+                      { name: 'bank_account_name', label: 'Account Holder Name', placeholder: 'As per bank records', required: true, full: true },
+                      { name: 'bank_account_number', label: 'Account Number', placeholder: 'Enter account number', required: true },
+                      { name: 'bank_name', label: 'Bank Name', placeholder: 'e.g. HDFC Bank', required: true },
+                      { name: 'bank_branch', label: 'Branch / Location', placeholder: 'e.g. Mumbai, Andheri West', required: false },
+                      { name: 'bank_swift_iban', label: 'SWIFT / IBAN Code', placeholder: 'e.g. HDFCINBB or GB29NWBK...', required: false },
+                    ].map(field => (
+                      <div key={field.name} style={{ gridColumn: field.full ? '1 / -1' : 'auto' }}>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+                          {field.label} {field.required && <span style={{ color: '#ef4444' }}>*</span>}
+                        </label>
+                        <input
+                          type="text" name={field.name} value={paymentForm[field.name]}
+                          onChange={handlePaymentChange} placeholder={field.placeholder}
+                          style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '13px', background: '#fff', outline: 'none', boxSizing: 'border-box' }}
+                          onFocus={e => e.target.style.borderColor = '#6366f1'}
+                          onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Error / Success */}
+              {paymentError && (
+                <div style={{ padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', marginBottom: '16px', fontSize: '13px', color: '#dc2626', fontWeight: '500' }}>
+                  {paymentError}
+                </div>
+              )}
+              {paymentSaved && (
+                <div style={{ padding: '12px 16px', background: '#f0fdf4', border: '1px solid #a7f3d0', borderRadius: '8px', marginBottom: '16px', fontSize: '13px', color: '#065f46', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Payment info saved successfully.
+                </div>
+              )}
+
+              {/* Save Button */}
+              <button
+                type="submit" disabled={paymentSaving}
+                style={{
+                  padding: '12px 32px', background: paymentSaving ? '#d1d5db' : '#10b981',
+                  color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px',
+                  fontWeight: '600', cursor: paymentSaving ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px',
+                }}
+                onMouseEnter={e => { if (!paymentSaving) e.currentTarget.style.background = '#059669'; }}
+                onMouseLeave={e => { if (!paymentSaving) e.currentTarget.style.background = '#10b981'; }}
+              >
+                {paymentSaving ? 'Saving...' : 'Save Payment Info'}
+                {!paymentSaving && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+
       </div>
     </div>
   );

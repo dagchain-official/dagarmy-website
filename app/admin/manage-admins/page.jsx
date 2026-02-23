@@ -24,6 +24,9 @@ export default function ManageAdminsPage() {
   // Edit admin state
   const [editingAdmin, setEditingAdmin] = useState(null);
   const [editPermissions, setEditPermissions] = useState({});
+  const [editRoleName, setEditRoleName] = useState('');
+  const [editDeptEmail, setEditDeptEmail] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
@@ -161,6 +164,61 @@ export default function ManageAdminsPage() {
       setTimeout(() => setNotification(null), 3000);
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleStartEdit = (admin) => {
+    setEditingAdmin(admin);
+    setEditRoleName(admin.role_name || admin.role || 'Admin');
+    setEditDeptEmail(admin.department_email || '');
+    const perms = {};
+    Object.keys(ADMIN_MODULES).forEach(moduleKey => {
+      perms[moduleKey] = {
+        read: (admin.permissions || []).includes(`${moduleKey}.read`),
+        write: (admin.permissions || []).includes(`${moduleKey}.write`),
+        overwrite: (admin.permissions || []).includes(`${moduleKey}.overwrite`),
+      };
+    });
+    setEditPermissions(perms);
+  };
+
+  const handleEditPermissionToggle = (moduleKey, action) => {
+    setEditPermissions(prev => ({
+      ...prev,
+      [moduleKey]: { ...prev[moduleKey], [action]: !prev[moduleKey][action] }
+    }));
+  };
+
+  const handleEditSave = async () => {
+    if (!editingAdmin) return;
+    const permArray = getPermissionArray(editPermissions);
+    setSavingEdit(true);
+    try {
+      const res = await fetch('/api/admin/roles', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: editingAdmin.user_id,
+          role_name: editRoleName,
+          permissions: permArray,
+          department_email: editDeptEmail || null,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNotification({ type: 'success', message: 'Admin permissions updated successfully' });
+        setTimeout(() => setNotification(null), 3000);
+        setEditingAdmin(null);
+        fetchAdmins();
+      } else {
+        setNotification({ type: 'error', message: data.error || 'Failed to update' });
+        setTimeout(() => setNotification(null), 3000);
+      }
+    } catch (err) {
+      setNotification({ type: 'error', message: 'An error occurred' });
+      setTimeout(() => setNotification(null), 3000);
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -783,8 +841,8 @@ export default function ManageAdminsPage() {
             ) : (
               <div style={{ display: 'grid', gap: '12px' }}>
                 {admins.map((admin, index) => (
+                  <div key={admin.id}>
                   <div
-                    key={admin.id}
                     style={{
                       padding: '20px 24px',
                       background: '#f8fafc',
@@ -854,11 +912,11 @@ export default function ManageAdminsPage() {
                     </div>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <button
-                        onClick={() => alert('Edit functionality coming soon')}
+                        onClick={() => handleStartEdit(admin)}
                         style={{
                           padding: '9px 16px',
-                          background: '#fff',
-                          border: '1px solid #e2e8f0',
+                          background: editingAdmin?.user_id === admin.user_id ? '#ede9fe' : '#fff',
+                          border: `1px solid ${editingAdmin?.user_id === admin.user_id ? '#c7d2fe' : '#e2e8f0'}`,
                           borderRadius: '10px',
                           cursor: 'pointer',
                           display: 'flex',
@@ -866,7 +924,7 @@ export default function ManageAdminsPage() {
                           gap: '6px',
                           fontSize: '13px',
                           fontWeight: '600',
-                          color: '#475569',
+                          color: editingAdmin?.user_id === admin.user_id ? '#6366f1' : '#475569',
                           transition: 'all 0.2s'
                         }}
                         onMouseEnter={(e) => {
@@ -874,12 +932,14 @@ export default function ManageAdminsPage() {
                           e.currentTarget.style.color = '#6366f1';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.color = '#475569';
+                          if (editingAdmin?.user_id !== admin.user_id) {
+                            e.currentTarget.style.borderColor = '#e2e8f0';
+                            e.currentTarget.style.color = '#475569';
+                          }
                         }}
                       >
                         <Edit3 size={14} />
-                        Edit
+                        {editingAdmin?.user_id === admin.user_id ? 'Editing...' : 'Edit'}
                       </button>
                       <button
                         onClick={() => handleRevokeAccess(admin.user_id)}
@@ -910,6 +970,54 @@ export default function ManageAdminsPage() {
                         Revoke
                       </button>
                     </div>
+                  </div>
+
+                  {/* Inline Edit Panel */}
+                  {editingAdmin?.user_id === admin.user_id && (
+                    <div style={{ marginTop: '16px', padding: '24px', background: '#fafbff', borderRadius: '14px', border: '1px solid #c7d2fe' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                        <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Edit Permissions</h4>
+                        <button onClick={() => setEditingAdmin(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', padding: '4px' }}>
+                          <X size={18} />
+                        </button>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Role Title</label>
+                          <input value={editRoleName} onChange={e => setEditRoleName(e.target.value)} style={{ width: '100%', padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} onFocus={e => e.target.style.borderColor = '#6366f1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Department Email</label>
+                          <input value={editDeptEmail} onChange={e => setEditDeptEmail(e.target.value)} placeholder="hr@dagchain.network" style={{ width: '100%', padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} onFocus={e => e.target.style.borderColor = '#6366f1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
+                        </div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                        {Object.entries(ADMIN_MODULES).map(([moduleKey, module]) => {
+                          const hasAny = editPermissions[moduleKey]?.read || editPermissions[moduleKey]?.write || editPermissions[moduleKey]?.overwrite;
+                          return (
+                            <div key={moduleKey} style={{ background: hasAny ? '#f0f4ff' : '#fff', borderRadius: '10px', padding: '14px', border: hasAny ? '1px solid #c7d2fe' : '1px solid #e2e8f0' }}>
+                              <div style={{ fontSize: '13px', fontWeight: '700', color: hasAny ? '#4338ca' : '#0f172a', marginBottom: '10px' }}>{module.label}</div>
+                              <div style={{ display: 'flex', gap: '14px' }}>
+                                {[{ key: 'read', label: 'Read', color: '#10b981' }, { key: 'write', label: 'Write', color: '#3b82f6' }, { key: 'overwrite', label: 'Delete', color: '#ef4444' }].map(({ key, label, color }) => (
+                                  <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <ToggleSwitch checked={editPermissions[moduleKey]?.[key] || false} onChange={() => handleEditPermissionToggle(moduleKey, key)} color={color} />
+                                    <span style={{ fontSize: '11px', fontWeight: '600', color: editPermissions[moduleKey]?.[key] ? color : '#94a3b8' }}>{label}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                        <button onClick={() => setEditingAdmin(null)} style={{ padding: '10px 20px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '600', color: '#64748b', cursor: 'pointer' }}>Cancel</button>
+                        <button onClick={handleEditSave} disabled={savingEdit} style={{ padding: '10px 24px', background: savingEdit ? '#94a3b8' : 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: savingEdit ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Check size={14} />
+                          {savingEdit ? 'Saving...' : 'Save Changes'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   </div>
                 ))}
               </div>
