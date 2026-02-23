@@ -287,6 +287,15 @@ const API_ENDPOINTS = [
   },
   {
     category: "Admin Users",
+    method: "POST",
+    path: "/api/admin/users/add-usd",
+    description: "Manually credit USD commission to a specific user. Inserts a paid sales_commissions row which fires the existing trigger to update users.usd_earned in real-time. Reflected instantly on the student Rewards page.",
+    auth: "Master Admin",
+    body: '{ userId, amount, reason }',
+    response: '{ success, commission_id, amount, new_balance_est }'
+  },
+  {
+    category: "Admin Users",
     method: "GET",
     path: "/api/admin/points-ledger",
     description: "Fetch all points transactions across all users with user details. Supports search by user name, email, transaction type, or transaction ID.",
@@ -820,6 +829,74 @@ const API_ENDPOINTS = [
     response: '{ success, points_spent, credits_received, new_balance }'
   },
 
+  // ─── Withdrawals ───
+  {
+    category: "Rewards",
+    method: "GET",
+    path: "/api/rewards/withdraw",
+    description: "Get all withdrawal requests for a user.",
+    auth: "Authenticated User",
+    body: "None",
+    response: '{ success, requests: [...] }',
+    params: "?userId=<uuid>"
+  },
+  {
+    category: "Rewards",
+    method: "POST",
+    path: "/api/rewards/withdraw",
+    description: "Submit a USD withdrawal request for a given reward month. Minimum $10. One request per user per month. Snapshots bank/BEP20 details at time of request.",
+    auth: "Authenticated User",
+    body: '{ userId, rewardMonth: "YYYY-MM", amountUsd }',
+    response: '{ success, request, message }'
+  },
+  {
+    category: "Rewards",
+    method: "GET",
+    path: "/api/admin/withdrawals",
+    description: "Admin: List all withdrawal requests with user details. Filterable by status and month.",
+    auth: "Admin",
+    body: "None",
+    response: '{ success, requests: [...], stats: { total, pending, approved, processing, paid, rejected, totalUsd } }',
+    params: "?status=pending&month=2026-02"
+  },
+  {
+    category: "Rewards",
+    method: "GET",
+    path: "/api/admin/withdrawals/[id]",
+    description: "Admin: Get a single withdrawal request with full user and payment details.",
+    auth: "Admin",
+    body: "None",
+    response: '{ success, request }'
+  },
+  {
+    category: "Rewards",
+    method: "PATCH",
+    path: "/api/admin/withdrawals/[id]",
+    description: "Admin: Update withdrawal request status. Valid transitions: pending -> approved -> processing -> paid | rejected.",
+    auth: "Admin",
+    body: '{ status: "approved"|"processing"|"paid"|"rejected", adminNote? }',
+    response: '{ success, request }'
+  },
+  {
+    category: "Users",
+    method: "GET",
+    path: "/api/user/payment-info",
+    description: "Get a user's saved payment info (bank details + BEP20 address + preferred payout method).",
+    auth: "Authenticated User",
+    body: "None",
+    response: '{ success, paymentInfo: { preferred_payout, bep20_address, bank_account_name, bank_account_number, bank_name, bank_branch, bank_swift_iban } }',
+    params: "?userId=<uuid>"
+  },
+  {
+    category: "Users",
+    method: "POST",
+    path: "/api/user/payment-info",
+    description: "Save or update a user's payment info. Validates required fields based on preferred_payout method.",
+    auth: "Authenticated User",
+    body: '{ userId, preferred_payout: "bank"|"crypto", bep20_address?, bank_account_name?, bank_account_number?, bank_name?, bank_branch?, bank_swift_iban? }',
+    response: '{ success, paymentInfo }'
+  },
+
   // ─── Referral (additional) ───
   {
     category: "Referral",
@@ -985,6 +1062,107 @@ const API_ENDPOINTS = [
     body: "None",
     response: '{ success, tasks: [...], stats: { total_tasks, completed, pending, available, total_points_earned }, is_lieutenant, lt_bonus_rate }',
     params: "?user_email=user@example.com"
+  },
+
+  // ─── Admin Auth Me ───
+  {
+    category: "Admin Auth",
+    method: "GET",
+    path: "/api/admin/auth/me",
+    description: "Returns the current admin's identity and permissions from the session cookie. Used by SubAdminLayout to build dynamic menus.",
+    auth: "admin_session cookie",
+    response: '{ success, admin: { id, email, full_name, is_master_admin, role_name, permissions[], department_email } }'
+  },
+
+  // ─── Admin Email ───
+  {
+    category: "Admin Email",
+    method: "GET",
+    path: "/api/admin/email/folders",
+    description: "Returns all IMAP mailbox folders for the current admin's department email account.",
+    auth: "admin_session cookie (notifications.read)",
+    response: '{ folders: [{ path, name, delimiter, flags, specialUse }], accountEmail }'
+  },
+  {
+    category: "Admin Email",
+    method: "GET",
+    path: "/api/admin/email/messages",
+    description: "Returns paginated message list from a mailbox folder.",
+    auth: "admin_session cookie (notifications.read)",
+    params: "?folder=INBOX&page=1&limit=25",
+    response: '{ messages: [{ uid, seq, subject, from, to, date, flags, isRead, isStarred }], total, page, limit, folder, accountEmail }'
+  },
+  {
+    category: "Admin Email",
+    method: "GET",
+    path: "/api/admin/email/message",
+    description: "Fetches a single full message with HTML body. Marks it as read automatically.",
+    auth: "admin_session cookie (notifications.read)",
+    params: "?folder=INBOX&uid=123",
+    response: '{ message: { uid, subject, from, to, cc, date, flags, isRead, html, text }, accountEmail }'
+  },
+  {
+    category: "Admin Email",
+    method: "PATCH",
+    path: "/api/admin/email/message",
+    description: "Update message flags or move to folder. Actions: read, unread, star, unstar, move.",
+    auth: "admin_session cookie (notifications.write)",
+    body: '{ folder, uid, action: "read"|"unread"|"star"|"unstar"|"move", targetFolder? }',
+    response: '{ success: true }'
+  },
+  {
+    category: "Admin Email",
+    method: "DELETE",
+    path: "/api/admin/email/message",
+    description: "Moves message to Trash folder. Falls back to delete flag if no Trash folder found.",
+    auth: "admin_session cookie (notifications.write)",
+    params: "?folder=INBOX&uid=123",
+    response: '{ success: true }'
+  },
+  {
+    category: "Admin Email",
+    method: "POST",
+    path: "/api/admin/email/send",
+    description: "Sends an email from the current admin's department mailbox via SMTP. Logs to email_sent_log.",
+    auth: "admin_session cookie (notifications.write)",
+    body: '{ to: string|string[], cc?, bcc?, subject, html, text?, replyTo? }',
+    response: '{ success: true, messageId }'
+  },
+  {
+    category: "Admin Email",
+    method: "GET",
+    path: "/api/admin/email/drafts",
+    description: "List all saved drafts for the current admin.",
+    auth: "admin_session cookie (notifications.read)",
+    response: '{ drafts: [{ id, admin_id, account_email, to_addresses, cc_addresses, subject, html_body, updated_at }] }'
+  },
+  {
+    category: "Admin Email",
+    method: "POST",
+    path: "/api/admin/email/drafts",
+    description: "Save a new email draft.",
+    auth: "admin_session cookie (notifications.write)",
+    body: '{ to_addresses, cc_addresses, bcc_addresses, subject, html_body }',
+    response: '{ draft: { id, ... } }'
+  },
+  {
+    category: "Admin Email",
+    method: "PUT",
+    path: "/api/admin/email/drafts",
+    description: "Update an existing draft.",
+    auth: "admin_session cookie (notifications.write)",
+    params: "?id=<uuid>",
+    body: '{ to_addresses, cc_addresses, bcc_addresses, subject, html_body }',
+    response: '{ draft: { id, ... } }'
+  },
+  {
+    category: "Admin Email",
+    method: "DELETE",
+    path: "/api/admin/email/drafts",
+    description: "Delete a saved draft.",
+    auth: "admin_session cookie (notifications.write)",
+    params: "?id=<uuid>",
+    response: '{ success: true }'
   }
 ];
 
@@ -1077,6 +1255,7 @@ export default function ApiDocsPage() {
     'Blog': { icon: svgIcon(<><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></>, '#0d9488'), color: '#0d9488', bg: '#ccfbf1' },
     'Emails': { icon: svgIcon(<><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>, '#e11d48'), color: '#e11d48', bg: '#ffe4e6' },
     'Leaderboard': { icon: svgIcon(<><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>, '#ca8a04'), color: '#ca8a04', bg: '#fef9c3' },
+    'Admin Email': { icon: svgIcon(<><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>, '#0d9488'), color: '#0d9488', bg: '#f0fdfa' },
     'Notifications': { icon: svgIcon(<><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></>, '#9333ea'), color: '#9333ea', bg: '#f3e8ff' },
     'Referral': { icon: svgIcon(<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></>, '#0284c7'), color: '#0284c7', bg: '#e0f2fe' },
     'Rewards': { icon: svgIcon(<><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></>, '#c026d3'), color: '#c026d3', bg: '#fae8ff' },

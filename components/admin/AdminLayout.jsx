@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { API_ENDPOINT_COUNT } from "@/data/api-endpoint-count";
+import SubAdminLayout from "@/components/admin/SubAdminLayout";
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
@@ -10,6 +11,7 @@ export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMasterAdmin, setIsMasterAdmin] = useState(null);
   const [userEmail, setUserEmail] = useState('');
   const [userName, setUserName] = useState('Admin');
   const [sideCounts, setSideCounts] = useState({ users: null, courses: null, certifications: null, events: null, logs: null, notifications: null, assignments: null, support_open: null });
@@ -27,25 +29,29 @@ export default function AdminLayout({ children }) {
       const userRole = localStorage.getItem('dagarmy_role');
       const authenticated = localStorage.getItem('dagarmy_authenticated');
       const storedUser = localStorage.getItem('dagarmy_user');
+      const adminUser = localStorage.getItem('admin_user');
       
       if (!authenticated || authenticated !== 'true' || userRole !== 'admin') {
-        // Not authenticated or not admin, redirect to home page
         router.push('/');
         return;
       }
       
-      // Get user data
-      if (storedUser) {
+      // Determine master admin status from either storage key
+      let masterAdmin = false;
+      const userSrc = adminUser || storedUser;
+      if (userSrc) {
         try {
-          const user = JSON.parse(storedUser);
+          const user = JSON.parse(userSrc);
           setUserEmail(user.email || 'admin@dagarmy.network');
           setUserName(user.full_name || 'Admin');
+          masterAdmin = !!(user.is_master_admin);
         } catch (e) {
           setUserEmail('admin@dagarmy.network');
           setUserName('Admin');
         }
       }
-      
+
+      setIsMasterAdmin(masterAdmin);
       setIsAuthenticated(true);
       setIsLoading(false);
     };
@@ -80,6 +86,11 @@ export default function AdminLayout({ children }) {
 
   if (!isAuthenticated) {
     return null;
+  }
+
+  // Sub-admins get their own permission-aware layout
+  if (isMasterAdmin === false) {
+    return <SubAdminLayout>{children}</SubAdminLayout>;
   }
 
   const menuItems = [
@@ -227,6 +238,28 @@ export default function AdminLayout({ children }) {
       ),
       path: "/admin/support",
       badge: sideCounts.support_open !== null ? (sideCounts.support_open > 0 ? String(sideCounts.support_open) : null) : '...'
+    },
+    {
+      title: "Withdrawals",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="2" y="5" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <line x1="2" y1="10" x2="22" y2="10" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      path: "/admin/withdrawals",
+      badge: sideCounts.pending_withdrawals !== null ? (sideCounts.pending_withdrawals > 0 ? String(sideCounts.pending_withdrawals) : null) : null
+    },
+    {
+      title: "Email",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      ),
+      path: "/admin/email",
+      badge: null
     },
     {
       title: "API Docs",

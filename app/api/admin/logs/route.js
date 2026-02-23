@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { requirePermission } from '@/lib/admin-auth';
 
 /**
  * GET /api/admin/logs

@@ -142,7 +142,7 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     const body = await request.json();
-    const { user_id, role_name, permissions, is_active } = body;
+    const { user_id, role_name, permissions, is_active, department_email } = body;
 
     if (!user_id) {
       return NextResponse.json(
@@ -155,6 +155,7 @@ export async function PUT(request) {
     if (role_name !== undefined) updateData.role_name = role_name;
     if (permissions !== undefined) updateData.permissions = permissions;
     if (is_active !== undefined) updateData.is_active = is_active;
+    if (department_email !== undefined) updateData.department_email = department_email;
     updateData.updated_at = new Date().toISOString();
 
     const { data, error } = await supabase

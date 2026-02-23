@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
+import { getAdminSession, requireMasterAdmin } from '@/lib/admin-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -23,31 +24,22 @@ function generateTemporaryPassword() {
 }
 
 export async function POST(request) {
+  // Always enforce master admin via session cookie — no bypass
+  const guard = await requireMasterAdmin(request);
+  if (guard) return guard;
+
+  const session = await getAdminSession(request);
+
   try {
     const body = await request.json();
-    const { email, full_name, role_name, permissions, created_by_id } = body;
+    const { email, full_name, role_name, permissions, department_email } = body;
+    const created_by_id = session?.user?.id || null;
 
     if (!email || !full_name) {
       return NextResponse.json(
         { error: 'Email and full name are required' },
         { status: 400 }
       );
-    }
-
-    // Verify that the requester is a master admin
-    if (created_by_id) {
-      const { data: creator, error: creatorError } = await supabase
-        .from('users')
-        .select('is_master_admin')
-        .eq('id', created_by_id)
-        .single();
-
-      if (!creator || !creator.is_master_admin || creatorError) {
-        return NextResponse.json(
-          { error: 'Only master admins can create admin accounts' },
-          { status: 403 }
-        );
-      }
     }
 
     // Check if user already exists
@@ -104,6 +96,7 @@ export async function POST(request) {
           role_name: role_name || 'Admin',
           permissions: permissions,
           assigned_by: created_by_id,
+          department_email: department_email || null,
           is_active: true
         });
 

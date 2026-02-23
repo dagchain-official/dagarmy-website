@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { requirePermission } from '@/lib/admin-auth';
 
 /**
  * POST /api/admin/users/add-points
@@ -10,6 +11,8 @@ import { NextResponse } from 'next/server';
  * Body: { userId, amount (integer, non-zero), reason (string) }
  */
 export async function POST(request) {
+  const guard = await requirePermission(request, 'rewards.write');
+  if (guard) return guard;
   try {
     const { userId, amount, reason } = await request.json();
 

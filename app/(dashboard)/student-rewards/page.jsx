@@ -18,6 +18,19 @@ export default function StudentRewardsPage() {
   // Burn modal
   const [showBurnModal, setShowBurnModal] = useState(false);
 
+  // Withdrawal modal
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [withdrawMessage, setWithdrawMessage] = useState(null);
+  const [paymentInfo, setPaymentInfo] = useState(null);
+  const [withdrawHistory, setWithdrawHistory] = useState([]);
+  const [withdrawMonth, setWithdrawMonth] = useState(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [withdrawPayoutMethod, setWithdrawPayoutMethod] = useState('bank');
+
   // Redeem modal
   const [showRedeemModal, setShowRedeemModal] = useState(false);
   const [redeemType, setRedeemType] = useState('daggpt'); // 'daggpt' | 'dagcoin'
@@ -46,10 +59,60 @@ export default function StudentRewardsPage() {
       const userData = JSON.parse(userStr);
       setUser(userData);
       fetchRewardData(userData.email);
+      fetchPaymentInfo(userData.id);
+      fetchWithdrawHistory(userData.id);
     } else {
       setLoading(false);
     }
   }, []);
+
+  const fetchPaymentInfo = async (userId) => {
+    try {
+      const res = await fetch(`/api/user/payment-info?userId=${userId}`);
+      const data = await res.json();
+      if (data.success) {
+        setPaymentInfo(data.paymentInfo);
+        setWithdrawPayoutMethod(data.paymentInfo?.preferred_payout || 'bank');
+      }
+    } catch (err) {
+      console.error('Error fetching payment info:', err);
+    }
+  };
+
+  const fetchWithdrawHistory = async (userId) => {
+    try {
+      const res = await fetch(`/api/rewards/withdraw?userId=${userId}`);
+      const data = await res.json();
+      if (data.success) setWithdrawHistory(data.requests || []);
+    } catch (err) {
+      console.error('Error fetching withdraw history:', err);
+    }
+  };
+
+  const handleWithdraw = async () => {
+    if (!user?.id) return;
+    setWithdrawing(true);
+    setWithdrawMessage(null);
+    try {
+      const res = await fetch('/api/rewards/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, rewardMonth: withdrawMonth, amountUsd: rewardData.usdEarned, payoutMethod: withdrawPayoutMethod }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setWithdrawMessage({ type: 'success', text: data.message });
+        fetchWithdrawHistory(user.id);
+        setTimeout(() => { setShowWithdrawModal(false); setWithdrawMessage(null); }, 3000);
+      } else {
+        setWithdrawMessage({ type: 'error', text: data.error });
+      }
+    } catch (err) {
+      setWithdrawMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setWithdrawing(false);
+    }
+  };
 
   const fetchRewardData = async (email) => {
     try {
@@ -305,13 +368,29 @@ export default function StudentRewardsPage() {
 
                 {/* USD Earned */}
                 <BentoCard delay={150}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>USD Earned</span>
+                    {rewardData.usdEarned >= 10 && (
+                      <button
+                        onClick={() => setShowWithdrawModal(true)}
+                        style={{ fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', cursor: 'pointer', letterSpacing: '0.2px' }}
+                      >
+                        Withdraw
+                      </button>
+                    )}
                   </div>
                   <p style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>
                     ${rewardData.usdEarned.toFixed(2)}
                   </p>
                   <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '8px' }}>Commissions</p>
+                  {/* Missing payment info nudge */}
+                  {rewardData.usdEarned >= 10 && paymentInfo && !paymentInfo.bank_account_name && !paymentInfo.bep20_address && (
+                    <div style={{ marginTop: '10px', padding: '8px 10px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" strokeLinecap="round" strokeLinejoin="round"/><line x1="12" y1="9" x2="12" y2="13" strokeLinecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" strokeLinecap="round"/></svg>
+                      <span style={{ fontSize: '11px', color: '#92400e', fontWeight: '600' }}>No payment info saved. </span>
+                      <a href="/student-setting" style={{ fontSize: '11px', color: '#d97706', fontWeight: '700', textDecoration: 'underline' }}>Add in Settings</a>
+                    </div>
+                  )}
                 </BentoCard>
               </div>
 
@@ -829,6 +908,198 @@ export default function StudentRewardsPage() {
                   </>
                 );
               })()}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ WITHDRAWAL MODAL ══ */}
+      {showWithdrawModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => { setShowWithdrawModal(false); setWithdrawMessage(null); }}>
+          <div style={{ background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '520px', boxShadow: '0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'linear-gradient(135deg,#10b981,#059669)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <DollarSign size={18} color="#fff" />
+                </div>
+                <div>
+                  <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Request Withdrawal</h2>
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Withdraw your USD rewards</p>
+                </div>
+              </div>
+              <button onClick={() => { setShowWithdrawModal(false); setWithdrawMessage(null); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', padding: '4px' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <div style={{ padding: '24px 28px' }}>
+              {/* Amount */}
+              <div style={{ background: '#f0fdf4', border: '1px solid #a7f3d0', borderRadius: '12px', padding: '14px 18px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '13px', fontWeight: '600', color: '#065f46' }}>Withdrawal Amount</span>
+                <span style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', letterSpacing: '-0.5px' }}>${rewardData.usdEarned.toFixed(2)}</span>
+              </div>
+
+              {/* Reward Month */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Reward Month</label>
+                <input
+                  type="month"
+                  value={withdrawMonth}
+                  onChange={e => setWithdrawMonth(e.target.value)}
+                  max={(() => { const d = new Date(); d.setMonth(d.getMonth() - 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}`; })()}
+                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                  onFocus={e => e.target.style.borderColor = '#10b981'}
+                  onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              {/* Payout method selector */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Payout Method</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {/* Bank option */}
+                  <button
+                    type="button"
+                    onClick={() => setWithdrawPayoutMethod('bank')}
+                    style={{
+                      padding: '12px 14px', borderRadius: '10px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s',
+                      border: withdrawPayoutMethod === 'bank' ? '2px solid #6366f1' : '2px solid #e2e8f0',
+                      background: withdrawPayoutMethod === 'bank' ? '#f5f3ff' : '#fff',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={withdrawPayoutMethod === 'bank' ? '#6366f1' : '#94a3b8'} strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                      <span style={{ fontSize: '13px', fontWeight: '700', color: withdrawPayoutMethod === 'bank' ? '#3730a3' : '#475569' }}>Bank Transfer</span>
+                    </div>
+                    {paymentInfo?.bank_account_name ? (
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>{paymentInfo.bank_account_name}<br/>{paymentInfo.bank_name}</div>
+                    ) : (
+                      <div style={{ fontSize: '11px', color: '#f59e0b' }}>No bank details saved</div>
+                    )}
+                    {withdrawPayoutMethod === 'bank' && (() => {
+                      const [y, m] = withdrawMonth.split('-').map(Number);
+                      const pd = new Date(y, m, 10);
+                      return <div style={{ fontSize: '10px', color: '#6366f1', fontWeight: '600', marginTop: '4px' }}>Credit on {pd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>;
+                    })()}
+                  </button>
+
+                  {/* Crypto option */}
+                  <button
+                    type="button"
+                    onClick={() => setWithdrawPayoutMethod('crypto')}
+                    style={{
+                      padding: '12px 14px', borderRadius: '10px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s',
+                      border: withdrawPayoutMethod === 'crypto' ? '2px solid #10b981' : '2px solid #e2e8f0',
+                      background: withdrawPayoutMethod === 'crypto' ? '#f0fdf4' : '#fff',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={withdrawPayoutMethod === 'crypto' ? '#10b981' : '#94a3b8'} strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9 8h5a2 2 0 0 1 0 4H9v4h5a2 2 0 0 0 0-4"/><line x1="9" y1="12" x2="14" y2="12"/></svg>
+                      <span style={{ fontSize: '13px', fontWeight: '700', color: withdrawPayoutMethod === 'crypto' ? '#065f46' : '#475569' }}>USDT (BEP20)</span>
+                    </div>
+                    {paymentInfo?.bep20_address ? (
+                      <div style={{ fontSize: '11px', color: '#64748b', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bep20_address}</div>
+                    ) : (
+                      <div style={{ fontSize: '11px', color: '#f59e0b' }}>No wallet address saved</div>
+                    )}
+                    {withdrawPayoutMethod === 'crypto' && <div style={{ fontSize: '10px', color: '#10b981', fontWeight: '600', marginTop: '4px' }}>Within 24hrs of approval</div>}
+                  </button>
+                </div>
+
+                {/* Warning if selected method has no details */}
+                {withdrawPayoutMethod === 'bank' && !paymentInfo?.bank_account_name && (
+                  <div style={{ marginTop: '8px', fontSize: '12px', color: '#d97706', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    Add bank details in <a href="/student-setting" style={{ color: '#d97706' }}>Settings</a> first
+                  </div>
+                )}
+                {withdrawPayoutMethod === 'crypto' && !paymentInfo?.bep20_address && (
+                  <div style={{ marginTop: '8px', fontSize: '12px', color: '#d97706', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    Add BEP20 wallet in <a href="/student-setting" style={{ color: '#d97706' }}>Settings</a> first
+                  </div>
+                )}
+              </div>
+
+              {/* No payment info warning — only show if BOTH methods are missing */}
+              {(!paymentInfo || (!paymentInfo.bank_account_name && !paymentInfo.bep20_address)) && (
+                <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', padding: '14px 18px', marginBottom: '16px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '1px' }}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" strokeLinecap="round" strokeLinejoin="round"/><line x1="12" y1="9" x2="12" y2="13" strokeLinecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" strokeLinecap="round"/></svg>
+                  <div>
+                    <p style={{ fontSize: '13px', fontWeight: '700', color: '#92400e', margin: '0 0 4px' }}>No payment info saved</p>
+                    <p style={{ fontSize: '12px', color: '#92400e', margin: '0 0 8px' }}>You need to add your bank or BEP20 wallet details before requesting a withdrawal.</p>
+                    <a href="/student-setting" style={{ fontSize: '12px', fontWeight: '700', color: '#d97706', textDecoration: 'underline' }}>Go to Settings to add payment info</a>
+                  </div>
+                </div>
+              )}
+
+              {/* Existing requests for this month */}
+              {withdrawHistory.filter(r => r.reward_month === withdrawMonth).length > 0 && (
+                <div style={{ background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '12px', padding: '12px 16px', marginBottom: '16px' }}>
+                  <p style={{ fontSize: '12px', fontWeight: '700', color: '#0369a1', margin: '0 0 4px' }}>Request already submitted for {withdrawMonth}</p>
+                  <p style={{ fontSize: '12px', color: '#0369a1', margin: 0 }}>Status: <strong>{withdrawHistory.find(r => r.reward_month === withdrawMonth)?.status}</strong></p>
+                </div>
+              )}
+
+              {/* Message */}
+              {withdrawMessage && (
+                <div style={{ padding: '12px 16px', background: withdrawMessage.type === 'success' ? '#f0fdf4' : '#fef2f2', border: `1px solid ${withdrawMessage.type === 'success' ? '#a7f3d0' : '#fecaca'}`, borderRadius: '10px', marginBottom: '16px', fontSize: '13px', color: withdrawMessage.type === 'success' ? '#065f46' : '#dc2626', fontWeight: '600' }}>
+                  {withdrawMessage.text}
+                </div>
+              )}
+
+              {/* Submit */}
+              <button
+                onClick={handleWithdraw}
+                disabled={(() => {
+                  const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
+                  return withdrawing || noDetails || withdrawHistory.some(r => r.reward_month === withdrawMonth);
+                })()}
+                style={{
+                  width: '100%', padding: '14px', borderRadius: '12px', border: 'none',
+                  background: (() => {
+                    const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
+                    return (withdrawing || noDetails || withdrawHistory.some(r => r.reward_month === withdrawMonth)) ? '#e2e8f0' : 'linear-gradient(135deg,#10b981,#059669)';
+                  })(),
+                  color: (() => {
+                    const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
+                    return (withdrawing || noDetails || withdrawHistory.some(r => r.reward_month === withdrawMonth)) ? '#94a3b8' : '#fff';
+                  })(),
+                  fontSize: '14px', fontWeight: '700',
+                  cursor: (() => {
+                    const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
+                    return (withdrawing || noDetails || withdrawHistory.some(r => r.reward_month === withdrawMonth)) ? 'not-allowed' : 'pointer';
+                  })(),
+                  transition: 'all 0.2s',
+                }}
+              >
+                {withdrawing ? 'Submitting...' : 'Submit Withdrawal Request'}
+              </button>
+
+              {/* Withdrawal history */}
+              {withdrawHistory.length > 0 && (
+                <div style={{ marginTop: '20px' }}>
+                  <p style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>Past Requests</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
+                    {withdrawHistory.map(r => {
+                      const statusColor = { pending: '#f59e0b', approved: '#3b82f6', processing: '#8b5cf6', paid: '#10b981', rejected: '#ef4444' }[r.status] || '#94a3b8';
+                      return (
+                        <div key={r.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #f1f5f9' }}>
+                          <div>
+                            <span style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>{r.reward_month}</span>
+                            <span style={{ fontSize: '11px', color: '#94a3b8', marginLeft: '8px' }}>{r.payout_method === 'crypto' ? 'USDT' : 'Bank'}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: '#10b981' }}>${parseFloat(r.amount_usd).toFixed(2)}</span>
+                            <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: statusColor + '18', color: statusColor, textTransform: 'uppercase' }}>{r.status}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
