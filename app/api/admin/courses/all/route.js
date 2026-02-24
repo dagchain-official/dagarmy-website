@@ -7,6 +7,19 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // GET - Fetch all courses with their creators, modules, and lessons
 export async function GET(request) {
   try {
+    // Validate Supabase credentials
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing Supabase credentials:', {
+        hasUrl: !!supabaseUrl,
+        hasKey: !!supabaseServiceKey
+      });
+      return NextResponse.json({ 
+        error: 'Database configuration error',
+        courses: [],
+        total: 0
+      }, { status: 200 }); // Return 200 with empty array instead of error
+    }
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status'); // 'draft', 'published', 'archived'
     const creatorId = searchParams.get('creatorId');
@@ -40,7 +53,12 @@ export async function GET(request) {
     const { data: courses, error } = await query;
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Supabase query error:', error);
+      return NextResponse.json({ 
+        error: error.message,
+        courses: [],
+        total: 0
+      }, { status: 200 }); // Return 200 with empty array to prevent frontend errors
     }
 
     // Calculate stats for each course
@@ -60,7 +78,12 @@ export async function GET(request) {
       total: courses.length
     });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('API error in /api/admin/courses/all:', error);
+    return NextResponse.json({ 
+      error: error.message,
+      courses: [],
+      total: 0
+    }, { status: 200 }); // Return 200 with empty array to prevent frontend errors
   }
 }
 

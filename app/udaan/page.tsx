@@ -2,6 +2,7 @@ import "./udaan.css";
 import Header2 from "@/components/headers/Header2";
 import Hero from "@/components/udaan/Hero";
 import ExecutionSection from "@/components/udaan/ExecutionSection";
+import WeeklyScheduleSection from "@/components/udaan/WeeklyScheduleSection";
 import SoldierSection from "@/components/udaan/SoldierSection";
 import LieutenantSection from "@/components/udaan/LieutenantSection";
 import PrideLadderSection from "@/components/udaan/PrideLadderSection";
@@ -12,6 +13,7 @@ import BuildersPledgeSection from "@/components/udaan/BuildersPledgeSection";
 import Reality from "@/components/udaan/Reality";
 import BentoGrid from "@/components/udaan/BentoGrid";
 import Vision2030 from "@/components/udaan/Vision2030";
+import NextStepSection from "@/components/udaan/NextStepSection";
 import Ecosystem from "@/components/udaan/Ecosystem";
 import RegionalSwitcher from "@/components/udaan/RegionalSwitcher";
 import Culture from "@/components/udaan/Culture";
@@ -27,6 +29,7 @@ export default function UdaanPage() {
       <main className="udaan-page">
         <Hero />
         <ExecutionSection />
+        <WeeklyScheduleSection />
         <SoldierSection />
         <LieutenantSection />
         <PrideLadderSection />
@@ -34,9 +37,10 @@ export default function UdaanPage() {
         <JurySection />
         <UdaanCodeSection />
         <BuildersPledgeSection />
+        <Vision2030 />
+        <NextStepSection />
         <Reality />
         <BentoGrid />
-        <Vision2030 />
         <Ecosystem />
         <RegionalSwitcher />
         <Culture />

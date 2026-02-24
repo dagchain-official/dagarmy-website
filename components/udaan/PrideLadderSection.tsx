@@ -19,9 +19,9 @@ export default function PrideLadderSection() {
       ref={ref}
       style={{
         position: "relative",
-        background: "#ffffff",
-        paddingTop: 70,
-        paddingBottom: 70,
+        background: "#fafafa",
+        paddingTop: 100,
+        paddingBottom: 100,
       }}
     >
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
@@ -31,16 +31,16 @@ export default function PrideLadderSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease }}
-          style={{ marginBottom: 40, textAlign: "center" }}
+          style={{ marginBottom: 56, textAlign: "center" }}
         >
           <div
             style={{
               fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.12em",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
               color: "#9494aa",
-              marginBottom: 16,
+              marginBottom: 20,
             }}
           >
             PRIDE LADDER
@@ -49,10 +49,11 @@ export default function PrideLadderSection() {
             style={{
               fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
               fontWeight: 700,
-              fontSize: "clamp(36px, 3.5vw, 48px)",
-              lineHeight: 1.2,
-              letterSpacing: "-0.02em",
-              marginBottom: 12,
+              fontSize: "clamp(40px, 5vw, 52px)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.01em",
+              marginBottom: 16,
+              color: "#0c0c14",
             }}
           >
             The <span style={{
@@ -64,8 +65,8 @@ export default function PrideLadderSection() {
           </h2>
           <p
             style={{
-              fontSize: "15px",
-              fontWeight: 500,
+              fontSize: "16px",
+              fontWeight: 600,
               color: "#5a5a72",
               marginBottom: 0,
             }}
@@ -78,17 +79,18 @@ export default function PrideLadderSection() {
         <motion.div
           {...fadeUp(0.2)}
           style={{
-            maxWidth: 700,
-            margin: "0 auto 48px auto",
+            maxWidth: 800,
+            margin: "0 auto 64px auto",
             textAlign: "center",
           }}
         >
           <p
             style={{
-              fontSize: "16px",
-              lineHeight: 1.8,
-              color: "#5a5a72",
-              marginBottom: 24,
+              fontSize: "17px",
+              lineHeight: 1.7,
+              color: "#0c0c14",
+              fontWeight: 600,
+              marginBottom: 28,
             }}
           >
             The DAG Army does not run on titles. It runs on contribution.
@@ -105,37 +107,40 @@ export default function PrideLadderSection() {
             The Pride Ladder exists to make one principle clear: growth here is earned through visible execution across your AI Startup Journey, not through passive participation or purchased status.
           </p>
           
-          <div style={{ marginBottom: 0 }}>
-            <p style={{ fontSize: "16px", lineHeight: 1.6, color: "#0c0c14", fontWeight: 600, marginBottom: 8 }}>
-              Rank cannot be bought.
-            </p>
-            <p style={{ fontSize: "16px", lineHeight: 1.6, color: "#0c0c14", fontWeight: 600, marginBottom: 8 }}>
-              Rank cannot be gifted.
-            </p>
-            <p style={{ fontSize: "16px", lineHeight: 1.6, color: "#0c0c14", fontWeight: 600, marginBottom: 0 }}>
-              Rank cannot be self-declared.
+          <div
+            style={{
+              marginTop: 32,
+              paddingTop: 28,
+              borderTop: "1px solid #e5e5e5",
+            }}
+          >
+            <p style={{ fontSize: "16px", lineHeight: 1.6, color: "#0c0c14", fontWeight: 700, marginBottom: 0 }}>
+              Rank cannot be bought. Rank cannot be gifted. Rank cannot be self-declared.
             </p>
           </div>
         </motion.div>
 
-        {/* Structured Rank Visual - 3 Column Grid */}
+        {/* Structured Rank Visual - 2 Column Grid */}
         <motion.div
           {...fadeUp(0.3)}
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(2, 1fr)",
             gap: 32,
-            marginBottom: 56,
+            marginBottom: 64,
+            maxWidth: 1000,
+            margin: "0 auto 64px",
           }}
         >
           {/* Soldier Card */}
           <div
             style={{
               background: "#ffffff",
-              border: "1px solid rgba(12,12,20,0.12)",
-              borderRadius: 12,
-              padding: "28px 24px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+              border: "1px solid #e5e5e5",
+              borderRadius: 16,
+              padding: "36px 32px",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+              transition: "all 0.3s ease",
             }}
           >
             {/* Header with Badge on Right */}
@@ -144,14 +149,14 @@ export default function PrideLadderSection() {
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "space-between",
-                marginBottom: 16,
+                marginBottom: 20,
               }}
             >
               <div style={{ flex: 1 }}>
                 <h3
                   style={{
                     fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                    fontSize: "22px",
+                    fontSize: "24px",
                     fontWeight: 700,
                     color: "#0c0c14",
                     marginBottom: 8,
@@ -212,9 +217,10 @@ export default function PrideLadderSection() {
               backgroundImage: "linear-gradient(white, white), linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
               backgroundOrigin: "border-box",
               backgroundClip: "padding-box, border-box",
-              borderRadius: 12,
-              padding: "28px 24px",
-              boxShadow: "0 2px 12px rgba(91,75,236,0.08)",
+              borderRadius: 16,
+              padding: "36px 32px",
+              boxShadow: "0 4px 20px rgba(99,102,241,0.12)",
+              transition: "all 0.3s ease",
             }}
           >
             {/* Header with Badge on Right */}
@@ -223,14 +229,14 @@ export default function PrideLadderSection() {
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "space-between",
-                marginBottom: 16,
+                marginBottom: 20,
               }}
             >
               <div style={{ flex: 1 }}>
                 <h3
                   style={{
                     fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                    fontSize: "22px",
+                    fontSize: "24px",
                     fontWeight: 700,
                     color: "#0c0c14",
                     marginBottom: 8,
@@ -282,72 +288,27 @@ export default function PrideLadderSection() {
               The builder rank. Lieutenants are no longer preparing—they are executing. They build prototypes, validate ideas with real users, and generate early market signals. This is where learning transitions into applied work.
             </p>
           </div>
-
-          {/* Commander Card */}
-          <div
-            style={{
-              background: "#ffffff",
-              border: "2px solid rgba(12,12,20,0.15)",
-              borderRadius: 12,
-              padding: "32px 24px",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-            }}
-          >
-            <h3
-              style={{
-                fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                fontSize: "24px",
-                fontWeight: 700,
-                color: "#0c0c14",
-                marginBottom: 8,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              Commander
-            </h3>
-            <p
-              style={{
-                fontSize: "13px",
-                fontWeight: 600,
-                color: "#0c0c14",
-                marginBottom: 16,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              Leadership Rank
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                lineHeight: 1.7,
-                color: "#5a5a72",
-                marginBottom: 0,
-              }}
-            >
-              The leadership rank. Commanders demonstrate sustained output, contribute meaningfully to the ecosystem, and advance responsibly. They mentor, guide, and maintain the integrity of the system through demonstrated capability—not self-promotion.
-            </p>
-          </div>
         </motion.div>
 
-        {/* Integrity Panel - Two Column Layout */}
+        {/* Integrity Panel - Professional Card Layout */}
         <motion.div
           {...fadeUp(0.4)}
           style={{
-            padding: "40px 48px",
-            background: "rgba(12,12,20,0.02)",
-            border: "1px solid rgba(12,12,20,0.08)",
-            borderRadius: 12,
-            marginBottom: 48,
+            padding: "48px 56px",
+            background: "#ffffff",
+            border: "1px solid #e5e5e5",
+            borderRadius: 16,
+            marginBottom: 56,
+            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
           }}
         >
           <h3
             style={{
               fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-              fontSize: "26px",
+              fontSize: "28px",
               fontWeight: 700,
               color: "#0c0c14",
-              marginBottom: 32,
+              marginBottom: 40,
               textAlign: "center",
               letterSpacing: "-0.01em",
             }}
@@ -358,54 +319,114 @@ export default function PrideLadderSection() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 48,
-              marginBottom: 28,
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: 32,
+              marginBottom: 40,
             }}
           >
-            {/* Left Column */}
-            <div>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 12 }}>
-                • No MLM logic
-              </p>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 12 }}>
-                • No get-rich shortcuts
-              </p>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 0 }}>
-                • No artificial hierarchy created for display
-              </p>
+            {/* What We Reject */}
+            <div
+              style={{
+                background: "#fafafa",
+                borderRadius: 12,
+                padding: "28px 24px",
+                border: "1px solid #e5e5e5",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  color: "#9494aa",
+                  marginBottom: 20,
+                }}
+              >
+                What We Reject
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  No MLM logic
+                </p>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  No get-rich shortcuts
+                </p>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  No artificial hierarchy for display
+                </p>
+              </div>
             </div>
 
-            {/* Right Column */}
-            <div>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 12 }}>
-                • Knowledge alone does not move anyone upward. <strong style={{ fontWeight: 700, color: "#0c0c14" }}>Applied work</strong> does.
-              </p>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 12 }}>
-                • Reputation is treated as earned trust.
-              </p>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 12 }}>
-                • Transparent reporting outweighs inflated claims.
-              </p>
-              <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#5a5a72", marginBottom: 0 }}>
-                • <strong style={{ fontWeight: 700, color: "#0c0c14" }}>Demonstrated</strong> impact outweighs presentation.
-              </p>
+            {/* What We Value */}
+            <div
+              style={{
+                background: "#fafafa",
+                borderRadius: 12,
+                padding: "28px 24px",
+                border: "1px solid #e5e5e5",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  color: "#9494aa",
+                  marginBottom: 20,
+                }}
+              >
+                What We Value
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  <strong style={{ fontWeight: 700, color: "#0c0c14" }}>Applied work</strong> over knowledge alone
+                </p>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  Reputation as earned trust
+                </p>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  Transparent reporting over claims
+                </p>
+                <p style={{ fontSize: "15px", lineHeight: 1.6, color: "#5a5a72", marginBottom: 0 }}>
+                  <strong style={{ fontWeight: 700, color: "#0c0c14" }}>Demonstrated</strong> impact over presentation
+                </p>
+              </div>
             </div>
           </div>
 
-          <p
+          <div
             style={{
-              fontSize: "16px",
-              lineHeight: 1.7,
-              color: "#0c0c14",
-              fontWeight: 600,
+              paddingTop: 32,
+              borderTop: "1px solid #e5e5e5",
               textAlign: "center",
-              marginBottom: 0,
             }}
           >
-            Inside this ecosystem, authority is not assigned.<br />
-            It is demonstrated through action.
-          </p>
+            <p
+              style={{
+                fontSize: "17px",
+                lineHeight: 1.6,
+                color: "#0c0c14",
+                fontWeight: 700,
+                marginBottom: 0,
+              }}
+            >
+              Inside this ecosystem, authority is not assigned—it is{" "}
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: 700,
+                }}
+              >
+                demonstrated through action
+              </span>
+              .
+            </p>
+          </div>
         </motion.div>
 
         {/* Closing Statement */}
@@ -413,14 +434,18 @@ export default function PrideLadderSection() {
           {...fadeUp(0.5)}
           style={{
             textAlign: "center",
+            maxWidth: 800,
+            margin: "0 auto",
+            paddingTop: 32,
+            borderTop: "1px solid #e5e5e5",
           }}
         >
           <p
             style={{
-              fontSize: "18px",
-              lineHeight: 1.7,
+              fontSize: "19px",
+              lineHeight: 1.6,
               color: "#0c0c14",
-              fontWeight: 600,
+              fontWeight: 700,
               marginBottom: 0,
             }}
           >

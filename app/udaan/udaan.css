@@ -65,11 +65,11 @@
 .udaan-page .wrap {
   display: block !important;
   width: 100% !important;
-  max-width: 1160px !important;
+  max-width: 1600px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  padding-left: 48px !important;
-  padding-right: 48px !important;
+  padding-left: 60px !important;
+  padding-right: 60px !important;
 }
 @media (max-width: 900px) { .udaan-page .wrap { padding-left: 28px !important; padding-right: 28px !important; } }
 @media (max-width: 480px) { .udaan-page .wrap { padding-left: 18px !important; padding-right: 18px !important; } }
