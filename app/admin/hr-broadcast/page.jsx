@@ -44,6 +44,7 @@ export default function HRBroadcastPage() {
   const [history, setHistory]     = useState([]);
   const [toast, setToast]         = useState(null);
   const [userCounts, setUserCounts] = useState({});
+  const [enhancing, setEnhancing] = useState({ title: false, body: false });
 
   useEffect(() => {
     fetch('/api/admin/users')
@@ -108,6 +109,31 @@ export default function HRBroadcastPage() {
     }
   };
 
+  const handleEnhance = async (type) => {
+    const text = type === 'title' ? title : body;
+    if (!text.trim()) {
+      showToast(`Please write a ${type === 'title' ? 'subject' : 'message'} first.`, false);
+      return;
+    }
+    setEnhancing(e => ({ ...e, [type]: true }));
+    try {
+      const res = await fetch('/api/admin/enhance-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, type }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Enhancement failed');
+      if (type === 'title') setTitle(data.enhanced);
+      else setBody(data.enhanced);
+      showToast('Content enhanced successfully.');
+    } catch (err) {
+      showToast(err.message || 'Enhancement failed. Please try again.', false);
+    } finally {
+      setEnhancing(e => ({ ...e, [type]: false }));
+    }
+  };
+
   const applyTemplate = (t) => {
     setTitle(t.title);
     setBody(t.body);
@@ -151,9 +177,14 @@ export default function HRBroadcastPage() {
         )}
 
         {/* Page header */}
-        <div style={{ marginBottom: '24px' }}>
-          <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', letterSpacing: '-0.4px' }}>Broadcast</h1>
-          <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>Send targeted announcements to your members</p>
+        <div style={{ background: '#fff', borderRadius: '18px', padding: '22px 26px', marginBottom: '24px', border: '1px solid #e8edf5', boxShadow: '0 1px 8px rgba(99,102,241,0.06)', display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '13px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(99,102,241,0.3)', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div>
+            <h1 style={{ fontSize: '19px', fontWeight: '800', color: '#0f172a', margin: '0 0 3px', letterSpacing: '-0.4px' }}>Broadcast</h1>
+            <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, fontWeight: '500' }}>Send targeted announcements to your members</p>
+          </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '20px', alignItems: 'start' }}>
@@ -162,17 +193,17 @@ export default function HRBroadcastPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
             {/* Quick Templates */}
-            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '20px' }}>
-              <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: '12px' }}>Quick Templates</div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '18px 20px', boxShadow: '0 1px 4px rgba(0,0,0,0.03)' }}>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Quick Templates</div>
+              <div style={{ display: 'flex', gap: '7px', flexWrap: 'wrap' }}>
                 {TEMPLATES.map(t => (
                   <button key={t.label} onClick={() => applyTemplate(t)} style={{
-                    padding: '7px 14px', border: '1.5px solid #e8edf5', borderRadius: '20px',
-                    background: '#f8fafc', fontSize: '12px', fontWeight: '600', color: '#475569',
+                    padding: '6px 14px', border: '1.5px solid #e8edf5', borderRadius: '20px',
+                    background: '#f8faff', fontSize: '12px', fontWeight: '600', color: '#64748b',
                     cursor: 'pointer', transition: 'all 0.15s',
                   }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#f0fdfa'; e.currentTarget.style.borderColor = '#99f6e4'; e.currentTarget.style.color = '#0d9488'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.borderColor = '#e8edf5'; e.currentTarget.style.color = '#475569'; }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#c7d2fe'; e.currentTarget.style.color = '#6366f1'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#f8faff'; e.currentTarget.style.borderColor = '#e8edf5'; e.currentTarget.style.color = '#64748b'; }}
                   >
                     {t.label}
                   </button>
@@ -181,17 +212,42 @@ export default function HRBroadcastPage() {
             </div>
 
             {/* Composer card */}
-            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '24px' }}>
-              <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: '16px' }}>Compose Message</div>
+            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '22px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
+                <div style={{ width: '3px', height: '16px', background: 'linear-gradient(180deg,#6366f1,#8b5cf6)', borderRadius: '2px' }} />
+                <div style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a' }}>Compose Message</div>
+              </div>
 
               {/* Title */}
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Title</label>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Title</label>
+                  <button onClick={() => handleEnhance('title')} disabled={enhancing.title || !title.trim()} title="Enhance with AI" style={{
+                    display: 'flex', alignItems: 'center', gap: '5px',
+                    padding: '4px 10px', borderRadius: '7px', border: '1.5px solid #c7d2fe',
+                    background: enhancing.title ? '#eef2ff' : '#f8faff',
+                    color: '#6366f1', fontSize: '11px', fontWeight: '700',
+                    cursor: enhancing.title || !title.trim() ? 'not-allowed' : 'pointer',
+                    opacity: !title.trim() ? 0.45 : 1, transition: 'all 0.15s',
+                  }}
+                    onMouseEnter={e => { if (title.trim() && !enhancing.title) e.currentTarget.style.background = '#eef2ff'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = enhancing.title ? '#eef2ff' : '#f8faff'; }}
+                  >
+                    {enhancing.title ? (
+                      <div style={{ width: '11px', height: '11px', border: '2px solid #c7d2fe', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                    ) : (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                    {enhancing.title ? 'Enhancing...' : 'Enhance'}
+                  </button>
+                </div>
                 <input
                   value={title} onChange={e => setTitle(e.target.value)}
                   placeholder="e.g. Important Update for All Members"
                   style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = '#0d9488'}
+                  onFocus={e => e.target.style.borderColor = '#6366f1'}
                   onBlur={e => e.target.style.borderColor = '#e8edf5'}
                   maxLength={120}
                 />
@@ -200,13 +256,35 @@ export default function HRBroadcastPage() {
 
               {/* Body */}
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Message</label>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Message</label>
+                  <button onClick={() => handleEnhance('body')} disabled={enhancing.body || !body.trim()} title="Fix spelling, grammar &amp; make it professional" style={{
+                    display: 'flex', alignItems: 'center', gap: '5px',
+                    padding: '4px 10px', borderRadius: '7px', border: '1.5px solid #c7d2fe',
+                    background: enhancing.body ? '#eef2ff' : '#f8faff',
+                    color: '#6366f1', fontSize: '11px', fontWeight: '700',
+                    cursor: enhancing.body || !body.trim() ? 'not-allowed' : 'pointer',
+                    opacity: !body.trim() ? 0.45 : 1, transition: 'all 0.15s',
+                  }}
+                    onMouseEnter={e => { if (body.trim() && !enhancing.body) e.currentTarget.style.background = '#eef2ff'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = enhancing.body ? '#eef2ff' : '#f8faff'; }}
+                  >
+                    {enhancing.body ? (
+                      <div style={{ width: '11px', height: '11px', border: '2px solid #c7d2fe', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                    ) : (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                    {enhancing.body ? 'Enhancing...' : 'Enhance'}
+                  </button>
+                </div>
                 <textarea
                   value={body} onChange={e => setBody(e.target.value)}
                   placeholder="Write your announcement here..."
                   rows={5}
                   style={{ ...inputStyle, resize: 'vertical', lineHeight: '1.6' }}
-                  onFocus={e => e.target.style.borderColor = '#0d9488'}
+                  onFocus={e => e.target.style.borderColor = '#6366f1'}
                   onBlur={e => e.target.style.borderColor = '#e8edf5'}
                   maxLength={1000}
                 />
@@ -216,23 +294,23 @@ export default function HRBroadcastPage() {
               {/* Actions */}
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                 <button onClick={() => setPreview(p => !p)} style={{
-                  padding: '10px 20px', border: '1.5px solid #e8edf5', borderRadius: '10px',
-                  background: preview ? '#f0fdfa' : '#fff', color: preview ? '#0d9488' : '#475569',
+                  padding: '9px 18px', border: '1.5px solid #e8edf5', borderRadius: '10px',
+                  background: preview ? '#eef2ff' : '#fff', color: preview ? '#6366f1' : '#475569',
                   fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.15s',
-                  borderColor: preview ? '#99f6e4' : '#e8edf5',
+                  borderColor: preview ? '#c7d2fe' : '#e8edf5',
                 }}>
                   {preview ? 'Hide Preview' : 'Preview'}
                 </button>
                 <button onClick={handleSend} disabled={sending || !title.trim() || !body.trim()} style={{
-                  padding: '10px 24px', border: 'none', borderRadius: '10px',
-                  background: sending || !title.trim() || !body.trim() ? '#e2e8f0' : '#0d9488',
+                  padding: '9px 22px', border: 'none', borderRadius: '10px',
+                  background: sending || !title.trim() || !body.trim() ? '#e2e8f0' : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
                   color: sending || !title.trim() || !body.trim() ? '#94a3b8' : '#fff',
                   fontSize: '13px', fontWeight: '700', cursor: sending || !title.trim() || !body.trim() ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.15s',
-                  boxShadow: sending || !title.trim() || !body.trim() ? 'none' : '0 2px 8px rgba(13,148,136,0.3)',
+                  boxShadow: sending || !title.trim() || !body.trim() ? 'none' : '0 2px 10px rgba(99,102,241,0.35)',
                 }}
-                  onMouseEnter={e => { if (!sending && title.trim() && body.trim()) e.currentTarget.style.background = '#0f766e'; }}
-                  onMouseLeave={e => { if (!sending && title.trim() && body.trim()) e.currentTarget.style.background = '#0d9488'; }}
+                  onMouseEnter={e => { if (!sending && title.trim() && body.trim()) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(99,102,241,0.45)'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = sending || !title.trim() || !body.trim() ? 'none' : '0 2px 10px rgba(99,102,241,0.35)'; }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
@@ -244,11 +322,11 @@ export default function HRBroadcastPage() {
 
             {/* Preview */}
             {preview && (
-              <div style={{ background: '#fff', borderRadius: '16px', border: '1.5px solid #99f6e4', padding: '20px' }}>
-                <div style={{ fontSize: '12px', fontWeight: '700', color: '#0d9488', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '14px' }}>Preview</div>
-                <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '18px', border: '1px solid #e8edf5' }}>
+              <div style={{ background: '#fff', borderRadius: '16px', border: '1.5px solid #c7d2fe', padding: '20px', boxShadow: '0 1px 4px rgba(99,102,241,0.08)' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '14px' }}>Notification Preview</div>
+                <div style={{ background: 'linear-gradient(180deg,#f8faff 0%,#f1f5fd 100%)', borderRadius: '12px', padding: '18px', border: '1px solid #e8edf5' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #0d9488, #0891b2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 10px rgba(99,102,241,0.3)' }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                       </svg>
@@ -263,7 +341,7 @@ export default function HRBroadcastPage() {
                         )}
                       </div>
                       <div style={{ fontSize: '12.5px', color: '#475569', lineHeight: '1.6' }}>{body || 'Your message will appear here...'}</div>
-                      <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '8px' }}>just now · DAG Army HR</div>
+                      <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '8px', fontWeight: '500' }}>just now · DAG Army HR</div>
                     </div>
                   </div>
                 </div>
@@ -275,8 +353,11 @@ export default function HRBroadcastPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
             {/* Audience */}
-            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '20px' }}>
-              <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: '14px' }}>Audience</div>
+            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <div style={{ width: '3px', height: '16px', background: 'linear-gradient(180deg,#6366f1,#8b5cf6)', borderRadius: '2px' }} />
+                <div style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a' }}>Audience</div>
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {AUDIENCES.map(a => (
                   <button key={a.key} onClick={() => setAudience(a.key)} style={{
@@ -300,8 +381,11 @@ export default function HRBroadcastPage() {
             </div>
 
             {/* Priority */}
-            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '20px' }}>
-              <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: '14px' }}>Priority</div>
+            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <div style={{ width: '3px', height: '16px', background: 'linear-gradient(180deg,#6366f1,#8b5cf6)', borderRadius: '2px' }} />
+                <div style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a' }}>Priority</div>
+              </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {PRIORITIES.map(p => (
                   <button key={p.key} onClick={() => setPriority(p.key)} style={{
@@ -319,10 +403,13 @@ export default function HRBroadcastPage() {
             </div>
 
             {/* History */}
-            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', overflow: 'hidden' }}>
-              <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Sent History</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>This session only</div>
+            <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.03)' }}>
+              <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '3px', height: '16px', background: 'linear-gradient(180deg,#6366f1,#8b5cf6)', borderRadius: '2px' }} />
+                <div>
+                  <div style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a' }}>Sent History</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '1px' }}>This session only</div>
+                </div>
               </div>
               {history.length === 0 ? (
                 <div style={{ padding: '28px 20px', textAlign: 'center' }}>

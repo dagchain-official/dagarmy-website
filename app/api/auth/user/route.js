@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createOrUpdateUser, getUserByWallet, getUserByEmail } from '@/lib/supabase/api/users'
+import { syncDagchainUser } from '@/lib/dagchain/sync'
 
 /**
  * POST /api/auth/user
@@ -12,7 +13,7 @@ export async function POST(request) {
     const body = await request.json()
     console.log('📦 Request body:', body)
     
-    const { wallet_address, email, role, full_name, avatar_url } = body
+    const { wallet_address, email, role, full_name, avatar_url, reown_access_token, auth_provider } = body
 
     // Validate required fields
     if (!wallet_address && !email) {
@@ -43,6 +44,17 @@ export async function POST(request) {
     })
 
     console.log('✅ User created/updated successfully:', result.user.id)
+
+    // Silently sync DAGChain data — never blocks or fails the auth response
+    if (email && reown_access_token) {
+      syncDagchainUser({
+        email,
+        reownAccessToken: reown_access_token,
+        authProvider: auth_provider || 'email',
+        name: full_name || null,
+        avatar: avatar_url || null,
+      }).catch(err => console.warn('DAGChain sync (background):', err.message))
+    }
 
     return NextResponse.json({
       success: true,

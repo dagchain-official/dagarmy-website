@@ -5,6 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { API_ENDPOINT_COUNT } from "@/data/api-endpoint-count";
 import SubAdminLayout from "@/components/admin/SubAdminLayout";
 
+// Module-level cache — fetched once per browser session, never again on remount
+let _countsCache = null;
+let _countsFetching = false;
+
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -17,47 +21,60 @@ export default function AdminLayout({ children }) {
   const [sideCounts, setSideCounts] = useState({ users: null, courses: null, certifications: null, events: null, logs: null, notifications: null, assignments: null, support_open: null });
 
   useEffect(() => {
+    if (_countsCache) { setSideCounts(_countsCache); return; }
+    if (_countsFetching) return;
+    _countsFetching = true;
     fetch('/api/admin/counts')
       .then(r => r.json())
-      .then(d => { if (!d.error) setSideCounts(d); })
-      .catch(() => {});
+      .then(d => {
+        if (!d.error) {
+          _countsCache = d;
+          setSideCounts(d);
+        } else {
+          _countsFetching = false;
+        }
+      })
+      .catch(() => { _countsFetching = false; });
   }, []);
 
+  const _authInitialised = React.useRef(false);
+
   useEffect(() => {
-    // Check authentication
-    const checkAuth = () => {
-      const userRole = localStorage.getItem('dagarmy_role');
-      const authenticated = localStorage.getItem('dagarmy_authenticated');
-      const storedUser = localStorage.getItem('dagarmy_user');
-      const adminUser = localStorage.getItem('admin_user');
-      
-      if (!authenticated || authenticated !== 'true' || userRole !== 'admin') {
-        router.push('/');
-        return;
-      }
-      
-      // Determine master admin status from either storage key
-      let masterAdmin = false;
-      const userSrc = adminUser || storedUser;
-      if (userSrc) {
-        try {
-          const user = JSON.parse(userSrc);
-          setUserEmail(user.email || 'admin@dagarmy.network');
-          setUserName(user.full_name || 'Admin');
-          masterAdmin = !!(user.is_master_admin);
-        } catch (e) {
-          setUserEmail('admin@dagarmy.network');
-          setUserName('Admin');
-        }
-      }
+    const userRole = localStorage.getItem('dagarmy_role');
+    const authenticated = localStorage.getItem('dagarmy_authenticated');
 
-      setIsMasterAdmin(masterAdmin);
-      setIsAuthenticated(true);
-      setIsLoading(false);
-    };
+    if (!authenticated || authenticated !== 'true' || userRole !== 'admin') {
+      router.push('/');
+      return;
+    }
 
-    checkAuth();
-  }, [pathname, router]);
+    // Only update state on first run — subsequent pathname changes just verify auth
+    if (_authInitialised.current) return;
+    _authInitialised.current = true;
+
+    const storedUser = localStorage.getItem('dagarmy_user');
+    const adminUser = localStorage.getItem('admin_user');
+    let masterAdmin = false;
+    let email = 'admin@dagarmy.network';
+    let name = 'Admin';
+
+    const userSrc = adminUser || storedUser;
+    if (userSrc) {
+      try {
+        const user = JSON.parse(userSrc);
+        email = user.email || email;
+        name = user.full_name || name;
+        masterAdmin = !!(user.is_master_admin);
+      } catch (e) {}
+    }
+
+    // Single batched state update — avoids multiple re-renders
+    setUserEmail(email);
+    setUserName(name);
+    setIsMasterAdmin(masterAdmin);
+    setIsAuthenticated(true);
+    setIsLoading(false);
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLogout = () => {
     // Clear all authentication data

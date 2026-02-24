@@ -158,6 +158,7 @@ export default function ComposeModal({
   const [showBcc, setShowBcc] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const [enhancing, setEnhancing] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [attachments, setAttachments] = useState([]);
   const [useTemplate, setUseTemplate]   = useState(false);
@@ -209,6 +210,49 @@ export default function ComposeModal({
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / 1048576).toFixed(1) + ' MB';
+  };
+
+  const handleEnhance = async () => {
+    const rawText = editorRef.current?.innerText?.trim();
+    if (!rawText) { setError('Write a message first before enhancing.'); return; }
+    setEnhancing(true);
+    setError('');
+    try {
+      const res = await fetch('/api/admin/enhance-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: rawText, type: 'body' }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Enhancement failed');
+      if (editorRef.current) {
+        editorRef.current.innerText = data.enhanced;
+      }
+    } catch (err) {
+      setError(err.message || 'Enhancement failed. Please try again.');
+    } finally {
+      setEnhancing(false);
+    }
+  };
+
+  const handleEnhanceSubject = async () => {
+    if (!subject.trim()) { setError('Write a subject first before enhancing.'); return; }
+    setEnhancing(true);
+    setError('');
+    try {
+      const res = await fetch('/api/admin/enhance-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: subject, type: 'title' }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Enhancement failed');
+      setSubject(data.enhanced);
+    } catch (err) {
+      setError(err.message || 'Enhancement failed. Please try again.');
+    } finally {
+      setEnhancing(false);
+    }
   };
 
   const getEmailHtml = useCallback(() => {
@@ -596,6 +640,32 @@ export default function ComposeModal({
           >
             {IcoAttach}
             {attachments.length > 0 ? `${attachments.length} file${attachments.length > 1 ? 's' : ''}` : 'Attach'}
+          </button>
+          <button
+            title="Fix spelling, grammar & make it professional"
+            onClick={handleEnhance}
+            disabled={enhancing}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              padding: '9px 13px',
+              background: enhancing ? '#eef2ff' : '#f8faff',
+              border: '1.5px solid #c7d2fe',
+              borderRadius: '10px',
+              color: '#6366f1',
+              cursor: enhancing ? 'not-allowed' : 'pointer',
+              transition: 'all 0.15s', fontSize: '12px', fontWeight: '700',
+            }}
+            onMouseEnter={e => { if (!enhancing) { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; }}}
+            onMouseLeave={e => { if (!enhancing) { e.currentTarget.style.background = '#f8faff'; e.currentTarget.style.borderColor = '#c7d2fe'; }}}
+          >
+            {enhancing ? (
+              <div style={{ width: '12px', height: '12px', border: '2px solid #c7d2fe', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+            ) : (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+            {enhancing ? 'Enhancing...' : 'Enhance'}
           </button>
         </div>
 

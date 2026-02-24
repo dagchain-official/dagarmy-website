@@ -57,6 +57,9 @@ export default function Dashboard2() {
     const [calendarMonth, setCalendarMonth] = useState(new Date());
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [dagchainData, setDagchainData] = useState(null);
+    const [dagchainLoading, setDagchainLoading] = useState(false);
+    const [dagchainCopied, setDagchainCopied] = useState(false);
     
     useEffect(() => {
         const hour = new Date().getHours();
@@ -146,6 +149,39 @@ export default function Dashboard2() {
 
         fetchReferralData();
     }, [userData]);
+
+    // Fetch DAGChain status
+    useEffect(() => {
+        async function fetchDagchainStatus() {
+            if (!userData?.email && !address) return;
+            setDagchainLoading(true);
+            try {
+                const param = userData?.email
+                    ? `email=${encodeURIComponent(userData.email)}`
+                    : `userId=${userData?.id || ''}`;
+                const res = await fetch(`/api/dagchain/status?${param}`);
+                const data = await res.json();
+                if (data.success && data.linked) {
+                    setDagchainData(data.dagchain);
+                }
+            } catch (err) {
+                console.error('DAGChain status fetch error:', err);
+            } finally {
+                setDagchainLoading(false);
+            }
+        }
+        fetchDagchainStatus();
+    }, [userData]);
+
+    const handleCopyDagchainCode = async () => {
+        const code = dagchainData?.referralCode;
+        if (!code) return;
+        try {
+            await navigator.clipboard.writeText(code);
+            setDagchainCopied(true);
+            setTimeout(() => setDagchainCopied(false), 2000);
+        } catch {}
+    };
 
     // Fetch events for calendar
     useEffect(() => {
@@ -710,6 +746,113 @@ export default function Dashboard2() {
                         </div>
                     </BentoCard>
                 </div>
+
+            {/* ━━━ DAGChain Integration Panel ━━━ */}
+            {(dagchainData || dagchainLoading) && (
+                <BentoCard span="12" hover={false} style={{ padding: '0', overflow: 'hidden', marginTop: '4px' }}>
+                    {/* Header */}
+                    <div style={{ padding: '20px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f1f5f9' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#0f172a,#1e3a5f)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px' }}>DAGChain Account</div>
+                                <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>Linked — synced from dagchain.network</div>
+                            </div>
+                        </div>
+                        <a href="https://dagchain.network" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '700', color: '#6366f1', textDecoration: 'none', padding: '7px 14px', borderRadius: '8px', border: '1.5px solid #e0e7ff', background: '#f8faff' }}>
+                            Open DAGChain
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                    </div>
+
+                    {dagchainLoading ? (
+                        <div style={{ padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', color: '#94a3b8', fontSize: '13px' }}>
+                            <div style={{ width: '18px', height: '18px', border: '2px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                            Loading DAGChain data...
+                        </div>
+                    ) : (
+                        <div style={{ padding: '20px 28px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+
+                            {/* Referral Code */}
+                            <div style={{ background: '#f8faff', borderRadius: '14px', padding: '16px', border: '1px solid #e8edf5' }}>
+                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Code</div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '2px', flex: 1 }}>
+                                        {dagchainData?.referralCode || '—'}
+                                    </div>
+                                    {dagchainData?.referralCode && (
+                                        <button onClick={handleCopyDagchainCode} style={{ padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #c7d2fe', background: dagchainCopied ? '#eef2ff' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: '700', color: '#6366f1', transition: 'all 0.15s' }}>
+                                            {dagchainCopied ? (
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                            ) : (
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                            )}
+                                            {dagchainCopied ? 'Copied' : 'Copy'}
+                                        </button>
+                                    )}
+                                </div>
+                                {dagchainData?.referredBy && (
+                                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '8px' }}>Referred by: <span style={{ fontWeight: '700', color: '#475569' }}>{dagchainData.referredBy}</span></div>
+                                )}
+                            </div>
+
+                            {/* Nodes */}
+                            <div style={{ background: '#f8faff', borderRadius: '14px', padding: '16px', border: '1px solid #e8edf5' }}>
+                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Nodes Owned</div>
+                                <div style={{ display: 'flex', gap: '12px', marginBottom: '8px' }}>
+                                    <div style={{ flex: 1, background: '#fff', borderRadius: '10px', padding: '10px 12px', border: '1px solid #e0e7ff', textAlign: 'center' }}>
+                                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>{dagchainData?.nodes?.validatorCount || 0}</div>
+                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>Validator</div>
+                                    </div>
+                                    <div style={{ flex: 1, background: '#fff', borderRadius: '10px', padding: '10px 12px', border: '1px solid #e0e7ff', textAlign: 'center' }}>
+                                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>{dagchainData?.nodes?.storageCount || 0}</div>
+                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>Storage</div>
+                                    </div>
+                                </div>
+                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>Total: <span style={{ fontWeight: '700', color: '#0f172a' }}>{dagchainData?.nodes?.total || 0}</span> nodes</div>
+                            </div>
+
+                            {/* Referral Journey */}
+                            <div style={{ background: '#f8faff', borderRadius: '14px', padding: '16px', border: '1px solid #e8edf5' }}>
+                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Journey</div>
+                                <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px' }}>
+                                    {dagchainData?.referralCount || 0}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>People referred on DAGChain</div>
+                                {dagchainData?.referralStats && (
+                                    <div style={{ fontSize: '11px', color: '#475569', fontWeight: '600' }}>
+                                        Earnings: <span style={{ color: '#10b981' }}>${(dagchainData.referralStats.totalEarnings || 0).toFixed(2)}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* DAG Points + Rewards */}
+                            <div style={{ background: '#f8faff', borderRadius: '14px', padding: '16px', border: '1px solid #e8edf5' }}>
+                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>DAGChain Points</div>
+                                <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+                                    {(dagchainData?.points || 0).toLocaleString()}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>Points earned on DAGChain</div>
+                                {dagchainData?.rewards?.pending && (
+                                    <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: '700' }}>
+                                        Pending rewards available
+                                    </div>
+                                )}
+                                {dagchainData?.syncedAt && (
+                                    <div style={{ fontSize: '10px', color: '#cbd5e1', marginTop: '6px' }}>
+                                        Last synced: {new Date(dagchainData.syncedAt).toLocaleDateString()}
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+                    )}
+                </BentoCard>
+            )}
 
             </div>
 

@@ -295,6 +295,14 @@ export function AuthProvider({ children }) {
       // Save user to Supabase
       try {
         const finalRole = profile.isAdmin ? 'admin' : 'student';
+
+        // Extract Reown access token for DAGChain sync (server-side only, never stored client-side)
+        const reownAccessToken =
+          embeddedWalletInfo?.user?.accessToken ||
+          embeddedWalletInfo?.accessToken ||
+          embeddedWalletInfo?.user?.token ||
+          null;
+
         const supabaseData = {
           wallet_address: address,
           email: profile.email || null,
@@ -303,7 +311,8 @@ export function AuthProvider({ children }) {
           avatar_url: profile.avatar || null,
           auth_provider: profile.authProvider || 'wallet',
           is_admin: profile.isAdmin || false,
-          is_master_admin: profile.isMasterAdmin || false
+          is_master_admin: profile.isMasterAdmin || false,
+          reown_access_token: reownAccessToken,
         };
 
         // Saving user to database
