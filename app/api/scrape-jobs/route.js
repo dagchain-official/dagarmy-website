@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
+import redis from '@/lib/redis';
+
+const CACHE_TTL = 3600; // 1 hour
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -7,7 +10,15 @@ export async function GET(request) {
   const location = searchParams.get('location') || 'United States';
   const maxPages = parseInt(searchParams.get('pages') || '2');
 
+  const cacheKey = `jobs:${keywords.toLowerCase()}:${location.toLowerCase()}`;
+
   try {
+    // Serve from Redis cache if available
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+      return NextResponse.json({ success: true, count: cached.length, jobs: cached, keywords, location, fromCache: true });
+    }
+
     const jobs = [];
     const jobIds = [];
 
@@ -140,6 +151,11 @@ export async function GET(request) {
       } catch (error) {
         console.error(`Error processing job ${jobId}:`, error.message);
       }
+    }
+
+    // Save to Redis cache for next request
+    if (jobs.length > 0) {
+      await redis.set(cacheKey, jobs, { ex: CACHE_TTL });
     }
 
     return NextResponse.json({
