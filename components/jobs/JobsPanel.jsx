@@ -7,17 +7,41 @@ const techCategories = [
   { 
     name: "Artificial Intelligence", 
     keywords: "Machine Learning OR Artificial Intelligence OR Deep Learning OR Neural Networks OR NLP OR Computer Vision OR AI Engineer",
-    iconPath: "/images/courses/AIsymbol.svg"
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4 4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z"/>
+        <path d="M8 11v2a4 4 0 0 0 8 0v-2"/>
+        <path d="M12 17v5"/>
+        <path d="M8 22h8"/>
+        <path d="M4 9H2"/><path d="M22 9h-2"/>
+        <path d="M4 15H2"/><path d="M22 15h-2"/>
+      </svg>
+    )
   },
   { 
     name: "Blockchain", 
     keywords: "Blockchain OR Web3 OR Smart Contracts OR Solidity OR Ethereum OR Cryptocurrency OR DeFi OR NFT",
-    iconPath: "/images/courses/BlockchainSymbol.svg"
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="7" width="6" height="6" rx="1"/>
+        <rect x="16" y="7" width="6" height="6" rx="1"/>
+        <rect x="9" y="2" width="6" height="6" rx="1"/>
+        <rect x="9" y="16" width="6" height="6" rx="1"/>
+        <path d="M8 10h8"/><path d="M12 8v8"/>
+      </svg>
+    )
   },
   { 
     name: "Data Visualization", 
     keywords: "Data Visualization OR Tableau OR Power BI OR Data Analytics OR Business Intelligence OR D3.js",
-    iconPath: "/images/courses/DataVisualizationSymbol.svg"
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+        <line x1="2" y1="20" x2="22" y2="20"/>
+      </svg>
+    )
   }
 ];
 
@@ -345,16 +369,7 @@ export default function JobsPanel() {
                       }}
                     >
                       <span style={{ marginRight: '10px', display: 'inline-flex', alignItems: 'center', verticalAlign: 'middle' }}>
-                        <Image 
-                          src={cat.iconPath} 
-                          alt={`${cat.name} icon`}
-                          width={20}
-                          height={20}
-                          style={{ 
-                            filter: selectedCategory.name === cat.name ? 'brightness(0) invert(1)' : 'brightness(0)',
-                            transition: 'filter 0.2s'
-                          }}
-                        />
+                        {cat.icon}
                       </span>
                       {cat.name}
                     </button>
