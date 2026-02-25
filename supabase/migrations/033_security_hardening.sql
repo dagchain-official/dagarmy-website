@@ -53,21 +53,25 @@ END $$;
 -- ═══════════════════════════════════════════════════════════════════
 
 -- update_updated_at_column
+DROP FUNCTION IF EXISTS public.update_updated_at_column() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;
 
 -- update_admin_roles_updated_at
+DROP FUNCTION IF EXISTS public.update_admin_roles_updated_at() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_admin_roles_updated_at()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;
 
 -- update_ticket_timestamp
+DROP FUNCTION IF EXISTS public.update_ticket_timestamp() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_ticket_timestamp()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;
 
 -- generate_ticket_number
+DROP FUNCTION IF EXISTS public.generate_ticket_number() CASCADE;
 CREATE OR REPLACE FUNCTION public.generate_ticket_number()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -93,6 +97,7 @@ BEGIN
 END; $$;
 
 -- reset_failed_login_attempts
+DROP FUNCTION IF EXISTS public.reset_failed_login_attempts() CASCADE;
 CREATE OR REPLACE FUNCTION public.reset_failed_login_attempts()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -103,6 +108,7 @@ BEGIN
 END; $$;
 
 -- update_course_module_count
+DROP FUNCTION IF EXISTS public.update_course_module_count() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_course_module_count()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -115,6 +121,7 @@ BEGIN
 END; $$;
 
 -- update_course_lesson_count
+DROP FUNCTION IF EXISTS public.update_course_lesson_count() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_course_lesson_count()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_course_id UUID;
@@ -130,6 +137,7 @@ BEGIN
 END; $$;
 
 -- update_course_enrollment_count
+DROP FUNCTION IF EXISTS public.update_course_enrollment_count() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_course_enrollment_count()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -142,6 +150,7 @@ BEGIN
 END; $$;
 
 -- update_course_rating
+DROP FUNCTION IF EXISTS public.update_course_rating() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_course_rating()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_avg_rating DECIMAL(3,2); v_total_reviews INTEGER;
@@ -156,6 +165,7 @@ BEGIN
 END; $$;
 
 -- update_creator_stats
+DROP FUNCTION IF EXISTS public.update_creator_stats() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_creator_stats()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -168,6 +178,7 @@ BEGIN
 END; $$;
 
 -- update_enrollment_progress
+DROP FUNCTION IF EXISTS public.update_enrollment_progress() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_enrollment_progress()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE
@@ -198,6 +209,7 @@ BEGIN
 END; $$;
 
 -- update_batch_student_count
+DROP FUNCTION IF EXISTS public.update_batch_student_count() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_batch_student_count()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -235,6 +247,7 @@ BEGIN
 END; $$;
 
 -- update_user_points_summary
+DROP FUNCTION IF EXISTS public.update_user_points_summary() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_user_points_summary()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -248,6 +261,7 @@ BEGIN
 END; $$;
 
 -- update_user_usd_earned
+DROP FUNCTION IF EXISTS public.update_user_usd_earned() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_user_usd_earned()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -258,6 +272,7 @@ BEGIN
 END; $$;
 
 -- create_notification_recipients
+DROP FUNCTION IF EXISTS public.create_notification_recipients() CASCADE;
 CREATE OR REPLACE FUNCTION public.create_notification_recipients()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -278,6 +293,7 @@ BEGIN
 END; $$;
 
 -- update_notification_read_count
+DROP FUNCTION IF EXISTS public.update_notification_read_count() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_notification_read_count()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -288,6 +304,7 @@ BEGIN
 END; $$;
 
 -- log_user_signup
+DROP FUNCTION IF EXISTS public.log_user_signup() CASCADE;
 CREATE OR REPLACE FUNCTION public.log_user_signup()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -300,6 +317,7 @@ BEGIN
 END; $$;
 
 -- log_points_transaction
+DROP FUNCTION IF EXISTS public.log_points_transaction() CASCADE;
 CREATE OR REPLACE FUNCTION public.log_points_transaction()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_name TEXT; v_email TEXT;
@@ -313,6 +331,7 @@ BEGIN
 END; $$;
 
 -- log_sale_paid
+DROP FUNCTION IF EXISTS public.log_sale_paid() CASCADE;
 CREATE OR REPLACE FUNCTION public.log_sale_paid()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_name TEXT; v_email TEXT;
@@ -328,6 +347,7 @@ BEGIN
 END; $$;
 
 -- log_rank_upgrade
+DROP FUNCTION IF EXISTS public.log_rank_upgrade() CASCADE;
 CREATE OR REPLACE FUNCTION public.log_rank_upgrade()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -341,6 +361,7 @@ BEGIN
 END; $$;
 
 -- grant_sale_dag_points
+DROP FUNCTION IF EXISTS public.grant_sale_dag_points() CASCADE;
 CREATE OR REPLACE FUNCTION public.grant_sale_dag_points()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_self_rate INTEGER;
@@ -354,6 +375,7 @@ BEGIN
 END; $$;
 
 -- generate_referral_code
+DROP FUNCTION IF EXISTS public.generate_referral_code() CASCADE;
 CREATE OR REPLACE FUNCTION public.generate_referral_code()
 RETURNS TEXT LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE code TEXT; exists BOOLEAN;
@@ -367,6 +389,7 @@ BEGIN
 END; $$;
 
 -- get_or_create_referral_code
+DROP FUNCTION IF EXISTS public.get_or_create_referral_code(UUID) CASCADE;
 CREATE OR REPLACE FUNCTION public.get_or_create_referral_code(p_user_id UUID)
 RETURNS TEXT LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_code TEXT;
@@ -390,6 +413,7 @@ BEGIN
 END; $$;
 
 -- trigger_update_referral_stats
+DROP FUNCTION IF EXISTS public.trigger_update_referral_stats() CASCADE;
 CREATE OR REPLACE FUNCTION public.trigger_update_referral_stats()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -397,7 +421,8 @@ BEGIN
   RETURN NEW;
 END; $$;
 
--- update_module_progress (from multi_course platform)
+-- update_module_progress
+DROP FUNCTION IF EXISTS public.update_module_progress() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_module_progress()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_total INTEGER; v_completed INTEGER;
@@ -411,6 +436,7 @@ BEGIN
 END; $$;
 
 -- update_program_progress
+DROP FUNCTION IF EXISTS public.update_program_progress() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_program_progress()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
@@ -418,6 +444,7 @@ BEGIN
 END; $$;
 
 -- award_signup_bonus
+DROP FUNCTION IF EXISTS public.award_signup_bonus() CASCADE;
 CREATE OR REPLACE FUNCTION public.award_signup_bonus()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 DECLARE v_signup_bonus INTEGER;
@@ -435,6 +462,7 @@ END; $$;
 
 -- certifications
 DROP POLICY IF EXISTS "Service role can manage certifications" ON public.certifications;
+DROP POLICY IF EXISTS "Service role can manage certifications" ON public.certifications;
 CREATE POLICY "Service role can manage certifications" ON public.certifications
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
@@ -450,6 +478,7 @@ CREATE POLICY "Service role can manage lesson progress" ON public.lesson_progres
 
 -- login_history
 DROP POLICY IF EXISTS "Service role full access to login_history" ON public.login_history;
+DROP POLICY IF EXISTS "Service role can manage login_history" ON public.login_history;
 CREATE POLICY "Service role full access to login_history" ON public.login_history
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
@@ -460,22 +489,26 @@ CREATE POLICY "Service role can manage reviews" ON public.reviews
 
 -- social_task_submissions
 DROP POLICY IF EXISTS "Service role full access social_task_submissions" ON public.social_task_submissions;
+DROP POLICY IF EXISTS "Service role can manage social_task_submissions" ON public.social_task_submissions;
 CREATE POLICY "Service role full access social_task_submissions" ON public.social_task_submissions
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- social_tasks
 DROP POLICY IF EXISTS "Service role full access social_tasks" ON public.social_tasks;
+DROP POLICY IF EXISTS "Service role can manage social_tasks" ON public.social_tasks;
 CREATE POLICY "Service role full access social_tasks" ON public.social_tasks
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- referrals - tighten insert/update policies
 DROP POLICY IF EXISTS "System can insert referrals" ON public.referrals;
 DROP POLICY IF EXISTS "System can update referrals" ON public.referrals;
+DROP POLICY IF EXISTS "Service role can manage referrals" ON public.referrals;
 CREATE POLICY "Service role can manage referrals" ON public.referrals
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- users - tighten service role policies
 DROP POLICY IF EXISTS "Service role can insert users" ON public.users;
 DROP POLICY IF EXISTS "Service role can update users" ON public.users;
+DROP POLICY IF EXISTS "Service role can manage users" ON public.users;
 CREATE POLICY "Service role can manage users" ON public.users
   FOR ALL TO service_role USING (true) WITH CHECK (true);
