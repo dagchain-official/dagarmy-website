@@ -9,51 +9,41 @@
 -- (Tables visible in screenshot as "RLS Disabled in Public")
 -- ═══════════════════════════════════════════════════════════════════
 
-ALTER TABLE public.swift_drafts              ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.swift_sent_log            ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.admin_audit_log           ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.admin_roles               ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.custom_permissions        ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.course_achievements       ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.sales_commissions         ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.points_transactions       ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.activity_logs             ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.support_tickets           ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.support_ticket_messages   ENABLE ROW LEVEL SECURITY;
-
--- Additional tables likely missing RLS based on migrations
-ALTER TABLE public.batches                   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.batch_enrollments         ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.assignments               ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.assignment_submissions    ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.notifications             ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.notification_recipients   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.withdrawal_requests       ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.rewards_config            ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.master_admin_whitelist    ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.social_tasks              ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.social_task_submissions   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.login_history             ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.referrals                 ENABLE ROW LEVEL SECURITY;
-
--- For all server-only tables: revoke client access, keep service_role
--- (These are accessed only via service_role from API routes)
+-- Enable RLS on all server-managed tables (safe — skips if table doesn't exist)
 DO $$
 DECLARE
-  server_tables TEXT[] := ARRAY[
-    'swift_drafts', 'swift_sent_log', 'admin_audit_log', 'admin_roles',
-    'custom_permissions', 'sales_commissions', 'points_transactions',
+  all_tables TEXT[] := ARRAY[
+    -- Email (031_rbac_email)
+    'email_drafts', 'email_sent_log',
+    -- Admin (011, 019)
+    'admin_audit_log', 'admin_roles', 'custom_permissions',
+    -- Rewards (017_comprehensive)
+    'sales_commissions', 'point_transactions', 'rank_achievements', 'referrals',
+    -- Activity & Support (028, 029)
     'activity_logs', 'support_tickets', 'support_ticket_messages',
+    -- Assignments & Batches (016)
     'batches', 'batch_enrollments', 'assignments', 'assignment_submissions',
-    'notifications', 'notification_recipients', 'withdrawal_requests',
-    'rewards_config', 'master_admin_whitelist', 'login_history'
+    -- Notifications (017_notification)
+    'notifications', 'notification_recipients',
+    -- Financials (030)
+    'withdrawal_requests',
+    -- Config & Auth
+    'rewards_config', 'master_admin_whitelist', 'login_history',
+    -- Social (020_social)
+    'social_tasks', 'social_task_submissions'
   ];
   t TEXT;
 BEGIN
-  FOREACH t IN ARRAY server_tables LOOP
-    EXECUTE format('REVOKE SELECT, INSERT, UPDATE, DELETE ON public.%I FROM anon', t);
-    EXECUTE format('REVOKE SELECT, INSERT, UPDATE, DELETE ON public.%I FROM authenticated', t);
-    EXECUTE format('GRANT SELECT, INSERT, UPDATE, DELETE ON public.%I TO service_role', t);
+  FOREACH t IN ARRAY all_tables LOOP
+    BEGIN
+      EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t);
+      EXECUTE format('REVOKE SELECT, INSERT, UPDATE, DELETE ON public.%I FROM anon', t);
+      EXECUTE format('REVOKE SELECT, INSERT, UPDATE, DELETE ON public.%I FROM authenticated', t);
+      EXECUTE format('GRANT SELECT, INSERT, UPDATE, DELETE ON public.%I TO service_role', t);
+    EXCEPTION WHEN undefined_table THEN
+      -- Table doesn't exist yet, skip silently
+      NULL;
+    END;
   END LOOP;
 END $$;
 
@@ -388,7 +378,8 @@ BEGIN
   RETURN v_code;
 END; $$;
 
--- update_referral_stats
+-- update_referral_stats (drop first — parameter name changed across migrations)
+DROP FUNCTION IF EXISTS public.update_referral_stats(UUID);
 CREATE OR REPLACE FUNCTION public.update_referral_stats(p_referrer_id UUID)
 RETURNS VOID LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
