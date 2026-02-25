@@ -160,6 +160,8 @@ export default function ComposeModal({
   const [error, setError] = useState('');
   const [enhancing, setEnhancing] = useState(false);
   const [minimized, setMinimized] = useState(false);
+  const [signature, setSignature] = useState('');
+  const [sigEnabled, setSigEnabled] = useState(true);
   const [attachments, setAttachments] = useState([]);
   const [useTemplate, setUseTemplate]   = useState(false);
   const [recipientName, setRecipientName]   = useState('');
@@ -173,10 +175,20 @@ export default function ComposeModal({
   const previewIframeRef = useRef(null);
 
   useEffect(() => {
-    if (editorRef.current && defaultHtml) {
-      editorRef.current.innerHTML = defaultHtml;
-    }
-  }, [defaultHtml]);
+    fetch('/api/admin/email/signature')
+      .then(r => r.json())
+      .then(d => { if (d.signature) setSignature(d.signature); })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!editorRef.current) return;
+    const body = defaultHtml || '';
+    const sig = signature && sigEnabled
+      ? `<br/><br/><div data-signature="1" style="border-top:1px solid #e8edf5;margin-top:16px;padding-top:14px;">${signature}</div>`
+      : '';
+    editorRef.current.innerHTML = body + sig;
+  }, [defaultHtml, signature, sigEnabled]);
 
   const exec = (cmd, val) => {
     document.execCommand(cmd, false, val);
@@ -619,6 +631,31 @@ export default function ComposeModal({
             {sending ? 'Sending...' : 'Send'}
           </button>
           <input ref={fileInputRef} type="file" multiple onChange={handleFileChange} style={{ display: 'none' }} />
+          {signature && (
+            <button
+              title={sigEnabled ? 'Signature is ON — click to remove from this email' : 'Signature is OFF — click to add to this email'}
+              onClick={() => {
+                setSigEnabled(v => !v);
+              }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '5px',
+                padding: '9px 13px', borderRadius: '10px',
+                border: `1.5px solid ${sigEnabled ? '#a5b4fc' : '#e2e8f0'}`,
+                background: sigEnabled ? '#eef2ff' : '#f8faff',
+                color: sigEnabled ? '#6366f1' : '#94a3b8',
+                fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; e.currentTarget.style.color = '#6366f1'; }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = sigEnabled ? '#eef2ff' : '#f8faff';
+                e.currentTarget.style.borderColor = sigEnabled ? '#a5b4fc' : '#e2e8f0';
+                e.currentTarget.style.color = sigEnabled ? '#6366f1' : '#94a3b8';
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              Sig
+            </button>
+          )}
           <button
             title="Attach file"
             onClick={() => fileInputRef.current?.click()}

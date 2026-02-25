@@ -5,6 +5,7 @@ import EmailSidebar, { STARRED_PATH } from "@/components/admin/email/EmailSideba
 import MessageList from "@/components/admin/email/MessageList";
 import MessageReader from "@/components/admin/email/MessageReader";
 import ComposeModal from "@/components/admin/email/ComposeModal";
+import SignatureEditor from "@/components/admin/email/SignatureEditor";
 
 const LIMIT = 25;
 
@@ -24,6 +25,7 @@ export default function EmailPage() {
   const [composeDefaults, setComposeDefaults] = useState({});
   const [searchQuery, setSearchQuery]       = useState('');
   const [error, setError]                   = useState('');
+  const [activeView, setActiveView]         = useState('inbox'); // 'inbox' | 'signature'
 
   // Load admin session
   useEffect(() => {
@@ -98,6 +100,7 @@ export default function EmailPage() {
     setSelectedMessage(null);
     setSelectedUid(null);
     setSearchQuery('');
+    setActiveView('inbox');
     prefetchCache.current.clear();
     if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
   };
@@ -285,45 +288,56 @@ export default function EmailPage() {
           folders={folders}
           activeFolder={activeFolder}
           loadingFolders={loadingFolders}
+          activeView={activeView}
           onFolderClick={handleFolderClick}
           onCompose={() => { setComposeDefaults({}); setShowCompose(true); }}
           onRefresh={() => loadMessages(activeFolder, currentPage)}
           onFoldersRefresh={loadFolders}
+          onSignatureClick={() => setActiveView(activeView === 'signature' ? 'inbox' : 'signature')}
         />
 
-        {/* Panel 2: Message list */}
-        <MessageList
-          folderName={activeFolder}
-          messages={messages}
-          totalMessages={totalMessages}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          selectedUid={selectedUid}
-          loading={loadingMessages}
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          onMessageClick={handleMessageClick}
-          onStar={handleStar}
-          onPageChange={(p) => {
-            setCurrentPage(p);
-            fetchMessages(activeFolder, p, searchQuery);
-          }}
-          onMessageHover={prefetchMessage}
-          onMessageHoverEnd={cancelPrefetch}
-        />
+        {/* Panels 2+3: either inbox view or signature editor */}
+        {activeView === 'signature' ? (
+          <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <SignatureEditor />
+          </div>
+        ) : (
+          <>
+            {/* Panel 2: Message list */}
+            <MessageList
+              folderName={activeFolder}
+              messages={messages}
+              totalMessages={totalMessages}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              selectedUid={selectedUid}
+              loading={loadingMessages}
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              onMessageClick={handleMessageClick}
+              onStar={handleStar}
+              onPageChange={(p) => {
+                setCurrentPage(p);
+                fetchMessages(activeFolder, p, searchQuery);
+              }}
+              onMessageHover={prefetchMessage}
+              onMessageHoverEnd={cancelPrefetch}
+            />
 
-        {/* Panel 3: Message reader */}
-        <MessageReader
-          message={selectedMessage}
-          loading={loadingMessage}
-          onReply={handleReply}
-          onForward={handleForward}
-          onDelete={handleDelete}
-          onToggleStar={handleToggleStar}
-          onMarkUnread={handleMarkUnread}
-          onMove={handleMoveMessage}
-          folders={folders}
-        />
+            {/* Panel 3: Message reader */}
+            <MessageReader
+              message={selectedMessage}
+              loading={loadingMessage}
+              onReply={handleReply}
+              onForward={handleForward}
+              onDelete={handleDelete}
+              onToggleStar={handleToggleStar}
+              onMarkUnread={handleMarkUnread}
+              onMove={handleMoveMessage}
+              folders={folders}
+            />
+          </>
+        )}
       </div>
 
       {/* Compose modal */}

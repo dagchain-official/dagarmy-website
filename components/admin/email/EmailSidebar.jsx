@@ -39,7 +39,7 @@ function getFolderMeta(path, customColor) {
 
 export default function EmailSidebar({
   accountEmail, folders, activeFolder, loadingFolders,
-  onFolderClick, onCompose, onRefresh, onFoldersRefresh,
+  activeView, onFolderClick, onCompose, onRefresh, onFoldersRefresh, onSignatureClick,
 }) {
   const [refreshing, setRefreshing]         = useState(false);
   const [showCreate, setShowCreate]         = useState(false);
@@ -247,7 +247,20 @@ export default function EmailSidebar({
       </nav>
 
       {/* Footer */}
-      <div style={{ padding: '12px 10px 16px', borderTop: '1px solid #e8edf5' }}>
+      <div style={{ padding: '12px 10px 16px', borderTop: '1px solid #e8edf5', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <button onClick={onSignatureClick} style={{
+          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
+          padding: '9px', cursor: 'pointer', border: `1px solid ${activeView === 'signature' ? '#a5b4fc' : '#c7d2fe'}`,
+          borderRadius: '10px', fontSize: '12px', fontWeight: '700', transition: 'all 0.2s',
+          background: activeView === 'signature' ? '#eef2ff' : 'transparent',
+          color: activeView === 'signature' ? '#6366f1' : '#6366f1',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = activeView === 'signature' ? '#eef2ff' : 'transparent'; e.currentTarget.style.borderColor = activeView === 'signature' ? '#a5b4fc' : '#c7d2fe'; }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          My Signature
+        </button>
         <button onClick={handleRefresh} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '9px', background: 'transparent', border: '1px solid #e2e8f0', borderRadius: '10px', color: '#94a3b8', cursor: 'pointer', fontSize: '12px', fontWeight: '600', transition: 'all 0.2s' }}
           onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = '#cbd5e1'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.borderColor = '#e2e8f0'; }}>
