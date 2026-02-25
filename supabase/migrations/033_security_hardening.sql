@@ -221,7 +221,8 @@ BEGIN
   RETURN NOW() <= deadline;
 END; $$;
 
--- update_referral_count
+-- update_referral_count (drop first to avoid stale column validation)
+DROP FUNCTION IF EXISTS public.update_referral_count() CASCADE;
 CREATE OR REPLACE FUNCTION public.update_referral_count()
 RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN
