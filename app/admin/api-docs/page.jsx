@@ -605,6 +605,17 @@ const API_ENDPOINTS = [
     params: "?courseId=uuid"
   },
 
+  // ─── Chatbot ───
+  {
+    category: "Chatbot",
+    method: "POST",
+    path: "/api/chatbot/chat",
+    description: "DAGARMY AI chatbot powered by Gemini 2.5 Flash. Accepts a user message and conversation history, responds with DAGARMY-specific knowledge. Used by the floating ChatWidget on public pages.",
+    auth: "None",
+    body: '{ message: string, history: [{ role: "user"|"bot", text: string }] }',
+    response: '{ reply: string }',
+  },
+
   // ─── Blog ───
   {
     category: "Blog",
@@ -1236,6 +1247,7 @@ export default function ApiDocsPage() {
   );
 
   const CATEGORY_META = {
+    'Chatbot': { icon: svgIcon(<><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></>, '#6366f1'), color: '#6366f1', bg: '#eef2ff' },
     'Admin Auth': { icon: svgIcon(<><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>, '#6366f1'), color: '#6366f1', bg: '#ede9fe' },
     'Admin Courses': { icon: svgIcon(<><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></>, '#8b5cf6'), color: '#8b5cf6', bg: '#f5f3ff' },
     'Admin Creators': { icon: svgIcon(<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>, '#7c3aed'), color: '#7c3aed', bg: '#ede9fe' },

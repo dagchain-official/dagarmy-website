@@ -10,6 +10,7 @@ import Context from "@/context/Context";
 import { Web3Provider } from "@/context/Web3Provider";
 import { usePathname } from "next/navigation";
 import { DM_Sans, Fraunces } from "next/font/google";
+import ChatWidget from "@/components/chatbot/ChatWidget";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -32,7 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  
+  const showChat = !pathname?.startsWith("/admin");
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       import("bootstrap/dist/js/bootstrap.esm" as any).then(() => {});
@@ -54,6 +56,7 @@ export default function RootLayout({
         <Web3Provider>
           <Context>{children}</Context>
         </Web3Provider>
+        {showChat && <ChatWidget />}
       </body>
     </html>
   );
