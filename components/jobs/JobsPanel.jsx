@@ -85,10 +85,10 @@ export default function JobsPanel() {
     setSelectedCity(""); // Reset city when country changes
   }, [selectedCountry]);
 
-  // Auto-search when category changes
+  // On mount / category change: try cache silently first, no spinner
   useEffect(() => {
     if (selectedCategory) {
-      handleSearch();
+      tryLoadFromCache();
     }
   }, [selectedCategory]);
 
@@ -228,33 +228,46 @@ export default function JobsPanel() {
     return items;
   };
 
+  const buildLocationString = () => {
+    if (selectedCountry === "Worldwide" || selectedCountry === "Remote") {
+      return selectedCountry === "Remote" ? "Remote" : "";
+    }
+    return selectedCity ? `${selectedCity}, ${selectedCountry}` : selectedCountry;
+  };
+
+  const enrichJobs = (rawJobs) => rawJobs.map(job => ({
+    ...job,
+    category: selectedCategory.name,
+    type: job.location?.toLowerCase().includes('remote') ? 'Remote' : 'Full-time',
+  }));
+
+  // Silent cache-only load — no spinner, instant if cached, silent if not
+  const tryLoadFromCache = async () => {
+    try {
+      const keywords = encodeURIComponent(selectedCategory.keywords);
+      const location = encodeURIComponent(buildLocationString());
+      const response = await fetch(`/api/scrape-jobs?keywords=${keywords}&location=${location}&pages=2`);
+      const data = await response.json();
+      if (data.success && data.fromCache && data.jobs.length > 0) {
+        setJobs(enrichJobs(data.jobs));
+        setFilteredJobs(enrichJobs(data.jobs));
+        setHasSearched(true);
+      }
+    } catch {}
+  };
+
+  // Full scrape — triggered only by explicit Search button click
   const handleSearch = async () => {
     setIsLoading(true);
     setHasSearched(true);
     try {
       const keywords = encodeURIComponent(selectedCategory.keywords);
-      // Construct location string from country and city
-      let locationString = "";
-      if (selectedCountry === "Worldwide" || selectedCountry === "Remote") {
-        locationString = selectedCountry === "Remote" ? "Remote" : "";
-      } else if (selectedCity) {
-        locationString = `${selectedCity}, ${selectedCountry}`;
-      } else {
-        locationString = selectedCountry;
-      }
-      const location = encodeURIComponent(locationString);
-      const response = await fetch(`/api/scrape-jobs?keywords=${keywords}&location=${location}&pages=5`);
+      const location = encodeURIComponent(buildLocationString());
+      const response = await fetch(`/api/scrape-jobs?keywords=${keywords}&location=${location}&pages=2`);
       const data = await response.json();
-      
       if (data.success && data.jobs.length > 0) {
-        const enrichedJobs = data.jobs.map(job => ({
-          ...job,
-          category: selectedCategory.name,
-          type: job.location?.toLowerCase().includes('remote') ? 'Remote' : 'Full-time',
-        }));
-        
-        setJobs(enrichedJobs);
-        setFilteredJobs(enrichedJobs);
+        setJobs(enrichJobs(data.jobs));
+        setFilteredJobs(enrichJobs(data.jobs));
       } else {
         setJobs([]);
         setFilteredJobs([]);
