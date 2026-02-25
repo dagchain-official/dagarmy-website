@@ -40,5 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# markdown files (may contain sensitive information)
+# markdown and internal note files
 *.md
+*.txt
+
+# loose SQL files in root (migrations belong in supabase/migrations/ only)
+/*.sql
