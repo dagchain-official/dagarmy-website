@@ -12,31 +12,13 @@ export default function AdminLoginPage() {
   const [error, setError] = useState('');
   const [attemptsRemaining, setAttemptsRemaining] = useState(null);
 
-  // Check if already logged in (only on mount)
+  // Only redirect if localStorage explicitly says logged in (avoids loop from stale cookies)
   useEffect(() => {
-    const checkSession = async () => {
-      // Check localStorage first (faster)
-      const isAuthenticated = localStorage.getItem('dagarmy_authenticated');
-      const role = localStorage.getItem('dagarmy_role');
-      
-      if (isAuthenticated === 'true' && role === 'admin') {
-        router.push('/admin/dashboard');
-        return;
-      }
-
-      // Then check session cookie
-      try {
-        const response = await fetch('/api/admin/auth/verify-session');
-        if (response.ok) {
-          router.push('/admin/dashboard');
-        }
-      } catch (error) {
-        // Not logged in, stay on login page
-      }
-    };
-    
-    // Only run once on mount
-    checkSession();
+    const isAuthenticated = localStorage.getItem('dagarmy_authenticated');
+    const role = localStorage.getItem('dagarmy_role');
+    if (isAuthenticated === 'true' && role === 'admin') {
+      router.push('/admin/dashboard');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
