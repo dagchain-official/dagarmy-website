@@ -132,6 +132,7 @@ export default function AdminDashboard2() {
   const [programData, setProgramData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [adminRoleName, setAdminRoleName] = useState("Admin");
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -146,6 +147,10 @@ export default function AdminDashboard2() {
 
   useEffect(() => {
     fetchData();
+    fetch('/api/admin/auth/me')
+      .then(r => r.json())
+      .then(d => { if (d.admin?.role_name) setAdminRoleName(d.admin.role_name); })
+      .catch(() => {});
   }, []);
 
   const fetchData = async () => {
@@ -333,7 +338,7 @@ export default function AdminDashboard2() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.6px' }}>
-              {greeting}, Admin
+              {greeting}, {adminRoleName}
             </h1>
             <span style={{ fontSize: '26px', lineHeight: 1 }}>👋</span>
           </div>
