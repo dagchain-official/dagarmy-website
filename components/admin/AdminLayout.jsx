@@ -44,7 +44,7 @@ export default function AdminLayout({ children }) {
     const authenticated = localStorage.getItem('dagarmy_authenticated');
 
     if (!authenticated || authenticated !== 'true' || userRole !== 'admin') {
-      router.push('/');
+      router.push('/admin/login');
       return;
     }
 
@@ -76,19 +76,25 @@ export default function AdminLayout({ children }) {
     setIsLoading(false);
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleLogout = () => {
-    // Clear all authentication data
+  const handleLogout = async () => {
+    // Call logout API to delete the httpOnly admin_session cookie server-side
+    try {
+      await fetch('/api/admin/auth/logout', { method: 'POST' });
+    } catch (_) { /* best-effort */ }
+
+    // Clear all authentication data from localStorage
     localStorage.removeItem('dagarmy_role');
     localStorage.removeItem('dagarmy_authenticated');
     localStorage.removeItem('dagarmy_user');
     localStorage.removeItem('dagarmy_wallet');
+    localStorage.removeItem('admin_user');
     
-    // Clear cookies
+    // Clear client-readable cookies
     document.cookie = 'dagarmy_role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'dagarmy_authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     
-    // Redirect to home page
-    router.push('/');
+    // Redirect to admin login page
+    router.push('/admin/login');
   };
 
   if (isLoading) {
