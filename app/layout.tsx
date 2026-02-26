@@ -42,6 +42,8 @@ export default function RootLayout({
   }, []);
 
   useEffect(() => {
+    // Skip WOW.js on admin pages — it causes re-render flicker
+    if (pathname?.startsWith("/admin")) return;
     const { WOW } = require("wowjs");
     const wow = new WOW({
       mobile: false,
