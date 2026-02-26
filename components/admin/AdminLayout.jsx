@@ -103,6 +103,11 @@ export default function AdminLayout({ children }) {
     router.push('/admin/login');
   };
 
+  // Login pages render without the admin shell — must be BEFORE isLoading gate
+  if (pathname === '/admin/login' || pathname === '/admin/auth-login') {
+    return <>{children}</>;
+  }
+
   if (isLoading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f8fafc' }}>
@@ -111,11 +116,6 @@ export default function AdminLayout({ children }) {
         </div>
       </div>
     );
-  }
-
-  // Login pages render without the admin shell
-  if (pathname === '/admin/login' || pathname === '/admin/auth-login') {
-    return <>{children}</>;
   }
 
   if (!isAuthenticated) {
