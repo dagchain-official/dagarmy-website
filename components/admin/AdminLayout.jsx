@@ -40,6 +40,12 @@ export default function AdminLayout({ children }) {
   const _authInitialised = React.useRef(false);
 
   useEffect(() => {
+    // Don't redirect from the login pages themselves — avoids infinite loop
+    if (pathname === '/admin/login' || pathname === '/admin/auth-login') {
+      setIsLoading(false);
+      return;
+    }
+
     const userRole = localStorage.getItem('dagarmy_role');
     const authenticated = localStorage.getItem('dagarmy_authenticated');
 
@@ -105,6 +111,11 @@ export default function AdminLayout({ children }) {
         </div>
       </div>
     );
+  }
+
+  // Login pages render without the admin shell
+  if (pathname === '/admin/login' || pathname === '/admin/auth-login') {
+    return <>{children}</>;
   }
 
   if (!isAuthenticated) {
