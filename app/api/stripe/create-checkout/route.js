@@ -12,13 +12,14 @@ const supabase = createClient(
 
 /**
  * POST /api/stripe/create-checkout
- * Creates a Stripe Checkout session for the DAG Lieutenant upgrade ($149).
- * Requires the user to be authenticated via wallet/session.
- * Body: { userId, userEmail }
+ * Creates a Stripe Checkout session for the DAG Lieutenant upgrade.
+ * Body: { userId, userEmail, test?: boolean }
+ *   test=true  → $5 "Mini Lieutenant" test payment
+ *   test=false → $149 full Lieutenant upgrade
  */
 export async function POST(request) {
   try {
-    const { userId, userEmail } = await request.json();
+    const { userId, userEmail, test = false } = await request.json();
 
     if (!userId || !userEmail) {
       return NextResponse.json({ error: 'userId and userEmail are required' }, { status: 400 });
@@ -41,6 +42,13 @@ export async function POST(request) {
 
     const baseUrl = request.headers.get('origin') || 'https://dagarmy.network';
 
+    const isTest = test === true;
+    const unitAmount = isTest ? 500 : 14900; // $5 or $149 in cents
+    const productName = isTest ? 'Mini Lieutenant Upgrade (Test)' : 'DAG Lieutenant Upgrade';
+    const productDesc = isTest
+      ? 'Test payment — verifies the Stripe checkout and upgrade flow end-to-end.'
+      : 'Upgrade from DAG Soldier to DAG Lieutenant — unlock full earning potential, referral bonuses, and exclusive benefits.';
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -48,11 +56,11 @@ export async function POST(request) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'DAG Lieutenant Upgrade',
-              description: 'Upgrade from DAG Soldier to DAG Lieutenant — unlock full earning potential, referral bonuses, and exclusive benefits.',
+              name: productName,
+              description: productDesc,
               images: [`${baseUrl}/images/logo/logo.png`],
             },
-            unit_amount: 14900, // $149.00 in cents
+            unit_amount: unitAmount,
           },
           quantity: 1,
         },
@@ -63,6 +71,7 @@ export async function POST(request) {
         userId,
         userEmail,
         product: 'dag_lieutenant_upgrade',
+        test: isTest ? 'true' : 'false',
       },
       success_url: `${baseUrl}/success/upgrade?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/student-rewards`,
