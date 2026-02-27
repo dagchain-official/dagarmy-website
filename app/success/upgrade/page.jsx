@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function UpgradeSuccessPage() {
+function UpgradeSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('session_id');
@@ -174,5 +174,17 @@ export default function UpgradeSuccessPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function UpgradeSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf4ff 100%)' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '3px solid #e0e7ff', borderTopColor: '#6366f1', animation: 'spin 0.8s linear infinite' }} />
+      </div>
+    }>
+      <UpgradeSuccessContent />
+    </Suspense>
   );
 }
