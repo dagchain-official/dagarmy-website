@@ -2,7 +2,7 @@
 
 import { avatars, testimonials } from "@/data/testimonials";
 import { useState } from "react";
-import { Navigation, Thumbs } from "swiper/modules";
+import { Navigation, Thumbs, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 export default function Testimonials({
@@ -11,16 +11,27 @@ export default function Testimonials({
 }) {
   const swiperOptions = {
     slidesPerView: 1,
-    // centeredSlides: true,
     loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    speed: 800,
+    effect: 'slide',
   };
   const swiperOptions2 = {
-    // slidesPerView: 'auto',
     spaceBetween: 80,
     slidesPerView: 5,
     centeredSlides: true,
     loop: true,
     slideToClickedSlide: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    speed: 800,
     breakpoints: {
       0: {
         slidesPerView: 3,
@@ -98,7 +109,7 @@ export default function Testimonials({
               </div>
               <Swiper
                 {...swiperOptions2}
-                modules={[Navigation, Thumbs]}
+                modules={[Navigation, Thumbs, Autoplay]}
                 className="swiper-container gallery-thumbs"
                 thumbs={{ swiper: thumbsSwiper }}
               >
@@ -124,7 +135,7 @@ export default function Testimonials({
               </Swiper>
               <Swiper
                 {...swiperOptions}
-                modules={[Thumbs]}
+                modules={[Thumbs, Autoplay]}
                 onSwiper={setThumbsSwiper}
                 allowTouchMove={false}
                 loopAdditionalSlides={7}

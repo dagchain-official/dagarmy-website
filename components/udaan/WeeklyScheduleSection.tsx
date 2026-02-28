@@ -10,47 +10,29 @@ const weekData = [
   {
     week: "Week 1",
     title: "Problem Discovery",
-    description: "Most ideas collapse because they were never tested against reality. Week 1 focuses on structured discovery.",
-    deliverables: [
-      "Defined problem statement",
-      "Target user clarity",
-      "AI Business Model Development structure",
-      "1-page concept summary"
-    ],
+    subtitle: "Structured Idea Validation",
+    description: "Define the right problem before building anything. Clarify users. Validate direction.",
     route: "/udaan/week-1"
   },
   {
     week: "Week 2",
     title: "AI MVP Development",
-    description: "Now the build begins. Using practical No Code AI Tools, workflow systems, and automation platforms.",
-    deliverables: [
-      "Working interface",
-      "Defined automation logic",
-      "Testable AI MVP Build Framework",
-      "Demonstrable product"
-    ],
+    subtitle: "Functional Build",
+    description: "Convert your concept into a working AI prototype using structured tools.",
     route: "/udaan/week-2"
   },
   {
     week: "Week 3",
-    title: "Validation and Market Testing",
-    description: "Now comes external reality. You test your MVP with 5 to 10 early users. You collect direct feedback.",
-    deliverables: [
-      "User testing report",
-      "Iteration plan",
-      "Traction metrics"
-    ],
+    title: "Validation & Testing",
+    subtitle: "Evidence Before Scale",
+    description: "Test with real users. Refine before expansion.",
     route: "/udaan/week-3"
   },
   {
     week: "Week 4",
-    title: "Pitch Preparation",
-    description: "Execution must be communicated clearly. Week 4 prepares you for structured evaluation.",
-    deliverables: [
-      "5-minute pitch",
-      "Measurable traction indicators",
-      "Clearer path toward Founder Track"
-    ],
+    title: "Pitch & Positioning",
+    subtitle: "Structured Evaluation",
+    description: "Prepare your narrative. Define traction. Enter the Founder Track.",
     route: "/udaan/week-4"
   }
 ];
@@ -64,9 +46,9 @@ export default function WeeklyScheduleSection() {
       ref={ref}
       style={{
         position: "relative",
-        background: "#fafafa",
-        paddingTop: 100,
-        paddingBottom: 100,
+        background: "#ffffff",
+        paddingTop: 60,
+        paddingBottom: 60,
       }}
     >
       <div className="wrap" style={{ maxWidth: 1200 }}>
@@ -76,251 +58,353 @@ export default function WeeklyScheduleSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease }}
-          style={{ marginBottom: 64, textAlign: "center" }}
+          style={{ marginBottom: 32, textAlign: "center" }}
         >
           <h2
             style={{
               fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
               fontWeight: 700,
-              fontSize: "clamp(36px, 3.5vw, 48px)",
+              fontSize: "clamp(32px, 3.5vw, 42px)",
               lineHeight: 1.2,
               letterSpacing: "-0.02em",
               color: "#0c0c14",
-              marginBottom: 16,
+              marginBottom: 4,
             }}
           >
             The Transformation Path
           </h2>
+          <h3
+            style={{
+              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+              fontWeight: 600,
+              fontSize: "clamp(24px, 2.5vw, 32px)",
+              lineHeight: 1.3,
+              color: "#0c0c14",
+              marginBottom: 12,
+              position: "relative",
+              display: "inline-block"
+            }}
+          >
+            <span style={{ position: "relative" }}>
+              4 Weeks
+              <span style={{
+                position: "absolute",
+                bottom: -4,
+                left: 0,
+                right: 0,
+                height: 3,
+                background: "#6366f1"
+              }} />
+            </span>
+            {" "}of Measured Execution
+          </h3>
           <p
             style={{
-              fontSize: "17px",
-              fontWeight: 500,
-              color: "#5a5a72",
+              fontSize: "15px",
+              fontWeight: 400,
+              color: "#6b7280",
               marginBottom: 0,
               maxWidth: 700,
               margin: "0 auto"
             }}
           >
-            4 Weeks of Measured Execution
+            A disciplined AI Startup build cycle designed to convert intent into execution.
           </p>
         </motion.div>
 
-        {/* Weekly Schedule Cards Grid */}
+        {/* Main Layout: 2 Columns */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 32,
+            gridTemplateColumns: "70% 30%",
+            gap: 24,
             marginBottom: 0,
           }}
         >
-          {weekData.map((week, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + index * 0.1, ease }}
-            >
-              <Link
-                href={week.route}
-                style={{
-                  textDecoration: "none",
-                  display: "block",
-                  height: "100%"
-                }}
-              >
-                <div
-                  style={{
-                    background: "#ffffff",
-                    border: "2px solid #e0e0e8",
-                    borderRadius: 16,
-                    padding: "36px 28px",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    transition: "all 0.3s ease",
-                    cursor: "pointer",
-                    position: "relative",
-                    overflow: "hidden"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-4px)";
-                    e.currentTarget.style.boxShadow = "0 8px 32px rgba(99,102,241,0.15)";
-                    e.currentTarget.style.borderColor = "#6366f1";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                    e.currentTarget.style.borderColor = "#e0e0e8";
-                  }}
-                >
-                  {/* Logo and Brand */}
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 12,
-                    marginBottom: 24,
-                    paddingBottom: 20,
-                    borderBottom: "1px solid #f0f0f4"
-                  }}>
-                    <Image
-                      src="/images/logo/logo.png"
-                      alt="DAGARMY Logo"
-                      width={32}
-                      height={32}
-                      style={{ objectFit: "contain" }}
-                    />
-                    <span style={{
-                      fontFamily: "'Nasalization', sans-serif",
-                      fontSize: "18px",
-                      fontWeight: 400,
-                      color: "#0c0c14",
-                      letterSpacing: "0.05em"
-                    }}>
-                      DAGARMY
-                    </span>
-                  </div>
-
-                  {/* Week Badge */}
-                  <div style={{
-                    display: "inline-block",
-                    background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-                    color: "#ffffff",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    padding: "6px 14px",
-                    borderRadius: 6,
-                    marginBottom: 16,
-                    alignSelf: "flex-start"
-                  }}>
-                    {week.week}
-                  </div>
-
-                  {/* Title */}
-                  <h3 style={{
-                    fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                    fontSize: "22px",
-                    fontWeight: 700,
-                    color: "#0c0c14",
-                    marginBottom: 12,
-                    letterSpacing: "-0.01em",
-                    lineHeight: 1.3
-                  }}>
-                    {week.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p style={{
-                    fontSize: "14px",
-                    lineHeight: 1.7,
-                    color: "#5a5a72",
-                    marginBottom: 20,
-                    flexGrow: 1
-                  }}>
-                    {week.description}
-                  </p>
-
-                  {/* Deliverables */}
-                  <div style={{
-                    background: "#fafafa",
-                    borderRadius: 10,
-                    padding: "16px 18px",
-                    marginTop: "auto"
-                  }}>
-                    <p style={{
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "#6366f1",
-                      marginBottom: 12
-                    }}>
-                      You Leave With:
-                    </p>
-                    <ul style={{
-                      margin: 0,
-                      padding: 0,
-                      listStyle: "none",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 8
-                    }}>
-                      {week.deliverables.map((item, i) => (
-                        <li key={i} style={{
-                          fontSize: "13px",
-                          color: "#0c0c14",
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: 8
-                        }}>
-                          <span style={{
-                            color: "#6366f1",
-                            fontSize: "16px",
-                            lineHeight: 1,
-                            marginTop: 2
-                          }}>•</span>
-                          <span style={{ lineHeight: 1.5 }}>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* View Details Arrow */}
-                  <div style={{
-                    marginTop: 20,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    color: "#6366f1",
-                    fontSize: "13px",
-                    fontWeight: 600
-                  }}>
-                    <span>View Details</span>
-                    <span style={{ fontSize: "16px" }}>→</span>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Bottom Statement */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6, ease }}
-          style={{
-            marginTop: 64,
-            textAlign: "center",
-            padding: "32px 40px",
-            background: "#ffffff",
-            borderRadius: 12,
-            border: "2px solid #e0e0e8",
-          }}
-        >
-          <p
+          {/* LEFT SIDE - Week Cards */}
+          <div
             style={{
-              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-              fontSize: "20px",
-              fontWeight: 600,
-              lineHeight: 1.6,
-              color: "#0c0c14",
-              letterSpacing: "-0.01em",
-              marginBottom: 0,
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: 24,
             }}
           >
-            After 4 weeks, you are not exploring tools.<br />
-            You are operating as an <span style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontWeight: 700
-            }}>Early Stage AI Founder</span> inside an execution-driven ecosystem.
-          </p>
-        </motion.div>
+            {weekData.map((week, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.08, ease }}
+              >
+                <Link
+                  href={week.route}
+                  style={{
+                    textDecoration: "none",
+                    display: "block",
+                    height: "100%"
+                  }}
+                >
+                  <div
+                    style={{
+                      background: "#ffffff",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 8,
+                      padding: "24px 20px",
+                      minHeight: 240,
+                      display: "flex",
+                      flexDirection: "column",
+                      transition: "all 0.25s ease",
+                      cursor: "pointer",
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+                      e.currentTarget.style.borderColor = "#d1d5db";
+                      const title = e.currentTarget.querySelector('h3');
+                      if (title) {
+                        (title as HTMLElement).style.textDecoration = "underline";
+                        (title as HTMLElement).style.textDecorationColor = "#6366f1";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
+                      e.currentTarget.style.borderColor = "#e5e7eb";
+                      const title = e.currentTarget.querySelector('h3');
+                      if (title) {
+                        (title as HTMLElement).style.textDecoration = "none";
+                      }
+                    }}
+                  >
+                    {/* Week Label */}
+                    <p style={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: "#6366f1",
+                      marginBottom: 12,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em"
+                    }}>
+                      {week.week}
+                    </p>
+
+                    {/* Title */}
+                    <h3 style={{
+                      fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                      fontSize: "20px",
+                      fontWeight: 700,
+                      color: "#0c0c14",
+                      marginBottom: 8,
+                      letterSpacing: "-0.01em",
+                      lineHeight: 1.3,
+                      transition: "text-decoration 0.25s ease"
+                    }}>
+                      {week.title}
+                    </h3>
+
+                    {/* Micro Label */}
+                    <p style={{
+                      fontSize: "11px",
+                      fontWeight: 500,
+                      letterSpacing: "0.05em",
+                      textTransform: "uppercase",
+                      color: "#9ca3af",
+                      marginBottom: 12
+                    }}>
+                      {week.subtitle}
+                    </p>
+
+                    {/* Description */}
+                    <p style={{
+                      fontSize: "14px",
+                      lineHeight: 1.6,
+                      color: "#6b7280",
+                      marginBottom: "auto",
+                      flexGrow: 1
+                    }}>
+                      {week.description}
+                    </p>
+
+                    {/* CTA Link */}
+                    <div style={{
+                      marginTop: 16,
+                      paddingTop: 16,
+                      borderTop: "1px solid #f3f4f6",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      color: "#6366f1",
+                      fontSize: "13px",
+                      fontWeight: 600
+                    }}>
+                      <span>View {week.week}</span>
+                      <span style={{ fontSize: "14px" }}>→</span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+          {/* RIGHT SIDE - Program Architecture Panel */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3, ease }}
+            style={{
+              background: "#0c0c14",
+              borderRadius: 8,
+              padding: 32,
+              display: "flex",
+              flexDirection: "column",
+              color: "#ffffff"
+            }}
+          >
+            {/* Title */}
+            <h3 style={{
+              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+              fontSize: "20px",
+              fontWeight: 700,
+              color: "#ffffff",
+              marginBottom: 4,
+              lineHeight: 1.3,
+              position: "relative",
+              paddingBottom: 12
+            }}>
+              Program Architecture
+              <span style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: 60,
+                height: 2,
+                background: "#6366f1"
+              }} />
+            </h3>
+
+            {/* Supporting Line */}
+            <p style={{
+              fontSize: "13px",
+              lineHeight: 1.5,
+              color: "#d1d5db",
+              marginBottom: 20
+            }}>
+              A structured 4-week execution cycle built for measurable output.
+            </p>
+
+            {/* 2x2 Grid */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 20,
+              marginBottom: 20
+            }}>
+              {/* Block 1 */}
+              <div>
+                <div style={{
+                  fontSize: "32px",
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  marginBottom: 4,
+                  lineHeight: 1
+                }}>4</div>
+                <div style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                  marginBottom: 4
+                }}>Defined Phases</div>
+                <div style={{
+                  fontSize: "11px",
+                  color: "#9ca3af",
+                  lineHeight: 1.4
+                }}>Structured weekly progression</div>
+              </div>
+
+              {/* Block 2 */}
+              <div>
+                <div style={{
+                  fontSize: "32px",
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  marginBottom: 4,
+                  lineHeight: 1
+                }}>4</div>
+                <div style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                  marginBottom: 4
+                }}>Tangible Deliverables</div>
+                <div style={{
+                  fontSize: "11px",
+                  color: "#9ca3af",
+                  lineHeight: 1.4
+                }}>One measurable output per week</div>
+              </div>
+
+              {/* Block 3 */}
+              <div>
+                <div style={{
+                  fontSize: "32px",
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  marginBottom: 4,
+                  lineHeight: 1
+                }}>Live</div>
+                <div style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                  marginBottom: 4
+                }}>Market Validation</div>
+                <div style={{
+                  fontSize: "11px",
+                  color: "#9ca3af",
+                  lineHeight: 1.4
+                }}>Real user feedback before scale</div>
+              </div>
+
+              {/* Block 4 */}
+              <div>
+                <div style={{
+                  fontSize: "32px",
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  marginBottom: 4,
+                  lineHeight: 1
+                }}>Founder</div>
+                <div style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                  marginBottom: 4
+                }}>Positioning Path</div>
+                <div style={{
+                  fontSize: "11px",
+                  color: "#9ca3af",
+                  lineHeight: 1.4
+                }}>Pitch, traction, evaluation</div>
+              </div>
+            </div>
+
+            {/* Bottom Closing Line */}
+            <div style={{
+              marginTop: "auto",
+              paddingTop: 20,
+              borderTop: "1px solid #374151"
+            }}>
+              <p style={{
+                fontSize: "12px",
+                color: "#d1d5db",
+                lineHeight: 1.5,
+                marginBottom: 0
+              }}>
+                Each week ends with visible progress. No passive participation.
+              </p>
+            </div>
+          </motion.div>
+        </div>
 
       </div>
     </section>

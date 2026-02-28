@@ -10,28 +10,28 @@ export default function UdaanDropdown({ isVisible }) {
       week: "Week 1",
       title: "Problem Discovery",
       subtitle: "Structured Idea Validation",
-      description: "Explore real problems. Define target users.",
+      description: "Define the right problem before building anything.",
       route: "/udaan/week-1"
     },
     {
       week: "Week 2",
       title: "AI MVP Development",
-      subtitle: "Functional Build Sprint",
-      description: "Build working AI prototype with no-code tools.",
+      subtitle: "Functional Build",
+      description: "Convert concept into working AI prototype.",
       route: "/udaan/week-2"
     },
     {
       week: "Week 3",
       title: "Validation & Testing",
       subtitle: "Evidence Before Scale",
-      description: "Test with users. Collect real feedback.",
+      description: "Test with real users. Refine before expansion.",
       route: "/udaan/week-3"
     },
     {
       week: "Week 4",
       title: "Pitch & Positioning",
       subtitle: "Structured Evaluation",
-      description: "Prepare pitch. Define traction signals.",
+      description: "Prepare narrative. Enter Founder Track.",
       route: "/udaan/week-4"
     }
   ];
@@ -45,21 +45,21 @@ export default function UdaanDropdown({ isVisible }) {
         transform: "translateX(-50%)",
         width: "750px",
         background: "#ffffff",
-        borderRadius: 12,
-        boxShadow: "0 4px 24px rgba(0,0,0,0.1)",
-        padding: "28px",
+        borderRadius: 8,
+        boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+        padding: "24px",
         marginTop: "4px",
         zIndex: 1000,
-        border: "1px solid #e5e5e5"
+        border: "1px solid #e5e7eb"
       }}
     >
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 0.8fr", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 0.75fr", gap: 20 }}>
         {/* LEFT SIDE - Week Cards */}
         <div>
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 14
+            gap: 12
           }}>
             {weekCards.map((card, index) => (
               <Link
@@ -67,41 +67,48 @@ export default function UdaanDropdown({ isVisible }) {
                 href={card.route}
                 style={{
                   textDecoration: "none",
-                  background: "#fafafa",
-                  border: "1px solid #e5e5e5",
-                  borderRadius: 10,
-                  padding: "16px 14px",
-                  transition: "all 0.25s ease",
-                  display: "block",
-                  position: "relative"
+                  background: "#ffffff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 6,
+                  padding: "14px 12px",
+                  minHeight: "130px",
+                  transition: "all 0.2s ease",
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 4px 16px rgba(99,102,241,0.12)";
-                  e.currentTarget.style.background = "#ffffff";
-                  e.currentTarget.style.borderColor = "#6366f1";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 3px 8px rgba(0,0,0,0.08)";
+                  e.currentTarget.style.borderColor = "#d1d5db";
+                  const title = e.currentTarget.querySelector('h4');
+                  if (title) {
+                    title.style.textDecoration = "underline";
+                    title.style.textDecorationColor = "#6366f1";
+                  }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.background = "#fafafa";
-                  e.currentTarget.style.borderColor = "#e5e5e5";
+                  e.currentTarget.style.boxShadow = "0 1px 2px rgba(0,0,0,0.04)";
+                  e.currentTarget.style.borderColor = "#e5e7eb";
+                  const title = e.currentTarget.querySelector('h4');
+                  if (title) {
+                    title.style.textDecoration = "none";
+                  }
                 }}
               >
-                {/* Week Number Badge */}
-                <div style={{
-                  display: "inline-block",
-                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-                  color: "#ffffff",
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  padding: "3px 10px",
-                  borderRadius: 5,
-                  marginBottom: 10,
+                {/* Week Label */}
+                <p style={{
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "#6366f1",
+                  marginBottom: 8,
+                  textTransform: "uppercase",
                   letterSpacing: "0.05em"
                 }}>
                   {card.week}
-                </div>
+                </p>
 
                 {/* Title */}
                 <h4 style={{
@@ -109,20 +116,21 @@ export default function UdaanDropdown({ isVisible }) {
                   fontSize: "15px",
                   fontWeight: 700,
                   color: "#0c0c14",
-                  marginBottom: 5,
-                  lineHeight: 1.3
+                  marginBottom: 6,
+                  lineHeight: 1.3,
+                  transition: "text-decoration 0.2s ease"
                 }}>
                   {card.title}
                 </h4>
 
                 {/* Subtitle */}
                 <p style={{
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  color: "#6366f1",
+                  fontSize: "10px",
+                  fontWeight: 500,
+                  color: "#9ca3af",
                   marginBottom: 8,
                   textTransform: "uppercase",
-                  letterSpacing: "0.03em"
+                  letterSpacing: "0.05em"
                 }}>
                   {card.subtitle}
                 </p>
@@ -131,8 +139,10 @@ export default function UdaanDropdown({ isVisible }) {
                 <p style={{
                   fontSize: "12px",
                   lineHeight: 1.5,
-                  color: "#5a5a72",
-                  marginBottom: 0
+                  color: "#6b7280",
+                  marginBottom: 0,
+                  marginTop: "auto",
+                  flexGrow: 1
                 }}>
                   {card.description}
                 </p>
@@ -141,114 +151,157 @@ export default function UdaanDropdown({ isVisible }) {
           </div>
         </div>
 
-        {/* RIGHT SIDE - Program Summary */}
+        {/* RIGHT SIDE - Program Architecture */}
         <div style={{
-          background: "#fafafa",
-          borderRadius: 10,
+          background: "#0c0c14",
+          borderRadius: 6,
           padding: "20px 18px",
-          border: "1px solid #e5e5e5"
+          display: "flex",
+          flexDirection: "column",
+          color: "#ffffff"
         }}>
+          {/* Title */}
           <h3 style={{
             fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-            fontSize: "16px",
+            fontSize: "15px",
             fontWeight: 700,
-            color: "#0c0c14",
-            marginBottom: 12,
-            lineHeight: 1.3
+            color: "#ffffff",
+            marginBottom: 3,
+            lineHeight: 1.3,
+            position: "relative",
+            paddingBottom: 10
           }}>
-            4 Weeks of Measured Execution
+            Program Architecture
+            <span style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: 175,
+              height: 2,
+              background: "#6366f1"
+            }} />
           </h3>
 
+          {/* Supporting Line */}
           <p style={{
-            fontSize: "12px",
-            lineHeight: 1.6,
-            color: "#5a5a72",
-            marginBottom: 18
+            fontSize: "11px",
+            lineHeight: 1.4,
+            color: "#d1d5db",
+            marginBottom: 16
           }}>
-            A structured AI Startup Program to convert intent into execution.
+            Structured 4-week execution cycle built for measurable output.
           </p>
 
+          {/* 2x2 Grid */}
           <div style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 10
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 14,
+            marginBottom: 14
           }}>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8
-            }}>
+            {/* Block 1 */}
+            <div>
               <div style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)"
-              }} />
-              <span style={{
-                fontSize: "12px",
-                color: "#0c0c14",
-                fontWeight: 600
-              }}>
-                4 Defined Phases
-              </span>
-            </div>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8
-            }}>
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                marginBottom: 2,
+                lineHeight: 1
+              }}>4</div>
               <div style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)"
-              }} />
-              <span style={{
-                fontSize: "12px",
-                color: "#0c0c14",
-                fontWeight: 600
-              }}>
-                Weekly Outcomes
-              </span>
-            </div>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8
-            }}>
+                fontSize: "11px",
+                fontWeight: 600,
+                color: "#ffffff",
+                marginBottom: 3
+              }}>Phases</div>
               <div style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)"
-              }} />
-              <span style={{
-                fontSize: "12px",
-                color: "#0c0c14",
-                fontWeight: 600
-              }}>
-                Measured Execution
-              </span>
+                fontSize: "9px",
+                color: "#9ca3af",
+                lineHeight: 1.3
+              }}>Weekly progression</div>
             </div>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8
-            }}>
+
+            {/* Block 2 */}
+            <div>
               <div style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)"
-              }} />
-              <span style={{
-                fontSize: "12px",
-                color: "#0c0c14",
-                fontWeight: 600
-              }}>
-                Founder Positioning
-              </span>
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                marginBottom: 2,
+                lineHeight: 1
+              }}>4</div>
+              <div style={{
+                fontSize: "11px",
+                fontWeight: 600,
+                color: "#ffffff",
+                marginBottom: 3
+              }}>Deliverables</div>
+              <div style={{
+                fontSize: "9px",
+                color: "#9ca3af",
+                lineHeight: 1.3
+              }}>Measurable output</div>
             </div>
+
+            {/* Block 3 */}
+            <div>
+              <div style={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                marginBottom: 2,
+                lineHeight: 1
+              }}>Live</div>
+              <div style={{
+                fontSize: "11px",
+                fontWeight: 600,
+                color: "#ffffff",
+                marginBottom: 3
+              }}>Validation</div>
+              <div style={{
+                fontSize: "9px",
+                color: "#9ca3af",
+                lineHeight: 1.3
+              }}>Real user feedback</div>
+            </div>
+
+            {/* Block 4 */}
+            <div>
+              <div style={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                marginBottom: 2,
+                lineHeight: 1
+              }}>Path</div>
+              <div style={{
+                fontSize: "11px",
+                fontWeight: 600,
+                color: "#ffffff",
+                marginBottom: 3
+              }}>Founder Track</div>
+              <div style={{
+                fontSize: "9px",
+                color: "#9ca3af",
+                lineHeight: 1.3
+              }}>Pitch & evaluation</div>
+            </div>
+          </div>
+
+          {/* Bottom Line */}
+          <div style={{
+            marginTop: "auto",
+            paddingTop: 14,
+            borderTop: "1px solid #374151"
+          }}>
+            <p style={{
+              fontSize: "10px",
+              color: "#d1d5db",
+              lineHeight: 1.4,
+              marginBottom: 0
+            }}>
+              Visible progress. No passive participation.
+            </p>
           </div>
         </div>
       </div>

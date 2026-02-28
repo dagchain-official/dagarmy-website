@@ -7,7 +7,6 @@ import SoldierSection from "@/components/udaan/SoldierSection";
 import LieutenantSection from "@/components/udaan/LieutenantSection";
 import PrideLadderSection from "@/components/udaan/PrideLadderSection";
 import DemoDaySection from "@/components/udaan/DemoDaySection";
-import JurySection from "@/components/udaan/JurySection";
 import UdaanCodeSection from "@/components/udaan/UdaanCodeSection";
 import BuildersPledgeSection from "@/components/udaan/BuildersPledgeSection";
 import Reality from "@/components/udaan/Reality";
@@ -34,7 +33,6 @@ export default function UdaanPage() {
         <LieutenantSection />
         <PrideLadderSection />
         <DemoDaySection />
-        <JurySection />
         <UdaanCodeSection />
         <BuildersPledgeSection />
         <Vision2030 />
