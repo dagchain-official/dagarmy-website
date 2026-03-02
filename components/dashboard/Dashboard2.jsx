@@ -184,21 +184,47 @@ export default function Dashboard2() {
         } catch {}
     };
 
-    // Fetch events for calendar
+    // Fetch events for calendar (admin events + joined user events)
     useEffect(() => {
         async function fetchEvents() {
             try {
                 const year = calendarMonth.getFullYear();
                 const month = calendarMonth.getMonth() + 1;
-                const res = await fetch(`/api/events?year=${year}&month=${month}`);
-                const data = await res.json();
-                if (data.events) setEvents(data.events);
+                const [adminRes, userRes] = await Promise.all([
+                    fetch(`/api/events?year=${year}&month=${month}`),
+                    userData?.id
+                        ? fetch(`/api/user-events?userId=${userData.id}&joined=true&filter=all`)
+                        : Promise.resolve(null),
+                ]);
+                const adminData = await adminRes.json();
+                const adminEvents = (adminData.events || []).map(e => ({ ...e, _source: 'admin' }));
+
+                let userEvents = [];
+                if (userRes) {
+                    const userdata = await userRes.json();
+                    userEvents = (userdata.events || []).map(e => ({
+                        id: e.id,
+                        title: e.title,
+                        event_date: e.event_date,
+                        event_time: e.event_time,
+                        end_time: e.end_time,
+                        event_type: e.event_type,
+                        description: e.description,
+                        location: e.location,
+                        is_online: e.is_online,
+                        meeting_link: e.meeting_link,
+                        _source: 'user',
+                        _color: '#0ea5e9',
+                    }));
+                }
+
+                setEvents([...adminEvents, ...userEvents]);
             } catch (err) {
                 console.error('Error fetching events:', err);
             }
         }
         fetchEvents();
-    }, [calendarMonth]);
+    }, [calendarMonth, userData]);
 
     // Handle copy referral code
     const handleCopyCode = async () => {
@@ -324,6 +350,10 @@ export default function Dashboard2() {
     const EVENT_COLORS = {
         workshop: '#6366f1', quiz: '#10b981', project: '#f59e0b',
         meeting: '#ec4899', deadline: '#ef4444', default: '#8b5cf6'
+    };
+    const getEventColor = (event) => {
+        if (event._color) return event._color;
+        return EVENT_COLORS[event.event_type] || EVENT_COLORS.default;
     };
 
     return (
@@ -646,7 +676,7 @@ export default function Dashboard2() {
                                 </div>
                                 {date.events && date.events.slice(0, 2).map((event, eidx) => (
                                     <div key={eidx} onClick={(e) => { e.stopPropagation(); setSelectedEvent(event); }} style={{
-                                        background: EVENT_COLORS[event.event_type] || EVENT_COLORS.default,
+                                        background: getEventColor(event),
                                         color: '#fff', padding: '2px 5px', borderRadius: '4px',
                                         fontSize: '9px', fontWeight: '600', marginBottom: '2px',
                                         overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -668,6 +698,7 @@ export default function Dashboard2() {
                             { label: 'Project', color: '#f59e0b' },
                             { label: 'Meeting', color: '#ec4899' },
                             { label: 'Deadline', color: '#ef4444' },
+                            { label: 'My Events', color: '#0ea5e9' },
                         ].map((item, i) => (
                             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 <div style={{ width: '10px', height: '10px', borderRadius: '3px', background: item.color }} />
@@ -703,7 +734,7 @@ export default function Dashboard2() {
                                     </div>
                                     <div style={{
                                         width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0,
-                                        background: EVENT_COLORS[event.event_type] || EVENT_COLORS.default
+                                        background: getEventColor(event)
                                     }} />
                                 </div>
                             )) : (

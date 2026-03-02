@@ -81,29 +81,55 @@ export async function POST(request) {
       data = result.data;
       error = result.error;
     } else if (wallet_address) {
-      // No email - use wallet_address as identifier (wallet-only login)
-      const result = await supabase
+      // No email - wallet_address is not unique so we can't use ON CONFLICT.
+      // Instead: look up existing user by wallet, then update or insert.
+      const normalizedWallet = wallet_address.toLowerCase();
+
+      const { data: existing, error: lookupError } = await supabase
         .from('users')
-        .upsert({
-          wallet_address: wallet_address.toLowerCase(),
-          email: null,
-          first_name,
-          last_name,
-          country_code: country_code || '+91',
-          whatsapp_number,
-          profile_completed: true,
-          role: 'student',
-          tier: 'DAG_SOLDIER',
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'wallet_address',
-          ignoreDuplicates: false
-        })
-        .select()
-        .single();
-      
-      data = result.data;
-      error = result.error;
+        .select('id')
+        .eq('wallet_address', normalizedWallet)
+        .maybeSingle();
+
+      if (lookupError) {
+        data = null;
+        error = lookupError;
+      } else if (existing) {
+        const result = await supabase
+          .from('users')
+          .update({
+            first_name,
+            last_name,
+            country_code: country_code || '+91',
+            whatsapp_number,
+            profile_completed: true,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', existing.id)
+          .select()
+          .single();
+        data = result.data;
+        error = result.error;
+      } else {
+        const result = await supabase
+          .from('users')
+          .insert({
+            wallet_address: normalizedWallet,
+            email: null,
+            first_name,
+            last_name,
+            country_code: country_code || '+91',
+            whatsapp_number,
+            profile_completed: true,
+            role: 'student',
+            tier: 'DAG_SOLDIER',
+            updated_at: new Date().toISOString(),
+          })
+          .select()
+          .single();
+        data = result.data;
+        error = result.error;
+      }
     } else {
       // Neither email nor wallet_address provided
       return NextResponse.json(

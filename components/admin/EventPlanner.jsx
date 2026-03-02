@@ -54,6 +54,10 @@ export default function EventPlanner() {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [viewMode, setViewMode] = useState('calendar'); // 'calendar' or 'list'
   const [selectedDate, setSelectedDate] = useState(null);
+  const [mainTab, setMainTab] = useState('admin'); // 'admin' or 'user'
+  const [userEvents, setUserEvents] = useState([]);
+  const [userEventsLoading, setUserEventsLoading] = useState(false);
+  const [userEventDeleteConfirm, setUserEventDeleteConfirm] = useState(null);
   const [formData, setFormData] = useState({
     title: '', description: '', event_date: '', event_time: '', end_time: '',
     event_type: 'workshop', location: '', is_online: true, meeting_link: '', is_published: true
@@ -75,6 +79,40 @@ export default function EventPlanner() {
   }, []);
 
   useEffect(() => { fetchEvents(); }, [fetchEvents]);
+
+  const fetchUserEvents = useCallback(async () => {
+    setUserEventsLoading(true);
+    try {
+      const res = await fetch('/api/user-events?filter=all');
+      const data = await res.json();
+      if (data.events) setUserEvents(data.events);
+    } catch (err) {
+      console.error('Error fetching user events:', err);
+    } finally {
+      setUserEventsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { if (mainTab === 'user') fetchUserEvents(); }, [mainTab, fetchUserEvents]);
+
+  const handleDeactivateUserEvent = async (id) => {
+    try {
+      await fetch(`/api/admin/user-events/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: false }),
+      });
+      fetchUserEvents();
+    } catch (err) { console.error(err); }
+  };
+
+  const handleDeleteUserEvent = async (id) => {
+    try {
+      const res = await fetch(`/api/admin/user-events/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) { setUserEventDeleteConfirm(null); fetchUserEvents(); }
+    } catch (err) { console.error(err); }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -257,6 +295,19 @@ export default function EventPlanner() {
         </div>
       </div>
 
+      {/* ─── Main Tab Toggle ─── */}
+      <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', borderRadius: '12px', padding: '4px', marginBottom: '28px', width: 'fit-content' }}>
+        {[{ key: 'admin', label: 'Admin Events' }, { key: 'user', label: 'User Events' }].map(t => (
+          <button key={t.key} onClick={() => setMainTab(t.key)} style={{
+            padding: '8px 20px', borderRadius: '9px', border: 'none', fontSize: '13px', fontWeight: '700', cursor: 'pointer',
+            background: mainTab === t.key ? '#fff' : 'transparent',
+            color: mainTab === t.key ? '#6366f1' : '#94a3b8',
+            boxShadow: mainTab === t.key ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
+            transition: 'all 0.2s'
+          }}>{t.label}</button>
+        ))}
+      </div>
+
       {/* ─── Stats Row ─── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '18px', marginBottom: '24px' }}>
         {[
@@ -278,6 +329,92 @@ export default function EventPlanner() {
       </div>
 
       {/* ─── Main Content ─── */}
+      {mainTab === 'user' ? (
+        /* ─── User Events Tab ─── */
+        <BentoCard mounted={mounted} hover={false} style={{ padding: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>User-Created Events</h3>
+              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0' }}>Events created by students — you can deactivate or delete any event</p>
+            </div>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              {[{ label: 'Total', value: userEvents.length, color: '#6366f1', bg: '#ede9fe' },
+                { label: 'Active', value: userEvents.filter(e => e.is_active).length, color: '#10b981', bg: '#dcfce7' },
+                { label: 'Total RSVPs', value: userEvents.reduce((s, e) => s + (e.rsvp_count || 0), 0), color: '#f59e0b', bg: '#fef3c7' },
+              ].map((s, i) => (
+                <div key={i} style={{ textAlign: 'center', padding: '10px 16px', background: s.bg, borderRadius: '12px' }}>
+                  <div style={{ fontSize: '22px', fontWeight: '800', color: s.color, lineHeight: 1 }}>{s.value}</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: s.color, opacity: 0.7, marginTop: '2px' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {userEventsLoading ? (
+            <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8', fontSize: '14px' }}>Loading...</div>
+          ) : userEvents.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '48px 0', color: '#94a3b8', fontSize: '14px' }}>No user-created events yet.</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {/* Table header */}
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 0.8fr 0.8fr 0.7fr 0.9fr auto', gap: '12px', padding: '8px 14px', borderRadius: '8px', background: '#f8fafc', fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <span>Title</span><span>Creator</span><span>Date</span><span>Type</span><span>RSVPs</span><span>Status</span><span>Actions</span>
+              </div>
+              {userEvents.map(event => (
+                <div key={event.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 0.8fr 0.8fr 0.7fr 0.9fr auto', gap: '12px', padding: '12px 14px', borderRadius: '12px', background: '#fff', border: '1px solid #f1f5f9', alignItems: 'center', transition: 'all 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>{event.title}</div>
+                    {event.max_capacity && <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>Cap: {event.max_capacity}</div>}
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#475569', fontWeight: '600' }}>{event.creator_name || '—'}</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>{new Date(event.event_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}</div>
+                  <div>
+                    <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '100px', background: (EVENT_COLORS[event.event_type] ? EVENT_COLORS[event.event_type] + '22' : '#ede9fe'), color: EVENT_COLORS[event.event_type] || '#6366f1', textTransform: 'capitalize' }}>
+                      {event.event_type}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
+                    {event.rsvp_count || 0}{event.max_capacity ? `/${event.max_capacity}` : ''}
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 10px', borderRadius: '100px', background: event.is_active ? '#dcfce7' : '#f1f5f9', color: event.is_active ? '#16a34a' : '#94a3b8' }}>
+                      {event.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '5px' }}>
+                    {event.is_active && (
+                      <button onClick={() => handleDeactivateUserEvent(event.id)} title="Deactivate" style={{ width: '30px', height: '30px', borderRadius: '8px', border: '1px solid #fef3c7', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', transition: 'all 0.2s' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#fef3c7'}
+                        onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      </button>
+                    )}
+                    <button onClick={() => setUserEventDeleteConfirm(event.id)} title="Delete" style={{ width: '30px', height: '30px', borderRadius: '8px', border: '1px solid #fecaca', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ef4444', transition: 'all 0.2s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
+                      onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {/* Delete confirm */}
+          {userEventDeleteConfirm && (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+              <div style={{ background: '#fff', borderRadius: '20px', padding: '32px', maxWidth: '380px', width: '90%', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 8px' }}>Delete User Event?</h3>
+                <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px' }}>This will permanently remove the event and all RSVPs. This cannot be undone.</p>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button onClick={() => setUserEventDeleteConfirm(null)} style={{ flex: 1, padding: '11px', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer', color: '#64748b' }}>Cancel</button>
+                  <button onClick={() => handleDeleteUserEvent(userEventDeleteConfirm)} style={{ flex: 1, padding: '11px', borderRadius: '10px', border: 'none', background: '#ef4444', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer' }}>Delete</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </BentoCard>
+      ) : (
       <div style={{ display: 'grid', gridTemplateColumns: showForm ? '1fr 400px' : '1fr', gap: '18px' }}>
 
         {/* Calendar / List View */}
@@ -599,6 +736,7 @@ export default function EventPlanner() {
           </BentoCard>
         )}
       </div>
+      )}
 
       {/* ─── Delete Confirmation Modal ─── */}
       {deleteConfirm && (
