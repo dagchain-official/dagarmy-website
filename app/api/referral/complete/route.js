@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { notifyReferralCompleted } from '@/services/dagchainWebhook';
 
 /**
  * POST /api/referral/complete
@@ -46,10 +47,10 @@ export async function POST(request) {
       });
     }
 
-    // Get referrer's tier and rank
+    // Get referrer's tier, rank and email
     const { data: referrer, error: referrerError } = await supabase
       .from('users')
-      .select('id, tier, current_rank')
+      .select('id, tier, current_rank, email')
       .eq('id', referral.referrer_id)
       .single();
 
@@ -136,6 +137,20 @@ export async function POST(request) {
         total_points_earned: totalPointsAwarded
       })
       .eq('id', referral.id);
+
+    // Notify DAGChain — they are the SSO source of truth for referrals (fire-and-forget)
+    // Pass emails so DAGChain can match users (DAGARMY users have no wallet, email is the identifier)
+    const { data: referredUser } = await supabase
+      .from('users')
+      .select('id, email')
+      .eq('id', referredUserId)
+      .single();
+    notifyReferralCompleted(
+      { id: referral.referrer_id, email: referrer.email },
+      { id: referredUserId, email: referredUser?.email || null },
+      referral.referral_code,
+      'direct'
+    );
 
     return NextResponse.json({
       success: true,
