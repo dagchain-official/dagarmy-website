@@ -64,11 +64,7 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Failed to upload resume' }, { status: 500 });
       }
 
-      const { data: urlData } = supabaseAdmin.storage
-        .from('career-resumes')
-        .getPublicUrl(filename);
-
-      resume_url = urlData?.publicUrl || null;
+      resume_url = filename;
       resume_filename = resumeFile.name;
     }
 

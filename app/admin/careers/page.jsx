@@ -2,6 +2,37 @@
 import React, { useState, useEffect, useCallback } from "react";
 import SubAdminLayout from "@/components/admin/SubAdminLayout";
 
+function ResumeDownload({ filename, label }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleDownload = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/careers/resume?file=${encodeURIComponent(filename)}`);
+      const data = await res.json();
+      if (data.url) {
+        window.open(data.url, '_blank');
+      } else {
+        alert('Could not generate download link. Please try again.');
+      }
+    } catch (err) {
+      alert('Failed to fetch resume link.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDownload}
+      disabled={loading}
+      style={{ background: 'none', border: 'none', padding: 0, color: '#3b82f6', fontSize: '13px', fontWeight: '500', cursor: loading ? 'wait' : 'pointer', textDecoration: 'underline' }}
+    >
+      {loading ? 'Generating link...' : `Download ${label}`}
+    </button>
+  );
+}
+
 const STATUS_CONFIG = {
   new:         { label: 'New',         bg: '#eff6ff', color: '#2563eb', border: '#bfdbfe' },
   reviewed:    { label: 'Reviewed',    bg: '#fefce8', color: '#a16207', border: '#fde68a' },
@@ -91,7 +122,7 @@ function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
                 <Row label="LinkedIn" value={<a href={app.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none', wordBreak: 'break-all' }}>View Profile</a>} />
               )}
               {app.resume_url && (
-                <Row label="Resume" value={<a href={app.resume_url} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>Download {app.resume_filename || 'Resume'}</a>} />
+                <Row label="Resume" value={<ResumeDownload filename={app.resume_url} label={app.resume_filename || 'Resume'} />} />
               )}
             </div>
           </div>
