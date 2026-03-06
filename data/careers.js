@@ -1,0 +1,156 @@
+export const CAREERS = [
+  {
+    slug: 'developer-relations-india',
+    title: 'Developer Relations Manager',
+    department: 'Developer Relations',
+    type: 'Full-time',
+    location: 'Remote',
+    region: 'India',
+    summary:
+      'Be the bridge between DAGArmy and the Indian Web3 developer community. Evangelize our platform, run local hackathons, and grow our technical ecosystem across India.',
+    responsibilities: [
+      'Build and nurture relationships with blockchain developers, communities, and universities across India',
+      'Create technical content — tutorials, blog posts, video walkthroughs — for the Indian developer audience',
+      'Represent DAGArmy at meetups, hackathons, and Web3 conferences in India',
+      'Gather developer feedback and relay product insights to our core team',
+      'Onboard developers onto DAGChain and DAGArmy platforms',
+      'Run regional hackathons and coding challenges to grow engagement',
+    ],
+    requirements: [
+      'Based in India with strong knowledge of the Indian Web3/crypto ecosystem',
+      '2+ years of experience in developer relations, community management, or software engineering',
+      'Strong written and verbal communication skills in English and at least one regional language',
+      'Hands-on experience with blockchain technology (Ethereum, Solidity, or similar)',
+      'Active presence in developer communities (GitHub, Twitter/X, Discord, Telegram)',
+    ],
+    niceToHave: [
+      'Prior experience working with a Web3 startup or protocol',
+      'Existing network in Indian crypto/blockchain communities',
+      'Experience running online or in-person hackathons',
+    ],
+  },
+  {
+    slug: 'developer-relations-sea',
+    title: 'Developer Relations Manager',
+    department: 'Developer Relations',
+    type: 'Full-time',
+    location: 'Remote',
+    region: 'Southeast Asia',
+    summary:
+      'Drive DAGArmy adoption across Southeast Asia by engaging with local developer communities, creating region-specific content, and representing our brand at key events.',
+    responsibilities: [
+      'Build relationships with blockchain developers and communities across SEA (Philippines, Vietnam, Indonesia, Thailand, Malaysia, Singapore)',
+      'Create and distribute technical content tailored to the SEA developer audience',
+      'Represent DAGArmy at local and regional Web3 conferences and meetups',
+      'Identify and collaborate with local KOLs and developer influencers',
+      'Coordinate with global DevRel team to align regional strategy',
+      'Track and report on community growth metrics',
+    ],
+    requirements: [
+      'Based in Southeast Asia',
+      '2+ years in developer relations, community management, or a technical role',
+      'Deep understanding of the SEA Web3/DeFi landscape',
+      'Strong communication skills in English and at least one SEA language',
+      'Experience with blockchain development or strong technical aptitude',
+    ],
+    niceToHave: [
+      'Existing network across SEA Web3 communities',
+      'Experience working with DAOs or decentralized protocols',
+      'Multilingual across multiple SEA languages',
+    ],
+  },
+  {
+    slug: 'developer-relations-mena',
+    title: 'Developer Relations Manager',
+    department: 'Developer Relations',
+    type: 'Full-time',
+    location: 'Remote',
+    region: 'Middle East & Africa',
+    summary:
+      'Lead DAGArmy\'s developer community efforts across the MENA region, building technical relationships and driving ecosystem growth in one of the fastest-growing Web3 markets.',
+    responsibilities: [
+      'Engage and grow the developer community across MENA (UAE, Saudi Arabia, Egypt, Nigeria, Kenya, and broader Africa)',
+      'Produce Arabic and English technical content — guides, tutorials, explainers',
+      'Attend and speak at regional blockchain events and conferences',
+      'Partner with universities, accelerators, and blockchain hubs across MENA',
+      'Feed regional developer needs back to the product team',
+      'Collaborate cross-functionally with marketing and growth teams',
+    ],
+    requirements: [
+      'Based in MENA region',
+      '2+ years in developer relations or technical community roles',
+      'Fluent in Arabic and English',
+      'Strong knowledge of blockchain technology and MENA crypto landscape',
+      'Excellent public speaking and content creation skills',
+    ],
+    niceToHave: [
+      'Network across MENA blockchain/crypto communities',
+      'Experience with smart contract development',
+      'Connections with regional VCs or Web3 accelerators',
+    ],
+  },
+  {
+    slug: 'developer-relations-global',
+    title: 'Developer Relations Lead',
+    department: 'Developer Relations',
+    type: 'Full-time',
+    location: 'Remote',
+    region: 'Global',
+    summary:
+      'Own and scale DAGArmy\'s global developer relations strategy, coordinating regional DevRel managers, shaping our developer brand, and driving platform adoption worldwide.',
+    responsibilities: [
+      'Define and execute the global developer relations strategy for DAGArmy',
+      'Lead and mentor a team of regional DevRel managers',
+      'Build and maintain relationships with top-tier blockchain developers and protocols globally',
+      'Oversee the creation of developer documentation, SDKs, and technical resources',
+      'Drive developer-focused campaigns in partnership with marketing',
+      'Represent DAGArmy at major global Web3 conferences (ETHGlobal, Consensus, etc.)',
+      'Own developer community KPIs: growth, engagement, retention',
+    ],
+    requirements: [
+      '4+ years in developer relations, developer advocacy, or engineering leadership',
+      'Deep expertise in blockchain and Web3 technologies',
+      'Proven track record managing developer communities at scale',
+      'Excellent leadership, communication, and stakeholder management skills',
+      'Experience working in a globally distributed team',
+    ],
+    niceToHave: [
+      'Prior experience at a Layer 1 or Layer 2 blockchain protocol',
+      'Public speaker at major tech or Web3 conferences',
+      'Open source contributions or maintained developer tools',
+    ],
+  },
+  {
+    slug: 'sales-intern',
+    title: 'Sales Intern',
+    department: 'Sales & Growth',
+    type: 'Internship',
+    location: 'Remote',
+    region: 'Global',
+    summary:
+      'Join DAGArmy\'s growth team as a Sales Intern and get hands-on experience driving user acquisition, partnerships, and revenue in the fast-moving Web3 space.',
+    responsibilities: [
+      'Identify and reach out to potential B2B partners, institutions, and community leads',
+      'Support the sales team in managing the CRM pipeline and follow-ups',
+      'Assist in creating sales decks, proposals, and pitch materials',
+      'Conduct market research on Web3 trends, competitors, and target segments',
+      'Participate in discovery calls and demos with prospects',
+      'Track sales metrics and prepare weekly reports for the team',
+    ],
+    requirements: [
+      'Currently enrolled in or recently graduated from a relevant degree program',
+      'Strong communication and interpersonal skills',
+      'Self-starter with a genuine interest in Web3, blockchain, or fintech',
+      'Comfortable working in a fast-paced, remote-first environment',
+      'Basic proficiency in spreadsheets and presentation tools',
+    ],
+    niceToHave: [
+      'Prior internship or part-time experience in sales or business development',
+      'Knowledge of CRM tools (HubSpot, Salesforce, or similar)',
+      'Existing network in the Web3 or startup space',
+    ],
+  },
+];
+
+export const DEPARTMENTS = [...new Set(CAREERS.map((j) => j.department))];
+export const REGIONS = [...new Set(CAREERS.map((j) => j.region))];
