@@ -43,7 +43,7 @@ export default function EmailPage() {
       const res  = await fetch('/api/admin/email/folders');
       const data = await res.json();
       if (res.ok) setFolders(data.folders || []);
-      else        setError(data.error || 'Failed to load mailbox');
+      else        setError((data.error || 'Failed to load mailbox') + (data.details ? ` — ${data.details}` : ''));
     } catch {
       setError('Could not connect to mailbox. Check credentials.');
     } finally {

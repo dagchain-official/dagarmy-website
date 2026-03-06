@@ -18,11 +18,11 @@ export async function GET(request) {
 
   const { data, error } = await supabaseAdmin.storage
     .from('career-resumes')
-    .createSignedUrl(filename, 60 * 10); // 10 minute expiry
+    .createSignedUrl(filename, 60 * 10);
 
   if (error) {
     console.error('Signed URL error:', error);
-    return NextResponse.json({ error: 'Failed to generate download link' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to generate download link', detail: error.message }, { status: 500 });
   }
 
   return NextResponse.json({ url: data.signedUrl });

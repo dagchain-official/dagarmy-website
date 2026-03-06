@@ -8,7 +8,7 @@ function ResumeDownload({ filename, label }) {
   const handleDownload = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/careers/resume?file=${encodeURIComponent(filename)}`);
+      const res = await fetch(`/api/admin/career-resume?file=${encodeURIComponent(filename)}`);
       const data = await res.json();
       if (data.url) {
         window.open(data.url, '_blank');
