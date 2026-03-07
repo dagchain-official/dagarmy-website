@@ -80,7 +80,7 @@ export default function LieutenantSection() {
                 borderRadius: "50%",
               }} />
               <img
-                src="/BADGES  and  RANK png+svg/DAGARMY BADGES/DAG LIEUTENANT.svg"
+                src="/images/badges/dag-lieutenant.svg"
                 alt="DAG Lieutenant Badge"
                 style={{ width: 160, height: 160, objectFit: "contain", position: "relative", zIndex: 1, filter: "drop-shadow(0 8px 32px rgba(251,191,36,0.3))" }}
               />

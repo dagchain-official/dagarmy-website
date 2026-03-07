@@ -73,7 +73,7 @@ export default function SoldierSection() {
                 borderRadius: "50%",
               }} />
               <img
-                src="/BADGES  and  RANK png+svg/DAGARMY BADGES/DAG SOLDIER.svg"
+                src="/images/badges/dag-soldier.svg"
                 alt="DAG Soldier Badge"
                 style={{ width: 160, height: 160, objectFit: "contain", position: "relative", zIndex: 1, filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))" }}
               />

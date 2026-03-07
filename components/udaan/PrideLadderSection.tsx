@@ -444,7 +444,7 @@ export default function PrideLadderSection() {
                   color: "#0c0c14", letterSpacing: "-0.02em", marginBottom: 0,
                 }}>Soldier</h3>
               </div>
-              <TiltBadge src="/BADGES  and  RANK png+svg/DAGARMY BADGES/DAG SOLDIER.svg" alt="Soldier Badge" />
+              <TiltBadge src="/images/badges/dag-soldier.svg" alt="Soldier Badge" />
             </div>
 
             <div style={{ borderTop: "1px solid #ebebf5", paddingTop: 24, marginBottom: 24 }}>
@@ -537,7 +537,7 @@ export default function PrideLadderSection() {
                   color: "#0c0c14", letterSpacing: "-0.02em", marginBottom: 0,
                 }}>Lieutenant</h3>
               </div>
-              <TiltBadge src="/BADGES  and  RANK png+svg/DAGARMY BADGES/DAG LIEUTENANT.svg" alt="Lieutenant Badge" />
+              <TiltBadge src="/images/badges/dag-lieutenant.svg" alt="Lieutenant Badge" />
             </div>
 
             <div style={{ borderTop: "1px solid #ebebf5", paddingTop: 24, marginBottom: 24 }}>
