@@ -40,16 +40,18 @@ export default function Pledge() {
             {lines.map(({ text, accent }) => (
               <p
                 key={text}
-                className={accent ? "t-serif grad-v" : "t-serif"}
-                style={{
-                  fontSize: "clamp(32px, 5vw, 72px)",
-                  letterSpacing: "-0.035em",
-                  lineHeight: 1.08,
-                  fontWeight: 700,
-                  display: "block",
-                  color: accent ? undefined : "var(--ink)",
-                  margin: 0,
-                }}
+                  className={accent ? "grad-v" : ""}
+                  style={{
+                    fontSize: "clamp(28px, 4vw, 60px)",
+                    fontFamily: "'Nasalization', sans-serif",
+                    letterSpacing: "0.01em",
+                    lineHeight: 1.15,
+                    fontWeight: 700,
+                    fontStyle: "normal",
+                    display: "block",
+                    color: accent ? undefined : "var(--ink)",
+                    margin: 0,
+                  }}
               >
                 {text}
               </p>

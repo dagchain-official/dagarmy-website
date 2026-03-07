@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { notifyUserCreated } from '@/services/dagchainWebhook';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -147,6 +148,16 @@ export async function POST(request) {
     }
 
     console.log('✅ Profile completed successfully:', data);
+
+    // Notify DAGChain of new user (fire-and-forget)
+    notifyUserCreated({
+      id: data.id,
+      email: data.email,
+      wallet_address: data.wallet_address,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      referral_code_used: body.referral_code || null,
+    });
 
     // Send welcome email asynchronously (don't wait for it)
     if (data.email) {

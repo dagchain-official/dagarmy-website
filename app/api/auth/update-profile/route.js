@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { notifyUserUpdated } from '@/services/dagchainWebhook';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -72,6 +73,17 @@ export async function POST(request) {
     }
 
     console.log('✅ Profile updated successfully:', data);
+
+    // Notify DAGChain of profile update (fire-and-forget)
+    notifyUserUpdated(
+      { id: data.id },
+      {
+        displayName: [first_name, last_name].filter(Boolean).join(' ') || undefined,
+        bio: bio,
+        avatar: avatar_url,
+        country: country_code,
+      }
+    );
 
     return NextResponse.json({
       success: true,

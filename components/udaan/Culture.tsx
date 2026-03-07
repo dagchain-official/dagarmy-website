@@ -12,28 +12,16 @@ const diffs = [
 
 const pillars = [
   {
-    icon: "✦",
     title: "Ideas get refined.",
     desc: "If you have an idea, the network sharpens it. No idea dies in a vacuum.",
-    color: "rgba(91,75,236,0.08)",
-    border: "rgba(91,75,236,0.12)",
-    iconColor: "var(--v)",
   },
   {
-    icon: "◈",
     title: "Skills get matched.",
     desc: "What you bring finds where it is needed. Collaboration is the default mode.",
-    color: "rgba(245,158,11,0.08)",
-    border: "rgba(245,158,11,0.12)",
-    iconColor: "var(--amber)",
   },
   {
-    icon: "↑",
     title: "Traction gets amplified.",
     desc: "When you get momentum, the community becomes your multiplier.",
-    color: "rgba(16,185,129,0.08)",
-    border: "rgba(16,185,129,0.12)",
-    iconColor: "var(--green)",
   },
 ];
 
@@ -58,8 +46,8 @@ function DiffRow({ old: o, udaan: u, i }: { old: string; udaan: string; i: numbe
           background: "rgba(239,68,68,0.04)", border: "1px solid rgba(239,68,68,0.1)",
         }}
       >
-        <span style={{ color: "var(--red)", fontWeight: 700, fontSize: "12px", flexShrink: 0 }}>✕</span>
-        <span style={{ fontSize: "14px", color: "var(--sub)", textDecoration: "line-through", textDecorationColor: "rgba(239,68,68,0.3)" }}>{o}</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1L1 9" stroke="#ef4444" strokeWidth="1.4" strokeLinecap="round"/></svg>
+        <span style={{ fontSize: "14px", color: "#999", textDecoration: "line-through", textDecorationColor: "rgba(239,68,68,0.3)" }}>{o}</span>
       </motion.div>
       {/* Udaan */}
       <motion.div
@@ -71,25 +59,14 @@ function DiffRow({ old: o, udaan: u, i }: { old: string; udaan: string; i: numbe
           background: "rgba(91,75,236,0.05)", border: "1px solid rgba(91,75,236,0.12)",
         }}
       >
-        <motion.span
-          whileHover={{ scale: 1.2 }}
-          transition={{ duration: 0.18 }}
-          style={{
-            width: 18, height: 18, borderRadius: "50%", background: "var(--vbg2)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "10px", color: "var(--v)", fontWeight: 700, flexShrink: 0,
-          }}
-        >✓</motion.span>
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--ink)" }}>{u}</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1 5 3.5 7.5 9 2" stroke="#10b981" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <span style={{ fontSize: "14px", fontWeight: 600, color: "#111" }}>{u}</span>
       </motion.div>
     </motion.div>
   );
 }
 
-function Pillar({ icon, title, desc, color, border, iconColor, i }: {
-  icon: string; title: string; desc: string;
-  color: string; border: string; iconColor: string; i: number;
-}) {
+function Pillar({ title, desc, i }: { title: string; desc: string; i: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   return (
@@ -97,25 +74,13 @@ function Pillar({ icon, title, desc, color, border, iconColor, i }: {
       ref={ref}
       initial={{ opacity: 0, y: 36, scale: 0.97 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      whileHover={{ y: -6, boxShadow: "0 12px 40px rgba(91,75,236,0.12)" }}
-      transition={{ duration: 0.65, delay: i * 0.1, ease }}
-      className="surface"
-      style={{ padding: 28, cursor: "default" }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.65, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as any }}
+      style={{ background: "#fff", border: "1px solid #f0f0f0", borderRadius: 18, padding: 28, cursor: "default" }}
     >
-      <motion.div
-        whileHover={{ scale: 1.12, rotate: 6 }}
-        transition={{ duration: 0.22 }}
-        style={{
-          width: 44, height: 44, borderRadius: 14,
-          background: color, border: `1px solid ${border}`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: "20px", fontWeight: 800, color: iconColor, marginBottom: 18,
-        }}
-      >
-        {icon}
-      </motion.div>
-      <h4 style={{ fontWeight: 700, fontSize: "16px", color: "var(--ink)", marginBottom: 8, letterSpacing: "-0.02em" }}>{title}</h4>
-      <p style={{ fontSize: "13px", lineHeight: 1.65, color: "var(--sub)" }}>{desc}</p>
+      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#111", marginBottom: 18 }} />
+      <h4 style={{ fontWeight: 700, fontSize: "16px", color: "#111", marginBottom: 8, letterSpacing: "-0.02em" }}>{title}</h4>
+      <p style={{ fontSize: "13px", lineHeight: 1.65, color: "#666" }}>{desc}</p>
     </motion.div>
   );
 }
@@ -125,7 +90,7 @@ export default function Culture() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="community" style={{ background: "var(--bg)", padding: "120px 0" }}>
+    <section id="community" style={{ background: "#fafafa", padding: "120px 0" }}>
       <div className="wrap">
 
         {/* ── What makes this different ── */}
@@ -134,12 +99,12 @@ export default function Culture() {
             ref={ref}
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as any }}
             style={{ marginBottom: 48 }}
           >
-            <h2 className="t-section" style={{ color: "var(--ink)", maxWidth: 680 }}>
+            <h2 style={{ fontSize: "clamp(2.2rem,5vw,4rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.08, color: "#111", maxWidth: 680 }}>
               We don&apos;t promise shortcuts.{" "}
-              <span className="grad-v">We build founders.</span>
+              <span style={{ color: "#888" }}>We build founders.</span>
             </h2>
           </motion.div>
 
@@ -154,11 +119,11 @@ export default function Culture() {
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2, ease }}
+            transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }}
             style={{
               padding: "20px 24px",
-              background: "var(--bg2)",
-              border: "1px solid var(--line)",
+              background: "#f5f5f5",
+              border: "1px solid #ebebeb",
               borderRadius: 16,
               display: "flex", flexWrap: "wrap", gap: 28, alignItems: "center",
             }}
@@ -169,18 +134,8 @@ export default function Culture() {
               "We do not sell shortcuts.",
             ].map(t => (
               <div key={t} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{
-                  width: 16, height: 16, borderRadius: "50%",
-                  background: "var(--vbg)", border: "1px solid rgba(91,75,236,0.18)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <svg width="7" height="7" viewBox="0 0 7 7" fill="none">
-                    <circle cx="3.5" cy="3.5" r="3" stroke="var(--v)" strokeWidth="0.8"/>
-                    <path d="M2 3.5l1 1 2-2" stroke="var(--v)" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <span style={{ fontSize: "13px", color: "var(--sub)" }}>{t}</span>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#111", flexShrink: 0 }} />
+                <span style={{ fontSize: "13px", color: "#666" }}>{t}</span>
               </div>
             ))}
           </motion.div>
@@ -192,18 +147,18 @@ export default function Culture() {
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }}
             style={{ marginBottom: 48 }}
           >
-            <h2 className="t-section" style={{ color: "var(--ink)", maxWidth: 720 }}>
+            <h2 style={{ fontSize: "clamp(2.2rem,5vw,4rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.08, color: "#111", maxWidth: 720 }}>
               Collaboration compounds{" "}
-              <span className="grad-v">faster than competition.</span>
+              <span style={{ color: "#888" }}>faster than competition.</span>
             </h2>
           </motion.div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
-            {pillars.map(({ icon, title, desc, color, border, iconColor }, i) => (
-              <Pillar key={title} icon={icon} title={title} desc={desc} color={color} border={border} iconColor={iconColor} i={i} />
+            {pillars.map(({ title, desc }, i) => (
+              <Pillar key={title} title={title} desc={desc} i={i} />
             ))}
           </div>
         </div>

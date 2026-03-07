@@ -152,7 +152,7 @@ export default function Header2() {
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </Link>
-            <Link href="/bootcamp" style={{
+            <Link href="/careers" style={{
               fontSize: '15px',
               fontWeight: '500',
               color: '#4b5563',
@@ -173,7 +173,39 @@ export default function Header2() {
                 const underline = e.currentTarget.querySelector('.nav-underline');
                 if (underline) underline.style.width = '0%';
               }}>
-              Bootcamp
+              Careers
+              <span className="nav-underline" style={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                width: '0%',
+                height: '2px',
+                background: '#1f2937',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
+            </Link>
+            <Link href="/ambassador" style={{
+              fontSize: '15px',
+              fontWeight: '500',
+              color: '#4b5563',
+              textDecoration: 'none',
+              transition: 'color 0.3s ease',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              paddingBottom: '4px',
+              display: 'inline-block'
+            }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#1f2937';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '100%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#4b5563';
+                const underline = e.currentTarget.querySelector('.nav-underline');
+                if (underline) underline.style.width = '0%';
+              }}>
+              Ambassador
               <span className="nav-underline" style={{
                 position: 'absolute',
                 bottom: '0',

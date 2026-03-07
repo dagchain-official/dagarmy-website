@@ -35,7 +35,7 @@ export async function GET(request) {
   } catch (err) {
     console.error('IMAP folders error:', err);
     return NextResponse.json(
-      { error: 'Failed to connect to mailbox', details: err.message },
+      { error: 'Failed to connect to mailbox', details: err.message, account: accountEmail },
       { status: 500 }
     );
   }

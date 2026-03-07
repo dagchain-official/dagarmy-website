@@ -1,188 +1,642 @@
 "use client";
-import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease },
-});
+const paths = [
+  {
+    num: "01",
+    condition: "If you are ready to build your AI startup prototype and test it in the market,",
+    cta: "Apply for the Udaan Cohort.",
+    accent: "#6366f1",
+  },
+  {
+    num: "02",
+    condition: "If you are prepared to enter the Founder Track and earn your rank through contribution,",
+    cta: "Start Your Application Now.",
+    accent: "#8b5cf6",
+  },
+  {
+    num: "03",
+    condition: "If you believe you can contribute to the 1 Lakh Founder Mission through real work,",
+    cta: "Step Into the Builder Circle.",
+    accent: "#a78bfa",
+  },
+];
+
+function PathCard({ item, index, inView }: { item: typeof paths[0]; index: number; inView: boolean }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: [...ease], delay: 0.5 + index * 0.12 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative",
+        background: hovered ? "#0c0c14" : "#ffffff",
+        border: `1px solid ${hovered ? item.accent : "#e8e8f0"}`,
+        borderRadius: 20,
+        padding: "40px 36px 36px",
+        cursor: "default",
+        transition: "background 0.35s ease, border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease",
+        transform: hovered ? "translateY(-6px)" : "translateY(0)",
+        boxShadow: hovered
+          ? `0 20px 60px rgba(99,102,241,0.18), 0 4px 20px rgba(0,0,0,0.12)`
+          : "0 2px 12px rgba(0,0,0,0.06)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Glow blob */}
+      <div
+        style={{
+          position: "absolute",
+          top: -40,
+          right: -40,
+          width: 180,
+          height: 180,
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${item.accent}22 0%, transparent 70%)`,
+          transition: "opacity 0.35s ease",
+          opacity: hovered ? 1 : 0,
+          pointerEvents: "none",
+        }}
+      />
+      {/* Number */}
+      <div
+        style={{
+          fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+          fontSize: 72,
+          fontWeight: 900,
+          lineHeight: 1,
+          color: hovered ? `${item.accent}30` : "#f0f0f8",
+          position: "absolute",
+          top: 16,
+          right: 28,
+          transition: "color 0.35s ease",
+          userSelect: "none",
+        }}
+      >
+        {item.num}
+      </div>
+      {/* Pill */}
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: hovered ? `${item.accent}20` : "#f4f4ff",
+          border: `1px solid ${hovered ? item.accent + "50" : "#e0e0f8"}`,
+          borderRadius: 100,
+          padding: "4px 14px",
+          marginBottom: 24,
+          transition: "background 0.35s ease, border-color 0.35s ease",
+        }}
+      >
+        <div
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: "50%",
+            background: item.accent,
+          }}
+        />
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: item.accent,
+          }}
+        >
+          Path {item.num}
+        </span>
+      </div>
+      {/* Condition text */}
+      <p
+        style={{
+          fontSize: 15,
+          lineHeight: 1.7,
+          color: hovered ? "#a0a0c0" : "#5a5a72",
+          marginBottom: 28,
+          transition: "color 0.35s ease",
+        }}
+      >
+        {item.condition}
+      </p>
+      {/* CTA line */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          paddingTop: 20,
+          borderTop: `1px solid ${hovered ? item.accent + "30" : "#e8e8f0"}`,
+          transition: "border-color 0.35s ease",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 16,
+            fontWeight: 700,
+            background: `linear-gradient(135deg, ${item.accent} 0%, #a78bfa 100%)`,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          {item.cta}
+        </span>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          style={{ flexShrink: 0, transition: "transform 0.3s ease", transform: hovered ? "translateX(4px)" : "translateX(0)" }}
+        >
+          <path d="M3 8h10M9 4l4 4-4 4" stroke={item.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function NextStepSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const paths = [
-    {
-      label: "Build",
-      title: "If you are ready to build an AI Startup Prototype and test it with real users:",
-      action: "Apply for the Udaan Cohort.",
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-      ),
-    },
-    {
-      label: "Earn",
-      title: "If you are prepared to earn rank through contribution:",
-      action: "Enter the Founder Track.",
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-      ),
-    },
-    {
-      label: "Contribute",
-      title: "If you want to contribute to the 1 Lakh Founder Mission through measurable work:",
-      action: "Start Your Application Today.",
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-      ),
-    },
-  ];
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "6%"]);
+
+  const wrapStyle: React.CSSProperties = {
+    maxWidth: 1280,
+    margin: "0 auto",
+    paddingLeft: 60,
+    paddingRight: 60,
+  };
 
   return (
-    <section ref={ref} style={{ background: "#ffffff", padding: "80px 0 72px 0", position: "relative" }}>
-      <div style={{ maxWidth: 920, margin: "0 auto", padding: "0 24px" }}>
+    <section
+      ref={ref}
+      style={{ position: "relative", background: "#fafafa", overflow: "hidden" }}
+    >
+      {/* ── HERO MASTHEAD ─────────────────────────────── */}
+      <div
+        style={{
+          position: "relative",
+          background: "#0c0c14",
+          paddingTop: 120,
+          paddingBottom: 120,
+          overflow: "hidden",
+        }}
+      >
+        {/* Dot grid */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage:
+              "radial-gradient(circle, rgba(99,102,241,0.12) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+            pointerEvents: "none",
+          }}
+        />
+        {/* Gradient orbs */}
+        <div
+          style={{
+            position: "absolute",
+            top: -120,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 900,
+            height: 500,
+            background: "radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div style={{ ...wrapStyle, position: "relative", zIndex: 1 }}>
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: [...ease] }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 40,
+            }}
+          >
+            <div style={{ height: 1, width: 40, background: "#6366f1" }} />
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "#6366f1",
+              }}
+            >
+              Your Next Step
+            </span>
+          </motion.div>
 
-        {/* HEADER */}
-        <motion.div initial="initial" animate={inView ? "animate" : "initial"} variants={fadeUp(0)} style={{ textAlign: "center", marginBottom: 40 }}>
-          <h2 style={{ fontFamily: "var(--font-fraunces, 'Fraunces', serif)", fontSize: "clamp(28px, 4vw, 38px)", fontWeight: 700, color: "#0c0c14", marginBottom: 16, letterSpacing: "-0.01em" }}>
-            Your Next Step Into the <span style={{ color: "#6366f1" }}>AI Startup Ecosystem</span>
-          </h2>
-          <div style={{ width: 60, height: 4, background: "linear-gradient(135deg, #6366f1, #8b5cf6)", margin: "0 auto 24px auto", borderRadius: 2 }} />
+          {/* Headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [...ease], delay: 0.08 }}
+            style={{
+              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+              fontSize: "clamp(48px, 6vw, 88px)",
+              fontWeight: 900,
+              lineHeight: 1.08,
+              letterSpacing: "-0.03em",
+              color: "#ffffff",
+              marginBottom: 0,
+              maxWidth: 900,
+            }}
+          >
+            Into the{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              AI Startup
+            </span>
+            <br />
+            Ecosystem.
+          </motion.h2>
 
-          <p style={{ fontSize: "16px", color: "#374151", lineHeight: 1.6, maxWidth: 700, margin: "0 auto" }}>
-            You have seen the ranks. You understand the pathway. <strong style={{ color: "#0c0c14" }}>The difference between learning and building is now clear.</strong>
-          </p>
-        </motion.div>
+          {/* Divider + sub row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: [...ease], delay: 0.18 }}
+            style={{
+              marginTop: 56,
+              paddingTop: 40,
+              borderTop: "1px solid rgba(255,255,255,0.08)",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 0,
+            }}
+          >
+            {[
+              { label: "Structured", sub: "Ecosystem" },
+              { label: "Curated", sub: "Selection" },
+              { label: "Execution", sub: "Focused" },
+            ].map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  paddingRight: 40,
+                  borderRight: i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                  paddingLeft: i > 0 ? 40 : 0,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                    fontSize: 28,
+                    fontWeight: 800,
+                    background: "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    marginBottom: 6,
+                  }}
+                >
+                  {item.label}
+                </div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "#5a5a80",
+                  }}
+                >
+                  {item.sub}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
 
-        {/* COMPACT CONTEXT — single unified block */}
-        <motion.div initial="initial" animate={inView ? "animate" : "initial"} variants={fadeUp(0.15)} style={{ background: "#fafafa", border: "1px solid #f0f0f0", borderRadius: 14, padding: "28px 32px", marginBottom: 40 }}>
-          <div className="nextstep-context-grid">
-            <p style={{ fontSize: "14.5px", color: "#374151", lineHeight: 1.65, margin: 0 }}>
-              <strong style={{ color: "#0c0c14" }}>Udaan is not an information layer.</strong> It is a structured entry into a disciplined AI Startup Ecosystem built for founders who intend to launch, validate, and scale responsibly.
+      {/* ── BODY ──────────────────────────────────────── */}
+      <div style={{ ...wrapStyle, paddingTop: 100, paddingBottom: 20 }}>
+
+        {/* Manifesto statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [...ease], delay: 0.25 }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 80,
+            alignItems: "start",
+            marginBottom: 80,
+          }}
+        >
+          <div>
+            <p
+              style={{
+                fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                fontSize: "clamp(22px, 2.4vw, 32px)",
+                fontWeight: 700,
+                lineHeight: 1.45,
+                color: "#0c0c14",
+                margin: 0,
+              }}
+            >
+              You have read about the ranks. You have seen the pathway. You understand the difference between learning tools and building real solutions.
             </p>
-            <div className="nextstep-context-divider" />
-            <p style={{ fontSize: "14.5px", color: "#374151", lineHeight: 1.65, margin: 0 }}>
-              Each cohort follows a defined <strong style={{ color: "#0c0c14" }}>Builder Selection Process</strong>. Seats are limited to preserve focus, execution depth, and serious peer collaboration.
+          </div>
+          <div style={{ paddingTop: 6 }}>
+            <p
+              style={{
+                fontSize: 16,
+                lineHeight: 1.8,
+                color: "#5a5a72",
+                margin: "0 0 24px",
+              }}
+            >
+              The only question left is whether you are ready to move.
             </p>
+            <div
+              style={{
+                padding: "24px 28px",
+                background: "#f0f0ff",
+                borderRadius: 14,
+                borderLeft: "3px solid #6366f1",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 15,
+                  lineHeight: 1.75,
+                  color: "#3d3d5c",
+                  margin: 0,
+                  fontWeight: 500,
+                }}
+              >
+                Every cohort is curated through a defined{" "}
+                <strong style={{ color: "#6366f1" }}>Builder Selection Process</strong>.
+                Seats are limited intentionally — not for marketing, but to protect focus
+                and mentorship depth. You will be surrounded by early-stage AI founders
+                working toward the same goal:{" "}
+                <strong style={{ color: "#0c0c14" }}>execution</strong>.
+              </p>
+            </div>
           </div>
         </motion.div>
 
-        {/* INTENTION BECOMES EXECUTION */}
-        <motion.div initial="initial" animate={inView ? "animate" : "initial"} variants={fadeUp(0.25)} style={{ textAlign: "center", marginBottom: 40 }}>
-          <p style={{ fontSize: "18px", fontFamily: "var(--font-fraunces, 'Fraunces', serif)", fontWeight: 700, fontStyle: "italic", background: "linear-gradient(135deg, #6366f1, #8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", margin: 0 }}>
-            This is where intention becomes execution.
-          </p>
-        </motion.div>
-
-        {/* 3 COMPACT ACTION ROWS */}
-        <div className="nextstep-actions-grid" style={{ marginBottom: 48 }}>
-          {paths.map((path, idx) => (
-            <motion.div
-              key={idx}
-              initial="initial"
-              animate={inView ? "animate" : "initial"}
-              variants={fadeUp(0.3 + idx * 0.1)}
-              onMouseEnter={() => setHoveredCard(idx)}
-              onMouseLeave={() => setHoveredCard(null)}
-              className="nextstep-action-card"
+        {/* Full-width manifesto block */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [...ease], delay: 0.32 }}
+          style={{
+            position: "relative",
+            background: "#0c0c14",
+            borderRadius: 24,
+            padding: "60px 72px",
+            marginBottom: 80,
+            overflow: "hidden",
+          }}
+        >
+          {/* BG accent */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(ellipse at 80% 50%, rgba(99,102,241,0.15) 0%, transparent 60%)",
+              pointerEvents: "none",
+            }}
+          />
+          <div style={{ position: "relative", zIndex: 1, maxWidth: 780 }}>
+            <p
               style={{
-                background: "#ffffff",
-                border: hoveredCard === idx ? "1px solid rgba(99,102,241,0.5)" : "1px solid rgba(0,0,0,0.06)",
-                borderRadius: 14,
-                padding: "24px 28px",
-                display: "flex",
-                flexDirection: "column",
-                boxShadow: hoveredCard === idx ? "0 8px 28px rgba(99,102,241,0.08)" : "0 4px 16px rgba(0,0,0,0.03)",
-                transform: hoveredCard === idx ? "translateY(-3px)" : "none",
-                transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-                position: "relative",
-                overflow: "hidden",
-                cursor: "pointer"
+                fontSize: "clamp(15px, 1.4vw, 18px)",
+                lineHeight: 1.85,
+                color: "#c0c0d8",
+                margin: "0 0 32px",
               }}
             >
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, #6366f1, #8b5cf6)", opacity: hoveredCard === idx ? 1 : 0, transition: "opacity 0.4s ease" }} />
-
-              {/* Top row: badge + description */}
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 16 }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(99, 102, 241, 0.08)", display: "flex", alignItems: "center", justifyContent: "center", color: "#6366f1", flexShrink: 0 }}>
-                  {path.icon}
-                </div>
-                <p style={{ fontSize: "14px", color: "#374151", lineHeight: 1.55, margin: 0, fontWeight: 500 }}>
-                  {path.title}
-                </p>
-              </div>
-
-              {/* Action link */}
-              <div style={{ marginTop: "auto", display: "inline-flex", alignItems: "center", gap: 8, color: "#6366f1", fontWeight: 700, fontSize: "14.5px", paddingLeft: 52 }}>
-                {path.action}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "transform 0.3s ease", transform: hoveredCard === idx ? "translateX(4px)" : "none" }}>
-                  <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-                </svg>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* FINAL CLOSING */}
-        <motion.div initial="initial" animate={inView ? "animate" : "initial"} variants={fadeUp(0.7)} style={{ textAlign: "center", position: "relative" }}>
-          <div style={{ position: "absolute", top: -24, left: "20%", right: "20%", height: 1, background: "linear-gradient(to right, transparent, rgba(229,231,235,0.7), transparent)" }} />
-
-          <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "20px 44px", borderRadius: 32, border: "1px solid rgba(99,102,241,0.1)", background: "linear-gradient(135deg, rgba(99,102,241,0.03), rgba(139,92,246,0.03))" }}>
-            <p style={{ fontSize: "15px", color: "#0c0c14", lineHeight: 1.7, margin: 0, textAlign: "center", fontWeight: 700 }}>
-              The ecosystem is structured.
+              Udaan is not an information program. It is a structured entry into a serious AI Startup
+              Ecosystem built for people who want to launch, validate, and scale responsibly. If you
+              are looking for passive sessions or symbolic participation,{" "}
+              <span style={{ color: "#ffffff", fontWeight: 600 }}>
+                this will not feel comfortable.
+              </span>
             </p>
-            <p style={{ fontSize: "15px", color: "#0c0c14", lineHeight: 1.7, margin: 0, textAlign: "center", fontWeight: 700 }}>
-              Execution is expected.
-            </p>
-            <p style={{ fontSize: "15px", margin: 0, textAlign: "center", fontWeight: 700, color: "#6366f1" }}>
-              The decision is yours.
+            <p
+              style={{
+                fontSize: "clamp(15px, 1.4vw, 18px)",
+                lineHeight: 1.85,
+                color: "#c0c0d8",
+                margin: 0,
+              }}
+            >
+              If you are ready to work on an idea, build an MVP, validate with real users,
+              and step into structured founder accountability,{" "}
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: 700,
+                }}
+              >
+                this is where that journey begins.
+              </span>
             </p>
           </div>
         </motion.div>
 
       </div>
 
-      <style jsx>{`
-        .nextstep-context-grid {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          gap: 28px;
-          align-items: center;
-        }
-        .nextstep-context-divider {
-          width: 1px;
-          height: 100%;
-          min-height: 40px;
-          background: linear-gradient(to bottom, transparent, #d1d5db, transparent);
-        }
-        @media (max-width: 700px) {
-          .nextstep-context-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-          }
-          .nextstep-context-divider {
-            display: none;
-          }
-        }
-        .nextstep-actions-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-        }
-        @media (max-width: 820px) {
-          .nextstep-actions-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-          }
-        }
-        .nextstep-action-card:hover .nextstep-arrow {
-          transform: translateX(4px);
-        }
-      `}</style>
+      {/* ── INVITATION BAND ───────────────────────────── */}
+      <div
+        style={{
+          background: "#f0f0ff",
+          borderTop: "1px solid #e0e0f8",
+          borderBottom: "1px solid #e0e0f8",
+          padding: "40px 0",
+          marginBottom: 80,
+        }}
+      >
+        <div style={wrapStyle}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.8, ease: [...ease], delay: 0.38 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            <span style={{ fontSize: "clamp(18px, 2vw, 26px)", fontWeight: 600, color: "#0c0c14" }}>
+              This is your invitation to
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                fontSize: "clamp(20px, 2.2vw, 30px)",
+                fontWeight: 800,
+                background: "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontStyle: "italic",
+              }}
+            >
+              move from intention to action.
+            </span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── THREE PATHS ───────────────────────────────── */}
+      <div style={{ ...wrapStyle, paddingBottom: 100 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: [...ease], delay: 0.44 }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 48,
+          }}
+        >
+          <div style={{ height: 1, flex: 1, background: "linear-gradient(to right, #e8e8f0, transparent)" }} />
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "#9494b0",
+            }}
+          >
+            Choose Your Path
+          </span>
+          <div style={{ height: 1, flex: 1, background: "linear-gradient(to left, #e8e8f0, transparent)" }} />
+        </motion.div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 24,
+            marginBottom: 80,
+          }}
+        >
+          {paths.map((item, i) => (
+            <PathCard key={i} item={item} index={i} inView={inView} />
+          ))}
+        </div>
+
+        {/* ── CLOSING DECLARATION ───────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: [...ease], delay: 0.75 }}
+          style={{
+            position: "relative",
+            textAlign: "center",
+            paddingTop: 80,
+          }}
+        >
+          {/* rule lines */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={inView ? { scaleX: 1 } : {}}
+            transition={{ duration: 1.2, ease: [...ease], delay: 0.85 }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 1,
+              background: "linear-gradient(to right, transparent, #6366f1 30%, #a78bfa 70%, transparent)",
+              transformOrigin: "center",
+            }}
+          />
+
+          {/* Ghost word */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+              fontSize: "clamp(80px, 14vw, 200px)",
+              fontWeight: 900,
+              color: "transparent",
+              WebkitTextStroke: "1.5px #e0e0f0",
+              letterSpacing: "-0.04em",
+              whiteSpace: "nowrap",
+              pointerEvents: "none",
+              userSelect: "none",
+              zIndex: 0,
+              lineHeight: 1,
+            }}
+          >
+            ACTION
+          </div>
+
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <p
+              style={{
+                fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                fontSize: "clamp(28px, 3.5vw, 48px)",
+                fontWeight: 800,
+                lineHeight: 1.4,
+                color: "#0c0c14",
+                margin: "0 auto 16px",
+                maxWidth: 640,
+              }}
+            >
+              The ecosystem is structured.<br />
+              The pathway is clear.
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                fontSize: "clamp(28px, 3.5vw, 48px)",
+                fontWeight: 800,
+                fontStyle: "italic",
+                background: "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                margin: "0 auto 80px",
+              }}
+            >
+              The next move belongs to you.
+            </p>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }
