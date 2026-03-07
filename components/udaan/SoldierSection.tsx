@@ -1,6 +1,6 @@
 "use client";
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -13,6 +13,53 @@ const fadeUp = (delay = 0) => ({
 export default function SoldierSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [transitionSlide, setTransitionSlide] = useState(0);
+  const [isTransitionHovering, setIsTransitionHovering] = useState(false);
+
+  const skillSlides = [
+    [
+      "Core AI Foundations",
+      "Practical AI Skills Development",
+      "Understanding the AI Tool Ecosystem",
+    ],
+    [
+      "No-Code Automation Workflows",
+      "Structured AI Opportunity Identification",
+      "AI Problem Framing",
+    ],
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % skillSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + skillSlides.length) % skillSlides.length);
+  };
+
+  // Auto-rotate carousel every 4 seconds (pause on hover)
+  useEffect(() => {
+    if (isHovering) return;
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [currentSlide, isHovering]);
+
+  // Auto-rotate transition card every 4 seconds (pause on hover)
+  useEffect(() => {
+    if (isTransitionHovering) return;
+
+    const interval = setInterval(() => {
+      setTransitionSlide((prev) => (prev + 1) % 2);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [transitionSlide, isTransitionHovering]);
 
   return (
     <section
@@ -20,29 +67,31 @@ export default function SoldierSection() {
       style={{
         position: "relative",
         background: "linear-gradient(135deg, rgba(148,148,170,0.04) 0%, rgba(90,90,114,0.04) 100%)",
-        paddingTop: 70,
-        paddingBottom: 70,
+        paddingTop: 60,
+        paddingBottom: 60,
       }}
     >
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         
-        {/* Section Header Block with Badge */}
+        {/* Section Header - Compact with Badge on Left */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease }}
-          style={{ marginBottom: 48, position: "relative" }}
+          style={{ 
+            marginBottom: 40,
+            display: "flex",
+            alignItems: "center",
+            gap: 24,
+          }}
         >
-          {/* Badge SVG - Positioned Independently */}
+          {/* Badge on Left */}
           <div
             style={{
-              position: "absolute",
-              left: "calc(22% - 280px)",
-              top: 0,
-              width: 200,
-              height: 200,
+              width: 100,
+              height: 100,
+              flexShrink: 0,
             }}
-            className="soldier-badge-desktop"
           >
             <img
               src="/BADGES  and  RANK png+svg/DAGARMY BADGES/DAG SOLDIER.svg"
@@ -55,16 +104,16 @@ export default function SoldierSection() {
             />
           </div>
 
-          {/* Header Content - Perfectly Centered */}
-          <div style={{ textAlign: "center" }}>
+          {/* Title Content */}
+          <div>
             <div
               style={{
-                fontSize: "11px",
-                fontWeight: 700,
+                fontSize: "15px",
+                fontWeight: 1000,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: "#5a5a72",
-                marginBottom: 16,
+                marginBottom: 8,
               }}
             >
               FOUNDATION RANK
@@ -72,415 +121,443 @@ export default function SoldierSection() {
             <h2
               style={{
                 fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                fontWeight: 700,
-                fontSize: "clamp(36px, 3.5vw, 48px)",
+                fontWeight: 750,
+                fontSize: "clamp(36px, 3vw, 46px)",
                 lineHeight: 1.2,
                 letterSpacing: "-0.02em",
                 color: "#0c0c14",
-                marginBottom: 12,
+                marginBottom: 6,
               }}
             >
-              Soldier: The Learner in Formation
+              Soldier  : The Learner in Formation
             </h2>
-            <p
-              style={{
-                fontSize: "15px",
-                fontWeight: 600,
-                color: "#5a5a72",
-                marginBottom: 24,
-              }}
-            >
-              The Entry Rank Inside DAG Army
-            </p>
-            {/* Gray gradient divider */}
-            <div
-              style={{
-                width: 100,
-                height: 3,
-                background: "linear-gradient(135deg, #5a5a72 0%, #9494aa 100%)",
-                margin: "0 auto",
-                borderRadius: 2,
-              }}
-            />
+            
           </div>
         </motion.div>
 
-        {/* Identity Block - Two Column Layout */}
+        {/* Two-Column Layout: Complete Left + Right Content */}
         <motion.div
-          {...fadeUp(0.2)}
+          {...fadeUp(0.1)}
           style={{
             display: "grid",
-            gridTemplateColumns: "1.2fr 1fr",
-            gap: 48,
+            gridTemplateColumns: "1fr 1fr",
+            gap: 40,
+            marginBottom: 5,
             alignItems: "start",
-            marginBottom: 48,
           }}
         >
-          {/* LEFT SIDE - Identity Text */}
+          {/* LEFT COLUMN - Entry Rank Text + Market Reality */}
           <div>
+            {/* Semi-headline */}
+            <p
+              style={{
+                fontSize: "29px",
+                fontWeight: 900,
+                color: "#000000",
+                marginBottom: 20,
+              }}
+            >
+              The Entry Rank Inside the AI Startup Ecosystem
+            </p>
+
+            {/* First Paragraph */}
             <p
               style={{
                 fontSize: "16px",
-                lineHeight: 1.8,
-                color: "#5a5a72",
-                marginBottom: 28,
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 0,
               }}
             >
-              A <strong style={{ fontWeight: 700, color: "#0c0c14" }}>Soldier</strong> is the structured entry rank inside the <strong style={{ fontWeight: 700, color: "#0c0c14" }}>DAG Army AI Startup Ecosystem.</strong> It is a deliberate starting point within a disciplined <strong style={{ fontWeight: 700, color: "#0c0c14" }}>AI Learning Track.</strong>
+              In the DAG Army ecosystem, the Soldier is the starting rank. It is not accidental.
             </p>
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 14,
+              }}
+            >
+              It is the structured entry into the AI Learning Track.
+            </p>
+
+            {/* Second Paragraph */}
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 0,
+              }}
+            >
+              This phase builds discipline before execution. It prepares for entrepreneurship. 
+            </p>
+
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 90,
+              }}
+            >
+             It does not represent the final destination.
+            </p>
+
+            {/* Market Reality Section - MOVED FROM RIGHT COLUMN */}
+            <h3
+              style={{
+                fontSize: "29px",
+              fontWeight: 900,
+              color: "#000000",
+              marginBottom: 20,
+              }}
+            >
+              The Market Reality
+            </h3>
             
             <p
               style={{
-                fontSize: "17px",
-                lineHeight: 1.7,
-                color: "#0c0c14",
-                fontWeight: 600,
-                marginBottom: 28,
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 0,
               }}
             >
-              This phase builds <span style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: 700,
-              }}>preparation.</span> It does not represent completion.
+              AI adoption is rising across industries. Freelancers and professionals are integrating AI tools
+
+            </p>
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 16,
+              }}
+            >
+              at scale. However, usage alone does not create distinction.
             </p>
 
             <p
               style={{
                 fontSize: "16px",
-                lineHeight: 1.8,
-                color: "#5a5a72",
-                marginBottom: 24,
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 2,
               }}
             >
-              The Soldier stage exists to create the foundation required for long-term <strong style={{ fontWeight: 700, color: "#0c0c14" }}>AI Entrepreneurship.</strong> It transforms interest into capability and capability into direction.
+              Using AI keeps you relevant.
             </p>
 
-            {/* Mindset Shift Card - Moved to Left Column */}
-            <div
+            <p
               style={{
-                padding: "24px 28px",
-                background: "rgba(255,255,255,0.7)",
-                borderTop: "3px solid transparent",
-                borderImage: "linear-gradient(135deg, #5a5a72 0%, #9494aa 100%) 1",
-                borderRadius: 8,
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
+                marginBottom: 16,
+              }}
+            >
+              Building with AI creates leverage.
+            </p>
+
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.65,
+                fontWeight: 650,
+                color: "#374151",
                 marginBottom: 0,
               }}
             >
-              <h3
-                style={{
-                  fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  color: "#0c0c14",
-                  marginBottom: 16,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                From Tool Usage to Real Value
-              </h3>
-              <p
-                style={{
-                  fontSize: "15px",
-                  lineHeight: 1.7,
-                  color: "#5a5a72",
-                  marginBottom: 16,
-                }}
-              >
-                AI adoption is expanding rapidly. But adoption alone does not create distinction.
-              </p>
-              <p
-                style={{
-                  fontSize: "15px",
-                  lineHeight: 1.7,
-                  color: "#0c0c14",
-                  fontWeight: 600,
-                  marginBottom: 0,
-                }}
-              >
-                <strong style={{ fontWeight: 700, color: "#0c0c14" }}>Using AI makes you current.</strong><br />
-                <strong style={{ 
-                  fontWeight: 700, 
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
-                }}>Building with AI makes you relevant.</strong>
-              </p>
-            </div>
+              The Soldier phase prepares you for that shift.
+            </p>
           </div>
 
-          {/* RIGHT SIDE - Skills Card */}
-          <div
-            style={{
-              background: "#ffffff",
-              border: "2px solid transparent",
-              backgroundImage: "linear-gradient(white, white), linear-gradient(135deg, #5a5a72 0%, #9494aa 100%)",
-              backgroundOrigin: "border-box",
-              backgroundClip: "padding-box, border-box",
-              borderRadius: 16,
-              padding: 32,
-              boxShadow: "0 4px 20px rgba(90,90,114,0.12)",
-            }}
-          >
+          {/* RIGHT COLUMN - Skill Card + Transition Card */}
+          <div>
+            {/* Heading: What the Soldier Phase Develops - MOVED FROM LEFT COLUMN */}
             <h3
               style={{
                 fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-                fontSize: "22px",
+                fontSize: "18px",
                 fontWeight: 700,
                 color: "#0c0c14",
-                marginBottom: 24,
+                marginBottom: 20,
                 letterSpacing: "-0.01em",
               }}
             >
-              What the Soldier Phase Builds
+              What the Soldier Phase Develops
             </h3>
 
-            {/* Skills as clean stacked blocks */}
-            <div style={{ marginBottom: 24 }}>
-              {[
-                "Core AI Foundations",
-                "Practical AI Skill Development",
-                "AI Tool Ecosystem Mastery",
-                "Automation & Opportunity Identification",
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: "12px 16px",
-                    marginBottom: 8,
-                    background: "rgba(12,12,20,0.02)",
-                    border: "1px solid rgba(12,12,20,0.08)",
-                    borderRadius: 8,
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#0c0c14",
-                  }}
-                >
-                  • {item}
-                </div>
-              ))}
-            </div>
-
-            {/* Highlighted mini panel */}
+            {/* Animated Skill Card - MOVED FROM LEFT COLUMN */}
             <div
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
               style={{
-                padding: "16px 20px",
-                background: "rgba(90,90,114,0.06)",
-                border: "1px solid rgba(90,90,114,0.15)",
-                borderRadius: 10,
+                background: "#ffffff",
+                border: "1px solid rgba(12,12,20,0.1)",
+                borderRadius: 12,
+                padding: "24px 26px",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                position: "relative",
+                width: "100%",
+                marginBottom: 35,
               }}
             >
+            {/* Card Semi-Heading */}
+            <h4
+              style={{
+                fontSize: "15px",
+                fontWeight: 700,
+                color: "#0c0c14",
+                marginBottom: 18,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              This Startup Preparation Phase focuses on:
+            </h4>
+
+            {/* Auto-Rotating Slide Container - Single Vertical Column */}
+            <div style={{ position: "relative", minHeight: "180px", overflow: "hidden" }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ 
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr",
+                    gap: 10,
+                  }}
+                >
+                  {skillSlides[currentSlide].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.7, delay: i * 0.8, ease: [0.16, 1, 0.3, 1] }}
+                      style={{
+                        padding: "10px 18px",
+                        background: "#ffffff",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 6,
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "#374151",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
+                      <span style={{
+                        width: 5,
+                        height: 5,
+                        borderRadius: "50%",
+                        background: "#6b7280",
+                        flexShrink: 0,
+                      }} />
+                      {item}
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Static Emphasis Line - Always Visible */}
+            <p
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.6,
+                color: "#374151",
+                marginTop: 18,
+                paddingTop: 18,
+                borderTop: "1px solid rgba(12,12,20,0.1)",
+              }}
+            >
+              The goal is <strong style={{ 
+                fontWeight: 700, 
+                color: "#0c0c14",
+                background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>clarity before commitment</strong>.
+            </p>
+          </div>
+
+            {/* Skill-to-Startup Transition Card - Professional Redesign */}
+          <div
+            onMouseEnter={() => setIsTransitionHovering(true)}
+            onMouseLeave={() => setIsTransitionHovering(false)}
+            style={{
+              background: "linear-gradient(135deg, #ffffff 0%, #f9fafb 100%)",
+              border: "1px solid rgba(99,102,241,0.12)",
+              borderRadius: 12,
+              padding: "24px 22px",
+              boxShadow: "0 2px 12px rgba(99,102,241,0.06)",
+              position: "relative",
+              width: "100%",
+            }}
+          >
+            <h4
+              style={{
+                fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
+                fontSize: "18px",
+                fontWeight: 700,
+                color: "#0c0c14",
+                marginBottom: 16,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              The Skill-to-Startup Transition
+            </h4>
+
+            {/* Auto-Sliding Question Block */}
+            <div style={{ position: "relative", minHeight: "85px", overflow: "hidden" }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={transitionSlide}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ 
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                >
+                  {transitionSlide === 0 ? (
+                    <div style={{
+                      background: "rgba(148,148,170,0.05)",
+                      padding: "16px 18px",
+                      borderRadius: 10,
+                      border: "1px solid rgba(148,148,170,0.15)",
+                    }}>
+                      <p
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          color: "#5e5e66ff",
+                          marginBottom: 8,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                        }}
+                      >
+                        Old Question
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "16px",
+                          lineHeight: 1.4,
+                          color: "#454551ff",
+                          fontWeight: 700,
+                          marginBottom: 0,
+                        }}
+                      >
+                        How do I use AI at work?
+                      </p>
+                    </div>
+                  ) : (
+                    <div style={{
+                      background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.08) 100%)",
+                      padding: "16px 18px",
+                      borderRadius: 10,
+                      border: "1px solid rgba(99,102,241,0.2)",
+                    }}>
+                      <p
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          color: "#6366f1",
+                          marginBottom: 8,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                        }}
+                      >
+                        New Question
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "16px",
+                          lineHeight: 1.4,
+                          fontWeight: 700,
+                          background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          backgroundClip: "text",
+                          marginBottom: 0,
+                        }}
+                      >
+                        What problem can I solve with AI?
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Static Text - Always Visible */}
+            <div style={{
+              marginTop: 18,
+              paddingTop: 18,
+              borderTop: "1px solid rgba(99,102,241,0.1)",
+            }}>
               <p
                 style={{
-                  fontSize: "15px",
+                  fontSize: "14px",
                   lineHeight: 1.6,
+                  fontWeight: 700,
                   color: "#0c0c14",
-                  fontWeight: 600,
+                  textAlign: "center",
                   marginBottom: 0,
                 }}
               >
-                Your foundation becomes your <span style={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  fontWeight: 700,
-                }}>strength.</span><br />
-                Your learning becomes your <span style={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  fontWeight: 700,
-                }}>advantage.</span>
+                This is where the <span style={{
+                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: 900,
+                }}>early-stage builder</span> begins to form.
               </p>
             </div>
           </div>
-        </motion.div>
-
-        {/* Skill-to-Startup Transition Block */}
-        <motion.div
-          {...fadeUp(0.3)}
-          style={{
-            marginBottom: 48,
-            padding: "32px 40px",
-            background: "#ffffff",
-            border: "1px solid rgba(12,12,20,0.1)",
-            borderRadius: 12,
-            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-              fontSize: "24px",
-              fontWeight: 700,
-              color: "#0c0c14",
-              marginBottom: 28,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            The Skill-to-Startup Transition
-          </h3>
-          
-          {/* Old Question */}
-          <div style={{ marginBottom: 24 }}>
-            <p
-              style={{
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "#9494aa",
-                marginBottom: 8,
-              }}
-            >
-              Old Question
-            </p>
-            <p
-              style={{
-                fontSize: "17px",
-                lineHeight: 1.6,
-                color: "#5a5a72",
-                fontStyle: "italic",
-                marginBottom: 0,
-              }}
-            >
-              How do I apply AI inside a company?
-            </p>
-          </div>
-
-          {/* Divider */}
-          <div
-            style={{
-              height: 1,
-              background: "rgba(12,12,20,0.1)",
-              margin: "24px 0",
-            }}
-          />
-
-          {/* New Question */}
-          <div>
-            <p
-              style={{
-                fontSize: "14px",
-                fontWeight: 700,
-                color: "#5b4bec",
-                marginBottom: 8,
-              }}
-            >
-              New Question
-            </p>
-            <p
-              style={{
-                fontSize: "18px",
-                lineHeight: 1.6,
-                color: "#0c0c14",
-                fontWeight: 700,
-                marginBottom: 0,
-              }}
-            >
-              <span style={{ 
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>What real problem can I solve with AI?</span>
-            </p>
           </div>
         </motion.div>
 
-        {/* Closing Principle Block */}
+        {/* Closing Statement */}
         <motion.div
           {...fadeUp(0.4)}
           style={{
             textAlign: "center",
+            maxWidth: "600px",
+            margin: "0 auto",
           }}
         >
-          <h3
-            style={{
-              fontFamily: "var(--font-fraunces, 'Fraunces', serif)",
-              fontSize: "26px",
-              fontWeight: 700,
-              color: "#0c0c14",
-              marginBottom: 28,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Progress Over Comfort
-          </h3>
           <p
             style={{
-              fontSize: "16px",
-              lineHeight: 1.8,
+              fontSize: "14px",
+              lineHeight: 1.65,
               color: "#5a5a72",
-              marginBottom: 28,
+              fontStyle: "italic",
             }}
           >
-            Inside this ecosystem, comfort is not rewarded. <strong style={{ 
-              fontWeight: 700, 
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>Progress is.</strong>
-          </p>
-
-          {/* Structured list */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 20,
-              marginBottom: 28,
-            }}
-          >
-            {[
-              "Learn the system",
-              "Build foundations",
-              "Prepare for execution",
-              "Advance to Lieutenant",
-            ].map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: "16px 20px",
-                  background: "#ffffff",
-                  border: "1px solid rgba(12,12,20,0.1)",
-                  borderRadius: 10,
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "#0c0c14",
-                  textAlign: "center",
-                }}
-              >
-                • {item}
-              </div>
-            ))}
-          </div>
-
-          {/* Final closing lines */}
-          <p
-            style={{
-              fontSize: "17px",
-              lineHeight: 1.7,
-              color: "#0c0c14",
-              fontWeight: 600,
-              marginBottom: 0,
-            }}
-          >
-            Being a Soldier is <strong style={{ fontWeight: 700, color: "#0c0c14" }}>preparation.</strong><br />
-            Your direction is <strong style={{ 
-              fontWeight: 700, 
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>forward.</strong>
+            The Soldier rank is not a permanent identity. It is a structured preparation phase designed to build clarity, capability, and confidence before advancing to the next level.
           </p>
         </motion.div>
-
       </div>
     </section>
   );

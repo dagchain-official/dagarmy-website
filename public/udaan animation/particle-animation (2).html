@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DagArmy Particle Animation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { overflow: hidden; background: #ffffff; }
+
+  #renderer-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+  }
+
+  #overlay {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* The text itself uses a gradient fill via background-clip */
+  .text-line {
+    font-family: 'Georgia', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+    line-height: 1.6;
+    /* Gradient grain text */
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* grain filter on the text */
+    filter: url(#grain-filter);
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+  .text-line.visible {
+    opacity: 1;
+  }
+  .text-line.fade-out {
+    opacity: 0 !important;
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG grain filter — applied only to text -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" seed="2" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+      <feBlend in="SourceGraphic" in2="grayNoise" mode="multiply" result="blended"/>
+      <feComponentTransfer in="blended">
+        <feFuncA type="linear" slope="1"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+</svg>
+
+<div id="renderer-wrap"></div>
+
+<div id="overlay">
+  <div class="text-line" id="t1"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── TWEEN ENGINE ─────────────────────────────────────────────────────────────
+const Tweens = [];
+function easeInOut(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
+function tweenTo(obj, props, duration, delay, onComplete) {
+  const start = {};
+  for (const k in props) start[k] = obj[k];
+  Tweens.push({ obj, start, end:{...props}, duration:duration*1000, delay:(delay||0)*1000, elapsed:0, onComplete });
+}
+function killTweensFor(objs) {
+  for (let i=Tweens.length-1;i>=0;i--) if (objs.includes(Tweens[i].obj)) Tweens.splice(i,1);
+}
+function updateTweens(dt) {
+  for (let i=Tweens.length-1;i>=0;i--) {
+    const tw=Tweens[i];
+    tw.elapsed+=dt;
+    if (tw.elapsed<tw.delay) continue;
+    const t=Math.min((tw.elapsed-tw.delay)/tw.duration,1);
+    const e=easeInOut(t);
+    for (const k in tw.end) tw.obj[k]=tw.start[k]+(tw.end[k]-tw.start[k])*e;
+    if (t>=1) { if(tw.onComplete) tw.onComplete(); Tweens.splice(i,1); }
+  }
+}
+
+// ── SCENE ────────────────────────────────────────────────────────────────────
+const wrap = document.getElementById('renderer-wrap');
+const W = window.innerWidth, H = window.innerHeight;
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, W/H, 1, 3000);
+camera.position.set(0, 0, 700);
+
+const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(W, H);
+renderer.setClearColor(0x000000, 0);
+wrap.appendChild(renderer.domElement);
+
+// Lights tuned for white bg — use indigo/violet tones
+const sl1 = new THREE.SpotLight(0x6366f1, 2.5);
+sl1.position.set(300, -200, 600);
+scene.add(sl1);
+const sl2 = new THREE.SpotLight(0x8b5cf6, 1.8);
+sl2.position.set(-400, 300, -100);
+scene.add(sl2);
+const sl3 = new THREE.SpotLight(0xa78bfa, 1.2);
+sl3.position.set(0, 400, 200);
+scene.add(sl3);
+scene.add(new THREE.AmbientLight(0x4f46e5, 0.7));
+
+// ── PARTICLES ────────────────────────────────────────────────────────────────
+const N = 2400, R = 255;
+// Indigo/violet palette — visible on white
+const COLORS = [0x6366f1, 0x7c3aed, 0x8b5cf6, 0x4f46e5, 0xa78bfa, 0x818cf8, 0x6d28d9];
+
+const particleGroup = new THREE.Object3D();
+scene.add(particleGroup);
+const meshes = [];
+const posProxies = [];
+
+const sphereTargets = Array.from({length:N}, () => {
+  const theta = Math.random()*Math.PI*2;
+  const phi   = Math.acos(2*Math.random()-1);
+  return { x:R*Math.sin(phi)*Math.cos(theta), y:R*Math.sin(phi)*Math.sin(theta), z:R*Math.cos(phi) };
+});
+
+for (let i=0;i<N;i++) {
+  const size = 1.5 + Math.random()*1.8;
+  const geo = new THREE.IcosahedronBufferGeometry(size, 0);
+  const col = COLORS[i % COLORS.length];
+  const mat = new THREE.MeshPhongMaterial({
+    color: col, emissive: col, emissiveIntensity: 0.25,
+    side: THREE.DoubleSide, flatShading: true, transparent: true, opacity: 0.92
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  const px = { x:(Math.random()-.5)*2200, y:(Math.random()-.5)*2200, z:(Math.random()-.5)*2200 };
+  mesh.position.set(px.x, px.y, px.z);
+  particleGroup.add(mesh);
+  meshes.push(mesh);
+  posProxies.push(px);
+}
+
+// ── TEXT RASTERIZER ───────────────────────────────────────────────────────────
+function rasterizeText(text, cw, ch, fs) {
+  const c = document.createElement('canvas');
+  c.width=cw; c.height=ch;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0,0,cw,ch);
+  ctx.fillStyle='#fff';
+  ctx.font=`bold ${fs}px Georgia, serif`;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText(text, cw/2, ch/2);
+  return ctx.getImageData(0,0,cw,ch);
+}
+function samplePoints(imgData, max) {
+  const pts=[], d=imgData.data, w=imgData.width, h=imgData.height;
+  for (let i=0;i<d.length;i+=4) {
+    if (d[i+3]>100) pts.push({ x:(i/4)%w - w/2, y:-(Math.floor(i/4/w) - h/2) });
+  }
+  if (pts.length<=max) return pts;
+  const step=Math.ceil(pts.length/max);
+  return pts.filter((_,i)=>i%step===0);
+}
+
+const TEXTS = ['Welcome','to DagArmy','and','Welcome','to Udaan'];
+const allTextTargets = TEXTS.map(text => {
+  const pts = samplePoints(rasterizeText(text, 1100, 300, 110), N);
+  return Array.from({length:N}, (_,i) => {
+    const p=pts[i%pts.length];
+    return { x:p.x*0.95, y:p.y*0.95, z:(Math.random()-.5)*8 };
+  });
+});
+
+// ── MORPH ─────────────────────────────────────────────────────────────────────
+function morphTo(targets, duration, onComplete) {
+  killTweensFor(posProxies);
+  let done=0;
+  posProxies.forEach((po,i) => {
+    const t=targets[i%targets.length];
+    tweenTo(po, {x:t.x,y:t.y,z:t.z}, duration, i*0.0002, () => {
+      if (++done===N && onComplete) onComplete();
+    });
+  });
+}
+
+// ── OVERLAY ──────────────────────────────────────────────────────────────────
+const tEl = document.getElementById('t1');
+function showText(text, cb) {
+  tEl.textContent = text;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>tEl.classList.add('visible')));
+  setTimeout(cb, 2600);
+}
+function hideText(cb) {
+  tEl.classList.remove('visible');
+  tEl.classList.add('fade-out');
+  setTimeout(() => { tEl.textContent=''; tEl.classList.remove('fade-out'); cb(); }, 800);
+}
+
+// ── ROTATION STATE ────────────────────────────────────────────────────────────
+let rotY=0, isSpinning=true;
+const rotProxy={y:0};
+
+// ── SEQUENCE ─────────────────────────────────────────────────────────────────
+function phaseGlobe(onDone) {
+  isSpinning=true;
+  morphTo(sphereTargets, 2.6, ()=>setTimeout(onDone, 2200));
+}
+function phaseText(idx, onDone) {
+  isSpinning=false;
+  killTweensFor([rotProxy]);
+  rotProxy.y=rotY % (Math.PI*2);
+  if (rotProxy.y>Math.PI) rotProxy.y-=Math.PI*2;
+  tweenTo(rotProxy, {y:0}, 0.55, 0, () => {
+    rotY=0;
+    particleGroup.rotation.y=0;
+    morphTo(allTextTargets[idx], 1.4, () => {
+      showText(TEXTS[idx], ()=>hideText(onDone));
+    });
+  });
+}
+function runSequence() {
+  phaseGlobe(() => {
+    let i=0;
+    (function nextText() {
+      if (i>=TEXTS.length) { setTimeout(runSequence,500); return; }
+      phaseText(i++, ()=>setTimeout(nextText,250));
+    })();
+  });
+}
+
+// ── RENDER LOOP ───────────────────────────────────────────────────────────────
+let lastTime=performance.now();
+(function animate() {
+  requestAnimationFrame(animate);
+  const now=performance.now(), dt=now-lastTime; lastTime=now;
+  updateTweens(dt);
+  for (let i=0;i<N;i++) {
+    meshes[i].position.x=posProxies[i].x;
+    meshes[i].position.y=posProxies[i].y;
+    meshes[i].position.z=posProxies[i].z;
+  }
+  if (isSpinning) { rotY+=0.0014; particleGroup.rotation.y=rotY; }
+  else { particleGroup.rotation.y=rotProxy.y; }
+  renderer.render(scene,camera);
+})();
+
+setTimeout(runSequence, 300);
+
+window.addEventListener('resize', () => {
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
+</body>
+</html>

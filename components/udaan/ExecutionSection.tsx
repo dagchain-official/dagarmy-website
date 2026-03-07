@@ -48,8 +48,8 @@ export default function ExecutionSection() {
           </h2>
           <p
             style={{
-              fontSize: "15px",
-              fontWeight: 500,
+              fontSize: "30px",
+              fontWeight: 1000,
               color: "#5a5a72",
               marginBottom: 24,
             }}
