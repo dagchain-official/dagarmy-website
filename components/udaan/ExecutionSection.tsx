@@ -314,7 +314,7 @@ function MarketStrip({ inView }: { inView: boolean }) {
           <div style={{
             fontFamily: dm, fontSize: "clamp(12px, 1vw, 14px)",
             fontWeight: 700, color: "#0a0a0f",
-            letterSpacing: "-0.01em", marginBottom: 8,
+            marginBottom: 8,
             textTransform: "uppercase", letterSpacing: "0.06em",
           }}>{s.label}</div>
           <p style={{
