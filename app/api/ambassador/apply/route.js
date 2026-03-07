@@ -41,8 +41,8 @@ export async function POST(request) {
     `;
 
     try {
-      await sendEmail('hr@dagchain.network', {
-        to: ['hr@dagchain.network', 'admin@dagchain.network'],
+      await sendEmail('support@dagchain.network', {
+        to: ['support@dagchain.network'],
         subject: `New Ambassador Application — ${full_name} (${country})`,
         html: notifyHtml,
       });
@@ -54,13 +54,13 @@ export async function POST(request) {
     const confirmHtml = `
       <h2>Thank you for applying, ${full_name}!</h2>
       <p>We have received your DAG Army Ambassador application. Our team will review it and reach out to shortlisted candidates.</p>
-      <p>If you have questions, contact us at <a href="mailto:hr@dagchain.network">hr@dagchain.network</a>.</p>
+      <p>If you have questions, contact us at <a href="mailto:support@dagarmy.network">support@dagarmy.network</a>.</p>
       <br/>
       <p>— The DAG Army Team</p>
     `;
 
     try {
-      await sendEmail('hr@dagchain.network', {
+      await sendEmail('support@dagchain.network', {
         to: email,
         subject: 'DAG Army Ambassador Application Received',
         html: confirmHtml,
