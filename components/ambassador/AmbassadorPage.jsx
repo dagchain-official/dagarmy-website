@@ -1,73 +1,18 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 
-/* ── Icons ─────────────────────────────────────────────────── */
-const Ic = {
-  chevron: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>,
-  check: () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-  arrow: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
-  close: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-  star: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
-  play: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
-  zap: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-  globe: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
-  users: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-  award: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>,
-  cpu: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>,
-  coins: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>,
-};
+/* ── Minimal Icons ──────────────────────────────────────── */
+const IArrow = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
+const ICheck = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+const IClose = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+const IChevron = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>;
 
-/* ── Animated Counter ──────────────────────────────────────── */
-function Counter({ end, suffix = '' }) {
-  const [val, setVal] = useState(0);
-  const ref = useRef(null);
-  const started = useRef(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !started.current) {
-        started.current = true;
-        let cur = 0;
-        const step = end / 60;
-        const t = setInterval(() => {
-          cur += step;
-          if (cur >= end) { setVal(end); clearInterval(t); } else setVal(Math.floor(cur));
-        }, 20);
-      }
-    }, { threshold: 0.5 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [end]);
-  return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
-}
-
-/* ── FAQ ───────────────────────────────────────────────────── */
-function FAQ({ q, a }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div style={{ borderBottom: '1px solid #f0f0f0' }}>
-      <button onClick={() => setOpen(!open)} style={{
-        width: '100%', background: 'none', border: 'none', padding: '22px 0',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        cursor: 'pointer', gap: '20px', textAlign: 'left',
-      }}>
-        <span style={{ fontSize: '15px', fontWeight: '600', color: '#111', lineHeight: 1.5 }}>{q}</span>
-        <span style={{ flexShrink: 0, color: '#111', transition: 'transform 0.3s', transform: open ? 'rotate(180deg)' : 'none', display: 'flex' }}>
-          <Ic.chevron />
-        </span>
-      </button>
-      <div style={{ overflow: 'hidden', maxHeight: open ? '200px' : '0', transition: 'max-height 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
-        <p style={{ margin: '0 0 22px', color: '#666', fontSize: '14px', lineHeight: 1.8 }}>{a}</p>
-      </div>
-    </div>
-  );
-}
-
-/* ── Apply Modal ───────────────────────────────────────────── */
+/* ── Apply Modal ────────────────────────────────────────── */
 function ApplyModal({ onClose, onSuccess }) {
   const [form, setForm] = useState({ full_name: '', email: '', country: '', telegram: '', social_links: '', follower_count: '', content_niche: '', statement: '' });
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');
-  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
+  const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
@@ -81,108 +26,98 @@ function ApplyModal({ onClose, onSuccess }) {
     } catch (e) { setErr(e.message); } finally { setLoading(false); }
   };
 
-  const inp = (extra = {}) => ({
-    style: {
-      width: '100%', padding: '11px 14px', border: '1.5px solid #eee',
-      borderRadius: '10px', fontSize: '14px', color: '#111', background: '#fafafa',
-      outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit',
-      transition: 'border-color 0.2s, background 0.2s',
-      ...extra,
-    },
-    onFocus: (e) => { e.target.style.borderColor = '#111'; e.target.style.background = '#fff'; },
-    onBlur: (e) => { e.target.style.borderColor = '#eee'; e.target.style.background = '#fafafa'; },
-  });
-  const lbl = { display: 'block', fontSize: '12px', fontWeight: '700', color: '#111', marginBottom: '6px', letterSpacing: '0.3px', textTransform: 'uppercase' };
+  const iStyle = { width: '100%', padding: '11px 14px', border: '1.5px solid #e8e8e8', borderRadius: '10px', fontSize: '14px', color: '#111', background: '#fafafa', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', transition: 'border-color 0.2s' };
+  const lStyle = { display: 'block', fontSize: '11px', fontWeight: '700', color: '#111', marginBottom: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' };
 
   return (
-    <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(6px)' }}>
-      <div style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '600px', maxHeight: '92vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 32px 80px rgba(0,0,0,0.18)' }}>
-        {/* Header */}
-        <div style={{ padding: '28px 32px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+    <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(8px)' }}>
+      <div style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '580px', maxHeight: '90vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 40px 100px rgba(0,0,0,0.2)' }}>
+        <div style={{ padding: '28px 32px 22px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <p style={{ margin: '0 0 4px', fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', color: '#999' }}>Ambassador Program</p>
-            <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#111', letterSpacing: '-0.5px' }}>Submit Your Application</h2>
+            <p style={{ margin: '0 0 3px', fontSize: '10px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#aaa' }}>Ambassador Program</p>
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#111', letterSpacing: '-0.5px' }}>Submit Your Application</h2>
           </div>
-          <button onClick={onClose} style={{ background: '#f5f5f5', border: 'none', borderRadius: '10px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#666', flexShrink: 0 }}>
-            <Ic.close />
-          </button>
+          <button onClick={onClose} style={{ background: '#f5f5f5', border: 'none', borderRadius: '8px', width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#555' }}><IClose /></button>
         </div>
-        {/* Form */}
-        <form onSubmit={submit} style={{ overflowY: 'auto', padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div>
-              <label style={lbl}>Full Name <span style={{ color: '#e00' }}>*</span></label>
-              <input value={form.full_name} onChange={set('full_name')} placeholder="Your full name" {...inp()} />
-            </div>
-            <div>
-              <label style={lbl}>Email Address <span style={{ color: '#e00' }}>*</span></label>
-              <input type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" {...inp()} />
-            </div>
+        <form onSubmit={submit} style={{ overflowY: 'auto', padding: '26px 32px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div><label style={lStyle}>Full Name <span style={{ color: '#e00' }}>*</span></label><input value={form.full_name} onChange={set('full_name')} placeholder="Your name" style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
+            <div><label style={lStyle}>Email <span style={{ color: '#e00' }}>*</span></label><input type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div>
-              <label style={lbl}>Country <span style={{ color: '#e00' }}>*</span></label>
-              <input value={form.country} onChange={set('country')} placeholder="India, UAE, USA..." {...inp()} />
-            </div>
-            <div>
-              <label style={lbl}>Telegram / WhatsApp</label>
-              <input value={form.telegram} onChange={set('telegram')} placeholder="@handle or +number" {...inp()} />
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div><label style={lStyle}>Country <span style={{ color: '#e00' }}>*</span></label><input value={form.country} onChange={set('country')} placeholder="India, UAE..." style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
+            <div><label style={lStyle}>Telegram / WhatsApp</label><input value={form.telegram} onChange={set('telegram')} placeholder="@handle" style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
           </div>
-          <div>
-            <label style={lbl}>Social Media Links</label>
-            <input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn — paste all links" {...inp()} />
+          <div><label style={lStyle}>Social Media Links</label><input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn links" style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div><label style={lStyle}>Total Followers</label><input value={form.follower_count} onChange={set('follower_count')} placeholder="e.g. 25,000" style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
+            <div><label style={lStyle}>Content Niche</label><input value={form.content_niche} onChange={set('content_niche')} placeholder="AI, Web3, Finance..." style={iStyle} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div>
-              <label style={lbl}>Total Followers / Subscribers</label>
-              <input value={form.follower_count} onChange={set('follower_count')} placeholder="e.g. 25,000" {...inp()} />
-            </div>
-            <div>
-              <label style={lbl}>Content Niche</label>
-              <input value={form.content_niche} onChange={set('content_niche')} placeholder="AI, Web3, Finance, Tech..." {...inp()} />
-            </div>
-          </div>
-          <div>
-            <label style={lbl}>Why do you want to be an Ambassador?</label>
-            <textarea value={form.statement} onChange={set('statement')} rows={4} placeholder="Tell us about yourself, your audience, and what excites you about DAG Army..." style={{ ...inp().style, resize: 'vertical', lineHeight: '1.7' }} onFocus={inp().onFocus} onBlur={inp().onBlur} />
-          </div>
-          {err && <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '10px', padding: '12px 16px', color: '#dc2626', fontSize: '13px' }}>{err}</div>}
-          <button type="submit" disabled={loading} style={{
-            background: loading ? '#ddd' : '#111', color: loading ? '#999' : '#fff',
-            border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px',
-            fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-            letterSpacing: '-0.2px', transition: 'background 0.2s',
-          }}>
-            {loading ? 'Submitting...' : <><span>Submit Application</span><Ic.arrow /></>}
+          <div><label style={lStyle}>Why do you want to be an Ambassador?</label><textarea value={form.statement} onChange={set('statement')} rows={4} placeholder="Tell us about yourself and your audience..." style={{ ...iStyle, resize: 'vertical', lineHeight: '1.7' }} onFocus={e => e.target.style.borderColor = '#111'} onBlur={e => e.target.style.borderColor = '#e8e8e8'} /></div>
+          {err && <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '8px', padding: '11px 14px', color: '#dc2626', fontSize: '13px' }}>{err}</div>}
+          <button type="submit" disabled={loading} style={{ background: loading ? '#ccc' : '#111', color: '#fff', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '14px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', letterSpacing: '-0.2px' }}>
+            {loading ? 'Submitting...' : <><span>Submit Application</span><IArrow /></>}
           </button>
-          <p style={{ margin: 0, textAlign: 'center', fontSize: '12px', color: '#aaa' }}>Our team reviews every application personally within 5–10 days.</p>
+          <p style={{ margin: 0, textAlign: 'center', fontSize: '11px', color: '#bbb' }}>Reviewed personally within 5–10 days.</p>
         </form>
       </div>
     </div>
   );
 }
 
-/* ── Success Modal ─────────────────────────────────────────── */
 function SuccessModal({ onClose }) {
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(6px)' }}>
-      <div style={{ background: '#fff', borderRadius: '24px', padding: '52px 44px', textAlign: 'center', maxWidth: '440px', width: '100%', boxShadow: '0 32px 80px rgba(0,0,0,0.16)' }}>
-        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff' }}>
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(8px)' }}>
+      <div style={{ background: '#fff', borderRadius: '24px', padding: '52px 44px', textAlign: 'center', maxWidth: '420px', width: '100%', boxShadow: '0 40px 100px rgba(0,0,0,0.2)' }}>
+        <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 22px', color: '#fff' }}>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 style={{ margin: '0 0 12px', fontSize: '24px', fontWeight: '800', color: '#111', letterSpacing: '-0.8px' }}>Application Received</h2>
-        <p style={{ margin: '0 0 32px', color: '#666', fontSize: '15px', lineHeight: 1.7 }}>Thank you for applying. Our team will review your application and reach out to shortlisted candidates. Check your email for a confirmation.</p>
-        <button onClick={onClose} style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '12px', padding: '13px 32px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.2px' }}>
-          Back to Ambassador Page
-        </button>
+        <h2 style={{ margin: '0 0 10px', fontSize: '22px', fontWeight: '800', color: '#111', letterSpacing: '-0.5px' }}>Application Received</h2>
+        <p style={{ margin: '0 0 28px', color: '#777', fontSize: '14px', lineHeight: 1.7 }}>Thank you for applying. Our team will review your application and reach out to shortlisted candidates within 5–10 days.</p>
+        <button onClick={onClose} style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: '700', cursor: 'pointer' }}>Back to Page</button>
       </div>
     </div>
   );
 }
 
-/* ── Main Page ─────────────────────────────────────────────── */
+/* ── FAQ ─────────────────────────────────────────────────── */
+function FAQ({ q, a }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderBottom: '1px solid #f0f0f0' }}>
+      <button onClick={() => setOpen(!open)} style={{ width: '100%', background: 'none', border: 'none', padding: '20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', gap: '16px', textAlign: 'left' }}>
+        <span style={{ fontSize: '15px', fontWeight: '600', color: '#111', lineHeight: 1.5 }}>{q}</span>
+        <span style={{ color: '#111', transition: 'transform 0.3s', transform: open ? 'rotate(180deg)' : 'none', display: 'flex', flexShrink: 0 }}><IChevron /></span>
+      </button>
+      <div style={{ overflow: 'hidden', maxHeight: open ? '200px' : '0', transition: 'max-height 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
+        <p style={{ margin: '0 0 20px', color: '#666', fontSize: '14px', lineHeight: 1.8 }}>{a}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Counter ─────────────────────────────────────────────── */
+function Counter({ end, suffix = '' }) {
+  const [v, setV] = useState(0);
+  const ref = useRef(null);
+  const done = useRef(false);
+  useEffect(() => {
+    const ob = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !done.current) {
+        done.current = true;
+        let c = 0; const step = end / 55;
+        const t = setInterval(() => { c += step; if (c >= end) { setV(end); clearInterval(t); } else setV(Math.floor(c)); }, 20);
+      }
+    }, { threshold: 0.5 });
+    if (ref.current) ob.observe(ref.current);
+    return () => ob.disconnect();
+  }, [end]);
+  return <span ref={ref}>{v.toLocaleString()}{suffix}</span>;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MAIN PAGE
+══════════════════════════════════════════════════════════ */
 export default function AmbassadorPage() {
   const [modal, setModal] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -191,334 +126,436 @@ export default function AmbassadorPage() {
   useEffect(() => {
     if (gsapDone.current) return;
     gsapDone.current = true;
+
     (async () => {
       try {
         const { gsap } = await import('gsap');
         const { ScrollTrigger } = await import('gsap/ScrollTrigger');
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hero word-by-word
-        gsap.fromTo('.amb-word', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.06, duration: 0.7, ease: 'power3.out', delay: 0.3 });
-        gsap.fromTo('.amb-hero-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.9 });
-        gsap.fromTo('.amb-hero-actions', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 1.1 });
-        gsap.fromTo('.amb-hero-badge', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 0.1 });
+        /* ─ Scene 1: Hero ─ */
+        const heroTl = gsap.timeline({ delay: 0.1 });
+        heroTl
+          .fromTo('.s1-eyebrow', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+          .fromTo('.s1-word', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.05 }, '-=0.3')
+          .fromTo('.s1-sub', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+          .fromTo('.s1-btns', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.3')
+          .fromTo('.s1-panel', { opacity: 0, y: 30, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out', stagger: 0.12 }, '-=0.5');
 
-        // Scroll reveals
-        gsap.utils.toArray('.amb-reveal').forEach(el => {
-          gsap.fromTo(el, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+        /* Floating panels */
+        document.querySelectorAll('.s1-panel').forEach((el, i) => {
+          gsap.to(el, { y: i % 2 === 0 ? -10 : 10, duration: 3.5 + i * 0.5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.4 });
         });
 
-        // Staggered grids
-        gsap.utils.toArray('.amb-grid').forEach(g => {
-          gsap.fromTo(g.querySelectorAll('.amb-card'), { opacity: 0, y: 36, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.65, ease: 'power3.out', scrollTrigger: { trigger: g, start: 'top 85%' } });
+        /* Hero scroll parallax — headline scales down */
+        gsap.to('.s1-headline', {
+          scale: 0.82, y: -60, opacity: 0.3,
+          scrollTrigger: { trigger: '#scene1', start: 'top top', end: 'bottom top', scrub: 1 },
+        });
+        gsap.to('.s1-panels-wrap', {
+          y: -80, opacity: 0,
+          scrollTrigger: { trigger: '#scene1', start: 'top top', end: 'bottom top', scrub: 1.2 },
         });
 
-        // Floating orbs in hero
-        gsap.utils.toArray('.amb-orb').forEach((orb, i) => {
-          gsap.to(orb, { y: -30 - i * 8, x: (i % 2 === 0 ? 12 : -12), duration: 4 + i * 0.5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3 });
+        /* ─ Scene 2: Ecosystem ─ */
+        gsap.fromTo('.s2-label', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '#scene2', start: 'top 80%' } });
+        gsap.fromTo('.s2-pillar', { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out', stagger: 0.14, scrollTrigger: { trigger: '.s2-pillars', start: 'top 80%' } });
+        gsap.fromTo('.s2-line', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: '.s2-pillars', start: 'top 75%' } });
+        gsap.fromTo('.s2-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.s2-desc', start: 'top 85%' } });
+
+        /* ─ Scene 3: Creators ─ */
+        gsap.fromTo('.s3-header', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '#scene3', start: 'top 75%' } });
+        gsap.fromTo('.s3-tile', { opacity: 0, y: 40, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out', stagger: 0.07, scrollTrigger: { trigger: '.s3-grid', start: 'top 80%' } });
+        gsap.fromTo('.s3-req', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1, scrollTrigger: { trigger: '.s3-reqs', start: 'top 82%' } });
+
+        /* ─ Scene 4: Journey Timeline ─ */
+        gsap.fromTo('.s4-header', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '#scene4', start: 'top 75%' } });
+        gsap.fromTo('.s4-line-fill', { scaleY: 0 }, { scaleY: 1, duration: 2, ease: 'power2.out', scrollTrigger: { trigger: '.s4-timeline', start: 'top 80%', end: 'bottom 60%', scrub: 1 } });
+        document.querySelectorAll('.s4-step-left').forEach(el => {
+          gsap.fromTo(el, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' } });
+        });
+        document.querySelectorAll('.s4-step-right').forEach(el => {
+          gsap.fromTo(el, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' } });
         });
 
-        // Stats line fill
-        gsap.fromTo('.amb-stat-line', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: '.amb-stats-row', start: 'top 85%' } });
+        /* ─ Scene 5: Benefits ─ */
+        gsap.fromTo('.s5-header', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '#scene5', start: 'top 75%' } });
+        gsap.fromTo('.s5-card', { opacity: 0, y: 40, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'power3.out', stagger: 0.1, scrollTrigger: { trigger: '.s5-grid', start: 'top 80%' } });
 
-      } catch (e) { /* GSAP unavailable */ }
+        /* ─ Scene 6: Tiers ─ */
+        gsap.fromTo('.s6-header', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '#scene6', start: 'top 75%' } });
+        gsap.fromTo('.s6-tier', { opacity: 0, y: 50 }, {
+          opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.15,
+          scrollTrigger: { trigger: '.s6-tiers', start: 'top 80%' },
+        });
+
+        /* ─ Scene 7: Final CTA ─ */
+        const s7tl = gsap.timeline({ scrollTrigger: { trigger: '#scene7', start: 'top 70%' } });
+        s7tl
+          .fromTo('.s7-tag', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+          .fromTo('.s7-headline', { opacity: 0, y: 40, letterSpacing: '4px' }, { opacity: 1, y: 0, letterSpacing: '-2px', duration: 1.1, ease: 'power3.out' }, '-=0.2')
+          .fromTo('.s7-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+          .fromTo('.s7-btn', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.4)', stagger: 0.12 }, '-=0.3');
+
+      } catch (e) { /* gsap unavailable */ }
     })();
   }, []);
 
-  const tiers = [
-    { name: 'Silver', req: '1,000+ followers', color: '#6b7280', accent: '#f9fafb', perks: ['Standard referral rewards', 'Free DAGGPT access', 'Official Ambassador Badge', 'Private community access'] },
-    { name: 'Gold', req: '50,000+ followers', color: '#d97706', accent: '#fffbeb', perks: ['Enhanced reward rate', 'Performance bonuses', 'Featured website profile', 'Priority support channel', 'Early ecosystem access'], featured: true },
-    { name: 'Platinum', req: '100,000+ followers', color: '#111', accent: '#f8fafc', perks: ['Custom partnership terms', 'Regional leadership role', 'Revenue-share agreements', 'Direct executive access', 'Co-branded campaigns'] },
+  /* ── Data ──────────────────────────────────────────────── */
+  const creators = [
+    { t: 'YouTubers', r: '1,000+ subscribers' },
+    { t: 'Instagram Creators', r: '1,000+ followers' },
+    { t: 'Facebook Creators', r: '1,000+ followers' },
+    { t: 'AI Educators', r: 'Any platform' },
+    { t: 'Blockchain Analysts', r: 'Any platform' },
+    { t: 'Web3 Influencers', r: 'Any platform' },
+    { t: 'Tech Community Leaders', r: 'Discord, Telegram' },
+    { t: 'Regional Language Creators', r: 'All languages welcome' },
+  ];
+
+  const journeySteps = [
+    { n: '01', title: 'Create Content', desc: 'Produce educational videos and posts about DAGGPT and DAGChain for your audience.' },
+    { n: '02', title: 'Share Your Link', desc: 'Use and distribute your unique referral link across all your platforms.' },
+    { n: '03', title: 'Tag & Engage', desc: 'Tag official DAGArmy community pages and engage with new members.' },
+    { n: '04', title: 'Introduce Users', desc: 'Onboard new users into the ecosystem — subscriptions, nodes, and community.' },
+    { n: '05', title: 'Build Regional Reach', desc: 'Lead awareness in your language and region, becoming a local ecosystem voice.' },
   ];
 
   const benefits = [
-    { icon: <Ic.cpu />, label: 'Free DAGGPT Access', desc: 'All approved ambassadors receive full complimentary access to DAGGPT\'s multi-module AI platform.' },
-    { icon: <Ic.coins />, label: 'Referral Earnings', desc: 'Earn rewards tied to real ecosystem activity — subscriptions, validator & storage nodes, upgrades.' },
-    { icon: <Ic.star />, label: 'Points & Redemptions', desc: 'Accumulate DAG points per referral and activity. Redeem for GasCoin, credits, or premium features.' },
-    { icon: <Ic.award />, label: 'Official Badge & Recognition', desc: 'Verified badge, featured profile on website (performance-based), and early feature previews.' },
-    { icon: <Ic.globe />, label: 'Regional Leadership', desc: 'Represent your region, lead local community events, and shape adoption in your language.' },
-    { icon: <Ic.users />, label: 'Private Ambassador Network', desc: 'Access an exclusive group of top ambassadors for collaboration, support, and opportunities.' },
+    { title: 'Free DAGGPT Access', desc: 'All approved ambassadors receive full complimentary access to DAGGPT\'s multi-module AI system — eliminating the need for multiple AI subscriptions.', accent: '#3b82f6' },
+    { title: 'Referral Earnings', desc: 'Earn rewards tied to real ecosystem activity — subscriptions, validator nodes, storage nodes, and ecosystem upgrades generated through your referral link.', accent: '#8b5cf6' },
+    { title: 'Reward Points', desc: 'Accumulate DAG points for every referral, signup, and ecosystem activity. Redeem for GasCoin, DAGGPT credits, or premium feature access.', accent: '#10b981' },
+    { title: 'Official Recognition', desc: 'Receive a verified Ambassador Badge, a featured profile on the website (performance-based), early feature previews, and private ambassador group access.', accent: '#f59e0b' },
+    { title: 'Priority Support', desc: 'Dedicated ambassador support channel, direct team access, and first look at ecosystem innovations before public launch.', accent: '#ef4444' },
+    { title: 'Regional Leadership', desc: 'Represent your region, lead local events and community initiatives, and shape DAGArmy\'s growth in your local language.', accent: '#06b6d4' },
+  ];
+
+  const tiers = [
+    { name: 'Silver', req: '1,000+ followers', color: '#6b7280', border: '#e5e7eb', perks: ['Standard referral rewards', 'Free DAGGPT access', 'Official Ambassador Badge', 'Private community access'] },
+    { name: 'Gold', req: '50,000+ followers', color: '#d97706', border: '#fde68a', perks: ['Enhanced reward rate', 'Performance bonuses', 'Featured website profile', 'Priority support', 'Early ecosystem access'], featured: true },
+    { name: 'Platinum', req: '100,000+ followers', color: '#111', border: '#111', perks: ['Custom partnership terms', 'Regional leadership role', 'Revenue-share agreements', 'Direct executive access', 'Co-branded campaigns'] },
   ];
 
   const faqs = [
-    { q: 'Is this an investment program?', a: 'No. The Ambassador Program is a performance-based referral and marketing initiative tied to actual product usage. There is no investment element.' },
-    { q: 'Is there a joining fee?', a: 'No. Applying and joining is completely free. There is no mandatory investment or payment required.' },
+    { q: 'Is this an investment program?', a: 'No. It is a performance-based referral and marketing initiative linked to actual product usage. There is no investment element.' },
+    { q: 'Is there a joining fee?', a: 'No. Applying and joining is completely free. There is no mandatory payment or investment required.' },
     { q: 'Are earnings guaranteed?', a: 'No. All rewards are based solely on verified ecosystem activity and product usage generated through your referral link.' },
-    { q: 'Can I create content in my regional language?', a: 'Yes — regional language content is highly encouraged. We actively look for creators who can reach local communities in their native language.' },
-    { q: 'How long does the review take?', a: 'Our team reviews applications personally within 5–10 business days. Shortlisted candidates are contacted directly via email.' },
-    { q: 'What type of content should I create?', a: 'Product walkthroughs, AI tool demos, validator node guides, blockchain education, ecosystem overviews, use-case tutorials — anything that educates your audience.' },
+    { q: 'Can I create content in my regional language?', a: 'Yes. Regional content is highly encouraged. We actively look for creators who engage local communities in their native language.' },
+    { q: 'How long does the review take?', a: 'Our team reviews applications personally within 5–10 business days. Shortlisted candidates are contacted via email.' },
+    { q: 'What content should I create?', a: 'Product walkthroughs, AI tool demos, node guides, blockchain education, ecosystem overviews, use-case tutorials — anything that educates your audience.' },
   ];
 
-  const CTABtn = ({ children, dark, onClick }) => (
-    <button onClick={onClick} style={{
-      background: dark ? '#111' : '#fff',
-      color: dark ? '#fff' : '#111',
-      border: dark ? 'none' : '1.5px solid #e0e0e0',
-      borderRadius: '100px', padding: '13px 28px',
-      fontSize: '14px', fontWeight: '700', cursor: 'pointer',
-      display: 'inline-flex', alignItems: 'center', gap: '8px',
-      letterSpacing: '-0.2px', transition: 'all 0.2s',
-      boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.15)' : 'none',
-    }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = dark ? '0 8px 28px rgba(0,0,0,0.22)' : '0 4px 16px rgba(0,0,0,0.08)'; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = dark ? '0 4px 20px rgba(0,0,0,0.15)' : 'none'; }}
-    >{children}</button>
-  );
+  /* ── Shared Styles ─────────────────────────────────────── */
+  const sectionPad = { padding: '130px 24px' };
+  const maxW = (w = 1100) => ({ maxWidth: w, margin: '0 auto' });
+  const eyebrow = { margin: '0 0 14px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#aaa' };
+  const h2Style = { fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: '900', color: '#111', letterSpacing: '-2px', lineHeight: 1.05, margin: 0 };
 
   return (
-    <div style={{ background: '#fff', minHeight: '100vh', color: '#111', fontFamily: 'inherit' }}>
+    <div style={{ background: '#fff', color: '#111', fontFamily: 'inherit', overflowX: 'hidden' }}>
 
-      {/* ═══ HERO ═════════════════════════════════════════════ */}
-      <section style={{ position: 'relative', overflow: 'hidden', padding: '130px 24px 100px', background: '#fff' }}>
+      {/* ══ SCENE 1 — THE INVITATION ══════════════════════════ */}
+      <section id="scene1" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden', background: '#fff', padding: '120px 24px 100px' }}>
+        {/* Gradient mesh background */}
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.05) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 50%, rgba(139,92,246,0.04) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 20% 80%, rgba(16,185,129,0.03) 0%, transparent 60%)', pointerEvents: 'none' }} />
         {/* Subtle grid */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(#f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.6 }} />
-        {/* Gradient overlay top */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '200px', background: 'linear-gradient(to bottom, #fff, transparent)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '200px', background: 'linear-gradient(to top, #fff, transparent)' }} />
-
-        {/* Decorative orbs */}
-        <div className="amb-orb" style={{ position: 'absolute', top: '15%', left: '8%', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div className="amb-orb" style={{ position: 'absolute', top: '25%', right: '6%', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div className="amb-orb" style={{ position: 'absolute', bottom: '10%', left: '30%', width: '400px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-        {/* Dot cluster top right */}
-        <div style={{ position: 'absolute', top: '60px', right: '80px', display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', opacity: 0.25, pointerEvents: 'none' }}>
-          {Array.from({ length: 36 }).map((_, i) => <div key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#111' }} />)}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
+        {/* Dot pattern corners */}
+        <div style={{ position: 'absolute', top: '80px', right: '80px', display: 'grid', gridTemplateColumns: 'repeat(8,1fr)', gap: '7px', opacity: 0.15, pointerEvents: 'none' }}>
+          {Array.from({ length: 48 }).map((_, i) => <div key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#111' }} />)}
         </div>
-        <div style={{ position: 'absolute', bottom: '80px', left: '60px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', opacity: 0.15, pointerEvents: 'none' }}>
-          {Array.from({ length: 25 }).map((_, i) => <div key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#111' }} />)}
+        <div style={{ position: 'absolute', bottom: '80px', left: '60px', display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '7px', opacity: 0.1, pointerEvents: 'none' }}>
+          {Array.from({ length: 30 }).map((_, i) => <div key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#111' }} />)}
         </div>
 
-        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
-          {/* Badge */}
-          <div className="amb-hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f5f5f5', border: '1px solid #e8e8e8', borderRadius: '100px', padding: '7px 16px', marginBottom: '36px' }}>
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
-            <span style={{ fontSize: '12px', fontWeight: '600', color: '#555', letterSpacing: '0.3px' }}>Applications Now Open</span>
-            <span style={{ background: '#111', color: '#fff', borderRadius: '100px', padding: '2px 10px', fontSize: '10px', fontWeight: '700', letterSpacing: '0.5px', textTransform: 'uppercase' }}>2026 Cohort</span>
-          </div>
-
-          {/* Headline — word by word */}
-          <h1 style={{ fontSize: 'clamp(42px, 6vw, 76px)', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1.0, margin: '0 0 28px', color: '#111' }}>
-            {['Represent', 'the', 'Future', 'of'].map((w, i) => (
-              <span key={i} className="amb-word" style={{ display: 'inline-block', marginRight: '0.28em', opacity: 0 }}>{w}</span>
-            ))}
-            <br />
-            {['AI', '&', 'Blockchain'].map((w, i) => (
-              <span key={i} className="amb-word" style={{
-                display: 'inline-block', marginRight: '0.28em', opacity: 0,
-                background: i === 1 ? 'none' : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                WebkitBackgroundClip: i === 1 ? 'none' : 'text',
-                WebkitTextFillColor: i === 1 ? '#111' : 'transparent',
-                backgroundClip: i === 1 ? 'none' : 'text',
-              }}>{w}</span>
-            ))}
-          </h1>
-
-          <p className="amb-hero-sub" style={{ fontSize: '18px', color: '#666', lineHeight: 1.75, maxWidth: '580px', margin: '0 auto 44px', opacity: 0 }}>
-            Join the official DAG Army Ambassador Program. Build your personal brand, earn performance rewards, and grow alongside a global AI-native blockchain ecosystem.
-          </p>
-
-          <div className="amb-hero-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
-            <CTABtn dark onClick={() => setModal(true)}>
-              Apply Now — It&apos;s Free <Ic.arrow />
-            </CTABtn>
-            <CTABtn onClick={() => document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              Learn More <Ic.chevron />
-            </CTABtn>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.3 }}>
-          <div style={{ width: '1px', height: '40px', background: '#111', animation: 'ambScrollLine 1.8s ease-in-out infinite' }} />
-        </div>
-      </section>
-
-      {/* ═══ STATS ════════════════════════════════════════════ */}
-      <section style={{ borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', background: '#fafafa' }}>
-        <div className="amb-stats-row" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-          {[
-            { n: 150, suf: '+', l: 'Active Ambassadors' },
-            { n: 40, suf: '+', l: 'Countries Represented' },
-            { n: 2, suf: 'M+', l: 'Combined Reach' },
-            { n: 3, suf: '', l: 'Ecosystem Products' },
-          ].map((s, i) => (
-            <div key={i} style={{ padding: '36px 24px', textAlign: 'center', borderRight: i < 3 ? '1px solid #eee' : 'none' }}>
-              <div style={{ fontSize: '36px', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1 }}>
-                <Counter end={s.n} suffix={s.suf} />
-              </div>
-              <div style={{ marginTop: '6px', fontSize: '12px', color: '#999', fontWeight: '600', letterSpacing: '0.3px' }}>{s.l}</div>
-              <div className="amb-stat-line" style={{ height: '2px', background: '#111', marginTop: '16px', transformOrigin: 'left', transform: 'scaleX(0)' }} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ═══ ABOUT ════════════════════════════════════════════ */}
-      <section id="about-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-          <div className="amb-reveal">
-            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Ecosystem</p>
-            <h2 style={{ fontSize: 'clamp(30px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
-              Three products.<br />One unified vision.
-            </h2>
-            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
-              DAG Army is a global community building the infrastructure for a decentralized, AI-powered future. Ambassadors are the backbone of this movement.
-            </p>
-            <CTABtn dark onClick={() => setModal(true)}>Join the Movement <Ic.arrow /></CTABtn>
-          </div>
-          <div className="amb-grid amb-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              { label: 'DAG Army', sub: 'Community-driven AI & Web3 movement', dot: '#3b82f6' },
-              { label: 'DAGGPT', sub: 'Multi-module AI platform — one subscription, all tools', dot: '#8b5cf6' },
-              { label: 'DAGChain', sub: 'AI-native Layer 1 blockchain infrastructure', dot: '#10b981' },
-              { label: 'Node Ecosystem', sub: 'Validator & Storage nodes for decentralized compute', dot: '#f59e0b' },
-            ].map((item, i) => (
-              <div key={i} className="amb-card" style={{
-                display: 'flex', alignItems: 'center', gap: '16px',
-                padding: '18px 20px', border: '1px solid #f0f0f0', borderRadius: '14px',
-                background: '#fff', transition: 'border-color 0.2s, transform 0.2s, box-shadow 0.2s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.transform = 'translateX(4px)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.06)'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f0'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = 'none'; }}
-              >
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: item.dot, flexShrink: 0 }} />
-                <div>
-                  <p style={{ margin: 0, fontWeight: '700', fontSize: '14px', color: '#111' }}>{item.label}</p>
-                  <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#888', lineHeight: 1.5 }}>{item.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ WHO CAN APPLY ════════════════════════════════════ */}
-      <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div className="amb-reveal" style={{ marginBottom: '64px' }}>
-            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Eligibility</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
-              <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0, lineHeight: 1.1 }}>Who Can Apply?</h2>
-              <p style={{ margin: 0, fontSize: '14px', color: '#888', maxWidth: '360px', lineHeight: 1.7 }}>We look for passionate creators and community builders who can bring the AI &amp; Web3 story to life in their language.</p>
-            </div>
-          </div>
-
-          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
-            {[
-              { type: 'YouTubers', req: '1,000+ subscribers' },
-              { type: 'Instagram Creators', req: '1,000+ followers' },
-              { type: 'Facebook Creators', req: '1,000+ followers' },
-              { type: 'AI Educators', req: 'Any platform' },
-              { type: 'Blockchain Analysts', req: 'Any platform' },
-              { type: 'Web3 Influencers', req: 'Any platform' },
-              { type: 'Tech Community Leaders', req: 'Discord, Telegram' },
-              { type: 'Regional Creators', req: 'All languages welcome' },
-            ].map((t, i) => (
-              <div key={i} className="amb-card" style={{
-                background: '#fff', border: '1px solid #eee', borderRadius: '14px',
-                padding: '20px 18px', transition: 'all 0.2s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.borderColor = '#111'; e.currentTarget.querySelector('.ct').style.color = '#fff'; e.currentTarget.querySelector('.cr').style.color = 'rgba(255,255,255,0.5)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#eee'; e.currentTarget.querySelector('.ct').style.color = '#111'; e.currentTarget.querySelector('.cr').style.color = '#999'; }}
-              >
-                <p className="ct" style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111', transition: 'color 0.2s' }}>{t.type}</p>
-                <p className="cr" style={{ margin: 0, fontSize: '12px', color: '#999', transition: 'color 0.2s' }}>{t.req}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Requirements */}
-          <div className="amb-reveal" style={{ marginTop: '48px', background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '40px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '28px' }}>
-            {[
-              { n: '01', t: 'Active Audience', d: 'You have a real, engaged audience on at least one platform.' },
-              { n: '02', t: 'Consistent Creator', d: 'You publish content regularly and have an established presence.' },
-              { n: '03', t: 'Explain Clearly', d: 'You can explain AI or blockchain concepts in simple, accessible language.' },
-            ].map((r, i) => (
-              <div key={i}>
-                <p style={{ margin: '0 0 10px', fontSize: '28px', fontWeight: '900', color: '#f0f0f0', letterSpacing: '-1px' }}>{r.n}</p>
-                <p style={{ margin: '0 0 6px', fontWeight: '700', fontSize: '15px', color: '#111' }}>{r.t}</p>
-                <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{r.d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ BENEFITS ═════════════════════════════════════════ */}
-      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div className="amb-reveal" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
+        <div style={{ ...maxW(1200), width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          {/* Left — Copy */}
           <div>
-            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>What You Get</p>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0, lineHeight: 1.1 }}>Ambassador Benefits</h2>
-          </div>
-          <CTABtn dark onClick={() => setModal(true)}>Apply Now <Ic.arrow /></CTABtn>
-        </div>
-        <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {benefits.map((b, i) => (
-            <div key={i} className="amb-card" style={{
-              padding: '28px', border: '1px solid #f0f0f0', borderRadius: '18px',
-              background: '#fff', transition: 'all 0.25s', position: 'relative', overflow: 'hidden',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}
-            >
-              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px', color: '#111' }}>
-                {b.icon}
-              </div>
-              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#111', letterSpacing: '-0.3px' }}>{b.label}</h3>
-              <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{b.desc}</p>
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: '#111', transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s' }} className="amb-underline" />
+            <div className="s1-eyebrow" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f5f5f5', border: '1px solid #eee', borderRadius: '100px', padding: '6px 14px', marginBottom: '32px', opacity: 0 }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
+              <span style={{ fontSize: '11px', fontWeight: '700', color: '#555', letterSpacing: '0.5px' }}>2026 Cohort — Applications Open</span>
             </div>
-          ))}
+
+            <div className="s1-headline" style={{ transformOrigin: 'left center' }}>
+              <h1 style={{ fontSize: 'clamp(44px, 5.5vw, 72px)', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1.0, margin: '0 0 24px', color: '#111' }}>
+                {['Become', 'a'].map((w, i) => (
+                  <span key={i} className="s1-word" style={{ display: 'inline-block', marginRight: '0.25em', opacity: 0 }}>{w}</span>
+                ))}
+                <br />
+                {['DAG', 'Army'].map((w, i) => (
+                  <span key={i} className="s1-word" style={{ display: 'inline-block', marginRight: '0.25em', opacity: 0 }}>{w}</span>
+                ))}
+                <br />
+                <span className="s1-word" style={{ display: 'inline-block', opacity: 0, background: 'linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Ambassador</span>
+              </h1>
+            </div>
+
+            <p className="s1-sub" style={{ fontSize: '18px', color: '#666', lineHeight: 1.75, maxWidth: '460px', margin: '0 0 40px', opacity: 0 }}>
+              Represent the future of AI-native blockchain. Build your brand, earn real rewards, and grow alongside a global ecosystem powered by DAGGPT and DAGChain.
+            </p>
+
+            <div className="s1-btns" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', opacity: 0 }}>
+              <button onClick={() => setModal(true)} style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '100px', padding: '14px 28px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.25s', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,0,0,0.22)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)'; }}>
+                Apply Now <IArrow />
+              </button>
+              <button onClick={() => document.getElementById('scene2')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: 'transparent', color: '#111', border: '1.5px solid #e0e0e0', borderRadius: '100px', padding: '14px 28px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.25s' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.background = '#f9f9f9'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.background = 'transparent'; }}>
+                Explore Program <IChevron />
+              </button>
+            </div>
+          </div>
+
+          {/* Right — Floating Panels */}
+          <div className="s1-panels-wrap" style={{ position: 'relative', height: '440px' }}>
+            {[
+              { label: 'DAGGPT', sub: 'Multi-module AI Platform', top: '0%', left: '10%', accent: '#3b82f6', delay: 0 },
+              { label: 'DAGChain', sub: 'AI-Native Layer 1 Blockchain', top: '30%', left: '40%', accent: '#8b5cf6', delay: 1 },
+              { label: 'Node Network', sub: 'Validator & Storage Infrastructure', top: '62%', left: '5%', accent: '#10b981', delay: 2 },
+            ].map((p, i) => (
+              <div key={i} className="s1-panel" style={{
+                position: 'absolute', top: p.top, left: p.left,
+                background: '#fff', border: '1px solid #f0f0f0', borderRadius: '18px',
+                padding: '20px 22px', opacity: 0,
+                boxShadow: '0 8px 40px rgba(0,0,0,0.07)',
+                minWidth: '210px', transition: 'box-shadow 0.3s',
+              }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 16px 56px rgba(0,0,0,0.12)'}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.07)'}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: `${p.accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: p.accent }} />
+                  </div>
+                  <span style={{ fontWeight: '800', fontSize: '14px', color: '#111', letterSpacing: '-0.3px' }}>{p.label}</span>
+                </div>
+                <p style={{ margin: 0, fontSize: '12px', color: '#888', lineHeight: 1.5 }}>{p.sub}</p>
+                <div style={{ marginTop: '12px', height: '2px', borderRadius: '2px', background: `linear-gradient(to right, ${p.accent}, transparent)` }} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', opacity: 0.3 }}>
+          <div style={{ width: '1px', height: '48px', background: 'linear-gradient(to bottom, transparent, #111)', animation: 'scrollCue 2s ease-in-out infinite' }} />
         </div>
       </section>
 
-      {/* ═══ TIERS ════════════════════════════════════════════ */}
-      <section style={{ background: '#111', padding: '120px 24px' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div className="amb-reveal" style={{ marginBottom: '64px', textAlign: 'center' }}>
-            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#555' }}>Program Levels</p>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#fff', letterSpacing: '-1.5px', margin: '0 0 16px' }}>Ambassador Tiers</h2>
-            <p style={{ color: '#666', fontSize: '15px', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>Grow through levels based on your reach and performance. Tiers are reviewed and upgraded periodically.</p>
+      {/* ══ SCENE 2 — THE ECOSYSTEM ═══════════════════════════ */}
+      <section id="scene2" style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', ...sectionPad }}>
+        <div style={maxW()}>
+          <div className="s2-label" style={{ marginBottom: '72px', textAlign: 'center' }}>
+            <p style={eyebrow}>The Ecosystem</p>
+            <h2 style={h2Style}>Three pillars.<br />One movement.</h2>
           </div>
-          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+
+          <div className="s2-pillars" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px', position: 'relative' }}>
+            {/* Connecting line */}
+            <div className="s2-line" style={{ position: 'absolute', top: '50%', left: '16.6%', right: '16.6%', height: '1px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6, #10b981)', transformOrigin: 'left', zIndex: 0 }} />
+            {[
+              { name: 'DAG Army', desc: 'A global community-driven AI & Web3 movement shaping the decentralized future.', color: '#3b82f6', idx: '01' },
+              { name: 'DAGGPT', desc: 'A multi-module AI platform — one subscription replacing multiple AI tools simultaneously.', color: '#8b5cf6', idx: '02' },
+              { name: 'DAGChain', desc: 'An AI-native Layer 1 blockchain — the infrastructure that powers the entire ecosystem.', color: '#10b981', idx: '03' },
+            ].map((p, i) => (
+              <div key={i} className="s2-pillar" style={{
+                background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '36px 28px',
+                position: 'relative', zIndex: 1, textAlign: 'center',
+                transition: 'transform 0.3s, box-shadow 0.3s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = `0 20px 56px rgba(0,0,0,0.08), 0 0 0 1px ${p.color}22`; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                <div style={{ width: '56px', height: '56px', borderRadius: '18px', background: `${p.color}10`, border: `1px solid ${p.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                  <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: p.color }} />
+                </div>
+                <p style={{ margin: '0 0 6px', fontSize: '10px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#ccc' }}>{p.idx}</p>
+                <h3 style={{ margin: '0 0 12px', fontSize: '20px', fontWeight: '800', color: '#111', letterSpacing: '-0.5px' }}>{p.name}</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.75 }}>{p.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="s2-desc" style={{ textAlign: 'center', marginTop: '48px', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>
+            Ambassadors sit at the intersection — representing all three pillars to the world.
+          </p>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #f0f0f0' }}>
+        <div style={{ ...maxW(800), display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderLeft: '1px solid #f0f0f0' }}>
+          {[{ n: 150, s: '+', l: 'Active Ambassadors' }, { n: 40, s: '+', l: 'Countries' }, { n: 2, s: 'M+', l: 'Combined Reach' }, { n: 3, s: '', l: 'Ecosystem Products' }].map((s, i) => (
+            <div key={i} style={{ padding: '36px 20px', textAlign: 'center', borderRight: '1px solid #f0f0f0' }}>
+              <div style={{ fontSize: '34px', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1 }}><Counter end={s.n} suffix={s.s} /></div>
+              <div style={{ marginTop: '6px', fontSize: '11px', color: '#bbb', fontWeight: '600', letterSpacing: '0.3px', textTransform: 'uppercase' }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ══ SCENE 3 — WHO THIS IS FOR ═════════════════════════ */}
+      <section id="scene3" style={sectionPad}>
+        <div style={maxW()}>
+          <div className="s3-header" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
+            <div>
+              <p style={eyebrow}>Who Can Apply</p>
+              <h2 style={h2Style}>Built for creators<br />and builders.</h2>
+            </div>
+            <p style={{ margin: 0, maxWidth: '320px', fontSize: '14px', color: '#888', lineHeight: 1.8 }}>We look for passionate creators and community builders who can bring the AI &amp; Web3 story to life in their language and region.</p>
+          </div>
+
+          <div className="s3-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '48px' }}>
+            {creators.map((c, i) => (
+              <div key={i} className="s3-tile" style={{
+                background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '16px',
+                padding: '22px 20px', cursor: 'default', transition: 'all 0.25s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)'; e.currentTarget.querySelector('p.ct').style.color = '#fff'; e.currentTarget.querySelector('p.cr').style.color = 'rgba(255,255,255,0.45)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#fafafa'; e.currentTarget.style.borderColor = '#f0f0f0'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.querySelector('p.ct').style.color = '#111'; e.currentTarget.querySelector('p.cr').style.color = '#aaa'; }}
+              >
+                <p className="ct" style={{ margin: '0 0 5px', fontWeight: '700', fontSize: '14px', color: '#111', letterSpacing: '-0.2px', transition: 'color 0.2s' }}>{c.t}</p>
+                <p className="cr" style={{ margin: 0, fontSize: '12px', color: '#aaa', transition: 'color 0.2s' }}>{c.r}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="s3-reqs" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0', border: '1px solid #f0f0f0', borderRadius: '20px', overflow: 'hidden' }}>
+            {[
+              { n: '01', t: 'Active Audience', d: 'An engaged following on at least one platform — size matters less than engagement quality.' },
+              { n: '02', t: 'Consistent Creator', d: 'A track record of publishing content regularly with an established community presence.' },
+              { n: '03', t: 'Clear Communicator', d: 'Ability to explain AI or blockchain concepts in accessible, simple, engaging language.' },
+            ].map((r, i) => (
+              <div key={i} className="s3-req" style={{ padding: '32px', borderRight: i < 2 ? '1px solid #f0f0f0' : 'none', background: '#fff', transition: 'background 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
+                onMouseLeave={e => e.currentTarget.style.background = '#fff'}
+              >
+                <p style={{ margin: '0 0 12px', fontSize: '28px', fontWeight: '900', color: '#f0f0f0', letterSpacing: '-1px' }}>{r.n}</p>
+                <p style={{ margin: '0 0 8px', fontWeight: '700', fontSize: '15px', color: '#111' }}>{r.t}</p>
+                <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.75 }}>{r.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SCENE 4 — THE AMBASSADOR JOURNEY ═════════════════ */}
+      <section id="scene4" style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', ...sectionPad }}>
+        <div style={maxW(800)}>
+          <div className="s4-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <p style={eyebrow}>Your Role</p>
+            <h2 style={h2Style}>The Ambassador Journey</h2>
+          </div>
+
+          <div className="s4-timeline" style={{ position: 'relative' }}>
+            {/* Center line */}
+            <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: '#eee', transform: 'translateX(-50%)' }} />
+            <div className="s4-line-fill" style={{ position: 'absolute', left: '50%', top: 0, width: '1px', background: 'linear-gradient(to bottom, #3b82f6, #8b5cf6, #10b981)', transform: 'translateX(-50%)', transformOrigin: 'top', height: '100%' }} />
+
+            {journeySteps.map((s, i) => {
+              const isLeft = i % 2 === 0;
+              return (
+                <div key={i} style={{ display: 'flex', justifyContent: isLeft ? 'flex-start' : 'flex-end', marginBottom: i < 4 ? '48px' : '0', position: 'relative' }}>
+                  {/* Center dot */}
+                  <div style={{ position: 'absolute', left: '50%', top: '28px', transform: 'translate(-50%, -50%)', width: '12px', height: '12px', borderRadius: '50%', background: '#fff', border: '2px solid #ddd', zIndex: 2 }} />
+                  <div className={isLeft ? 's4-step-left' : 's4-step-right'} style={{ width: '44%', background: '#fff', border: '1px solid #eee', borderRadius: '16px', padding: '24px', transition: 'box-shadow 0.25s, transform 0.25s' }}
+                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = isLeft ? 'translateX(-4px)' : 'translateX(4px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateX(0)'; }}
+                  >
+                    <p style={{ margin: '0 0 6px', fontSize: '10px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#ccc' }}>{s.n}</p>
+                    <h3 style={{ margin: '0 0 8px', fontSize: '17px', fontWeight: '800', color: '#111', letterSpacing: '-0.4px' }}>{s.title}</h3>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{s.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SCENE 5 — THE REWARDS ════════════════════════════ */}
+      <section id="scene5" style={sectionPad}>
+        <div style={maxW()}>
+          <div className="s5-header" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
+            <div>
+              <p style={eyebrow}>Ambassador Benefits</p>
+              <h2 style={h2Style}>Real rewards.<br />Real impact.</h2>
+            </div>
+            <button onClick={() => setModal(true)} style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '100px', padding: '13px 24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, transition: 'all 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+              Apply Now <IArrow />
+            </button>
+          </div>
+
+          <div className="s5-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+            {benefits.map((b, i) => (
+              <div key={i} className="s5-card" style={{
+                background: '#fff', border: '1px solid #f0f0f0', borderRadius: '20px',
+                padding: '32px 28px', position: 'relative', overflow: 'hidden',
+                transition: 'transform 0.3s, box-shadow 0.3s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = `0 20px 56px rgba(0,0,0,0.08), inset 0 0 0 1px ${b.accent}30`; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: b.accent, opacity: 0.6 }} />
+                <h3 style={{ margin: '0 0 12px', fontSize: '17px', fontWeight: '800', color: '#111', letterSpacing: '-0.4px', lineHeight: 1.3 }}>{b.title}</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: '#777', lineHeight: 1.8 }}>{b.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SCENE 6 — AMBASSADOR TIERS ════════════════════════ */}
+      <section id="scene6" style={{ background: '#0c0c0c', ...sectionPad }}>
+        <div style={maxW()}>
+          <div className="s6-header" style={{ textAlign: 'center', marginBottom: '72px' }}>
+            <p style={{ ...eyebrow, color: '#444' }}>Program Levels</p>
+            <h2 style={{ ...h2Style, color: '#fff' }}>Ambassador Tiers</h2>
+            <p style={{ margin: '16px auto 0', maxWidth: '440px', fontSize: '15px', color: '#555', lineHeight: 1.75 }}>Grow through levels as your reach and performance expand. Reviewed and upgraded periodically.</p>
+          </div>
+
+          <div className="s6-tiers" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', alignItems: 'end' }}>
             {tiers.map((t, i) => (
-              <div key={i} className="amb-card" style={{
-                background: t.featured ? '#fff' : '#1a1a1a',
-                border: t.featured ? 'none' : '1px solid #222',
-                borderRadius: '20px', padding: '32px 28px',
-                position: 'relative', transition: 'transform 0.25s',
-                transform: t.featured ? 'translateY(-8px)' : 'none',
+              <div key={i} className="s6-tier" style={{
+                background: t.featured ? '#fff' : '#161616',
+                border: `1px solid ${t.featured ? 'transparent' : '#222'}`,
+                borderRadius: '22px', padding: t.featured ? '40px 32px' : '32px 28px',
+                position: 'relative', transform: t.featured ? 'translateY(-12px)' : 'none',
+                boxShadow: t.featured ? '0 24px 80px rgba(0,0,0,0.35)' : 'none',
+                transition: 'transform 0.3s',
               }}>
                 {t.featured && (
-                  <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#111', color: '#fff', borderRadius: '100px', padding: '4px 14px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                  <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#111', color: '#fff', borderRadius: '100px', padding: '5px 16px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', whiteSpace: 'nowrap', border: '1px solid #333' }}>
                     Most Popular
                   </div>
                 )}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: t.color }} />
-                  <span style={{ fontSize: '18px', fontWeight: '900', color: t.featured ? '#111' : '#fff', letterSpacing: '-0.5px' }}>{t.name}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: t.color }} />
+                  <span style={{ fontSize: '20px', fontWeight: '900', color: t.featured ? '#111' : '#fff', letterSpacing: '-0.5px' }}>{t.name}</span>
                 </div>
-                <p style={{ margin: '0 0 24px', fontSize: '13px', color: t.featured ? '#888' : '#555' }}>{t.req}</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <p style={{ margin: '0 0 24px', fontSize: '13px', color: t.featured ? '#aaa' : '#444' }}>{t.req}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '28px' }}>
                   {t.perks.map((p, j) => (
-                    <div key={j} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: t.featured ? '#f5f5f5' : '#222', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: t.featured ? '#111' : '#555', marginTop: '1px' }}>
-                        <Ic.check />
+                    <div key={j} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: t.featured ? '#f0f0f0' : '#1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: t.featured ? '#111' : '#444' }}>
+                        <ICheck />
                       </div>
-                      <span style={{ fontSize: '13px', color: t.featured ? '#444' : '#666', lineHeight: 1.5 }}>{p}</span>
+                      <span style={{ fontSize: '13px', color: t.featured ? '#444' : '#555', lineHeight: 1.5 }}>{p}</span>
                     </div>
                   ))}
                 </div>
                 <button onClick={() => setModal(true)} style={{
-                  width: '100%', marginTop: '28px', background: t.featured ? '#111' : '#222',
-                  color: t.featured ? '#fff' : '#666', border: t.featured ? 'none' : '1px solid #333',
-                  borderRadius: '10px', padding: '12px', fontSize: '13px', fontWeight: '700',
+                  width: '100%', background: t.featured ? '#111' : '#1e1e1e',
+                  color: t.featured ? '#fff' : '#555', border: t.featured ? 'none' : '1px solid #2a2a2a',
+                  borderRadius: '12px', padding: '13px', fontSize: '13px', fontWeight: '700',
                   cursor: 'pointer', transition: 'all 0.2s', letterSpacing: '-0.2px',
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = t.featured ? '#333' : '#2a2a2a'; e.currentTarget.style.color = '#fff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = t.featured ? '#111' : '#222'; e.currentTarget.style.color = t.featured ? '#fff' : '#666'; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = t.featured ? '#333' : '#252525'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = t.featured ? '#111' : '#1e1e1e'; e.currentTarget.style.color = t.featured ? '#fff' : '#555'; }}
                 >
                   Apply for {t.name}
                 </button>
@@ -528,134 +565,83 @@ export default function AmbassadorPage() {
         </div>
       </section>
 
-      {/* ═══ RESPONSIBILITIES ═════════════════════════════════ */}
-      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
-          <div className="amb-reveal">
-            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Your Role</p>
-            <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What you&apos;ll do as an Ambassador</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {[
-                'Create educational content about DAGGPT and DAGChain',
-                'Publish and distribute content on your platforms',
-                'Use and share your unique referral link',
-                'Introduce new users to the ecosystem',
-                'Tag official community pages in your posts',
-                'Support regional community growth',
-              ].map((r, i) => (
-                <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', padding: '16px 0', borderBottom: i < 5 ? '1px solid #f5f5f5' : 'none' }}>
-                  <span style={{ fontSize: '12px', fontWeight: '800', color: '#ddd', width: '24px', flexShrink: 0, paddingTop: '2px' }}>0{i + 1}</span>
-                  <span style={{ fontSize: '14px', color: '#444', lineHeight: 1.6 }}>{r}</span>
-                </div>
-              ))}
-            </div>
+      {/* ══ FAQ ═══════════════════════════════════════════════ */}
+      <section style={sectionPad}>
+        <div style={maxW(700)}>
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <p style={eyebrow}>FAQ</p>
+            <h2 style={{ ...h2Style, fontSize: 'clamp(28px, 3.5vw, 44px)' }}>Common Questions</h2>
           </div>
-
-          <div className="amb-reveal">
-            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Content Ideas</p>
-            <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What to create</h2>
-            <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              {[
-                'Product walkthroughs', 'AI tool demos',
-                'Validator node guides', 'Blockchain basics',
-                'Use-case tutorials', 'Ecosystem overviews',
-                'Live Q&A sessions', 'Community updates',
-              ].map((c, i) => (
-                <div key={i} className="amb-card" style={{
-                  background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '12px',
-                  padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#444',
-                  display: 'flex', alignItems: 'center', gap: '10px',
-                  transition: 'all 0.2s',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#111'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fafafa'; e.currentTarget.style.color = '#444'; e.currentTarget.style.borderColor = '#f0f0f0'; }}
-                >
-                  <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
-                  {c}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ WHY JOIN — FULL WIDTH BANNER ═════════════════════ */}
-      <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-          <div className="amb-reveal">
-            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Opportunity</p>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
-              Early contributors benefit from early positioning.
-            </h2>
-            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
-              AI and blockchain are reshaping global infrastructure. As a DAG Army Ambassador, you grow alongside a Layer 1 network from day one.
-            </p>
-            <CTABtn dark onClick={() => setModal(true)}>Apply Now — Free <Ic.arrow /></CTABtn>
-          </div>
-          <div className="amb-grid" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              'Build authority in AI + Web3',
-              'Earn performance-based rewards',
-              'Early access to ecosystem innovations',
-              'Grow with an expanding Layer 1 network',
-              'Become part of a long-term movement',
-              'Expand your global network',
-            ].map((r, i) => (
-              <div key={i} className="amb-card" style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '16px 18px', background: '#fff', border: '1px solid #eee', borderRadius: '12px', transition: 'all 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.borderColor = '#ddd'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.05)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.borderColor = '#eee'; e.currentTarget.style.boxShadow = 'none'; }}
-              >
-                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#fff' }}>
-                  <Ic.check />
-                </div>
-                <span style={{ fontSize: '14px', fontWeight: '500', color: '#333' }}>{r}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ FAQ ══════════════════════════════════════════════ */}
-      <section style={{ maxWidth: '720px', margin: '0 auto', padding: '120px 24px' }}>
-        <div className="amb-reveal" style={{ marginBottom: '56px' }}>
-          <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>FAQ</p>
-          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0 }}>Frequently Asked Questions</h2>
-        </div>
-        <div className="amb-reveal">
           {faqs.map((f, i) => <FAQ key={i} q={f.q} a={f.a} />)}
         </div>
       </section>
 
-      {/* ═══ COMPLIANCE ════════════════════════════════════════ */}
-      <section style={{ borderTop: '1px solid #f0f0f0', padding: '40px 24px' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontSize: '11px', color: '#bbb', lineHeight: 1.9, margin: 0 }}>
-            <strong style={{ color: '#999' }}>Compliance Notice:</strong> The DAG Army Ambassador Program is a referral-based marketing initiative promoting ecosystem products and services. It is not an investment scheme, does not guarantee income, and all rewards depend on verified product usage. Full Terms &amp; Conditions apply.
-          </p>
-        </div>
-      </section>
+      {/* Compliance */}
+      <div style={{ borderTop: '1px solid #f8f8f8', padding: '32px 24px' }}>
+        <p style={{ ...maxW(720), margin: '0 auto', fontSize: '11px', color: '#ccc', lineHeight: 1.9, textAlign: 'center' }}>
+          <strong style={{ color: '#bbb' }}>Compliance Notice:</strong> The DAG Army Ambassador Program is a referral-based marketing initiative. It is not an investment scheme, does not guarantee income, and all rewards depend on verified product usage. Full Terms &amp; Conditions apply.
+        </p>
+      </div>
 
-      {/* ═══ FINAL CTA ════════════════════════════════════════ */}
-      <section style={{ padding: '80px 24px 100px', textAlign: 'center', background: '#fff', borderTop: '1px solid #f0f0f0' }}>
-        <div style={{ maxWidth: '560px', margin: '0 auto' }} className="amb-reveal">
-          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: '0 0 16px' }}>
-            Ready to make an impact?
+      {/* ══ SCENE 7 — THE CALL TO JOIN ════════════════════════ */}
+      <section id="scene7" style={{ position: 'relative', overflow: 'hidden', padding: '160px 24px', textAlign: 'center', background: '#fff', borderTop: '1px solid #f0f0f0' }}>
+        {/* Animated gradient wave */}
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 100% 80% at 50% 100%, rgba(59,130,246,0.04) 0%, transparent 60%), radial-gradient(ellipse 80% 60% at 20% 50%, rgba(139,92,246,0.03) 0%, transparent 60%)', animation: 's7Wave 8s ease-in-out infinite alternate', pointerEvents: 'none' }} />
+        <div style={maxW(620)}>
+          <p className="s7-tag" style={{ ...eyebrow, textAlign: 'center', opacity: 0 }}>Join the Movement</p>
+          <h2 className="s7-headline" style={{ ...h2Style, fontSize: 'clamp(40px, 5.5vw, 72px)', margin: '0 0 24px', opacity: 0 }}>
+            Join the DAG Army<br />Ambassador Program
           </h2>
-          <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.75, margin: '0 0 36px' }}>
-            Applications are reviewed personally by our team. Shortlisted candidates are contacted within 5–10 business days.
+          <p className="s7-sub" style={{ fontSize: '18px', color: '#888', lineHeight: 1.75, margin: '0 0 48px', opacity: 0 }}>
+            Early contributors benefit from early positioning. Be part of the infrastructure shift combining AI and blockchain.
           </p>
-          <CTABtn dark onClick={() => setModal(true)}>
-            Submit Application <Ic.arrow />
-          </CTABtn>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="s7-btn" onClick={() => setModal(true)} style={{
+              background: '#111', color: '#fff', border: 'none', borderRadius: '100px',
+              padding: '16px 36px', fontSize: '15px', fontWeight: '700', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: '10px', opacity: 0,
+              boxShadow: '0 4px 24px rgba(0,0,0,0.15)', transition: 'all 0.25s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.22)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.15)'; }}
+            >
+              Apply Now — It&apos;s Free <IArrow />
+            </button>
+            <a className="s7-btn" href="mailto:hr@dagchain.network?subject=Ambassador Program Inquiry" style={{
+              background: 'transparent', color: '#111', border: '1.5px solid #e0e0e0',
+              borderRadius: '100px', padding: '16px 36px', fontSize: '15px', fontWeight: '600',
+              cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px',
+              textDecoration: 'none', opacity: 0, transition: 'all 0.25s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.background = '#f9f9f9'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.background = 'transparent'; }}
+            >
+              Contact the Team
+            </a>
+          </div>
         </div>
       </section>
 
       <style>{`
-        @keyframes ambScrollLine { 0% { transform: scaleY(0); transform-origin: top; opacity: 1; } 50% { transform: scaleY(1); transform-origin: top; opacity: 1; } 100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; } }
-        @media (max-width: 768px) {
-          .amb-two-col { grid-template-columns: 1fr !important; gap: 48px !important; }
-          .amb-three-col { grid-template-columns: 1fr !important; }
-          .amb-stats-row { grid-template-columns: repeat(2, 1fr) !important; }
+        @keyframes scrollCue {
+          0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+          50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+          100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+        }
+        @keyframes s7Wave {
+          0% { transform: scale(1) translateY(0px); }
+          100% { transform: scale(1.05) translateY(-10px); }
+        }
+        @media (max-width: 900px) {
+          #scene1 > div { grid-template-columns: 1fr !important; }
+          .s1-panels-wrap { display: none !important; }
+          .s2-pillars { grid-template-columns: 1fr !important; }
+          .s3-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .s3-reqs { grid-template-columns: 1fr !important; }
+          .s3-reqs > div { border-right: none !important; border-bottom: 1px solid #f0f0f0 !important; }
+          .s5-grid { grid-template-columns: 1fr !important; }
+          .s6-tiers { grid-template-columns: 1fr !important; }
+          .s6-tiers > div { transform: none !important; }
         }
       `}</style>
 
