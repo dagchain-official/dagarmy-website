@@ -6,7 +6,7 @@ const regions = [
   {
     id: "india",
     code: "IN",
-    flag: "🇮🇳",
+    flag: "IN",
     label: "India",
     title: "From IT powerhouse to AI startup nation.",
     subtitle: "Freelancer → Founder",
@@ -22,7 +22,7 @@ const regions = [
   {
     id: "pakistan",
     code: "PK",
-    flag: "🇵🇰",
+    flag: "PK",
     label: "Pakistan",
     title: "The next Silicon Valley is being written in Urdu.",
     subtitle: "Talent → Capital",
@@ -38,7 +38,7 @@ const regions = [
   {
     id: "bangladesh",
     code: "BD",
-    flag: "🇧🇩",
+    flag: "BD",
     label: "Bangladesh",
     title: "The rising tiger is going digital.",
     subtitle: "Skill → Startup",
@@ -60,7 +60,7 @@ export default function RegionalSwitcher() {
   const r = regions[active];
 
   return (
-    <section ref={ref} style={{ background: "var(--bg)", padding: "120px 0" }}>
+    <section ref={ref} style={{ background: "#fff", padding: "120px 0" }}>
       <div className="wrap">
         {/* Header */}
         <motion.div
@@ -69,14 +69,14 @@ export default function RegionalSwitcher() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           style={{ marginBottom: 56 }}
         >
-          <h2 className="t-section" style={{ color: "var(--ink)" }}>
+          <h2 style={{ fontSize: "clamp(2.2rem,5vw,4rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.08, color: "#111" }}>
             One movement.{" "}
-            <span className="grad-v">Three nations.</span>
+            <span style={{ color: "#888" }}>Three nations.</span>
           </h2>
         </motion.div>
 
         {/* Tab switcher */}
-        <div style={{ display: "flex", gap: 8, marginBottom: 40, padding: "6px", background: "var(--bg2)", borderRadius: 999, width: "fit-content", border: "1px solid var(--line)" }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 40, padding: "6px", background: "#f5f5f5", borderRadius: 999, width: "fit-content", border: "1px solid #ebebeb" }}>
           {regions.map((reg, i) => (
             <button
               key={reg.id}
@@ -90,12 +90,12 @@ export default function RegionalSwitcher() {
                 fontSize: "13px",
                 letterSpacing: "-0.01em",
                 transition: "all 0.2s",
-                background: active === i ? "var(--bg)" : "transparent",
-                color: active === i ? "var(--ink)" : "var(--sub)",
+                background: active === i ? "#fff" : "transparent",
+                color: active === i ? "#111" : "#888",
                 boxShadow: active === i ? "0 1px 8px rgba(10,10,15,0.08)" : "none",
               }}
             >
-              {reg.flag} {reg.label}
+              {reg.label}
             </button>
           ))}
         </div>
@@ -113,15 +113,15 @@ export default function RegionalSwitcher() {
               {/* Left */}
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sub2)" }}>{r.code} — {r.label}</span>
+                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#aaa" }}>{r.code} — {r.label}</span>
                 </div>
                 <div style={{ fontSize: "13px", fontWeight: 700, color: r.accent, marginBottom: 12 }}>{r.subtitle}</div>
-                <h3 className="t-card" style={{ color: "var(--ink)", marginBottom: 20, maxWidth: 440 }}>{r.title}</h3>
-                <p style={{ fontSize: "14px", color: "var(--sub)", lineHeight: 1.75, maxWidth: 420, marginBottom: 32 }}>{r.emotion}</p>
+                <h3 style={{ fontSize: "clamp(1.2rem,2.5vw,1.8rem)", fontWeight: 800, letterSpacing: "-0.03em", color: "#111", marginBottom: 20, maxWidth: 440 }}>{r.title}</h3>
+                <p style={{ fontSize: "14px", color: "#666", lineHeight: 1.75, maxWidth: 420, marginBottom: 32 }}>{r.emotion}</p>
 
                 <div style={{ marginBottom: 32 }}>
                   <div style={{ fontSize: "45px", fontWeight: 900, letterSpacing: "-0.05em", color: r.accent, lineHeight: 1 }}>{r.stat}</div>
-                  <div style={{ fontSize: "12px", color: "var(--sub)", marginTop: 4, fontWeight: 500 }}>{r.statLabel}</div>
+                  <div style={{ fontSize: "12px", color: "#888", marginTop: 4, fontWeight: 500 }}>{r.statLabel}</div>
                 </div>
 
                 <button onClick={() => window.dispatchEvent(new CustomEvent("dagarmy:open-signin"))} className="btn btn-ink" style={{ cursor: "pointer" }}>{r.ctaLabel} →</button>
@@ -130,20 +130,20 @@ export default function RegionalSwitcher() {
               {/* Right card */}
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {/* Cities */}
-                <div className="surface2" style={{ padding: 24 }}>
-                  <div className="t-label" style={{ marginBottom: 14 }}>Active Cities</div>
+                <div style={{ padding: 24, background: "#fafafa", border: "1px solid #f0f0f0", borderRadius: 16 }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#999", marginBottom: 14 }}>Active Cities</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {r.cities.map(c => (
                       <div key={c} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                         <span style={{ width: 5, height: 5, borderRadius: "50%", background: r.accent, display: "inline-block" }} />
-                        <span style={{ fontSize: "13px", color: "var(--ink)", fontWeight: 600 }}>{c}</span>
+                        <span style={{ fontSize: "13px", color: "#111", fontWeight: 600 }}>{c}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Quote */}
-                <div className="surface-ink" style={{ padding: 28 }}>
+                <div style={{ background: "#111", borderRadius: 16, padding: 28 }}>
                   <p style={{ fontSize: "16px", fontWeight: 700, color: "#fff", lineHeight: 1.55, marginBottom: 16 }}>
                     {r.quote}
                   </p>
@@ -154,9 +154,9 @@ export default function RegionalSwitcher() {
                 </div>
 
                 {/* Bottom note */}
-                <div style={{ padding: "14px 20px", background: "var(--bg2)", borderRadius: 14, border: "1px solid var(--line)", textAlign: "center" }}>
-                  <span style={{ fontSize: "12px", color: "var(--sub2)" }}>Different contexts. </span>
-                  <strong style={{ fontSize: "12px", color: "var(--ink)" }}>Same standard of execution.</strong>
+                <div style={{ padding: "14px 20px", background: "#f5f5f5", borderRadius: 14, border: "1px solid #ebebeb", textAlign: "center" }}>
+                  <span style={{ fontSize: "12px", color: "#aaa" }}>Different contexts. </span>
+                  <strong style={{ fontSize: "12px", color: "#111" }}>Same standard of execution.</strong>
                 </div>
               </div>
             </div>

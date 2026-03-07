@@ -1,761 +1,666 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring, animate } from "framer-motion";
-import HolographicCard from "./HolographicCard";
-import MagneticButton from "./MagneticButton";
-import RewardDashboard from "./RewardDashboard";
-import GlassTerminalForm from "./GlassTerminalForm";
+import React, { useState, useEffect, useRef } from "react";
 
-/* ─────────────────────────────────────────────────
-   ANIMATED COUNTER
-───────────────────────────────────────────────── */
-function Counter({ to, suffix = "" }) {
+/* ── Icons ─────────────────────────────────────────────────── */
+const Ic = {
+  chevron: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>,
+  check: () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+  arrow: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
+  close: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+  star: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+  play: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
+  zap: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  globe: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+  users: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  award: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>,
+  cpu: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>,
+  coins: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>,
+};
+
+/* ── Animated Counter ──────────────────────────────────────── */
+function Counter({ end, suffix = '' }) {
   const [val, setVal] = useState(0);
   const ref = useRef(null);
-  const seen = useRef(false);
+  const started = useRef(false);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
     const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !seen.current) {
-        seen.current = true;
-        const ctrl = animate(0, to, {
-          duration: 2, ease: [0.22, 1, 0.36, 1],
-          onUpdate: v => setVal(Math.round(v)),
-        });
-        return () => ctrl.stop();
+      if (e.isIntersecting && !started.current) {
+        started.current = true;
+        let cur = 0;
+        const step = end / 60;
+        const t = setInterval(() => {
+          cur += step;
+          if (cur >= end) { setVal(end); clearInterval(t); } else setVal(Math.floor(cur));
+        }, 20);
       }
     }, { threshold: 0.5 });
-    obs.observe(el);
+    if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
-  }, [to]);
+  }, [end]);
   return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
 }
 
-/* ─────────────────────────────────────────────────
-   DAG NODE SVG ILLUSTRATION (animated)
-───────────────────────────────────────────────── */
-function DAGNetworkSVG() {
-  const nodes = [
-    { x: 300, y: 80, r: 14, color: "#a78bfa", delay: 0 },
-    { x: 120, y: 180, r: 10, color: "#818cf8", delay: 0.4 },
-    { x: 480, y: 160, r: 10, color: "#60a5fa", delay: 0.8 },
-    { x: 220, y: 300, r: 16, color: "#6366f1", delay: 0.2 },
-    { x: 400, y: 280, r: 12, color: "#c4b5fd", delay: 1.0 },
-    { x: 560, y: 320, r: 8,  color: "#93c5fd", delay: 0.6 },
-    { x: 100, y: 380, r: 9,  color: "#a78bfa", delay: 1.2 },
-    { x: 330, y: 420, r: 13, color: "#8b5cf6", delay: 0.3 },
-    { x: 500, y: 440, r: 8,  color: "#60a5fa", delay: 0.9 },
-    { x: 180, y: 480, r: 7,  color: "#818cf8", delay: 1.5 },
-    { x: 440, y: 180, r: 6,  color: "#c4b5fd", delay: 0.7 },
-    { x: 260, y: 220, r: 8,  color: "#6366f1", delay: 1.1 },
-  ];
-  const edges = [
-    [0,1],[0,2],[0,3],[1,3],[2,4],[2,5],[3,4],[3,7],[4,5],
-    [4,8],[5,8],[6,7],[7,8],[7,9],[1,6],[3,11],[0,11],[11,4],[10,2],[10,4],
-  ];
-  return (
-    <svg viewBox="0 0 660 560" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%" }}>
-      <defs>
-        <linearGradient id="edge1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.5"/>
-          <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.1"/>
-        </linearGradient>
-        <linearGradient id="edge2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.4"/>
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0.1"/>
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="softglow">
-          <feGaussianBlur stdDeviation="6" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <radialGradient id="bgOrb1" cx="50%" cy="40%" r="50%">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.08"/>
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0"/>
-        </radialGradient>
-        <radialGradient id="bgOrb2" cx="70%" cy="70%" r="40%">
-          <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.06"/>
-          <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0"/>
-        </radialGradient>
-      </defs>
-
-      {/* Background orbs */}
-      <ellipse cx="300" cy="220" rx="220" ry="180" fill="url(#bgOrb1)"/>
-      <ellipse cx="440" cy="380" rx="160" ry="140" fill="url(#bgOrb2)"/>
-
-      {/* Edges */}
-      {edges.map(([a, b], i) => (
-        <motion.line
-          key={i}
-          x1={nodes[a].x} y1={nodes[a].y}
-          x2={nodes[b].x} y2={nodes[b].y}
-          stroke={i % 2 === 0 ? "url(#edge1)" : "url(#edge2)"}
-          strokeWidth="1.2"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 1 }}
-          transition={{ duration: 1.2, delay: 0.1 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-        />
-      ))}
-
-      {/* Pulse rings */}
-      {[nodes[0], nodes[3], nodes[7]].map((n, i) => (
-        <motion.circle
-          key={`pulse-${i}`}
-          cx={n.x} cy={n.y} r={n.r}
-          stroke={n.color}
-          strokeWidth="1"
-          fill="none"
-          initial={{ scale: 1, opacity: 0.6 }}
-          animate={{ scale: [1, 2.5, 1], opacity: [0.6, 0, 0.6] }}
-          transition={{ duration: 2.5, delay: i * 0.8, repeat: Infinity, ease: "easeOut" }}
-          style={{ transformOrigin: `${n.x}px ${n.y}px` }}
-        />
-      ))}
-
-      {/* Nodes */}
-      {nodes.map((n, i) => (
-        <motion.g key={i}>
-          <motion.circle
-            cx={n.x} cy={n.y} r={n.r + 5}
-            fill={n.color}
-            fillOpacity="0.12"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: n.delay + 0.8, type: "spring", stiffness: 200 }}
-            style={{ transformOrigin: `${n.x}px ${n.y}px` }}
-          />
-          <motion.circle
-            cx={n.x} cy={n.y} r={n.r}
-            fill={n.color}
-            filter="url(#glow)"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1, y: [0, -5, 0] }}
-            transition={{
-              scale: { duration: 0.5, delay: n.delay + 0.6, type: "spring", stiffness: 200 },
-              opacity: { duration: 0.5, delay: n.delay + 0.6 },
-              y: { duration: 3 + i * 0.3, delay: n.delay + 1.2, repeat: Infinity, ease: "easeInOut" }
-            }}
-            style={{ transformOrigin: `${n.x}px ${n.y}px` }}
-          />
-        </motion.g>
-      ))}
-
-      {/* Floating labels on key nodes */}
-      {[
-        { x: 300, y: 55, text: "DAGChain" },
-        { x: 220, y: 330, text: "DAGGPT" },
-        { x: 330, y: 450, text: "DAG Army" },
-      ].map((l, i) => (
-        <motion.text
-          key={i}
-          x={l.x} y={l.y}
-          textAnchor="middle"
-          fontSize="10"
-          fill="rgba(255,255,255,0.4)"
-          fontFamily="monospace"
-          letterSpacing="1.5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.5 + i * 0.2 }}
-        >
-          {l.text}
-        </motion.text>
-      ))}
-    </svg>
-  );
-}
-
-/* ─────────────────────────────────────────────────
-   FAQ ITEM
-───────────────────────────────────────────────── */
-function FAQItem({ q, a, i }) {
+/* ── FAQ ───────────────────────────────────────────────────── */
+function FAQ({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-      style={{ borderBottom: "1px solid rgba(0,0,0,0.07)" }}
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        style={{ width: "100%", background: "none", border: "none", padding: "22px 0", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", gap: "24px", textAlign: "left" }}
-      >
-        <span style={{ fontSize: "16px", fontWeight: 650, color: "#0a0a0a", lineHeight: 1.5, letterSpacing: "-0.2px" }}>{q}</span>
-        <motion.div
-          animate={{ rotate: open ? 45 : 0, background: open ? "#6366f1" : "rgba(99,102,241,0.08)" }}
-          transition={{ duration: 0.3 }}
-          style={{ width: "30px", height: "30px", borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
-        >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M6 1v10M1 6h10" stroke={open ? "#fff" : "#6366f1"} strokeWidth="1.8" strokeLinecap="round"/>
-          </svg>
-        </motion.div>
+    <div style={{ borderBottom: '1px solid #f0f0f0' }}>
+      <button onClick={() => setOpen(!open)} style={{
+        width: '100%', background: 'none', border: 'none', padding: '22px 0',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        cursor: 'pointer', gap: '20px', textAlign: 'left',
+      }}>
+        <span style={{ fontSize: '15px', fontWeight: '600', color: '#111', lineHeight: 1.5 }}>{q}</span>
+        <span style={{ flexShrink: 0, color: '#111', transition: 'transform 0.3s', transform: open ? 'rotate(180deg)' : 'none', display: 'flex' }}>
+          <Ic.chevron />
+        </span>
       </button>
-      <motion.div
-        initial={false}
-        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-        transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-        style={{ overflow: "hidden" }}
-      >
-        <p style={{ margin: "0 0 22px", color: "#6b7280", fontSize: "15px", lineHeight: 1.9 }}>{a}</p>
-      </motion.div>
-    </motion.div>
+      <div style={{ overflow: 'hidden', maxHeight: open ? '200px' : '0', transition: 'max-height 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
+        <p style={{ margin: '0 0 22px', color: '#666', fontSize: '14px', lineHeight: 1.8 }}>{a}</p>
+      </div>
+    </div>
   );
 }
 
-/* ─────────────────────────────────────────────────
-   MAIN PAGE
-───────────────────────────────────────────────── */
-export default function AmbassadorPage() {
-  const [formOpen, setFormOpen] = useState(false);
-  const [success, setSuccess] = useState(false);
+/* ── Apply Modal ───────────────────────────────────────────── */
+function ApplyModal({ onClose, onSuccess }) {
+  const [form, setForm] = useState({ full_name: '', email: '', country: '', telegram: '', social_links: '', follower_count: '', content_niche: '', statement: '' });
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('');
+  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
 
-  const faqs = [
-    { q: "Is this an investment program?", a: "No. The DAG Army Ambassador Program is a performance-based referral and marketing initiative linked to verified product usage. There is no investment element." },
-    { q: "Is there a joining fee?", a: "No. Applying and joining is completely free. No payment or investment is required at any stage of the program." },
-    { q: "Are earnings guaranteed?", a: "No. All rewards are earned solely through verified ecosystem activity generated via your referral link and content performance." },
-    { q: "Can I create content in my regional language?", a: "Absolutely. Regional language content is strongly encouraged. We actively prioritize creators who can engage local communities in their native language." },
-    { q: "How long does the review take?", a: "Our team personally reviews each application within 5–10 business days. Shortlisted candidates are contacted via email with next steps." },
-    { q: "What content performs best?", a: "Product walkthroughs, AI tool comparisons, node infrastructure explainers, blockchain education, and ecosystem overview content consistently perform best." },
-  ];
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!form.full_name || !form.email || !form.country) { setErr('Full name, email and country are required.'); return; }
+    setLoading(true); setErr('');
+    try {
+      const res = await fetch('/api/ambassador/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Submission failed');
+      onSuccess();
+    } catch (e) { setErr(e.message); } finally { setLoading(false); }
+  };
+
+  const inp = (extra = {}) => ({
+    style: {
+      width: '100%', padding: '11px 14px', border: '1.5px solid #eee',
+      borderRadius: '10px', fontSize: '14px', color: '#111', background: '#fafafa',
+      outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit',
+      transition: 'border-color 0.2s, background 0.2s',
+      ...extra,
+    },
+    onFocus: (e) => { e.target.style.borderColor = '#111'; e.target.style.background = '#fff'; },
+    onBlur: (e) => { e.target.style.borderColor = '#eee'; e.target.style.background = '#fafafa'; },
+  });
+  const lbl = { display: 'block', fontSize: '12px', fontWeight: '700', color: '#111', marginBottom: '6px', letterSpacing: '0.3px', textTransform: 'uppercase' };
 
   return (
-    <div style={{ fontFamily: "'Inter', 'Geist', -apple-system, system-ui, sans-serif", background: "#eceef5" }}>
-      <style>{`
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-        @keyframes drift { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
-        @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        @keyframes rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        * { box-sizing: border-box; }
-      `}</style>
+    <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(6px)' }}>
+      <div style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '600px', maxHeight: '92vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 32px 80px rgba(0,0,0,0.18)' }}>
+        {/* Header */}
+        <div style={{ padding: '28px 32px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <p style={{ margin: '0 0 4px', fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', color: '#999' }}>Ambassador Program</p>
+            <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#111', letterSpacing: '-0.5px' }}>Submit Your Application</h2>
+          </div>
+          <button onClick={onClose} style={{ background: '#f5f5f5', border: 'none', borderRadius: '10px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#666', flexShrink: 0 }}>
+            <Ic.close />
+          </button>
+        </div>
+        {/* Form */}
+        <form onSubmit={submit} style={{ overflowY: 'auto', padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div>
+              <label style={lbl}>Full Name <span style={{ color: '#e00' }}>*</span></label>
+              <input value={form.full_name} onChange={set('full_name')} placeholder="Your full name" {...inp()} />
+            </div>
+            <div>
+              <label style={lbl}>Email Address <span style={{ color: '#e00' }}>*</span></label>
+              <input type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" {...inp()} />
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div>
+              <label style={lbl}>Country <span style={{ color: '#e00' }}>*</span></label>
+              <input value={form.country} onChange={set('country')} placeholder="India, UAE, USA..." {...inp()} />
+            </div>
+            <div>
+              <label style={lbl}>Telegram / WhatsApp</label>
+              <input value={form.telegram} onChange={set('telegram')} placeholder="@handle or +number" {...inp()} />
+            </div>
+          </div>
+          <div>
+            <label style={lbl}>Social Media Links</label>
+            <input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn — paste all links" {...inp()} />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div>
+              <label style={lbl}>Total Followers / Subscribers</label>
+              <input value={form.follower_count} onChange={set('follower_count')} placeholder="e.g. 25,000" {...inp()} />
+            </div>
+            <div>
+              <label style={lbl}>Content Niche</label>
+              <input value={form.content_niche} onChange={set('content_niche')} placeholder="AI, Web3, Finance, Tech..." {...inp()} />
+            </div>
+          </div>
+          <div>
+            <label style={lbl}>Why do you want to be an Ambassador?</label>
+            <textarea value={form.statement} onChange={set('statement')} rows={4} placeholder="Tell us about yourself, your audience, and what excites you about DAG Army..." style={{ ...inp().style, resize: 'vertical', lineHeight: '1.7' }} onFocus={inp().onFocus} onBlur={inp().onBlur} />
+          </div>
+          {err && <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '10px', padding: '12px 16px', color: '#dc2626', fontSize: '13px' }}>{err}</div>}
+          <button type="submit" disabled={loading} style={{
+            background: loading ? '#ddd' : '#111', color: loading ? '#999' : '#fff',
+            border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px',
+            fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            letterSpacing: '-0.2px', transition: 'background 0.2s',
+          }}>
+            {loading ? 'Submitting...' : <><span>Submit Application</span><Ic.arrow /></>}
+          </button>
+          <p style={{ margin: 0, textAlign: 'center', fontSize: '12px', color: '#aaa' }}>Our team reviews every application personally within 5–10 days.</p>
+        </form>
+      </div>
+    </div>
+  );
+}
 
-      {/* Outer wrapper: soft grey body */}
-      <div style={{ padding: "28px 16px 56px", minHeight: "100vh" }}>
-        <div style={{ maxWidth: "1360px", margin: "0 auto", borderRadius: "32px", overflow: "hidden", boxShadow: "0 40px 120px rgba(0,0,0,0.12)" }}>
+/* ── Success Modal ─────────────────────────────────────────── */
+function SuccessModal({ onClose }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(6px)' }}>
+      <div style={{ background: '#fff', borderRadius: '24px', padding: '52px 44px', textAlign: 'center', maxWidth: '440px', width: '100%', boxShadow: '0 32px 80px rgba(0,0,0,0.16)' }}>
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff' }}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style={{ margin: '0 0 12px', fontSize: '24px', fontWeight: '800', color: '#111', letterSpacing: '-0.8px' }}>Application Received</h2>
+        <p style={{ margin: '0 0 32px', color: '#666', fontSize: '15px', lineHeight: 1.7 }}>Thank you for applying. Our team will review your application and reach out to shortlisted candidates. Check your email for a confirmation.</p>
+        <button onClick={onClose} style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '12px', padding: '13px 32px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.2px' }}>
+          Back to Ambassador Page
+        </button>
+      </div>
+    </div>
+  );
+}
 
-          {/* ═══════════════════════════════════════════
-              HERO — DARK / LIGHT SPLIT
-          ═══════════════════════════════════════════ */}
-          <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "95vh" }}>
+/* ── Main Page ─────────────────────────────────────────────── */
+export default function AmbassadorPage() {
+  const [modal, setModal] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const gsapDone = useRef(false);
 
-            {/* LEFT — DARK */}
-            <div style={{ background: "#08081a", padding: "72px 60px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+  useEffect(() => {
+    if (gsapDone.current) return;
+    gsapDone.current = true;
+    (async () => {
+      try {
+        const { gsap } = await import('gsap');
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+        gsap.registerPlugin(ScrollTrigger);
 
-              {/* Radial glow behind text */}
-              <div style={{ position: "absolute", top: "50%", left: "10%", transform: "translateY(-50%)", width: "600px", height: "600px", background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 65%)", pointerEvents: "none" }} />
+        // Hero word-by-word
+        gsap.fromTo('.amb-word', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.06, duration: 0.7, ease: 'power3.out', delay: 0.3 });
+        gsap.fromTo('.amb-hero-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.9 });
+        gsap.fromTo('.amb-hero-actions', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 1.1 });
+        gsap.fromTo('.amb-hero-badge', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 0.1 });
 
-              {/* Grid lines decoration */}
-              <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }} />
+        // Scroll reveals
+        gsap.utils.toArray('.amb-reveal').forEach(el => {
+          gsap.fromTo(el, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+        });
 
-              <div style={{ position: "relative", zIndex: 2 }}>
-                {/* Status */}
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ display: "inline-flex", alignItems: "center", gap: "8px", border: "1px solid rgba(34,197,94,0.25)", borderRadius: "100px", padding: "7px 16px 7px 10px", marginBottom: "52px", background: "rgba(34,197,94,0.06)" }}
-                >
-                  <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#22c55e", animation: "blink 2s infinite" }} />
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(134,239,172,0.9)", letterSpacing: "0.04em" }}>2026 Applications Open</span>
-                </motion.div>
+        // Staggered grids
+        gsap.utils.toArray('.amb-grid').forEach(g => {
+          gsap.fromTo(g.querySelectorAll('.amb-card'), { opacity: 0, y: 36, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.65, ease: 'power3.out', scrollTrigger: { trigger: g, start: 'top 85%' } });
+        });
 
-                {/* Headline — line by line */}
-                {[
-                  { text: "Become a", color: "rgba(255,255,255,0.95)" },
-                  { text: "DAG Army", gradient: true },
-                  { text: "Ambassador.", color: "rgba(255,255,255,0.95)" },
-                ].map((line, i) => (
-                  <div key={i} style={{ overflow: "hidden", marginBottom: i === 2 ? "36px" : "2px" }}>
-                    <motion.h1
-                      initial={{ y: "110%", opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 1.1, delay: 0.08 + i * 0.11, ease: [0.22, 1, 0.36, 1] }}
-                      style={{
-                        margin: 0,
-                        fontSize: "clamp(56px, 6.5vw, 90px)",
-                        fontWeight: 900,
-                        letterSpacing: "-4px",
-                        lineHeight: 0.95,
-                        paddingBottom: "4px",
-                        ...(line.gradient
-                          ? { background: "linear-gradient(125deg, #818cf8 0%, #a78bfa 40%, #67e8f9 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }
-                          : { color: line.color })
-                      }}
-                    >
-                      {line.text}
-                    </motion.h1>
+        // Floating orbs in hero
+        gsap.utils.toArray('.amb-orb').forEach((orb, i) => {
+          gsap.to(orb, { y: -30 - i * 8, x: (i % 2 === 0 ? 12 : -12), duration: 4 + i * 0.5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3 });
+        });
+
+        // Stats line fill
+        gsap.fromTo('.amb-stat-line', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: '.amb-stats-row', start: 'top 85%' } });
+
+      } catch (e) { /* GSAP unavailable */ }
+    })();
+  }, []);
+
+  const tiers = [
+    { name: 'Silver', req: '1,000+ followers', color: '#6b7280', accent: '#f9fafb', perks: ['Standard referral rewards', 'Free DAGGPT access', 'Official Ambassador Badge', 'Private community access'] },
+    { name: 'Gold', req: '50,000+ followers', color: '#d97706', accent: '#fffbeb', perks: ['Enhanced reward rate', 'Performance bonuses', 'Featured website profile', 'Priority support channel', 'Early ecosystem access'], featured: true },
+    { name: 'Platinum', req: '100,000+ followers', color: '#111', accent: '#f8fafc', perks: ['Custom partnership terms', 'Regional leadership role', 'Revenue-share agreements', 'Direct executive access', 'Co-branded campaigns'] },
+  ];
+
+  const benefits = [
+    { icon: <Ic.cpu />, label: 'Free DAGGPT Access', desc: 'All approved ambassadors receive full complimentary access to DAGGPT\'s multi-module AI platform.' },
+    { icon: <Ic.coins />, label: 'Referral Earnings', desc: 'Earn rewards tied to real ecosystem activity — subscriptions, validator & storage nodes, upgrades.' },
+    { icon: <Ic.star />, label: 'Points & Redemptions', desc: 'Accumulate DAG points per referral and activity. Redeem for GasCoin, credits, or premium features.' },
+    { icon: <Ic.award />, label: 'Official Badge & Recognition', desc: 'Verified badge, featured profile on website (performance-based), and early feature previews.' },
+    { icon: <Ic.globe />, label: 'Regional Leadership', desc: 'Represent your region, lead local community events, and shape adoption in your language.' },
+    { icon: <Ic.users />, label: 'Private Ambassador Network', desc: 'Access an exclusive group of top ambassadors for collaboration, support, and opportunities.' },
+  ];
+
+  const faqs = [
+    { q: 'Is this an investment program?', a: 'No. The Ambassador Program is a performance-based referral and marketing initiative tied to actual product usage. There is no investment element.' },
+    { q: 'Is there a joining fee?', a: 'No. Applying and joining is completely free. There is no mandatory investment or payment required.' },
+    { q: 'Are earnings guaranteed?', a: 'No. All rewards are based solely on verified ecosystem activity and product usage generated through your referral link.' },
+    { q: 'Can I create content in my regional language?', a: 'Yes — regional language content is highly encouraged. We actively look for creators who can reach local communities in their native language.' },
+    { q: 'How long does the review take?', a: 'Our team reviews applications personally within 5–10 business days. Shortlisted candidates are contacted directly via email.' },
+    { q: 'What type of content should I create?', a: 'Product walkthroughs, AI tool demos, validator node guides, blockchain education, ecosystem overviews, use-case tutorials — anything that educates your audience.' },
+  ];
+
+  const CTABtn = ({ children, dark, onClick }) => (
+    <button onClick={onClick} style={{
+      background: dark ? '#111' : '#fff',
+      color: dark ? '#fff' : '#111',
+      border: dark ? 'none' : '1.5px solid #e0e0e0',
+      borderRadius: '100px', padding: '13px 28px',
+      fontSize: '14px', fontWeight: '700', cursor: 'pointer',
+      display: 'inline-flex', alignItems: 'center', gap: '8px',
+      letterSpacing: '-0.2px', transition: 'all 0.2s',
+      boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.15)' : 'none',
+    }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = dark ? '0 8px 28px rgba(0,0,0,0.22)' : '0 4px 16px rgba(0,0,0,0.08)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = dark ? '0 4px 20px rgba(0,0,0,0.15)' : 'none'; }}
+    >{children}</button>
+  );
+
+  return (
+    <div style={{ background: '#fff', minHeight: '100vh', color: '#111', fontFamily: 'inherit' }}>
+
+      {/* ═══ HERO ═════════════════════════════════════════════ */}
+      <section style={{ position: 'relative', overflow: 'hidden', padding: '130px 24px 100px', background: '#fff' }}>
+        {/* Subtle grid */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(#f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.6 }} />
+        {/* Gradient overlay top */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '200px', background: 'linear-gradient(to bottom, #fff, transparent)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '200px', background: 'linear-gradient(to top, #fff, transparent)' }} />
+
+        {/* Decorative orbs */}
+        <div className="amb-orb" style={{ position: 'absolute', top: '15%', left: '8%', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div className="amb-orb" style={{ position: 'absolute', top: '25%', right: '6%', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div className="amb-orb" style={{ position: 'absolute', bottom: '10%', left: '30%', width: '400px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+        {/* Dot cluster top right */}
+        <div style={{ position: 'absolute', top: '60px', right: '80px', display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', opacity: 0.25, pointerEvents: 'none' }}>
+          {Array.from({ length: 36 }).map((_, i) => <div key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#111' }} />)}
+        </div>
+        <div style={{ position: 'absolute', bottom: '80px', left: '60px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', opacity: 0.15, pointerEvents: 'none' }}>
+          {Array.from({ length: 25 }).map((_, i) => <div key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#111' }} />)}
+        </div>
+
+        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
+          {/* Badge */}
+          <div className="amb-hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f5f5f5', border: '1px solid #e8e8e8', borderRadius: '100px', padding: '7px 16px', marginBottom: '36px' }}>
+            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
+            <span style={{ fontSize: '12px', fontWeight: '600', color: '#555', letterSpacing: '0.3px' }}>Applications Now Open</span>
+            <span style={{ background: '#111', color: '#fff', borderRadius: '100px', padding: '2px 10px', fontSize: '10px', fontWeight: '700', letterSpacing: '0.5px', textTransform: 'uppercase' }}>2026 Cohort</span>
+          </div>
+
+          {/* Headline — word by word */}
+          <h1 style={{ fontSize: 'clamp(42px, 6vw, 76px)', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1.0, margin: '0 0 28px', color: '#111' }}>
+            {['Represent', 'the', 'Future', 'of'].map((w, i) => (
+              <span key={i} className="amb-word" style={{ display: 'inline-block', marginRight: '0.28em', opacity: 0 }}>{w}</span>
+            ))}
+            <br />
+            {['AI', '&', 'Blockchain'].map((w, i) => (
+              <span key={i} className="amb-word" style={{
+                display: 'inline-block', marginRight: '0.28em', opacity: 0,
+                background: i === 1 ? 'none' : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                WebkitBackgroundClip: i === 1 ? 'none' : 'text',
+                WebkitTextFillColor: i === 1 ? '#111' : 'transparent',
+                backgroundClip: i === 1 ? 'none' : 'text',
+              }}>{w}</span>
+            ))}
+          </h1>
+
+          <p className="amb-hero-sub" style={{ fontSize: '18px', color: '#666', lineHeight: 1.75, maxWidth: '580px', margin: '0 auto 44px', opacity: 0 }}>
+            Join the official DAG Army Ambassador Program. Build your personal brand, earn performance rewards, and grow alongside a global AI-native blockchain ecosystem.
+          </p>
+
+          <div className="amb-hero-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
+            <CTABtn dark onClick={() => setModal(true)}>
+              Apply Now — It&apos;s Free <Ic.arrow />
+            </CTABtn>
+            <CTABtn onClick={() => document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' })}>
+              Learn More <Ic.chevron />
+            </CTABtn>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.3 }}>
+          <div style={{ width: '1px', height: '40px', background: '#111', animation: 'ambScrollLine 1.8s ease-in-out infinite' }} />
+        </div>
+      </section>
+
+      {/* ═══ STATS ════════════════════════════════════════════ */}
+      <section style={{ borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', background: '#fafafa' }}>
+        <div className="amb-stats-row" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          {[
+            { n: 150, suf: '+', l: 'Active Ambassadors' },
+            { n: 40, suf: '+', l: 'Countries Represented' },
+            { n: 2, suf: 'M+', l: 'Combined Reach' },
+            { n: 3, suf: '', l: 'Ecosystem Products' },
+          ].map((s, i) => (
+            <div key={i} style={{ padding: '36px 24px', textAlign: 'center', borderRight: i < 3 ? '1px solid #eee' : 'none' }}>
+              <div style={{ fontSize: '36px', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1 }}>
+                <Counter end={s.n} suffix={s.suf} />
+              </div>
+              <div style={{ marginTop: '6px', fontSize: '12px', color: '#999', fontWeight: '600', letterSpacing: '0.3px' }}>{s.l}</div>
+              <div className="amb-stat-line" style={{ height: '2px', background: '#111', marginTop: '16px', transformOrigin: 'left', transform: 'scaleX(0)' }} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ ABOUT ════════════════════════════════════════════ */}
+      <section id="about-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          <div className="amb-reveal">
+            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Ecosystem</p>
+            <h2 style={{ fontSize: 'clamp(30px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
+              Three products.<br />One unified vision.
+            </h2>
+            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
+              DAG Army is a global community building the infrastructure for a decentralized, AI-powered future. Ambassadors are the backbone of this movement.
+            </p>
+            <CTABtn dark onClick={() => setModal(true)}>Join the Movement <Ic.arrow /></CTABtn>
+          </div>
+          <div className="amb-grid amb-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              { label: 'DAG Army', sub: 'Community-driven AI & Web3 movement', dot: '#3b82f6' },
+              { label: 'DAGGPT', sub: 'Multi-module AI platform — one subscription, all tools', dot: '#8b5cf6' },
+              { label: 'DAGChain', sub: 'AI-native Layer 1 blockchain infrastructure', dot: '#10b981' },
+              { label: 'Node Ecosystem', sub: 'Validator & Storage nodes for decentralized compute', dot: '#f59e0b' },
+            ].map((item, i) => (
+              <div key={i} className="amb-card" style={{
+                display: 'flex', alignItems: 'center', gap: '16px',
+                padding: '18px 20px', border: '1px solid #f0f0f0', borderRadius: '14px',
+                background: '#fff', transition: 'border-color 0.2s, transform 0.2s, box-shadow 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.transform = 'translateX(4px)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.06)'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f0'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: item.dot, flexShrink: 0 }} />
+                <div>
+                  <p style={{ margin: 0, fontWeight: '700', fontSize: '14px', color: '#111' }}>{item.label}</p>
+                  <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#888', lineHeight: 1.5 }}>{item.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ WHO CAN APPLY ════════════════════════════════════ */}
+      <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div className="amb-reveal" style={{ marginBottom: '64px' }}>
+            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Eligibility</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
+              <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0, lineHeight: 1.1 }}>Who Can Apply?</h2>
+              <p style={{ margin: 0, fontSize: '14px', color: '#888', maxWidth: '360px', lineHeight: 1.7 }}>We look for passionate creators and community builders who can bring the AI &amp; Web3 story to life in their language.</p>
+            </div>
+          </div>
+
+          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
+            {[
+              { type: 'YouTubers', req: '1,000+ subscribers' },
+              { type: 'Instagram Creators', req: '1,000+ followers' },
+              { type: 'Facebook Creators', req: '1,000+ followers' },
+              { type: 'AI Educators', req: 'Any platform' },
+              { type: 'Blockchain Analysts', req: 'Any platform' },
+              { type: 'Web3 Influencers', req: 'Any platform' },
+              { type: 'Tech Community Leaders', req: 'Discord, Telegram' },
+              { type: 'Regional Creators', req: 'All languages welcome' },
+            ].map((t, i) => (
+              <div key={i} className="amb-card" style={{
+                background: '#fff', border: '1px solid #eee', borderRadius: '14px',
+                padding: '20px 18px', transition: 'all 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.borderColor = '#111'; e.currentTarget.querySelector('.ct').style.color = '#fff'; e.currentTarget.querySelector('.cr').style.color = 'rgba(255,255,255,0.5)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#eee'; e.currentTarget.querySelector('.ct').style.color = '#111'; e.currentTarget.querySelector('.cr').style.color = '#999'; }}
+              >
+                <p className="ct" style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111', transition: 'color 0.2s' }}>{t.type}</p>
+                <p className="cr" style={{ margin: 0, fontSize: '12px', color: '#999', transition: 'color 0.2s' }}>{t.req}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Requirements */}
+          <div className="amb-reveal" style={{ marginTop: '48px', background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '40px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '28px' }}>
+            {[
+              { n: '01', t: 'Active Audience', d: 'You have a real, engaged audience on at least one platform.' },
+              { n: '02', t: 'Consistent Creator', d: 'You publish content regularly and have an established presence.' },
+              { n: '03', t: 'Explain Clearly', d: 'You can explain AI or blockchain concepts in simple, accessible language.' },
+            ].map((r, i) => (
+              <div key={i}>
+                <p style={{ margin: '0 0 10px', fontSize: '28px', fontWeight: '900', color: '#f0f0f0', letterSpacing: '-1px' }}>{r.n}</p>
+                <p style={{ margin: '0 0 6px', fontWeight: '700', fontSize: '15px', color: '#111' }}>{r.t}</p>
+                <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{r.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ BENEFITS ═════════════════════════════════════════ */}
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
+        <div className="amb-reveal" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
+          <div>
+            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>What You Get</p>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0, lineHeight: 1.1 }}>Ambassador Benefits</h2>
+          </div>
+          <CTABtn dark onClick={() => setModal(true)}>Apply Now <Ic.arrow /></CTABtn>
+        </div>
+        <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          {benefits.map((b, i) => (
+            <div key={i} className="amb-card" style={{
+              padding: '28px', border: '1px solid #f0f0f0', borderRadius: '18px',
+              background: '#fff', transition: 'all 0.25s', position: 'relative', overflow: 'hidden',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            >
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px', color: '#111' }}>
+                {b.icon}
+              </div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#111', letterSpacing: '-0.3px' }}>{b.label}</h3>
+              <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{b.desc}</p>
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: '#111', transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s' }} className="amb-underline" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ TIERS ════════════════════════════════════════════ */}
+      <section style={{ background: '#111', padding: '120px 24px' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div className="amb-reveal" style={{ marginBottom: '64px', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#555' }}>Program Levels</p>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#fff', letterSpacing: '-1.5px', margin: '0 0 16px' }}>Ambassador Tiers</h2>
+            <p style={{ color: '#666', fontSize: '15px', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>Grow through levels based on your reach and performance. Tiers are reviewed and upgraded periodically.</p>
+          </div>
+          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+            {tiers.map((t, i) => (
+              <div key={i} className="amb-card" style={{
+                background: t.featured ? '#fff' : '#1a1a1a',
+                border: t.featured ? 'none' : '1px solid #222',
+                borderRadius: '20px', padding: '32px 28px',
+                position: 'relative', transition: 'transform 0.25s',
+                transform: t.featured ? 'translateY(-8px)' : 'none',
+              }}>
+                {t.featured && (
+                  <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#111', color: '#fff', borderRadius: '100px', padding: '4px 14px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                    Most Popular
                   </div>
-                ))}
-
-                <motion.p
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ fontSize: "16px", color: "rgba(255,255,255,0.45)", lineHeight: 1.85, maxWidth: "380px", marginBottom: "40px" }}
-                >
-                  Represent the future of AI-native blockchain. Build your personal brand, earn real rewards, and grow alongside a global ecosystem.
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.62, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}
-                >
-                  <button
-                    onClick={() => setFormOpen(true)}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#6366f1", color: "#fff", border: "none", borderRadius: "100px", padding: "14px 30px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 0 40px rgba(99,102,241,0.5)", letterSpacing: "-0.01em", fontFamily: "inherit" }}
-                  >
-                    Apply Now →
-                  </button>
-                  <button
-                    onClick={() => document.getElementById("amb-tiers")?.scrollIntoView({ behavior: "smooth" })}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "100px", padding: "13px 26px", fontSize: "14px", fontWeight: 600, cursor: "pointer", letterSpacing: "-0.01em", fontFamily: "inherit" }}
-                  >
-                    Explore Program
-                  </button>
-                </motion.div>
-
-                {/* Stats */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.85, duration: 0.8 }}
-                  style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", marginTop: "56px", paddingTop: "32px", borderTop: "1px solid rgba(255,255,255,0.07)" }}
-                >
-                  {[
-                    { n: 10000, suffix: "+", l: "Members" },
-                    { n: 3, suffix: "", l: "Platforms" },
-                    { n: 5, suffix: "", l: "Continents" },
-                    { n: 0, suffix: "Free", l: "No Cost" },
-                  ].map((s, i) => (
-                    <div key={i} style={{ paddingRight: "16px", borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none", paddingLeft: i > 0 ? "16px" : "0" }}>
-                      <p style={{ margin: "0 0 3px", fontSize: "22px", fontWeight: 900, color: "#fff", letterSpacing: "-1px" }}>
-                        {s.n === 0 ? s.suffix : <><Counter to={s.n} suffix={s.suffix} /></>}
-                      </p>
-                      <p style={{ margin: 0, fontSize: "11px", color: "rgba(255,255,255,0.3)", fontWeight: 500 }}>{s.l}</p>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: t.color }} />
+                  <span style={{ fontSize: '18px', fontWeight: '900', color: t.featured ? '#111' : '#fff', letterSpacing: '-0.5px' }}>{t.name}</span>
+                </div>
+                <p style={{ margin: '0 0 24px', fontSize: '13px', color: t.featured ? '#888' : '#555' }}>{t.req}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {t.perks.map((p, j) => (
+                    <div key={j} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: t.featured ? '#f5f5f5' : '#222', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: t.featured ? '#111' : '#555', marginTop: '1px' }}>
+                        <Ic.check />
+                      </div>
+                      <span style={{ fontSize: '13px', color: t.featured ? '#444' : '#666', lineHeight: 1.5 }}>{p}</span>
                     </div>
                   ))}
-                </motion.div>
+                </div>
+                <button onClick={() => setModal(true)} style={{
+                  width: '100%', marginTop: '28px', background: t.featured ? '#111' : '#222',
+                  color: t.featured ? '#fff' : '#666', border: t.featured ? 'none' : '1px solid #333',
+                  borderRadius: '10px', padding: '12px', fontSize: '13px', fontWeight: '700',
+                  cursor: 'pointer', transition: 'all 0.2s', letterSpacing: '-0.2px',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background = t.featured ? '#333' : '#2a2a2a'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = t.featured ? '#111' : '#222'; e.currentTarget.style.color = t.featured ? '#fff' : '#666'; }}
+                >
+                  Apply for {t.name}
+                </button>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* RIGHT — WHITE with SVG */}
-            <div style={{ background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 48px", position: "relative", overflow: "hidden" }}>
-              {/* Subtle grid */}
-              <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(99,102,241,0.06) 1px, transparent 1px)", backgroundSize: "32px 32px", pointerEvents: "none" }} />
-
-              {/* Top-right corner label */}
-              <div style={{ position: "absolute", top: "32px", right: "32px", display: "flex", alignItems: "center", gap: "6px" }}>
-                <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#6366f1", animation: "blink 3s infinite" }} />
-                <span style={{ fontSize: "10px", fontWeight: 700, color: "#9ca3af", letterSpacing: "0.12em", textTransform: "uppercase" }}>DAG Network</span>
-              </div>
-
-              <div style={{ width: "100%", maxWidth: "580px", height: "480px", position: "relative", zIndex: 1 }}>
-                <DAGNetworkSVG />
-              </div>
-            </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════
-              MARQUEE — VIOLET
-          ═══════════════════════════════════════════ */}
-          <div style={{ background: "#6366f1", padding: "14px 0", overflow: "hidden" }}>
-            <div style={{ display: "flex", gap: "0", width: "max-content", animation: "marquee 24s linear infinite" }}>
-              {[...Array(3)].map((_, rep) => (
-                <div key={rep} style={{ display: "flex", gap: "0" }}>
-                  {["DAG Army", "DAGGPT", "DAGChain", "Web3 Infrastructure", "AI Native", "Layer 1 Blockchain", "Earn Rewards", "Free Access", "Ambassador Program", "Global Community"].map((t, i) => (
-                    <div key={i} style={{ display: "inline-flex", alignItems: "center", gap: "24px", padding: "0 24px" }}>
-                      <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{t}</span>
-                      <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(255,255,255,0.4)", flexShrink: 0 }} />
-                    </div>
-                  ))}
+      {/* ═══ RESPONSIBILITIES ═════════════════════════════════ */}
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
+          <div className="amb-reveal">
+            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Your Role</p>
+            <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What you&apos;ll do as an Ambassador</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+              {[
+                'Create educational content about DAGGPT and DAGChain',
+                'Publish and distribute content on your platforms',
+                'Use and share your unique referral link',
+                'Introduce new users to the ecosystem',
+                'Tag official community pages in your posts',
+                'Support regional community growth',
+              ].map((r, i) => (
+                <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', padding: '16px 0', borderBottom: i < 5 ? '1px solid #f5f5f5' : 'none' }}>
+                  <span style={{ fontSize: '12px', fontWeight: '800', color: '#ddd', width: '24px', flexShrink: 0, paddingTop: '2px' }}>0{i + 1}</span>
+                  <span style={{ fontSize: '14px', color: '#444', lineHeight: 1.6 }}>{r}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ═══════════════════════════════════════════
-              ECOSYSTEM — DEEP DARK VIOLET
-          ═══════════════════════════════════════════ */}
-          <section style={{ background: "#0c0a2e", padding: "100px 72px", position: "relative", overflow: "hidden" }}>
-            {/* Grid */}
-            <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px)", backgroundSize: "80px 80px", pointerEvents: "none" }} />
-            {/* Glow orbs */}
-            <div style={{ position: "absolute", top: "0", left: "30%", width: "500px", height: "500px", background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 65%)", pointerEvents: "none" }} />
-
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                  <div style={{ width: "32px", height: "1px", background: "rgba(99,102,241,0.8)" }} />
-                  <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(165,180,252,0.8)", letterSpacing: "0.12em", textTransform: "uppercase" }}>The Ecosystem</span>
-                </div>
-              </motion.div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "60px", flexWrap: "wrap", gap: "32px" }}>
-                <motion.h2
-                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ margin: 0, fontSize: "clamp(36px, 4.5vw, 56px)", fontWeight: 900, letterSpacing: "-2.5px", lineHeight: 1, color: "#fff" }}
+          <div className="amb-reveal">
+            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Content Ideas</p>
+            <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What to create</h2>
+            <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              {[
+                'Product walkthroughs', 'AI tool demos',
+                'Validator node guides', 'Blockchain basics',
+                'Use-case tutorials', 'Ecosystem overviews',
+                'Live Q&A sessions', 'Community updates',
+              ].map((c, i) => (
+                <div key={i} className="amb-card" style={{
+                  background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '12px',
+                  padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#444',
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  transition: 'all 0.2s',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#111'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#fafafa'; e.currentTarget.style.color = '#444'; e.currentTarget.style.borderColor = '#f0f0f0'; }}
                 >
-                  Built on<br /><span style={{ background: "linear-gradient(125deg, #818cf8, #a78bfa, #67e8f9)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>three pillars.</span>
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  style={{ margin: 0, fontSize: "15px", color: "rgba(255,255,255,0.4)", lineHeight: 1.9, maxWidth: "280px" }}
-                >
-                  A community, an AI platform, and a blockchain — interconnected.
-                </motion.p>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1.7fr 1fr 1fr", gap: "20px" }}>
-                {/* DAG Army — large */}
-                {[
-                  {
-                    num: "01", tag: "Community", name: "DAG Army", desc: "A global community-driven AI and Web3 movement. Ambassadors are the human face of this mission — representing the ecosystem in every corner of the world.",
-                    border: "rgba(99,102,241,0.3)", accent: "#818cf8", wide: true,
-                    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.9)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  },
-                  {
-                    num: "02", tag: "AI Platform", name: "DAGGPT", desc: "Multi-module AI platform. Free full access for all ambassadors — replacing multiple AI subscriptions in one place.",
-                    border: "rgba(96,165,250,0.25)", accent: "#60a5fa", wide: false,
-                    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-                  },
-                  {
-                    num: "03", tag: "Blockchain", name: "DAGChain", desc: "AI-native Layer-1 blockchain. The infrastructure powering the entire ecosystem — built for the next generation of decentralized apps.",
-                    border: "rgba(167,139,250,0.25)", accent: "#a78bfa", wide: false,
-                    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                  },
-                ].map((c, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.8, delay: i * 0.13, ease: [0.22, 1, 0.36, 1] }}
-                    whileHover={{ y: -6 }}
-                    style={{ gridColumn: c.wide ? "1 / 2" : "auto", background: "rgba(255,255,255,0.03)", border: `1px solid ${c.border}`, borderRadius: "24px", padding: c.wide ? "44px" : "32px", minHeight: c.wide ? "320px" : "auto", position: "relative", overflow: "hidden", cursor: "default", backdropFilter: "blur(20px)" }}
-                  >
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(to right, transparent, ${c.accent}40, transparent)` }} />
-                    <div style={{ width: "44px", height: "44px", borderRadius: "14px", background: `${c.accent}15`, border: `1px solid ${c.accent}25`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "24px" }}>
-                      {c.icon}
-                    </div>
-                    <p style={{ margin: "0 0 6px", fontSize: "10px", fontWeight: 800, color: `${c.accent}80`, letterSpacing: "0.12em", textTransform: "uppercase" }}>{c.num} — {c.tag}</p>
-                    <h3 style={{ margin: "0 0 14px", fontSize: c.wide ? "30px" : "22px", fontWeight: 900, color: "#fff", letterSpacing: "-1px" }}>{c.name}</h3>
-                    <p style={{ margin: 0, fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.85 }}>{c.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════
-              WHO CAN APPLY — WHITE
-          ═══════════════════════════════════════════ */}
-          <section style={{ background: "#fff", padding: "100px 72px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", right: "-60px", top: "50%", transform: "translateY(-50%)", fontSize: "380px", fontWeight: 900, color: "transparent", WebkitTextStroke: "1px rgba(99,102,241,0.04)", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>02</div>
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                  <div style={{ width: "32px", height: "1px", background: "#6366f1" }} />
-                  <span style={{ fontSize: "11px", fontWeight: 800, color: "#6366f1", letterSpacing: "0.12em", textTransform: "uppercase" }}>Who Can Apply</span>
+                  <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
+                  {c}
                 </div>
-              </motion.div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "56px", flexWrap: "wrap", gap: "32px" }}>
-                <motion.h2 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} style={{ margin: 0, fontSize: "clamp(36px, 4.5vw, 56px)", fontWeight: 900, letterSpacing: "-2.5px", lineHeight: 1, color: "#0a0a0a" }}>
-                  Built for creators<br />and builders.
-                </motion.h2>
-                <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} style={{ margin: 0, fontSize: "15px", color: "#6b7280", lineHeight: 1.9, maxWidth: "280px" }}>
-                  We welcome passionate voices who can tell the AI and Web3 story in their language.
-                </motion.p>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px", marginBottom: "48px" }}>
-                {[
-                  { title: "YouTubers", desc: "Long-form video creators in AI, crypto & tech", accent: "#ef4444", bg: "rgba(239,68,68,0.07)" },
-                  { title: "Instagram Creators", desc: "Visual storytellers with engaged communities", accent: "#ec4899", bg: "rgba(236,72,153,0.07)" },
-                  { title: "AI Educators", desc: "Experts simplifying AI for mainstream audiences", accent: "#6366f1", bg: "rgba(99,102,241,0.07)" },
-                  { title: "Web3 Influencers", desc: "Voices shaping decentralized tech adoption", accent: "#8b5cf6", bg: "rgba(139,92,246,0.07)" },
-                  { title: "Blockchain Analysts", desc: "Research-driven content on Layer-1 ecosystems", accent: "#06b6d4", bg: "rgba(6,182,212,0.07)" },
-                  { title: "Facebook Creators", desc: "Community builders with strong regional reach", accent: "#3b82f6", bg: "rgba(59,130,246,0.07)" },
-                  { title: "Tech Leaders", desc: "Forum moderators and developer advocates", accent: "#10b981", bg: "rgba(16,185,129,0.07)" },
-                  { title: "Regional Language", desc: "Local-language voices driving global adoption", accent: "#f59e0b", bg: "rgba(245,158,11,0.07)" },
-                ].map((c, i) => (
-                  <motion.div key={i}
-                    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                    whileHover={{ y: -5, boxShadow: "0 20px 48px rgba(0,0,0,0.09)" }}
-                    style={{ background: "#fff", borderRadius: "20px", padding: "22px 20px", border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 4px 16px rgba(0,0,0,0.04)", cursor: "default" }}
-                  >
-                    <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: c.bg, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px" }}>
-                      <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: c.accent }} />
-                    </div>
-                    <p style={{ margin: "0 0 5px", fontSize: "13px", fontWeight: 800, color: "#0a0a0a" }}>{c.title}</p>
-                    <p style={{ margin: 0, fontSize: "11px", color: "#9ca3af", lineHeight: 1.65 }}>{c.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* 3 requirements */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", border: "1px solid rgba(0,0,0,0.07)", borderRadius: "24px", overflow: "hidden" }}>
-                {[
-                  { n: "01", title: "Active Audience", desc: "Minimum 1,000 engaged followers across any channel." },
-                  { n: "02", title: "Consistent Creator", desc: "Established publishing history with a real community voice." },
-                  { n: "03", title: "Clear Communicator", desc: "Ability to explain AI or blockchain clearly in your language." },
-                ].map((r, i) => (
-                  <motion.div key={i}
-                    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    transition={{ duration: 0.7, delay: i * 0.1 }}
-                    style={{ padding: "32px 28px", borderRight: i < 2 ? "1px solid rgba(0,0,0,0.07)" : "none", transition: "background 0.25s" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.025)"}
-                    onMouseLeave={e => e.currentTarget.style.background = ""}
-                  >
-                    <p style={{ margin: "0 0 12px", fontSize: "40px", fontWeight: 900, color: "rgba(0,0,0,0.05)", letterSpacing: "-2px" }}>{r.n}</p>
-                    <p style={{ margin: "0 0 7px", fontSize: "15px", fontWeight: 800, color: "#0a0a0a" }}>{r.title}</p>
-                    <p style={{ margin: 0, fontSize: "13px", color: "#9ca3af", lineHeight: 1.85 }}>{r.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
+              ))}
             </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════
-              BENEFITS — WARM OFF-WHITE
-          ═══════════════════════════════════════════ */}
-          <section style={{ background: "#faf9f7", padding: "100px 72px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", left: "-60px", top: "50%", transform: "translateY(-50%)", fontSize: "380px", fontWeight: 900, color: "transparent", WebkitTextStroke: "1px rgba(99,102,241,0.04)", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>03</div>
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                  <div style={{ width: "32px", height: "1px", background: "#6366f1" }} />
-                  <span style={{ fontSize: "11px", fontWeight: 800, color: "#6366f1", letterSpacing: "0.12em", textTransform: "uppercase" }}>The Rewards</span>
-                </div>
-              </motion.div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "60px", flexWrap: "wrap", gap: "32px" }}>
-                <motion.h2 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} style={{ margin: 0, fontSize: "clamp(36px, 4.5vw, 56px)", fontWeight: 900, letterSpacing: "-2.5px", lineHeight: 1, color: "#0a0a0a" }}>
-                  A unified<br />reward network.
-                </motion.h2>
-                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.3 }}>
-                  <MagneticButton onClick={() => setFormOpen(true)} variant="primary">Apply Now →</MagneticButton>
-                </motion.div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "start" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                  {[
-                    { title: "Free DAGGPT", metric: "10+ AI Modules", accent: "#6366f1", bg: "linear-gradient(145deg,#f5f3ff,#ede9fe)", border: "rgba(196,181,254,0.4)", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>, desc: "Full access to DAGGPT's multi-module AI — replaces multiple subscriptions." },
-                    { title: "Referral Earnings", metric: "Real Crypto", accent: "#3b82f6", bg: "linear-gradient(145deg,#eff6ff,#dbeafe)", border: "rgba(147,197,253,0.4)", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>, desc: "Earn based on verified ecosystem activity via your referral link." },
-                    { title: "DAG Points", metric: "Redeemable", accent: "#ec4899", bg: "linear-gradient(145deg,#fdf2f8,#fce7f3)", border: "rgba(249,168,212,0.4)", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ec4899" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>, desc: "Points redeemable for GasCoin, credits, and premium feature access." },
-                    { title: "Verified Status", metric: "Official Badge", accent: "#10b981", bg: "linear-gradient(145deg,#f0fdf4,#d1fae5)", border: "rgba(110,231,183,0.4)", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>, desc: "Official badge, featured profile, and exclusive ambassador events." },
-                  ].map((b, i) => (
-                    <motion.div key={i}
-                      initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                      transition={{ duration: 0.7, delay: i * 0.1 }}
-                      whileHover={{ y: -5, boxShadow: "0 24px 48px rgba(0,0,0,0.09)" }}
-                      style={{ background: b.bg, borderRadius: "22px", padding: "26px", border: `1px solid ${b.border}`, boxShadow: "0 8px 24px rgba(0,0,0,0.04)", cursor: "default" }}
-                    >
-                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: "rgba(255,255,255,0.7)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>{b.icon}</div>
-                      <p style={{ margin: "0 0 2px", fontSize: "20px", fontWeight: 900, color: b.accent, letterSpacing: "-0.6px" }}>{b.metric}</p>
-                      <p style={{ margin: "0 0 8px", fontSize: "13px", fontWeight: 800, color: "#0a0a0a" }}>{b.title}</p>
-                      <p style={{ margin: 0, fontSize: "12px", color: "#6b7280", lineHeight: 1.75 }}>{b.desc}</p>
-                    </motion.div>
-                  ))}
-                </div>
-                <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
-                  <RewardDashboard />
-                </motion.div>
-              </div>
-            </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════
-              TIERS — FULL DARK (horizontal rows)
-          ═══════════════════════════════════════════ */}
-          <section id="amb-tiers" style={{ background: "#08081a", padding: "100px 72px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)", backgroundSize: "72px 72px", pointerEvents: "none" }} />
-            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "800px", height: "600px", background: "radial-gradient(ellipse, rgba(99,102,241,0.1) 0%, transparent 65%)", pointerEvents: "none" }} />
-
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: "center", marginBottom: "16px" }}>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "32px", height: "1px", background: "rgba(99,102,241,0.8)" }} />
-                  <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(165,180,252,0.8)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Select Your Path</span>
-                  <div style={{ width: "32px", height: "1px", background: "rgba(99,102,241,0.8)" }} />
-                </div>
-              </motion.div>
-              <motion.h2 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} style={{ margin: "0 auto 12px", fontSize: "clamp(36px, 4.5vw, 56px)", fontWeight: 900, letterSpacing: "-2.5px", lineHeight: 1, color: "#fff", textAlign: "center" }}>
-                Ambassador Tiers
-              </motion.h2>
-              <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ margin: "0 auto 64px", fontSize: "15px", color: "rgba(255,255,255,0.35)", textAlign: "center" }}>
-                Tiers reviewed and upgraded based on performance and growth.
-              </motion.p>
-
-              {/* Horizontal tier rows */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                {[
-                  {
-                    level: "Silver", range: "1,000+ followers", accent: "#94a3b8", bg: "rgba(148,163,184,0.06)", border: "rgba(148,163,184,0.15)",
-                    perks: ["Standard referral rewards", "Free DAGGPT access", "Ambassador badge", "Private community", "Monthly report"],
-                  },
-                  {
-                    level: "Gold", range: "50,000+ followers", accent: "#fbbf24", bg: "rgba(251,191,36,0.06)", border: "rgba(251,191,36,0.2)",
-                    perks: ["Enhanced reward rate", "Performance bonuses", "Featured profile", "Priority support", "Early ecosystem access", "Account manager"],
-                  },
-                  {
-                    level: "Platinum", range: "100,000+ followers", accent: "#a78bfa", bg: "rgba(99,102,241,0.1)", border: "rgba(167,139,250,0.35)", featured: true,
-                    perks: ["Custom partnership terms", "Regional leadership", "Revenue-share", "Executive access", "Co-branded campaigns", "Governance input"],
-                  },
-                ].map((t, i) => (
-                  <motion.div key={i}
-                    initial={{ opacity: 0, x: -32 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-30px" }}
-                    transition={{ duration: 0.75, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                    whileHover={{ x: 6 }}
-                    style={{ display: "grid", gridTemplateColumns: "200px 1fr auto", alignItems: "center", gap: "40px", background: t.bg, border: `1px solid ${t.border}`, borderRadius: "20px", padding: "28px 36px", position: "relative", overflow: "hidden", cursor: "default" }}
-                  >
-                    {t.featured && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(to right, transparent, #a78bfa, #67e8f9, transparent)" }} />}
-                    {/* Level name */}
-                    <div>
-                      <p style={{ margin: "0 0 4px", fontSize: "11px", fontWeight: 800, color: t.accent, letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.7 }}>{t.range}</p>
-                      <h3 style={{ margin: 0, fontSize: "30px", fontWeight: 900, color: t.featured ? t.accent : "#fff", letterSpacing: "-1.2px" }}>{t.level}</h3>
-                    </div>
-                    {/* Perks chips */}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                      {t.perks.map((p, j) => (
-                        <span key={j} style={{ background: `${t.accent}15`, border: `1px solid ${t.accent}25`, borderRadius: "100px", padding: "5px 12px", fontSize: "12px", color: `${t.accent}dd`, fontWeight: 600 }}>{p}</span>
-                      ))}
-                    </div>
-                    {/* CTA */}
-                    <button
-                      onClick={() => setFormOpen(true)}
-                      style={{ whiteSpace: "nowrap", background: t.featured ? t.accent : "transparent", color: t.featured ? "#fff" : t.accent, border: `1px solid ${t.accent}50`, borderRadius: "100px", padding: "11px 22px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
-                    >
-                      Apply →
-                    </button>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════
-              FAQ — WHITE
-          ═══════════════════════════════════════════ */}
-          <section style={{ background: "#fff", padding: "100px 72px" }}>
-            <div style={{ maxWidth: "760px", margin: "0 auto" }}>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: "16px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "32px", height: "1px", background: "#6366f1" }} />
-                  <span style={{ fontSize: "11px", fontWeight: 800, color: "#6366f1", letterSpacing: "0.12em", textTransform: "uppercase" }}>FAQ</span>
-                </div>
-              </motion.div>
-              <motion.h2 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} style={{ margin: "0 0 52px", fontSize: "clamp(36px, 4.5vw, 56px)", fontWeight: 900, letterSpacing: "-2.5px", lineHeight: 1, color: "#0a0a0a" }}>
-                Common<br />Questions
-              </motion.h2>
-              {faqs.map((f, i) => <FAQItem key={i} q={f.q} a={f.a} i={i} />)}
-              <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }} style={{ marginTop: "36px", fontSize: "12px", color: "#c4c9d4", lineHeight: 2 }}>
-                COMPLIANCE: The DAG Army Ambassador Program is a referral-based marketing initiative — not an investment scheme. All rewards are conditional on verified product usage and activity. Full Terms &amp; Conditions apply.
-              </motion.p>
-            </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════
-              CTA — DEEP VIOLET GRADIENT
-          ═══════════════════════════════════════════ */}
-          <section style={{ background: "linear-gradient(145deg, #1e1b4b 0%, #312e81 40%, #1e1b4b 100%)", padding: "120px 72px", textAlign: "center", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(165,180,252,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(165,180,252,0.05) 1px, transparent 1px)", backgroundSize: "64px 64px", pointerEvents: "none" }} />
-            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "900px", height: "600px", background: "radial-gradient(ellipse, rgba(99,102,241,0.3) 0%, transparent 65%)", pointerEvents: "none" }} />
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(165,180,252,0.3), transparent)" }} />
-
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: "24px" }}>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "32px", height: "1px", background: "rgba(165,180,252,0.6)" }} />
-                  <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(165,180,252,0.7)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Join the Movement</span>
-                  <div style={{ width: "32px", height: "1px", background: "rgba(165,180,252,0.6)" }} />
-                </div>
-              </motion.div>
-              <motion.h2 initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }} style={{ margin: "0 auto 20px", fontSize: "clamp(40px, 5.5vw, 72px)", fontWeight: 900, letterSpacing: "-3.5px", lineHeight: 0.95, color: "#fff", maxWidth: "700px" }}>
-                Join the DAG Army<br />
-                <span style={{ background: "linear-gradient(125deg, #818cf8, #a78bfa, #67e8f9)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Ambassador Program</span>
-              </motion.h2>
-              <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ margin: "0 auto 48px", fontSize: "16px", color: "rgba(255,255,255,0.45)", lineHeight: 1.9, maxWidth: "440px" }}>
-                Early contributors gain early positioning. Be part of the infrastructure shift combining AI and blockchain at global scale.
-              </motion.p>
-              <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-                <button
-                  onClick={() => setFormOpen(true)}
-                  style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#fff", color: "#4338ca", border: "none", borderRadius: "100px", padding: "15px 32px", fontSize: "15px", fontWeight: 800, cursor: "pointer", boxShadow: "0 0 60px rgba(255,255,255,0.2)", letterSpacing: "-0.02em", fontFamily: "inherit" }}
-                >
-                  Apply Now — It&apos;s Free →
-                </button>
-                <a
-                  href="mailto:hr@dagchain.network?subject=Ambassador Program"
-                  style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.8)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "100px", padding: "14px 28px", fontSize: "14px", fontWeight: 600, cursor: "pointer", letterSpacing: "-0.01em", textDecoration: "none", fontFamily: "inherit" }}
-                >
-                  Contact the Team
-                </a>
-              </motion.div>
-            </div>
-          </section>
-
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* ═══════════════════════════════════════════
-          APPLY MODAL
-      ═══════════════════════════════════════════ */}
-      <AnimatePresence>
-        {formOpen && !success && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={(e) => e.target === e.currentTarget && setFormOpen(false)}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 99999, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", backdropFilter: "blur(14px)", overflow: "auto" }}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 24 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 24 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              style={{ width: "100%", maxWidth: "780px", position: "relative" }}
-            >
-              <button onClick={() => setFormOpen(false)} style={{ position: "absolute", top: "-14px", right: "12px", background: "#fff", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "10px", width: "36px", height: "36px", color: "#6b7280", cursor: "pointer", fontSize: "20px", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>×</button>
-              <GlassTerminalForm onSuccess={() => { setFormOpen(false); setSuccess(true); }} />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ═══ WHY JOIN — FULL WIDTH BANNER ═════════════════════ */}
+      <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          <div className="amb-reveal">
+            <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Opportunity</p>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
+              Early contributors benefit from early positioning.
+            </h2>
+            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
+              AI and blockchain are reshaping global infrastructure. As a DAG Army Ambassador, you grow alongside a Layer 1 network from day one.
+            </p>
+            <CTABtn dark onClick={() => setModal(true)}>Apply Now — Free <Ic.arrow /></CTABtn>
+          </div>
+          <div className="amb-grid" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              'Build authority in AI + Web3',
+              'Earn performance-based rewards',
+              'Early access to ecosystem innovations',
+              'Grow with an expanding Layer 1 network',
+              'Become part of a long-term movement',
+              'Expand your global network',
+            ].map((r, i) => (
+              <div key={i} className="amb-card" style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '16px 18px', background: '#fff', border: '1px solid #eee', borderRadius: '12px', transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.borderColor = '#ddd'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.05)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.borderColor = '#eee'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#fff' }}>
+                  <Ic.check />
+                </div>
+                <span style={{ fontSize: '14px', fontWeight: '500', color: '#333' }}>{r}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* SUCCESS MODAL */}
-      <AnimatePresence>
-        {success && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={() => setSuccess(false)}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 99999, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", backdropFilter: "blur(14px)" }}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              style={{ background: "#fff", borderRadius: "32px", padding: "60px 52px", textAlign: "center", maxWidth: "440px", width: "100%", boxShadow: "0 40px 80px rgba(0,0,0,0.2)" }}
-            >
-              <div style={{ width: "60px", height: "60px", borderRadius: "20px", background: "linear-gradient(135deg,#ede9fe,#ddd6fe)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 28px" }}>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-                <div style={{ width: "24px", height: "1px", background: "#6366f1" }} />
-                <span style={{ fontSize: "10px", fontWeight: 800, color: "#6366f1", letterSpacing: "0.1em", textTransform: "uppercase" }}>Application Received</span>
-                <div style={{ width: "24px", height: "1px", background: "#6366f1" }} />
-              </div>
-              <h2 style={{ margin: "0 0 14px", fontSize: "28px", fontWeight: 900, color: "#0a0a0a", letterSpacing: "-1px" }}>Enrollment Confirmed</h2>
-              <p style={{ margin: "0 0 36px", color: "#9ca3af", fontSize: "14px", lineHeight: 1.9 }}>Our team will review your application personally and reach out within 5–10 business days.</p>
-              <MagneticButton onClick={() => setSuccess(false)} variant="primary" style={{ width: "100%", justifyContent: "center" }}>Done</MagneticButton>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ═══ FAQ ══════════════════════════════════════════════ */}
+      <section style={{ maxWidth: '720px', margin: '0 auto', padding: '120px 24px' }}>
+        <div className="amb-reveal" style={{ marginBottom: '56px' }}>
+          <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>FAQ</p>
+          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0 }}>Frequently Asked Questions</h2>
+        </div>
+        <div className="amb-reveal">
+          {faqs.map((f, i) => <FAQ key={i} q={f.q} a={f.a} />)}
+        </div>
+      </section>
+
+      {/* ═══ COMPLIANCE ════════════════════════════════════════ */}
+      <section style={{ borderTop: '1px solid #f0f0f0', padding: '40px 24px' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: '11px', color: '#bbb', lineHeight: 1.9, margin: 0 }}>
+            <strong style={{ color: '#999' }}>Compliance Notice:</strong> The DAG Army Ambassador Program is a referral-based marketing initiative promoting ecosystem products and services. It is not an investment scheme, does not guarantee income, and all rewards depend on verified product usage. Full Terms &amp; Conditions apply.
+          </p>
+        </div>
+      </section>
+
+      {/* ═══ FINAL CTA ════════════════════════════════════════ */}
+      <section style={{ padding: '80px 24px 100px', textAlign: 'center', background: '#fff', borderTop: '1px solid #f0f0f0' }}>
+        <div style={{ maxWidth: '560px', margin: '0 auto' }} className="amb-reveal">
+          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: '0 0 16px' }}>
+            Ready to make an impact?
+          </h2>
+          <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.75, margin: '0 0 36px' }}>
+            Applications are reviewed personally by our team. Shortlisted candidates are contacted within 5–10 business days.
+          </p>
+          <CTABtn dark onClick={() => setModal(true)}>
+            Submit Application <Ic.arrow />
+          </CTABtn>
+        </div>
+      </section>
+
+      <style>{`
+        @keyframes ambScrollLine { 0% { transform: scaleY(0); transform-origin: top; opacity: 1; } 50% { transform: scaleY(1); transform-origin: top; opacity: 1; } 100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; } }
+        @media (max-width: 768px) {
+          .amb-two-col { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .amb-three-col { grid-template-columns: 1fr !important; }
+          .amb-stats-row { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+      `}</style>
+
+      {modal && <ApplyModal onClose={() => setModal(false)} onSuccess={() => { setModal(false); setSuccess(true); }} />}
+      {success && <SuccessModal onClose={() => setSuccess(false)} />}
     </div>
   );
 }

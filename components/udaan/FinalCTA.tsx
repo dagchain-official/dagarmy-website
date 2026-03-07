@@ -36,11 +36,10 @@ function StatCard({ value, label, index }: { value: string; label: string; index
       initial={{ opacity: 0, y: 20, scale: 0.92 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.55, delay: index * 0.08 }}
-      className="surface"
-      style={{ padding: 28, textAlign: 'center' }}
+      style={{ background: '#fff', border: '1px solid #f0f0f0', borderRadius: 16, padding: 28, textAlign: 'center' }}
     >
-      <div className="grad-v" style={{ fontSize: '29px', fontWeight: 900, letterSpacing: '-0.04em', marginBottom: 6 }}>{value}</div>
-      <div className="t-label">{label}</div>
+      <div style={{ fontSize: '29px', fontWeight: 900, letterSpacing: '-0.04em', marginBottom: 6, color: '#111' }}>{value}</div>
+      <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#999' }}>{label}</div>
     </motion.div>
   );
 }
@@ -66,8 +65,7 @@ function HeadlineLine({ text, accent, orangeWord, index }: { text: string; accen
         initial={{ y: '110%', skewY: 2 }}
         animate={inView ? { y: '0%', skewY: 0 } : {}}
         transition={{ duration: 0.85, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-        style={{ display: 'inline-block', lineHeight: 0.92 }}
-        className={accent ? 'grad-v' : ''}
+        style={{ display: 'inline-block', lineHeight: 0.92, color: accent ? '#888' : 'inherit' }}
       >
         {content}
       </motion.div>
@@ -81,22 +79,22 @@ export default function FinalCTA() {
   const parallaxY = useTransform(scrollYProgress, [0, 1], ['-4%', '4%']);
 
   return (
-    <section ref={sRef} style={{ background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
+    <section ref={sRef} style={{ background: '#fff', position: 'relative', overflow: 'hidden' }}>
 
       {/* ── Marquee ticker ── */}
       <div style={{
-        borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)',
-        background: 'var(--bg2)', padding: '14px 0', overflow: 'hidden',
+        borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0',
+        background: '#fafafa', padding: '14px 0', overflow: 'hidden',
       }}>
         <div className="marquee-wrap">
           <div className="marquee-track">
             {TICKER.map((item, i) => (
               <span key={i} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 12,
-                margin: '0 20px', fontSize: '13px', fontWeight: 600, color: 'var(--sub)',
+                margin: '0 20px', fontSize: '13px', fontWeight: 600, color: '#888',
               }}>
                 {item}
-                <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--v)', display: 'inline-block' }} />
+                <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#111', display: 'inline-block' }} />
               </span>
             ))}
           </div>
@@ -125,7 +123,7 @@ export default function FinalCTA() {
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ ease }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }}
               style={{ display: 'flex', justifyContent: 'center', marginBottom: 40 }}
             >
             </motion.div>
@@ -136,7 +134,7 @@ export default function FinalCTA() {
               fontWeight: 900,
               letterSpacing: '-0.05em',
               lineHeight: 0.92,
-              color: 'var(--ink)',
+              color: '#111',
             }}>
               {HEADLINES.map(({ text, accent, orangeWord }, i) => (
                 <HeadlineLine key={text} text={text} accent={accent} orangeWord={orangeWord} index={i} />
@@ -148,9 +146,9 @@ export default function FinalCTA() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, ease }}
+              transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }}
               style={{
-                color: 'var(--sub)', fontSize: '18px',
+                color: '#666', fontSize: '18px',
                 marginTop: 40, maxWidth: 560,
                 marginLeft: 'auto', marginRight: 'auto',
                 lineHeight: 1.65,
@@ -179,7 +177,7 @@ export default function FinalCTA() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2, ease }}
+            transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }}
             style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 }}
           >
             <motion.button
@@ -209,8 +207,8 @@ export default function FinalCTA() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4, ease }}
-            style={{ textAlign: 'center', color: 'var(--sub2)', fontSize: '14px', marginTop: 32 }}
+            transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }}
+            style={{ textAlign: 'center', color: '#aaa', fontSize: '14px', marginTop: 32 }}
           >
             100,000 strong. By 2030.
           </motion.p>
