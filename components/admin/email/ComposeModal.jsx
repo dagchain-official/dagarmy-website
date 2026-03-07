@@ -349,12 +349,17 @@ export default function ComposeModal({
   // ── Full compose window ─────────────────────────────────────────────────────
   return (
     <div style={{
-      position: 'fixed', bottom: 0, right: '32px', width: '580px',
+      position: 'fixed', bottom: 0,
+      right: 'clamp(0px, 2vw, 32px)',
+      width: 'min(580px, 100vw)',
       background: '#fff', borderRadius: '16px 16px 0 0',
       boxShadow: '0 -8px 60px rgba(99,102,241,0.15), 0 -2px 20px rgba(0,0,0,0.08)',
       zIndex: 9999,
-      display: 'flex', flexDirection: 'column', maxHeight: '84vh',
+      display: 'flex', flexDirection: 'column',
+      height: 'min(84vh, 100dvh)',
+      maxHeight: '100dvh',
       border: '1.5px solid #e8edf5', borderBottom: 'none',
+      boxSizing: 'border-box',
     }}>
 
       {/* Title bar */}
@@ -558,8 +563,8 @@ export default function ComposeModal({
         suppressContentEditableWarning
         data-placeholder="Write your message here..."
         style={{
-          flex: 1, padding: '18px 20px', fontSize: '14px', color: '#0f172a',
-          outline: 'none', overflowY: 'auto', minHeight: '200px',
+          flex: 1, minHeight: 0, padding: '18px 20px', fontSize: '14px', color: '#0f172a',
+          outline: 'none', overflowY: 'auto',
           lineHeight: '1.7', background: '#fff',
         }}
       />
@@ -606,17 +611,17 @@ export default function ComposeModal({
 
       {/* Footer */}
       <div style={{
-        padding: '11px 18px', borderTop: '1px solid #f1f5f9',
+        padding: '10px 14px', borderTop: '1px solid #f1f5f9',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        flexShrink: 0, background: '#fff', gap: '10px',
+        flexShrink: 0, background: '#fff', gap: '8px', flexWrap: 'wrap',
       }}>
-        <div style={{ display: 'flex', gap: '7px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
           <button
             onClick={handleSend}
             disabled={sending}
             style={{
               display: 'flex', alignItems: 'center', gap: '7px',
-              padding: '9px 22px',
+              padding: '8px 18px',
               background: sending ? '#94a3b8' : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
               border: 'none', borderRadius: '10px', color: '#fff',
               fontSize: '13px', fontWeight: '700',
@@ -639,7 +644,7 @@ export default function ComposeModal({
               }}
               style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
-                padding: '9px 13px', borderRadius: '10px',
+                padding: '8px 11px', borderRadius: '10px',
                 border: `1.5px solid ${sigEnabled ? '#a5b4fc' : '#e2e8f0'}`,
                 background: sigEnabled ? '#eef2ff' : '#f8faff',
                 color: sigEnabled ? '#6366f1' : '#94a3b8',
@@ -661,7 +666,7 @@ export default function ComposeModal({
             onClick={() => fileInputRef.current?.click()}
             style={{
               display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '9px 13px',
+              padding: '8px 11px',
               background: attachments.length > 0 ? '#eef2ff' : '#f8faff',
               border: `1.5px solid ${attachments.length > 0 ? '#a5b4fc' : '#e8edf5'}`,
               borderRadius: '10px',
@@ -684,7 +689,7 @@ export default function ComposeModal({
             disabled={enhancing}
             style={{
               display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '9px 13px',
+              padding: '8px 11px',
               background: enhancing ? '#eef2ff' : '#f8faff',
               border: '1.5px solid #c7d2fe',
               borderRadius: '10px',
