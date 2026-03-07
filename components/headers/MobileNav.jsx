@@ -26,6 +26,7 @@ export default function MobileNav() {
           <li><a href="/about">About</a></li>
           <li><a href="/courses">Courses</a></li>
           <li><a href="/careers">Careers</a></li>
+          <li><a href="/ambassador">Ambassador</a></li>
           <li><a href="/udaan">Udaan</a></li>
           <li><a href="/jobs">Jobs</a></li>
           <li><a href="/mentorship">Mentorship</a></li>
