@@ -16,7 +16,7 @@ export default function GlassTerminalForm({ onSuccess }) {
   const submit = async (e) => {
     e.preventDefault();
     if (!form.full_name || !form.email || !form.country) {
-      setErr("IDENTIFIER, EMAIL and COUNTRY fields are required."); return;
+      setErr("Full name, email and country are required."); return;
     }
     setLoading(true); setErr("");
     try {
@@ -31,147 +31,117 @@ export default function GlassTerminalForm({ onSuccess }) {
   };
 
   const fields = [
-    { id: "full_name",      label: "IDENTIFIER",       placeholder: "FULL_NAME...",           type: "text" },
-    { id: "email",          label: "SECURE_CHANNEL",   placeholder: "EMAIL_ADDRESS...",       type: "email" },
-    { id: "country",        label: "GEO_NODE",         placeholder: "COUNTRY_OF_ORIGIN...",   type: "text" },
-    { id: "telegram",       label: "COMM_HANDLE",      placeholder: "TELEGRAM/@HANDLE...",    type: "text" },
-    { id: "social_links",   label: "NETWORK_LINKS",    placeholder: "YT/IG/FB/X URLS...",     type: "text" },
-    { id: "follower_count", label: "REACH_METRIC",     placeholder: "TOTAL_FOLLOWERS...",     type: "text" },
-    { id: "content_niche",  label: "SIGNAL_TYPE",      placeholder: "AI / WEB3 / FINANCE...", type: "text" },
+    { id: "full_name",      label: "Full Name",         placeholder: "Your full name",          type: "text" },
+    { id: "email",          label: "Email Address",     placeholder: "you@example.com",         type: "email" },
+    { id: "country",        label: "Country",           placeholder: "Country of origin",       type: "text" },
+    { id: "telegram",       label: "Telegram Handle",  placeholder: "@yourhandle (optional)",  type: "text" },
+    { id: "social_links",   label: "Social Links",      placeholder: "YT / IG / FB / X URLs",   type: "text" },
+    { id: "follower_count", label: "Follower Count",    placeholder: "e.g. 15,000",             type: "text" },
+    { id: "content_niche",  label: "Content Niche",     placeholder: "AI / Web3 / Finance...",  type: "text" },
   ];
 
-  const inputStyle = {
-    width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "10px", padding: "12px 14px", fontFamily: "monospace", fontSize: "13px",
-    color: "#e5e5e5", outline: "none", boxSizing: "border-box",
-    transition: "border-color 0.2s, background 0.2s",
-    letterSpacing: "0.03em",
+  const inp = (id) => ({
+    width: "100%", background: focused === id ? "#fafaff" : "#f8f9fb",
+    border: focused === id ? "1.5px solid #6366f1" : "1.5px solid #e5e7eb",
+    borderRadius: "12px", padding: "11px 14px", fontSize: "14px",
+    color: "#111", outline: "none", boxSizing: "border-box",
+    transition: "all 0.2s", fontFamily: "inherit",
+    boxShadow: focused === id ? "0 0 0 3px rgba(99,102,241,0.1)" : "none",
+  });
+
+  const lbl = {
+    display: "block", fontSize: "11px", fontWeight: 700, color: "#6b7280",
+    marginBottom: "6px", letterSpacing: "0.04em", textTransform: "uppercase",
   };
-  const inputFocusStyle = { ...inputStyle, borderColor: "rgba(99,102,241,0.6)", background: "rgba(99,102,241,0.06)" };
 
   return (
-    <div style={{
-      position: "relative", padding: "1.5px",
-      background: "linear-gradient(135deg, rgba(99,102,241,0.4), rgba(139,92,246,0.2), rgba(6,182,212,0.3))",
-      borderRadius: "22px",
-    }}>
-      <div style={{
-        background: "rgba(5,5,5,0.92)", borderRadius: "21px",
-        backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
-        padding: "32px",
-      }}>
-        {/* Terminal header */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "28px", paddingBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-          <div style={{ display: "flex", gap: "5px" }}>
-            <div style={{ width: "11px", height: "11px", borderRadius: "50%", background: "rgba(239,68,68,0.55)" }} />
-            <div style={{ width: "11px", height: "11px", borderRadius: "50%", background: "rgba(234,179,8,0.55)" }} />
-            <div style={{ width: "11px", height: "11px", borderRadius: "50%", background: "rgba(34,197,94,0.55)" }} />
-          </div>
-          <span style={{ marginLeft: "10px", fontFamily: "monospace", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "2.5px", textTransform: "uppercase" }}>
-            SECURE_ENROLLMENT_PROTOCOL_V3.0
-          </span>
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "5px" }}>
-            <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 8px rgba(34,197,94,0.8)", animation: "blink 2s ease-in-out infinite" }} />
-            <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(34,197,94,0.6)", letterSpacing: "1px" }}>SECURE</span>
-          </div>
+    <div style={{ background: "#ffffff", borderRadius: "24px", padding: "40px", boxShadow: "0 24px 64px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.06)" }}>
+      {/* Header */}
+      <div style={{ marginBottom: "32px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(99,102,241,0.08)", borderRadius: "100px", padding: "6px 14px", marginBottom: "16px" }}>
+          <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#6366f1" }} />
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "#6366f1", letterSpacing: "0.06em", textTransform: "uppercase" }}>Ambassador Application</span>
+        </div>
+        <h2 style={{ margin: "0 0 8px", fontSize: "26px", fontWeight: 900, color: "#0f0f0f", letterSpacing: "-0.8px" }}>Apply to the Program</h2>
+        <p style={{ margin: 0, fontSize: "14px", color: "#9ca3af", lineHeight: 1.7 }}>All applications are reviewed personally. We reply to shortlisted candidates within 5–10 business days.</p>
+      </div>
+
+      <form onSubmit={submit}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+          {fields.slice(0, 4).map((f) => (
+            <div key={f.id}>
+              <label style={lbl}>{f.label}</label>
+              <input
+                type={f.type}
+                value={form[f.id]}
+                onChange={set(f.id)}
+                placeholder={f.placeholder}
+                onFocus={() => setFocused(f.id)}
+                onBlur={() => setFocused(null)}
+                style={inp(f.id)}
+              />
+            </div>
+          ))}
         </div>
 
-        <form onSubmit={submit}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
-            {fields.slice(0, 4).map((f) => (
-              <div key={f.id} style={{ position: "relative" }}>
-                <label style={{ display: "block", fontFamily: "monospace", fontSize: "9px", color: focused === f.id ? "rgba(99,102,241,0.9)" : "rgba(99,102,241,0.5)", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "7px", transition: "color 0.2s" }}>
-                  {`> ${f.label}`}
-                </label>
-                <input
-                  type={f.type}
-                  value={form[f.id]}
-                  onChange={set(f.id)}
-                  placeholder={f.placeholder}
-                  onFocus={() => setFocused(f.id)}
-                  onBlur={() => setFocused(null)}
-                  style={focused === f.id ? inputFocusStyle : inputStyle}
-                />
-                <AnimatePresence>
-                  {focused === f.id && (
-                    <motion.div
-                      layoutId="inputGlow"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      style={{ position: "absolute", inset: 0, borderRadius: "10px", border: "1px solid rgba(99,102,241,0.5)", boxShadow: "0 0 20px rgba(99,102,241,0.15)", pointerEvents: "none", top: "auto", bottom: 0, height: "calc(100% - 24px)" }}
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+          {fields.slice(4).map((f) => (
+            <div key={f.id}>
+              <label style={lbl}>{f.label}</label>
+              <input
+                type={f.type}
+                value={form[f.id]}
+                onChange={set(f.id)}
+                placeholder={f.placeholder}
+                onFocus={() => setFocused(f.id)}
+                onBlur={() => setFocused(null)}
+                style={inp(f.id)}
+              />
+            </div>
+          ))}
+        </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "14px", marginBottom: "14px" }}>
-            {fields.slice(4).map((f) => (
-              <div key={f.id} style={{ position: "relative" }}>
-                <label style={{ display: "block", fontFamily: "monospace", fontSize: "9px", color: focused === f.id ? "rgba(99,102,241,0.9)" : "rgba(99,102,241,0.5)", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "7px", transition: "color 0.2s" }}>
-                  {`> ${f.label}`}
-                </label>
-                <input
-                  type={f.type}
-                  value={form[f.id]}
-                  onChange={set(f.id)}
-                  placeholder={f.placeholder}
-                  onFocus={() => setFocused(f.id)}
-                  onBlur={() => setFocused(null)}
-                  style={focused === f.id ? inputFocusStyle : inputStyle}
-                />
-              </div>
-            ))}
-          </div>
+        <div style={{ marginBottom: "20px" }}>
+          <label style={lbl}>Why DAG Army?</label>
+          <textarea
+            value={form.statement}
+            onChange={set("statement")}
+            placeholder="Tell us about your audience, your vision, and why you want to represent the ecosystem..."
+            rows={4}
+            onFocus={() => setFocused("statement")}
+            onBlur={() => setFocused(null)}
+            style={{ ...inp("statement"), resize: "vertical", lineHeight: 1.75 }}
+          />
+        </div>
 
-          {/* Mission statement */}
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", fontFamily: "monospace", fontSize: "9px", color: focused === "statement" ? "rgba(99,102,241,0.9)" : "rgba(99,102,241,0.5)", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "7px", transition: "color 0.2s" }}>
-              {`> MISSION_STATEMENT`}
-            </label>
-            <textarea
-              value={form.statement}
-              onChange={set("statement")}
-              placeholder="WHY DAG ARMY? DESCRIBE YOUR AUDIENCE AND VISION..."
-              rows={4}
-              onFocus={() => setFocused("statement")}
-              onBlur={() => setFocused(null)}
-              style={{ ...focused === "statement" ? inputFocusStyle : inputStyle, resize: "vertical", lineHeight: "1.7" }}
-            />
-          </div>
+        {err && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ marginBottom: "16px", padding: "12px 16px", background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)", borderRadius: "12px", fontSize: "13px", color: "#dc2626" }}>
+            {err}
+          </motion.div>
+        )}
 
-          {err && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              style={{ marginBottom: "16px", padding: "12px 16px", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: "10px", fontFamily: "monospace", fontSize: "12px", color: "rgba(239,68,68,0.8)" }}>
-              ERROR: {err}
-            </motion.div>
-          )}
+        <motion.button
+          type="submit"
+          disabled={loading}
+          whileHover={{ scale: 1.01, boxShadow: "0 8px 32px rgba(99,102,241,0.35)" }}
+          whileTap={{ scale: 0.99 }}
+          style={{
+            width: "100%", padding: "15px", background: loading ? "#a5b4fc" : "#6366f1",
+            border: "none", borderRadius: "14px", fontSize: "15px",
+            fontWeight: 700, color: "#fff", cursor: loading ? "not-allowed" : "pointer",
+            boxShadow: "0 4px 20px rgba(99,102,241,0.3)",
+            transition: "background 0.2s", letterSpacing: "-0.01em",
+          }}>
+          {loading ? "Submitting..." : "Submit Application →"}
+        </motion.button>
 
-          <motion.button
-            type="submit"
-            disabled={loading}
-            whileHover={{ scale: 1.01, boxShadow: "0 0 40px rgba(99,102,241,0.4)" }}
-            whileTap={{ scale: 0.99 }}
-            style={{
-              width: "100%", padding: "15px", background: loading ? "rgba(99,102,241,0.3)" : "rgba(99,102,241,0.9)",
-              border: "none", borderRadius: "12px", fontFamily: "monospace", fontSize: "13px",
-              fontWeight: 700, color: "#fff", cursor: loading ? "not-allowed" : "pointer",
-              letterSpacing: "2px", textTransform: "uppercase",
-              boxShadow: "0 0 20px rgba(99,102,241,0.3)",
-              transition: "background 0.2s",
-            }}>
-            {loading ? "INITIALIZING..." : "INITIALIZE_APPLICATION →"}
-          </motion.button>
-
-          <p style={{ margin: "12px 0 0", textAlign: "center", fontFamily: "monospace", fontSize: "10px", color: "rgba(255,255,255,0.18)", letterSpacing: "1px" }}>
-            APPLICATIONS_REVIEWED_WITHIN: 5–10_BUSINESS_DAYS
-          </p>
-        </form>
-      </div>
+        <p style={{ margin: "12px 0 0", textAlign: "center", fontSize: "12px", color: "#9ca3af" }}>
+          Applications reviewed within 5–10 business days. No fee required.
+        </p>
+      </form>
     </div>
   );
 }
