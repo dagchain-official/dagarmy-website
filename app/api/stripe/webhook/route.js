@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { sendEmail } from '@/lib/email/smtp-client';
+import { lieutenantUpgradeEmailTemplate } from '@/lib/email-templates';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -50,7 +52,7 @@ export async function POST(request) {
     // Check user is not already a lieutenant (idempotency guard)
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('id, tier')
+      .select('id, tier, email, full_name, username')
       .eq('id', userId)
       .single();
 
@@ -76,6 +78,16 @@ export async function POST(request) {
     }
 
     console.log(`Stripe webhook: upgraded user ${userId} to DAG LIEUTENANT`);
+
+    // Send lieutenant upgrade confirmation email (fire-and-forget)
+    if (user?.email) {
+      const displayName = user.full_name || user.username || 'Soldier';
+      sendEmail('support@dagchain.network', {
+        to: user.email,
+        subject: 'Congratulations! You are now a DAG Lieutenant',
+        html: lieutenantUpgradeEmailTemplate({ userName: displayName }),
+      }).catch(err => console.error('Stripe webhook: lieutenant email failed (non-blocking):', err));
+    }
 
     // Award referral upgrade points to upline (fire-and-forget)
     try {

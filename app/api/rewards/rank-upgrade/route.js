@@ -1,5 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { sendEmail } from '@/lib/email/smtp-client';
+import { rankAchievementEmailTemplate } from '@/lib/email-templates';
 
 /**
  * POST /api/rewards/rank-upgrade
@@ -30,7 +32,7 @@ export async function POST(request) {
     // Get user
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('id, tier, current_rank, total_points_earned, total_points_burned')
+      .select('id, email, full_name, username, tier, current_rank, total_points_earned, total_points_burned')
       .eq('email', user_email)
       .single();
 
@@ -103,6 +105,22 @@ export async function POST(request) {
     }
 
     const newAvailable = availablePoints - burnCost;
+
+    // Send rank achievement email (fire-and-forget)
+    if (user?.email) {
+      const displayName = user.full_name || user.username || 'Soldier';
+      sendEmail('support@dagchain.network', {
+        to: user.email,
+        subject: `You achieved ${nextRank} rank in DAG Army!`,
+        html: rankAchievementEmailTemplate({
+          userName: displayName,
+          newRank: nextRank,
+          previousRank: currentRank,
+          pointsBurned: burnCost,
+          availablePoints: newAvailable,
+        }),
+      }).catch(err => console.error('Rank achievement email failed (non-blocking):', err));
+    }
 
     return NextResponse.json({
       success: true,
