@@ -164,23 +164,60 @@ export default function Hero() {
             <div style={{ width: 28, height: 1, background: "#c7c7e0" }} />
           </motion.div>
 
-          {/* UDAAN — Nasalization, commanding */}
-          <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", overflow: "hidden" }}>
+          {/* UDAAN — Nasalization + split line + plane */}
+          <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            {/* Text + line */}
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <motion.div
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: "0%", opacity: 1 }}
+                transition={{ duration: 0.9, delay: 0.22, ease }}
+                style={{
+                  fontFamily: "'Nasalization', sans-serif",
+                  fontWeight: 400,
+                  fontSize: "clamp(80px, 14vw, 200px)",
+                  letterSpacing: "0.12em",
+                  lineHeight: 0.92,
+                  color: "#0a0a0f",
+                  display: "block",
+                }}
+              >
+                UDAAN
+              </motion.div>
+              {/* White split line sweeping left to right */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.7, delay: 0.9, ease }}
+                style={{
+                  position: "absolute",
+                  left: 0, right: 0,
+                  top: "50%",
+                  height: "clamp(8px, 1.1vw, 17px)",
+                  background: "#ffffff",
+                  pointerEvents: "none",
+                  transformOrigin: "left center",
+                }}
+              />
+            </div>
+            {/* Plane GIF — animates from U to end, then stays */}
             <motion.div
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ duration: 0.9, delay: 0.22, ease }}
+              initial={{ x: "-95vw", opacity: 1 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 2.0, delay: 0.9, ease }}
               style={{
-                fontFamily: "'Nasalization', sans-serif",
-                fontWeight: 400,
-                fontSize: "clamp(80px, 14vw, 200px)",
-                letterSpacing: "0.12em",
-                lineHeight: 0.92,
-                color: "#0a0a0f",
-                textAlign: "center",
+                flexShrink: 0,
+                marginLeft: "clamp(-8px, -0.5vw, -2px)",
+                background: "#ffffff",
+                lineHeight: 0,
+                mixBlendMode: "multiply",
               }}
             >
-              UDAAN
+              <img
+                src="/images/icons8-plane-100.gif"
+                alt=""
+                style={{ height: "clamp(28px, 4vw, 58px)", width: "auto", display: "block" }}
+              />
             </motion.div>
           </div>
 
