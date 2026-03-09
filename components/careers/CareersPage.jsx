@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { CAREERS, DEPARTMENTS, REGIONS } from "@/data/careers";
 
 const IconBriefcase = () => (
@@ -83,6 +84,40 @@ function Tag({ label, type = 'dept' }) {
 }
 
 function JobCard({ job, isOpen, onToggle, onApply }) {
+  if (job._isDbJob) {
+    return (
+      <Link href={`/careers/${job.slug}`} style={{ textDecoration: 'none' }}>
+        <div style={{
+          background: '#fff', borderRadius: '16px', border: '1.5px solid #e2e8f0',
+          overflow: 'hidden', transition: 'all 0.25s ease', cursor: 'pointer',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,102,241,0.1)'; }}
+          onMouseLeave={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'; }}
+        >
+          <div style={{ padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px', alignItems: 'center' }}>
+                <Tag label={job.department} type="dept" />
+                <Tag label={job.type} type="type" />
+              </div>
+              <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.3px' }}>{job.title}</h3>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px', alignItems: 'center' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconGlobe />{job.region}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconMapPin />{job.location}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconClock />{job.type}</span>
+              </div>
+              {job.summary && <p style={{ margin: '10px 0 0', color: '#64748b', fontSize: '14px', lineHeight: 1.6, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{job.summary}</p>}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0, color: '#6366f1', fontSize: '13px', fontWeight: '700' }}>
+              View Role <IconArrowRight />
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <div style={{
       background: '#fff', borderRadius: '16px',
@@ -482,6 +517,14 @@ export default function CareersPage() {
   const [successJob, setSuccessJob] = useState(null);
   const [filterDept, setFilterDept] = useState('All');
   const [filterRegion, setFilterRegion] = useState('All');
+  const [dbJobs, setDbJobs] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/careers/jobs')
+      .then(r => r.json())
+      .then(d => { if (d.jobs) setDbJobs(d.jobs); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const slug = searchParams.get('job');
@@ -494,7 +537,26 @@ export default function CareersPage() {
     }
   }, [searchParams]);
 
-  const filtered = CAREERS.filter(j => {
+  // DB jobs converted to card-compatible shape (link to /careers/[slug])
+  const dbJobCards = dbJobs.map(j => ({
+    slug: j.slug,
+    title: j.title,
+    department: j.department || 'General',
+    type: j.employment_type,
+    location: j.work_mode,
+    region: j.location,
+    summary: j.summary,
+    responsibilities: [],
+    requirements: [],
+    niceToHave: [],
+    _isDbJob: true,
+  }));
+
+  const allJobs = [...dbJobCards, ...CAREERS];
+  const allDepts = ['All', ...new Set(allJobs.map(j => j.department))];
+  const allRegions = ['All', ...new Set(allJobs.map(j => j.region))];
+
+  const filtered = allJobs.filter(j => {
     if (filterDept !== 'All' && j.department !== filterDept) return false;
     if (filterRegion !== 'All' && j.region !== filterRegion) return false;
     return true;
@@ -597,11 +659,11 @@ export default function CareersPage() {
           {/* Filters */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
             <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600', marginRight: '4px' }}>Department:</span>
-            {['All', ...DEPARTMENTS].map(d => (
+            {allDepts.map(d => (
               <button key={d} style={filterBtnStyle(filterDept === d)} onClick={() => setFilterDept(d)}>{d}</button>
             ))}
             <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600', marginLeft: '12px', marginRight: '4px' }}>Region:</span>
-            {['All', ...REGIONS].map(r => (
+            {allRegions.map(r => (
               <button key={r} style={filterBtnStyle(filterRegion === r)} onClick={() => setFilterRegion(r)}>{r}</button>
             ))}
           </div>
