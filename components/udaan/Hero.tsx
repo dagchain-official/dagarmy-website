@@ -208,9 +208,9 @@ export default function Hero() {
               style={{
                 flexShrink: 0,
                 marginLeft: "clamp(-8px, -0.5vw, -2px)",
-                background: "#ffffff",
                 lineHeight: 0,
                 mixBlendMode: "multiply",
+                background: "#ffffff",
               }}
             >
               <img
