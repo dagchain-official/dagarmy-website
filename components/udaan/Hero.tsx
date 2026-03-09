@@ -216,7 +216,7 @@ export default function Hero() {
                   src="/images/icons8-plane-100.png"
                   alt=""
                   initial={{ x: 0 }}
-                  animate={{ x: textWidth - 10 }}
+                  animate={{ x: textWidth }}
                   transition={{ duration: 2.0, delay: 0.9, ease }}
                   style={{
                     position: "absolute",
