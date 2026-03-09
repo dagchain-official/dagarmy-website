@@ -56,7 +56,7 @@ export default function RootLayout({
       <body className="counter-scroll">
         <Web3Provider>
           <Context>{children}</Context>
-          <ChatWidget />
+          {!pathname?.startsWith("/admin") && <ChatWidget />}
         </Web3Provider>
       </body>
     </html>
