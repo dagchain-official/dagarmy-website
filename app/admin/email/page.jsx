@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import EmailSidebar, { STARRED_PATH } from "@/components/admin/email/EmailSidebar";
 import MessageList from "@/components/admin/email/MessageList";
@@ -10,6 +11,7 @@ import SignatureEditor from "@/components/admin/email/SignatureEditor";
 const LIMIT = 25;
 
 export default function EmailPage() {
+  const searchParams = useSearchParams();
   const [adminData, setAdminData]           = useState(null);
   const [folders, setFolders]               = useState([]);
   const [activeFolder, setActiveFolder]     = useState('INBOX');
@@ -26,6 +28,19 @@ export default function EmailPage() {
   const [searchQuery, setSearchQuery]       = useState('');
   const [error, setError]                   = useState('');
   const [activeView, setActiveView]         = useState('inbox'); // 'inbox' | 'signature'
+
+  // Auto-open compose if URL has composeTo / composeSubject params
+  useEffect(() => {
+    const composeTo = searchParams.get('composeTo');
+    const composeSubject = searchParams.get('composeSubject');
+    if (composeTo) {
+      setComposeDefaults({
+        defaultTo: composeTo,
+        defaultSubject: composeSubject || '',
+      });
+      setShowCompose(true);
+    }
+  }, [searchParams]);
 
   // Load admin session
   useEffect(() => {

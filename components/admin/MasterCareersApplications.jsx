@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 function ResumeDownload({ filename, label }) {
   const [loading, setLoading] = useState(false);
@@ -151,11 +152,11 @@ function EmailModal({ app, onClose }) {
 }
 
 function DetailPanel({ app, onClose, onStatusChange }) {
+  const router = useRouter();
   const [status, setStatus] = useState(app.status);
   const [notes, setNotes] = useState(app.notes || "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [showEmail, setShowEmail] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
@@ -164,116 +165,115 @@ function DetailPanel({ app, onClose, onStatusChange }) {
     setTimeout(() => setSaved(false), 2000);
   };
 
+  const emailUrl = `/admin/email?composeTo=${encodeURIComponent(app.email)}&composeSubject=${encodeURIComponent("Re: Your application for " + app.role_title)}`;
+
   return (
-    <>
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 1000,
+      background: "rgba(15,23,42,0.5)", backdropFilter: "blur(3px)",
+      display: "flex", justifyContent: "flex-end",
+    }} onClick={onClose}>
       <div style={{
-        position: "fixed", inset: 0, zIndex: 1000,
-        background: "rgba(15,23,42,0.5)", backdropFilter: "blur(3px)",
-        display: "flex", justifyContent: "flex-end",
-      }} onClick={onClose}>
-        <div style={{
-          width: "100%", maxWidth: "520px", background: "#fff", height: "100vh",
-          overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.12)",
-          display: "flex", flexDirection: "column",
-        }} onClick={e => e.stopPropagation()}>
-          {/* Header */}
-          <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexShrink: 0 }}>
-            <div>
-              <p style={{ margin: "0 0 3px", fontSize: "11px", fontWeight: "700", color: "#6366f1", textTransform: "uppercase", letterSpacing: "0.8px" }}>
-                {app.department} — {app.region}
-              </p>
-              <h2 style={{ margin: "0 0 4px", fontSize: "18px", fontWeight: "800", color: "#0f172a", letterSpacing: "-0.3px" }}>{app.role_title}</h2>
-              <p style={{ margin: 0, fontSize: "13px", color: "#64748b" }}>
-                Applied {new Date(app.applied_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-              </p>
+        width: "100%", maxWidth: "520px", background: "#fff", height: "100vh",
+        overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.12)",
+        display: "flex", flexDirection: "column",
+      }} onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexShrink: 0 }}>
+          <div>
+            <p style={{ margin: "0 0 3px", fontSize: "11px", fontWeight: "700", color: "#6366f1", textTransform: "uppercase", letterSpacing: "0.8px" }}>
+              {app.department} — {app.region}
+            </p>
+            <h2 style={{ margin: "0 0 4px", fontSize: "18px", fontWeight: "800", color: "#0f172a", letterSpacing: "-0.3px" }}>{app.role_title}</h2>
+            <p style={{ margin: 0, fontSize: "13px", color: "#64748b" }}>
+              Applied {new Date(app.applied_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+            </p>
+          </div>
+          <button onClick={onClose} style={{ background: "#f1f5f9", border: "none", borderRadius: "8px", width: "34px", height: "34px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#64748b", flexShrink: 0 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: "24px 28px", flex: 1 }}>
+          {/* Applicant info */}
+          <div style={{ background: "#f8fafc", borderRadius: "12px", padding: "16px 18px", marginBottom: "16px" }}>
+            <p style={{ margin: "0 0 12px", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px" }}>Applicant</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <Row label="Name" value={app.name} />
+              <Row label="Email" value={<a href={"mailto:" + app.email} style={{ color: "#3b82f6", textDecoration: "none" }}>{app.email}</a>} />
+              {app.phone && <Row label="Phone" value={app.phone} />}
+              {app.linkedin_url && (
+                <Row label="LinkedIn" value={<a href={app.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ color: "#3b82f6", textDecoration: "none", wordBreak: "break-all" }}>View Profile</a>} />
+              )}
+              {app.resume_url && (
+                <Row label="Resume" value={<ResumeDownload filename={app.resume_url} label={app.resume_filename || "Resume"} />} />
+              )}
             </div>
-            <button onClick={onClose} style={{ background: "#f1f5f9", border: "none", borderRadius: "8px", width: "34px", height: "34px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#64748b", flexShrink: 0 }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
           </div>
 
-          {/* Body */}
-          <div style={{ padding: "24px 28px", flex: 1 }}>
-            {/* Applicant info */}
-            <div style={{ background: "#f8fafc", borderRadius: "12px", padding: "16px 18px", marginBottom: "16px" }}>
-              <p style={{ margin: "0 0 12px", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px" }}>Applicant</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Row label="Name" value={app.name} />
-                <Row label="Email" value={<a href={`mailto:${app.email}`} style={{ color: "#3b82f6", textDecoration: "none" }}>{app.email}</a>} />
-                {app.phone && <Row label="Phone" value={app.phone} />}
-                {app.linkedin_url && (
-                  <Row label="LinkedIn" value={<a href={app.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ color: "#3b82f6", textDecoration: "none", wordBreak: "break-all" }}>View Profile</a>} />
-                )}
-                {app.resume_url && (
-                  <Row label="Resume" value={<ResumeDownload filename={app.resume_url} label={app.resume_filename || "Resume"} />} />
-                )}
-              </div>
-            </div>
+          {/* Email button — navigates to /admin/email with pre-filled compose */}
+          <button onClick={() => router.push(emailUrl)} style={{
+            width: "100%", padding: "10px", borderRadius: "10px", marginBottom: "16px",
+            border: "1.5px solid #6366f1", background: "#eff0ff",
+            color: "#6366f1", fontSize: "13px", fontWeight: "700", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "7px",
+          }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email Applicant
+          </button>
 
-            {/* Email button */}
-            <button onClick={() => setShowEmail(true)} style={{
-              width: "100%", padding: "10px", borderRadius: "10px", marginBottom: "16px",
-              border: "1.5px solid #6366f1", background: "#eff0ff",
-              color: "#6366f1", fontSize: "13px", fontWeight: "700", cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "7px",
-              transition: "all 0.15s",
-            }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              Email Applicant
-            </button>
-
-            {/* Cover letter */}
-            {app.cover_letter && (
-              <div style={{ marginBottom: "16px" }}>
-                <p style={{ margin: "0 0 8px", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px" }}>Cover Letter</p>
-                <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "14px 16px", fontSize: "13px", color: "#374151", lineHeight: "1.7", borderLeft: "3px solid #6366f1", whiteSpace: "pre-wrap" }}>
-                  {app.cover_letter}
-                </div>
-              </div>
-            )}
-
-            {/* Status */}
+          {/* Cover letter */}
+          {app.cover_letter && (
             <div style={{ marginBottom: "16px" }}>
-              <label style={{ display: "block", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "8px" }}>Status</label>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
-                  <button key={key} onClick={() => setStatus(key)} style={{
-                    padding: "6px 14px", borderRadius: "8px", border: "1.5px solid",
-                    borderColor: status === key ? cfg.color : "#e2e8f0",
-                    background: status === key ? cfg.bg : "#fff",
-                    color: status === key ? cfg.color : "#64748b",
-                    fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s",
-                  }}>{cfg.label}</button>
-                ))}
+              <p style={{ margin: "0 0 8px", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px" }}>Cover Letter</p>
+              <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "14px 16px", fontSize: "13px", color: "#374151", lineHeight: "1.7", borderLeft: "3px solid #6366f1", whiteSpace: "pre-wrap" }}>
+                {app.cover_letter}
               </div>
             </div>
+          )}
 
-            {/* Notes */}
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{ display: "block", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "8px" }}>Internal Notes</label>
-              <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={4}
-                placeholder="Add notes about this applicant..."
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1.5px solid #e2e8f0", fontSize: "13px", color: "#0f172a", outline: "none", resize: "vertical", fontFamily: "inherit", boxSizing: "border-box", background: "#fff" }}
-                onFocus={e => { e.target.style.border = "1.5px solid #6366f1"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.1)"; }}
-                onBlur={e => { e.target.style.border = "1.5px solid #e2e8f0"; e.target.style.boxShadow = "none"; }}
-              />
+          {/* Status */}
+          <div style={{ marginBottom: "16px" }}>
+            <label style={{ display: "block", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "8px" }}>Status</label>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
+                <button key={key} onClick={() => setStatus(key)} style={{
+                  padding: "6px 14px", borderRadius: "8px", border: "1.5px solid",
+                  borderColor: status === key ? cfg.color : "#e2e8f0",
+                  background: status === key ? cfg.bg : "#fff",
+                  color: status === key ? cfg.color : "#64748b",
+                  fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s",
+                }}>{cfg.label}</button>
+              ))}
             </div>
-
-            <button onClick={handleSave} disabled={saving} style={{
-              width: "100%", padding: "12px", borderRadius: "10px",
-              background: saved ? "#10b981" : saving ? "#94a3b8" : "#0f172a",
-              color: "#fff", border: "none", fontSize: "14px", fontWeight: "700",
-              cursor: saving ? "not-allowed" : "pointer", transition: "all 0.2s",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-            }}>
-              {saved ? (<><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>Saved</>) : saving ? "Saving..." : "Save Changes"}
-            </button>
           </div>
+
+          {/* Notes */}
+          <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "8px" }}>Internal Notes</label>
+            <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={4}
+              placeholder="Add notes about this applicant..."
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1.5px solid #e2e8f0", fontSize: "13px", color: "#0f172a", outline: "none", resize: "vertical", fontFamily: "inherit", boxSizing: "border-box", background: "#fff" }}
+              onFocus={e => { e.target.style.border = "1.5px solid #6366f1"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.1)"; }}
+              onBlur={e => { e.target.style.border = "1.5px solid #e2e8f0"; e.target.style.boxShadow = "none"; }}
+            />
+          </div>
+
+          <button onClick={handleSave} disabled={saving} style={{
+            width: "100%", padding: "12px", borderRadius: "10px",
+            background: saved ? "#10b981" : saving ? "#94a3b8" : "#0f172a",
+            color: "#fff", border: "none", fontSize: "14px", fontWeight: "700",
+            cursor: saving ? "not-allowed" : "pointer", transition: "all 0.2s",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+          }}>
+            {saved ? (
+              <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>Saved</>
+            ) : saving ? "Saving..." : "Save Changes"}
+          </button>
         </div>
       </div>
-
-      {showEmail && <EmailModal app={app} onClose={() => setShowEmail(false)} />}
-    </>
+    </div>
   );
 }
 

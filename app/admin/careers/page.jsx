@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import SubAdminLayout from "@/components/admin/SubAdminLayout";
 import JobPostingsManager from "@/components/admin/JobPostingsManager";
 
@@ -69,73 +70,14 @@ function StatCard({ label, value, color, bg, icon }) {
   );
 }
 
-function EmailModal({ app, onClose }) {
-  const [subject, setSubject] = useState(`Re: Your application for ${app.role_title}`);
-  const [message, setMessage] = useState(`Hi ${app.name.split(' ')[0]},\n\nThank you for your interest in the ${app.role_title} role at DAGARMY.\n\n`);
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [err, setErr] = useState('');
-
-  const handleSend = async () => {
-    if (!subject.trim() || !message.trim()) { setErr('Subject and message are required.'); return; }
-    setSending(true); setErr('');
-    try {
-      const res = await fetch('/api/admin/careers/email-applicant', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to: app.email, subject: subject.trim(), message: message.trim() }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to send');
-      setSent(true);
-      setTimeout(onClose, 1800);
-    } catch (e) { setErr(e.message); }
-    finally { setSending(false); }
-  };
-
-  const inp = { width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '13px', color: '#0f172a', outline: 'none', background: '#fff', fontFamily: 'inherit', boxSizing: 'border-box' };
-
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 1300, background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(3px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={onClose}>
-      <div style={{ background: '#fff', borderRadius: '18px', width: '100%', maxWidth: '520px', padding: '28px 32px', margin: '0 16px', boxShadow: '0 24px 60px rgba(0,0,0,0.18)' }} onClick={e => e.stopPropagation()}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-          <div>
-            <h3 style={{ margin: '0 0 3px', fontSize: '17px', fontWeight: '800', color: '#0f172a' }}>Email Applicant</h3>
-            <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>To: <strong>{app.email}</strong></p>
-          </div>
-          <button onClick={onClose} style={{ background: '#f1f5f9', border: 'none', borderRadius: '8px', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-            <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg>
-          </button>
-        </div>
-        {err && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '10px 12px', marginBottom: '12px', fontSize: '13px', color: '#dc2626' }}>{err}</div>}
-        <div style={{ marginBottom: '12px' }}>
-          <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '6px' }}>Subject</label>
-          <input value={subject} onChange={e => setSubject(e.target.value)} style={inp}
-            onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; }}
-            onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.boxShadow = 'none'; }} />
-        </div>
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '6px' }}>Message</label>
-          <textarea value={message} onChange={e => setMessage(e.target.value)} rows={7} style={{ ...inp, resize: 'vertical' }}
-            onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; }}
-            onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.boxShadow = 'none'; }} />
-        </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} style={{ padding: '10px 20px', borderRadius: '9px', border: '1.5px solid #e2e8f0', background: '#fff', color: '#64748b', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>Cancel</button>
-          <button onClick={handleSend} disabled={sending || sent} style={{ padding: '10px 24px', borderRadius: '9px', border: 'none', background: sent ? '#10b981' : sending ? '#94a3b8' : '#6366f1', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: sending || sent ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '7px' }}>
-            {sent ? 'Sent!' : sending ? 'Sending...' : 'Send Email'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
+  const router = useRouter();
   const [status, setStatus] = useState(app.status);
   const [notes, setNotes] = useState(app.notes || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [showEmail, setShowEmail] = useState(false);
+
+  const emailUrl = `/admin/email?composeTo=${encodeURIComponent(app.email)}&composeSubject=${encodeURIComponent('Re: Your application for ' + app.role_title)}`;
 
   const handleSave = async () => {
     setSaving(true);
@@ -146,7 +88,6 @@ function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
   };
 
   return (
-    <>
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
       background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(3px)',
@@ -176,7 +117,7 @@ function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
         {/* Body */}
         <div style={{ padding: '24px 28px', flex: 1 }}>
           {/* Email button */}
-          <button onClick={() => setShowEmail(true)} style={{ width: '100%', padding: '10px', borderRadius: '10px', marginBottom: '16px', border: '1.5px solid #6366f1', background: '#eff0ff', color: '#6366f1', fontSize: '13px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
+          <button onClick={() => router.push(emailUrl)} style={{ width: '100%', padding: '10px', borderRadius: '10px', marginBottom: '16px', border: '1.5px solid #6366f1', background: '#eff0ff', color: '#6366f1', fontSize: '13px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
             <svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round'><path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/><polyline points='22,6 12,13 2,6'/></svg>
             Email Applicant
           </button>
@@ -268,8 +209,6 @@ function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
         </div>
       </div>
     </div>
-      {showEmail && <EmailModal app={app} onClose={() => setShowEmail(false)} />}
-    </>
   );
 }
 
