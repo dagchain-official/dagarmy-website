@@ -372,7 +372,6 @@ export default function AmbassadorPage() {
               { label: 'DAG Army', sub: 'Community-driven AI & Web3 movement', dot: '#3b82f6' },
               { label: 'DAGGPT', sub: 'Multi-module AI platform — one subscription, all tools', dot: '#8b5cf6' },
               { label: 'DAGChain', sub: 'AI-native Layer 1 blockchain infrastructure', dot: '#10b981' },
-              { label: 'Node Ecosystem', sub: 'Validator & Storage nodes for decentralized compute', dot: '#f59e0b' },
             ].map((item, i) => (
               <div key={i} className="amb-card" style={{
                 display: 'flex', alignItems: 'center', gap: '16px',
