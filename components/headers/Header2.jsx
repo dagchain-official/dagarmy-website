@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ export default function Header2() {
   const { isAuthenticated, userRole, isAdmin } = useAuth();
   const router = useRouter();
   const { disconnect } = useDisconnect();
+  const udaanCloseTimeoutRef = useRef(null);
 
   // Close modal if user becomes authenticated
   useEffect(() => {
@@ -218,8 +219,20 @@ export default function Header2() {
             </Link>
             <div
               style={{ position: 'relative', paddingBottom: '8px' }}
-              onMouseEnter={() => setShowUdaanDropdown(true)}
-              onMouseLeave={() => setShowUdaanDropdown(false)}
+              onMouseEnter={() => {
+                // Clear any pending close timeout
+                if (udaanCloseTimeoutRef.current) {
+                  clearTimeout(udaanCloseTimeoutRef.current);
+                  udaanCloseTimeoutRef.current = null;
+                }
+                setShowUdaanDropdown(true);
+              }}
+              onMouseLeave={() => {
+                // Add 300ms delay before closing
+                udaanCloseTimeoutRef.current = setTimeout(() => {
+                  setShowUdaanDropdown(false);
+                }, 300);
+              }}
             >
               <Link href="/udaan" className="udaan-menu-item" style={{
                 fontSize: '15px',

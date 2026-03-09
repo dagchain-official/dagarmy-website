@@ -1,3 +1,5 @@
+"use client";
+import { useEffect } from "react";
 import "./udaan.css";
 import Header2 from "@/components/headers/Header2";
 import Hero from "@/components/udaan/Hero";
@@ -14,6 +16,24 @@ import Footer1 from "@/components/footers/Footer1";
 import UdaanClient from "./UdaanClient";
 
 export default function UdaanPage() {
+  // Scroll to top when page loads to ensure hero stats are fully visible
+  useEffect(() => {
+    // Set scroll restoration to manual to prevent browser from restoring scroll position
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    
+    // Scroll to top immediately
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    
+    // Also scroll after a brief delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 0);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <Header2 />
