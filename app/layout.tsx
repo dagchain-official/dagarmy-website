@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "react-modal-video/css/modal-video.css";
 import Context from "@/context/Context";
+import ChatWidget from "@/components/chatbot/ChatWidget";
 import { Web3Provider } from "@/context/Web3Provider";
 import { usePathname } from "next/navigation";
 import { DM_Sans, Fraunces } from "next/font/google";
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className="counter-scroll">
         <Web3Provider>
           <Context>{children}</Context>
+          <ChatWidget />
         </Web3Provider>
       </body>
     </html>
