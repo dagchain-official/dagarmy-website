@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import EmailSidebar, { STARRED_PATH } from "@/components/admin/email/EmailSidebar";
@@ -10,7 +10,7 @@ import SignatureEditor from "@/components/admin/email/SignatureEditor";
 
 const LIMIT = 25;
 
-export default function EmailPage() {
+function EmailPageInner() {
   const searchParams = useSearchParams();
   const [adminData, setAdminData]           = useState(null);
   const [folders, setFolders]               = useState([]);
@@ -364,5 +364,13 @@ export default function EmailPage() {
         />
       )}
     </AdminLayout>
+  );
+}
+
+export default function EmailPage() {
+  return (
+    <Suspense fallback={null}>
+      <EmailPageInner />
+    </Suspense>
   );
 }
