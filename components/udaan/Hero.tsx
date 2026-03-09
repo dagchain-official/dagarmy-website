@@ -58,6 +58,17 @@ function Stat({ num, suffix = "", label, delay = 0 }: { num: number; suffix?: st
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [textWidth, setTextWidth] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      if (textRef.current) setTextWidth(textRef.current.offsetWidth);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const yContent = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "12%"]), { stiffness: 55, damping: 18 });
   const fadeOut = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -165,10 +176,10 @@ export default function Hero() {
           </motion.div>
 
           {/* UDAAN — Nasalization + split line + plane */}
-          <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            {/* Text + line */}
+          <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", textAlign: "center" }}>
             <div style={{ position: "relative", display: "inline-block" }}>
               <motion.div
+                ref={textRef}
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: "0%", opacity: 1 }}
                 transition={{ duration: 0.9, delay: 0.22, ease }}
@@ -199,26 +210,27 @@ export default function Hero() {
                   transformOrigin: "left center",
                 }}
               />
+              {/* Plane — sweeps from x:0 to end of text width */}
+              {textWidth > 0 && (
+                <motion.img
+                  src="/images/icons8-plane-100.png"
+                  alt=""
+                  initial={{ x: 0 }}
+                  animate={{ x: textWidth - 10 }}
+                  transition={{ duration: 2.0, delay: 0.9, ease }}
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: 0,
+                    translateY: "-50%",
+                    height: "clamp(28px, 4vw, 58px)",
+                    width: "auto",
+                    display: "block",
+                    pointerEvents: "none",
+                  }}
+                />
+              )}
             </div>
-            {/* Plane GIF — animates from U to end, then stays */}
-            <motion.div
-              initial={{ x: "-95vw", opacity: 1 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 2.0, delay: 0.9, ease }}
-              style={{
-                flexShrink: 0,
-                marginLeft: "clamp(-8px, -0.5vw, -2px)",
-                lineHeight: 0,
-                mixBlendMode: "multiply",
-                background: "#ffffff",
-              }}
-            >
-              <img
-                src="/images/icons8-plane-100.gif"
-                alt=""
-                style={{ height: "clamp(28px, 4vw, 58px)", width: "auto", display: "block" }}
-              />
-            </motion.div>
           </div>
 
           {/* Subtitle — single line */}
