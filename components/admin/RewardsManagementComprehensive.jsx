@@ -59,7 +59,7 @@ export default function RewardsManagementComprehensive() {
     const ev = {};
     Object.keys(config).forEach(k => { ev[k] = String(config[k] ?? ''); });
     // Ensure all keys have defaults even if missing from DB
-    const defaults = { soldier_signup_bonus: '500', lieutenant_upgrade_base: '2500', lieutenant_bonus_rate: '20', lieutenant_self_upgrade_bonus: '3000', soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '2500', lieutenant_refers_soldier_join: '600', lieutenant_refers_soldier_upgrade: '3000', ranking_system_enabled_for_soldier: '0', max_commission_levels: '3', rank_upgrade_bonus_initiator: '10', rank_upgrade_bonus_vanguard: '20', rank_upgrade_bonus_guardian: '30', rank_upgrade_bonus_striker: '40', rank_upgrade_bonus_invoker: '50', rank_upgrade_bonus_commander: '60', rank_upgrade_bonus_champion: '70', rank_upgrade_bonus_conqueror: '80', rank_upgrade_bonus_paragon: '90', rank_upgrade_bonus_mythic: '100', social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50', social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20', incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1', incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1', incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2', soldier_direct_sales_commission: '7', self_sale_dag_points_per_dollar: '25', referral_sale_dag_points_per_dollar: '25', sale_dag_points_lieutenant_bonus: '20' };
+    const defaults = { soldier_signup_bonus: '500', lieutenant_upgrade_base: '2500', lieutenant_bonus_rate: '20', lieutenant_upgrade_price_usd: '149', lieutenant_self_upgrade_bonus: '3000', soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '2500', lieutenant_refers_soldier_join: '600', lieutenant_refers_soldier_upgrade: '3000', ranking_system_enabled_for_soldier: '0', max_commission_levels: '3', rank_upgrade_bonus_initiator: '10', rank_upgrade_bonus_vanguard: '20', rank_upgrade_bonus_guardian: '30', rank_upgrade_bonus_striker: '40', rank_upgrade_bonus_invoker: '50', rank_upgrade_bonus_commander: '60', rank_upgrade_bonus_champion: '70', rank_upgrade_bonus_conqueror: '80', rank_upgrade_bonus_paragon: '90', rank_upgrade_bonus_mythic: '100', social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50', social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20', incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1', incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1', incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2', soldier_direct_sales_commission: '7', self_sale_dag_points_per_dollar: '25', referral_sale_dag_points_per_dollar: '25', sale_dag_points_lieutenant_bonus: '20' };
     Object.keys(defaults).forEach(k => { if (!ev[k] && ev[k] !== '0') ev[k] = defaults[k]; });
     setEditValues(ev);
   };
@@ -75,7 +75,7 @@ export default function RewardsManagementComprehensive() {
       if (!u.email) { sm('error', 'Not authenticated'); return; }
       let keys = [];
       if (section === 'signup') {
-        keys = ['soldier_signup_bonus','lieutenant_upgrade_base','lieutenant_bonus_rate'];
+        keys = ['soldier_signup_bonus','lieutenant_upgrade_base','lieutenant_bonus_rate','lieutenant_upgrade_price_usd'];
         const base = parseInt(editValues.lieutenant_upgrade_base) || 2500;
         const rate = parseInt(editValues.lieutenant_bonus_rate) || 20;
         editValues.lieutenant_self_upgrade_bonus = base + Math.round((base * rate) / 100);
@@ -288,7 +288,7 @@ export default function RewardsManagementComprehensive() {
 
         {/* Two side-by-side cards: Soldier & Lieutenant */}
         {(() => {
-          const s = g('soldier_signup_bonus',500), b = g('lieutenant_upgrade_base',2500), r = g('lieutenant_bonus_rate',20), bn = Math.round((b*r)/100), ltTotal = s+b+bn;
+          const s = g('soldier_signup_bonus',500), b = g('lieutenant_upgrade_base',2500), r = g('lieutenant_bonus_rate',20), bn = Math.round((b*r)/100), ltTotal = s+b+bn, price = editingSection ? (parseInt(editValues.lieutenant_upgrade_price_usd)||149) : (config.lieutenant_upgrade_price_usd||149);
           return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '16px', alignItems: 'stretch', marginBottom: '16px' }}>
 
@@ -360,10 +360,19 @@ export default function RewardsManagementComprehensive() {
                       </div>
                       <div>
                         <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: 0 }}>DAG LIEUTENANT</h3>
-                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Paid upgrade ($149 USD) - SOLDIER to LIEUTENANT</p>
+                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Paid upgrade (${price} USD) - SOLDIER to LIEUTENANT</p>
                       </div>
                     </div>
-                    <span style={{ fontSize: '10px', fontWeight: '700', padding: '4px 12px', borderRadius: '100px', background: '#0f172a', color: '#fff', letterSpacing: '0.3px' }}>$149 USD</span>
+                    {editingSection === 'signup' ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b' }}>$</span>
+                        <input type="number" min="1" value={editValues.lieutenant_upgrade_price_usd ?? '149'} onChange={e => ov('lieutenant_upgrade_price_usd', e.target.value)}
+                          style={{ width: '70px', padding: '5px 10px', borderRadius: '8px', border: '1.5px solid #6366f1', fontSize: '14px', fontWeight: '800', color: '#0f172a', textAlign: 'center', outline: 'none' }} />
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b' }}>USD</span>
+                      </div>
+                    ) : (
+                      <span style={{ fontSize: '10px', fontWeight: '700', padding: '4px 12px', borderRadius: '100px', background: '#0f172a', color: '#fff', letterSpacing: '0.3px' }}>${price} USD</span>
+                    )}
                   </div>
                 </div>
 

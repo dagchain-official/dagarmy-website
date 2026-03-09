@@ -385,17 +385,6 @@ export default function Dashboard2() {
                                 {stripeLoading === 'full' ? 'Redirecting...' : 'Upgrade to Lieutenant'}
                                 <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 6px', borderRadius: '5px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
                             </button>
-                            <button
-                                onClick={() => handleStripeUpgrade(true)}
-                                disabled={!!stripeLoading}
-                                style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 16px', borderRadius: '10px', border: '1.5px dashed #fcd34d', background: stripeLoading === 'test' ? '#fffbeb' : '#fff', color: '#92400e', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(245,158,11,0.08)', transition: 'all 0.2s ease' }}
-                                onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.background = '#fffbeb'; } }}
-                                onMouseLeave={e => { if (!stripeLoading) { e.currentTarget.style.background = '#fff'; } }}
-                            >
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                                {stripeLoading === 'test' ? 'Redirecting...' : 'Mini Lieutenant Upgrade'}
-                                <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 6px', borderRadius: '5px', background: '#fef3c7', color: '#92400e' }}>$5 TEST</span>
-                            </button>
                         </>
                     )}
                     <div style={{
