@@ -300,34 +300,46 @@ async function handleReferralCompleted({ userId, email, timestamp, data = {} }) 
 }
 
 async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
-  const {
-    nodeType,
-    nodeId,
-    tier,
-    amountUsd,
-    currency,
-    status,
-  } = data
+  console.log('[DAGChain webhook] handleNodePurchased raw data payload:', JSON.stringify(data))
 
-  // Find the DAGARMY user
+  // Handle all field name variants DAGChain might send
+  const nodeType     = data.nodeType     || data.node_type     || data.type         || null
+  const nodeId       = data.nodeId       || data.node_id       || data.id           || null
+  const tier         = data.tier         || data.nodeTier      || data.node_tier    || null
+  const amountUsd    = data.amountUsd    || data.amount_usd    || data.amount       || data.price || null
+  const currency     = data.currency     || data.coin          || 'USD'
+  const status       = data.status       || 'active'
+  const purchasedAt  = data.purchasedAt  || data.purchased_at  || timestamp || new Date().toISOString()
+
+  // Normalise node_type to match DB CHECK constraint: must be 'validator' or 'storage'
+  const resolvedType = String(nodeType || '').toLowerCase().includes('validator') ? 'validator' : 'storage'
+
+  // Find the DAGARMY user by email first, fall back to dagchain_user_id
   const { data: user } = email
     ? await supabaseAdmin.from('users').select('id').eq('email', email).maybeSingle()
     : await supabaseAdmin.from('users').select('id').eq('dagchain_user_id', userId).maybeSingle()
 
   // Insert node purchase record
-  await supabaseAdmin.from('dagchain_nodes').insert({
+  const { error: insertError } = await supabaseAdmin.from('dagchain_nodes').insert({
     user_id: user?.id || null,
     dagchain_user_id: userId || null,
     email: email || null,
-    node_type: nodeType === 'validator' ? 'validator' : 'storage',
+    node_type: resolvedType,
     node_id: nodeId || null,
     tier: tier || null,
     amount_usd: amountUsd || null,
     currency: currency || null,
-    status: status || 'active',
-    purchased_at: timestamp || new Date().toISOString(),
+    status: status,
+    purchased_at: purchasedAt,
     raw_data: data,
   })
+
+  if (insertError) {
+    console.error('[DAGChain webhook] handleNodePurchased insert error:', insertError.message)
+    throw new Error(`Failed to insert node purchase: ${insertError.message}`)
+  }
+
+  console.log(`[DAGChain webhook] Node purchase recorded — type=${resolvedType}, user=${email || userId}`)
 
   // Update user's dagchain_data with node summary
   if (user) {
@@ -339,13 +351,12 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
 
     const existing = existingUser?.dagchain_data || {}
     const nodes = existing.nodes || { validator: 0, storage: 0 }
-    const type = nodeType === 'validator' ? 'validator' : 'storage'
-    nodes[type] = (nodes[type] || 0) + 1
+    nodes[resolvedType] = (nodes[resolvedType] || 0) + 1
 
     await supabaseAdmin
       .from('users')
       .update({
-        dagchain_data: { ...existing, nodes, last_node_purchase_at: timestamp || new Date().toISOString() },
+        dagchain_data: { ...existing, nodes, last_node_purchase_at: purchasedAt },
         dagchain_synced_at: new Date().toISOString(),
       })
       .eq('id', user.id)
