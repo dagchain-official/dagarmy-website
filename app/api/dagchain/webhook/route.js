@@ -114,12 +114,25 @@ async function handleUserCreated({ userId, email, timestamp, data = {} }) {
   } = data
 
   // Upsert user into DAGARMY users table by email
-  const { data: existingUser } = await supabaseAdmin
+  const { data: existingUser, error: lookupError } = await supabaseAdmin
     .from('users')
-    .select('id, dagchain_user_id')
+    .select('id, dagchain_user_id, full_name, avatar_url, wallet_address')
     .eq('email', email)
     .maybeSingle()
 
+  if (lookupError) {
+    console.error('[DAGChain webhook] handleUserCreated lookup error:', lookupError.message)
+  }
+
+  // Core fields that definitely exist in the users table
+  const coreFields = {
+    full_name: displayName || username || null,
+    avatar_url: avatar || null,
+    wallet_address: walletAddress || null,
+    updated_at: new Date().toISOString(),
+  }
+
+  // DAGChain-specific fields (may not exist if migration hasn't run yet)
   const dagchainFields = {
     dagchain_user_id: userId || null,
     dagchain_wallet_address: walletAddress || null,
@@ -131,31 +144,66 @@ async function handleUserCreated({ userId, email, timestamp, data = {} }) {
   }
 
   if (existingUser) {
-    // Merge DAGChain fields into existing DAGARMY user
-    await supabaseAdmin
+    // Step 1: Update core fields (always safe)
+    const { error: coreUpdateError } = await supabaseAdmin
       .from('users')
       .update({
-        ...dagchainFields,
         full_name: existingUser.full_name || displayName || null,
         avatar_url: existingUser.avatar_url || avatar || null,
         wallet_address: existingUser.wallet_address || walletAddress || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', existingUser.id)
+
+    if (coreUpdateError) {
+      console.error('[DAGChain webhook] handleUserCreated core update error:', coreUpdateError.message)
+    }
+
+    // Step 2: Try to update dagchain fields (gracefully skip if columns missing)
+    const { error: dagUpdateError } = await supabaseAdmin
+      .from('users')
+      .update(dagchainFields)
+      .eq('id', existingUser.id)
+
+    if (dagUpdateError) {
+      console.warn('[DAGChain webhook] handleUserCreated dagchain fields update error (columns may not exist yet):', dagUpdateError.message)
+    }
+
+    console.log(`[DAGChain webhook] Merged DAGChain data into existing user: ${email}`)
   } else {
-    // Create new user record from DAGChain signup
-    await supabaseAdmin.from('users').insert({
-      email,
-      full_name: displayName || username || null,
-      avatar_url: avatar || null,
-      wallet_address: walletAddress || null,
-      role: 'student',
-      auth_provider: authProvider || 'dagchain',
-      is_admin: false,
-      is_master_admin: false,
-      last_login: timestamp || new Date().toISOString(),
-      ...dagchainFields,
-    })
+    // Step 1: Insert with core fields only (always safe)
+    const { data: newUser, error: insertError } = await supabaseAdmin
+      .from('users')
+      .insert({
+        email,
+        full_name: displayName || username || null,
+        avatar_url: avatar || null,
+        wallet_address: walletAddress || null,
+        role: 'student',
+        auth_provider: authProvider || 'dagchain',
+        is_admin: false,
+        is_master_admin: false,
+        last_login: timestamp || new Date().toISOString(),
+      })
+      .select('id')
+      .single()
+
+    if (insertError) {
+      console.error('[DAGChain webhook] handleUserCreated insert error:', insertError.message, insertError.details)
+      throw new Error(`Failed to insert DAGChain user: ${insertError.message}`)
+    }
+
+    console.log(`[DAGChain webhook] Created new user from DAGChain signup: ${email} (id: ${newUser.id})`)
+
+    // Step 2: Try to update dagchain fields (gracefully skip if columns missing)
+    const { error: dagUpdateError } = await supabaseAdmin
+      .from('users')
+      .update(dagchainFields)
+      .eq('id', newUser.id)
+
+    if (dagUpdateError) {
+      console.warn('[DAGChain webhook] handleUserCreated dagchain fields update error (columns may not exist yet):', dagUpdateError.message)
+    }
   }
 }
 
