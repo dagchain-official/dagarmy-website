@@ -12,8 +12,12 @@ export async function POST(request) {
   try {
     // 1. Verify secret
     const secret = request.headers.get('x-dagchain-secret')
-    if (!WEBHOOK_SECRET || secret !== WEBHOOK_SECRET) {
-      console.warn('DAGChain webhook: unauthorized attempt')
+    if (!WEBHOOK_SECRET) {
+      console.error('DAGChain webhook: DAGCHAIN_WEBHOOK_SECRET env var is not set')
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    if (secret !== WEBHOOK_SECRET) {
+      console.warn(`DAGChain webhook: secret mismatch — received="${secret?.substring(0, 6)}..." expected prefix="${WEBHOOK_SECRET.substring(0, 6)}..."`)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
