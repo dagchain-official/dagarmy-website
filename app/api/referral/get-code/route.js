@@ -7,7 +7,6 @@ import { NextResponse } from 'next/server';
  */
 export async function GET(request) {
   try {
-    // Get user ID from query params or headers
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 
@@ -18,7 +17,23 @@ export async function GET(request) {
       );
     }
 
-    // Call database function to get or create referral code
+    // Check if this is a DAGChain user with their own referral code
+    const { data: userRow } = await supabaseAdmin
+      .from('users')
+      .select('dagchain_referral_code, auth_provider')
+      .eq('id', userId)
+      .maybeSingle();
+
+    // DAGChain users use their dagchain_referral_code as their canonical code
+    if (userRow?.dagchain_referral_code) {
+      return NextResponse.json({
+        success: true,
+        code: userRow.dagchain_referral_code,
+        source: 'dagchain',
+      });
+    }
+
+    // DAGARMY native users — get or create their generated referral code
     const { data: referralCode, error } = await supabaseAdmin.rpc('get_or_create_referral_code', {
       p_user_id: userId
     });
@@ -33,7 +48,8 @@ export async function GET(request) {
 
     return NextResponse.json({
       success: true,
-      code: referralCode
+      code: referralCode,
+      source: 'dagarmy',
     });
 
   } catch (error) {
