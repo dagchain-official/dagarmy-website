@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { notifyUserCreated } from '@/services/dagchainWebhook';
+import { sendEmail } from '@/lib/email/smtp-client';
+import { welcomeEmailTemplate } from '@/lib/email-templates';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -159,15 +161,13 @@ export async function POST(request) {
       referral_code_used: body.referral_code || null,
     });
 
-    // Send welcome email asynchronously (don't wait for it)
+    // Send welcome email asynchronously (fire-and-forget)
     if (data.email) {
-      fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/emails/welcome`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: data.email,
-          name: `${data.first_name} ${data.last_name}`
-        })
+      const fullName = `${data.first_name} ${data.last_name}`.trim();
+      sendEmail('support@dagchain.network', {
+        to: data.email,
+        subject: 'Welcome to DAGARMY - Your Learning Journey Begins!',
+        html: welcomeEmailTemplate(fullName || 'there'),
       }).catch(err => {
         console.error('⚠️ Failed to send welcome email (non-blocking):', err);
       });
