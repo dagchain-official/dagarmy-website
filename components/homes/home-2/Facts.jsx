@@ -15,6 +15,15 @@ export default function Facts() {
   }, []);
   return (
     <section className="section-about-box tf-spacing-1 pt-0" style={{ paddingBottom: '60px' }}>
+      <style jsx>{`
+        .facts-heading { font-size: clamp(24px, 5vw, 36px); }
+        @media (max-width: 767px) {
+          .facts-cta-btn {
+            width: 100% !important;
+            justify-content: center;
+          }
+        }
+      `}</style>
       <div className="tf-container">
         <div className="row">
           <div className="col-lg-7">
@@ -102,10 +111,9 @@ export default function Facts() {
                 </div>
               </div>
               <h2
-                className="title-content fw-7 letter-spacing-1 wow fadeInUp"
+                className="title-content fw-7 letter-spacing-1 wow fadeInUp facts-heading"
                 data-wow-delay="0.2s"
                 style={{
-                  fontSize: '36px',
                   fontWeight: '700',
                   color: '#1a1a1a',
                   marginBottom: '20px',
@@ -213,7 +221,7 @@ export default function Facts() {
               </div>
               <a
                 href="/mentorship"
-                className="wow fadeInUp relative flex items-center gap-1 bg-[#000000] px-8 border-2 border-[#000000] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                className="wow fadeInUp facts-cta-btn relative flex items-center gap-1 bg-[#000000] px-8 border-2 border-[#000000] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                 data-wow-delay="0.6s"
                 style={{ textDecoration: 'none', height: '52px', width: '280px', justifyContent: 'center' }}
               >

@@ -16,15 +16,17 @@ const skills = [
 export default function Skills() {
   return (
     <section className="section-search-tags tf-spacing-11" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
+      <style jsx>{`
+        .skills-heading { font-size: clamp(24px, 5vw, 36px); }
+      `}</style>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div className="row">
           <div className="col-12">
             <div className="heading-section text-center" style={{ marginBottom: '48px' }}>
               <h2 
-                className="font-outfit wow fadeInUp" 
+                className="font-outfit wow fadeInUp skills-heading" 
                 data-wow-delay="0.1s"
                 style={{
-                  fontSize: '36px',
                   fontWeight: '700',
                   color: '#1a1a1a',
                   marginBottom: '20px',

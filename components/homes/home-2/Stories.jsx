@@ -134,11 +134,10 @@ const StoryCarousel = () => {
       onMouseLeave={() => setIsAutoPlaying(true)}
       style={{
         position: 'relative',
-        marginBottom: '40px',
-        maxWidth: '1400px',
         margin: '0 auto 40px',
-        paddingLeft: '120px',
-        paddingRight: '120px',
+        maxWidth: '1400px',
+        paddingLeft: 'clamp(48px, 10vw, 120px)',
+        paddingRight: 'clamp(48px, 10vw, 120px)',
         paddingTop: '30px',
         paddingBottom: '30px'
       }}
@@ -251,6 +250,7 @@ const StoryCarousel = () => {
             return (
               <div
                 key={slideIndex}
+                className="story-slide"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -258,6 +258,7 @@ const StoryCarousel = () => {
                   width: '100%',
                   display: 'flex',
                   gap: '24px',
+                  flexWrap: 'wrap',
                   justifyContent: cardCount === 1 ? 'center' : 'flex-start',
                   opacity: isActive ? 1 : 0,
                   transform: isActive ? 'translateX(0)' : `translateX(${slideIndex > currentSlide ? '50px' : '-50px'})`,
@@ -270,9 +271,10 @@ const StoryCarousel = () => {
                     key={`${story.id}-${cardIndex}`}
                     className="story-card"
                     style={{
-                      width: cardCount === 1 ? '340px' : '340px',
-                      minWidth: '340px',
+                      width: '340px',
+                      minWidth: '260px',
                       maxWidth: '340px',
+                      flex: '1 1 260px',
                       height: '380px',
                       background: '#fff',
                       borderRadius: '16px',
@@ -479,12 +481,31 @@ export default function Stories() {
     >
       <div className="tf-container">
         {/* Section Heading */}
+        <style jsx>{`
+          .stories-heading { font-size: clamp(26px, 5vw, 42px); }
+          @media (max-width: 767px) {
+            .story-carousel-wrapper {
+              padding-left: 40px !important;
+              padding-right: 40px !important;
+            }
+            .story-slide {
+              flex-wrap: nowrap !important;
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+              scrollbar-width: none;
+            }
+            .story-slide::-webkit-scrollbar { display: none; }
+            .story-card {
+              min-width: 260px !important;
+              width: 260px !important;
+            }
+          }
+        `}</style>
         <div style={{ 
           marginBottom: '56px',
           maxWidth: '900px'
         }}>
-          <h2 style={{
-            fontSize: '42px',
+          <h2 className="stories-heading" style={{
             fontWeight: '700',
             color: '#1f2937',
             marginBottom: '16px',

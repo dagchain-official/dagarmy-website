@@ -64,10 +64,26 @@ export default function Features() {
       background: '#fafafa',
       position: 'relative'
     }}>
+      <style jsx>{`
+        .features-heading { font-size: clamp(24px, 5vw, 36px); }
+        .features-subheading { font-size: clamp(15px, 3vw, 18px); }
+        .features-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media (max-width: 991px) {
+          .features-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 575px) {
+          .features-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 style={{
-            fontSize: '36px',
+          <h2 className="features-heading" style={{
             fontWeight: '700',
             color: '#1a1a1a',
             marginBottom: '16px',
@@ -75,8 +91,7 @@ export default function Features() {
           }}>
             Learning Experience
           </h2>
-          <p style={{
-            fontSize: '18px',
+          <p className="features-subheading" style={{
             color: '#6b7280',
             maxWidth: '600px',
             margin: '0 auto'
@@ -85,9 +100,8 @@ export default function Features() {
           </p>
         </div>
 
-        <div style={{
+        <div className="features-grid" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '20px',
           marginTop: '40px'
         }}>

@@ -16,16 +16,22 @@ export default function DownloadApp() {
   }, []);
   return (
     <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
+      <style jsx>{`
+        .download-heading { font-size: clamp(24px, 5vw, 36px); }
+        .download-grid { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 767px) {
+          .download-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <div className="tf-container">
-        <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
+        <div className="download-grid" style={{ display: 'grid', gap: '40px', alignItems: 'start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div className="content-left" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
               <div style={{ flex: '0 0 auto' }}>
                 <h2
-                  className="fw-7 letter-spacing-1 wow fadeInUp"
+                  className="fw-7 letter-spacing-1 wow fadeInUp download-heading"
                   data-wow-delay="0.2s"
                   style={{
-                    fontSize: '36px',
                     fontWeight: '700',
                     color: '#1a1a1a',
                     marginBottom: '20px',

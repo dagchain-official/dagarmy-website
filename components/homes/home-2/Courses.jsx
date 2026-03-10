@@ -81,8 +81,7 @@ const ProgressiveInfoCards = () => {
       `}</style>
 
       {/* Main Heading */}
-      <h3 style={{
-        fontSize: '32px',
+      <h3 className="program-info-heading" style={{
         fontWeight: '700',
         color: '#1f2937',
         marginBottom: '16px',
@@ -105,7 +104,7 @@ const ProgressiveInfoCards = () => {
       </p>
 
       {/* Navigation Indicators - Moved Above Card */}
-      <div style={{
+      <div className="program-tab-nav" style={{
         display: 'flex',
         gap: '32px',
         marginBottom: '20px',
@@ -136,7 +135,7 @@ const ProgressiveInfoCards = () => {
       </div>
 
       {/* Card Container - Fixed Height with Overflow */}
-      <div style={{
+      <div className="program-card-container" style={{
         position: 'relative',
         flex: '1',
         minHeight: 0,
@@ -164,7 +163,7 @@ const ProgressiveInfoCards = () => {
             }}
           >
             {/* Fixed Header Section */}
-            <div style={{
+            <div className="program-card-inner" style={{
               padding: '36px 36px 0 36px',
               flexShrink: 0
             }}>
@@ -189,7 +188,7 @@ const ProgressiveInfoCards = () => {
 
             {/* Scrollable Content Section */}
             <div 
-              className="scrollable-content"
+              className="scrollable-content program-card-scroll"
               style={{
                 flex: '1',
                 overflowY: 'auto',
@@ -251,12 +250,31 @@ export default function Courses() {
             grid-template-columns: 40% 60% !important;
           }
         }
+        .program-heading {
+          font-size: clamp(28px, 6vw, 42px);
+        }
+        .program-info-heading {
+          font-size: clamp(20px, 4vw, 32px);
+        }
+        @media (max-width: 767px) {
+          .program-card-container {
+            min-height: 320px !important;
+          }
+          .program-card-inner {
+            padding: 20px 20px 0 20px !important;
+          }
+          .program-card-scroll {
+            padding: 0 20px 20px 20px !important;
+          }
+          .program-tab-nav {
+            gap: 16px !important;
+          }
+        }
       `}</style>
       <div className="tf-container">
         {/* Section Title - Left Aligned */}
         <div style={{ marginBottom: '48px' }}>
-          <h2 style={{
-            fontSize: '42px',
+          <h2 className="program-heading" style={{
             fontWeight: '700',
             color: '#1f2937',
             marginBottom: '0',
