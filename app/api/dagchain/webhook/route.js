@@ -103,15 +103,28 @@ export async function POST(request) {
 async function handleUserCreated({ userId, email, timestamp, data = {} }) {
   if (!email && !userId) return
 
+  console.log('[DAGChain webhook] handleUserCreated raw data payload:', JSON.stringify(data))
+
   const {
     walletAddress,
     authProvider,
+    // Try all common referral code field name variants
     referralCode,
+    referral_code,
     referredBy,
+    referred_by,
+    referrerCode,
+    referrer_code,
     displayName,
+    display_name,
     username,
     avatar,
   } = data
+
+  // Normalise to single variable regardless of which key DAGChain uses
+  const resolvedReferralCode = referralCode || referral_code || referrerCode || referrer_code || null
+  const resolvedReferredBy = referredBy || referred_by || null
+  const resolvedDisplayName = displayName || display_name || username || null
 
   // Upsert user into DAGARMY users table by email
   const { data: existingUser, error: lookupError } = await supabaseAdmin
@@ -124,21 +137,13 @@ async function handleUserCreated({ userId, email, timestamp, data = {} }) {
     console.error('[DAGChain webhook] handleUserCreated lookup error:', lookupError.message)
   }
 
-  // Core fields that definitely exist in the users table
-  const coreFields = {
-    full_name: displayName || username || null,
-    avatar_url: avatar || null,
-    wallet_address: walletAddress || null,
-    updated_at: new Date().toISOString(),
-  }
-
   // DAGChain-specific fields (may not exist if migration hasn't run yet)
   const dagchainFields = {
     dagchain_user_id: userId || null,
     dagchain_wallet_address: walletAddress || null,
     dagchain_auth_provider: authProvider || null,
-    dagchain_referral_code: referralCode || null,
-    dagchain_referred_by: referredBy || null,
+    dagchain_referral_code: resolvedReferralCode,
+    dagchain_referred_by: resolvedReferredBy,
     dagchain_joined_at: timestamp || new Date().toISOString(),
     dagchain_synced_at: new Date().toISOString(),
   }
@@ -148,7 +153,7 @@ async function handleUserCreated({ userId, email, timestamp, data = {} }) {
     const { error: coreUpdateError } = await supabaseAdmin
       .from('users')
       .update({
-        full_name: existingUser.full_name || displayName || null,
+        full_name: existingUser.full_name || resolvedDisplayName || null,
         avatar_url: existingUser.avatar_url || avatar || null,
         wallet_address: existingUser.wallet_address || walletAddress || null,
         updated_at: new Date().toISOString(),
@@ -176,7 +181,7 @@ async function handleUserCreated({ userId, email, timestamp, data = {} }) {
       .from('users')
       .insert({
         email,
-        full_name: displayName || username || null,
+        full_name: resolvedDisplayName || null,
         avatar_url: avatar || null,
         wallet_address: walletAddress || null,
         role: 'student',
