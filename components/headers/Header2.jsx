@@ -66,7 +66,7 @@ export default function Header2() {
     <header id="header_main" className="header style-2" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 0' }}>
       <div className="header-inner">
         {/* Single Row: Logo - Search - Menu - Login - Register */}
-        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '80px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
+        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '80px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }} id="header-inner-wrap">
           
           {/* Logo Section */}
           <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: '180px' }}>
@@ -82,9 +82,8 @@ export default function Header2() {
             </Link>
           </div>
 
-          {/* Navigation Menu */}
-          <nav style={{
-            display: 'flex',
+          {/* Navigation Menu — hidden on mobile, shown on desktop */}
+          <nav className="d-none d-lg-flex" style={{
             gap: '32px',
             alignItems: 'center',
             flex: 1
@@ -457,8 +456,8 @@ export default function Header2() {
             </Link>
           </nav>
 
-          {/* Sign In / Dashboard Button - Animated */}
-          <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {/* Sign In / Dashboard Button - hidden on mobile */}
+          <div className="header-btn d-none d-lg-flex" style={{ gap: '12px', alignItems: 'center' }}>
             {/* Notification Bell - Only show for authenticated users */}
             {isAuthenticated && <NotificationBell />}
             

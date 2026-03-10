@@ -22,9 +22,9 @@ const AnimatedNoText = () => {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      gap: '12px',
-      marginBottom: '24px',
-      height: '50px',
+      gap: '8px',
+      marginBottom: '20px',
+      height: '44px',
       overflow: 'hidden'
     }}>
       <style jsx>{`
@@ -51,11 +51,12 @@ const AnimatedNoText = () => {
         }
       `}</style>
       <span style={{
-        fontSize: '42px',
+        fontSize: 'clamp(28px, 8vw, 42px)',
         fontWeight: '800',
         color: '#1f2937',
         letterSpacing: '-0.02em',
-        lineHeight: '1'
+        lineHeight: '1',
+        flexShrink: 0
       }}>
         NO
       </span>
@@ -73,7 +74,7 @@ const AnimatedNoText = () => {
             className={index === currentIndex ? 'animated-text' : ''}
             style={{
               position: 'absolute',
-              fontSize: '20px',
+              fontSize: 'clamp(13px, 3.5vw, 20px)',
               fontWeight: '600',
               color: '#1f2937',
               opacity: index === currentIndex ? 1 : 0,
@@ -98,18 +99,47 @@ export default function Hero() {
 
   return (
     <>
+      <style jsx>{`
+        .hero-title {
+          font-size: clamp(32px, 7vw, 58px);
+          line-height: 1.2;
+          margin-bottom: 20px;
+          color: #1f2937;
+        }
+        .hero-title .no-wrap {
+          white-space: nowrap;
+        }
+        @media (max-width: 767px) {
+          .hero-title .no-wrap {
+            white-space: normal;
+          }
+          .hero-bottom-btns {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 14px !important;
+          }
+          .hero-explore-btn {
+            width: 100% !important;
+            min-width: unset !important;
+            justify-content: center;
+          }
+          .hero-video-wrap {
+            margin-top: 32px;
+            max-width: 100% !important;
+          }
+          .hero-desc {
+            font-size: 15px !important;
+            max-width: 100% !important;
+          }
+        }
+      `}</style>
       <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingTop: '80px', paddingBottom: '0' }}>
         <div className="tf-container" style={{ background: '#fff' }}>
           <div className="row items-center" style={{ alignItems: 'center', minHeight: 'auto' }}>
             <div className="col-lg-6">
               <div className="content" style={{ paddingTop: '0', paddingBottom: '0', marginBottom: '0' }}>
-                <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{
-                  fontSize: '58px',
-                  lineHeight: '1.2',
-                  marginBottom: '24px',
-                  color: '#1f2937'
-                }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>Join the <span style={{
+                <h1 className="fw-7 wow fadeInUp hero-title" data-wow-delay="0.2s">
+                  <span className="no-wrap">Join the <span style={{
                     color: '#1f2937',
                     fontWeight: '700',
                     fontFamily: 'Nasalization, sans-serif'
@@ -124,7 +154,7 @@ export default function Hero() {
                   <AnimatedNoText />
                   
                   {/* Main description paragraph */}
-                  <p style={{
+                  <p className="hero-desc" style={{
                     fontSize: '17px',
                     lineHeight: '1.7',
                     color: '#4b5563',
@@ -135,7 +165,7 @@ export default function Hero() {
                     DAG Army brings together learners, builders, and professionals who want skills that lead to real outcomes. From early learners in Tier 3 cities to teams collaborating across continents, this is a place where capability grows through steady effort and structured learning.
                   </p>
                 </div>
-                <div className="bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
+                <div className="bottom-btns hero-bottom-btns" style={{ display: 'flex', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap', marginTop: '32px' }}>
                   <PremiumButton
                     text="Get Started"
                     onClick={() => {
@@ -149,7 +179,7 @@ export default function Hero() {
                   />
                   <a
                     href="/courses"
-                    className="custom-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
+                    className="custom-explore-btn hero-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
                     style={{ textDecoration: 'none', height: '52px', minWidth: '200px', justifyContent: 'center' }}
                   >
                     <svg
@@ -193,7 +223,7 @@ export default function Hero() {
               </div>
             </div>
             <div className="col-lg-6">
-              <div style={{
+              <div className="hero-video-wrap" style={{
                 width: '100%',
                 maxWidth: '500px',
                 aspectRatio: '1 / 1',
