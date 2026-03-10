@@ -16,7 +16,7 @@ const skills = [
 export default function Skills() {
   return (
     <section className="section-search-tags tf-spacing-11" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
-      <style jsx>{`
+      <style>{`
         .skills-heading { font-size: clamp(24px, 5vw, 36px); }
       `}</style>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>

@@ -481,7 +481,7 @@ export default function Stories() {
     >
       <div className="tf-container">
         {/* Section Heading */}
-        <style jsx>{`
+        <style>{`
           .stories-heading { font-size: clamp(26px, 5vw, 42px); }
           @media (max-width: 767px) {
             .story-carousel-wrapper {

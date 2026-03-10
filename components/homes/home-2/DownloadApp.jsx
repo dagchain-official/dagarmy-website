@@ -16,7 +16,7 @@ export default function DownloadApp() {
   }, []);
   return (
     <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
-      <style jsx>{`
+      <style>{`
         .download-heading { font-size: clamp(24px, 5vw, 36px); }
         .download-grid { grid-template-columns: 1fr 1fr; }
         @media (max-width: 767px) {

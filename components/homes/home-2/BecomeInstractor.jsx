@@ -5,7 +5,7 @@ import PremiumButton from "./PremiumButton";
 export default function BecomeInstractor() {
   return (
     <section className="section-become-instructor tf-spacing-4 pb-0" style={{ paddingTop: '60px' }}>
-      <style jsx>{`
+      <style>{`
         .instructor-heading { font-size: clamp(24px, 5vw, 36px); }
         @media (max-width: 767px) {
           .instructor-btn { width: 100% !important; min-width: unset !important; }

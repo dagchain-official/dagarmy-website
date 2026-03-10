@@ -25,7 +25,7 @@ export default function NextPhase() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      <style jsx>{`
+      <style>{`
         .nextphase-heading { font-size: clamp(28px, 6vw, 42px); }
         .nextphase-sub { font-size: clamp(15px, 3vw, 18px); }
         .nextphase-box { padding: 24px !important; }

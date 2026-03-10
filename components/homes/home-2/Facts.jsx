@@ -15,7 +15,7 @@ export default function Facts() {
   }, []);
   return (
     <section className="section-about-box tf-spacing-1 pt-0" style={{ paddingBottom: '60px' }}>
-      <style jsx>{`
+      <style>{`
         .facts-heading { font-size: clamp(24px, 5vw, 36px); }
         @media (max-width: 767px) {
           .facts-cta-btn {

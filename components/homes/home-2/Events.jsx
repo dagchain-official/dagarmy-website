@@ -57,7 +57,7 @@ export default function Events() {
         <div className="row">
           <div className="col-12">
             <div className="heading-section" style={{ marginBottom: '48px' }}>
-              <style jsx>{`
+              <style>{`
                 .events-heading { font-size: clamp(24px, 5vw, 36px); }
                 @media (max-width: 575px) {
                   .event-content-wrap { min-width: 0 !important; padding: 16px !important; }

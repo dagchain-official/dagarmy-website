@@ -64,7 +64,7 @@ export default function Features() {
       background: '#fafafa',
       position: 'relative'
     }}>
-      <style jsx>{`
+      <style>{`
         .features-heading { font-size: clamp(24px, 5vw, 36px); }
         .features-subheading { font-size: clamp(15px, 3vw, 18px); }
         .features-grid {

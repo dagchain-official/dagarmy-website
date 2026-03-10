@@ -59,7 +59,7 @@ const ProgressiveInfoCards = () => {
       flexDirection: 'column',
       height: '100%'
     }}>
-      <style jsx>{`
+      <style>{`
         .scrollable-content::-webkit-scrollbar {
           width: 6px;
         }
@@ -244,7 +244,7 @@ export default function Courses() {
       padding: '0 0 80px',
       background: '#fff'
     }}>
-      <style jsx>{`
+      <style>{`
         @media (min-width: 992px) {
           .program-grid {
             grid-template-columns: 40% 60% !important;

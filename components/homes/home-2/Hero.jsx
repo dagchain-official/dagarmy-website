@@ -27,7 +27,7 @@ const AnimatedNoText = () => {
       height: '44px',
       overflow: 'hidden'
     }}>
-      <style jsx>{`
+      <style>{`
         @keyframes slideUp {
           0% {
             transform: translateY(100%);
@@ -99,7 +99,7 @@ export default function Hero() {
 
   return (
     <>
-      <style jsx>{`
+      <style>{`
         .hero-title {
           font-size: clamp(32px, 7vw, 58px);
           line-height: 1.2;

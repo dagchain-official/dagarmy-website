@@ -48,7 +48,7 @@ export default function Courses2() {
   return (
     <>
       {/* Consolidated Styles */}
-      <style jsx>{`
+      <style>{`
         .badge-container {
           position: relative;
           display: inline-block;
