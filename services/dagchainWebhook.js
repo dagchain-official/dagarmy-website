@@ -102,7 +102,7 @@ export function notifyUserCreated(user) {
     externalUserId: user.id,
     email: user.email || null,
     walletAddress: user.wallet_address || null,
-    displayName: [user.first_name, user.last_name].filter(Boolean).join(' ') || null,
+    displayName: user.full_name || [user.first_name, user.last_name].filter(Boolean).join(' ') || null,
     referralCode: user.referral_code_used || null,
   }, idempotencyKey);
 }

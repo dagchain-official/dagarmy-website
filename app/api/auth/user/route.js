@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createOrUpdateUser, getUserByWallet, getUserByEmail } from '@/lib/supabase/api/users'
 import { syncDagchainUser } from '@/lib/dagchain/sync'
+import { notifyUserCreated } from '@/services/dagchainWebhook'
 
 /**
  * POST /api/auth/user
@@ -44,6 +45,17 @@ export async function POST(request) {
     })
 
     console.log('✅ User created/updated successfully:', result.user.id)
+
+    // Notify DAGChain of new user (fire-and-forget, only for new users)
+    if (result.isNewUser) {
+      notifyUserCreated({
+        id: result.user.id,
+        email: result.user.email || email,
+        wallet_address: result.user.wallet_address || wallet_address,
+        full_name: result.user.full_name || full_name,
+        referral_code_used: body.referral_code || null,
+      })
+    }
 
     // Silently sync DAGChain data — never blocks or fails the auth response
     if (email && reown_access_token) {
