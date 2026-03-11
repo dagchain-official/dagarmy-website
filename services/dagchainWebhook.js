@@ -15,7 +15,9 @@
  */
 
 const WEBHOOK_URL = process.env.DAGCHAIN_WEBHOOK_URL || 'https://api.dagchain.network/api/v1/dag-army/webhook';
-const WEBHOOK_SECRET = process.env.DAGCHAIN_WEBHOOK_SECRET || '';
+// DAGARMY_OUTGOING_SECRET = the secret DAGChain uses to verify events coming FROM DAGARMY
+// This is different from DAGCHAIN_WEBHOOK_SECRET (which DAGARMY uses to verify events coming FROM DAGChain)
+const WEBHOOK_SECRET = process.env.DAGARMY_OUTGOING_SECRET || process.env.DAGCHAIN_WEBHOOK_SECRET || '';
 const TIMEOUT_MS = 30000;
 const RETRY_DELAYS = [30_000, 120_000, 600_000]; // 30s, 2m, 10m
 
@@ -70,7 +72,7 @@ async function sendWithRetry(payload, attempt = 0) {
 
 function dispatch(event, data, idempotencyKey) {
   if (!WEBHOOK_SECRET) {
-    console.warn(`[DAGChain Webhook] DAGCHAIN_WEBHOOK_SECRET not set — skipping ${event}`);
+    console.warn(`[DAGChain Webhook → DAGChain] DAGARMY_OUTGOING_SECRET not set — skipping ${event}`);
     return;
   }
 
@@ -82,9 +84,11 @@ function dispatch(event, data, idempotencyKey) {
     data,
   };
 
+  console.log(`[DAGChain Webhook → DAGChain] Dispatching ${event} to ${WEBHOOK_URL} for user=${payload.userId || payload.email}`);
+
   // Fire-and-forget — never blocks the caller
   sendWithRetry(payload).catch(err => {
-    console.error(`[DAGChain Webhook] Unexpected dispatch error for ${event}:`, err.message);
+    console.error(`[DAGChain Webhook → DAGChain] Unexpected dispatch error for ${event}:`, err.message);
   });
 }
 
