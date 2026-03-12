@@ -52,6 +52,8 @@ export async function POST(request) {
     // Fire for: (a) brand-new users, OR (b) existing users who were never synced to DAGChain yet
     const neverSynced = !result.user.dagchain_synced_at;
     if (result.isNewUser || neverSynced) {
+      // Stamp dagchain_synced_at immediately to prevent repeated dispatches on every login
+      await supabaseAdmin.from('users').update({ dagchain_synced_at: new Date().toISOString() }).eq('id', result.user.id);
       // Fetch the user's own referral code (get or create)
       const { data: ownReferralCode } = await supabaseAdmin.rpc('get_or_create_referral_code', {
         p_user_id: result.user.id,

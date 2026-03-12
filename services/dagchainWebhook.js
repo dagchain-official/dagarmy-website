@@ -14,7 +14,7 @@
  * All calls are fire-and-forget (non-blocking) — never fails the caller.
  */
 
-const WEBHOOK_URL = process.env.DAGCHAIN_WEBHOOK_URL || 'https://api.dagchain.network/api/v1/dag-army/webhook';
+const WEBHOOK_URL = process.env.DAGCHAIN_WEBHOOK_URL || 'https://nhs-repeated-nov-plates.trycloudflare.com/api/v1/dag-army/webhook';
 // DAGARMY_OUTGOING_SECRET = the secret DAGChain uses to verify events coming FROM DAGARMY
 // This is different from DAGCHAIN_WEBHOOK_SECRET (which DAGARMY uses to verify events coming FROM DAGChain)
 const WEBHOOK_SECRET = process.env.DAGARMY_OUTGOING_SECRET || process.env.DAGCHAIN_WEBHOOK_SECRET || '';
@@ -130,29 +130,32 @@ export function notifyUserCreated(user) {
  * @param {Object} updates - keys can be camelCase or snake_case; normalised here
  */
 export function notifyUserUpdated(user, updates) {
-  // Normalise snake_case → camelCase and filter to DAGChain-safe fields only
-  const data = {};
-  const str = v => (v !== undefined && v !== null && v !== '') ? String(v) : undefined;
+  // Map from DAGARMY snake_case to DAGChain camelCase
+  const fieldMapping = {
+    displayName: 'displayName',
+    display_name: 'displayName',
+    username: 'username',
+    avatar: 'avatar',
+    avatar_url: 'avatar',
+    bio: 'bio',
+    country: 'country',
+    country_code: 'country',
+    first_name: 'firstName',
+    firstName: 'firstName',
+    last_name: 'lastName',
+    lastName: 'lastName',
+    phone: 'phone',
+    phone_country_code: 'phoneCountryCode',
+    phoneCountryCode: 'phoneCountryCode',
+  };
 
-  const displayName = str(updates.displayName || updates.display_name);
-  const username    = str(updates.username);
-  const avatar      = str(updates.avatar || updates.avatar_url);
-  const bio         = str(updates.bio);
-  const country     = str(updates.country || updates.country_code);
-  const firstName   = str(updates.firstName || updates.first_name);
-  const lastName    = str(updates.lastName  || updates.last_name);
+  const safeUpdates = {};
+  for (const [srcField, destField] of Object.entries(fieldMapping)) {
+    if (updates[srcField] !== undefined) safeUpdates[destField] = updates[srcField];
+  }
+  if (Object.keys(safeUpdates).length === 0) return;
 
-  if (displayName !== undefined) data.displayName = displayName;
-  if (username    !== undefined) data.username    = username;
-  if (avatar      !== undefined) data.avatar      = avatar;
-  if (bio         !== undefined) data.bio         = bio;
-  if (country     !== undefined) data.country     = country;
-  if (firstName   !== undefined) data.firstName   = firstName;
-  if (lastName    !== undefined) data.lastName    = lastName;
-
-  if (Object.keys(data).length === 0) return;
-
-  dispatch('user.updated', user.id, user.email || null, data);
+  dispatch('user.updated', user.id, user.email || null, safeUpdates);
 }
 
 /**
