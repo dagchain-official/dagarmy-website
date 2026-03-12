@@ -115,8 +115,10 @@ export function notifyUserCreated(user) {
   if (displayName)                  data.displayName      = displayName;
   if (user.first_name)              data.firstName        = user.first_name;
   if (user.last_name)               data.lastName         = user.last_name;
-  if (user.referral_code_used)      data.referralCode     = user.referral_code_used;
-  if (user.referral_code_referred_by) data.referredByCode = user.referral_code_referred_by;
+  // referralCode = the user's OWN code (what they share with others)
+  if (user.referral_code_own)       data.referralCode     = user.referral_code_own;
+  // referredByCode = the code this user was referred WITH (someone else's code they used)
+  if (user.referral_code_used)      data.referredByCode   = user.referral_code_used;
 
   dispatch('user.created', user.id, user.email || null, data);
 }
