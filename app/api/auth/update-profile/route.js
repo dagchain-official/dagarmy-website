@@ -28,7 +28,6 @@ export async function POST(request) {
       avatar_url,
       banner_url,
       social_links,
-      wallet_address: new_wallet_address
     } = body;
 
     // Validation - need at least one identifier
@@ -47,7 +46,8 @@ export async function POST(request) {
     // Only update fields that are provided
     if (first_name !== undefined) updateData.first_name = first_name;
     if (last_name !== undefined) updateData.last_name = last_name;
-    if (user_provided_email !== undefined) updateData.user_provided_email = user_provided_email;
+    // user_provided_email maps to the 'email' column (no such column as user_provided_email)
+    if (user_provided_email !== undefined) updateData.email = user_provided_email;
     if (country_code !== undefined) updateData.country_code = country_code;
     if (whatsapp_number !== undefined) updateData.whatsapp_number = whatsapp_number;
     if (bio !== undefined) updateData.bio = bio;
@@ -55,14 +55,16 @@ export async function POST(request) {
     if (avatar_url !== undefined) updateData.avatar_url = avatar_url;
     if (banner_url !== undefined) updateData.banner_url = banner_url;
     if (social_links !== undefined) updateData.social_links = social_links;
-    if (new_wallet_address !== undefined) updateData.wallet_address = new_wallet_address;
 
-    const { data, error } = await supabase
-      .from('users')
-      .update(updateData)
-      .eq('wallet_address', current_wallet)
-      .select()
-      .single();
+    // Identify the user: prefer email (email-auth users have no wallet), fall back to wallet
+    let query = supabase.from('users').update(updateData).select().single();
+    if (user_provided_email) {
+      query = supabase.from('users').update(updateData).eq('email', user_provided_email).select().single();
+    } else {
+      query = supabase.from('users').update(updateData).eq('wallet_address', current_wallet).select().single();
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('❌ Supabase error:', error);
