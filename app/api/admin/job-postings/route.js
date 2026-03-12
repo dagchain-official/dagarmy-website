@@ -65,14 +65,14 @@ export async function POST(request) {
       requirements: requirements.trim(),
       nice_to_have: nice_to_have?.trim() || null,
       is_active: is_active !== false,
-      created_by: session.user?.id || null,
+      created_by: null,
     })
     .select()
     .single();
 
   if (error) {
     console.error('Create job posting error:', error);
-    return NextResponse.json({ error: 'Failed to create job posting' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to create job posting' }, { status: 500 });
   }
 
   return NextResponse.json({ posting: data }, { status: 201 });
