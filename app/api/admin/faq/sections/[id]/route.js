@@ -7,11 +7,11 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-export async function PATCH(request, { params }) {
+export async function PATCH(request, context) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { id } = params;
+  const { id } = await context.params;
   const body = await request.json();
   const { label, icon_key, color_accent, sort_order } = body;
 
@@ -33,11 +33,11 @@ export async function PATCH(request, { params }) {
   return NextResponse.json({ section: data });
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { id } = params;
+  const { id } = await context.params;
 
   await supabaseAdmin.from('faq_questions').delete().eq('section_id', id);
 
