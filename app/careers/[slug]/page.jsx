@@ -5,8 +5,9 @@ import JobDetailPage from "@/components/careers/JobDetailPage";
 
 export async function generateMetadata({ params }) {
   try {
+    const { slug } = await params;
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || "https://dagarmy.network"}/api/careers/jobs/${params.slug}`,
+      `${process.env.NEXT_PUBLIC_SITE_URL || "https://dagarmy.network"}/api/careers/jobs/${slug}`,
       { cache: "no-store" }
     );
     if (!res.ok) return { title: "Job Not Found — DAGArmy" };
@@ -20,12 +21,13 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default function JobDetailRoute({ params }) {
+export default async function JobDetailRoute({ params }) {
+  const { slug } = await params;
   return (
     <div id="wrapper">
       <Header2 />
       <Suspense fallback={null}>
-        <JobDetailPage slug={params.slug} />
+        <JobDetailPage slug={slug} />
       </Suspense>
       <Footer1 parentClass="footer has-border-top" />
     </div>
