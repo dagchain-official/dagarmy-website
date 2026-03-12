@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 
 const WORK_MODES = ["Remote", "Hybrid", "On-site"];
 const EMP_TYPES = ["Full-time", "Part-time", "Freelance", "Internship"];
@@ -21,6 +21,196 @@ function Field({ label, required, children }) {
     <div style={{ marginBottom: "16px" }}>
       <label style={labelStyle}>{label}{required && <span style={{ color: "#ef4444" }}> *</span>}</label>
       {children}
+    </div>
+  );
+}
+
+/* ── Toolbar button ── */
+function ToolBtn({ title, active, onClick, children }) {
+  return (
+    <button
+      type="button"
+      title={title}
+      onMouseDown={e => { e.preventDefault(); onClick(); }}
+      style={{
+        padding: "4px 8px", borderRadius: "6px", border: "none", cursor: "pointer",
+        fontSize: "12px", fontWeight: "700", lineHeight: 1,
+        background: active ? "#e0e7ff" : "transparent",
+        color: active ? "#4f46e5" : "#475569",
+        transition: "background 0.12s",
+        display: "flex", alignItems: "center", justifyContent: "center", minWidth: "28px", height: "26px",
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+/* ── Rich Text Editor (contenteditable div → converts to/from plain text) ── */
+function RichEditor({ value, onChange, placeholder, rows = 5 }) {
+  const editorRef = useRef(null);
+  const [focused, setFocused] = useState(false);
+
+  /* Init content from value prop (once on mount) */
+  const initialised = useRef(false);
+  const initEditor = useCallback((node) => {
+    if (!node) return;
+    editorRef.current = node;
+    if (!initialised.current) {
+      initialised.current = true;
+      node.innerHTML = toHtml(value || "");
+    }
+  }, []);
+
+  /* Convert plain text → HTML for the editor */
+  function toHtml(text) {
+    if (!text) return "";
+    return text.split("\n").map(line => {
+      const t = line.replace(/^[-•]\s*/, "• ").replace(/^\d+\.\s*/, m => m);
+      return `<div>${escHtml(t) || "<br>"}</div>`;
+    }).join("");
+  }
+
+  /* Convert editor HTML → plain text for storage */
+  function toText(node) {
+    const lines = [];
+    node.childNodes.forEach(child => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const t = child.textContent;
+        if (t) lines.push(t);
+      } else {
+        const t = child.innerText ?? child.textContent ?? "";
+        lines.push(t);
+      }
+    });
+    return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function handleInput() {
+    onChange(toText(editorRef.current));
+  }
+
+  /* Insert text at cursor position */
+  function insertAtCursor(text) {
+    editorRef.current?.focus();
+    const sel = window.getSelection();
+    if (!sel?.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    const node = document.createTextNode(text);
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    onChange(toText(editorRef.current));
+  }
+
+  /* Wrap selected text */
+  function wrapSelection(before, after = before) {
+    editorRef.current?.focus();
+    const sel = window.getSelection();
+    if (!sel?.rangeCount) return;
+    const selected = sel.getRangeAt(0).toString();
+    if (selected) {
+      document.execCommand("insertText", false, before + selected + after);
+    } else {
+      insertAtCursor(before + after);
+    }
+    onChange(toText(editorRef.current));
+  }
+
+  /* Prefix each selected line */
+  function prefixLines(prefix) {
+    editorRef.current?.focus();
+    const sel = window.getSelection();
+    if (!sel?.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    const selected = range.toString();
+    if (selected) {
+      const prefixed = selected.split("\n").map(l => prefix + l.replace(/^([-•]\s*|\d+\.\s*)/, "")).join("\n");
+      document.execCommand("insertText", false, prefixed);
+    } else {
+      document.execCommand("insertText", false, "\n" + prefix);
+    }
+    onChange(toText(editorRef.current));
+  }
+
+  /* Bold: wrap with ** markers (stored, shown as-is in plain text) */
+  function handleBold() { wrapSelection("**"); }
+  function handleBullet() { prefixLines("- "); }
+  function handleNumbered() {
+    editorRef.current?.focus();
+    const sel = window.getSelection();
+    if (!sel?.rangeCount) return;
+    const selected = sel.getRangeAt(0).toString();
+    if (selected) {
+      const lines = selected.split("\n");
+      const numbered = lines.map((l, i) => `${i + 1}. ${l.replace(/^([-•]\s*|\d+\.\s*)/, "")}`).join("\n");
+      document.execCommand("insertText", false, numbered);
+    } else {
+      document.execCommand("insertText", false, "\n1. ");
+    }
+    onChange(toText(editorRef.current));
+  }
+
+  const minH = `${rows * 24 + 20}px`;
+
+  return (
+    <div style={{
+      border: focused ? "1.5px solid #6366f1" : "1.5px solid #e2e8f0",
+      borderRadius: "10px", overflow: "hidden",
+      boxShadow: focused ? "0 0 0 3px rgba(99,102,241,0.1)" : "none",
+      transition: "border-color 0.15s, box-shadow 0.15s",
+    }}>
+      {/* Toolbar */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: "2px",
+        padding: "6px 8px", borderBottom: "1px solid #f1f5f9", background: "#f8fafc",
+        flexWrap: "wrap",
+      }}>
+        <ToolBtn title="Bold (wrap with **)" onClick={handleBold}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+        </ToolBtn>
+        <div style={{ width: "1px", height: "18px", background: "#e2e8f0", margin: "0 2px" }} />
+        <ToolBtn title="Bullet list (- item)" onClick={handleBullet}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg>
+        </ToolBtn>
+        <ToolBtn title="Numbered list (1. item)" onClick={handleNumbered}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4" /><path d="M4 10h2" /><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1.5"/></svg>
+        </ToolBtn>
+        <div style={{ width: "1px", height: "18px", background: "#e2e8f0", margin: "0 2px" }} />
+        <ToolBtn title="Em dash —" onClick={() => insertAtCursor(" — ")}>—</ToolBtn>
+        <ToolBtn title="Insert line break" onClick={() => { editorRef.current?.focus(); document.execCommand("insertText", false, "\n"); onChange(toText(editorRef.current)); }}>↵</ToolBtn>
+      </div>
+
+      {/* Editable area */}
+      <div
+        ref={initEditor}
+        contentEditable
+        suppressContentEditableWarning
+        onInput={handleInput}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        data-placeholder={placeholder}
+        style={{
+          minHeight: minH, padding: "10px 12px",
+          fontSize: "13px", color: "#0f172a", lineHeight: "1.7",
+          outline: "none", fontFamily: "inherit", whiteSpace: "pre-wrap",
+          wordBreak: "break-word", background: "#fff",
+        }}
+      />
+      <style>{`
+        [contenteditable]:empty:before {
+          content: attr(data-placeholder);
+          color: #94a3b8;
+          pointer-events: none;
+        }
+      `}</style>
     </div>
   );
 }
@@ -132,34 +322,42 @@ export default function JobPostingForm({ initial = null, onSave, onCancel }) {
 
         {/* Summary */}
         <Field label="Sub Text / Summary" required>
-          <textarea value={form.summary} onChange={e => set("summary", e.target.value)}
-            rows={3} placeholder="Brief description shown on the careers listing page..."
-            style={{ ...inputStyle, resize: "vertical" }}
-            onFocus={focusStyle} onBlur={blurStyle} />
+          <RichEditor
+            value={form.summary}
+            onChange={v => set("summary", v)}
+            placeholder="Brief description shown on the careers listing page..."
+            rows={3}
+          />
         </Field>
 
         {/* Responsibilities */}
         <Field label="Responsibilities" required>
-          <textarea value={form.responsibilities} onChange={e => set("responsibilities", e.target.value)}
-            rows={6} placeholder={"List each responsibility on a new line:\n- Build and nurture developer relationships\n- Create technical content..."}
-            style={{ ...inputStyle, resize: "vertical" }}
-            onFocus={focusStyle} onBlur={blurStyle} />
+          <RichEditor
+            value={form.responsibilities}
+            onChange={v => set("responsibilities", v)}
+            placeholder={"List each responsibility on a new line:\n- Build and nurture developer relationships\n- Create technical content..."}
+            rows={6}
+          />
         </Field>
 
         {/* Requirements */}
         <Field label="Requirements" required>
-          <textarea value={form.requirements} onChange={e => set("requirements", e.target.value)}
-            rows={5} placeholder={"List each requirement on a new line:\n- 2+ years of experience\n- Strong communication skills..."}
-            style={{ ...inputStyle, resize: "vertical" }}
-            onFocus={focusStyle} onBlur={blurStyle} />
+          <RichEditor
+            value={form.requirements}
+            onChange={v => set("requirements", v)}
+            placeholder={"List each requirement on a new line:\n- 2+ years of experience\n- Strong communication skills..."}
+            rows={5}
+          />
         </Field>
 
         {/* Nice to Have */}
         <Field label="Nice to Have Expertise (Optional)">
-          <textarea value={form.nice_to_have} onChange={e => set("nice_to_have", e.target.value)}
-            rows={3} placeholder={"Optional bonus skills:\n- Experience with Web3 protocols\n- Prior open source contributions..."}
-            style={{ ...inputStyle, resize: "vertical" }}
-            onFocus={focusStyle} onBlur={blurStyle} />
+          <RichEditor
+            value={form.nice_to_have}
+            onChange={v => set("nice_to_have", v)}
+            placeholder={"Optional bonus skills:\n- Experience with Web3 protocols\n- Prior open source contributions..."}
+            rows={3}
+          />
         </Field>
 
         {/* Active toggle */}
