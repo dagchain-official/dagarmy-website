@@ -729,7 +729,7 @@ export default function CareersPage() {
       </div>
 
       {/* Open Roles */}
-      <div ref={rolesRef} style={{ maxWidth: '860px', margin: '0 auto', padding: '64px 24px' }}>
+      <div ref={rolesRef} style={{ maxWidth: '1280px', margin: '0 auto', padding: '64px 24px' }}>
         <div style={{ marginBottom: '40px' }}>
           <h2 style={{ fontSize: '30px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px', margin: '0 0 6px' }}>
             Open Positions
