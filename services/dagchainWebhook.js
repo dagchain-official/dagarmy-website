@@ -14,12 +14,24 @@
  * All calls are fire-and-forget (non-blocking) — never fails the caller.
  */
 
-const WEBHOOK_URL = process.env.DAGCHAIN_WEBHOOK_URL || 'https://nhs-repeated-nov-plates.trycloudflare.com/api/v1/dag-army/webhook';
+const WEBHOOK_URL = process.env.DAGCHAIN_WEBHOOK_URL || 'https://api.dagchain.network/api/v1/dag-army/webhook';
 // DAGARMY_OUTGOING_SECRET = the secret DAGChain uses to verify events coming FROM DAGARMY
 // This is different from DAGCHAIN_WEBHOOK_SECRET (which DAGARMY uses to verify events coming FROM DAGChain)
 const WEBHOOK_SECRET = process.env.DAGARMY_OUTGOING_SECRET || process.env.DAGCHAIN_WEBHOOK_SECRET || '';
 const TIMEOUT_MS = 30000;
 const RETRY_DELAYS = [30_000, 120_000, 600_000]; // 30s, 2m, 10m
+
+function _mapSocialLinks(socialLinks) {
+  if (!socialLinks || typeof socialLinks !== 'object') return null;
+  return {
+    instagram: socialLinks.instagram || '',
+    twitter: socialLinks.x || socialLinks.twitter || '',
+    facebook: socialLinks.facebook || '',
+    telegram: socialLinks.telegram || '',
+    youtube: socialLinks.youtube || '',
+    tiktok: socialLinks.tiktok || '',
+  };
+}
 
 function generateIdempotencyKey(event, userId, extra = '') {
   const date = new Date().toISOString().split('T')[0];
@@ -132,19 +144,21 @@ export function notifyUserCreated(user) {
 export function notifyUserUpdated(user, updates) {
   // Map from DAGARMY snake_case to DAGChain camelCase
   const fieldMapping = {
+    full_name: 'displayName',
     displayName: 'displayName',
     display_name: 'displayName',
     username: 'username',
-    avatar: 'avatar',
     avatar_url: 'avatar',
+    avatar: 'avatar',
     bio: 'bio',
     country: 'country',
-    country_code: 'country',
     first_name: 'firstName',
     firstName: 'firstName',
     last_name: 'lastName',
     lastName: 'lastName',
+    whatsapp_number: 'phone',
     phone: 'phone',
+    country_code: 'phoneCountryCode',
     phone_country_code: 'phoneCountryCode',
     phoneCountryCode: 'phoneCountryCode',
   };
@@ -153,6 +167,12 @@ export function notifyUserUpdated(user, updates) {
   for (const [srcField, destField] of Object.entries(fieldMapping)) {
     if (updates[srcField] !== undefined) safeUpdates[destField] = updates[srcField];
   }
+
+  // Handle social_links separately (needs key remapping)
+  if (updates.social_links !== undefined) {
+    safeUpdates.socialLinks = _mapSocialLinks(updates.social_links);
+  }
+
   if (Object.keys(safeUpdates).length === 0) return;
 
   dispatch('user.updated', user.id, user.email || null, safeUpdates);

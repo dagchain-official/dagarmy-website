@@ -82,10 +82,11 @@ export async function POST(request) {
       {
         first_name,
         last_name,
-        displayName: [first_name, last_name].filter(Boolean).join(' ') || undefined,
         bio,
         avatar_url,
         country_code,
+        whatsapp_number,
+        social_links,
       }
     );
 
