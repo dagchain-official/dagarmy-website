@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 const FAQ_SECTIONS = [
@@ -289,11 +289,44 @@ function FAQItem({ q, a, isOpen, onToggle, accent }) {
   );
 }
 
+function mapDbSections(dbSections) {
+  return dbSections.map((sec) => ({
+    id: String(sec.id),
+    label: sec.label,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    ),
+    color: {
+      bg: sec.color_accent + "12",
+      accent: sec.color_accent || "#6366f1",
+      border: sec.color_accent + "40",
+      light: sec.color_accent + "20",
+    },
+    faqs: (sec.faq_questions || []).map((q) => ({ q: q.question, a: q.answer })),
+  }));
+}
+
 export default function FAQPage() {
-  const [activeSection, setActiveSection] = useState("about");
+  const [sections, setSections] = useState(FAQ_SECTIONS);
+  const [activeSection, setActiveSection] = useState(FAQ_SECTIONS[0]?.id || "about");
   const [openIndex, setOpenIndex] = useState(0);
 
-  const currentSection = FAQ_SECTIONS.find(s => s.id === activeSection);
+  useEffect(() => {
+    fetch("/api/faq")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.sections && d.sections.length > 0) {
+          const mapped = mapDbSections(d.sections);
+          setSections(mapped);
+          setActiveSection(mapped[0].id);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const currentSection = sections.find(s => s.id === activeSection);
 
   const handleSectionChange = (id) => {
     setActiveSection(id);
@@ -398,7 +431,7 @@ export default function FAQPage() {
               margin: '0 0 12px 4px',
             }}>SECTIONS</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {FAQ_SECTIONS.map((section) => {
+              {sections.map((section) => {
                 const active = activeSection === section.id;
                 return (
                   <button
@@ -540,7 +573,7 @@ export default function FAQPage() {
                 Explore other sections
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {FAQ_SECTIONS.filter(s => s.id !== activeSection).map(section => (
+                {sections.filter(s => s.id !== activeSection).map(section => (
                   <button
                     key={section.id}
                     onClick={() => handleSectionChange(section.id)}
