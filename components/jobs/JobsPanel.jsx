@@ -682,15 +682,15 @@ export default function JobsPanel() {
                           onClick={(e) => e.stopPropagation()}
                           style={{
                             flex: 1, padding: '11px 16px', borderRadius: '12px',
-                            background: '#0f172a',
-                            boxShadow: '6px 6px 14px rgba(15,23,42,0.25), -2px -2px 8px rgba(255,255,255,0.7)',
+                            background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)',
+                            boxShadow: '6px 6px 14px rgba(96,165,250,0.3), -2px -2px 8px rgba(255,255,255,0.7)',
                             fontSize: '13px', fontWeight: '700', color: '#fff',
                             textDecoration: 'none', textAlign: 'center',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
                             transition: 'all 0.2s',
                           }}
-                          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '8px 8px 20px rgba(15,23,42,0.35), -2px -2px 10px rgba(255,255,255,0.8)'; }}
-                          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '6px 6px 14px rgba(15,23,42,0.25), -2px -2px 8px rgba(255,255,255,0.7)'; }}
+                          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '8px 8px 20px rgba(96,165,250,0.45), -2px -2px 10px rgba(255,255,255,0.8)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '6px 6px 14px rgba(96,165,250,0.3), -2px -2px 8px rgba(255,255,255,0.7)'; }}
                         >
                           Apply Now
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -869,15 +869,15 @@ export default function JobsPanel() {
                 target="_blank"
                 style={{
                   flex: 1, padding: '14px 24px', borderRadius: '14px',
-                  background: '#0f172a',
-                  boxShadow: '6px 6px 16px rgba(15,23,42,0.28), -2px -2px 8px rgba(255,255,255,0.7)',
+                  background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)',
+                  boxShadow: '6px 6px 16px rgba(96,165,250,0.35), -2px -2px 8px rgba(255,255,255,0.7)',
                   fontSize: '14px', fontWeight: '700', color: '#fff',
                   textDecoration: 'none', textAlign: 'center',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                   transition: 'all 0.2s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '8px 8px 22px rgba(96,165,250,0.5), -2px -2px 10px rgba(255,255,255,0.8)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '6px 6px 16px rgba(96,165,250,0.35), -2px -2px 8px rgba(255,255,255,0.7)'; }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                 Apply on LinkedIn
