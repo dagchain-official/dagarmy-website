@@ -84,7 +84,17 @@ function Tag({ label, type = 'dept' }) {
 
 function parseTextLines(text) {
   if (!text) return [];
-  return text.split('\n').map(l => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
+  return text.split('\n').map(l => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean);
+}
+
+function renderMd(text) {
+  if (!text) return null;
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((p, i) =>
+    p.startsWith('**') && p.endsWith('**')
+      ? <strong key={i}>{p.slice(2, -2)}</strong>
+      : p
+  );
 }
 
 function JobCard({ job, isOpen, onToggle, onApply }) {
@@ -131,7 +141,7 @@ function JobCard({ job, isOpen, onToggle, onApply }) {
           <div style={{ padding: '0 28px 28px', borderTop: '1px solid #f1f5f9' }}>
             {job.summary && (
               <p style={{ color: '#475569', fontSize: '15px', lineHeight: '1.7', marginTop: '20px', marginBottom: '24px' }}>
-                {job.summary}
+                {renderMd(job.summary)}
               </p>
             )}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '24px' }}>
@@ -141,7 +151,7 @@ function JobCard({ job, isOpen, onToggle, onApply }) {
                   <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {responsibilities.map((r, i) => (
                       <li key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', flexShrink: 0, marginTop: '8px' }} />{r}
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', flexShrink: 0, marginTop: '8px' }} /><span>{renderMd(r)}</span>
                       </li>
                     ))}
                   </ul>
@@ -153,7 +163,7 @@ function JobCard({ job, isOpen, onToggle, onApply }) {
                   <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {requirements.map((r, i) => (
                       <li key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', flexShrink: 0, marginTop: '8px' }} />{r}
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', flexShrink: 0, marginTop: '8px' }} /><span>{renderMd(r)}</span>
                       </li>
                     ))}
                   </ul>
@@ -165,7 +175,7 @@ function JobCard({ job, isOpen, onToggle, onApply }) {
                 <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Nice to Have</h4>
                 <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {niceToHave.map((n, i) => (
-                    <li key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '6px 12px', color: '#64748b', fontSize: '13px' }}>{n}</li>
+                    <li key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '6px 12px', color: '#64748b', fontSize: '13px' }}>{renderMd(n)}</li>
                   ))}
                 </ul>
               </div>
