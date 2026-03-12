@@ -96,6 +96,21 @@ export default function FAQManagement() {
     }
   }
 
+  async function seedFAQs() {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/faq/seed", { method: "POST" });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || "Seed failed");
+      notify(`Loaded ${d.sections_created} sections and ${d.questions_created} questions successfully`);
+      await fetchSections();
+    } catch (e) {
+      notify(e.message, "error");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   // ── Section CRUD ────────────────────────────────────────────
   async function saveSection(form) {
     setSaving(true);
@@ -245,7 +260,7 @@ export default function FAQManagement() {
           </div>
           <div style={{ padding: "10px" }}>
             {sections.length === 0 && (
-              <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "13px", padding: "24px 0" }}>No sections yet</p>
+              <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "13px", padding: "16px 8px 8px" }}>No sections yet</p>
             )}
             {sections.map((sec) => {
               const isActive = sec.id === activeSectionId;
@@ -278,9 +293,29 @@ export default function FAQManagement() {
         {/* RIGHT: Questions panel */}
         <div>
           {!activeSection ? (
-            <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #e2e8f0", padding: "64px 32px", textAlign: "center", color: "#94a3b8" }}>
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: "16px", opacity: 0.4 }}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              <p style={{ margin: 0, fontSize: "15px" }}>Select or create a section to manage its questions</p>
+            <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #e2e8f0", padding: "48px 32px", textAlign: "center" }}>
+              {sections.length === 0 ? (
+                <>
+                  <div style={{ width: "56px", height: "56px", borderRadius: "16px", background: "linear-gradient(135deg,#ede9fe,#e0e7ff)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  </div>
+                  <h3 style={{ margin: "0 0 8px", fontSize: "17px", fontWeight: "700", color: "#0f172a" }}>No FAQ data yet</h3>
+                  <p style={{ margin: "0 0 28px", fontSize: "14px", color: "#64748b", maxWidth: "380px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.6 }}>
+                    Load the default FAQ content (6 sections, 33 questions) to get started. You can edit, delete, or add new entries from the admin panel at any time.
+                  </p>
+                  <button style={{ ...btnPrimary, margin: "0 auto", padding: "12px 28px", fontSize: "14px" }} disabled={saving} onClick={seedFAQs}>
+                    {saving ? <Spinner /> : (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+                    )}
+                    Load Default FAQs
+                  </button>
+                </>
+              ) : (
+                <>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: "16px", opacity: 0.4 }}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <p style={{ margin: 0, fontSize: "15px", color: "#94a3b8" }}>Select a section to manage its questions</p>
+                </>
+              )}
             </div>
           ) : (
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #e2e8f0", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
