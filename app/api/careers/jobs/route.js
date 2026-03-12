@@ -9,7 +9,7 @@ const supabaseAdmin = createClient(
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('job_postings')
-    .select('id, title, slug, department, location, work_mode, employment_type, summary, is_active, created_at')
+    .select('id, title, slug, department, location, work_mode, employment_type, summary, responsibilities, requirements, nice_to_have, is_active, created_at')
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 
