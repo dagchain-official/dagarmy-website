@@ -42,17 +42,24 @@ export async function POST(request) {
       role,
       full_name,
       avatar_url,
+      auth_provider,
     })
 
     console.log('✅ User created/updated successfully:', result.user.id)
 
-    // Notify DAGChain of new user (fire-and-forget, only for new users)
-    if (result.isNewUser) {
+    // Notify DAGChain of new user (fire-and-forget)
+    // Fire for: (a) brand-new users, OR (b) existing users who were never synced to DAGChain yet
+    const neverSynced = !result.user.dagchain_synced_at;
+    if (result.isNewUser || neverSynced) {
       notifyUserCreated({
         id: result.user.id,
         email: result.user.email || email,
         wallet_address: result.user.wallet_address || wallet_address,
         full_name: result.user.full_name || full_name,
+        first_name: result.user.first_name || null,
+        last_name: result.user.last_name || null,
+        auth_provider: result.user.auth_provider || auth_provider || null,
+        role: result.user.role || role || 'student',
         referral_code_used: body.referral_code || null,
       })
     }

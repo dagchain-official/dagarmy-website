@@ -98,11 +98,18 @@ function dispatch(event, data, idempotencyKey) {
  */
 export function notifyUserCreated(user) {
   const idempotencyKey = generateIdempotencyKey('user.created', user.id);
+  const displayName = user.full_name
+    || [user.first_name, user.last_name].filter(Boolean).join(' ')
+    || null;
   dispatch('user.created', {
     externalUserId: user.id,
     email: user.email || null,
     walletAddress: user.wallet_address || null,
-    displayName: user.full_name || [user.first_name, user.last_name].filter(Boolean).join(' ') || null,
+    displayName,
+    firstName: user.first_name || null,
+    lastName: user.last_name || null,
+    authProvider: user.auth_provider || null,
+    role: user.role || 'student',
     referralCode: user.referral_code_used || null,
   }, idempotencyKey);
 }
