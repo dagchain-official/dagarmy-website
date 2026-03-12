@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
+import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 
 /* ─── Circular Progress Ring ─── */
 function ProgressRing({ value = 0, size = 64, strokeWidth = 5, color = '#6366f1' }) {
@@ -265,6 +266,8 @@ export default function Dashboard2() {
     };
 
     const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
     const handleStripeUpgrade = async (test = false) => {
         if (!userData?.id || !userData?.email) return;
         setStripeLoading(test ? 'test' : 'full');
@@ -375,7 +378,7 @@ export default function Dashboard2() {
                     {!isLieutenant && (
                         <>
                             <button
-                                onClick={() => handleStripeUpgrade(false)}
+                                onClick={() => setShowUpgradeModal(true)}
                                 disabled={!!stripeLoading}
                                 style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 16px', borderRadius: '10px', border: '1.5px solid #e0e7ff', background: stripeLoading === 'full' ? '#eef2ff' : '#fff', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(99,102,241,0.08)', transition: 'all 0.2s ease' }}
                                 onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; } }}
@@ -1041,6 +1044,15 @@ export default function Dashboard2() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* ── Lieutenant Upgrade Perks Modal ── */}
+            {showUpgradeModal && (
+                <LieutenantUpgradeModal
+                    onClose={() => setShowUpgradeModal(false)}
+                    onConfirm={() => { setShowUpgradeModal(false); handleStripeUpgrade(false); }}
+                    loading={stripeLoading === 'full'}
+                />
             )}
         </div>
     );

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
+import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 import { 
   Award, DollarSign, 
   ChevronRight, Trophy, Zap, Crown, ArrowUp, Flame, Shield, Lock
@@ -15,6 +16,7 @@ export default function StudentRewardsPage() {
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeMessage, setUpgradeMessage] = useState(null);
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   // Burn modal
   const [showBurnModal, setShowBurnModal] = useState(false);
@@ -343,7 +345,7 @@ export default function StudentRewardsPage() {
                   {rewardData.tier !== 'DAG_LIEUTENANT' && rewardData.tier !== 'DAG LIEUTENANT' && (
                     <>
                       <button
-                        onClick={() => handleStripeUpgrade(false)}
+                        onClick={() => setShowUpgradeModal(true)}
                         disabled={!!stripeLoading}
                         style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 18px', borderRadius: '10px', border: '1.5px solid #e0e7ff', background: stripeLoading === 'full' ? '#eef2ff' : '#fff', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', letterSpacing: '0.2px', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(99,102,241,0.08)' }}
                         onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; } }}
@@ -1131,6 +1133,15 @@ export default function StudentRewardsPage() {
       )}
 
       <Footer1 />
+
+      {/* ── Lieutenant Upgrade Perks Modal ── */}
+      {showUpgradeModal && (
+        <LieutenantUpgradeModal
+          onClose={() => setShowUpgradeModal(false)}
+          onConfirm={() => { setShowUpgradeModal(false); handleStripeUpgrade(false); }}
+          loading={stripeLoading === 'full'}
+        />
+      )}
     </div>
   );
 }
