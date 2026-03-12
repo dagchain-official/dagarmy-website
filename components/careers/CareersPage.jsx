@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { CAREERS, DEPARTMENTS, REGIONS } from "@/data/careers";
 
 const IconBriefcase = () => (
@@ -83,38 +82,108 @@ function Tag({ label, type = 'dept' }) {
   );
 }
 
+function parseTextLines(text) {
+  if (!text) return [];
+  return text.split('\n').map(l => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
+}
+
 function JobCard({ job, isOpen, onToggle, onApply }) {
   if (job._isDbJob) {
+    const responsibilities = parseTextLines(job._raw?.responsibilities);
+    const requirements = parseTextLines(job._raw?.requirements);
+    const niceToHave = parseTextLines(job._raw?.nice_to_have);
     return (
-      <Link href={`/careers/${job.slug}`} style={{ textDecoration: 'none' }}>
-        <div style={{
-          background: '#fff', borderRadius: '16px', border: '1.5px solid #e2e8f0',
-          overflow: 'hidden', transition: 'all 0.25s ease', cursor: 'pointer',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-        }}
-          onMouseEnter={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,102,241,0.1)'; }}
-          onMouseLeave={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'; }}
-        >
-          <div style={{ padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px', alignItems: 'center' }}>
-                <Tag label={job.department} type="dept" />
-                <Tag label={job.type} type="type" />
-              </div>
-              <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.3px' }}>{job.title}</h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px', alignItems: 'center' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconGlobe />{job.region}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconMapPin />{job.location}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconClock />{job.type}</span>
-              </div>
-              {job.summary && <p style={{ margin: '10px 0 0', color: '#64748b', fontSize: '14px', lineHeight: 1.6, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{job.summary}</p>}
+      <div style={{
+        background: '#fff', borderRadius: '16px',
+        border: isOpen ? '1.5px solid #3b82f6' : '1.5px solid #e2e8f0',
+        overflow: 'hidden', transition: 'all 0.25s ease',
+        boxShadow: isOpen ? '0 8px 32px rgba(59,130,246,0.08)' : '0 1px 4px rgba(0,0,0,0.04)',
+      }}>
+        <button onClick={onToggle} style={{
+          width: '100%', background: 'none', border: 'none', cursor: 'pointer',
+          padding: '24px 28px', textAlign: 'left', display: 'flex',
+          alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+        }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px', alignItems: 'center' }}>
+              <Tag label={job.department} type="dept" />
+              <Tag label={job.type} type="type" />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0, color: '#6366f1', fontSize: '13px', fontWeight: '700' }}>
-              View Role <IconArrowRight />
+            <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.3px' }}>{job.title}</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px', alignItems: 'center' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconGlobe />{job.region}</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconMapPin />{job.location}</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px' }}><IconClock />{job.type}</span>
             </div>
           </div>
-        </div>
-      </Link>
+          <div style={{
+            width: '32px', height: '32px', borderRadius: '8px', flexShrink: 0,
+            background: isOpen ? '#3b82f6' : '#f1f5f9',
+            color: isOpen ? '#fff' : '#64748b',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'all 0.2s',
+          }}>
+            {isOpen ? <IconChevronUp /> : <IconChevronDown />}
+          </div>
+        </button>
+
+        {isOpen && (
+          <div style={{ padding: '0 28px 28px', borderTop: '1px solid #f1f5f9' }}>
+            {job.summary && (
+              <p style={{ color: '#475569', fontSize: '15px', lineHeight: '1.7', marginTop: '20px', marginBottom: '24px' }}>
+                {job.summary}
+              </p>
+            )}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '24px' }}>
+              {responsibilities.length > 0 && (
+                <div>
+                  <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Responsibilities</h4>
+                  <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {responsibilities.map((r, i) => (
+                      <li key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', flexShrink: 0, marginTop: '8px' }} />{r}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {requirements.length > 0 && (
+                <div>
+                  <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Requirements</h4>
+                  <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {requirements.map((r, i) => (
+                      <li key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', flexShrink: 0, marginTop: '8px' }} />{r}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+            {niceToHave.length > 0 && (
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Nice to Have</h4>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {niceToHave.map((n, i) => (
+                    <li key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '6px 12px', color: '#64748b', fontSize: '13px' }}>{n}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <button onClick={() => onApply(job)} style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              background: '#0f172a', color: '#fff', border: 'none',
+              borderRadius: '10px', padding: '12px 24px',
+              fontSize: '14px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#1e293b'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#0f172a'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            >
+              Apply for this Role <IconArrowRight />
+            </button>
+          </div>
+        )}
+      </div>
     );
   }
 
