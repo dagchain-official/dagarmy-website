@@ -7,9 +7,9 @@ const supabase = createClient(
 );
 
 // DELETE /api/user-events/[id]?userId=...
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 

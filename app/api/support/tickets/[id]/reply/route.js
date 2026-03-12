@@ -7,9 +7,9 @@ const supabase = createClient(
 );
 
 // POST /api/support/tickets/[id]/reply
-export async function POST(request, { params }) {
+export async function POST(request, context) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     const { sender_type, sender_email, sender_name, message } = body;
 

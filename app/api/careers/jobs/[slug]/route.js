@@ -6,8 +6,8 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-export async function GET(request, { params }) {
-  const { slug } = params;
+export async function GET(request, context) {
+  const { slug } = await context.params;
 
   const { data, error } = await supabaseAdmin
     .from('job_postings')

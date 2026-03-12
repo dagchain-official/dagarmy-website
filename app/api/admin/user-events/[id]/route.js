@@ -7,9 +7,9 @@ const supabase = createClient(
 );
 
 // PATCH /api/admin/user-events/[id] — deactivate (set is_active = false)
-export async function PATCH(request, { params }) {
+export async function PATCH(request, context) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
 
     const { error } = await supabase
@@ -25,9 +25,9 @@ export async function PATCH(request, { params }) {
 }
 
 // DELETE /api/admin/user-events/[id] — hard delete
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     await supabase.from('user_event_rsvps').delete().eq('event_id', id);
 
