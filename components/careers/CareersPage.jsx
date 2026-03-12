@@ -82,9 +82,12 @@ function Tag({ label, type = 'dept' }) {
   );
 }
 
-function parseTextLines(text) {
+function parseStructuredLines(text) {
   if (!text) return [];
-  return text.split('\n').map(l => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean);
+  return text.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    if (/^\d+\.\s/.test(l)) return { type: 'heading', text: l.replace(/^\d+\.\s*/, '').trim() };
+    return { type: 'bullet', text: l.replace(/^[-•*]\s*/, '').trim() };
+  });
 }
 
 function renderMd(text) {
@@ -99,9 +102,9 @@ function renderMd(text) {
 
 function JobCard({ job, isOpen, onToggle, onApply }) {
   if (job._isDbJob) {
-    const responsibilities = parseTextLines(job._raw?.responsibilities);
-    const requirements = parseTextLines(job._raw?.requirements);
-    const niceToHave = parseTextLines(job._raw?.nice_to_have);
+    const responsibilities = parseStructuredLines(job._raw?.responsibilities);
+    const requirements = parseStructuredLines(job._raw?.requirements);
+    const niceToHave = parseStructuredLines(job._raw?.nice_to_have);
     return (
       <div style={{
         background: '#fff', borderRadius: '16px',
@@ -148,36 +151,40 @@ function JobCard({ job, isOpen, onToggle, onApply }) {
               {responsibilities.length > 0 && (
                 <div>
                   <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Responsibilities</h4>
-                  <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {responsibilities.map((r, i) => (
-                      <li key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', flexShrink: 0, marginTop: '8px' }} /><span>{renderMd(r)}</span>
-                      </li>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {responsibilities.map((r, i) => r.type === 'heading' ? (
+                      <p key={i} style={{ margin: '10px 0 4px', fontSize: '12px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{renderMd(r.text)}</p>
+                    ) : (
+                      <div key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', flexShrink: 0, marginTop: '8px' }} /><span>{renderMd(r.text)}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
               {requirements.length > 0 && (
                 <div>
                   <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Requirements</h4>
-                  <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {requirements.map((r, i) => (
-                      <li key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', flexShrink: 0, marginTop: '8px' }} /><span>{renderMd(r)}</span>
-                      </li>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {requirements.map((r, i) => r.type === 'heading' ? (
+                      <p key={i} style={{ margin: '10px 0 4px', fontSize: '12px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{renderMd(r.text)}</p>
+                    ) : (
+                      <div key={i} style={{ display: 'flex', gap: '10px', color: '#475569', fontSize: '14px', lineHeight: '1.6' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', flexShrink: 0, marginTop: '8px' }} /><span>{renderMd(r.text)}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
             </div>
             {niceToHave.length > 0 && (
               <div style={{ marginBottom: '24px' }}>
                 <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Nice to Have</h4>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {niceToHave.map((n, i) => (
-                    <li key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '6px 12px', color: '#64748b', fontSize: '13px' }}>{renderMd(n)}</li>
+                    <span key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '6px 12px', color: '#64748b', fontSize: '13px' }}>{renderMd(n.text)}</span>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
             <button onClick={() => onApply(job)} style={{
