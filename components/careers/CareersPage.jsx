@@ -606,7 +606,6 @@ export default function CareersPage() {
     }
   }, [searchParams]);
 
-  // DB jobs converted to card-compatible shape (link to /careers/[slug])
   const dbJobCards = dbJobs.map(j => ({
     slug: j.slug,
     title: j.title,
@@ -619,6 +618,7 @@ export default function CareersPage() {
     requirements: [],
     niceToHave: [],
     _isDbJob: true,
+    _raw: j,
   }));
 
   const allJobs = [...dbJobCards, ...CAREERS];
