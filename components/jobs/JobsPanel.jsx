@@ -3,6 +3,18 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+// Always derive logo from company name via Clearbit — ignores stale LinkedIn CDN URLs
+const getLogoUrl = (companyName) => {
+  if (!companyName) return null;
+  const domain = companyName
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\b(inc|llc|ltd|corp|co|the|group|technologies|technology|solutions|services|global|international|ai)\b/g, '')
+    .trim()
+    .split(/\s+/)[0];
+  return domain ? `https://logo.clearbit.com/${domain}.com` : null;
+};
+
 const techCategories = [
   { 
     name: "Artificial Intelligence", 
@@ -581,19 +593,15 @@ export default function JobsPanel() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       overflow: 'hidden',
                     }}>
-                      {job.companyLogo ? (
-                        <img
-                          src={job.companyLogo}
-                          alt={job.company}
-                          style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '8px' }}
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.parentElement.innerHTML = `<span style="font-size:20px;font-weight:800;color:#475569">${job.company?.charAt(0) || 'C'}</span>`;
-                          }}
-                        />
-                      ) : (
-                        <span style={{ fontSize: '20px', fontWeight: '800', color: '#475569' }}>{job.company?.charAt(0) || 'C'}</span>
-                      )}
+                      <img
+                        src={getLogoUrl(job.company)}
+                        alt={job.company}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '8px' }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = `<span style="font-size:20px;font-weight:800;color:#475569">${job.company?.charAt(0) || 'C'}</span>`;
+                        }}
+                      />
                     </div>
 
                     {/* Content */}
@@ -758,19 +766,15 @@ export default function JobsPanel() {
                   background: nm.bg, boxShadow: nm.shadowSm,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
                 }}>
-                  {selectedJob.companyLogo ? (
-                    <img
-                      src={selectedJob.companyLogo}
-                      alt={selectedJob.company}
-                      style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '10px' }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = `<span style="font-size:22px;font-weight:800;color:#475569">${selectedJob.company?.charAt(0) || 'C'}</span>`;
-                      }}
-                    />
-                  ) : (
-                    <span style={{ fontSize: '22px', fontWeight: '800', color: '#475569' }}>{selectedJob.company?.charAt(0) || 'C'}</span>
-                  )}
+                  <img
+                    src={getLogoUrl(selectedJob.company)}
+                    alt={selectedJob.company}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '10px' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = `<span style="font-size:22px;font-weight:800;color:#475569">${selectedJob.company?.charAt(0) || 'C'}</span>`;
+                    }}
+                  />
                 </div>
 
                 {/* Info */}
