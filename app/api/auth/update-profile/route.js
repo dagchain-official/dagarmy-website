@@ -78,12 +78,14 @@ export async function POST(request) {
 
     // Notify DAGChain of profile update (fire-and-forget)
     notifyUserUpdated(
-      { id: data.id },
+      { id: data.id, email: data.email },
       {
+        first_name,
+        last_name,
         displayName: [first_name, last_name].filter(Boolean).join(' ') || undefined,
-        bio: bio,
-        avatar: avatar_url,
-        country: country_code,
+        bio,
+        avatar_url,
+        country_code,
       }
     );
 

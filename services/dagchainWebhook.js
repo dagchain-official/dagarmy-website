@@ -70,7 +70,14 @@ async function sendWithRetry(payload, attempt = 0) {
   }
 }
 
-function dispatch(event, data, idempotencyKey) {
+/**
+ * dispatch — builds the top-level envelope and sends.
+ * @param {string} event
+ * @param {string} userId   - DAGARMY user ID (referred user for referral events)
+ * @param {string|null} email - top-level email (referred user for referral events)
+ * @param {Object} data     - clean event-specific data object (no internal keys)
+ */
+function dispatch(event, userId, email, data) {
   if (!WEBHOOK_SECRET) {
     console.warn(`[DAGChain Webhook → DAGChain] DAGARMY_OUTGOING_SECRET not set — skipping ${event}`);
     return;
@@ -79,8 +86,8 @@ function dispatch(event, data, idempotencyKey) {
   const payload = {
     event,
     timestamp: new Date().toISOString(),
-    userId: String(data.externalUserId || data.referredExternalId || ''),
-    email: data.email || undefined,
+    userId: String(userId || ''),
+    email: email || undefined,
     data,
   };
 
@@ -93,66 +100,74 @@ function dispatch(event, data, idempotencyKey) {
 }
 
 /**
- * Fire user.created — call after a new user profile is saved
- * @param {Object} user - { id, email, wallet_address, first_name, last_name, referral_code_used }
+ * Fire user.created — call after a new user profile is saved.
+ * @param {Object} user - { id, email, wallet_address, full_name, first_name, last_name,
+ *                          auth_provider, role, referral_code_used, referral_code_referred_by }
  */
 export function notifyUserCreated(user) {
-  const idempotencyKey = generateIdempotencyKey('user.created', user.id);
   const displayName = user.full_name
     || [user.first_name, user.last_name].filter(Boolean).join(' ')
     || null;
-  dispatch('user.created', {
-    externalUserId: user.id,
-    email: user.email || null,
-    walletAddress: user.wallet_address || null,
-    displayName,
-    firstName: user.first_name || null,
-    lastName: user.last_name || null,
-    authProvider: user.auth_provider || null,
-    role: user.role || 'student',
-    referralCode: user.referral_code_used || null,
-  }, idempotencyKey);
+
+  // Clean data object — only fields DAGChain accepts
+  const data = {};
+  if (user.wallet_address)          data.walletAddress    = user.wallet_address;
+  if (displayName)                  data.displayName      = displayName;
+  if (user.first_name)              data.firstName        = user.first_name;
+  if (user.last_name)               data.lastName         = user.last_name;
+  if (user.referral_code_used)      data.referralCode     = user.referral_code_used;
+  if (user.referral_code_referred_by) data.referredByCode = user.referral_code_referred_by;
+
+  dispatch('user.created', user.id, user.email || null, data);
 }
 
 /**
- * Fire user.updated — call after profile fields are updated
- * @param {Object} user - { id, email, wallet_address, ...updatedFields }
- * @param {Object} updates - only the fields that changed (safe fields only)
+ * Fire user.updated — call after profile fields are updated.
+ * Only safe fields accepted by DAGChain are forwarded.
+ * @param {Object} user    - { id, email }
+ * @param {Object} updates - keys can be camelCase or snake_case; normalised here
  */
 export function notifyUserUpdated(user, updates) {
-  const idempotencyKey = generateIdempotencyKey('user.updated', user.id, Date.now());
-  const safeFields = ['displayName', 'username', 'avatar', 'bio', 'country', 'first_name', 'last_name'];
-  const safeUpdates = {};
-  for (const field of safeFields) {
-    if (updates[field] !== undefined) safeUpdates[field] = updates[field];
-  }
-  if (Object.keys(safeUpdates).length === 0) return;
+  // Normalise snake_case → camelCase and filter to DAGChain-safe fields only
+  const data = {};
+  const str = v => (v !== undefined && v !== null && v !== '') ? String(v) : undefined;
 
-  dispatch('user.updated', {
-    externalUserId: user.id,
-    email: user.email || null,
-    ...safeUpdates,
-  }, idempotencyKey);
+  const displayName = str(updates.displayName || updates.display_name);
+  const username    = str(updates.username);
+  const avatar      = str(updates.avatar || updates.avatar_url);
+  const bio         = str(updates.bio);
+  const country     = str(updates.country || updates.country_code);
+  const firstName   = str(updates.firstName || updates.first_name);
+  const lastName    = str(updates.lastName  || updates.last_name);
+
+  if (displayName !== undefined) data.displayName = displayName;
+  if (username    !== undefined) data.username    = username;
+  if (avatar      !== undefined) data.avatar      = avatar;
+  if (bio         !== undefined) data.bio         = bio;
+  if (country     !== undefined) data.country     = country;
+  if (firstName   !== undefined) data.firstName   = firstName;
+  if (lastName    !== undefined) data.lastName    = lastName;
+
+  if (Object.keys(data).length === 0) return;
+
+  dispatch('user.updated', user.id, user.email || null, data);
 }
 
 /**
  * Fire referral.completed — call after a referral is validated and points awarded.
- * DAGChain is the SSO source of truth for referrals.
- *
- * @param {Object} referrer - { id, email, wallet_address }
- * @param {Object} referred - { id, email, wallet_address }
+ * Top-level userId/email = the REFERRED (new) user.
+ * @param {Object} referrer     - { id, email }
+ * @param {Object} referred     - { id, email }
  * @param {string} referralCode - the code used
- * @param {string} source - 'link' | 'direct' | 'social' | 'qr_code'
+ * @param {string} source       - 'link' | 'direct' | 'social' | 'qr_code' | 'webhook'
  */
-export function notifyReferralCompleted(referrer, referred, referralCode, source = 'direct') {
-  const idempotencyKey = generateIdempotencyKey('referral.completed', referrer.id, referred.id);
-  dispatch('referral.completed', {
-    externalUserId: referred.id,
-    referredExternalId: referred.id,
-    referrerExternalId: referrer.id,
-    referrerEmail: referrer.email || null,
-    email: referred.email || null,
-    referralCode: referralCode || null,
+export function notifyReferralCompleted(referrer, referred, referralCode, source = 'webhook') {
+  const data = {
+    referrerExternalId: referrer.id   || null,
+    referrerEmail:      referrer.email || null,
+    referralCode:       referralCode   || null,
     source,
-  }, idempotencyKey);
+  };
+
+  dispatch('referral.completed', referred.id, referred.email || null, data);
 }
