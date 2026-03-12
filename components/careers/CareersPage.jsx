@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { CAREERS, DEPARTMENTS, REGIONS } from "@/data/careers";
 
 const IconBriefcase = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -615,11 +614,8 @@ export default function CareersPage() {
   useEffect(() => {
     const slug = searchParams.get('job');
     if (slug) {
-      const found = CAREERS.find(j => j.slug === slug);
-      if (found) {
-        setOpenSlug(slug);
-        setTimeout(() => rolesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
-      }
+      setOpenSlug(slug);
+      setTimeout(() => rolesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
     }
   }, [searchParams]);
 
@@ -638,7 +634,7 @@ export default function CareersPage() {
     _raw: j,
   }));
 
-  const allJobs = [...dbJobCards, ...CAREERS];
+  const allJobs = dbJobCards;
   const allDepts = ['All', ...new Set(allJobs.map(j => j.department))];
   const allRegions = ['All', ...new Set(allJobs.map(j => j.region))];
 
