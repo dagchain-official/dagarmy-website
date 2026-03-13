@@ -3,6 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import { getAdminSession, requireMasterAdmin } from '@/lib/admin-auth';
+import { sendEmail } from '@/lib/email/smtp-client';
+import { adminInviteEmailTemplate } from '@/lib/email-templates';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -118,6 +120,20 @@ export async function POST(request) {
           details: { email, full_name, role_name }
         });
     }
+
+    // Send admin invite email with credentials (fire-and-forget)
+    const inviterName = session?.user?.full_name || session?.user?.email || 'DAGARMY Master Admin';
+    sendEmail('admin@dagchain.network', {
+      to: email,
+      subject: `You've been invited to DAGARMY as ${role_name || 'Admin'}`,
+      html: adminInviteEmailTemplate({
+        fullName: full_name,
+        email,
+        temporaryPassword,
+        roleName: role_name || 'Admin',
+        invitedByName: inviterName,
+      }),
+    }).catch(err => console.error('Admin invite email failed (non-blocking):', err));
 
     return NextResponse.json({
       success: true,

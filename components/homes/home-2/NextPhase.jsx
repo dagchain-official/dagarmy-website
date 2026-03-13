@@ -26,6 +26,17 @@ export default function NextPhase() {
       position: 'relative',
       overflow: 'hidden'
     }}>
+      <style>{`
+        .nextphase-heading { font-size: clamp(28px, 6vw, 42px); }
+        .nextphase-sub { font-size: clamp(15px, 3vw, 18px); }
+        .nextphase-box { padding: 24px !important; }
+        @media (max-width: 767px) {
+          .nextphase-cta {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      `}</style>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 1 }}>
         <div className="row">
           <div className="col-12">
@@ -54,10 +65,9 @@ export default function NextPhase() {
               </div>
               
               <h2 
-                className="wow fadeInUp" 
+                className="wow fadeInUp nextphase-heading" 
                 data-wow-delay="0.2s"
                 style={{
-                  fontSize: '42px',
                   fontWeight: '700',
                   color: '#ffffff',
                   marginBottom: '24px',
@@ -68,10 +78,9 @@ export default function NextPhase() {
               </h2>
               
               <p 
-                className="wow fadeInUp" 
+                className="wow fadeInUp nextphase-sub" 
                 data-wow-delay="0.3s"
                 style={{
-                  fontSize: '18px',
                   color: 'rgba(255, 255, 255, 0.95)',
                   maxWidth: '700px',
                   margin: '0 auto 32px',
@@ -120,7 +129,7 @@ export default function NextPhase() {
                     window.modal.open();
                   }
                 }}
-                className="wow fadeInUp"
+                className="wow fadeInUp nextphase-cta"
                 data-wow-delay="0.4s"
                 style={{
                   display: 'inline-flex',

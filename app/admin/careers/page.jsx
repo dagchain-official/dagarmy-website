@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import SubAdminLayout from "@/components/admin/SubAdminLayout";
+import JobPostingsManager from "@/components/admin/JobPostingsManager";
 
 function ResumeDownload({ filename, label }) {
   const [loading, setLoading] = useState(false);
@@ -69,10 +71,13 @@ function StatCard({ label, value, color, bg, icon }) {
 }
 
 function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
+  const router = useRouter();
   const [status, setStatus] = useState(app.status);
   const [notes, setNotes] = useState(app.notes || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const emailUrl = `/admin/email?composeTo=${encodeURIComponent(app.email)}&composeSubject=${encodeURIComponent('Re: Your application for ' + app.role_title)}`;
 
   const handleSave = async () => {
     setSaving(true);
@@ -111,6 +116,12 @@ function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
 
         {/* Body */}
         <div style={{ padding: '24px 28px', flex: 1 }}>
+          {/* Email button */}
+          <button onClick={() => router.push(emailUrl)} style={{ width: '100%', padding: '10px', borderRadius: '10px', marginBottom: '16px', border: '1.5px solid #6366f1', background: '#eff0ff', color: '#6366f1', fontSize: '13px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}>
+            <svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round'><path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/><polyline points='22,6 12,13 2,6'/></svg>
+            Email Applicant
+          </button>
+
           {/* Applicant info */}
           <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '16px 18px', marginBottom: '20px' }}>
             <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Applicant</p>
@@ -211,6 +222,7 @@ function Row({ label, value }) {
 }
 
 export default function AdminCareersPage() {
+  const [tab, setTab] = useState('applications');
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
@@ -273,21 +285,31 @@ export default function AdminCareersPage() {
     fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.15s',
   });
 
+  const tabStyle = (active) => ({
+    padding: '10px 22px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+    fontSize: '13px', fontWeight: '700', transition: 'all 0.15s',
+    background: active ? '#0f172a' : 'transparent',
+    color: active ? '#fff' : '#64748b',
+  });
+
   return (
     <SubAdminLayout>
       <div style={{ padding: '32px', maxWidth: '1200px' }}>
         {/* Header */}
-        <div style={{ marginBottom: '28px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-          <div>
-            <h1 style={{ margin: '0 0 4px', fontSize: '24px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>Career Applications</h1>
-            <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>Review and manage job applications from dagarmy.network/careers</p>
-          </div>
-          <button onClick={fetchApplications} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '10px', padding: '9px 16px', fontSize: '13px', fontWeight: '600', color: '#475569', cursor: 'pointer' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-            Refresh
-          </button>
+        <div style={{ marginBottom: '20px' }}>
+          <h1 style={{ margin: '0 0 4px', fontSize: '24px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>Careers</h1>
+          <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>Manage job postings and review applicants</p>
         </div>
 
+        {/* Tabs */}
+        <div style={{ display: 'inline-flex', background: '#f1f5f9', borderRadius: '12px', padding: '4px', marginBottom: '28px', gap: '2px' }}>
+          <button style={tabStyle(tab === 'applications')} onClick={() => setTab('applications')}>Applications</button>
+          <button style={tabStyle(tab === 'postings')} onClick={() => setTab('postings')}>Job Postings</button>
+        </div>
+
+        {tab === 'postings' && <JobPostingsManager />}
+
+        {tab === 'applications' && <>
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '28px' }}>
           <StatCard label="Total Applications" value={stats.total} color="#6366f1" bg="#eff0ff"
@@ -417,15 +439,16 @@ export default function AdminCareersPage() {
         <p style={{ margin: '12px 0 0', fontSize: '12px', color: '#94a3b8', textAlign: 'right' }}>
           Showing {filtered.length} of {applications.length} applications
         </p>
-      </div>
 
-      {selected && (
-        <DetailPanel
-          app={selected}
-          onClose={() => setSelected(null)}
-          onStatusChange={handleStatusChange}
-        />
-      )}
+        {selected && (
+          <DetailPanel
+            app={selected}
+            onClose={() => setSelected(null)}
+            onStatusChange={handleStatusChange}
+          />
+        )}
+        </>}
+      </div>
     </SubAdminLayout>
   );
 }

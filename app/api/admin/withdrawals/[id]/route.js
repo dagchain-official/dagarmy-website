@@ -8,11 +8,11 @@ import { requirePermission } from '@/lib/admin-auth';
  * Body: { status, adminNote? }
  * Valid transitions: pending -> approved -> processing -> paid | rejected
  */
-export async function PATCH(request, { params }) {
+export async function PATCH(request, context) {
   const guard = await requirePermission(request, 'payments.write');
   if (guard) return guard;
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     const { status, adminNote } = body;
 
@@ -94,9 +94,9 @@ export async function PATCH(request, { params }) {
  * GET /api/admin/withdrawals/[id]
  * Get a single withdrawal request with full user details.
  */
-export async function GET(request, { params }) {
+export async function GET(request, context) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     const { data, error } = await supabaseAdmin
       .from('withdrawal_requests')

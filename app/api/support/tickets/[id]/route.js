@@ -7,9 +7,9 @@ const supabase = createClient(
 );
 
 // GET /api/support/tickets/[id] — fetch ticket + messages
-export async function GET(request, { params }) {
+export async function GET(request, context) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     const { data: ticket, error: ticketError } = await supabase
       .from('support_tickets')

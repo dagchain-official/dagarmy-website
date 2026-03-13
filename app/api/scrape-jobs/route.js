@@ -93,11 +93,20 @@ export async function GET(request) {
         // Extract company name and logo
         try {
           const companyImg = $job('div.top-card-layout__card').find('img').first();
-          job.companyLogo = companyImg.attr('data-delayed-url') || companyImg.attr('src');
           job.company = companyImg.attr('alt') || 
                         $job('div.top-card-layout__card').find('a').text().trim() ||
                         $job('.topcard__org-name-link').text().trim() ||
                         $job('.topcard__flavor').first().text().trim();
+          // Derive Clearbit logo URL from company name (reliable, no auth needed)
+          if (job.company) {
+            const domain = job.company
+              .toLowerCase()
+              .replace(/[^a-z0-9\s]/g, '')
+              .replace(/\b(inc|llc|ltd|corp|co|the|group|technologies|technology|solutions|services|global|international|ai)\b/g, '')
+              .trim()
+              .split(/\s+/)[0];
+            if (domain) job.companyLogo = `https://logo.clearbit.com/${domain}.com`;
+          }
         } catch (e) {
           console.error(`Error extracting company for job ${jobId}:`, e.message);
         }

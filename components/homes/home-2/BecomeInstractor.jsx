@@ -6,6 +6,12 @@ import styles from "./BecomeInstractor.module.css";
 export default function BecomeInstractor() {
   return (
     <section className="section-become-instructor tf-spacing-4 pb-0" style={{ paddingTop: '60px' }}>
+      <style>{`
+        .instructor-heading { font-size: clamp(24px, 5vw, 36px); }
+        @media (max-width: 767px) {
+          .instructor-btn { width: 100% !important; min-width: unset !important; }
+        }
+      `}</style>
       <div className="tf-container">
         <div className="row justify-center">
           <div className="col-md-5">
@@ -48,10 +54,9 @@ export default function BecomeInstractor() {
                 </div>
               </div>
               <h2
-                className="fw-7 letter-spacing-1 wow fadeInUp"
+                className="fw-7 letter-spacing-1 wow fadeInUp instructor-heading"
                 data-wow-delay="0.1s"
                 style={{
-                  fontSize: '36px',
                   fontWeight: '700',
                   color: '#1a1a1a',
                   marginBottom: '20px',
@@ -151,7 +156,7 @@ export default function BecomeInstractor() {
               <PremiumButton
                 text="Start Teaching Today"
                 href="#"
-                className="wow fadeInUp"
+                className="wow fadeInUp instructor-btn"
                 data-wow-delay="0.3s"
                 style={{ height: '52px', minWidth: '220px' }}
               />

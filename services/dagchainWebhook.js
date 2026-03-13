@@ -15,9 +15,23 @@
  */
 
 const WEBHOOK_URL = process.env.DAGCHAIN_WEBHOOK_URL || 'https://api.dagchain.network/api/v1/dag-army/webhook';
-const WEBHOOK_SECRET = process.env.DAGCHAIN_WEBHOOK_SECRET || '';
+// DAGARMY_OUTGOING_SECRET = the secret DAGChain uses to verify events coming FROM DAGARMY
+// This is different from DAGCHAIN_WEBHOOK_SECRET (which DAGARMY uses to verify events coming FROM DAGChain)
+const WEBHOOK_SECRET = process.env.DAGARMY_OUTGOING_SECRET || process.env.DAGCHAIN_WEBHOOK_SECRET || '';
 const TIMEOUT_MS = 30000;
 const RETRY_DELAYS = [30_000, 120_000, 600_000]; // 30s, 2m, 10m
+
+function _mapSocialLinks(socialLinks) {
+  if (!socialLinks || typeof socialLinks !== 'object') return null;
+  return {
+    instagram: socialLinks.instagram || '',
+    twitter: socialLinks.x || socialLinks.twitter || '',
+    facebook: socialLinks.facebook || '',
+    telegram: socialLinks.telegram || '',
+    youtube: socialLinks.youtube || '',
+    tiktok: socialLinks.tiktok || '',
+  };
+}
 
 function generateIdempotencyKey(event, userId, extra = '') {
   const date = new Date().toISOString().split('T')[0];
@@ -68,80 +82,117 @@ async function sendWithRetry(payload, attempt = 0) {
   }
 }
 
-function dispatch(event, data, idempotencyKey) {
+/**
+ * dispatch — builds the top-level envelope and sends.
+ * @param {string} event
+ * @param {string} userId   - DAGARMY user ID (referred user for referral events)
+ * @param {string|null} email - top-level email (referred user for referral events)
+ * @param {Object} data     - clean event-specific data object (no internal keys)
+ */
+function dispatch(event, userId, email, data) {
   if (!WEBHOOK_SECRET) {
-    console.warn(`[DAGChain Webhook] DAGCHAIN_WEBHOOK_SECRET not set — skipping ${event}`);
+    console.warn(`[DAGChain Webhook → DAGChain] DAGARMY_OUTGOING_SECRET not set — skipping ${event}`);
     return;
   }
 
   const payload = {
     event,
     timestamp: new Date().toISOString(),
-    userId: String(data.externalUserId || data.referredExternalId || ''),
-    email: data.email || undefined,
+    userId: String(userId || ''),
+    email: email || undefined,
     data,
   };
 
+  console.log(`[DAGChain Webhook → DAGChain] Dispatching ${event} to ${WEBHOOK_URL} for user=${payload.userId || payload.email}`);
+
   // Fire-and-forget — never blocks the caller
   sendWithRetry(payload).catch(err => {
-    console.error(`[DAGChain Webhook] Unexpected dispatch error for ${event}:`, err.message);
+    console.error(`[DAGChain Webhook → DAGChain] Unexpected dispatch error for ${event}:`, err.message);
   });
 }
 
 /**
- * Fire user.created — call after a new user profile is saved
- * @param {Object} user - { id, email, wallet_address, first_name, last_name, referral_code_used }
+ * Fire user.created — call after a new user profile is saved.
+ * @param {Object} user - { id, email, wallet_address, full_name, first_name, last_name,
+ *                          auth_provider, role, referral_code_used, referral_code_referred_by }
  */
 export function notifyUserCreated(user) {
-  const idempotencyKey = generateIdempotencyKey('user.created', user.id);
-  dispatch('user.created', {
-    externalUserId: user.id,
-    email: user.email || null,
-    walletAddress: user.wallet_address || null,
-    displayName: [user.first_name, user.last_name].filter(Boolean).join(' ') || null,
-    referralCode: user.referral_code_used || null,
-  }, idempotencyKey);
+  const displayName = user.full_name
+    || [user.first_name, user.last_name].filter(Boolean).join(' ')
+    || null;
+
+  // Clean data object — only fields DAGChain accepts
+  const data = {};
+  if (user.wallet_address)          data.walletAddress    = user.wallet_address;
+  if (displayName)                  data.displayName      = displayName;
+  if (user.first_name)              data.firstName        = user.first_name;
+  if (user.last_name)               data.lastName         = user.last_name;
+  // referralCode = the user's OWN code (what they share with others)
+  if (user.referral_code_own)       data.referralCode     = user.referral_code_own;
+  // referredByCode = the code this user was referred WITH (someone else's code they used)
+  if (user.referral_code_used)      data.referredByCode   = user.referral_code_used;
+
+  dispatch('user.created', user.id, user.email || null, data);
 }
 
 /**
- * Fire user.updated — call after profile fields are updated
- * @param {Object} user - { id, email, wallet_address, ...updatedFields }
- * @param {Object} updates - only the fields that changed (safe fields only)
+ * Fire user.updated — call after profile fields are updated.
+ * Only safe fields accepted by DAGChain are forwarded.
+ * @param {Object} user    - { id, email }
+ * @param {Object} updates - keys can be camelCase or snake_case; normalised here
  */
 export function notifyUserUpdated(user, updates) {
-  const idempotencyKey = generateIdempotencyKey('user.updated', user.id, Date.now());
-  const safeFields = ['displayName', 'username', 'avatar', 'bio', 'country', 'first_name', 'last_name'];
+  // Map from DAGARMY snake_case to DAGChain camelCase
+  const fieldMapping = {
+    full_name: 'displayName',
+    displayName: 'displayName',
+    display_name: 'displayName',
+    username: 'username',
+    avatar_url: 'avatar',
+    avatar: 'avatar',
+    bio: 'bio',
+    country: 'country',
+    first_name: 'firstName',
+    firstName: 'firstName',
+    last_name: 'lastName',
+    lastName: 'lastName',
+    whatsapp_number: 'phone',
+    phone: 'phone',
+    country_code: 'phoneCountryCode',
+    phone_country_code: 'phoneCountryCode',
+    phoneCountryCode: 'phoneCountryCode',
+  };
+
   const safeUpdates = {};
-  for (const field of safeFields) {
-    if (updates[field] !== undefined) safeUpdates[field] = updates[field];
+  for (const [srcField, destField] of Object.entries(fieldMapping)) {
+    if (updates[srcField] !== undefined) safeUpdates[destField] = updates[srcField];
   }
+
+  // Handle social_links separately (needs key remapping)
+  if (updates.social_links !== undefined) {
+    safeUpdates.socialLinks = _mapSocialLinks(updates.social_links);
+  }
+
   if (Object.keys(safeUpdates).length === 0) return;
 
-  dispatch('user.updated', {
-    externalUserId: user.id,
-    email: user.email || null,
-    ...safeUpdates,
-  }, idempotencyKey);
+  dispatch('user.updated', user.id, user.email || null, safeUpdates);
 }
 
 /**
  * Fire referral.completed — call after a referral is validated and points awarded.
- * DAGChain is the SSO source of truth for referrals.
- *
- * @param {Object} referrer - { id, email, wallet_address }
- * @param {Object} referred - { id, email, wallet_address }
+ * Top-level userId/email = the REFERRED (new) user.
+ * @param {Object} referrer     - { id, email }
+ * @param {Object} referred     - { id, email }
  * @param {string} referralCode - the code used
- * @param {string} source - 'link' | 'direct' | 'social' | 'qr_code'
+ * @param {string} source       - 'link' | 'direct' | 'social' | 'qr_code' | 'webhook'
  */
-export function notifyReferralCompleted(referrer, referred, referralCode, source = 'direct') {
-  const idempotencyKey = generateIdempotencyKey('referral.completed', referrer.id, referred.id);
-  dispatch('referral.completed', {
-    externalUserId: referred.id,
-    referredExternalId: referred.id,
-    referrerExternalId: referrer.id,
-    referrerEmail: referrer.email || null,
-    email: referred.email || null,
-    referralCode: referralCode || null,
+export function notifyReferralCompleted(referrer, referred, referralCode, source = 'webhook') {
+  const data = {
+    referrerExternalId: referrer.id   || null,
+    referrerEmail:      referrer.email || null,
+    referralCode:       referralCode   || null,
     source,
-  }, idempotencyKey);
+  };
+
+  dispatch('referral.completed', referred.id, referred.email || null, data);
 }

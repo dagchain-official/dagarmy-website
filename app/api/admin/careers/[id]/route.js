@@ -7,11 +7,11 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-export async function PATCH(request, { params }) {
+export async function PATCH(request, context) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { id } = params;
+  const { id } = await context.params;
   const body = await request.json();
   const { status, notes } = body;
 

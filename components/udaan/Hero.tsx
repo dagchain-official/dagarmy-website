@@ -58,6 +58,17 @@ function Stat({ num, suffix = "", label, delay = 0 }: { num: number; suffix?: st
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [textWidth, setTextWidth] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      if (textRef.current) setTextWidth(textRef.current.offsetWidth);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const yContent = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "12%"]), { stiffness: 55, damping: 18 });
   const fadeOut = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -164,24 +175,62 @@ export default function Hero() {
             <div style={{ width: 28, height: 1, background: "#c7c7e0" }} />
           </motion.div>
 
-          {/* UDAAN — Nasalization, commanding */}
-          <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", overflow: "hidden" }}>
-            <motion.div
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ duration: 0.9, delay: 0.22, ease }}
-              style={{
-                fontFamily: "'Nasalization', sans-serif",
-                fontWeight: 400,
-                fontSize: "clamp(80px, 14vw, 200px)",
-                letterSpacing: "0.12em",
-                lineHeight: 0.92,
-                color: "#0a0a0f",
-                textAlign: "center",
-              }}
-            >
-              UDAAN
-            </motion.div>
+          {/* UDAAN — Nasalization + split line + plane */}
+          <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", textAlign: "center" }}>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <motion.div
+                ref={textRef}
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: "0%", opacity: 1 }}
+                transition={{ duration: 0.9, delay: 0.22, ease }}
+                style={{
+                  fontFamily: "'Nasalization', sans-serif",
+                  fontWeight: 400,
+                  fontSize: "clamp(80px, 14vw, 200px)",
+                  letterSpacing: "0.12em",
+                  lineHeight: 0.92,
+                  color: "#0a0a0f",
+                  display: "block",
+                }}
+              >
+                UDAAN
+              </motion.div>
+              {/* White split line sweeping left to right */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.7, delay: 0.9, ease }}
+                style={{
+                  position: "absolute",
+                  left: 0, right: 0,
+                  top: "50%",
+                  height: "clamp(8px, 1.1vw, 17px)",
+                  background: "#ffffff",
+                  pointerEvents: "none",
+                  transformOrigin: "left center",
+                }}
+              />
+              {/* Plane — sweeps from x:0 to end of text width */}
+              {textWidth > 0 && (
+                <motion.img
+                  src="/images/icons8-plane-100.png"
+                  alt=""
+                  initial={{ x: 0 }}
+                  animate={{ x: textWidth }}
+                  transition={{ duration: 2.0, delay: 0.9, ease }}
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: 0,
+                    translateY: "-50%",
+                    height: "clamp(28px, 4vw, 58px)",
+                    width: "auto",
+                    display: "block",
+                    pointerEvents: "none",
+                  }}
+                />
+              )}
+            </div>
           </div>
 
           {/* Subtitle — single line */}

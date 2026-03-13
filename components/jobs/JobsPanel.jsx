@@ -3,6 +3,18 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+// Always derive logo from company name via Clearbit — ignores stale LinkedIn CDN URLs
+const getLogoUrl = (companyName) => {
+  if (!companyName) return null;
+  const domain = companyName
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\b(inc|llc|ltd|corp|co|the|group|technologies|technology|solutions|services|global|international|ai)\b/g, '')
+    .trim()
+    .split(/\s+/)[0];
+  return domain ? `https://logo.clearbit.com/${domain}.com` : null;
+};
+
 const techCategories = [
   { 
     name: "Artificial Intelligence", 
@@ -304,688 +316,548 @@ export default function JobsPanel() {
     }
   };
 
+  /* ── Neumorphic helpers ── */
+  const nm = {
+    bg: '#eef0f5',
+    shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
+    shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
+    shadowInset: 'inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9)',
+    shadowHover: '12px 12px 28px rgba(166,180,200,0.65), -12px -12px 28px rgba(255,255,255,0.98)',
+  };
+
+  const NmCard = ({ children, style = {}, hover = true, onClick }) => (
+    <div
+      onClick={onClick}
+      style={{
+        background: nm.bg,
+        borderRadius: '18px',
+        boxShadow: nm.shadow,
+        transition: 'box-shadow 0.25s, transform 0.25s',
+        cursor: onClick ? 'pointer' : 'default',
+        ...style,
+      }}
+      onMouseEnter={hover ? e => {
+        e.currentTarget.style.boxShadow = nm.shadowHover;
+        e.currentTarget.style.transform = 'translateY(-3px)';
+      } : undefined}
+      onMouseLeave={hover ? e => {
+        e.currentTarget.style.boxShadow = nm.shadow;
+        e.currentTarget.style.transform = 'translateY(0)';
+      } : undefined}
+    >
+      {children}
+    </div>
+  );
+
   return (
-    <section className="tf-spacing-1" style={{ background: '#f9fafb', minHeight: '100vh', paddingTop: '40px' }}>
+    <section style={{ background: nm.bg, minHeight: '100vh', paddingTop: '56px', paddingBottom: '64px' }}>
       <div className="tf-container">
-        {/* Header */}
-        <div className="text-center mb-5 wow fadeInUp">
-          <h2 className="font-cardo fw-7 mb-2">Find Your Dream <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Tech Job</span></h2>
-          <p className="fs-16 text-muted">
+
+        {/* ── Page Header ── */}
+        <div style={{ textAlign: 'center', marginBottom: '52px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '6px 18px', borderRadius: '20px', marginBottom: '16px',
+            background: nm.bg, boxShadow: nm.shadowSm,
+            fontSize: '11px', fontWeight: '700', color: '#64748b', letterSpacing: '1px', textTransform: 'uppercase',
+          }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+            Tech Career Board
+          </div>
+          <h2 style={{ fontSize: '36px', fontWeight: '800', color: '#0f172a', margin: '0 0 10px', letterSpacing: '-0.8px' }}>
+            Find Your Dream Tech Job
+          </h2>
+          <p style={{ fontSize: '15px', color: '#64748b', margin: 0 }}>
             Search for opportunities in AI, Blockchain, and Data Visualization
           </p>
         </div>
 
-        <div className="row g-4">
-          {/* Left Sidebar - Filters */}
-          <div className="col-lg-3">
-            <div style={{ position: 'sticky', top: '100px' }}>
-              {/* Search Box */}
-              <div className="mb-4 wow fadeInUp">
+        <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
+
+          {/* ── Left Sidebar ── */}
+          <div style={{ width: '270px', flexShrink: 0, position: 'sticky', top: '100px' }}>
+            <NmCard hover={false} style={{ padding: '24px' }}>
+
+              {/* Search */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.8px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Search</label>
                 <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '12px 16px',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  background: '#fff'
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '11px 14px', borderRadius: '12px',
+                  boxShadow: nm.shadowInset, background: nm.bg,
                 }}>
-                  <i className="icon-search" style={{ color: '#6b7280', fontSize: '18px' }} />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                   <input
                     type="text"
-                    placeholder="Search jobs..."
+                    placeholder="Job title, company..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{
-                      flex: 1,
-                      border: 'none',
-                      outline: 'none',
-                      background: 'transparent',
-                      fontSize: '14px'
-                    }}
+                    style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: '13px', color: '#0f172a' }}
                   />
                 </div>
               </div>
 
-              {/* Tech Categories */}
-              <div className="mb-4 wow fadeInUp">
-                <h5 className="fw-6 mb-3">Tech Categories</h5>
+              {/* Divider */}
+              <div style={{ height: '1px', background: 'rgba(148,163,184,0.2)', margin: '0 0 24px' }} />
+
+              {/* Categories */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.8px', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>Category</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {techCategories.map((cat) => (
-                    <button
-                      key={cat.name}
-                      onClick={() => setSelectedCategory(cat)}
-                      style={{
-                        padding: '12px 16px',
-                        border: selectedCategory.name === cat.name ? '2px solid #000000' : '1px solid #e5e7eb',
-                        borderRadius: '8px',
-                        background: selectedCategory.name === cat.name ? '#000000' : '#fff',
-                        color: selectedCategory.name === cat.name ? '#ffffff' : '#1f2937',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        fontSize: '14px',
-                        fontWeight: selectedCategory.name === cat.name ? '600' : '500'
-                      }}
-                    >
-                      <span style={{ marginRight: '10px', display: 'inline-flex', alignItems: 'center', verticalAlign: 'middle' }}>
-                        {cat.icon}
-                      </span>
-                      {cat.name}
-                    </button>
-                  ))}
+                  {techCategories.map((cat) => {
+                    const active = selectedCategory.name === cat.name;
+                    return (
+                      <button
+                        key={cat.name}
+                        onClick={() => setSelectedCategory(cat)}
+                        style={{
+                          padding: '11px 14px',
+                          borderRadius: '12px', border: 'none', textAlign: 'left',
+                          cursor: 'pointer', transition: 'all 0.2s',
+                          display: 'flex', alignItems: 'center', gap: '10px',
+                          fontSize: '13px', fontWeight: active ? '700' : '500',
+                          color: active ? '#0f172a' : '#475569',
+                          background: nm.bg,
+                          boxShadow: active ? nm.shadowInset : nm.shadowSm,
+                        }}
+                      >
+                        <span style={{ opacity: active ? 1 : 0.5 }}>{cat.icon}</span>
+                        {cat.name}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Location Filter - Country */}
-              <div className="mb-4 wow fadeInUp">
-                <h5 className="fw-6 mb-3">Country</h5>
-                <select
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    background: '#fff',
-                    fontSize: '14px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {countries.map((country) => (
-                    <option key={country} value={country}>{country}</option>
-                  ))}
-                </select>
-              </div>
+              <div style={{ height: '1px', background: 'rgba(148,163,184,0.2)', margin: '0 0 24px' }} />
 
-              {/* Location Filter - City (conditional) */}
-              {availableCities.length > 0 && (
-                <div className="mb-4 wow fadeInUp">
-                  <h5 className="fw-6 mb-3">City (Optional)</h5>
+              {/* Country */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.8px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Country</label>
+                <div style={{ position: 'relative' }}>
                   <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
                     style={{
-                      width: '100%',
-                      padding: '12px 16px',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '8px',
-                      background: '#fff',
-                      fontSize: '14px',
-                      cursor: 'pointer'
+                      width: '100%', padding: '11px 14px', borderRadius: '12px',
+                      border: 'none', outline: 'none',
+                      boxShadow: nm.shadowInset, background: nm.bg,
+                      fontSize: '13px', color: '#0f172a', cursor: 'pointer', appearance: 'none',
                     }}
                   >
-                    <option value="">All Cities in {selectedCountry}</option>
-                    {availableCities.map((city) => (
-                      <option key={city} value={city}>{city}</option>
-                    ))}
+                    {countries.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
+                  <svg style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+
+              {/* City */}
+              {availableCities.length > 0 && (
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.8px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>City</label>
+                  <div style={{ position: 'relative' }}>
+                    <select
+                      value={selectedCity}
+                      onChange={(e) => setSelectedCity(e.target.value)}
+                      style={{
+                        width: '100%', padding: '11px 14px', borderRadius: '12px',
+                        border: 'none', outline: 'none',
+                        boxShadow: nm.shadowInset, background: nm.bg,
+                        fontSize: '13px', color: '#0f172a', cursor: 'pointer', appearance: 'none',
+                      }}
+                    >
+                      <option value="">All Cities</option>
+                      {availableCities.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                    <svg style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
                 </div>
               )}
 
-              {/* Seniority Level */}
-              <div className="mb-4 wow fadeInUp">
-                <h5 className="fw-6 mb-3">Seniority Level</h5>
-                <select
-                  value={selectedLevel}
-                  onChange={(e) => setSelectedLevel(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    background: '#fff',
-                    fontSize: '14px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {seniorityLevels.map((level) => (
-                    <option key={level} value={level}>{level}</option>
-                  ))}
-                </select>
+              {/* Seniority */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.8px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Seniority</label>
+                <div style={{ position: 'relative' }}>
+                  <select
+                    value={selectedLevel}
+                    onChange={(e) => setSelectedLevel(e.target.value)}
+                    style={{
+                      width: '100%', padding: '11px 14px', borderRadius: '12px',
+                      border: 'none', outline: 'none',
+                      boxShadow: nm.shadowInset, background: nm.bg,
+                      fontSize: '13px', color: '#0f172a', cursor: 'pointer', appearance: 'none',
+                    }}
+                  >
+                    {seniorityLevels.map((l) => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                  <svg style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
               </div>
 
               {/* Job Type */}
-              <div className="mb-4 wow fadeInUp">
-                <h5 className="fw-6 mb-3">Job Type</h5>
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    background: '#fff',
-                    fontSize: '14px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {jobTypes.map((type) => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.8px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Job Type</label>
+                <div style={{ position: 'relative' }}>
+                  <select
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                    style={{
+                      width: '100%', padding: '11px 14px', borderRadius: '12px',
+                      border: 'none', outline: 'none',
+                      boxShadow: nm.shadowInset, background: nm.bg,
+                      fontSize: '13px', color: '#0f172a', cursor: 'pointer', appearance: 'none',
+                    }}
+                  >
+                    {jobTypes.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                  <svg style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
               </div>
 
               {/* Search Button */}
               <button
                 onClick={handleSearch}
                 disabled={isLoading}
-                className="tf-btn w-100"
                 style={{
-                  background: isLoading ? '#9ca3af' : '#1f2937',
-                  color: 'white',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: isLoading ? 'not-allowed' : 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '600'
+                  width: '100%', padding: '13px', borderRadius: '14px',
+                  border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer',
+                  background: nm.bg,
+                  boxShadow: isLoading ? nm.shadowInset : nm.shadow,
+                  fontSize: '13px', fontWeight: '700', color: isLoading ? '#94a3b8' : '#0f172a',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  transition: 'all 0.2s',
                 }}
+                onMouseEnter={e => { if (!isLoading) { e.currentTarget.style.boxShadow = nm.shadowHover; } }}
+                onMouseLeave={e => { if (!isLoading) { e.currentTarget.style.boxShadow = nm.shadow; } }}
               >
-                {isLoading ? 'Searching...' : 'Search Jobs'}
+                {isLoading ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                    Searching...
+                  </>
+                ) : (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Search Jobs
+                  </>
+                )}
               </button>
-            </div>
+            </NmCard>
           </div>
 
-          {/* Right Content - Job Listings */}
-          <div className="col-lg-9">
-            {/* Results Header */}
-            <div className="mb-4 d-flex justify-content-between align-items-center wow fadeInUp">
-              <div>
-                <h4 className="fw-6 mb-1" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', color: '#1f2937' }}>{selectedCategory.icon}</span>
-                  {selectedCategory.name} Jobs
-                </h4>
-                <p className="fs-14 text-muted mb-0">
-                  {filteredJobs.length} job{filteredJobs.length !== 1 ? 's' : ''} found
-                </p>
+          {/* ── Right: Job Listings ── */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+
+            {/* Results bar */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '12px',
+                  background: nm.bg, boxShadow: nm.shadowSm,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#475569',
+                }}>
+                  {selectedCategory.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a' }}>{selectedCategory.name} Jobs</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>
+                    {filteredJobs.length} position{filteredJobs.length !== 1 ? 's' : ''} found
+                  </div>
+                </div>
               </div>
               {isLoading && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div className="spinner-border spinner-border-sm text-primary" role="status" />
-                  <span className="fs-14 text-muted">Loading jobs...</span>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '8px 16px', borderRadius: '10px',
+                  background: nm.bg, boxShadow: nm.shadowSm,
+                  fontSize: '12px', color: '#64748b', fontWeight: '600',
+                }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                  Loading...
                 </div>
               )}
             </div>
 
-            {/* Jobs List - Professional Design */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* Job cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {filteredJobs.map((job, index) => (
-                <div
+                <NmCard
                   key={job.id}
-                  className="wow fadeInUp"
-                  data-wow-delay={`${index * 0.05}s`}
-                  style={{
-                    background: '#fff',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = 'none';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
+                  style={{ padding: '24px' }}
                 >
-                  <div style={{ padding: '24px' }}>
-                    {/* Header with Logo */}
-                    <div className="d-flex gap-3 mb-3">
-                      {/* Company Logo */}
-                      <div
-                        style={{
-                          width: '64px',
-                          height: '64px',
-                          borderRadius: '12px',
-                          border: '1px solid #f3f4f6',
-                          background: '#fff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          overflow: 'hidden',
-                          flexShrink: 0
+                  <div style={{ display: 'flex', gap: '18px' }}>
+                    {/* Company logo */}
+                    <div style={{
+                      width: '56px', height: '56px', borderRadius: '14px', flexShrink: 0,
+                      background: nm.bg, boxShadow: nm.shadowSm,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      overflow: 'hidden',
+                    }}>
+                      <img
+                        src={getLogoUrl(job.company)}
+                        alt={job.company}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '8px' }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = `<span style="font-size:20px;font-weight:800;color:#475569">${job.company?.charAt(0) || 'C'}</span>`;
                         }}
-                      >
-                        {job.companyLogo ? (
-                          <img
-                            src={job.companyLogo}
-                            alt={job.company}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'contain',
-                              padding: '8px'
-                            }}
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.parentElement.innerHTML = `<div style="font-size: 24px; font-weight: 700; color: #1f2937;">${job.company?.charAt(0) || 'C'}</div>`;
-                            }}
-                          />
-                        ) : (
-                          <div style={{ fontSize: '24px', fontWeight: '700', color: '#1f2937' }}>
-                            {job.company?.charAt(0) || 'C'}
-                          </div>
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      {/* Company + date */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px' }}>{job.company}</span>
+                        {job.postedDate && (
+                          <span style={{
+                            fontSize: '11px', fontWeight: '600', color: '#94a3b8',
+                            padding: '3px 10px', borderRadius: '20px',
+                            background: nm.bg, boxShadow: nm.shadowSm,
+                          }}>{job.postedDate}</span>
                         )}
                       </div>
 
-                      {/* Job Info */}
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <h5 className="fw-6 mb-1" style={{ fontSize: '14px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          {job.company}
-                        </h5>
-                        <h4 className="fw-6 mb-2" style={{ fontSize: '20px', lineHeight: '1.3', color: '#111827', marginTop: '4px' }}>
-                          {cleanText(job.jobTitle)}
-                        </h4>
-                        <div className="d-flex flex-wrap gap-2">
-                          <span
-                            style={{
-                              background: '#f3f4f6',
-                              color: '#1f2937',
-                              padding: '4px 12px',
-                              borderRadius: '6px',
-                              fontSize: '12px',
-                              fontWeight: '600'
-                            }}
-                          >
-                            {job.category}
-                          </span>
-                          <span
-                            style={{
-                              background: '#e5e7eb',
-                              color: '#111827',
-                              padding: '4px 12px',
-                              borderRadius: '6px',
-                              fontSize: '12px',
-                              fontWeight: '600'
-                            }}
-                          >
-                            {job.type}
-                          </span>
-                          <span
-                            style={{
-                              background: '#f9fafb',
-                              color: '#4b5563',
-                              padding: '4px 12px',
-                              borderRadius: '6px',
-                              fontSize: '12px',
-                              fontWeight: '600'
-                            }}
-                          >
-                            {job.postedDate}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                      {/* Title */}
+                      <h4 style={{ margin: '0 0 10px', fontSize: '17px', fontWeight: '800', color: '#0f172a', lineHeight: '1.3' }}>
+                        {cleanText(job.jobTitle)}
+                      </h4>
 
-                    {/* Location & Level */}
-                    <div className="d-flex flex-wrap gap-4 mb-3" style={{ paddingLeft: '76px' }}>
-                      {job.location && (
-                        <div className="d-flex align-items-center gap-2">
-                          <i className="flaticon-location" style={{ fontSize: '16px', color: '#1f2937' }} />
-                          <span style={{ fontSize: '14px', color: '#4b5563' }}>
+                      {/* Meta chips */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+                        {job.location && (
+                          <span style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                            fontSize: '12px', fontWeight: '600', color: '#475569',
+                            padding: '4px 12px', borderRadius: '20px',
+                            background: nm.bg, boxShadow: nm.shadowSm,
+                          }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             {cleanText(job.location)}
                           </span>
-                        </div>
-                      )}
-                      {job.level && (
-                        <div className="d-flex align-items-center gap-2">
-                          <i className="flaticon-user-1" style={{ fontSize: '16px', color: '#1f2937' }} />
-                          <span style={{ fontSize: '14px', color: '#4b5563' }}>
+                        )}
+                        {job.level && (
+                          <span style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                            fontSize: '12px', fontWeight: '600', color: '#475569',
+                            padding: '4px 12px', borderRadius: '20px',
+                            background: nm.bg, boxShadow: nm.shadowSm,
+                          }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                             {cleanText(job.level)}
                           </span>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                        {job.type && (
+                          <span style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                            fontSize: '12px', fontWeight: '600', color: '#475569',
+                            padding: '4px 12px', borderRadius: '20px',
+                            background: nm.bg, boxShadow: nm.shadowSm,
+                          }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                            {job.type}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Description Preview */}
-                    <p
-                      style={{
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        color: '#6b7280',
-                        marginBottom: '20px',
-                        paddingLeft: '76px',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden'
-                      }}
-                    >
-                      {cleanText(job.description)}
-                    </p>
+                      {/* Description preview */}
+                      <p style={{
+                        fontSize: '13px', lineHeight: '1.6', color: '#64748b',
+                        margin: '0 0 18px',
+                        display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                      }}>
+                        {cleanText(job.description)}
+                      </p>
 
-                    {/* Action Buttons */}
-                    <div className="d-flex gap-3" style={{ paddingLeft: '76px' }}>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedJob(job);
-                        }}
-                        style={{
-                          flex: 1,
-                          padding: '12px 20px',
-                          borderRadius: '8px',
-                          border: '2px solid #1f2937',
-                          background: '#fff',
-                          color: '#1f2937',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#f3f4f6';
-                          e.currentTarget.style.borderColor = '#000000';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#fff';
-                          e.currentTarget.style.borderColor = '#1f2937';
-                        }}
-                      >
-                        View Details
-                      </button>
-                      <Link
-                        href={job.jobUrl}
-                        target="_blank"
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          flex: 1,
-                          padding: '12px 20px',
-                          borderRadius: '8px',
-                          background: '#000000',
-                          color: '#fff',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                          textDecoration: 'none',
-                          textAlign: 'center',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
-                          transition: 'all 0.3s',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)';
-                          e.currentTarget.style.background = '#1f2937';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
-                          e.currentTarget.style.background = '#000000';
-                        }}
-                      >
-                        Apply Now
-                        <i className="icon-arrow-top-right" />
-                      </Link>
+                      {/* Actions */}
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); }}
+                          style={{
+                            flex: 1, padding: '11px 16px', borderRadius: '12px', border: 'none',
+                            background: nm.bg, boxShadow: nm.shadowSm,
+                            fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer',
+                            transition: 'all 0.2s',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.color = '#0f172a'; }}
+                          onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadowSm; e.currentTarget.style.color = '#475569'; }}
+                        >
+                          View Details
+                        </button>
+                        <Link
+                          href={job.jobUrl}
+                          target="_blank"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            flex: 1, padding: '11px 16px', borderRadius: '12px',
+                            background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)',
+                            boxShadow: '6px 6px 14px rgba(96,165,250,0.3), -2px -2px 8px rgba(255,255,255,0.7)',
+                            fontSize: '13px', fontWeight: '700', color: '#fff',
+                            textDecoration: 'none', textAlign: 'center',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
+                            transition: 'all 0.2s',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '8px 8px 20px rgba(96,165,250,0.45), -2px -2px 10px rgba(255,255,255,0.8)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '6px 6px 14px rgba(96,165,250,0.3), -2px -2px 8px rgba(255,255,255,0.7)'; }}
+                        >
+                          Apply Now
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </NmCard>
               ))}
             </div>
 
-            {/* No Results / Initial State */}
+            {/* Empty / Initial state */}
             {filteredJobs.length === 0 && !isLoading && (
-              <div className="text-center py-5 wow fadeInUp">
-                {hasSearched ? (
-                  <>
-                    <h4 className="fw-6 mb-2">No jobs found</h4>
-                    <p className="text-muted">Try adjusting your filters or search in a different location</p>
-                  </>
-                ) : (
-                  <>
-                    <div style={{ fontSize: '48px', marginBottom: '16px', display: 'flex', justifyContent: 'center', color: '#1f2937' }}>
-                      <div style={{ transform: 'scale(2.4)' }}>{selectedCategory.icon}</div>
-                    </div>
-                    <h4 className="fw-6 mb-2">Ready to find {selectedCategory.name} jobs?</h4>
-                    <p className="text-muted mb-3">Click "Search Jobs" to find opportunities from LinkedIn</p>
-                  </>
-                )}
-              </div>
+              <NmCard hover={false} style={{ padding: '60px 32px', textAlign: 'center' }}>
+                <div style={{
+                  width: '72px', height: '72px', borderRadius: '22px', margin: '0 auto 20px',
+                  background: nm.bg, boxShadow: nm.shadow,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#94a3b8',
+                }}>
+                  <div style={{ transform: 'scale(1.6)' }}>{selectedCategory.icon}</div>
+                </div>
+                <h4 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 8px' }}>
+                  {hasSearched ? 'No jobs found' : `Ready to find ${selectedCategory.name} jobs?`}
+                </h4>
+                <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
+                  {hasSearched
+                    ? 'Try adjusting your filters or search in a different location'
+                    : 'Click "Search Jobs" to find live opportunities from LinkedIn'}
+                </p>
+              </NmCard>
             )}
           </div>
         </div>
       </div>
 
-      {/* Job Detail Modal */}
+      {/* ── Job Detail Modal ── */}
       {selectedJob && (
         <div
           style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            padding: '20px'
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(5px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '20px',
           }}
           onClick={() => setSelectedJob(null)}
         >
           <div
             style={{
-              background: '#fff',
-              borderRadius: '16px',
-              maxWidth: '800px',
-              width: '100%',
-              maxHeight: '90vh',
-              overflow: 'auto',
-              padding: '32px'
+              background: nm.bg,
+              borderRadius: '24px',
+              boxShadow: '24px 24px 60px rgba(166,180,200,0.65), -24px -24px 60px rgba(255,255,255,0.98)',
+              maxWidth: '780px', width: '100%', maxHeight: '90vh',
+              display: 'flex', flexDirection: 'column',
+              overflow: 'hidden',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header - Professional Design */}
-            <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '24px', marginBottom: '24px' }}>
-              <div className="d-flex justify-content-between align-items-start mb-3">
-                <div className="d-flex gap-3" style={{ flex: 1 }}>
-                  {/* Company Logo */}
-                  <div
-                    style={{
-                      width: '72px',
-                      height: '72px',
-                      borderRadius: '12px',
-                      border: '1px solid #e5e7eb',
-                      background: '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      overflow: 'hidden',
-                      flexShrink: 0
+            {/* Modal header */}
+            <div style={{ padding: '28px 32px 24px', borderBottom: '1px solid rgba(148,163,184,0.15)', flexShrink: 0 }}>
+              <div style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
+                {/* Logo */}
+                <div style={{
+                  width: '64px', height: '64px', borderRadius: '16px', flexShrink: 0,
+                  background: nm.bg, boxShadow: nm.shadowSm,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+                }}>
+                  <img
+                    src={getLogoUrl(selectedJob.company)}
+                    alt={selectedJob.company}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '10px' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = `<span style="font-size:22px;font-weight:800;color:#475569">${selectedJob.company?.charAt(0) || 'C'}</span>`;
                     }}
-                  >
-                    {selectedJob.companyLogo ? (
-                      <img
-                        src={selectedJob.companyLogo}
-                        alt={selectedJob.company}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain',
-                          padding: '12px'
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = `<div style="font-size: 28px; font-weight: 700; color: #1f2937;">${selectedJob.company?.charAt(0) || 'C'}</div>`;
-                        }}
-                      />
-                    ) : (
-                      <div style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937' }}>
-                        {selectedJob.company?.charAt(0) || 'C'}
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Company & Job Info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h5 className="fw-6 mb-1" style={{ fontSize: '14px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                      {selectedJob.company}
-                    </h5>
-                    <h3 className="fw-7 mb-2" style={{ fontSize: '24px', lineHeight: '1.2', color: '#111827' }}>
-                      {cleanText(selectedJob.jobTitle)}
-                    </h3>
-                    <p className="text-muted mb-0" style={{ fontSize: '13px' }}>
-                      Posted {selectedJob.postedDate}
-                    </p>
-                  </div>
+                  />
                 </div>
-                
-                {/* Close Button */}
+
+                {/* Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '4px' }}>{selectedJob.company}</div>
+                  <h3 style={{ margin: '0 0 6px', fontSize: '22px', fontWeight: '800', color: '#0f172a', lineHeight: '1.2' }}>{cleanText(selectedJob.jobTitle)}</h3>
+                  {selectedJob.postedDate && <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>Posted {selectedJob.postedDate}</p>}
+                </div>
+
+                {/* Close */}
                 <button
                   onClick={() => setSelectedJob(null)}
                   style={{
-                    background: '#f3f4f6',
-                    border: 'none',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '10px',
-                    fontSize: '24px',
-                    cursor: 'pointer',
-                    color: '#6b7280',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    transition: 'all 0.2s'
+                    width: '36px', height: '36px', borderRadius: '50%', border: 'none', flexShrink: 0,
+                    background: nm.bg, boxShadow: nm.shadowSm,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#94a3b8', cursor: 'pointer', transition: 'all 0.2s',
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#e5e7eb';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#f3f4f6';
-                  }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#0f172a'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#94a3b8'; }}
                 >
-                  ×
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
               </div>
-            </div>
 
-            {/* Job Meta Info - Professional Cards */}
-            <div className="mb-4" style={{ paddingBottom: '24px', borderBottom: '1px solid #e5e7eb' }}>
-              <div className="row g-3 mb-3">
-                <div className="col-md-6">
-                  <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
-                    <div className="d-flex align-items-center gap-3">
-                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#1f2937', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <i className="flaticon-location" style={{ fontSize: '18px', color: '#fff' }} />
-                      </div>
-                      <div>
-                        <p className="mb-0" style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600' }}>LOCATION</p>
-                        <p className="mb-0" style={{ fontSize: '14px', color: '#111827', fontWeight: '600' }}>
-                          {cleanText(selectedJob.location) || 'Not specified'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
-                    <div className="d-flex align-items-center gap-3">
-                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#1f2937', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <i className="flaticon-user-1" style={{ fontSize: '18px', color: '#fff' }} />
-                      </div>
-                      <div>
-                        <p className="mb-0" style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600' }}>SENIORITY LEVEL</p>
-                        <p className="mb-0" style={{ fontSize: '14px', color: '#111827', fontWeight: '600' }}>
-                          {cleanText(selectedJob.level) || 'Not specified'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex flex-wrap gap-2">
-                <span style={{ background: '#f3f4f6', color: '#1f2937', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
-                  {selectedJob.category}
-                </span>
-                <span style={{ background: '#e5e7eb', color: '#111827', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
-                  {selectedJob.type}
-                </span>
+              {/* Meta chips */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '18px' }}>
+                {selectedJob.location && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: '600', color: '#475569', padding: '5px 13px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowSm }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    {cleanText(selectedJob.location)}
+                  </span>
+                )}
+                {selectedJob.level && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: '600', color: '#475569', padding: '5px 13px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowSm }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    {cleanText(selectedJob.level)}
+                  </span>
+                )}
+                {selectedJob.type && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: '600', color: '#475569', padding: '5px 13px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowSm }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                    {selectedJob.type}
+                  </span>
+                )}
+                {selectedJob.category && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: '600', color: '#475569', padding: '5px 13px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowSm }}>
+                    {selectedJob.category}
+                  </span>
+                )}
               </div>
             </div>
 
-            {/* Job Description - LinkedIn-Style Layout */}
-            <div className="mb-4">
-              <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
-                <h5 className="fw-6 mb-3" style={{ fontSize: '18px', color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '4px', height: '24px', background: '#1f2937', borderRadius: '2px' }}></div>
+            {/* Description body */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '28px 32px' }}>
+              <div style={{
+                background: nm.bg, borderRadius: '16px',
+                boxShadow: nm.shadowInset,
+                padding: '24px',
+              }}>
+                <h5 style={{ margin: '0 0 16px', fontSize: '15px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '3px', height: '18px', background: '#0f172a', borderRadius: '2px' }} />
                   About the job
                 </h5>
-                <div style={{ 
-                  fontSize: '15px', 
-                  lineHeight: '1.7', 
-                  color: '#374151',
-                  maxHeight: '500px',
-                  overflowY: 'auto',
-                  paddingRight: '12px',
-                  background: '#fff',
-                  padding: '24px',
-                  borderRadius: '8px'
-                }}>
-                  {formatDescription(selectedJob.description).map((section, sectionIndex) => (
-                    <div key={sectionIndex} style={{ marginBottom: '32px' }}>
+                <div style={{ fontSize: '14px', lineHeight: '1.75', color: '#374151' }}>
+                  {formatDescription(selectedJob.description).map((section, si) => (
+                    <div key={si} style={{ marginBottom: '28px' }}>
                       {section.header && (
-                        <h6 style={{ 
-                          fontSize: '16px', 
-                          fontWeight: '700', 
-                          color: '#111827',
-                          marginBottom: '16px',
-                          marginTop: sectionIndex > 0 ? '8px' : '0'
-                        }}>
+                        <h6 style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', marginBottom: '12px', marginTop: si > 0 ? '4px' : '0' }}>
                           {section.header}
                         </h6>
                       )}
-                      
-                      {section.content && section.content.map((item, itemIndex) => {
-                        if (item.type === 'paragraph') {
-                          return (
-                            <p 
-                              key={itemIndex} 
-                              style={{ 
-                                marginBottom: '16px', 
-                                color: '#374151', 
-                                lineHeight: '1.7',
-                                fontSize: '15px'
-                              }}
-                            >
-                              {item.text}
-                            </p>
-                          );
-                        } else if (item.type === 'bullets') {
-                          return (
-                            <ul 
-                              key={itemIndex} 
-                              style={{ 
-                                marginBottom: '16px',
-                                paddingLeft: '20px',
-                                listStyleType: 'disc'
-                              }}
-                            >
-                              {item.items.map((bullet, bulletIndex) => (
-                                <li 
-                                  key={bulletIndex}
-                                  style={{
-                                    marginBottom: '8px',
-                                    color: '#374151',
-                                    lineHeight: '1.7',
-                                    fontSize: '15px'
-                                  }}
-                                >
-                                  {bullet}
-                                </li>
-                              ))}
-                            </ul>
-                          );
-                        }
+                      {section.content && section.content.map((item, ii) => {
+                        if (item.type === 'paragraph') return (
+                          <p key={ii} style={{ marginBottom: '12px', color: '#374151', lineHeight: '1.75', fontSize: '14px' }}>{item.text}</p>
+                        );
+                        if (item.type === 'bullets') return (
+                          <ul key={ii} style={{ marginBottom: '12px', paddingLeft: '18px', listStyleType: 'disc' }}>
+                            {item.items.map((b, bi) => (
+                              <li key={bi} style={{ marginBottom: '6px', color: '#374151', lineHeight: '1.75', fontSize: '14px' }}>{b}</li>
+                            ))}
+                          </ul>
+                        );
                         return null;
                       })}
                     </div>
@@ -994,70 +866,45 @@ export default function JobsPanel() {
               </div>
             </div>
 
-            {/* Modal Footer - Professional Actions */}
-            <div style={{ paddingTop: '24px', borderTop: '1px solid #e5e7eb' }}>
-              <div className="d-flex gap-3">
-                <Link
-                  href={selectedJob.jobUrl}
-                  target="_blank"
-                  style={{
-                    flex: 1,
-                    padding: '16px 32px',
-                    borderRadius: '10px',
-                    background: '#000000',
-                    color: '#fff',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    textDecoration: 'none',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    transition: 'all 0.3s',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
-                    e.currentTarget.style.background = '#1f2937';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.2)';
-                    e.currentTarget.style.background = '#000000';
-                  }}
-                >
-                  <i className="icon-arrow-top-right" />
-                  Apply on LinkedIn
-                </Link>
-                <button
-                  onClick={() => setSelectedJob(null)}
-                  style={{
-                    padding: '16px 32px',
-                    borderRadius: '10px',
-                    background: '#f3f4f6',
-                    color: '#4b5563',
-                    border: 'none',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#e5e7eb';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#f3f4f6';
-                  }}
-                >
-                  Close
-                </button>
-              </div>
+            {/* Modal footer */}
+            <div style={{ padding: '20px 32px 28px', borderTop: '1px solid rgba(148,163,184,0.15)', flexShrink: 0, display: 'flex', gap: '12px' }}>
+              <Link
+                href={selectedJob.jobUrl}
+                target="_blank"
+                style={{
+                  flex: 1, padding: '14px 24px', borderRadius: '14px',
+                  background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)',
+                  boxShadow: '6px 6px 16px rgba(96,165,250,0.35), -2px -2px 8px rgba(255,255,255,0.7)',
+                  fontSize: '14px', fontWeight: '700', color: '#fff',
+                  textDecoration: 'none', textAlign: 'center',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '8px 8px 22px rgba(96,165,250,0.5), -2px -2px 10px rgba(255,255,255,0.8)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '6px 6px 16px rgba(96,165,250,0.35), -2px -2px 8px rgba(255,255,255,0.7)'; }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                Apply on LinkedIn
+              </Link>
+              <button
+                onClick={() => setSelectedJob(null)}
+                style={{
+                  padding: '14px 28px', borderRadius: '14px', border: 'none',
+                  background: nm.bg, boxShadow: nm.shadowSm,
+                  fontSize: '14px', fontWeight: '700', color: '#475569', cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.color = '#0f172a'; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadowSm; e.currentTarget.style.color = '#475569'; }}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </section>
   );
 }

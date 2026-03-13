@@ -1,5 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { sendEmail } from '@/lib/email/smtp-client';
+import { lieutenantUpgradeEmailTemplate } from '@/lib/email-templates';
 
 // POST - Upgrade user to DAG LIEUTENANT
 export async function POST(request) {
@@ -51,14 +53,24 @@ export async function POST(request) {
       console.error('Non-blocking: Failed to award referral upgrade points:', refErr);
     }
 
-    // Fetch updated user data
+    // Fetch updated user data (include email + name for the confirmation email)
     const { data: updatedUser, error: fetchError } = await supabase
       .from('users')
-      .select('tier, dag_points, total_points_earned, upgraded_at')
+      .select('tier, dag_points, total_points_earned, upgraded_at, email, full_name, username')
       .eq('id', userId)
       .single();
 
     if (fetchError) throw fetchError;
+
+    // Send lieutenant upgrade confirmation email (fire-and-forget)
+    if (updatedUser?.email) {
+      const displayName = updatedUser.full_name || updatedUser.username || 'Soldier';
+      sendEmail('support@dagchain.network', {
+        to: updatedUser.email,
+        subject: 'Congratulations! You are now a DAG Lieutenant',
+        html: lieutenantUpgradeEmailTemplate({ userName: displayName }),
+      }).catch(err => console.error('Lieutenant upgrade email failed (non-blocking):', err));
+    }
 
     return NextResponse.json({ 
       success: true,

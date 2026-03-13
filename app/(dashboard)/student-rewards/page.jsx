@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
+import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 import { 
   Award, DollarSign, 
   ChevronRight, Trophy, Zap, Crown, ArrowUp, Flame, Shield, Lock
@@ -15,6 +16,7 @@ export default function StudentRewardsPage() {
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeMessage, setUpgradeMessage] = useState(null);
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   // Burn modal
   const [showBurnModal, setShowBurnModal] = useState(false);
@@ -343,7 +345,7 @@ export default function StudentRewardsPage() {
                   {rewardData.tier !== 'DAG_LIEUTENANT' && rewardData.tier !== 'DAG LIEUTENANT' && (
                     <>
                       <button
-                        onClick={() => handleStripeUpgrade(false)}
+                        onClick={() => setShowUpgradeModal(true)}
                         disabled={!!stripeLoading}
                         style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 18px', borderRadius: '10px', border: '1.5px solid #e0e7ff', background: stripeLoading === 'full' ? '#eef2ff' : '#fff', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', letterSpacing: '0.2px', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(99,102,241,0.08)' }}
                         onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; } }}
@@ -352,17 +354,6 @@ export default function StudentRewardsPage() {
                         <Crown size={15} />
                         {stripeLoading === 'full' ? 'Redirecting...' : 'Upgrade to DAG Lieutenant'}
                         <span style={{ fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '6px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
-                      </button>
-                      <button
-                        onClick={() => handleStripeUpgrade(true)}
-                        disabled={!!stripeLoading}
-                        style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 18px', borderRadius: '10px', border: '1.5px dashed #fcd34d', background: stripeLoading === 'test' ? '#fffbeb' : '#fff', color: '#92400e', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', letterSpacing: '0.2px', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(245,158,11,0.08)' }}
-                        onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.background = '#fffbeb'; } }}
-                        onMouseLeave={e => { if (!stripeLoading) { e.currentTarget.style.background = '#fff'; } }}
-                      >
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                        {stripeLoading === 'test' ? 'Redirecting...' : 'Mini Lieutenant Upgrade'}
-                        <span style={{ fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '6px', background: '#fef3c7', color: '#92400e' }}>$5 TEST</span>
                       </button>
                     </>
                   )}
@@ -1142,6 +1133,15 @@ export default function StudentRewardsPage() {
       )}
 
       <Footer1 />
+
+      {/* ── Lieutenant Upgrade Perks Modal ── */}
+      {showUpgradeModal && (
+        <LieutenantUpgradeModal
+          onClose={() => setShowUpgradeModal(false)}
+          onConfirm={() => { setShowUpgradeModal(false); handleStripeUpgrade(false); }}
+          loading={stripeLoading === 'full'}
+        />
+      )}
     </div>
   );
 }

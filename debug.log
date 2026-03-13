@@ -1,0 +1,91 @@
+2026-03-07T12:01:54.596Z [console][warn] [Fast Refresh] done in 123ms
+2026-03-07T12:01:54.725Z [console][error] Access to fetch at 'https://ipapi.co/114.142.164.240/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:54.726Z [console][error] Access to fetch at 'https://ipapi.co/114.142.164.240/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:54.727Z [console][error] Access to fetch at 'https://ipapi.co/114.142.164.240/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:57.784Z [console][log] __ORCHIDS_NAVIGATE__ http://localhost:3000/ambassador
+2026-03-07T12:01:57.889Z [console][error] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+2026-03-07T12:01:57.893Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T12:01:57.902Z [console][warn] 🔍 LoginModal State: [object Object]
+2026-03-07T12:01:57.913Z [console][warn] 🔍 LoginModal State: [object Object]
+2026-03-07T12:01:54.295Z [console][debug] __ORCHIDS_NAVIGATE__ http://localhost:3000/
+2026-03-07T12:01:54.299Z [console][log] 🔍 LoginModal State: {"isOpen":false,"showRoleSelection":false,"showProfileCompletion":false,"isAuthenticated":false,"userRole":null}
+2026-03-07T12:01:54.355Z [console][warn] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T12:01:54.402Z [console][warn] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T12:01:54.573Z [console][log] [Fast Refresh] rebuilding
+2026-03-07T12:01:54.596Z [console][log] [Fast Refresh] done in 123ms
+2026-03-07T12:01:57.784Z [console][debug] __ORCHIDS_NAVIGATE__ http://localhost:3000/ambassador
+2026-03-07T12:01:57.889Z [console][warn] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+2026-03-07T12:01:57.893Z [console][warn] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T12:01:57.902Z [console][log] 🔍 LoginModal State: {"isOpen":false,"showRoleSelection":false,"showProfileCompletion":false,"isAuthenticated":false,"userRole":null}
+2026-03-07T12:01:57.913Z [console][log] 🔍 LoginModal State: {"isOpen":false,"showRoleSelection":false,"showProfileCompletion":false,"isAuthenticated":false,"userRole":null}
+2026-03-07T12:01:54.185Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T12:01:54.355Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T12:01:54.386Z [console][error] Access to fetch at 'https://ipapi.co/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:54.387Z [console][error] Access to fetch at 'https://ipapi.co/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:54.402Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T12:01:54.725Z [console][error] Access to fetch at 'https://ipapi.co/114.142.164.240/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:54.726Z [console][error] Access to fetch at 'https://ipapi.co/114.142.164.240/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:54.727Z [console][error] Access to fetch at 'https://ipapi.co/114.142.164.240/json/' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+2026-03-07T12:01:57.889Z [console][error] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+2026-03-07T12:01:57.893Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T12:09:23.309Z [console][error] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+2026-03-07T12:09:23.345Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T12:09:23.459Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T12:09:23.460Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T12:09:23.934Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T12:16:21.546Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T16:04:03.638Z [console][error] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+2026-03-07T16:04:03.674Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T16:04:03.821Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T16:04:03.852Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T16:04:04.145Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T16:24:13.552Z [console][error] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+2026-03-07T16:24:13.578Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T16:24:13.695Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T16:24:13.721Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T16:24:13.752Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T17:16:08.254Z [console][error] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+2026-03-07T17:16:08.289Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T17:16:08.458Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T17:16:08.507Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T17:16:08.643Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T17:29:15.902Z [console][error] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+2026-03-07T17:29:15.967Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T17:29:16.153Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T17:29:16.188Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T17:29:16.266Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T17:31:49.825Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T17:31:49.973Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T17:31:50.008Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T17:31:50.933Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T17:37:58.256Z [console][error] [HMR] Invalid message: {"isTrusted":true}
+TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at extractModulesFromTurbopackMessage (http://localhost:3000/_next/static/chunks/44d57_next_dist_client_e2c15e2c._.js:11208:39)
+    at TurbopackHmr.onTurbopackMessage (http://localhost:3000/_next/static/chunks/44d57_next_dist_client_e2c15e2c._.js:11155:32)
+    at processMessage (http://localhost:3000/_next/static/chunks/44d57_next_dist_client_e2c15e2c._.js:11587:30)
+    at WebSocket.handleMessage (http://localhost:3000/_next/static/chunks/44d57_next_dist_client_e2c15e2c._.js:10912:52)
+2026-03-07T18:14:18.437Z [console][warn] [Fast Refresh] rebuilding
+2026-03-07T18:14:18.864Z [console][warn] [Fast Refresh] done in 530ms
+2026-03-07T18:14:19.038Z [console][warn] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+2026-03-07T18:14:19.119Z [console][warn] [HMR] connected
+2026-03-07T18:14:19.163Z [console][error] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+2026-03-07T18:14:19.200Z [console][error] The configured WalletConnect 'metadata.url':https://dagarmy.network differs from the actual page url:http://localhost:3000. This is probably unintended and can lead to issues.
+2026-03-07T18:14:19.374Z [console][log] __ORCHIDS_NAVIGATE__ http://localhost:3000/udaan
+2026-03-07T18:14:19.385Z [console][error] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T18:14:19.389Z [console][warn] 🔍 LoginModal State: [object Object]
+2026-03-07T18:14:19.419Z [console][error] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T18:14:19.526Z [console][error] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T18:14:19.603Z [console][warn] [Fast Refresh] rebuilding
+2026-03-07T18:14:19.657Z [console][warn] [Fast Refresh] done in 154ms
+2026-03-07T18:23:23.117Z [console][warn] [Fast Refresh] rebuilding
+2026-03-07T18:23:23.244Z [console][warn] [Fast Refresh] done in 146ms
+2026-03-07T18:14:19.374Z [console][debug] __ORCHIDS_NAVIGATE__ http://localhost:3000/udaan
+2026-03-07T18:14:19.386Z [console][warn] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+2026-03-07T18:14:19.390Z [console][log] 🔍 LoginModal State: {"isOpen":false,"showRoleSelection":false,"showProfileCompletion":false,"isAuthenticated":false,"userRole":null}
+2026-03-07T18:14:19.419Z [console][warn] Image with src "/images/logo/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+2026-03-07T18:14:19.527Z [console][warn] [Reown Config Notice] Your local configuration for "features.email", "features.socials" was ignored because a remote configuration was successfully fetched. Please manage these features via your project dashboard on dashboard.reown.com. undefined
+2026-03-07T18:14:19.603Z [console][log] [Fast Refresh] rebuilding
+2026-03-07T18:14:19.658Z [console][log] [Fast Refresh] done in 154ms
+2026-03-07T18:23:23.118Z [console][log] [Fast Refresh] rebuilding
+2026-03-07T18:23:23.244Z [console][log] [Fast Refresh] done in 146ms

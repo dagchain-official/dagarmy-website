@@ -59,11 +59,17 @@ export default function Events() {
         <div className="row">
           <div className="col-12">
             <div className="heading-section" style={{ marginBottom: '48px' }}>
+              <style>{`
+                .events-heading { font-size: clamp(24px, 5vw, 36px); }
+                @media (max-width: 575px) {
+                  .event-content-wrap { min-width: 0 !important; padding: 16px !important; }
+                  .event-cta-wrap { padding: 12px 16px !important; width: 100%; }
+                }
+              `}</style>
               <h2
-                className="fw-7 letter-spacing-1 wow fadeInUp"
+                className="fw-7 letter-spacing-1 wow fadeInUp events-heading"
                 data-wow-delay="0.1s"
                 style={{
-                  fontSize: '36px',
                   fontWeight: '700',
                   color: '#1a1a1a',
                   marginBottom: '16px',
@@ -138,7 +144,7 @@ export default function Events() {
                       }}
                     />
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: '1', minWidth: '300px', padding: '24px' }}>
+                  <div className="event-content-wrap" style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: '1', minWidth: '300px', padding: '24px' }}>
                     <div style={{ flex: '1' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                         <h3 style={{
@@ -173,7 +179,7 @@ export default function Events() {
                       </p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', padding: '24px' }}>
+                  <div className="event-cta-wrap" style={{ display: 'flex', alignItems: 'center', padding: '24px' }}>
                     <div style={{
                       display: 'inline-flex',
                       alignItems: 'center',

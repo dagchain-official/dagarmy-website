@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { notifyUserCreated } from '@/services/dagchainWebhook';
+import { supabaseAdmin } from '@/lib/supabase/server';
+import { sendEmail } from '@/lib/email/smtp-client';
+import { welcomeEmailTemplate } from '@/lib/email-templates';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -150,24 +153,27 @@ export async function POST(request) {
     console.log('✅ Profile completed successfully:', data);
 
     // Notify DAGChain of new user (fire-and-forget)
+    // Fetch user's own referral code to include in payload
+    const { data: ownReferralCode } = await supabaseAdmin.rpc('get_or_create_referral_code', {
+      p_user_id: data.id,
+    });
     notifyUserCreated({
       id: data.id,
       email: data.email,
       wallet_address: data.wallet_address,
       first_name: data.first_name,
       last_name: data.last_name,
+      referral_code_own: ownReferralCode || null,
       referral_code_used: body.referral_code || null,
     });
 
-    // Send welcome email asynchronously (don't wait for it)
+    // Send welcome email asynchronously (fire-and-forget)
     if (data.email) {
-      fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/emails/welcome`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: data.email,
-          name: `${data.first_name} ${data.last_name}`
-        })
+      const fullName = `${data.first_name} ${data.last_name}`.trim();
+      sendEmail('support@dagchain.network', {
+        to: data.email,
+        subject: 'Welcome to DAGARMY - Your Learning Journey Begins!',
+        html: welcomeEmailTemplate(fullName || 'there'),
       }).catch(err => {
         console.error('⚠️ Failed to send welcome email (non-blocking):', err);
       });

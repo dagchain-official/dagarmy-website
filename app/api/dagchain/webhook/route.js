@@ -12,8 +12,12 @@ export async function POST(request) {
   try {
     // 1. Verify secret
     const secret = request.headers.get('x-dagchain-secret')
-    if (!WEBHOOK_SECRET || secret !== WEBHOOK_SECRET) {
-      console.warn('DAGChain webhook: unauthorized attempt')
+    if (!WEBHOOK_SECRET) {
+      console.error('DAGChain webhook: DAGCHAIN_WEBHOOK_SECRET env var is not set')
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    if (secret !== WEBHOOK_SECRET) {
+      console.warn(`DAGChain webhook: secret mismatch — received="${secret?.substring(0, 6)}..." expected prefix="${WEBHOOK_SECRET.substring(0, 6)}..."`)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -99,59 +103,112 @@ export async function POST(request) {
 async function handleUserCreated({ userId, email, timestamp, data = {} }) {
   if (!email && !userId) return
 
+  console.log('[DAGChain webhook] handleUserCreated raw data payload:', JSON.stringify(data))
+
   const {
     walletAddress,
     authProvider,
+    // Try all common referral code field name variants
     referralCode,
+    referral_code,
     referredBy,
+    referred_by,
+    referrerCode,
+    referrer_code,
     displayName,
+    display_name,
     username,
     avatar,
   } = data
 
+  // Normalise to single variable regardless of which key DAGChain uses
+  const resolvedReferralCode = referralCode || referral_code || referrerCode || referrer_code || null
+  const resolvedReferredBy = referredBy || referred_by || null
+  const resolvedDisplayName = displayName || display_name || username || null
+
   // Upsert user into DAGARMY users table by email
-  const { data: existingUser } = await supabaseAdmin
+  const { data: existingUser, error: lookupError } = await supabaseAdmin
     .from('users')
-    .select('id, dagchain_user_id')
+    .select('id, dagchain_user_id, full_name, avatar_url, wallet_address')
     .eq('email', email)
     .maybeSingle()
 
+  if (lookupError) {
+    console.error('[DAGChain webhook] handleUserCreated lookup error:', lookupError.message)
+  }
+
+  // DAGChain-specific fields (may not exist if migration hasn't run yet)
   const dagchainFields = {
     dagchain_user_id: userId || null,
     dagchain_wallet_address: walletAddress || null,
     dagchain_auth_provider: authProvider || null,
-    dagchain_referral_code: referralCode || null,
-    dagchain_referred_by: referredBy || null,
+    dagchain_referral_code: resolvedReferralCode,
+    dagchain_referred_by: resolvedReferredBy,
     dagchain_joined_at: timestamp || new Date().toISOString(),
     dagchain_synced_at: new Date().toISOString(),
   }
 
   if (existingUser) {
-    // Merge DAGChain fields into existing DAGARMY user
-    await supabaseAdmin
+    // Step 1: Update core fields (always safe)
+    const { error: coreUpdateError } = await supabaseAdmin
       .from('users')
       .update({
-        ...dagchainFields,
-        full_name: existingUser.full_name || displayName || null,
+        full_name: existingUser.full_name || resolvedDisplayName || null,
         avatar_url: existingUser.avatar_url || avatar || null,
         wallet_address: existingUser.wallet_address || walletAddress || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', existingUser.id)
+
+    if (coreUpdateError) {
+      console.error('[DAGChain webhook] handleUserCreated core update error:', coreUpdateError.message)
+    }
+
+    // Step 2: Try to update dagchain fields (gracefully skip if columns missing)
+    const { error: dagUpdateError } = await supabaseAdmin
+      .from('users')
+      .update(dagchainFields)
+      .eq('id', existingUser.id)
+
+    if (dagUpdateError) {
+      console.warn('[DAGChain webhook] handleUserCreated dagchain fields update error (columns may not exist yet):', dagUpdateError.message)
+    }
+
+    console.log(`[DAGChain webhook] Merged DAGChain data into existing user: ${email}`)
   } else {
-    // Create new user record from DAGChain signup
-    await supabaseAdmin.from('users').insert({
-      email,
-      full_name: displayName || username || null,
-      avatar_url: avatar || null,
-      wallet_address: walletAddress || null,
-      role: 'student',
-      auth_provider: authProvider || 'dagchain',
-      is_admin: false,
-      is_master_admin: false,
-      last_login: timestamp || new Date().toISOString(),
-      ...dagchainFields,
-    })
+    // Step 1: Insert with core fields only (always safe)
+    const { data: newUser, error: insertError } = await supabaseAdmin
+      .from('users')
+      .insert({
+        email,
+        full_name: resolvedDisplayName || null,
+        avatar_url: avatar || null,
+        wallet_address: walletAddress || null,
+        role: 'student',
+        auth_provider: authProvider || 'dagchain',
+        is_admin: false,
+        is_master_admin: false,
+        last_login: timestamp || new Date().toISOString(),
+      })
+      .select('id')
+      .single()
+
+    if (insertError) {
+      console.error('[DAGChain webhook] handleUserCreated insert error:', insertError.message, insertError.details)
+      throw new Error(`Failed to insert DAGChain user: ${insertError.message}`)
+    }
+
+    console.log(`[DAGChain webhook] Created new user from DAGChain signup: ${email} (id: ${newUser.id})`)
+
+    // Step 2: Try to update dagchain fields (gracefully skip if columns missing)
+    const { error: dagUpdateError } = await supabaseAdmin
+      .from('users')
+      .update(dagchainFields)
+      .eq('id', newUser.id)
+
+    if (dagUpdateError) {
+      console.warn('[DAGChain webhook] handleUserCreated dagchain fields update error (columns may not exist yet):', dagUpdateError.message)
+    }
   }
 }
 
@@ -243,34 +300,46 @@ async function handleReferralCompleted({ userId, email, timestamp, data = {} }) 
 }
 
 async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
-  const {
-    nodeType,
-    nodeId,
-    tier,
-    amountUsd,
-    currency,
-    status,
-  } = data
+  console.log('[DAGChain webhook] handleNodePurchased raw data payload:', JSON.stringify(data))
 
-  // Find the DAGARMY user
+  // Handle all field name variants DAGChain might send
+  const nodeType     = data.nodeType     || data.node_type     || data.type         || null
+  const nodeId       = data.nodeId       || data.node_id       || data.id           || null
+  const tier         = data.tier         || data.nodeTier      || data.node_tier    || null
+  const amountUsd    = data.amountUsd    || data.amount_usd    || data.amount       || data.price || null
+  const currency     = data.currency     || data.coin          || 'USD'
+  const status       = data.status       || 'active'
+  const purchasedAt  = data.purchasedAt  || data.purchased_at  || timestamp || new Date().toISOString()
+
+  // Normalise node_type to match DB CHECK constraint: must be 'validator' or 'storage'
+  const resolvedType = String(nodeType || '').toLowerCase().includes('validator') ? 'validator' : 'storage'
+
+  // Find the DAGARMY user by email first, fall back to dagchain_user_id
   const { data: user } = email
     ? await supabaseAdmin.from('users').select('id').eq('email', email).maybeSingle()
     : await supabaseAdmin.from('users').select('id').eq('dagchain_user_id', userId).maybeSingle()
 
   // Insert node purchase record
-  await supabaseAdmin.from('dagchain_nodes').insert({
+  const { error: insertError } = await supabaseAdmin.from('dagchain_nodes').insert({
     user_id: user?.id || null,
     dagchain_user_id: userId || null,
     email: email || null,
-    node_type: nodeType === 'validator' ? 'validator' : 'storage',
+    node_type: resolvedType,
     node_id: nodeId || null,
     tier: tier || null,
     amount_usd: amountUsd || null,
     currency: currency || null,
-    status: status || 'active',
-    purchased_at: timestamp || new Date().toISOString(),
+    status: status,
+    purchased_at: purchasedAt,
     raw_data: data,
   })
+
+  if (insertError) {
+    console.error('[DAGChain webhook] handleNodePurchased insert error:', insertError.message)
+    throw new Error(`Failed to insert node purchase: ${insertError.message}`)
+  }
+
+  console.log(`[DAGChain webhook] Node purchase recorded — type=${resolvedType}, user=${email || userId}`)
 
   // Update user's dagchain_data with node summary
   if (user) {
@@ -282,13 +351,12 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
 
     const existing = existingUser?.dagchain_data || {}
     const nodes = existing.nodes || { validator: 0, storage: 0 }
-    const type = nodeType === 'validator' ? 'validator' : 'storage'
-    nodes[type] = (nodes[type] || 0) + 1
+    nodes[resolvedType] = (nodes[resolvedType] || 0) + 1
 
     await supabaseAdmin
       .from('users')
       .update({
-        dagchain_data: { ...existing, nodes, last_node_purchase_at: timestamp || new Date().toISOString() },
+        dagchain_data: { ...existing, nodes, last_node_purchase_at: purchasedAt },
         dagchain_synced_at: new Date().toISOString(),
       })
       .eq('id', user.id)
