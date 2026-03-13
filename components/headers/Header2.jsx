@@ -15,6 +15,7 @@ import styles from "./AnimatedSignInButton.module.css";
 export default function Header2() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showUdaanDropdown, setShowUdaanDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, userRole, isAdmin } = useAuth();
   const router = useRouter();
   const { disconnect } = useDisconnect();
@@ -525,18 +526,63 @@ export default function Header2() {
             </Link> */}
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <a
-            className="mobile-nav-toggler mobile-button d-lg-none flex"
+          {/* Mobile Menu Toggle - Hamburger to X Animation */}
+          <button
+            className="mobile-nav-toggler"
             type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasMenu"
-            aria-controls="offcanvasMenu"
-            style={{ marginLeft: '12px' }}
-          />
+            aria-label="Toggle navigation menu"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              padding: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '5px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '40px',
+              height: '40px',
+              borderRadius: '8px',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#f3f4f6';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            <span style={{
+              width: '24px',
+              height: '2.5px',
+              background: '#1f2937',
+              borderRadius: '2px',
+              transition: 'all 0.3s ease',
+              transform: isMobileMenuOpen ? 'rotate(45deg) translateY(7.5px)' : 'rotate(0)',
+            }} />
+            <span style={{
+              width: '24px',
+              height: '2.5px',
+              background: '#1f2937',
+              borderRadius: '2px',
+              transition: 'all 0.3s ease',
+              opacity: isMobileMenuOpen ? 0 : 1,
+            }} />
+            <span style={{
+              width: '24px',
+              height: '2.5px',
+              background: '#1f2937',
+              borderRadius: '2px',
+              transition: 'all 0.3s ease',
+              transform: isMobileMenuOpen ? 'rotate(-45deg) translateY(-7.5px)' : 'rotate(0)',
+            }} />
+          </button>
         </div>
       </div>
-      <MobileNav />
+      <MobileNav isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       <LoginModal 
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 

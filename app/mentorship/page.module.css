@@ -1,0 +1,259 @@
+/* Mentorship Page - Tab Navigation Styles */
+
+/* Tab navigation container */
+.tabNavigation {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabNavigation::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual tab button */
+.tabButton {
+  flex: 0 0 auto;
+  min-width: fit-content;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  overflow: visible;
+}
+
+.tabButton:hover {
+  color: #1f2937;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.tabButton.active {
+  color: #000000;
+  border-bottom-color: #000000;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Content container with slide animation */
+.tabContent {
+  animation: slideIn 0.5s ease-in-out;
+  text-align: left;
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.01);
+  border-radius: 12px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Content heading */
+.tabContent h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  position: relative;
+  padding-bottom: 16px;
+}
+
+/* Optional divider line under heading */
+.tabContent h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #000000;
+  border-radius: 2px;
+}
+
+/* Content list */
+.tabContent ul {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.9;
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: none;
+}
+
+.tabContent ul li {
+  margin-bottom: 8px;
+}
+
+.tabContent ul li:last-child {
+  margin-bottom: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .tabButton {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .tabContent h2 {
+    font-size: 20px;
+  }
+
+  .tabContent ul {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 430px) {
+  .tabNavigation {
+    gap: 0;
+    border-bottom-width: 1.5px;
+  }
+
+  .tabButton {
+    padding: 10px 8px;
+    font-size: 11px;
+    border-bottom-width: 2.5px;
+  }
+
+  .tabContent {
+    padding: 0 4px;
+  }
+
+  .tabContent h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .tabContent ul {
+    font-size: 13px;
+    line-height: 1.7;
+    padding-left: 18px;
+  }
+
+  .tabContent ul li {
+    margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 390px) {
+  .tabButton {
+    padding: 9px 6px;
+    font-size: 10px;
+  }
+
+  .tabContent h2 {
+    font-size: 17px;
+  }
+
+  .tabContent ul {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .tabButton {
+    padding: 8px 5px;
+    font-size: 9px;
+  }
+
+  .tabContent h2 {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .tabContent p,
+  .tabContent ul {
+    font-size: 11px;
+    line-height: 1.6;
+    padding-left: 16px;
+  }
+
+  .tabContent ul li {
+    margin-bottom: 5px;
+  }
+}
+
+/* Email notification section responsive */
+@media (max-width: 768px) {
+  .emailContainer {
+    flex-direction: column !important;
+    gap: 16px !important;
+    padding: 0 20px;
+  }
+
+  .emailInput {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  .notifyButton {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .emailContainer {
+    padding: 0 16px;
+    gap: 14px !important;
+  }
+
+  .emailInput {
+    font-size: 14px !important;
+    padding: 12px 18px !important;
+  }
+
+  .notifyButton {
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .emailContainer {
+    padding: 0 12px;
+  }
+
+  .emailInput {
+    font-size: 13px !important;
+    padding: 11px 16px !important;
+  }
+
+  .notifyButton {
+    padding: 11px 20px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .emailInput {
+    font-size: 12px !important;
+    padding: 10px 14px !important;
+  }
+
+  .notifyButton {
+    padding: 10px 18px !important;
+    font-size: 12px !important;
+  }
+}

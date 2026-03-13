@@ -5,6 +5,7 @@ import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 import { menuItems, socialLinks } from "@/data/footerLinks";
+import styles from "./Footer1.module.css";
 
 export default function Footer1({ parentClass = "footer" }) {
   const formRef = useRef();
@@ -37,7 +38,7 @@ export default function Footer1({ parentClass = "footer" }) {
   };
   return (
     <>
-      <footer style={{
+      <footer className={styles['footer-section'] || ''} style={{
         background: '#ffffff',
         position: 'relative',
         overflow: 'hidden'
@@ -80,16 +81,18 @@ export default function Footer1({ parentClass = "footer" }) {
               {/* Phone Numbers */}
               <div style={{ marginBottom: '16px' }}>
                 <p style={{
-                  fontSize: '14px',
-                  color: '#6b7280',
+                  fontSize: '15px',
+                  fontWeight: '500',
+                  color: '#374151',
                   lineHeight: '1.7',
-                  marginBottom: '4px'
+                  marginBottom: '6px'
                 }}>
                   +1 (555) 789-0123
                 </p>
                 <p style={{
-                  fontSize: '14px',
-                  color: '#6b7280',
+                  fontSize: '15px',
+                  fontWeight: '500',
+                  color: '#374151',
                   lineHeight: '1.7'
                 }}>
                   +44 (20) 7946-0958
@@ -98,9 +101,10 @@ export default function Footer1({ parentClass = "footer" }) {
 
               {/* Address */}
               <p style={{
-                fontSize: '14px',
-                color: '#6b7280',
-                lineHeight: '1.7',
+                fontSize: '15px',
+                fontWeight: '500',
+                color: '#374151',
+                lineHeight: '1.8',
                 marginBottom: '16px'
               }}>
                 Meydan Grandstand, 6th Floor, Meydan Road<br />
@@ -108,15 +112,16 @@ export default function Footer1({ parentClass = "footer" }) {
               </p>
 
               {/* Email */}
-              <a href="mailto:" style={{
-                fontSize: '14px',
-                color: '#4b5563',
+              <a href="mailto:careers@dagchain.network" style={{
+                fontSize: '15px',
+                fontWeight: '500',
+                color: '#374151',
                 textDecoration: 'none',
                 transition: 'color 0.2s ease',
                 display: 'inline-block'
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+              onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
                 careers@dagchain.network
               </a>
             </div>
@@ -136,13 +141,14 @@ export default function Footer1({ parentClass = "footer" }) {
                 {menuItems[0].links.map((link, index) => (
                   <li key={index} style={{ marginBottom: '12px' }}>
                     <Link href={link.href} style={{
-                      fontSize: '14px',
-                      color: '#4b5563',
+                      fontSize: '15px',
+                      fontWeight: '500',
+                      color: '#374151',
                       textDecoration: 'none',
                       transition: 'color 0.2s ease'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
                       {link.name}
                     </Link>
                   </li>
@@ -165,13 +171,14 @@ export default function Footer1({ parentClass = "footer" }) {
                 {menuItems[1].links.map((link, index) => (
                   <li key={index} style={{ marginBottom: '12px' }}>
                     <Link href={link.href} style={{
-                      fontSize: '14px',
-                      color: '#4b5563',
+                      fontSize: '15px',
+                      fontWeight: '500',
+                      color: '#374151',
                       textDecoration: 'none',
                       transition: 'color 0.2s ease'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
                       {link.name}
                     </Link>
                   </li>
@@ -194,13 +201,14 @@ export default function Footer1({ parentClass = "footer" }) {
                 {menuItems[2].links.map((link, index) => (
                   <li key={index} style={{ marginBottom: '12px' }}>
                     <Link href={link.href} style={{
-                      fontSize: '14px',
-                      color: '#4b5563',
+                      fontSize: '15px',
+                      fontWeight: '500',
+                      color: '#374151',
                       textDecoration: 'none',
                       transition: 'color 0.2s ease'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}>
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
                       {link.name}
                     </Link>
                   </li>

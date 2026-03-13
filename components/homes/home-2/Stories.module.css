@@ -1,0 +1,173 @@
+/* Mobile Responsive Styles for Stories Section */
+
+@media (max-width: 768px) {
+  /* TASK 4: Add top margin to push section down after tab content */
+  .section-stories {
+    margin-top: 60px !important;
+    padding: 60px 0 !important;
+  }
+
+  .section-stories h2 {
+    font-size: 32px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .section-stories p {
+    font-size: 16px !important;
+  }
+
+  /* TASK 6: Mobile container - full width with proper padding */
+  .story-carousel-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* TASK 2: Card sizing for mobile - 90-95% of screen width */
+  .story-card {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 360px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* TASK 3: Image responsiveness */
+  .story-card img,
+  .story-card video {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  /* TASK 5: Navigation arrows - position outside card */
+  .story-carousel-wrapper button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .story-carousel-wrapper button:first-of-type {
+    left: 5px !important;
+  }
+
+  .story-carousel-wrapper button:last-of-type {
+    right: 5px !important;
+  }
+
+  /* Cards container */
+  .story-carousel-wrapper > div {
+    max-width: 100% !important;
+    padding: 10px 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Slide container */
+  .story-carousel-wrapper > div > div {
+    min-height: 380px !important;
+  }
+
+  /* Individual slide */
+  .story-carousel-wrapper > div > div > div {
+    gap: 0 !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .section-stories {
+    margin-top: 50px !important;
+    padding: 50px 0 !important;
+  }
+
+  .section-stories h2 {
+    font-size: 28px !important;
+  }
+
+  .section-stories p {
+    font-size: 15px !important;
+  }
+
+  /* Tighter padding for smaller screens */
+  .story-carousel-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Smaller navigation arrows */
+  .story-carousel-wrapper button {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .story-carousel-wrapper button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Card adjustments */
+  .story-card {
+    min-height: 340px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .section-stories {
+    margin-top: 40px !important;
+    padding: 40px 0 !important;
+  }
+
+  .section-stories h2 {
+    font-size: 26px !important;
+  }
+
+  .section-stories p {
+    font-size: 14px !important;
+  }
+
+  /* Even tighter padding */
+  .story-carousel-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Compact navigation */
+  .story-carousel-wrapper button {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .story-carousel-wrapper button:first-of-type {
+    left: 3px !important;
+  }
+
+  .story-carousel-wrapper button:last-of-type {
+    right: 3px !important;
+  }
+
+  /* Card sizing */
+  .story-card {
+    min-height: 320px !important;
+  }
+}
+
+/* Extra small devices - 360px */
+@media (max-width: 360px) {
+  .story-carousel-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .story-carousel-wrapper button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .story-carousel-wrapper button svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}

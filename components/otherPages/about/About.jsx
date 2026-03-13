@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import styles from "./About.module.css";
+
 export default function About() {
   return (
     <section className="flat-about" style={{ background: '#ffffff', paddingTop: '80px', paddingBottom: '60px' }}>
@@ -24,25 +26,15 @@ export default function About() {
         {/* Professional Grid Layout */}
         <div className="row" style={{ marginTop: '50px' }}>
           <div className="col-12">
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(12, 1fr)',
-              gridTemplateRows: 'repeat(6, 120px)',
-              gap: '20px',
-              width: '100%'
-            }}>
+            <div className={styles['gallery-container']}>
 
               {/* Position 1: Top-left wide rectangle (Image 1) */}
               <div
-                className="wow fadeInUp"
+                className={`wow fadeInUp ${styles['gallery-item']}`}
                 data-wow-delay="0.1s"
                 style={{
                   gridColumn: '1 / 6',
-                  gridRow: '1 / 3',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                  background: '#f8f9fa'
+                  gridRow: '1 / 3'
                 }}
               >
                 <Image
@@ -60,15 +52,12 @@ export default function About() {
 
               {/* Position M: Center largest tile (Main Image) */}
               <div
-                className="wow fadeInUp"
+                className={`wow fadeInUp ${styles['gallery-item']}`}
                 data-wow-delay="0.2s"
                 style={{
                   gridColumn: '6 / 13',
                   gridRow: '1 / 5',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
                   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.08)',
-                  background: '#f8f9fa',
                   border: '1px solid rgba(0, 0, 0, 0.05)'
                 }}
               >
@@ -87,15 +76,11 @@ export default function About() {
 
               {/* Position 2: Bottom-left small square (Image 2) */}
               <div
-                className="wow fadeInUp"
+                className={`wow fadeInUp ${styles['gallery-item']}`}
                 data-wow-delay="0.3s"
                 style={{
                   gridColumn: '1 / 4',
-                  gridRow: '3 / 5',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                  background: '#f8f9fa'
+                  gridRow: '3 / 5'
                 }}
               >
                 <Image
@@ -114,15 +99,11 @@ export default function About() {
 
               {/* Position 3: Bottom-left next to Image 2 (Image 3 - using image 5) */}
               <div
-                className="wow fadeInUp"
+                className={`wow fadeInUp ${styles['gallery-item']}`}
                 data-wow-delay="0.4s"
                 style={{
                   gridColumn: '4 / 6',
-                  gridRow: '3 / 5',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                  background: '#f8f9fa'
+                  gridRow: '3 / 5'
                 }}
               >
                 <Image
@@ -141,15 +122,11 @@ export default function About() {
 
               {/* Position 4: Bottom section spanning (Image 4) */}
               <div
-                className="wow fadeInUp"
+                className={`wow fadeInUp ${styles['gallery-item']}`}
                 data-wow-delay="0.5s"
                 style={{
                   gridColumn: '1 / 7',
-                  gridRow: '5 / 7',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 20px rgba(0, 0, 0, 0.06)',
-                  background: '#f8f9fa'
+                  gridRow: '5 / 7'
                 }}
               >
                 <Image
@@ -168,12 +145,11 @@ export default function About() {
 
               {/* Position 5: Right bottom section with professional quote card */}
               <div
-                className="wow fadeInUp"
+                className={`wow fadeInUp ${styles['gallery-item']}`}
                 data-wow-delay="0.6s"
                 style={{
                   gridColumn: '7 / 13',
                   gridRow: '5 / 7',
-                  borderRadius: '16px',
                   background: '#ffffff',
                   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.08)',
                   border: '2px solid rgba(0, 0, 0, 0.1)',
@@ -183,8 +159,7 @@ export default function About() {
                   justifyContent: 'center',
                   padding: '50px 40px',
                   textAlign: 'center',
-                  position: 'relative',
-                  overflow: 'hidden'
+                  position: 'relative'
                 }}
               >
                 {/* Subtle background pattern */}

@@ -1,9 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
+import styles from "./Features.module.css";
 
 export default function Features() {
   const [userCountry, setUserCountry] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const sliderRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  const totalCards = 4;
 
   useEffect(() => {
     const detectCountry = async () => {
@@ -12,6 +20,47 @@ export default function Features() {
     };
     detectCountry();
   }, []);
+
+  // Auto-slide every 2 seconds on mobile
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalCards);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  // Touch/swipe handlers
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    setIsAutoPlaying(false);
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const swipeThreshold = 50;
+    const diff = touchStartX.current - touchEndX.current;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swipe left - next card
+        setCurrentSlide((prev) => (prev + 1) % totalCards);
+      } else {
+        // Swipe right - previous card
+        setCurrentSlide((prev) => (prev - 1 + totalCards) % totalCards);
+      }
+    }
+
+    // Resume autoplay after 3 seconds
+    setTimeout(() => {
+      setIsAutoPlaying(true);
+    }, 3000);
+  };
   const features = [
     {
       icon: (
@@ -59,42 +108,63 @@ export default function Features() {
   ];
 
   return (
-    <section style={{
-      padding: '80px 0',
-      background: '#fafafa',
-      position: 'relative'
-    }}>
-      <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+    <section 
+      className={styles['features-section'] || ''}
+      style={{
+        padding: '80px 0',
+        background: '#fafafa',
+        position: 'relative'
+      }}
+    >
+      <div className={`tf-container ${styles['features-container'] || ''}`} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 style={{
-            fontSize: '36px',
-            fontWeight: '700',
-            color: '#1a1a1a',
-            marginBottom: '16px',
-            lineHeight: '1.3'
-          }}>
+          <h2 
+            className={styles['section-heading'] || ''}
+            style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#1a1a1a',
+              marginBottom: '16px',
+              lineHeight: '1.3'
+            }}
+          >
             Learning Experience
           </h2>
-          <p style={{
-            fontSize: '18px',
-            color: '#6b7280',
-            maxWidth: '600px',
-            margin: '0 auto'
-          }}>
+          <p 
+            className={styles['section-description'] || ''}
+            style={{
+              fontSize: '18px',
+              color: '#6b7280',
+              maxWidth: '600px',
+              margin: '0 auto'
+            }}
+          >
             Designed for real growth with practical tools and continuous support
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '20px',
-          marginTop: '40px'
-        }}>
+        <div 
+          ref={sliderRef}
+          className={styles['features-grid'] || ''}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '20px',
+            marginTop: '40px'
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div style={{
+            display: 'contents',
+            transform: `translateX(-${currentSlide * 100}%)`,
+            transition: 'transform 0.5s ease-in-out'
+          }}>
           {features.map((feature, index) => (
             <div
               key={index}
-              className="wow fadeInUp"
+              className={`wow fadeInUp ${styles['feature-card'] || ''} ${currentSlide === index ? 'active' : ''}`}
               data-wow-delay={`${0.1 * (index + 1)}s`}
               style={{
                 background: '#ffffff',
@@ -131,7 +201,7 @@ export default function Features() {
               }}
             >
               <div
-                className="feature-icon"
+                className={`feature-icon ${styles['feature-icon'] || ''}`}
                 style={{
                   width: '56px',
                   height: '56px',
@@ -166,6 +236,7 @@ export default function Features() {
               </p>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </section>

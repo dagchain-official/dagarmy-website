@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { CAREERS, DEPARTMENTS, REGIONS } from "@/data/careers";
+import styles from "./CareersPage.module.css";
 
 const IconBriefcase = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -482,6 +483,8 @@ export default function CareersPage() {
   const [successJob, setSuccessJob] = useState(null);
   const [filterDept, setFilterDept] = useState('All');
   const [filterRegion, setFilterRegion] = useState('All');
+  const [currentCultureCycle, setCurrentCultureCycle] = useState(0);
+  const [visibleJobsCount, setVisibleJobsCount] = useState(3);
 
   useEffect(() => {
     const slug = searchParams.get('job');
@@ -494,11 +497,22 @@ export default function CareersPage() {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCultureCycle((prev) => (prev + 1) % 4);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   const filtered = CAREERS.filter(j => {
     if (filterDept !== 'All' && j.department !== filterDept) return false;
     if (filterRegion !== 'All' && j.region !== filterRegion) return false;
     return true;
   });
+
+  useEffect(() => {
+    setVisibleJobsCount(3);
+  }, [filterDept, filterRegion]);
 
   const handleApply = (job) => setApplyJob(job);
   const handleSuccess = () => {
@@ -507,6 +521,9 @@ export default function CareersPage() {
     setShowSuccess(true);
   };
   const handleSuccessClose = () => { setShowSuccess(false); setSuccessJob(null); };
+  const handleLoadMore = () => {
+    setVisibleJobsCount(prev => prev + 3);
+  };
 
   const filterBtnStyle = (active) => ({
     padding: '7px 16px', borderRadius: '8px', border: '1.5px solid',
@@ -564,14 +581,14 @@ export default function CareersPage() {
 
       {/* Culture strip */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '36px 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+        <div className={styles.cultureCardsContainer} style={{ maxWidth: '1100px', margin: '0 auto', padding: '36px 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
           {[
             { icon: <IconGlobe />, title: 'Remote-First', desc: 'Work from anywhere. We hire for talent, not timezone.' },
             { icon: <IconBriefcase />, title: 'Web3 Native', desc: 'We live and breathe blockchain. Every role has real impact.' },
             { icon: <IconCheck />, title: 'Community Driven', desc: 'You\'re not just an employee — you\'re part of the DAGArmy.' },
             { icon: <IconArrowRight />, title: 'High Growth', desc: 'Early-stage startup with global scale. Grow fast with us.' },
           ].map((v, i) => (
-            <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div key={i} className={`${styles.cultureCard} ${currentCultureCycle === i ? styles.active : ''}`} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 {v.icon}
               </div>
@@ -613,17 +630,56 @@ export default function CareersPage() {
             <p style={{ fontSize: '14px' }}>Try adjusting the department or region filter.</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {filtered.map(job => (
-              <JobCard
-                key={job.slug}
-                job={job}
-                isOpen={openSlug === job.slug}
-                onToggle={() => setOpenSlug(openSlug === job.slug ? null : job.slug)}
-                onApply={handleApply}
-              />
-            ))}
-          </div>
+          <>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {filtered.slice(0, visibleJobsCount).map(job => (
+                <JobCard
+                  key={job.slug}
+                  job={job}
+                  isOpen={openSlug === job.slug}
+                  onToggle={() => setOpenSlug(openSlug === job.slug ? null : job.slug)}
+                  onApply={handleApply}
+                />
+              ))}
+            </div>
+
+            {visibleJobsCount < filtered.length && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+                <button
+                  onClick={handleLoadMore}
+                  className={styles.loadMoreBtn}
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                    color: '#fff',
+                    border: '1.5px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '12px',
+                    padding: '14px 32px',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 16px rgba(59, 130, 246, 0.2)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 24px rgba(59, 130, 246, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(59, 130, 246, 0.2)';
+                  }}
+                >
+                  Load More Positions
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+            )}
+          </>
         )}
 
         {/* Generic apply CTA */}

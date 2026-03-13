@@ -3,9 +3,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import PremiumButton from "./PremiumButton";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
+import styles from "./DownloadApp.module.css";
 
 export default function DownloadApp() {
   const [userCountry, setUserCountry] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const detectCountry = async () => {
@@ -14,12 +16,20 @@ export default function DownloadApp() {
     };
     detectCountry();
   }, []);
+
+  // Auto-rotate slides every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % 3); // 3 slides: 0, 1, 2
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
       <div className="tf-container">
-        <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <div className="content-left" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div className={`row ${styles['download-section']}`} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', order: 1 }}>
+            <div className={`content-left ${styles['content-left']}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
               <div style={{ flex: '0 0 auto' }}>
                 <h2
                   className="fw-7 letter-spacing-1 wow fadeInUp"
@@ -44,7 +54,7 @@ export default function DownloadApp() {
                   Thousands of learners continue building credibility through structured programs, guided sessions and shared learning across {getDisplayCountry(userCountry)}.
                 </p>
               </div>
-              <div className="wow fadeInUp" data-wow-delay="0.35s" style={{ marginTop: 'auto' }}>
+              <div className={`wow fadeInUp ${styles['stats-grid']}`} data-wow-delay="0.35s" style={{ marginTop: 'auto' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                   <div style={{ padding: '20px', background: '#fafafa', borderRadius: '12px', border: '1px solid #f0f0f0', transition: 'all 0.3s ease' }}>
                     <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '5px' }}>2.5K+</h3>
@@ -62,12 +72,12 @@ export default function DownloadApp() {
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex' }}>
-            <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ padding: '40px', width: '100%' }}>
+          <div style={{ display: 'flex', order: 2 }}>
+            <div className={`wow fadeInUp ${styles['benefits-card']}`} data-wow-delay="0.3s" style={{ padding: '40px', width: '100%' }}>
               <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', border: '1px solid #f0f0f0', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)' }}>
                 <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '28px', color: '#1a1a1a' }}>What You Get as a DAG Army Member</h3>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                  <li style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
+                <ul className={styles['benefits-list']} style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  <li className={`${styles['benefit-item']} ${currentSlide === 0 ? styles['visible'] : ''}`} data-slide="0" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
                     <div style={{
                       width: '48px',
                       height: '48px',
@@ -89,7 +99,7 @@ export default function DownloadApp() {
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Learn without pressure and return anytime</p>
                     </div>
                   </li>
-                  <li style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
+                  <li className={`${styles['benefit-item']} ${currentSlide === 0 ? styles['visible'] : ''}`} data-slide="0" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
                     <div style={{
                       width: '48px',
                       height: '48px',
@@ -114,7 +124,7 @@ export default function DownloadApp() {
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Complete programs and earn credentials</p>
                     </div>
                   </li>
-                  <li style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
+                  <li className={`${styles['benefit-item']} ${currentSlide === 1 ? styles['visible'] : ''}`} data-slide="1" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
                     <div style={{
                       width: '48px',
                       height: '48px',
@@ -136,7 +146,7 @@ export default function DownloadApp() {
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Build practical work samples</p>
                     </div>
                   </li>
-                  <li style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
+                  <li className={`${styles['benefit-item']} ${currentSlide === 1 ? styles['visible'] : ''}`} data-slide="1" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
                     <div style={{
                       width: '48px',
                       height: '48px',
@@ -160,7 +170,7 @@ export default function DownloadApp() {
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Learn alongside peers and mentors</p>
                     </div>
                   </li>
-                  <li style={{ display: 'flex', alignItems: 'start' }}>
+                  <li className={`${styles['benefit-item']} ${currentSlide === 2 ? styles['visible'] : ''}`} data-slide="2" style={{ display: 'flex', alignItems: 'start' }}>
                     <div style={{
                       width: '48px',
                       height: '48px',

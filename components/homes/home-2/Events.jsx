@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import styles from "./Events.module.css";
 
 export default function Events() {
+  const [showAll, setShowAll] = useState(false);
   const upcomingEvents = [
     {
       id: 1,
@@ -70,7 +72,7 @@ export default function Events() {
               >
                 Upcoming Events
               </h2>
-              <div className="flex items-center justify-between flex-wrap gap-10">
+              <div className={styles['subtitle-container']}>
                 <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s" style={{
                   fontSize: '18px',
                   color: '#6b7280',
@@ -80,16 +82,19 @@ export default function Events() {
                 </div>
               </div>
             </div>
-            <div style={{
+            <div className={styles['events-container']} style={{
               display: 'grid',
               gap: '20px'
             }}>
-              {upcomingEvents.map((event, index) => (
+              {upcomingEvents.map((event, index) => {
+                const isVisible = showAll || index < 2;
+                return (
                 <div
                   key={index}
-                  className="wow fadeInUp"
+                  className={`${styles['event-card']} ${!isVisible ? styles['hidden'] : ''} wow fadeInUp`}
                   data-wow-delay={event.delay}
                   style={{
+                    display: isVisible ? 'flex' : 'none',
                     background: '#ffffff',
                     borderRadius: '16px',
                     padding: '0',
@@ -193,7 +198,56 @@ export default function Events() {
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
+            </div>
+            <div className={styles['show-more-container']}>
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className={styles['show-more-btn']}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '14px 32px',
+                  background: '#ffffff',
+                  color: '#1a1a1a',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  marginTop: '24px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#000000';
+                  e.currentTarget.style.color = '#ffffff';
+                  e.currentTarget.style.borderColor = '#000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#ffffff';
+                  e.currentTarget.style.color = '#1a1a1a';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                }}
+              >
+                {showAll ? (
+                  <>
+                    Show Less
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    Show More Events
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

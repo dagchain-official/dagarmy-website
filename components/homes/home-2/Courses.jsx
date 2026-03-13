@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import styles from "./Courses.module.css";
 
 const ProgressiveInfoCards = () => {
   const [activeCard, setActiveCard] = useState(0);
@@ -81,7 +82,7 @@ const ProgressiveInfoCards = () => {
       `}</style>
 
       {/* Main Heading */}
-      <h3 style={{
+      <h3 className="unified-program-heading" style={{
         fontSize: '32px',
         fontWeight: '700',
         color: '#1f2937',
@@ -94,7 +95,7 @@ const ProgressiveInfoCards = () => {
       </h3>
 
       {/* Body Text */}
-      <p style={{
+      <p className="unified-program-text" style={{
         fontSize: '16px',
         lineHeight: '1.65',
         color: '#4b5563',
@@ -105,7 +106,7 @@ const ProgressiveInfoCards = () => {
       </p>
 
       {/* Navigation Indicators - Moved Above Card */}
-      <div style={{
+      <div className="tab-navigation" style={{
         display: 'flex',
         gap: '32px',
         marginBottom: '20px',
@@ -135,41 +136,28 @@ const ProgressiveInfoCards = () => {
         ))}
       </div>
 
-      {/* Card Container - Fixed Height with Overflow */}
-      <div style={{
-        position: 'relative',
-        flex: '1',
-        minHeight: 0,
-        marginBottom: '0'
-      }}>
+      {/* Card Container - Auto Height for Mobile */}
+      <div className="info-card-container">
         {cards.map((card) => (
           <div
             key={card.id}
+            className="info-card"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              display: activeCard === card.id ? 'flex' : 'none',
               background: '#fff',
               borderRadius: '16px',
               boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
               border: '1px solid #e5e7eb',
-              opacity: activeCard === card.id ? 1 : 0,
-              transform: activeCard === card.id ? 'translateY(0)' : 'translateY(12px)',
-              transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out',
-              pointerEvents: activeCard === card.id ? 'auto' : 'none',
-              display: 'flex',
               flexDirection: 'column'
             }}
           >
             {/* Fixed Header Section */}
-            <div style={{
+            <div className="info-card-header" style={{
               padding: '36px 36px 0 36px',
               flexShrink: 0
             }}>
               {/* Card Heading */}
-              <h4 style={{
+              <h4 className="info-card-heading" style={{
                 fontSize: '24px',
                 fontWeight: '700',
                 color: '#1f2937',
@@ -189,7 +177,7 @@ const ProgressiveInfoCards = () => {
 
             {/* Scrollable Content Section */}
             <div 
-              className="scrollable-content"
+              className="scrollable-content info-card-content"
               style={{
                 flex: '1',
                 overflowY: 'auto',
@@ -204,7 +192,7 @@ const ProgressiveInfoCards = () => {
                 gap: '14px'
               }}>
                 {card.items.map((item, index) => (
-                  <div key={index} style={{
+                  <div key={index} className="info-card-item" style={{
                     display: 'flex',
                     alignItems: 'flex-start',
                     gap: '12px'
@@ -242,7 +230,6 @@ export default function Courses() {
 
   return (
     <section className="section-popular-program" style={{ 
-      padding: '0 0 80px',
       background: '#fff'
     }}>
       <style jsx>{`

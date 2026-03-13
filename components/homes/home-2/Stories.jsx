@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import styles from "./Stories.module.css";
 
 const allStories = [
   {
@@ -94,14 +95,34 @@ const StoryCarousel = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
   const [popupVideoUrl, setPopupVideoUrl] = useState('');
+  const [cardsPerSlide, setCardsPerSlide] = useState(3);
 
-  // Define slide groups - each slide shows only complete cards
-  const slideGroups = [
-    [0, 1, 2],     // Cards 1, 2, 3
-    [3, 4, 5],     // Cards 4, 5, 6
-    [6, 7, 8],     // Cards 7, 8, 9
-    [9, 10, 11]    // Cards 10, 11, 12
-  ];
+  // Update cards per slide based on window width
+  useEffect(() => {
+    const updateCardsPerSlide = () => {
+      if (window.innerWidth < 768) {
+        setCardsPerSlide(1); // Mobile: 1 card
+      } else if (window.innerWidth < 992) {
+        setCardsPerSlide(2); // Tablet: 2 cards
+      } else {
+        setCardsPerSlide(3); // Desktop: 3 cards
+      }
+    };
+
+    updateCardsPerSlide();
+    window.addEventListener('resize', updateCardsPerSlide);
+    return () => window.removeEventListener('resize', updateCardsPerSlide);
+  }, []);
+
+  // Generate slide groups dynamically based on cardsPerSlide
+  const slideGroups = [];
+  for (let i = 0; i < allStories.length; i += cardsPerSlide) {
+    const group = [];
+    for (let j = 0; j < cardsPerSlide && i + j < allStories.length; j++) {
+      group.push(i + j);
+    }
+    slideGroups.push(group);
+  }
 
   const totalSlides = slideGroups.length;
 
@@ -129,7 +150,7 @@ const StoryCarousel = () => {
 
   return (
     <div 
-      className="story-carousel-wrapper"
+      className={`story-carousel-wrapper ${styles['story-carousel-wrapper'] || ''}`}
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
       style={{
@@ -140,7 +161,9 @@ const StoryCarousel = () => {
         paddingLeft: '120px',
         paddingRight: '120px',
         paddingTop: '30px',
-        paddingBottom: '30px'
+        paddingBottom: '30px',
+        width: '100%',
+        boxSizing: 'border-box'
       }}
     >
       {/* Left Navigation Button */}
@@ -233,14 +256,16 @@ const StoryCarousel = () => {
           margin: '0 auto',
           position: 'relative',
           padding: '20px 0',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}
       >
         <div
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: '380px'
+            minHeight: '380px',
+            boxSizing: 'border-box'
           }}
         >
           {slideGroups.map((group, slideIndex) => {
@@ -262,13 +287,14 @@ const StoryCarousel = () => {
                   opacity: isActive ? 1 : 0,
                   transform: isActive ? 'translateX(0)' : `translateX(${slideIndex > currentSlide ? '50px' : '-50px'})`,
                   transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out',
-                  pointerEvents: isActive ? 'auto' : 'none'
+                  pointerEvents: isActive ? 'auto' : 'none',
+                  boxSizing: 'border-box'
                 }}
               >
                 {cardsInSlide.map((story, cardIndex) => (
                   <div
                     key={`${story.id}-${cardIndex}`}
-                    className="story-card"
+                    className={`story-card ${styles['story-card'] || ''}`}
                     style={{
                       width: cardCount === 1 ? '340px' : '340px',
                       minWidth: '340px',
@@ -470,7 +496,7 @@ const StoryCarousel = () => {
 export default function Stories() {
   return (
     <section 
-      className="section-stories" 
+      className={`section-stories ${styles['section-stories'] || ''}`}
       style={{ 
         padding: '80px 0',
         background: '#fafafa',

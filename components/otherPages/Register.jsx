@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { useAuth } from "@/context/AuthContext";
+import styles from "./Register.module.css";
 
 export default function Register() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function Register() {
           <div className="row" style={{ gap: "40px 0" }}>
             <div className="col-lg-6">
               <div
-                className="img-left wow fadeInLeft"
+                className={`img-left wow fadeInLeft ${styles['img-left']}`}
                 data-wow-delay="0s"
                 style={{
                   backgroundImage: "url('/images/loginpage/login.png')",
@@ -209,7 +210,7 @@ export default function Register() {
             </div>
             <div className="col-lg-6">
               <div
-                className="content-right"
+                className={`content-right ${styles['content-right']}`}
                 style={{
                   padding: "50px 40px",
                   background: "#ffffff",
@@ -477,7 +478,7 @@ export default function Register() {
                     </div>
                   </>
                 ) : showRoleSelection && !isAuthenticated ? (
-                  <div className="role-selection wow fadeInUp">
+                  <div className={`role-selection wow fadeInUp ${styles['role-selection-modal']}`}>
                     <p className="fs-18 fw-5 mb-3">Select Your Role</p>
                     <p className="fs-15 mb-4">
                       Connected: {address?.slice(0, 6)}...{address?.slice(-4)}

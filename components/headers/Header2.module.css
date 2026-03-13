@@ -1,0 +1,4 @@
+/* Header2 Mobile Responsive Styles */
+/* Note: This file is currently empty because all mobile navbar styles */
+/* are in globals.css to avoid CSS module restrictions on global selectors */
+/* CSS modules require local class names, but the navbar uses global elements */

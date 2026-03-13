@@ -1,7 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import styles from "./Features.module.css";
 
 export default function Features() {
+  const [currentCycle, setCurrentCycle] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCycle((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <section className="section-why tf-spacing-3 pt-0 page-about" style={{ background: '#fafafa', paddingTop: '80px', paddingBottom: '80px' }}>
       <div className="tf-container">
@@ -17,10 +26,10 @@ export default function Features() {
             </div>
           </div>
         </div>
-        <div className="row" style={{ gap: '30px 0' }}>
+        <div className={`row ${styles.gapsContainer}`} style={{ gap: '30px 0' }}>
           <div className="col-lg-4">
             <div
-              className="icons-box wow fadeInUp"
+              className={`icons-box wow fadeInUp ${styles.gapCard} ${currentCycle === 0 ? styles.active : ''}`}
               style={{
                 textAlign: 'center',
                 padding: '40px 30px',
@@ -71,7 +80,7 @@ export default function Features() {
           </div>
           <div className="col-lg-4">
             <div
-              className="icons-box wow fadeInUp"
+              className={`icons-box wow fadeInUp ${styles.gapCard} ${currentCycle === 1 ? styles.active : ''}`}
               data-wow-delay="0.1s"
               style={{
                 textAlign: 'center',
@@ -124,7 +133,7 @@ export default function Features() {
           </div>
           <div className="col-lg-4">
             <div
-              className="icons-box wow fadeInUp"
+              className={`icons-box wow fadeInUp ${styles.gapCard} ${currentCycle === 2 ? styles.active : ''}`}
               data-wow-delay="0.2s"
               style={{
                 textAlign: 'center',

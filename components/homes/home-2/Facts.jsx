@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
+import styles from "./Facts.module.css";
 
 export default function Facts() {
   const [userCountry, setUserCountry] = useState(null);
@@ -98,7 +99,7 @@ export default function Facts() {
                   </svg>
                 </div>
                 <div className="sub-tag-title">
-                  <p style={{ margin: 0, fontWeight: '600', fontSize: '15px', color: '#1f2937' }}>Professionals With Real Industry Experience</p>
+                  <p style={{ margin: 0, fontWeight: '600', fontSize: '13.5px', color: '#1f2937' }}>Professionals With Real Industry Experience</p>
                 </div>
               </div>
               <h2

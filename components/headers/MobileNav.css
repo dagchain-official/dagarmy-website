@@ -1,0 +1,316 @@
+/* ============================================
+   MOBILE NAVIGATION DRAWER - PROFESSIONAL DESIGN
+   ============================================ */
+
+/* Dark Overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  animation: fadeIn 0.25s ease;
+  backdrop-filter: blur(3px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile Navigation Drawer - Slides from Left */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85vw;
+  max-width: 320px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+
+.mobile-nav-drawer.active {
+  left: 0;
+}
+
+/* Header Section - Logo + Close Button */
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.mobile-nav-logo {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-nav-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-close:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.mobile-nav-close:active {
+  background: #e5e7eb;
+  transform: scale(0.95);
+}
+
+/* Navigation Links Container */
+.mobile-nav-links {
+  display: flex !important;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  flex-shrink: 0;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 400px;
+  background: #ffffff;
+}
+
+/* Individual Navigation Link */
+.mobile-nav-link {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 14px 24px;
+  color: #374151 !important;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+  border-bottom: 1px solid #f3f4f6;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.mobile-nav-link:hover {
+  background: #f9fafb;
+  color: #1f2937;
+  padding-left: 28px;
+}
+
+.mobile-nav-link:active {
+  background: #f3f4f6;
+}
+
+/* Active Link State */
+.mobile-nav-link.active {
+  background: #f9fafb;
+  color: #1f2937;
+  font-weight: 600;
+  border-left: 4px solid #1f2937;
+  padding-left: 20px;
+}
+
+/* Active Page Indicator Dot */
+.mobile-nav-active-indicator {
+  width: 8px;
+  height: 8px;
+  background: #1f2937;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Link Text */
+.mobile-nav-link-text {
+  flex: 1;
+  color: inherit;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Special Item - Udaan with Gradient */
+.mobile-nav-link.special .mobile-nav-link-text {
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: udaanGlow 4s ease infinite;
+}
+
+.mobile-nav-link.special:hover {
+  filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.3));
+}
+
+@keyframes udaanGlow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Custom Scrollbar */
+.mobile-nav-drawer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-nav-drawer::-webkit-scrollbar-track {
+  background: #f9fafb;
+}
+
+.mobile-nav-drawer::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.mobile-nav-drawer::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablet and Small Devices */
+@media (max-width: 768px) {
+  .mobile-nav-drawer {
+    width: 80vw;
+    max-width: 300px;
+  }
+
+  .mobile-nav-header {
+    padding: 18px 20px;
+  }
+
+  .mobile-nav-link {
+    min-height: 48px;
+    padding: 13px 20px;
+    font-size: 15px;
+  }
+
+  .mobile-nav-link:hover {
+    padding-left: 24px;
+  }
+
+  .mobile-nav-link.active {
+    padding-left: 16px;
+  }
+}
+
+/* Large Phones */
+@media (max-width: 430px) {
+  .mobile-nav-drawer {
+    width: 85vw;
+    max-width: 280px;
+  }
+
+  .mobile-nav-header {
+    padding: 16px 18px;
+  }
+
+  .mobile-nav-logo span {
+    font-size: 18px !important;
+  }
+
+  .mobile-nav-close {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mobile-nav-link {
+    min-height: 46px;
+    padding: 12px 18px;
+    font-size: 15px;
+  }
+
+  .mobile-nav-link:hover {
+    padding-left: 22px;
+  }
+
+  .mobile-nav-link.active {
+    padding-left: 14px;
+  }
+}
+
+/* Standard Phones */
+@media (max-width: 390px) {
+  .mobile-nav-drawer {
+    width: 85vw;
+    max-width: 260px;
+  }
+
+  .mobile-nav-header {
+    padding: 16px;
+  }
+
+  .mobile-nav-link {
+    min-height: 44px;
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+
+  .mobile-nav-link:hover {
+    padding-left: 20px;
+  }
+
+  .mobile-nav-link.active {
+    padding-left: 12px;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 375px) {
+  .mobile-nav-drawer {
+    width: 85vw;
+    max-width: 250px;
+  }
+
+  .mobile-nav-logo span {
+    font-size: 17px !important;
+  }
+
+  .mobile-nav-link {
+    font-size: 14px;
+  }
+}
+
+/* Hide on Desktop */
+@media (min-width: 769px) {
+  .mobile-nav-drawer,
+  .mobile-nav-overlay {
+    display: none !important;
+  }
+}

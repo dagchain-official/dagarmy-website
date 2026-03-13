@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import styles from "./Categories.module.css";
 
 const dagarmyCategories = [
   {
@@ -115,6 +115,14 @@ const dagarmyCategories = [
 
 export default function Categories() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [currentCycle, setCurrentCycle] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCycle((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="section-categories tf-spacing-1 pt-0" style={{ paddingBottom: '60px' }}>
@@ -130,143 +138,117 @@ export default function Categories() {
           </div>
         </div>
         <div className="row">
-          {/* Create columns dynamically */}
-          {[0, 1, 2].map((colIndex) => (
-            <div className="col-lg-4" key={colIndex}>
-              <div className="wrap-icon-box" style={{ gap: '20px', display: 'flex', flexDirection: 'column' }}>
-                {dagarmyCategories.slice(colIndex * 3, colIndex * 3 + 3).map((elm, i) => {
-                  const globalIndex = colIndex * 3 + i;
-                  const isHovered = hoveredIndex === globalIndex;
-                  // Pop-up for: Automation (2), Web3 (5), Dashboard (8)
-                  // Pop-down for: Intelligent (0), Creative (1), Distributed (3), DeFi (4), Excel (6), Power BI (7)
-                  const shouldPopUp = globalIndex === 2 || globalIndex === 5 || globalIndex === 8;
-                  
-                  return (
+          {[0, 1, 2].map((colIndex) => {
+            const globalIndex = currentCycle * 3 + colIndex;
+            const elm = dagarmyCategories[globalIndex];
+            const isHovered = hoveredIndex === globalIndex;
+            const shouldPopUp = globalIndex === 2 || globalIndex === 5 || globalIndex === 8;
+            
+            return (
+              <div className="col-lg-4" key={colIndex}>
+                <div className="wrap-icon-box" style={{ gap: '20px', display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    className={`icon-box-link wow fadeInUp ${styles.categoryCard}`}
+                    data-wow-delay="0.1s"
+                    style={{ textDecoration: 'none', display: 'block', position: 'relative' }}
+                    onMouseEnter={() => setHoveredIndex(globalIndex)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
                     <div
-                      key={i}
-                      className="icon-box-link wow fadeInUp"
-                      data-wow-delay="0.1s"
-                      style={{ textDecoration: 'none', display: 'block', position: 'relative' }}
-                      onMouseEnter={() => setHoveredIndex(globalIndex)}
-                      onMouseLeave={() => setHoveredIndex(null)}
+                      className="icons-box style-2"
+                      style={{
+                        padding: '24px',
+                        borderRadius: '16px',
+                        background: '#fff',
+                        border: isHovered ? '2px solid #000000' : '1px solid #f3f4f6',
+                        boxShadow: isHovered ? '0 12px 24px -5px rgba(0, 0, 0, 0.2)' : '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '20px',
+                        cursor: 'default',
+                        transform: isHovered ? 'translateY(-5px)' : 'translateY(0)',
+                        overflow: 'visible'
+                      }}
                     >
-                      <Link
-                        href={`/categories`}
-                        style={{ textDecoration: 'none', display: 'block' }}
-                      >
-                        <div
-                          className="icons-box style-2"
-                          style={{
-                            padding: '24px',
-                            borderRadius: '16px',
-                            background: '#fff',
-                            border: isHovered ? '2px solid #000000' : '1px solid #f3f4f6',
-                            boxShadow: isHovered 
-                              ? '0 12px 24px -5px rgba(0, 0, 0, 0.2)' 
-                              : '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '20px',
-                            cursor: 'pointer',
-                            transform: isHovered ? 'translateY(-5px)' : 'translateY(0)',
-                            overflow: 'visible'
-                          }}
-                        >
-                          <div className="icon-wrapper" style={{
-                            width: '56px',
-                            height: '56px',
-                            borderRadius: '16px',
-                            background: isHovered ? '#000000' : 'rgba(0, 0, 0, 0.05)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            transition: 'all 0.4s ease',
-                            flexShrink: 0
-                          }}>
-                            <div style={{ 
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              justifyContent: 'center',
-                              transition: 'all 0.4s ease'
-                            }}>
-                              {React.cloneElement(elm.icon, {
-                                style: { 
-                                  stroke: isHovered ? '#ffffff' : '#6b7280',
-                                  transition: 'stroke 0.4s ease'
-                                }
-                              })}
-                            </div>
-                          </div>
-                          <div className="content">
-                            <h5 style={{
-                              margin: 0,
-                              fontSize: '17px',
-                              fontWeight: '600',
-                              color: isHovered ? '#000000' : '#1f2937',
-                              transition: 'color 0.4s ease',
-                              lineHeight: '1.4'
-                            }}>
-                              {elm.title}
-                            </h5>
-                          </div>
-                        </div>
-                      </Link>
-                      
-                      {/* Conditional Pop-up/Pop-down Description Panel */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          ...(shouldPopUp ? { bottom: '100%', marginBottom: '8px' } : { top: '100%', marginTop: '8px' }),
-                          left: 0,
-                          right: 0,
-                          background: 'linear-gradient(135deg, #000000 0%, #1f2937 100%)',
-                          borderRadius: '16px',
-                          padding: isHovered ? '20px 24px' : '0 24px',
-                          maxHeight: isHovered ? '500px' : '0',
-                          opacity: isHovered ? 1 : 0,
-                          overflow: 'hidden',
-                          transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                          boxShadow: isHovered 
-                            ? (shouldPopUp ? '0 -20px 40px -10px rgba(0, 0, 0, 0.3)' : '0 20px 40px -10px rgba(0, 0, 0, 0.3)')
-                            : 'none',
-                          zIndex: 10,
-                          pointerEvents: isHovered ? 'auto' : 'none',
-                          border: '1px solid rgba(255, 255, 255, 0.1)'
-                        }}
-                      >
-                        <div style={{
-                          transform: isHovered ? 'translateY(0)' : (shouldPopUp ? 'translateY(10px)' : 'translateY(-10px)'),
-                          transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s',
-                          opacity: isHovered ? 1 : 0
-                        }}>
-                          {/* Decorative top line */}
-                          <div style={{
-                            width: '40px',
-                            height: '3px',
-                            background: 'linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.3) 100%)',
-                            borderRadius: '2px',
-                            marginBottom: '16px'
-                          }} />
-                          
-                          <p style={{
-                            margin: 0,
-                            fontSize: '14px',
-                            lineHeight: '1.7',
-                            color: 'rgba(255, 255, 255, 0.9)',
-                            fontWeight: '400',
-                            letterSpacing: '0.2px'
-                          }}>
-                            {elm.description}
-                          </p>
+                      <div className="icon-wrapper" style={{
+                        width: '56px',
+                        height: '56px',
+                        borderRadius: '16px',
+                        background: isHovered ? '#000000' : 'rgba(0, 0, 0, 0.05)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.4s ease',
+                        flexShrink: 0
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.4s ease' }}>
+                          {React.cloneElement(elm.icon, {
+                            style: { stroke: isHovered ? '#ffffff' : '#6b7280', transition: 'stroke 0.4s ease' }
+                          })}
                         </div>
                       </div>
+                      <div className="content">
+                        <h5 style={{
+                          margin: 0,
+                          fontSize: '17px',
+                          fontWeight: '600',
+                          color: isHovered ? '#000000' : '#1f2937',
+                          transition: 'color 0.4s ease',
+                          lineHeight: '1.4'
+                        }}>
+                          {elm.title}
+                        </h5>
+                      </div>
                     </div>
-                  );
-                })}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        ...(shouldPopUp ? { bottom: '100%', marginBottom: '8px' } : { top: '100%', marginTop: '8px' }),
+                        left: 0,
+                        right: 0,
+                        background: 'linear-gradient(135deg, #000000 0%, #1f2937 100%)',
+                        borderRadius: '16px',
+                        padding: isHovered ? '20px 24px' : '0 24px',
+                        maxHeight: isHovered ? '500px' : '0',
+                        opacity: isHovered ? 1 : 0,
+                        overflow: 'hidden',
+                        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: isHovered ? (shouldPopUp ? '0 -20px 40px -10px rgba(0, 0, 0, 0.3)' : '0 20px 40px -10px rgba(0, 0, 0, 0.3)') : 'none',
+                        zIndex: 10,
+                        pointerEvents: isHovered ? 'auto' : 'none',
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                      }}
+                    >
+                      <div style={{
+                        transform: isHovered ? 'translateY(0)' : (shouldPopUp ? 'translateY(10px)' : 'translateY(-10px)'),
+                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s',
+                        opacity: isHovered ? 1 : 0
+                      }}>
+                        <div style={{
+                          width: '40px',
+                          height: '3px',
+                          background: 'linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.3) 100%)',
+                          borderRadius: '2px',
+                          marginBottom: '16px'
+                        }} />
+                        <p style={{
+                          margin: 0,
+                          fontSize: '14px',
+                          lineHeight: '1.7',
+                          color: 'rgba(255, 255, 255, 0.9)',
+                          fontWeight: '400',
+                          letterSpacing: '0.2px'
+                        }}>
+                          {elm.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

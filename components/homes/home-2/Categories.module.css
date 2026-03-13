@@ -1,0 +1,70 @@
+/* Fade-in animation for category cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.categoryCard {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  :global(.section-categories) {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+  }
+
+  :global(.section-categories .tf-container) {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow-x: hidden !important;
+  }
+
+  :global(.section-categories .heading-section) {
+    max-width: 100% !important;
+  }
+
+  :global(.section-categories .heading-section h2) {
+    font-size: 28px !important;
+  }
+
+  :global(.section-categories .row) {
+    margin: 0 !important;
+  }
+
+  :global(.section-categories [class*="col-"]) {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  :global(.section-categories .icons-box) {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 430px) {
+  :global(.section-categories .heading-section h2) {
+    font-size: 26px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  :global(.section-categories .heading-section h2) {
+    font-size: 24px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  :global(.section-categories .heading-section h2) {
+    font-size: 23px !important;
+  }
+}

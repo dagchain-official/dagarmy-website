@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
+import styles from "./NextPhase.module.css";
 
 export default function NextPhase() {
   const [userCountry, setUserCountry] = useState(null);
@@ -18,7 +19,7 @@ export default function NextPhase() {
     detectCountry();
   }, []);
   return (
-    <section style={{
+    <section className={`next-phase-section ${styles['next-phase-section'] || ''}`} style={{
       background: '#000000',
       paddingTop: '80px',
       paddingBottom: '80px',

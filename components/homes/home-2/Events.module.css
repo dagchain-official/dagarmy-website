@@ -1,0 +1,223 @@
+/* Mobile responsive styles for Upcoming Events section */
+
+/* Desktop - maintain horizontal layout */
+.event-card {
+  display: flex;
+  transition: all 0.4s ease-in-out;
+}
+
+.event-card.hidden {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Subtitle container */
+.subtitle-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Show more button - visible on desktop and mobile */
+.show-more-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Mobile - Below 768px */
+@media (max-width: 767px) {
+  /* Section padding - reduce excessive space */
+  :global(.section-event) {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+
+  /* Section heading */
+  :global(.section-event .heading-section h2) {
+    font-size: 28px !important;
+    text-align: left !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Subtitle - visible on mobile, left aligned with customizable padding */
+  .subtitle-container {
+    margin-bottom: 24px !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+  }
+
+  :global(.section-event .heading-section .sub) {
+    font-size: 16px !important;
+    text-align: left !important;
+    padding-left: 0px !important; /* Adjust this value to shift right */
+  }
+
+  :global(.section-event .heading-section) {
+    margin-bottom: 24px !important;
+  }
+
+  /* Mobile container padding for proper card alignment */
+  :global(.section-event .tf-container) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Events grid container */
+  .events-container {
+    padding: 0 !important;
+    gap: 16px !important;
+  }
+
+  /* Show more button - visible below cards with proper spacing */
+  .show-more-container {
+    display: flex !important;
+    justify-content: flex-start !important;
+    margin-top: 20px !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .show-more-btn {
+    width: auto !important;
+    min-width: 200px !important;
+  }
+
+  /* Event card container - content-sized width */
+  :global(.section-event) > div > div > div > div > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 0 0 14px 0 !important;
+    padding: 12px !important;
+  }
+
+  /* Icon container */
+  :global(.section-event) > div > div > div > div > div > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    padding: 8px !important;
+    width: 100% !important;
+    min-width: auto !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+  }
+
+  :global(.section-event) > div > div > div > div > div > div:first-child img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Content container */
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) {
+    padding: 10px 0 !important;
+    min-width: auto !important;
+    width: 100% !important;
+  }
+
+  /* Title and tag container - keep on same line */
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div > div:first-child {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Event title */
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div > div:first-child h3 {
+    font-size: 17px !important;
+    word-wrap: break-word !important;
+    max-width: calc(100% - 80px) !important;
+    flex-shrink: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  /* Event tag - keep on same line */
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div > div:first-child > div {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Event description - wrap text, don't extend beyond title+tag */
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div > div:first-child + p,
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div p {
+    font-size: 13px !important;
+    word-wrap: break-word !important;
+    white-space: normal !important;
+    max-width: 280px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Button container - compact spacing */
+  :global(.section-event) > div > div > div > div > div > div:last-child {
+    padding: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    margin-top: 6px !important;
+  }
+
+  /* Button */
+  :global(.section-event) > div > div > div > div > div > div:last-child > div {
+    width: auto !important;
+    justify-content: center !important;
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* Small phones - 430px */
+@media (max-width: 430px) {
+  :global(.section-event .heading-section h2) {
+    font-size: 26px !important;
+  }
+
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div > div:first-child h3 {
+    font-size: 16px !important;
+  }
+
+  :global(.section-event) > div > div > div > div > div > div:nth-child(2) > div p {
+    font-size: 12px !important;
+  }
+}
+
+/* Small phones - 390px */
+@media (max-width: 390px) {
+  :global(.section-event .heading-section h2) {
+    font-size: 24px !important;
+  }
+
+  :global(.section-event) > div > div > div > div > div {
+    padding: 14px !important;
+  }
+}
+
+/* Small phones - 375px */
+@media (max-width: 375px) {
+  :global(.section-event .heading-section h2) {
+    font-size: 23px !important;
+  }
+
+  :global(.section-event) > div > div > div > div > div > div:last-child > div {
+    padding: 10px 20px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* Small phones - 360px */
+@media (max-width: 360px) {
+  :global(.section-event .heading-section h2) {
+    font-size: 22px !important;
+  }
+
+  :global(.section-event) > div > div > div > div > div {
+    padding: 12px !important;
+  }
+}

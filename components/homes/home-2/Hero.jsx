@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ModalVideo from "react-modal-video";
 import PremiumButton from "./PremiumButton";
+import "./Hero.module.css";
 
 const AnimatedNoText = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -109,15 +110,12 @@ export default function Hero() {
                   marginBottom: '24px',
                   color: '#1f2937'
                 }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>Join the <span style={{
+                  Join the <span style={{
                     color: '#1f2937',
                     fontWeight: '700',
                     fontFamily: 'Nasalization, sans-serif'
-                  }}>GLOBAL ARMY</span></span>
-                  <br />
-                  of Skill Builders and
-                  <br />
-                  Technology Creators
+                  }}>GLOBAL ARMY</span>
+                  {' '}of Skill Builders and Technology Creators
                 </h1>
                 <div className="wow fadeInUp" data-wow-delay="0.3s" style={{ marginBottom: '32px' }}>
                   {/* Animated "NO" statement */}

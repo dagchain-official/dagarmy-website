@@ -1,11 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Header2 from "@/components/headers/Header2";
+import styles from "./page.module.css";
 
 export default function MentorshipComingSoon() {
   const [email, setEmail] = useState("");
+  const [activeTab, setActiveTab] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTab((prev) => (prev + 1) % 3);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -143,84 +152,45 @@ export default function MentorshipComingSoon() {
               </p>
             </div>
 
-            {/* What the Mentorship Covers */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                What the Mentorship Covers
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Career roadmap alignment (tech, product, AI, Web3)</li>
-                <li style={{ marginBottom: '6px' }}>Project and portfolio reviews</li>
-                <li style={{ marginBottom: '6px' }}>System-level thinking and architecture guidance</li>
-                <li style={{ marginBottom: '6px' }}>Transition support for students and early professionals</li>
-                <li>Strategic feedback on learning paths and execution</li>
-              </ul>
-            </div>
+            {/* Auto-Rotating Content */}
+            <div className={styles.tabContent} key={activeTab}>
+              {activeTab === 0 && (
+                <div>
+                  <h2>What the Mentorship Covers</h2>
+                  <ul>
+                    <li>* Career roadmap alignment (tech, product, AI, Web3)</li>
+                    <li>* Project and portfolio reviews</li>
+                    <li>* System-level thinking and architecture guidance</li>
+                    <li>* Transition support for students and early professionals</li>
+                    <li>* Strategic feedback on learning paths and execution</li>
+                  </ul>
+                </div>
+              )}
 
-            {/* Who This Is For */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                Who This Is For
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Students preparing beyond traditional placements</li>
-                <li style={{ marginBottom: '6px' }}>Early professionals stuck in execution-only roles</li>
-                <li style={{ marginBottom: '6px' }}>Builders seeking architectural clarity</li>
-                <li>Non-technical founders understanding digital systems</li>
-              </ul>
-            </div>
+              {activeTab === 1 && (
+                <div>
+                  <h2>Who This Is For</h2>
+                  <ul>
+                    <li>* Students preparing beyond traditional placements</li>
+                    <li>* Early professionals stuck in execution-only roles</li>
+                    <li>* Builders seeking architectural clarity</li>
+                    <li>* Non-technical founders understanding digital systems</li>
+                  </ul>
+                </div>
+              )}
 
-            {/* Program Structure */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                Program Structure (Preview)
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>1:1 and small-group mentorship sessions</li>
-                <li style={{ marginBottom: '6px' }}>Fixed mentorship cycles</li>
-                <li style={{ marginBottom: '6px' }}>Clear problem statements per session</li>
-                <li style={{ marginBottom: '6px' }}><span style={{ fontWeight: '600', color: '#1f2937' }}>Actionable feedback, not theory</span></li>
-                <li>Limited slots to maintain quality</li>
-              </ul>
+              {activeTab === 2 && (
+                <div>
+                  <h2>Program Structure (Preview)</h2>
+                  <ul>
+                    <li>* 1:1 and small-group mentorship sessions</li>
+                    <li>* Fixed mentorship cycles</li>
+                    <li>* Clear problem statements per session</li>
+                    <li>* <span style={{ fontWeight: '600', color: '#1f2937' }}>Actionable feedback, not theory</span></li>
+                    <li>* Limited slots to maintain quality</li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
@@ -236,7 +206,7 @@ export default function MentorshipComingSoon() {
           </p>
 
           {/* Email Input with Notify Button */}
-          <div style={{
+          <div className={styles.emailContainer} style={{
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
@@ -249,6 +219,7 @@ export default function MentorshipComingSoon() {
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className={styles.emailInput}
               style={{
                 flex: 1,
                 padding: '14px 20px',
@@ -270,6 +241,7 @@ export default function MentorshipComingSoon() {
               }}
             />
             <button
+              className={styles.notifyButton}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',

@@ -1,0 +1,126 @@
+/* Bridging the Three Gaps - Mobile Carousel */
+
+/* Fade-in animation for cards */
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gapCard {
+  animation: fadeInCard 0.5s ease-in-out;
+}
+
+/* Desktop - show all 3 cards side by side */
+@media (min-width: 769px) {
+  .gapsContainer {
+    display: flex;
+    gap: 30px;
+  }
+
+  .gapCard {
+    flex: 1;
+  }
+}
+
+/* Mobile - carousel mode, show 1 card at a time */
+@media (max-width: 768px) {
+  .gapsContainer {
+    position: relative;
+    min-height: 400px;
+  }
+
+  .gapCard {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Hide cards by default on mobile */
+  .gapCard {
+    display: none;
+  }
+
+  /* Show only the active card */
+  .gapCard.active {
+    display: block;
+  }
+}
+
+@media (max-width: 430px) {
+  .gapsContainer {
+    min-height: 380px;
+  }
+
+  .gapCard {
+    padding: 35px 25px !important;
+  }
+
+  .gapCard h4 {
+    font-size: 20px !important;
+  }
+
+  .gapCard p {
+    font-size: 14px !important;
+  }
+
+  .gapCard .icons > div {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .gapCard .icons svg {
+    width: 35px !important;
+    height: 35px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .gapsContainer {
+    min-height: 360px;
+  }
+
+  .gapCard {
+    padding: 30px 20px !important;
+  }
+
+  .gapCard h4 {
+    font-size: 19px !important;
+  }
+
+  .gapCard p {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .gapsContainer {
+    min-height: 340px;
+  }
+
+  .gapCard {
+    padding: 28px 18px !important;
+  }
+
+  .gapCard h4 {
+    font-size: 18px !important;
+  }
+
+  .gapCard p {
+    font-size: 12px !important;
+  }
+
+  .gapCard .icons > div {
+    width: 65px !important;
+    height: 65px !important;
+  }
+
+  .gapCard .icons svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import styles from "./Skills.module.css";
 
 const skills = [
   "Intelligent Systems and Decision Tools",
@@ -13,7 +14,17 @@ const skills = [
   "Web3 Development",
   "Python Programming",
 ];
+
 export default function Skills() {
+  const [currentCycle, setCurrentCycle] = useState(0);
+
+  // Auto-rotate through cycles every 2 seconds on mobile
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCycle((prev) => (prev + 1) % 3); // 3 cycles: 0, 1, 2
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <section className="section-search-tags tf-spacing-11" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
@@ -31,7 +42,9 @@ export default function Skills() {
                   lineHeight: '1.3'
                 }}
               >
-                Build Skills That Stay Relevant<br />Build Your Army
+                <span className={styles['heading-line-1']}>Build Skills That Stay Relevant</span>
+                <br />
+                <span className={styles['heading-line-2']}>Build Your Army</span>
               </h2>
               <div className="sub fs-15 wow fadeInUp" data-wow-delay="0.2s" style={{
                 fontSize: '16px',
@@ -53,7 +66,7 @@ export default function Skills() {
               </div>
             </div>
             <div
-              className="wow fadeInUp"
+              className={`${styles['skills-grid']} wow fadeInUp`}
               data-wow-delay="0.3s"
               style={{
                 display: 'grid',
@@ -61,9 +74,16 @@ export default function Skills() {
                 gap: '16px'
               }}
             >
-              {skills.map((skill, index) => (
+              <div className={styles['skills-slider-track']}>
+                {skills.map((skill, index) => {
+                  const cardCycle = Math.floor(index / 3);
+                  const isVisible = cardCycle === currentCycle;
+                  return (
                 <div
                   key={index}
+                  className={`${styles['skill-card']} ${isVisible ? styles['visible'] : ''}`}
+                  data-cycle={cardCycle}
+                  data-visible={isVisible}
                   style={{
                     background: '#fafafa',
                     borderRadius: '12px',
@@ -100,7 +120,9 @@ export default function Skills() {
                     {skill}
                   </span>
                 </div>
-              ))}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

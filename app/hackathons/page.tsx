@@ -1,11 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Header2 from "@/components/headers/Header2";
+import styles from "./page.module.css";
 
 export default function HackathonComingSoon() {
   const [email, setEmail] = useState("");
+  const [activeTab, setActiveTab] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTab((prev) => (prev + 1) % 4);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -143,129 +152,62 @@ export default function HackathonComingSoon() {
               </p>
             </div>
 
-            {/* What Participants Will Build */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                What Participants Will Build
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>AI-driven tools and workflows</li>
-                <li style={{ marginBottom: '6px' }}>Full-stack systems and applications</li>
-                <li style={{ marginBottom: '6px' }}>Automation agents</li>
-                <li style={{ marginBottom: '6px' }}>Blockchain-backed verification or utility layers</li>
-                <li>Data dashboards and analytical systems</li>
-              </ul>
-            </div>
+            {/* Auto-Rotating Content */}
+            <div className={styles.tabContent} key={activeTab}>
+              {activeTab === 0 && (
+                <div>
+                  <h2>What Participants Will Build</h2>
+                  <ul>
+                    <li>* AI-driven tools and workflows</li>
+                    <li>* Full-stack systems and applications</li>
+                    <li>* Automation agents</li>
+                    <li>* Blockchain-backed verification or utility layers</li>
+                    <li>* Data dashboards and analytical systems</li>
+                  </ul>
+                </div>
+              )}
 
-            {/* How It Works */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                How It Works
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0 0 12px 0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Clearly defined problem statements</li>
-                <li style={{ marginBottom: '6px' }}>Individual or team participation</li>
-                <li style={{ marginBottom: '6px' }}>Time-bound execution with checkpoints</li>
-                <li>Mentorship support during the hackathon</li>
-              </ul>
-              <p style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.7',
-                marginBottom: '8px'
-              }}>
-                Final evaluation based on:
-              </p>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '40px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Logic</li>
-                <li style={{ marginBottom: '6px' }}>Architecture</li>
-                <li>Practical usefulness</li>
-              </ul>
-            </div>
+              {activeTab === 1 && (
+                <div>
+                  <h2>How It Works</h2>
+                  <ul>
+                    <li>* Clearly defined problem statements</li>
+                    <li>* Individual or team participation</li>
+                    <li>* Time-bound execution with checkpoints</li>
+                    <li>* Mentorship support during the hackathon</li>
+                  </ul>
+                  <p style={{ fontWeight: '700', color: '#000000', fontSize: '16px', marginTop: '16px' }}>Final evaluation based on:</p>
+                  <ul>
+                    <li>* Logic</li>
+                    <li>* Architecture</li>
+                    <li>* Practical usefulness</li>
+                  </ul>
+                </div>
+              )}
 
-            {/* Who Should Participate */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                Who Should Participate
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Students and early-stage developers</li>
-                <li style={{ marginBottom: '6px' }}>Builders looking to test real skills</li>
-                <li style={{ marginBottom: '6px' }}>Professionals exploring new domains</li>
-                <li>Teams validating technical ideas</li>
-              </ul>
-            </div>
+              {activeTab === 2 && (
+                <div>
+                  <h2>Who Should Participate</h2>
+                  <ul>
+                    <li>* Students and early-stage developers</li>
+                    <li>* Builders looking to test real skills</li>
+                    <li>* Professionals exploring new domains</li>
+                    <li>* Teams validating technical ideas</li>
+                  </ul>
+                </div>
+              )}
 
-            {/* Outcomes */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                Outcomes
-              </h2>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Real project artifacts</li>
-                <li style={{ marginBottom: '6px' }}>Public proof of work</li>
-                <li style={{ marginBottom: '6px' }}>Feedback from experienced reviewers</li>
-                <li>Potential pathway into DAGARMY programs</li>
-              </ul>
+              {activeTab === 3 && (
+                <div>
+                  <h2>Outcomes</h2>
+                  <ul>
+                    <li>* Real project artifacts</li>
+                    <li>* Public proof of work</li>
+                    <li>* Feedback from experienced reviewers</li>
+                    <li>* Potential pathway into DAGARMY programs</li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
@@ -281,7 +223,7 @@ export default function HackathonComingSoon() {
           </p>
 
           {/* Email Input with Notify Button */}
-          <div style={{
+          <div className={styles.emailContainer} style={{
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
@@ -294,6 +236,7 @@ export default function HackathonComingSoon() {
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className={styles.emailInput}
               style={{
                 flex: 1,
                 padding: '14px 20px',
@@ -315,6 +258,7 @@ export default function HackathonComingSoon() {
               }}
             />
             <button
+              className={styles.notifyButton}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',

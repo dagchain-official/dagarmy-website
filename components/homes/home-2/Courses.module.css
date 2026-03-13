@@ -1,0 +1,319 @@
+/* Mobile Responsive Styles for Popular Program Section */
+
+/* Desktop default */
+.section-popular-program {
+  padding: 0 0 80px !important;
+}
+
+/* Desktop card container - absolute positioning for overlay effect */
+@media (min-width: 769px) {
+  .info-card-container {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .info-card {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+  }
+
+  .info-card[style*="display: none"] {
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Section padding - normal spacing */
+  .section-popular-program {
+    padding: 40px 0 60px !important;
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+  }
+
+  /* Section title */
+  .section-popular-program h2 {
+    font-size: 32px !important;
+    margin-bottom: 32px !important;
+  }
+
+  /* TASK 1: Stack layout vertically - Program card first, then content */
+  .program-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 40px !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* TASK 5: Program card - full width, no overflow */
+  .program-grid > div:first-child {
+    width: 100% !important;
+    max-width: 100% !important;
+    order: 1 !important;
+  }
+
+  /* Content area with tabs - comes after program card */
+  .program-grid > div:last-child {
+    width: 100% !important;
+    max-width: 100% !important;
+    order: 2 !important;
+  }
+
+  /* Tab navigation - scrollable horizontally */
+  .tab-navigation {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2px;
+    margin-bottom: 24px !important;
+  }
+
+  .tab-navigation::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Tab buttons */
+  .tab-navigation button {
+    font-size: 15px !important;
+    padding: 12px 8px !important;
+    white-space: nowrap !important;
+    min-width: auto !important;
+  }
+
+  /* TASK 1 & 2: Remove ALL positioning restrictions - natural document flow */
+  .info-card-container {
+    position: static !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    margin-bottom: 40px !important;
+    width: 100% !important;
+  }
+
+  /* TASK 7: Cards use static positioning - NO absolute positioning */
+  .info-card {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* Only show active card */
+  .info-card[style*="display: none"] {
+    display: none !important;
+  }
+
+  .info-card[style*="display: flex"] {
+    display: flex !important;
+  }
+
+  /* Card padding */
+  .info-card-header {
+    padding: 24px 20px 0 20px !important;
+  }
+
+  .info-card-content {
+    padding: 0 20px 24px 20px !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Card heading */
+  .info-card-heading {
+    font-size: 20px !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Main section heading */
+  .unified-program-heading {
+    font-size: 24px !important;
+    margin-bottom: 16px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Body text */
+  .unified-program-text {
+    font-size: 15px !important;
+    margin-bottom: 24px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* TASK 6: Proper spacing for list items */
+  .info-card-item {
+    font-size: 14px !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .info-card-item span {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .section-popular-program {
+    padding: 32px 0 50px !important;
+  }
+
+  .section-popular-program h2 {
+    font-size: 28px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .program-grid {
+    gap: 32px !important;
+  }
+
+  .unified-program-heading {
+    font-size: 22px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .unified-program-text {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .tab-navigation {
+    margin-bottom: 20px !important;
+  }
+
+  .tab-navigation button {
+    font-size: 14px !important;
+    padding: 10px 6px !important;
+  }
+
+  .info-card-container {
+    margin-bottom: 32px !important;
+  }
+
+  .info-card-header {
+    padding: 20px 16px 0 16px !important;
+  }
+
+  .info-card-content {
+    padding: 0 16px 20px 16px !important;
+  }
+
+  .info-card-heading {
+    font-size: 18px !important;
+  }
+
+  .info-card-item {
+    margin-bottom: 10px !important;
+  }
+
+  .info-card-item span {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .section-popular-program {
+    padding: 28px 0 40px !important;
+  }
+
+  .section-popular-program h2 {
+    font-size: 26px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .program-grid {
+    gap: 28px !important;
+  }
+
+  .unified-program-heading {
+    font-size: 20px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .unified-program-text {
+    font-size: 13px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .tab-navigation {
+    margin-bottom: 18px !important;
+  }
+
+  .tab-navigation button {
+    font-size: 13px !important;
+    padding: 10px 4px !important;
+  }
+
+  .info-card-container {
+    margin-bottom: 28px !important;
+  }
+
+  .info-card-header {
+    padding: 18px 14px 0 14px !important;
+  }
+
+  .info-card-content {
+    padding: 0 14px 18px 14px !important;
+  }
+
+  .info-card-heading {
+    font-size: 17px !important;
+  }
+
+  .info-card-item {
+    margin-bottom: 8px !important;
+  }
+
+  .info-card-item span {
+    font-size: 12px !important;
+  }
+}
+
+/* Extra small phones - 360px */
+@media (max-width: 360px) {
+  .section-popular-program {
+    padding: 24px 0 36px !important;
+  }
+
+  .section-popular-program h2 {
+    font-size: 24px !important;
+  }
+
+  .program-grid {
+    gap: 24px !important;
+  }
+
+  .unified-program-heading {
+    font-size: 19px !important;
+  }
+
+  .unified-program-text {
+    font-size: 13px !important;
+  }
+
+  .tab-navigation button {
+    font-size: 12px !important;
+    padding: 8px 4px !important;
+  }
+
+  .info-card-heading {
+    font-size: 16px !important;
+  }
+
+  .info-card-item span {
+    font-size: 12px !important;
+  }
+}
