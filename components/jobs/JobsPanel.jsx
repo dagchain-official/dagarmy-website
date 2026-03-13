@@ -3,17 +3,6 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Always derive logo from company name via Clearbit — ignores stale LinkedIn CDN URLs
-const getLogoUrl = (companyName) => {
-  if (!companyName) return null;
-  const domain = companyName
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '')
-    .replace(/\b(inc|llc|ltd|corp|co|the|group|technologies|technology|solutions|services|global|international|ai)\b/g, '')
-    .trim()
-    .split(/\s+/)[0];
-  return domain ? `https://logo.clearbit.com/${domain}.com` : null;
-};
 
 const techCategories = [
   { 
@@ -278,13 +267,27 @@ export default function JobsPanel() {
   }));
 
   // Silent cache-only load — no spinner, instant if cached, silent if not
+  // If cached jobs have no logos (stale data), flush and re-scrape fresh
   const tryLoadFromCache = async () => {
     try {
       const keywords = encodeURIComponent(selectedCategory.keywords);
       const location = encodeURIComponent(buildLocationString());
       const response = await fetch(`/api/scrape-jobs?keywords=${keywords}&location=${location}&pages=2`);
       const data = await response.json();
-      if (data.success && data.fromCache && data.jobs.length > 0) {
+      if (data.success && data.jobs.length > 0) {
+        // If cached data has no logos (stale), flush and re-fetch fresh
+        const hasLogos = data.jobs.some(j => j.companyLogo);
+        if (!hasLogos) {
+          await fetch('/api/scrape-jobs', { method: 'DELETE' });
+          const fresh = await fetch(`/api/scrape-jobs?keywords=${keywords}&location=${location}&pages=2`);
+          const freshData = await fresh.json();
+          if (freshData.success && freshData.jobs.length > 0) {
+            setJobs(enrichJobs(freshData.jobs));
+            setFilteredJobs(enrichJobs(freshData.jobs));
+            setHasSearched(true);
+          }
+          return;
+        }
         setJobs(enrichJobs(data.jobs));
         setFilteredJobs(enrichJobs(data.jobs));
         setHasSearched(true);
@@ -588,20 +591,24 @@ export default function JobsPanel() {
                   <div style={{ display: 'flex', gap: '18px' }}>
                     {/* Company logo */}
                     <div style={{
-                      width: '56px', height: '56px', borderRadius: '14px', flexShrink: 0,
-                      background: nm.bg, boxShadow: nm.shadowSm,
+                      width: '52px', height: '52px', borderRadius: '14px', flexShrink: 0,
+                      background: '#ffffff', boxShadow: nm.shadowSm,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      overflow: 'hidden',
+                      overflow: 'hidden', padding: '8px',
                     }}>
-                      <img
-                        src={getLogoUrl(job.company)}
-                        alt={job.company}
-                        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '8px' }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = `<span style="font-size:20px;font-weight:800;color:#475569">${job.company?.charAt(0) || 'C'}</span>`;
-                        }}
-                      />
+                      {job.companyLogo ? (
+                        <img
+                          src={job.companyLogo}
+                          alt={job.company}
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.insertAdjacentHTML('afterend', `<span style="font-size:18px;font-weight:800;color:#475569">${job.company?.charAt(0) || 'C'}</span>`);
+                          }}
+                        />
+                      ) : (
+                        <span style={{ fontSize: '18px', fontWeight: '800', color: '#475569' }}>{job.company?.charAt(0) || 'C'}</span>
+                      )}
                     </div>
 
                     {/* Content */}
@@ -762,19 +769,24 @@ export default function JobsPanel() {
               <div style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
                 {/* Logo */}
                 <div style={{
-                  width: '64px', height: '64px', borderRadius: '16px', flexShrink: 0,
-                  background: nm.bg, boxShadow: nm.shadowSm,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+                  width: '60px', height: '60px', borderRadius: '14px', flexShrink: 0,
+                  background: '#ffffff', boxShadow: nm.shadowSm,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  overflow: 'hidden', padding: '8px',
                 }}>
-                  <img
-                    src={getLogoUrl(selectedJob.company)}
-                    alt={selectedJob.company}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '10px' }}
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.parentElement.innerHTML = `<span style="font-size:22px;font-weight:800;color:#475569">${selectedJob.company?.charAt(0) || 'C'}</span>`;
-                    }}
-                  />
+                  {selectedJob.companyLogo ? (
+                    <img
+                      src={selectedJob.companyLogo}
+                      alt={selectedJob.company}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.insertAdjacentHTML('afterend', `<span style="font-size:22px;font-weight:800;color:#475569">${selectedJob.company?.charAt(0) || 'C'}</span>`);
+                      }}
+                    />
+                  ) : (
+                    <span style={{ fontSize: '22px', fontWeight: '800', color: '#475569' }}>{selectedJob.company?.charAt(0) || 'C'}</span>
+                  )}
                 </div>
 
                 {/* Info */}

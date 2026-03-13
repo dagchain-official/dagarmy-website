@@ -21,8 +21,11 @@ export async function GET(request) {
 
     const jobs = [];
     const jobIds = [];
+    const logoMap = {};    // jobId -> logo URL from listing page
+    const companyMap = {}; // jobId -> company name from listing page
+    const titleMap = {};   // jobId -> clean job title from listing page
 
-    // Step 1: Scrape job IDs from listing pages
+    // Step 1: Scrape job IDs + logos from listing pages
     const baseUrl = `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(keywords)}&location=${encodeURIComponent(location)}&start={}`;
     
     for (let page = 0; page < maxPages; page++) {
@@ -50,6 +53,19 @@ export async function GET(request) {
           const jobId = dataUrn.split(':')[3];
           if (jobId) {
             jobIds.push(jobId);
+            // Logo lives in the listing card, not the detail page
+            const logoImg = $(element).find('div.search-entity-media img, img.artdeco-entity-image').first();
+            const logoUrl = logoImg.attr('data-delayed-url') || logoImg.attr('src');
+            if (logoUrl && logoUrl.includes('media.licdn.com')) {
+              logoMap[jobId] = logoUrl;
+            }
+            // Company name is cleanly in the listing card subtitle
+            const companyName = $(element).find('h4.base-search-card__subtitle a').text().trim() ||
+                                $(element).find('h4.base-search-card__subtitle').text().trim();
+            if (companyName) companyMap[jobId] = companyName;
+            // Job title is cleanly in the listing card h3
+            const jobTitle = $(element).find('h3.base-search-card__title').text().trim();
+            if (jobTitle) titleMap[jobId] = jobTitle;
           }
         }
       });
@@ -80,7 +96,7 @@ export async function GET(request) {
         const job = {
           id: jobId,
           company: null,
-          companyLogo: null,
+          companyLogo: logoMap[jobId] || null, // from listing page — media.licdn.com URLs are public
           jobTitle: null,
           level: null,
           location: null,
@@ -90,31 +106,20 @@ export async function GET(request) {
           scrapedAt: new Date().toISOString()
         };
 
-        // Extract company name and logo
+        // Company name from listing page (reliable); fall back to detail page selectors
         try {
-          const companyImg = $job('div.top-card-layout__card').find('img').first();
-          job.company = companyImg.attr('alt') || 
-                        $job('div.top-card-layout__card').find('a').text().trim() ||
+          job.company = companyMap[jobId] ||
                         $job('.topcard__org-name-link').text().trim() ||
-                        $job('.topcard__flavor').first().text().trim();
-          // Derive Clearbit logo URL from company name (reliable, no auth needed)
-          if (job.company) {
-            const domain = job.company
-              .toLowerCase()
-              .replace(/[^a-z0-9\s]/g, '')
-              .replace(/\b(inc|llc|ltd|corp|co|the|group|technologies|technology|solutions|services|global|international|ai)\b/g, '')
-              .trim()
-              .split(/\s+/)[0];
-            if (domain) job.companyLogo = `https://logo.clearbit.com/${domain}.com`;
-          }
+                        $job('.top-card-layout__company-url').text().trim() || null;
         } catch (e) {
           console.error(`Error extracting company for job ${jobId}:`, e.message);
         }
 
-        // Extract job title
+        // Extract job title — use listing page value (clean) first
         try {
-          job.jobTitle = $job('div.top-card-layout__entity-info').find('a').text().trim() ||
-                         $job('h1.top-card-layout__title').text().trim();
+          job.jobTitle = titleMap[jobId] ||
+                         $job('h1.top-card-layout__title').text().trim() ||
+                         $job('div.top-card-layout__entity-info').find('a').text().trim();
         } catch (e) {
           console.error(`Error extracting job title for job ${jobId}:`, e.message);
         }
@@ -185,5 +190,18 @@ export async function GET(request) {
       },
       { status: 500 }
     );
+  }
+}
+
+// DELETE /api/scrape-jobs — flush all cached job results so next search re-scrapes fresh data
+export async function DELETE() {
+  try {
+    const keys = await redis.keys('jobs:*');
+    if (keys.length > 0) {
+      await Promise.all(keys.map(k => redis.del(k)));
+    }
+    return NextResponse.json({ success: true, flushed: keys.length });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
