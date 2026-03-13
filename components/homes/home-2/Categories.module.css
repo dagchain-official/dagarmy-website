@@ -14,7 +14,35 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
+/* Desktop layout - 3x3 grid for all 9 categories */
+@media (min-width: 1024px) {
+  .categoriesGrid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 24px 32px !important;
+    margin: 0 !important;
+  }
+
+  .categoryCol {
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Show all categories on desktop */
+  .hiddenMobile {
+    display: block !important;
+  }
+}
+
 /* Mobile responsive styles */
+@media (max-width: 1023px) {
+  /* Hide cards that are not in current cycle */
+  .hiddenMobile {
+    display: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   :global(.section-categories) {
     overflow-x: hidden !important;
