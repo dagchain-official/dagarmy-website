@@ -11,6 +11,7 @@ import ChatWidget from "@/components/chatbot/ChatWidget";
 import { Web3Provider } from "@/context/Web3Provider";
 import { usePathname } from "next/navigation";
 import { DM_Sans, Fraunces } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -62,6 +63,7 @@ export default function RootLayout({
           </Context>
           {!pathname?.startsWith("/admin") && <ChatWidget />}
         </Web3Provider>
+        <Analytics />
       </body>
     </html>
   );
