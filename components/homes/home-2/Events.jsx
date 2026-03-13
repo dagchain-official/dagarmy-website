@@ -54,7 +54,7 @@ export default function Events() {
     }
   ];
   return (
-    <section className="section-event tf-spacing-11" style={{ background: '#fafafa', paddingTop: '80px', paddingBottom: '80px' }}>
+    <section className="section-event tf-spacing-11" style={{ background: '#fafafa', paddingTop: '80px', paddingBottom: '40px' }}>
       <div className="tf-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div className="row">
           <div className="col-12">
@@ -90,17 +90,16 @@ export default function Events() {
             </div>
             <div className={styles['events-container']} style={{
               display: 'grid',
-              gap: '20px'
+              gap: '18px'
             }}>
-              {upcomingEvents.map((event, index) => {
-                const isVisible = showAll || index < 2;
-                return (
+              {upcomingEvents
+                .filter((event, index) => showAll || index < 2)
+                .map((event, index) => (
                 <div
-                  key={index}
-                  className={`${styles['event-card']} ${!isVisible ? styles['hidden'] : ''} wow fadeInUp`}
+                  key={event.id}
+                  className={`${styles['event-card']} wow fadeInUp`}
                   data-wow-delay={event.delay}
                   style={{
-                    display: isVisible ? 'flex' : 'none',
                     background: '#ffffff',
                     borderRadius: '16px',
                     padding: '0',
@@ -204,8 +203,7 @@ export default function Events() {
                     </div>
                   </div>
                 </div>
-                );
-              })}
+                ))}
             </div>
             <div className={styles['show-more-container']}>
               <button
@@ -224,8 +222,7 @@ export default function Events() {
                   fontSize: '15px',
                   fontWeight: '600',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  marginTop: '24px'
+                  transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#000000';

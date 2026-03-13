@@ -6,14 +6,6 @@
   transition: all 0.4s ease-in-out;
 }
 
-.event-card.hidden {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-
 /* Subtitle container */
 .subtitle-container {
   display: flex;
@@ -24,9 +16,9 @@
 /* Show more button - visible on desktop and mobile */
 .show-more-container {
   display: flex;
-  justify-content: flex-start;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  justify-content: center;
+  margin-top: 28px;
+  margin-bottom: 0;
 }
 
 /* Mobile - Below 768px */
@@ -34,7 +26,7 @@
   /* Section padding - reduce excessive space */
   :global(.section-event) {
     padding-top: 40px !important;
-    padding-bottom: 40px !important;
+    padding-bottom: 24px !important;
   }
 
   /* Section heading */
@@ -76,8 +68,8 @@
   /* Show more button - visible below cards with proper spacing */
   .show-more-container {
     display: flex !important;
-    justify-content: flex-start !important;
-    margin-top: 20px !important;
+    justify-content: center !important;
+    margin-top: 16px !important;
     margin-bottom: 0 !important;
     padding-top: 0 !important;
   }
