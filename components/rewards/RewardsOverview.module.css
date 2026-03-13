@@ -1,0 +1,94 @@
+/* Desktop styles are inline in the component - DO NOT MODIFY */
+/* This file contains ONLY mobile responsive overrides */
+
+/* Mobile Breakpoint: 768px and below */
+@media (max-width: 768px) {
+  .heroGrid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 32px !important;
+    grid-template-columns: 1fr !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .heroContent {
+    order: 1;
+    padding-top: 20px !important;
+  }
+
+  .heroImage {
+    order: 2;
+  }
+
+  .mainHeading {
+    font-size: 36px !important;
+    line-height: 1.1 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .subHeading {
+    font-size: 36px !important;
+    line-height: 1.1 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .description {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 24px !important;
+    max-width: 100% !important;
+  }
+
+  .buttonContainer {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+    margin-bottom: 24px !important;
+  }
+
+  .buttonContainer button {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .imageContainer {
+    padding: 20px !important;
+    margin-top: 24px !important;
+  }
+}
+
+/* Extra small phones: 430px and below */
+@media (max-width: 430px) {
+  .mainHeading {
+    font-size: 32px !important;
+  }
+
+  .subHeading {
+    font-size: 32px !important;
+  }
+
+  .description {
+    font-size: 15px !important;
+  }
+
+  .imageContainer {
+    padding: 20px !important;
+  }
+}
+
+/* Very small phones: 375px and below */
+@media (max-width: 375px) {
+  .mainHeading {
+    font-size: 28px !important;
+  }
+
+  .subHeading {
+    font-size: 28px !important;
+  }
+
+  .description {
+    font-size: 14px !important;
+  }
+}
