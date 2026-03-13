@@ -189,7 +189,7 @@ export default function RewardsOverviewNeo() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '32px', marginBottom: '32px', flexWrap: 'wrap' }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ width: '120px', height: '120px', margin: '0 auto 12px', background: nm.bg, borderRadius: '50%', boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src="/BADGES  and  RANK png+svg/DAGARMY RANKS/STARTER RANK.svg" alt="Starter" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+                  <img src="/images/badges/dag-starter.svg" alt="Starter" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
                 </div>
                 <p style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px', margin: '0 0 2px' }}>Starter</p>
                 <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Starting Point</p>
@@ -204,7 +204,7 @@ export default function RewardsOverviewNeo() {
 
               <div style={{ textAlign: 'center' }}>
                 <div style={{ width: '120px', height: '120px', margin: '0 auto 12px', background: nm.bg, borderRadius: '50%', boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src="/images/ranks svgs/MYTHIC RANK.svg" alt="Mythic" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+                  <img src="/images/badges/dag-mythic.svg" alt="Mythic" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
                 </div>
                 <p style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px', margin: '0 0 2px' }}>Mythic</p>
                 <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Elite Status</p>

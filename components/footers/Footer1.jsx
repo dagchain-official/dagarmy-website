@@ -78,37 +78,16 @@ export default function Footer1({ parentClass = "footer" }) {
                 </div>
               </Link>
               
-              {/* Phone Numbers */}
-              <div style={{ marginBottom: '16px' }}>
-                <p style={{
-                  fontSize: '15px',
-                  fontWeight: '500',
-                  color: '#374151',
-                  lineHeight: '1.7',
-                  marginBottom: '6px'
-                }}>
-                  +1 (555) 789-0123
-                </p>
-                <p style={{
-                  fontSize: '15px',
-                  fontWeight: '500',
-                  color: '#374151',
-                  lineHeight: '1.7'
-                }}>
-                  +44 (20) 7946-0958
-                </p>
-              </div>
-
-              {/* Address */}
+              {/* Tagline */}
               <p style={{
-                fontSize: '15px',
-                fontWeight: '500',
-                color: '#374151',
-                lineHeight: '1.8',
-                marginBottom: '16px'
+                fontSize: '14px',
+                color: '#6b7280',
+                lineHeight: '1.7',
+                marginTop: '16px',
+                marginBottom: '20px',
+                maxWidth: '280px'
               }}>
-                Meydan Grandstand, 6th Floor, Meydan Road<br />
-                Nad Al Sheba, United Arab Emirates
+                DAG Army brings together learners, builders, and professionals who want skills that lead to real outcomes.
               </p>
 
               {/* Email */}
@@ -118,12 +97,31 @@ export default function Footer1({ parentClass = "footer" }) {
                 color: '#374151',
                 textDecoration: 'none',
                 transition: 'color 0.2s ease',
-                display: 'inline-block'
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px'
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  animation: 'mailBounce 2s ease-in-out infinite'
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </span>
                 careers@dagchain.network
               </a>
+              <style>{`
+                @keyframes mailBounce {
+                  0%, 100% { transform: translateY(0); }
+                  50% { transform: translateY(-3px); }
+                }
+              `}</style>
             </div>
 
             {/* Company Links */}
