@@ -89,6 +89,38 @@ const locationData = {
 
 const countries = Object.keys(locationData);
 
+const nm = {
+  bg: '#ffffff',
+  shadow: '6px 6px 16px rgba(0,0,0,0.09), -4px -4px 12px rgba(255,255,255,0.9)',
+  shadowSm: '4px 4px 10px rgba(0,0,0,0.07), -3px -3px 8px rgba(255,255,255,0.9)',
+  shadowInset: 'inset 3px 3px 8px rgba(0,0,0,0.07), inset -2px -2px 6px rgba(255,255,255,0.9)',
+  shadowHover: '10px 10px 24px rgba(0,0,0,0.12), -6px -6px 16px rgba(255,255,255,0.95)',
+};
+
+const NmCard = ({ children, style = {}, hover = true, onClick }) => (
+  <div
+    onClick={onClick}
+    style={{
+      background: nm.bg,
+      borderRadius: '18px',
+      boxShadow: nm.shadow,
+      transition: 'box-shadow 0.25s, transform 0.25s',
+      cursor: onClick ? 'pointer' : 'default',
+      ...style,
+    }}
+    onMouseEnter={hover ? e => {
+      e.currentTarget.style.boxShadow = nm.shadowHover;
+      e.currentTarget.style.transform = 'translateY(-3px)';
+    } : undefined}
+    onMouseLeave={hover ? e => {
+      e.currentTarget.style.boxShadow = nm.shadow;
+      e.currentTarget.style.transform = 'translateY(0)';
+    } : undefined}
+  >
+    {children}
+  </div>
+);
+
 export default function JobsPanel() {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
@@ -318,39 +350,6 @@ export default function JobsPanel() {
       setIsLoading(false);
     }
   };
-
-  /* ── Neumorphic helpers ── */
-  const nm = {
-    bg: '#eef0f5',
-    shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
-    shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
-    shadowInset: 'inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9)',
-    shadowHover: '12px 12px 28px rgba(166,180,200,0.65), -12px -12px 28px rgba(255,255,255,0.98)',
-  };
-
-  const NmCard = ({ children, style = {}, hover = true, onClick }) => (
-    <div
-      onClick={onClick}
-      style={{
-        background: nm.bg,
-        borderRadius: '18px',
-        boxShadow: nm.shadow,
-        transition: 'box-shadow 0.25s, transform 0.25s',
-        cursor: onClick ? 'pointer' : 'default',
-        ...style,
-      }}
-      onMouseEnter={hover ? e => {
-        e.currentTarget.style.boxShadow = nm.shadowHover;
-        e.currentTarget.style.transform = 'translateY(-3px)';
-      } : undefined}
-      onMouseLeave={hover ? e => {
-        e.currentTarget.style.boxShadow = nm.shadow;
-        e.currentTarget.style.transform = 'translateY(0)';
-      } : undefined}
-    >
-      {children}
-    </div>
-  );
 
   return (
     <section style={{ background: nm.bg, minHeight: '100vh', paddingTop: '56px', paddingBottom: '64px' }}>

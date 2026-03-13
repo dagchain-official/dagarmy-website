@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { CAREERS, DEPARTMENTS, REGIONS } from "@/data/careers";
 import styles from "./CareersPage.module.css";
 
-const NEU_BG = '#f0f4ff';
+const NEU_BG = '#ffffff';
 const NEU_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -112,9 +112,9 @@ function renderMd(text) {
   );
 }
 
-const NEU_SHADOW = '6px 6px 14px rgba(180,195,220,0.65), -4px -4px 10px rgba(255,255,255,1)';
-const NEU_SHADOW_INSET = 'inset 4px 4px 10px rgba(180,195,220,0.55), inset -3px -3px 8px rgba(255,255,255,1)';
-const NEU_SHADOW_OPEN = '8px 8px 20px rgba(160,180,215,0.65), -4px -4px 12px rgba(255,255,255,1), 0 0 0 2px rgba(99,102,241,0.2)';
+const NEU_SHADOW = '6px 6px 14px rgba(0,0,0,0.09), -4px -4px 10px rgba(255,255,255,0.95)';
+const NEU_SHADOW_INSET = 'inset 3px 3px 8px rgba(0,0,0,0.07), inset -2px -2px 6px rgba(255,255,255,0.9)';
+const NEU_SHADOW_OPEN = '8px 8px 20px rgba(0,0,0,0.10), -4px -4px 12px rgba(255,255,255,0.95), 0 0 0 2px rgba(99,102,241,0.2)';
 
 function NeuSectionPanel({ title, accentColor, children }) {
   return (

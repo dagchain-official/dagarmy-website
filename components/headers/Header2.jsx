@@ -77,9 +77,9 @@ export default function Header2() {
         zIndex: '9999',
         width: '100%',
         background: '#ffffff',
-        borderBottom: '1px solid #e5e7eb',
-        padding: '7px 0',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        borderBottom: '1px solid rgba(0,0,0,0.06)',
+        padding: '10px 0',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.07)'
       }}
     >
       <div className="header-inner">
@@ -108,132 +108,96 @@ export default function Header2() {
             flex: 1
           }}>
             <Link href="/about" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               About
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/courses" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Course
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/careers" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Careers
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/ambassador" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Ambassador
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <div
               style={{ position: 'relative', paddingBottom: '8px' }}
@@ -314,132 +278,96 @@ export default function Header2() {
               }
             `}</style>
             <Link href="/jobs" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Jobs
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/mentorship" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Mentorship
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/rewards" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Rewards
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/hackathons" style={{
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '7px 16px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+              transition: 'all 0.25s ease',
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
               }}>
               Hackathons
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <div
               style={{ position: 'relative', paddingBottom: '8px' }}
@@ -458,20 +386,33 @@ export default function Header2() {
             >
               <button
                 style={{
-                  fontSize: '15px',
+                  fontSize: '14px',
                   fontWeight: '500',
                   color: showSupportDropdown ? '#1f2937' : '#4b5563',
-                  background: 'none',
+                  background: '#ffffff',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: '0 0 4px 0',
+                  padding: '7px 16px',
+                  borderRadius: '50px',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '4px',
                   whiteSpace: 'nowrap',
-                  position: 'relative',
-                  transition: 'color 0.2s ease',
+                  boxShadow: showSupportDropdown
+                    ? 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)'
+                    : '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
+                  transition: 'all 0.25s ease',
                   outline: 'none',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#1f2937';
+                  e.currentTarget.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = showSupportDropdown ? '#1f2937' : '#4b5563';
+                  e.currentTarget.style.boxShadow = showSupportDropdown
+                    ? 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)'
+                    : '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)';
                 }}
               >
                 Support
@@ -484,12 +425,6 @@ export default function Header2() {
                 >
                   <polyline points="6 9 12 15 18 9"/>
                 </svg>
-                <span style={{
-                  position: 'absolute', bottom: '0', left: '0',
-                  width: showSupportDropdown ? '100%' : '0%',
-                  height: '2px', background: '#1f2937',
-                  transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                }} />
               </button>
 
               {/* Support dropdown */}
@@ -499,10 +434,12 @@ export default function Header2() {
                   top: 'calc(100% + 6px)',
                   left: '50%',
                   transform: 'translateX(-50%)',
-                  background: '#fff',
+                  background: '#ffffff',
                   borderRadius: '14px',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
-                  border: '1px solid #e5e7eb',
+                  boxShadow: '6px 6px 20px rgba(0,0,0,0.10), -2px -2px 8px rgba(255,255,255,0.9)',
+                  border: '1px solid rgba(0,0,0,0.05)',
+                  backdropFilter: 'blur(8px)',
+
                   padding: '8px',
                   minWidth: '180px',
                   zIndex: 1000,
@@ -517,8 +454,8 @@ export default function Header2() {
                       fontSize: '14px', fontWeight: '500',
                       transition: 'background 0.15s ease',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.05)'; e.currentTarget.style.boxShadow = 'inset 2px 2px 5px #c5c7cd, inset -2px -2px 5px #ffffff'; e.currentTarget.style.borderRadius = '50px'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.boxShadow = 'none'; }}
                     onClick={() => setShowSupportDropdown(false)}
                   >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#6b7280' }}>
@@ -533,10 +470,10 @@ export default function Header2() {
                       padding: '9px 14px', borderRadius: '9px',
                       textDecoration: 'none', color: '#374151',
                       fontSize: '14px', fontWeight: '500',
-                      transition: 'background 0.15s ease',
+                      transition: 'all 0.15s ease',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.05)'; e.currentTarget.style.boxShadow = 'inset 2px 2px 5px #c5c7cd, inset -2px -2px 5px #ffffff'; e.currentTarget.style.borderRadius = '50px'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.boxShadow = 'none'; }}
                     onClick={() => setShowSupportDropdown(false)}
                   >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#6b7280' }}>
@@ -646,10 +583,12 @@ export default function Header2() {
               position: 'relative',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f3f4f6';
+              e.currentTarget.style.background = '#f9fafb';
+              e.currentTarget.style.boxShadow = 'inset 2px 2px 5px rgba(0,0,0,0.07), inset -1px -1px 4px rgba(255,255,255,0.9)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             <span style={{

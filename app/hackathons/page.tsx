@@ -17,10 +17,10 @@ export default function HackathonComingSoon() {
   }, []);
 
   const nm = {
-    bg: '#eef0f5',
-    shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
-    shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
-    shadowInset: 'inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9)',
+    bg: '#ffffff',
+    shadow: '6px 6px 16px rgba(0,0,0,0.09), -4px -4px 12px rgba(255,255,255,0.9)',
+    shadowSm: '4px 4px 10px rgba(0,0,0,0.07), -3px -3px 8px rgba(255,255,255,0.9)',
+    shadowInset: 'inset 3px 3px 8px rgba(0,0,0,0.07), inset -2px -2px 6px rgba(255,255,255,0.9)',
   };
 
   const tabs = [
@@ -127,7 +127,7 @@ export default function HackathonComingSoon() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ flex: 1, padding: '13px 18px', fontSize: '14px', color: '#0f172a', background: nm.bg, border: 'none', borderRadius: '50px', outline: 'none', boxShadow: nm.shadowInset }}
-                onFocus={(e) => { e.currentTarget.style.boxShadow = 'inset 5px 5px 12px rgba(166,180,200,0.6), inset -5px -5px 12px rgba(255,255,255,0.95)'; }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = 'inset 4px 4px 10px rgba(0,0,0,0.09), inset -3px -3px 8px rgba(255,255,255,0.9)'; }}
                 onBlur={(e) => { e.currentTarget.style.boxShadow = nm.shadowInset; }}
               />
               <button
@@ -145,7 +145,7 @@ export default function HackathonComingSoon() {
               {socials.map((s, i) => (
                 <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
                   style={{ width: '38px', height: '38px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#475569', textDecoration: 'none', transition: 'box-shadow 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '10px 10px 24px rgba(166,180,200,0.65), -10px -10px 24px rgba(255,255,255,0.98)'; }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '10px 10px 24px rgba(0,0,0,0.12), -6px -6px 16px rgba(255,255,255,0.95)'; }}
                   onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadow; }}>
                   {s.icon}
                 </a>
