@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Header2 from "@/components/headers/Header2";
-import styles from "./page.module.css";
+import Footer1 from "@/components/footers/Footer1";
 
 export default function MentorshipComingSoon() {
   const [email, setEmail] = useState("");
@@ -16,336 +16,142 @@ export default function MentorshipComingSoon() {
     return () => clearInterval(interval);
   }, []);
 
+  const nm = {
+    bg: '#eef0f5',
+    shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
+    shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
+    shadowInset: 'inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9)',
+  };
+
+  const tabs = [
+    {
+      title: 'What the Mentorship Covers',
+      items: ['Career roadmap alignment (tech, product, AI, Web3)', 'Project and portfolio reviews', 'System-level thinking and architecture guidance', 'Transition support for students and early professionals', 'Strategic feedback on learning paths and execution'],
+    },
+    {
+      title: 'Who This Is For',
+      items: ['Students preparing beyond traditional placements', 'Early professionals stuck in execution-only roles', 'Builders seeking architectural clarity', 'Non-technical founders understanding digital systems'],
+    },
+    {
+      title: 'Program Structure (Preview)',
+      items: ['1:1 and small-group mentorship sessions', 'Fixed mentorship cycles', 'Clear problem statements per session', 'Actionable feedback, not theory', 'Limited slots to maintain quality'],
+    },
+  ];
+
+  const socials = [
+    { href: 'https://www.facebook.com/profile.php?id=61587859905614', label: 'Facebook', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> },
+    { href: 'https://x.com/dagarmy_network', label: 'X', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
+    { href: 'https://www.instagram.com/dagarmy.network/', label: 'Instagram', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> },
+    { href: 'https://www.linkedin.com/company/dag-army', label: 'LinkedIn', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> },
+    { href: 'https://www.youtube.com/channel/UCmDPRCQf8-SvEf5OBLqHRFQ', label: 'YouTube', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg> },
+    { href: 'https://www.tiktok.com/@dagarmy_dagchain', label: 'TikTok', icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg> },
+  ];
+
   return (
     <>
       <Header2 />
-      
-      <div
-        className={styles.container}
-        style={{
-          minHeight: '100vh',
-          background: '#ffffff',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '40px 20px',
-          position: 'relative'
-        }}
-      >
+      <div style={{ minHeight: '100vh', background: nm.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 20px' }}>
+        <div style={{ maxWidth: '660px', width: '100%' }}>
 
-        {/* Main Card */}
-        <div style={{
-          maxWidth: '650px',
-          width: '100%',
-          background: '#ffffff',
-          borderRadius: '32px',
-          padding: '60px 40px',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-          border: '1px solid #e5e7eb',
-          textAlign: 'center',
-          position: 'relative'
-        }}>
-          {/* Logo Section */}
-          <div style={{
-            marginBottom: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px'
-          }}>
-            <Image
-              src="/images/logo/logo.png"
-              alt="DAGARMY"
-              width={48}
-              height={48}
-              style={{ borderRadius: '12px' }}
-            />
-            <span style={{
-              fontSize: '20px',
-              fontWeight: '700',
-              color: '#000000',
-              fontFamily: 'Nasalization, sans-serif',
-              letterSpacing: '0.5px'
-            }}>
-              DAGARMY
-            </span>
-          </div>
-
-          {/* Badge */}
-          <div style={{
-            fontSize: '13px',
-            fontWeight: '600',
-            color: '#6b7280',
-            textTransform: 'uppercase',
-            letterSpacing: '1.5px',
-            marginBottom: '20px'
-          }}>
-            WE'RE STILL
-          </div>
-
-          {/* Main Heading */}
-          <h1 style={{
-            fontSize: 'clamp(32px, 6vw, 48px)',
-            fontWeight: '800',
-            color: '#000000',
-            marginBottom: '24px',
-            lineHeight: '1.2'
-          }}>
-            Launching Our <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Mentorship</span> Program.
-          </h1>
-
-          {/* Supporting Subtitle */}
-          <p style={{
-            fontSize: '17px',
-            color: '#4b5563',
-            lineHeight: '1.65',
-            marginBottom: '48px',
-            maxWidth: '580px',
-            margin: '0 auto 48px auto',
-            fontWeight: '400'
-          }}>
-            A structured mentorship initiative designed to guide builders, professionals, and early-stage innovators through real-world problem-solving and career clarity.
-          </p>
-
-          {/* Content Sections */}
-          <div style={{
-            textAlign: 'left',
-            marginBottom: '48px'
-          }}>
-            {/* Why Mentorship at DAGARMY */}
-            <div style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                color: '#000000',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}>
-                Why Mentorship at DAGARMY
-              </h2>
-              <p style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.7',
-                marginBottom: '12px'
-              }}>
-                DAGARMY mentorship is <span style={{ fontWeight: '600', color: '#1f2937' }}>not generic advice or motivational coaching</span>. It is a structured guidance program focused on:
-              </p>
-              <ul style={{
-                fontSize: '15px',
-                color: '#4b5563',
-                lineHeight: '1.9',
-                paddingLeft: '20px',
-                margin: '0 0 12px 0',
-                listStyleType: 'disc'
-              }}>
-                <li style={{ marginBottom: '6px' }}>Practical decision-making</li>
-                <li style={{ marginBottom: '6px' }}>Technical clarity</li>
-                <li>Career direction in modern tech ecosystems</li>
-              </ul>
-              <p style={{
-                fontSize: '15px',
-                color: '#1f2937',
-                lineHeight: '1.7',
-                fontWeight: '600'
-              }}>
-                Mentors are practitioners, not influencers.
-              </p>
+          {/* Main Card */}
+          <div style={{ background: nm.bg, borderRadius: '28px', boxShadow: nm.shadow, padding: '52px 44px', textAlign: 'center' }}>
+            {/* Logo */}
+            <div style={{ marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <Image src="/images/logo/logo.png" alt="DAGARMY" width={36} height={36} />
+              </div>
+              <span style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span>
             </div>
 
-            {/* Auto-Rotating Content */}
-            <div className={styles.tabContent} key={activeTab}>
-              {activeTab === 0 && (
-                <div>
-                  <h2>What the Mentorship Covers</h2>
-                  <ul>
-                    <li>* Career roadmap alignment (tech, product, AI, Web3)</li>
-                    <li>* Project and portfolio reviews</li>
-                    <li>* System-level thinking and architecture guidance</li>
-                    <li>* Transition support for students and early professionals</li>
-                    <li>* Strategic feedback on learning paths and execution</li>
-                  </ul>
-                </div>
-              )}
+            {/* Label */}
+            <p style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '14px' }}>WE'RE STILL</p>
 
-              {activeTab === 1 && (
-                <div>
-                  <h2>Who This Is For</h2>
-                  <ul>
-                    <li>* Students preparing beyond traditional placements</li>
-                    <li>* Early professionals stuck in execution-only roles</li>
-                    <li>* Builders seeking architectural clarity</li>
-                    <li>* Non-technical founders understanding digital systems</li>
-                  </ul>
-                </div>
-              )}
+            {/* Heading */}
+            <h1 style={{ fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: '800', color: '#0f172a', marginBottom: '18px', lineHeight: '1.2' }}>
+              Launching Our <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Mentorship</span> Program.
+            </h1>
 
-              {activeTab === 2 && (
-                <div>
-                  <h2>Program Structure (Preview)</h2>
-                  <ul>
-                    <li>* 1:1 and small-group mentorship sessions</li>
-                    <li>* Fixed mentorship cycles</li>
-                    <li>* Clear problem statements per session</li>
-                    <li>* <span style={{ fontWeight: '600', color: '#1f2937' }}>Actionable feedback, not theory</span></li>
-                    <li>* Limited slots to maintain quality</li>
-                  </ul>
+            <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', marginBottom: '36px', maxWidth: '520px', margin: '0 auto 36px' }}>
+              A structured mentorship initiative designed to guide builders, professionals, and early-stage innovators through real-world problem-solving and career clarity.
+            </p>
+
+            {/* Why section */}
+            <div style={{ background: nm.bg, borderRadius: '16px', boxShadow: nm.shadowSm, padding: '24px', textAlign: 'left', marginBottom: '20px' }}>
+              <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '12px' }}>Why Mentorship at DAGARMY</h2>
+              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.7', marginBottom: '10px' }}>
+                DAGARMY mentorship is <strong style={{ color: '#0f172a' }}>not generic advice or motivational coaching</strong>. It is a structured guidance program focused on:
+              </p>
+              {['Practical decision-making', 'Technical clarity', 'Career direction in modern tech ecosystems'].map(item => (
+                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '6px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <span style={{ fontSize: '13px', color: '#475569' }}>{item}</span>
                 </div>
-              )}
+              ))}
+              <p style={{ fontSize: '13px', color: '#0f172a', fontWeight: '700', marginTop: '12px', marginBottom: 0 }}>Mentors are practitioners, not influencers.</p>
             </div>
-          </div>
 
-          {/* CTA Text */}
-          <p style={{
-            fontSize: '15px',
-            color: '#4b5563',
-            lineHeight: '1.7',
-            marginBottom: '28px',
-            textAlign: 'center'
-          }}>
-            Stay informed. Early access will be announced soon.
-          </p>
+            {/* Rotating tab card */}
+            <div style={{ background: nm.bg, borderRadius: '16px', boxShadow: nm.shadowSm, padding: '24px', textAlign: 'left', marginBottom: '28px', minHeight: '180px' }}>
+              <h2 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '14px' }}>{tabs[activeTab].title}</h2>
+              {tabs[activeTab].items.map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '8px' }}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '6px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <span style={{ fontSize: '13px', color: '#475569', lineHeight: '1.6' }}>{item}</span>
+                </div>
+              ))}
+            </div>
 
-          {/* Email Input with Notify Button */}
-          <div className={styles.emailContainer} style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            maxWidth: '500px',
-            width: '100%',
-            margin: '0 auto 40px auto'
-          }}>
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={styles.emailInput}
-              style={{
-                flex: 1,
-                padding: '14px 20px',
-                fontSize: '15px',
-                color: '#1f2937',
-                background: '#f9fafb',
-                border: '1px solid #e5e7eb',
-                borderRadius: '50px',
-                outline: 'none',
-                transition: 'all 0.3s ease'
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.border = '1px solid #000000';
-                e.currentTarget.style.background = '#ffffff';
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.border = '1px solid #e5e7eb';
-                e.currentTarget.style.background = '#f9fafb';
-              }}
-            />
-            <button
-              className={styles.notifyButton}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '14px 28px',
-                fontSize: '15px',
-                fontWeight: '700',
-                color: '#ffffff',
-                background: '#000000',
-                border: 'none',
-                borderRadius: '50px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                whiteSpace: 'nowrap'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#333333';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#000000';
-              }}
-            >
-              Notify Me
-            </button>
-          </div>
+            {/* Dot indicators */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '28px' }}>
+              {tabs.map((_, i) => (
+                <button key={i} onClick={() => setActiveTab(i)} style={{ width: activeTab === i ? '24px' : '8px', height: '8px', borderRadius: '4px', border: 'none', cursor: 'pointer', background: nm.bg, boxShadow: activeTab === i ? nm.shadowSm : nm.shadowInset, transition: 'all 0.3s' }} />
+              ))}
+            </div>
 
-          {/* Social Links */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '12px'
-          }}>
-            {/* Facebook */}
-            <a href="#" style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: '#000000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              textDecoration: 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#333333';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000000';
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            </a>
-            
-            {/* Twitter/X */}
-            <a href="#" style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: '#000000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              textDecoration: 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#333333';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000000';
-            }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            
-            {/* LinkedIn */}
-            <a href="#" style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: '#000000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              textDecoration: 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#333333';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000000';
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
+            {/* CTA text */}
+            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>Stay informed. Early access will be announced soon.</p>
+
+            {/* Email + Notify */}
+            <div style={{ display: 'flex', gap: '10px', maxWidth: '480px', margin: '0 auto 32px' }}>
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ flex: 1, padding: '13px 18px', fontSize: '14px', color: '#0f172a', background: nm.bg, border: 'none', borderRadius: '50px', outline: 'none', boxShadow: nm.shadowInset }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = 'inset 5px 5px 12px rgba(166,180,200,0.6), inset -5px -5px 12px rgba(255,255,255,0.95)'; }}
+                onBlur={(e) => { e.currentTarget.style.boxShadow = nm.shadowInset; }}
+              />
+              <button
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '13px 24px', fontSize: '14px', fontWeight: '700', color: '#fff', background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)', border: 'none', borderRadius: '50px', cursor: 'pointer', boxShadow: '6px 6px 14px rgba(96,165,250,0.3)', transition: 'all 0.2s', whiteSpace: 'nowrap' }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '8px 8px 20px rgba(96,165,250,0.45)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '6px 6px 14px rgba(96,165,250,0.3)'; }}
+              >
+                Notify Me
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </button>
+            </div>
+
+            {/* Social icons */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              {socials.map((s, i) => (
+                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
+                  style={{ width: '38px', height: '38px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#475569', textDecoration: 'none', transition: 'box-shadow 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '10px 10px 24px rgba(166,180,200,0.65), -10px -10px 24px rgba(255,255,255,0.98)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadow; }}>
+                  {s.icon}
+                </a>
+              ))}
+            </div>
+
           </div>
         </div>
       </div>
+      <Footer1 />
     </>
   );
 }

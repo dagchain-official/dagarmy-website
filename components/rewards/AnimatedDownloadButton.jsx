@@ -6,20 +6,7 @@ const AnimatedDownloadButton = () => {
 
   const handleClick = () => {
     if (isChecked) return;
-    
     setIsChecked(true);
-
-    // Trigger download after 3s (when installing animation completes)
-    setTimeout(() => {
-      const link = document.createElement("a");
-      link.href = "/images/dagarmyrewardspdf/Understanding the DAG Army Reward System (1) (3).pdf";
-      link.download = "DAG-Army-Reward-System.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }, 3000);
-
-    // Reset after full animation (4s total)
     setTimeout(() => {
       setIsChecked(false);
     }, 4000);
@@ -36,9 +23,12 @@ const AnimatedDownloadButton = () => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <label 
+        <a
+          href={isChecked ? undefined : "/api/download/rewards-pdf"}
+          download="DAG-Army-Reward-System.pdf"
           onClick={handleClick}
           style={{
+            textDecoration: 'none',
             backgroundColor: 'transparent',
             border: '2px solid rgba(0, 0, 0, 1)',
             display: 'flex',
@@ -49,7 +39,8 @@ const AnimatedDownloadButton = () => {
             transition: 'all 0.4s ease',
             padding: '5px',
             position: 'relative',
-            animation: isChecked ? 'installed 0.4s ease 3.5s forwards' : 'none'
+            animation: isChecked ? 'installed 0.4s ease 3.5s forwards' : 'none',
+            pointerEvents: isChecked ? 'none' : 'auto',
           }}
         >
           <span 
@@ -192,7 +183,7 @@ const AnimatedDownloadButton = () => {
   Open
 </p>
 
-        </label>
+        </a>
       </div>
 
       <style jsx>{`

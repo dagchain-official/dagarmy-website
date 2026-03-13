@@ -1,12 +1,24 @@
 import React from "react";
 
+const nm = {
+  bg: '#eef0f5',
+  shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
+  shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
+};
+
+const stats = [
+  { value: '50+', label: 'Articles' },
+  { value: '50K+', label: 'Readers' },
+  { value: 'Weekly', label: 'Updates' },
+];
+
 export default function PageTitle({ title = "DAGARMY Blog" }) {
-  // Split title to apply Nasalization to DAGARMY and Blog
   const renderTitle = () => {
     if (title === "DAGARMY Blog") {
       return (
         <>
-          <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span> <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Blog</span>
+          <span style={{ fontFamily: 'Nasalization, sans-serif' }}>DAGARMY</span>{' '}
+          <span style={{ fontFamily: 'Nasalization, sans-serif' }}>Blog</span>
         </>
       );
     }
@@ -14,206 +26,52 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
   };
 
   return (
-    <div
-      className="section-blog-hero"
-      style={{
-        padding: "60px 0 30px",
-        background: "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
-        position: "relative",
-        overflow: "hidden",
-        borderBottom: "1px solid #e5e7eb",
-      }}
-    >
-      {/* Subtle Decorative Elements */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-10%",
-          right: "10%",
-          width: "300px",
-          height: "300px",
-          background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-          borderRadius: "50%",
-          filter: "blur(100px)",
-          opacity: 0.1,
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-10%",
-          left: "10%",
-          width: "250px",
-          height: "250px",
-          background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-          borderRadius: "50%",
-          filter: "blur(80px)",
-          opacity: 0.08,
-          pointerEvents: "none",
-        }}
-      />
-
-      <div className="tf-container" style={{ position: "relative", zIndex: 2 }}>
+    <div style={{ background: nm.bg, padding: '56px 0 40px' }}>
+      <div className="tf-container">
         <div className="row">
           <div className="col-12">
-            <div className="content text-center">
-              {/* Tag Badge - Without Icon */}
-              <div
-                className="wow fadeInUp"
-                data-wow-delay="0s"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-                  padding: "6px 18px",
-                  borderRadius: "50px",
-                  marginBottom: "16px",
-                  boxShadow: "0 4px 12px rgba(139, 92, 246, 0.15)",
-                }}
-              >
-                <span style={{
-                  color: "#fff",
-                  fontSize: "12px",
-                  fontWeight: "600",
-                  letterSpacing: "0.5px",
-                  textTransform: "uppercase"
-                }}>
+            <div style={{ textAlign: 'center' }}>
+
+              {/* Label badge */}
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: '7px',
+                padding: '6px 18px', borderRadius: '20px',
+                background: nm.bg, boxShadow: nm.shadowSm,
+                marginBottom: '18px',
+              }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2.5" strokeLinecap="round">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
                   Knowledge Hub
                 </span>
               </div>
 
-              {/* Main Title */}
-              <h1
-                className="font-cardo fw-7 wow fadeInUp"
-                data-wow-delay="0.1s"
-                style={{
-                  fontSize: "48px",
-                  lineHeight: "1.2",
-                  marginBottom: "12px",
-                  color: "#111827",
-                  fontWeight: "700",
-                  letterSpacing: "-0.02em",
-                }}
-              >
+              {/* Title */}
+              <h1 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: '800', color: '#0f172a', marginBottom: '14px', lineHeight: '1.2' }}>
                 {renderTitle()}
               </h1>
 
               {/* Subtitle */}
-              <p
-                className="sub fs-18 wow fadeInUp"
-                data-wow-delay="0.2s"
-                style={{
-                  fontSize: "16px",
-                  color: "#6b7280",
-                  maxWidth: "700px",
-                  margin: "0 auto 24px",
-                  lineHeight: "1.6",
-                  fontWeight: "400",
-                }}
-              >
+              <p style={{ fontSize: '16px', color: '#64748b', maxWidth: '600px', margin: '0 auto 32px', lineHeight: '1.7' }}>
                 Insights on AI, Blockchain, and Data Visualization from the Vibe Coder Army
               </p>
 
-              {/* Stats Bar */}
-              <div
-                className="wow fadeInUp"
-                data-wow-delay="0.3s"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "32px",
-                  background: "#ffffff",
-                  padding: "20px 40px",
-                  borderRadius: "12px",
-                  border: "1px solid #e5e7eb",
-                  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
-              >
-                <div style={{ textAlign: "center" }}>
-                  <div style={{
-                    fontSize: "28px",
-                    fontWeight: "700",
-                    background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    marginBottom: "4px"
-                  }}>
-                    50+
-                  </div>
-                  <div style={{
-                    fontSize: "12px",
-                    color: "#6b7280",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    fontWeight: "500"
-                  }}>
-                    Articles
-                  </div>
-                </div>
-
-                <div style={{
-                  width: "1px",
-                  height: "40px",
-                  background: "#e5e7eb"
-                }} />
-
-                <div style={{ textAlign: "center" }}>
-                  <div style={{
-                    fontSize: "28px",
-                    fontWeight: "700",
-                    background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    marginBottom: "4px"
-                  }}>
-                    50K+
-                  </div>
-                  <div style={{
-                    fontSize: "12px",
-                    color: "#6b7280",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    fontWeight: "500"
-                  }}>
-                    Readers
-                  </div>
-                </div>
-
-                <div style={{
-                  width: "1px",
-                  height: "40px",
-                  background: "#e5e7eb"
-                }} />
-
-                <div style={{ textAlign: "center" }}>
-                  <div style={{
-                    fontSize: "28px",
-                    fontWeight: "700",
-                    background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    marginBottom: "4px"
-                  }}>
-                    Weekly
-                  </div>
-                  <div style={{
-                    fontSize: "12px",
-                    color: "#6b7280",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    fontWeight: "500"
-                  }}>
-                    Updates
-                  </div>
-                </div>
+              {/* Stats row */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0', background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '20px 40px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                {stats.map((s, i) => (
+                  <React.Fragment key={s.label}>
+                    <div style={{ textAlign: 'center', padding: '0 24px' }}>
+                      <div style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', marginBottom: '4px' }}>{s.value}</div>
+                      <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600' }}>{s.label}</div>
+                    </div>
+                    {i < stats.length - 1 && (
+                      <div style={{ width: '1px', height: '36px', background: 'rgba(148,163,184,0.3)', flexShrink: 0 }} />
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
+
             </div>
           </div>
         </div>

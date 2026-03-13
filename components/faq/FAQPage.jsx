@@ -221,18 +221,24 @@ function ChevronDown() {
   );
 }
 
-function FAQItem({ q, a, isOpen, onToggle, accent }) {
+const nm = {
+  bg: '#eef0f5',
+  shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
+  shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
+  shadowInset: 'inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9)',
+};
+
+function FAQItem({ q, a, isOpen, onToggle }) {
   return (
     <div
       onClick={onToggle}
       style={{
-        borderRadius: '12px',
-        border: isOpen ? `1.5px solid ${accent}40` : '1.5px solid #e5e7eb',
-        background: isOpen ? '#fff' : '#fff',
+        borderRadius: '14px',
+        background: nm.bg,
+        boxShadow: isOpen ? nm.shadowInset : nm.shadowSm,
         cursor: 'pointer',
-        transition: 'all 0.25s ease',
+        transition: 'box-shadow 0.25s',
         overflow: 'hidden',
-        boxShadow: isOpen ? `0 4px 24px ${accent}18` : '0 1px 4px rgba(0,0,0,0.04)',
       }}
     >
       <div style={{
@@ -240,13 +246,13 @@ function FAQItem({ q, a, isOpen, onToggle, accent }) {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: '16px',
-        padding: '20px 24px',
+        padding: '18px 22px',
         userSelect: 'none',
       }}>
         <span style={{
-          fontSize: '15px',
+          fontSize: '14px',
           fontWeight: '600',
-          color: isOpen ? '#111827' : '#374151',
+          color: '#0f172a',
           lineHeight: '1.5',
           flex: 1,
         }}>{q}</span>
@@ -254,35 +260,23 @@ function FAQItem({ q, a, isOpen, onToggle, accent }) {
           flexShrink: 0,
           width: '28px',
           height: '28px',
-          borderRadius: '50%',
-          background: isOpen ? accent : '#f3f4f6',
-          color: isOpen ? '#fff' : '#6b7280',
+          borderRadius: '8px',
+          background: nm.bg,
+          boxShadow: isOpen ? nm.shadowInset : nm.shadowSm,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'all 0.25s ease',
+          transition: 'all 0.25s',
           transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+          color: '#475569',
         }}>
           <ChevronDown />
         </span>
       </div>
       {isOpen && (
-        <div style={{
-          padding: '0 24px 22px 24px',
-        }}>
-          <div style={{
-            width: '40px',
-            height: '2px',
-            background: `${accent}50`,
-            borderRadius: '2px',
-            marginBottom: '14px',
-          }} />
-          <p style={{
-            fontSize: '14.5px',
-            color: '#4b5563',
-            lineHeight: '1.75',
-            margin: 0,
-          }}>{a}</p>
+        <div style={{ padding: '0 22px 20px' }}>
+          <div style={{ width: '36px', height: '2px', background: 'linear-gradient(90deg,#818cf8,#a78bfa)', borderRadius: '2px', marginBottom: '12px' }} />
+          <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.75', margin: 0 }}>{a}</p>
         </div>
       )}
     </div>
@@ -334,103 +328,46 @@ export default function FAQPage() {
   };
 
   return (
-    <main style={{ background: '#f8fafc', minHeight: '100vh' }}>
+    <main style={{ background: nm.bg, minHeight: '100vh' }}>
 
       {/* Hero */}
-      <section style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
-        padding: 'clamp(72px, 10vw, 120px) 24px clamp(48px, 7vw, 80px)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* Decorative background blobs */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden',
-        }}>
-          <div style={{
-            position: 'absolute', top: '-60px', right: '-60px',
-            width: '400px', height: '400px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)',
-          }} />
-          <div style={{
-            position: 'absolute', bottom: '-40px', left: '-40px',
-            width: '300px', height: '300px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(147,51,234,0.12) 0%, transparent 70%)',
-          }} />
-        </div>
-
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)',
-            borderRadius: '100px', padding: '6px 16px', marginBottom: '24px',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <section style={{ background: nm.bg, padding: '56px 24px 40px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+          {/* Label */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '6px 18px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowSm, marginBottom: '18px' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2.5" strokeLinecap="round">
               <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-            <span style={{ color: '#93c5fd', fontSize: '13px', fontWeight: '600', letterSpacing: '0.5px' }}>
-              HELP &amp; SUPPORT
-            </span>
+            <span style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Help &amp; Support</span>
           </div>
 
-          <h1 style={{
-            fontSize: 'clamp(32px, 5vw, 52px)',
-            fontWeight: '800',
-            color: '#fff',
-            lineHeight: '1.15',
-            margin: '0 0 20px',
-            letterSpacing: '-0.5px',
-          }}>
-            Frequently Asked <span style={{
-              background: 'linear-gradient(90deg, #60a5fa, #a78bfa)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>Questions</span>
+          <h1 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: '800', color: '#0f172a', lineHeight: '1.2', margin: '0 0 16px' }}>
+            Frequently Asked{' '}
+            <span style={{ background: 'linear-gradient(135deg,#818cf8,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Questions</span>
           </h1>
 
-          <p style={{
-            fontSize: 'clamp(15px, 2vw, 17px)',
-            color: '#94a3b8',
-            lineHeight: '1.7',
-            maxWidth: '560px',
-            margin: '0 auto 32px',
-          }}>
+          <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', maxWidth: '520px', margin: '0 auto 24px' }}>
             Everything you need to know about DAGARMY — from courses and careers to rewards and the Udaan initiative.
           </p>
 
-          {/* Search hint */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '10px',
-            background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: '10px', padding: '10px 20px',
-            color: '#64748b', fontSize: '14px',
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, color: '#64748b', fontSize: '13px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             Browse by section below or{' '}
-            <Link href="/blog" style={{ color: '#60a5fa', textDecoration: 'none', fontWeight: '600' }}>visit our blog</Link>
+            <Link href="/blog" style={{ color: '#818cf8', textDecoration: 'none', fontWeight: '600' }}>visit our blog</Link>
             {' '}for detailed guides
           </div>
         </div>
       </section>
 
       {/* Main content */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(40px, 6vw, 64px) 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 280px) 1fr', gap: '32px', alignItems: 'start' }}>
+      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '8px 24px 64px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 260px) 1fr', gap: '28px', alignItems: 'start' }}>
 
-          {/* Sidebar nav */}
-          <aside style={{
-            position: 'sticky',
-            top: '100px',
-          }}>
-            <p style={{
-              fontSize: '11px', fontWeight: '700', letterSpacing: '1.2px',
-              color: '#9ca3af', textTransform: 'uppercase',
-              margin: '0 0 12px 4px',
-            }}>SECTIONS</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {/* Sidebar */}
+          <aside style={{ position: 'sticky', top: '100px' }}>
+            <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 12px 4px' }}>Sections</p>
+
+            <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {sections.map((section) => {
                 const active = activeSection === section.id;
                 return (
@@ -438,78 +375,41 @@ export default function FAQPage() {
                     key={section.id}
                     onClick={() => handleSectionChange(section.id)}
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '11px 14px',
-                      borderRadius: '10px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      width: '100%',
-                      transition: 'all 0.2s ease',
-                      background: active ? section.color.bg : 'transparent',
-                      color: active ? section.color.accent : '#374151',
+                      display: 'flex', alignItems: 'center', gap: '10px',
+                      padding: '11px 14px', borderRadius: '12px', border: 'none',
+                      cursor: 'pointer', textAlign: 'left', width: '100%',
+                      transition: 'box-shadow 0.2s',
+                      background: nm.bg,
+                      boxShadow: active ? nm.shadowInset : 'none',
+                      color: active ? '#0f172a' : '#64748b',
                       fontWeight: active ? '700' : '500',
-                      fontSize: '14px',
-                      outline: 'none',
+                      fontSize: '13px', outline: 'none',
                     }}
                   >
-                    <span style={{
-                      color: active ? section.color.accent : '#9ca3af',
-                      flexShrink: 0,
-                      transition: 'color 0.2s ease',
-                    }}>
-                      {section.icon}
-                    </span>
+                    <span style={{ color: active ? '#818cf8' : '#94a3b8', flexShrink: 0 }}>{section.icon}</span>
                     {section.label}
-                    {active && (
-                      <span style={{
-                        marginLeft: 'auto',
-                        width: '6px', height: '6px', borderRadius: '50%',
-                        background: section.color.accent, flexShrink: 0,
-                      }} />
-                    )}
+                    {active && <span style={{ marginLeft: 'auto', width: '6px', height: '6px', borderRadius: '50%', background: 'linear-gradient(135deg,#818cf8,#a78bfa)', flexShrink: 0 }} />}
                   </button>
                 );
               })}
             </div>
 
-            {/* Still have questions */}
-            <div style={{
-              marginTop: '28px',
-              background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-              borderRadius: '16px',
-              padding: '24px',
-              color: '#fff',
-            }}>
-              <div style={{
-                width: '40px', height: '40px', borderRadius: '10px',
-                background: 'rgba(96,165,250,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '14px',
-              }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {/* Contact card */}
+            <div style={{ marginTop: '20px', background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '22px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '14px' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
               </div>
-              <p style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 6px', color: '#fff' }}>
-                Still have questions?
-              </p>
-              <p style={{ fontSize: '13px', color: '#94a3b8', margin: '0 0 16px', lineHeight: '1.6' }}>
-                Can't find the answer you're looking for? Reach out to our team.
-              </p>
+              <p style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 6px', color: '#0f172a' }}>Still have questions?</p>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 16px', lineHeight: '1.6' }}>Can't find what you're looking for? Reach out to our team.</p>
               <a
                 href="mailto:support@dagchain.network"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '8px',
-                  background: '#2563eb', color: '#fff',
-                  borderRadius: '8px', padding: '9px 16px',
-                  fontSize: '13px', fontWeight: '600',
-                  textDecoration: 'none', transition: 'background 0.2s ease',
-                }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '9px 18px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg,#60a5fa,#818cf8,#a78bfa)', color: '#fff', fontSize: '12px', fontWeight: '700', textDecoration: 'none', boxShadow: '5px 5px 12px rgba(96,165,250,0.28)', transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
                 </svg>
                 Contact Support
@@ -520,34 +420,17 @@ export default function FAQPage() {
           {/* FAQ panel */}
           <div>
             {/* Section header */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '14px',
-              marginBottom: '28px',
-              padding: '20px 24px',
-              background: currentSection.color.bg,
-              borderRadius: '14px',
-              border: `1.5px solid ${currentSection.color.border}`,
-            }}>
-              <div style={{
-                width: '44px', height: '44px', borderRadius: '12px',
-                background: currentSection.color.light,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: currentSection.color.accent, flexShrink: 0,
-              }}>
+            <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '20px 24px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8', flexShrink: 0 }}>
                 {currentSection.icon}
               </div>
               <div>
-                <h2 style={{
-                  fontSize: '18px', fontWeight: '800', color: '#111827',
-                  margin: '0 0 2px',
-                }}>{currentSection.label}</h2>
-                <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>
-                  {currentSection.faqs.length} frequently asked questions
-                </p>
+                <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', margin: '0 0 2px' }}>{currentSection.label}</h2>
+                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>{currentSection.faqs.length} frequently asked questions</p>
               </div>
             </div>
 
-            {/* FAQ list */}
+            {/* FAQ accordion */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {currentSection.faqs.map((faq, i) => (
                 <FAQItem
@@ -556,37 +439,21 @@ export default function FAQPage() {
                   a={faq.a}
                   isOpen={openIndex === i}
                   onToggle={() => setOpenIndex(openIndex === i ? null : i)}
-                  accent={currentSection.color.accent}
                 />
               ))}
             </div>
 
-            {/* All sections quick nav */}
-            <div style={{
-              marginTop: '48px',
-              padding: '28px',
-              background: '#fff',
-              borderRadius: '16px',
-              border: '1.5px solid #e5e7eb',
-            }}>
-              <p style={{ fontSize: '13px', fontWeight: '700', color: '#374151', margin: '0 0 16px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                Explore other sections
-              </p>
+            {/* Explore other sections */}
+            <div style={{ marginTop: '32px', background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '24px' }}>
+              <p style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', margin: '0 0 14px', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Explore other sections</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {sections.filter(s => s.id !== activeSection).map(section => (
                   <button
                     key={section.id}
                     onClick={() => handleSectionChange(section.id)}
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '7px',
-                      padding: '8px 14px', borderRadius: '8px',
-                      border: `1.5px solid ${section.color.border}`,
-                      background: section.color.bg,
-                      color: section.color.accent,
-                      fontSize: '13px', fontWeight: '600',
-                      cursor: 'pointer', transition: 'all 0.2s ease',
-                      outline: 'none',
-                    }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '8px 16px', borderRadius: '10px', border: 'none', background: nm.bg, boxShadow: nm.shadowSm, color: '#475569', fontSize: '12px', fontWeight: '600', cursor: 'pointer', transition: 'box-shadow 0.2s', outline: 'none' }}
+                    onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadow; }}
+                    onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadowSm; }}
                   >
                     {section.icon}
                     {section.label}
@@ -595,17 +462,9 @@ export default function FAQPage() {
               </div>
             </div>
           </div>
+
         </div>
       </section>
-
-      {/* Mobile responsive styles */}
-      <style>{`
-        @media (max-width: 767px) {
-          .faq-layout {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </main>
   );
 }

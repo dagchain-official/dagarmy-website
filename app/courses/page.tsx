@@ -1,5 +1,5 @@
 "use client";
-import CourseListCompact from "@/components/course-list/CourseListCompact";
+import CourseListNeo from "@/components/course-list/CourseListNeo";
 import Footer1 from "@/components/footers/Footer1";
 import Header2 from "@/components/headers/Header2";
 import React from "react";
@@ -9,7 +9,7 @@ export default function CoursesPage() {
     <>
       <div id="wrapper">
         <Header2 />
-        <CourseListCompact />
+        <CourseListNeo />
         <Footer1 />
       </div>
     </>

@@ -126,467 +126,195 @@ export default function Blogs2() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const nm = {
+    bg: '#eef0f5',
+    shadow: '8px 8px 20px rgba(166,180,200,0.55), -8px -8px 20px rgba(255,255,255,0.95)',
+    shadowSm: '4px 4px 10px rgba(166,180,200,0.5), -4px -4px 10px rgba(255,255,255,0.9)',
+    shadowInset: 'inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9)',
+    shadowHover: '12px 12px 28px rgba(166,180,200,0.65), -12px -12px 28px rgba(255,255,255,0.98)',
+  };
+
   return (
     <>
       <style dangerouslySetInnerHTML={{
         __html: `
-          .page-blog-list {
-            display: flex !important;
-            gap: 24px !important;
-            align-items: flex-start !important;
-          }
-          .page-blog-list .left {
-            flex: 1 !important;
-            min-width: 0 !important;
-            max-width: none !important;
-          }
-          .page-blog-list .right {
-            width: 380px !important;
-            flex-shrink: 0 !important;
-            max-width: 400px !important;
-          }
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
         `
       }} />
-      <section className="tf-spacing tf-spacing-1" style={{ background: "#fafafa", padding: "30px 0 50px" }}>
+      <section style={{ background: nm.bg, padding: '40px 0 64px' }}>
         <div className="tf-container">
           <div className="row">
             <div className="col-12">
-              <div className="page-blog-list">
-                {/* Main Blog List - Expanded Width */}
-                <div className="left">
+              <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
+                {/* ── Main post list ── */}
+                <div style={{ flex: 1, minWidth: 0 }}>
                   {loading ? (
-                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                      <div style={{
-                        width: '60px',
-                        height: '60px',
-                        margin: '0 auto 20px',
-                        border: '4px solid #f3f4f6',
-                        borderTop: '4px solid #1f2937',
-                        borderRadius: '50%',
-                        animation: 'spin 1s linear infinite'
-                      }} />
-                      <p style={{ color: '#6b7280', fontSize: '16px' }}>Loading blog posts from Medium...</p>
-                      <style dangerouslySetInnerHTML={{
-                        __html: `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`
-                      }} />
+                    <div style={{ textAlign: 'center', padding: '80px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                      </div>
+                      <p style={{ color: '#64748b', fontSize: '15px', fontWeight: '500' }}>Loading blog posts from Medium...</p>
                     </div>
                   ) : error ? (
-                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                      <p style={{ color: '#ef4444', fontSize: '16px', marginBottom: '10px' }}>{error}</p>
-                      <button 
-                        onClick={fetchMediumPosts}
-                        style={{
-                          background: '#1f2937',
-                          color: '#fff',
-                          padding: '10px 20px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          fontWeight: '600'
-                        }}
-                      >
-                        Retry
-                      </button>
+                    <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '60px 40px', textAlign: 'center' }}>
+                      <p style={{ color: '#ef4444', fontSize: '15px', marginBottom: '18px', fontWeight: '600' }}>{error}</p>
+                      <button onClick={fetchMediumPosts} style={{ padding: '12px 28px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg,#60a5fa,#818cf8,#a78bfa)', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', boxShadow: '6px 6px 14px rgba(96,165,250,0.3)' }}>Retry</button>
                     </div>
                   ) : filteredPosts.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 20px', display: 'block' }}>
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                      </svg>
-                      <h3 style={{ color: '#374151', fontSize: '20px', marginBottom: '10px', fontWeight: '600' }}>No Results Found</h3>
-                      <p style={{ color: '#9ca3af', fontSize: '15px', marginBottom: '20px' }}>
-                        No blog posts match your search for "<strong>{searchQuery}</strong>"
-                      </p>
-                      <button 
-                        onClick={() => setSearchQuery("")}
-                        style={{
-                          background: '#1f2937',
-                          color: '#fff',
-                          padding: '10px 24px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          fontWeight: '600'
-                        }}
-                      >
-                        Clear Search
-                      </button>
+                    <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '60px 40px', textAlign: 'center' }}>
+                      <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                      </div>
+                      <h3 style={{ color: '#0f172a', fontSize: '20px', fontWeight: '700', marginBottom: '10px' }}>No Results Found</h3>
+                      <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px' }}>No posts match &ldquo;<strong>{searchQuery}</strong>&rdquo;</p>
+                      <button onClick={() => setSearchQuery('')} style={{ padding: '12px 28px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg,#60a5fa,#818cf8,#a78bfa)', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', boxShadow: '6px 6px 14px rgba(96,165,250,0.3)' }}>Clear Search</button>
                     </div>
                   ) : (
-                    <div className="wrap-blog-list">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {filteredPosts.map((article, index) => (
-                      <div
-                        className="blog-article-item style-row hover-img wow fadeInUp"
-                        key={index}
-                        style={{
-                          background: "#ffffff",
-                          borderRadius: "10px",
-                          padding: "12px",
-                          marginBottom: "20px",
-                          border: "2px solid #e5e7eb",
-                          transition: "all 0.3s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = "translateY(-5px)";
-                          e.currentTarget.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.15)";
-                          e.currentTarget.style.borderColor = "#000000";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = "translateY(0)";
-                          e.currentTarget.style.boxShadow = "none";
-                          e.currentTarget.style.borderColor = "#e5e7eb";
-                        }}
-                      >
-                        <div className="article-thumb image-wrap" style={{ marginBottom: "6px" }}>
-                          <img
-                            src={article.imageUrl}
-                            alt={article.title}
-                            style={{ 
-                              borderRadius: "8px",
-                              width: '100%',
-                              height: 'auto',
-                              maxHeight: '400px',
-                              objectFit: 'cover'
-                            }}
-                            onError={(e) => {
-                              e.target.src = '/images/blog/default-blog.jpg';
-                            }}
-                          />
-                        </div>
-                        <div className="article-content">
-                          <div className="article-label" style={{ marginBottom: "4px", display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            {article.categories && article.categories.slice(0, 3).map((cat, idx) => (
-                              <span
-                                key={idx}
-                                style={{
-                                  background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
-                                  color: "#fff",
-                                  padding: "6px 14px",
-                                  borderRadius: "5px",
-                                  fontSize: "12px",
-                                  fontWeight: "600",
-                                  textTransform: "uppercase",
-                                  letterSpacing: "0.5px",
-                                  display: "inline-block",
-                                }}
+                        <div
+                          key={index}
+                          style={{ background: nm.bg, borderRadius: '14px', boxShadow: nm.shadow, overflow: 'hidden', transition: 'box-shadow 0.25s, transform 0.25s', display: 'flex', gap: 0, padding: '12px' }}
+                          onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadowHover; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.transform = 'translateY(0)'; }}
+                        >
+                          {/* Thumbnail — left side, fixed width */}
+                          {article.imageUrl && (
+                            <div style={{ width: '200px', minWidth: '200px', height: '260px', borderRadius: '10px', overflow: 'hidden', marginRight: '16px', flexShrink: 0, boxShadow: nm.shadowSm }}>
+                              <img src={article.imageUrl} alt={article.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={e => { e.target.src = '/images/blog/default-blog.jpg'; }} />
+                            </div>
+                          )}
+                          {/* Content — right side */}
+                          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            {/* Categories */}
+                            {article.categories?.length > 0 && (
+                              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                                {article.categories.slice(0, 3).map((cat, idx) => (
+                                  <span key={idx} style={{ padding: '3px 10px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowSm, fontSize: '10px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{cat}</span>
+                                ))}
+                              </div>
+                            )}
+                            {/* Title */}
+                            <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '6px', lineHeight: '1.4', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                              <a href={article.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>{article.title}</a>
+                            </h3>
+                            {/* Description */}
+                            {article.description && (
+                              <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5', marginBottom: '8px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{article.description}</p>
+                            )}
+                            {/* Meta + CTA row */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>
+                                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                  {article.pubDate}
+                                </span>
+                                {article.author && (
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    {article.author}
+                                  </span>
+                                )}
+                              </div>
+                              <a
+                                href={article.link} target="_blank" rel="noopener noreferrer"
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '7px 14px', borderRadius: '8px', background: 'linear-gradient(135deg,#60a5fa,#818cf8,#a78bfa)', color: '#fff', fontSize: '11px', fontWeight: '700', textDecoration: 'none', boxShadow: '4px 4px 10px rgba(96,165,250,0.28)', transition: 'all 0.2s', whiteSpace: 'nowrap' }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '6px 6px 14px rgba(96,165,250,0.42)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '4px 4px 10px rgba(96,165,250,0.28)'; }}
                               >
-                                {cat}
-                              </span>
-                            ))}
-                          </div>
-                          <h3 className="fw-5 font-outfit" style={{ fontSize: "24px", marginBottom: "4px", lineHeight: "1.3" }}>
-                            <a 
-                              href={article.link} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
-                              {article.title}
-                            </a>
-                          </h3>
-                          <p style={{ fontSize: "16px", lineHeight: "1.6", marginBottom: "6px", color: "#4b5563" }}>
-                            {article.description}
-                          </p>
-                          <div className="meta" style={{ marginBottom: "6px" }}>
-                            <div className="meta-item">
-                              <i className="flaticon-calendar" />
-                              <p>{article.pubDate}</p>
-                            </div>
-                            <div className="meta-item">
-                              <i className="flaticon-user-1" />
-                              <p>{article.author}</p>
+                                Read on Medium
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                              </a>
                             </div>
                           </div>
-                          <a
-                            href={article.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="tf-btn-arrow"
-                            style={{
-                              color: "#1f2937",
-                              fontWeight: "600",
-                              fontSize: "16px",
-                              textDecoration: "none",
-                            }}
-                          >
-                            Read on Medium <i className="icon-arrow-top-right" />
-                          </a>
                         </div>
-                      </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* Sidebar - Fixed Width */}
-                <div className="right tf-sidebar" style={{ padding: "12px" }}>
-                  {/* Search Box - Real-Time Predictive Search */}
-                  <div
-                    ref={searchRef}
-                    className="sidebar-search wow fadeInUp"
-                    data-wow-delay="0s"
-                    style={{
-                      background: "#ffffff",
-                      borderRadius: "10px",
-                      padding: "18px",
-                      marginBottom: "20px",
-                      border: "2px solid #e5e7eb",
-                      position: "relative",
-                    }}
-                  >
-                    <h5 className="fw-6" style={{ fontSize: "17px", marginBottom: "12px", color: "#111827", fontWeight: "700" }}>
-                      Search
-                    </h5>
-                    <div style={{ position: "relative" }}>
+                {/* ── Sidebar ── */}
+                <div style={{ width: '340px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                  {/* Search */}
+                  <div ref={searchRef} style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '22px', position: 'relative' }}>
+                    <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Search</h5>
+                    <div style={{ position: 'relative' }}>
                       <input
                         type="text"
                         placeholder="Search articles..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={e => setSearchQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        onFocus={() => searchQuery && suggestions.length > 0 && setShowSuggestions(true)}
-                        style={{
-                          width: "100%",
-                          padding: "12px 14px",
-                          borderRadius: "8px",
-                          border: showSuggestions ? "2px solid #1f2937" : "2px solid #e5e7eb",
-                          fontSize: "14px",
-                          outline: "none",
-                          transition: "border-color 0.2s ease",
-                        }}
+                        style={{ width: '100%', padding: '12px 16px', borderRadius: '10px', border: 'none', outline: 'none', background: nm.bg, boxShadow: nm.shadowInset, fontSize: '14px', color: '#0f172a', boxSizing: 'border-box' }}
+                        onFocus={e => { e.currentTarget.style.boxShadow = 'inset 5px 5px 12px rgba(166,180,200,0.6), inset -5px -5px 12px rgba(255,255,255,0.95)'; if (searchQuery && suggestions.length > 0) setShowSuggestions(true); }}
+                        onBlur={e => { e.currentTarget.style.boxShadow = nm.shadowInset; }}
                       />
-                      
-                      {/* Search Suggestions Dropdown */}
+                      {/* Suggestions dropdown */}
                       {showSuggestions && suggestions.length > 0 && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "calc(100% + 8px)",
-                            left: 0,
-                            right: 0,
-                            background: "#ffffff",
-                            borderRadius: "8px",
-                            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.15)",
-                            border: "2px solid #e5e7eb",
-                            maxHeight: "400px",
-                            overflowY: "auto",
-                            zIndex: 1000,
-                            animation: "slideDown 0.2s ease-out",
-                          }}
-                        >
-                          <div style={{ padding: "8px 0" }}>
-                            {suggestions.map((post, index) => (
-                              <div
-                                key={post.id || index}
-                                onClick={() => handleSuggestionClick(post)}
-                                onMouseEnter={() => setSelectedSuggestionIndex(index)}
-                                style={{
-                                  padding: "12px 16px",
-                                  cursor: "pointer",
-                                  background: selectedSuggestionIndex === index ? "#f3f4f6" : "transparent",
-                                  borderLeft: selectedSuggestionIndex === index ? "3px solid #1f2937" : "3px solid transparent",
-                                  transition: "all 0.15s ease",
-                                  display: "flex",
-                                  gap: "12px",
-                                  alignItems: "flex-start",
-                                }}
-                              >
-                                {post.imageUrl && (
-                                  <img
-                                    src={post.imageUrl}
-                                    alt={post.title}
-                                    style={{
-                                      width: "50px",
-                                      height: "50px",
-                                      borderRadius: "6px",
-                                      objectFit: "cover",
-                                      flexShrink: 0,
-                                    }}
-                                    onError={(e) => {
-                                      e.target.style.display = 'none';
-                                    }}
-                                  />
-                                )}
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                  <div
-                                    style={{
-                                      fontSize: "14px",
-                                      fontWeight: "600",
-                                      color: "#111827",
-                                      marginBottom: "4px",
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 2,
-                                      WebkitBoxOrient: "vertical",
-                                      lineHeight: "1.4",
-                                    }}
-                                  >
-                                    {post.title}
-                                  </div>
-                                  {post.pubDate && (
-                                    <div
-                                      style={{
-                                        fontSize: "12px",
-                                        color: "#9ca3af",
-                                      }}
-                                    >
-                                      {post.pubDate}
-                                    </div>
-                                  )}
-                                </div>
+                        <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, right: 0, background: nm.bg, borderRadius: '14px', boxShadow: nm.shadowHover, maxHeight: '380px', overflowY: 'auto', zIndex: 1000, animation: 'slideDown 0.2s ease-out' }}>
+                          {suggestions.map((post, index) => (
+                            <div
+                              key={post.id || index}
+                              onClick={() => handleSuggestionClick(post)}
+                              onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                              style={{ padding: '12px 16px', cursor: 'pointer', background: selectedSuggestionIndex === index ? 'rgba(129,140,248,0.06)' : 'transparent', borderLeft: `3px solid ${selectedSuggestionIndex === index ? '#818cf8' : 'transparent'}`, transition: 'all 0.15s', display: 'flex', gap: '10px', alignItems: 'flex-start' }}
+                            >
+                              {post.imageUrl && (
+                                <img src={post.imageUrl} alt={post.title} style={{ width: '44px', height: '44px', borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }} onError={e => { e.target.style.display = 'none'; }} />
+                              )}
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', lineHeight: '1.4', marginBottom: '3px' }}>{post.title}</div>
+                                {post.pubDate && <div style={{ fontSize: '11px', color: '#94a3b8' }}>{post.pubDate}</div>}
                               </div>
-                            ))}
-                          </div>
-                          <div
-                            style={{
-                              padding: "8px 16px",
-                              borderTop: "1px solid #e5e7eb",
-                              fontSize: "12px",
-                              color: "#6b7280",
-                              textAlign: "center",
-                            }}
-                          >
-                            Press ↑↓ to navigate, Enter to select, Esc to close
+                            </div>
+                          ))}
+                          <div style={{ padding: '8px 16px', borderTop: '1px solid rgba(148,163,184,0.15)', fontSize: '11px', color: '#94a3b8', textAlign: 'center' }}>
+                            Press ↑↓ to navigate · Enter to open · Esc to close
                           </div>
                         </div>
                       )}
                     </div>
-                    
-                    <style dangerouslySetInnerHTML={{
-                      __html: `
-                        @keyframes slideDown {
-                          from {
-                            opacity: 0;
-                            transform: translateY(-10px);
-                          }
-                          to {
-                            opacity: 1;
-                            transform: translateY(0);
-                          }
-                        }
-                      `
-                    }} />
                   </div>
 
-                  {/* Recent Posts - Collapsible */}
-                  <div
-                    className="sidebar-item sidebar-recent wow fadeInUp"
-                    data-wow-delay="0.2s"
-                    style={{
-                      background: "#ffffff",
-                      borderRadius: "10px",
-                      padding: "18px",
-                      marginBottom: "20px",
-                      border: "2px solid #e5e7eb",
-                    }}
-                  >
+                  {/* Recent Posts */}
+                  <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '22px' }}>
                     <div
-                      className="sidebar-title"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "12px",
-                        cursor: "pointer",
-                      }}
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: isRecentPostsOpen ? '16px' : 0 }}
                       onClick={() => setIsRecentPostsOpen(!isRecentPostsOpen)}
                     >
-                      <h5 className="fw-6" style={{ fontSize: "17px", margin: 0, color: "#111827", fontWeight: "700" }}>
-                        Recent Posts
-                      </h5>
-                      <i
-                        className="icon-arrow-top"
-                        style={{
-                          color: "#1f2937",
-                          fontSize: "16px",
-                          transform: isRecentPostsOpen ? "rotate(0deg)" : "rotate(180deg)",
-                          transition: "transform 0.3s ease"
-                        }}
-                      />
+                      <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px', margin: 0 }}>Recent Posts</h5>
+                      <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" style={{ transform: isRecentPostsOpen ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.3s' }}><polyline points="18 15 12 9 6 15"/></svg>
+                      </div>
                     </div>
                     {isRecentPostsOpen && (
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                         {mediumPosts.slice(0, 5).map((article, index) => (
-                          <li
-                            key={article.id}
-                            className="recent-item hover-img"
-                            style={{
-                              display: "flex",
-                              gap: "12px",
-                              paddingBottom: "14px",
-                              marginBottom: "14px",
-                              borderBottom: index < 4 ? "1px solid #f3f4f6" : "none",
-                            }}
-                          >
-                            <div
-                              className="image image-wrap"
-                              style={{
-                                width: "70px",
-                                height: "70px",
-                                flexShrink: 0,
-                              }}
-                            >
-                              <img
-                                src={article.imageUrl}
-                                alt={article.title}
-                                style={{
-                                  borderRadius: "6px",
-                                  width: "100%",
-                                  height: "100%",
-                                  objectFit: "cover",
-                                }}
-                                onError={(e) => {
-                                  e.target.src = '/images/blog/default-blog.jpg';
-                                }}
-                              />
-                            </div>
-                            <div className="content" style={{ flex: 1 }}>
-                              <div className="font-outfit text-15 fw-5">
-                                <a
-                                  href={article.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  style={{
-                                    textDecoration: "none",
-                                    color: "#111827",
-                                    fontSize: "14px",
-                                    fontWeight: "600",
-                                    lineHeight: "1.4",
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: "vertical",
-                                    overflow: "hidden",
-                                    transition: "color 0.2s ease",
-                                  }}
-                                  onMouseEnter={(e) => e.currentTarget.style.color = "#1f2937"}
-                                  onMouseLeave={(e) => e.currentTarget.style.color = "#111827"}
-                                >
-                                  {article.title}
-                                </a>
+                          <div key={article.id || index} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', paddingBottom: index < 4 ? '14px' : 0, borderBottom: index < 4 ? '1px solid rgba(148,163,184,0.15)' : 'none' }}>
+                            {article.imageUrl && (
+                              <div style={{ width: '60px', height: '60px', borderRadius: '10px', overflow: 'hidden', flexShrink: 0, boxShadow: nm.shadowSm }}>
+                                <img src={article.imageUrl} alt={article.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.src = '/images/blog/default-blog.jpg'; }} />
                               </div>
-                              <p style={{
-                                margin: "6px 0 0 0",
-                                fontSize: "12px",
-                                color: "#9ca3af"
-                              }}>
-                                {article.pubDate}
-                              </p>
+                            )}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <a
+                                href={article.link} target="_blank" rel="noopener noreferrer"
+                                style={{ textDecoration: 'none', fontSize: '13px', fontWeight: '600', color: '#0f172a', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', transition: 'color 0.2s' }}
+                                onMouseEnter={e => { e.currentTarget.style.color = '#818cf8'; }}
+                                onMouseLeave={e => { e.currentTarget.style.color = '#0f172a'; }}
+                              >
+                                {article.title}
+                              </a>
+                              <p style={{ margin: '5px 0 0', fontSize: '11px', color: '#94a3b8' }}>{article.pubDate}</p>
                             </div>
-                          </li>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
                     )}
                   </div>
+
                 </div>
               </div>
             </div>

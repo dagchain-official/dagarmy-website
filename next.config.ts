@@ -12,6 +12,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: '/files/:path*',
+        headers: [
+          { key: 'Content-Disposition', value: 'attachment' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
