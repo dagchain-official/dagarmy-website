@@ -72,8 +72,8 @@ export default function DownloadApp() {
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', order: 2 }}>
-            <div className={styles['benefits-card']} style={{ padding: '0', width: '100%' }}>
+          <div style={{ display: 'flex', order: 2, alignItems: 'flex-start' }}>
+            <div className={styles['benefits-card']} style={{ width: '100%', marginTop: '110px' }}>
               <div style={{ background: '#ffffff', borderRadius: '16px', padding: '32px', border: '1px solid #f0f0f0', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)', minHeight: '380px' }}>
                 <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '28px', color: '#1a1a1a' }}>What You Get as a DAG Army Member</h3>
                 <ul className={styles['benefits-list']} style={{ listStyle: 'none', padding: 0, margin: 0 }}>
