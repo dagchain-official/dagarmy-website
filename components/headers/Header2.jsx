@@ -552,7 +552,7 @@ export default function Header2() {
               border: 'none',
               padding: '8px',
               cursor: 'pointer',
-              display: 'flex',
+              display: 'none',
               flexDirection: 'column',
               gap: '5px',
               alignItems: 'center',

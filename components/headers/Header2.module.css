@@ -1,4 +1,35 @@
 /* Header2 Mobile Responsive Styles */
-/* Note: This file is currently empty because all mobile navbar styles */
-/* are in globals.css to avoid CSS module restrictions on global selectors */
-/* CSS modules require local class names, but the navbar uses global elements */
+
+.stickyHeader {
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Hide navigation menu on mobile, show hamburger */
+@media (max-width: 1023px) {
+  :global(.mobile-nav-toggler) {
+    display: flex !important;
+  }
+  
+  :global(nav) {
+    display: none !important;
+  }
+}
+
+/* Show navigation menu on desktop, hide hamburger */
+@media (min-width: 1024px) {
+  :global(.mobile-nav-toggler) {
+    display: none !important;
+  }
+  
+  :global(nav) {
+    display: flex !important;
+  }
+}
