@@ -73,12 +73,12 @@ export default function DownloadApp() {
             </div>
           </div>
           <div style={{ display: 'flex', order: 2 }}>
-            <div className={`wow fadeInUp ${styles['benefits-card']}`} data-wow-delay="0.3s" style={{ padding: '40px', width: '100%' }}>
-              <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', border: '1px solid #f0f0f0', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)' }}>
+            <div className={styles['benefits-card']} style={{ padding: '0', width: '100%' }}>
+              <div style={{ background: '#ffffff', borderRadius: '16px', padding: '32px', border: '1px solid #f0f0f0', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)', minHeight: '380px' }}>
                 <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '28px', color: '#1a1a1a' }}>What You Get as a DAG Army Member</h3>
                 <ul className={styles['benefits-list']} style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   <li className={`${styles['benefit-item']} ${currentSlide === 0 ? styles['visible'] : ''}`} data-slide="0" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
-                    <div style={{
+                    <div className={styles['benefit-icon']} style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
@@ -94,13 +94,13 @@ export default function DownloadApp() {
                         <polyline points="12 6 12 12 16 14"></polyline>
                       </svg>
                     </div>
-                    <div>
+                    <div className={styles['benefit-content']}>
                       <strong style={{ fontSize: '16px', color: '#1a1a1a', display: 'block', marginBottom: '6px' }}>Lifetime Access</strong>
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Learn without pressure and return anytime</p>
                     </div>
                   </li>
                   <li className={`${styles['benefit-item']} ${currentSlide === 0 ? styles['visible'] : ''}`} data-slide="0" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
-                    <div style={{
+                    <div className={styles['benefit-icon']} style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
@@ -119,13 +119,13 @@ export default function DownloadApp() {
                         <polyline points="10 9 9 9 8 9"></polyline>
                       </svg>
                     </div>
-                    <div>
+                    <div className={styles['benefit-content']}>
                       <strong style={{ fontSize: '16px', color: '#1a1a1a', display: 'block', marginBottom: '6px' }}>Industry Certificates</strong>
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Complete programs and earn credentials</p>
                     </div>
                   </li>
                   <li className={`${styles['benefit-item']} ${currentSlide === 1 ? styles['visible'] : ''}`} data-slide="1" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
-                    <div style={{
+                    <div className={styles['benefit-icon']} style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
@@ -141,13 +141,13 @@ export default function DownloadApp() {
                         <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
                       </svg>
                     </div>
-                    <div>
+                    <div className={styles['benefit-content']}>
                       <strong style={{ fontSize: '16px', color: '#1a1a1a', display: 'block', marginBottom: '6px' }}>Project Based Learning</strong>
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Build practical work samples</p>
                     </div>
                   </li>
                   <li className={`${styles['benefit-item']} ${currentSlide === 1 ? styles['visible'] : ''}`} data-slide="1" style={{ marginBottom: '24px', display: 'flex', alignItems: 'start' }}>
-                    <div style={{
+                    <div className={styles['benefit-icon']} style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
@@ -165,13 +165,13 @@ export default function DownloadApp() {
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                       </svg>
                     </div>
-                    <div>
+                    <div className={styles['benefit-content']}>
                       <strong style={{ fontSize: '16px', color: '#1a1a1a', display: 'block', marginBottom: '6px' }}>Community Support</strong>
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Learn alongside peers and mentors</p>
                     </div>
                   </li>
                   <li className={`${styles['benefit-item']} ${currentSlide === 2 ? styles['visible'] : ''}`} data-slide="2" style={{ display: 'flex', alignItems: 'start' }}>
-                    <div style={{
+                    <div className={styles['benefit-icon']} style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
@@ -187,7 +187,7 @@ export default function DownloadApp() {
                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                       </svg>
                     </div>
-                    <div>
+                    <div className={styles['benefit-content']}>
                       <strong style={{ fontSize: '16px', color: '#1a1a1a', display: 'block', marginBottom: '6px' }}>Career Progress</strong>
                       <p style={{ margin: 0, color: '#6b7280', fontSize: '14px', lineHeight: '1.6' }}>Build skills aligned with current and emerging roles</p>
                     </div>
