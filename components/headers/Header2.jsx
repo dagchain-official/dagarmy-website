@@ -64,7 +64,22 @@ export default function Header2() {
     }
   };
   return (
-    <header id="header_main" className="header style-2" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 0' }}>
+    <header 
+      id="header_main" 
+      className="header style-2"
+      style={{
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        right: '0',
+        zIndex: '9999',
+        width: '100%',
+        background: '#ffffff',
+        borderBottom: '1px solid #e5e7eb',
+        padding: '12px 0',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}
+    >
       <div className="header-inner">
         {/* Single Row: Logo - Search - Menu - Login - Register */}
         <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '80px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>

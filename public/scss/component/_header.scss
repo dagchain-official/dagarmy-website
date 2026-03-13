@@ -15,12 +15,13 @@
 }
 
 #header_main {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  width: 100% !important;
+  background-color: var(--White) !important;
   -webkit-transition: all 0.15s ease-out;
   -moz-transition: all 0.15s ease-out;
   -ms-transition: all 0.15s ease-out;
