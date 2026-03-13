@@ -573,10 +573,8 @@ export default function CareersPage() {
   const [successJob, setSuccessJob] = useState(null);
   const [filterDept, setFilterDept] = useState('All');
   const [filterRegion, setFilterRegion] = useState('All');
-<<<<<<< HEAD
   const [currentCultureCycle, setCurrentCultureCycle] = useState(0);
   const [visibleJobsCount, setVisibleJobsCount] = useState(3);
-=======
   const [dbJobs, setDbJobs] = useState([]);
 
   useEffect(() => {
@@ -585,7 +583,6 @@ export default function CareersPage() {
       .then(d => { if (d.jobs) setDbJobs(d.jobs); })
       .catch(() => {});
   }, []);
->>>>>>> 6e64267af37b0ba811afaeedf3b60c8cdf9d83bf
 
   useEffect(() => {
     const slug = searchParams.get('job');
@@ -595,7 +592,6 @@ export default function CareersPage() {
     }
   }, [searchParams]);
 
-<<<<<<< HEAD
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentCultureCycle((prev) => (prev + 1) % 4);
@@ -603,8 +599,6 @@ export default function CareersPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const filtered = CAREERS.filter(j => {
-=======
   const dbJobCards = dbJobs.map(j => ({
     slug: j.slug,
     title: j.title,
@@ -625,7 +619,6 @@ export default function CareersPage() {
   const allRegions = ['All', ...new Set(allJobs.map(j => j.region))];
 
   const filtered = allJobs.filter(j => {
->>>>>>> 6e64267af37b0ba811afaeedf3b60c8cdf9d83bf
     if (filterDept !== 'All' && j.department !== filterDept) return false;
     if (filterRegion !== 'All' && j.region !== filterRegion) return false;
     return true;
@@ -730,20 +723,6 @@ export default function CareersPage() {
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Culture strip */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #e2e8f0' }}>
-        <div className={styles.cultureCardsContainer} style={{ maxWidth: '1100px', margin: '0 auto', padding: '36px 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
-          {[
-            { icon: <IconGlobe />, title: 'Remote-First', desc: 'Work from anywhere. We hire for talent, not timezone.' },
-            { icon: <IconBriefcase />, title: 'Web3 Native', desc: 'We live and breathe blockchain. Every role has real impact.' },
-            { icon: <IconCheck />, title: 'Community Driven', desc: 'You\'re not just an employee — you\'re part of the DAGArmy.' },
-            { icon: <IconArrowRight />, title: 'High Growth', desc: 'Early-stage startup with global scale. Grow fast with us.' },
-          ].map((v, i) => (
-            <div key={i} className={`${styles.cultureCard} ${currentCultureCycle === i ? styles.active : ''}`} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {v.icon}
-=======
       {/* ── CULTURE STRIP ── */}
       <div style={{ padding: '0 24px 48px' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
@@ -769,7 +748,6 @@ export default function CareersPage() {
                   <p style={{ margin: '0 0 5px', fontWeight: '700', fontSize: '14px', color: '#1e1b4b' }}>{v.title}</p>
                   <p style={{ margin: 0, fontSize: '13px', color: '#64748b', lineHeight: '1.55' }}>{v.desc}</p>
                 </div>
->>>>>>> 6e64267af37b0ba811afaeedf3b60c8cdf9d83bf
               </div>
             ))}
           </div>
@@ -896,8 +874,6 @@ export default function CareersPage() {
             )}
           </>
         )}
-=======
->>>>>>> 6e64267af37b0ba811afaeedf3b60c8cdf9d83bf
 
           {/* Open Application CTA */}
           <div style={{
