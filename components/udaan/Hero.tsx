@@ -142,11 +142,9 @@ export default function Hero() {
         style={{
           position: "relative", zIndex: 2,
           y: yContent, opacity: fadeOut,
-          flex: 1,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          paddingTop: "clamp(50px, 6vh, 50px)",
           paddingBottom: "clamp(60px, 8vh, 100px)",
         }}
       >

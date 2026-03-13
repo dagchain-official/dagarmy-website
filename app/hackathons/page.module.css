@@ -274,3 +274,10 @@
     font-size: 12px !important;
   }
 }
+
+/* Mobile responsive padding */
+@media (max-width: 768px) {
+  .container {
+    padding-bottom: 60px !important;
+  }
+}

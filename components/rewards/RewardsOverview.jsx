@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import AnimatedDownloadButton from './AnimatedDownloadButton';
+import styles from './RewardsOverview.module.css';
 
 export default function RewardsOverview() {
   const scrollToDocs = () => {
@@ -19,7 +20,7 @@ export default function RewardsOverview() {
         background: '#FFFFFF'
       }}>
         <div className="tf-container">
-          <div style={{ 
+          <div className={styles.heroGrid} style={{ 
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '48px',
@@ -28,8 +29,8 @@ export default function RewardsOverview() {
             margin: '0 auto'
           }}>
             {/* Left: Content */}
-            <div>
-              <h1 style={{
+            <div className={styles.heroContent}>
+              <h1 className={styles.mainHeading} style={{
                 fontFamily: 'Georgia, serif',
                 fontSize: '72px',
                 fontWeight: '700',
@@ -40,7 +41,7 @@ export default function RewardsOverview() {
               }}>
                 PROOF OF WORK.
               </h1>
-              <h2 style={{
+              <h2 className={styles.subHeading} style={{
                 fontFamily: 'Georgia, serif',
                 fontSize: '72px',
                 fontWeight: '700',
@@ -67,7 +68,7 @@ export default function RewardsOverview() {
               </p>
 
               {/* Dual Button Layout */}
-              <div style={{
+              <div className={styles.buttonContainer} style={{
                 display: 'flex',
                 gap: '16px',
                 alignItems: 'center'
@@ -107,7 +108,7 @@ export default function RewardsOverview() {
             </div>
 
             {/* Right: Merit Shield Visual */}
-            <div style={{
+            <div className={`${styles.heroImage} ${styles.imageContainer}`} style={{
               background: 'rgba(249, 250, 251, 0.5)',
               border: '1px solid #e5e7eb',
               borderRadius: '16px',

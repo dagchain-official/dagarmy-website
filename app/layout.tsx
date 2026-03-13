@@ -55,7 +55,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${dmSans.variable} ${fraunces.variable}`}>
       <body className="counter-scroll">
         <Web3Provider>
-          <Context>{children}</Context>
+          <Context>
+            <div style={{ paddingTop: '50px' }}>
+              {children}
+            </div>
+          </Context>
           {!pathname?.startsWith("/admin") && <ChatWidget />}
         </Web3Provider>
       </body>

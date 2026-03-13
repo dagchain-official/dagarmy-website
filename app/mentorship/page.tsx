@@ -21,6 +21,7 @@ export default function MentorshipComingSoon() {
       <Header2 />
       
       <div
+        className={styles.container}
         style={{
           minHeight: '100vh',
           background: '#ffffff',

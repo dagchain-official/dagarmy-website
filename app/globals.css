@@ -44,27 +44,23 @@ body {
   overflow-x: hidden;
   max-width: 100%;
   width: 100%;
-  padding-top: 140px;
+}
+
+/* Desktop section spacing */
+section {
+  padding-top: 60px !important;
+  padding-bottom: 60px !important;
 }
 
 /* Responsive padding for mobile navbar */
 @media (max-width: 768px) {
-  body {
-    padding-top: 130px;
-  }
   
   /* Add extra padding to all sections on mobile */
   section {
-    padding-top: 48px !important;
-    padding-bottom: 48px !important;
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
   }
   
-  /* First section needs even more top padding */
-  section:first-of-type,
-  .main-content > section:first-child,
-  .main-content > div:first-child {
-    padding-top: 20px !important;
-  }
   
   /* Ensure containers have proper spacing */
   .tf-container {
@@ -72,20 +68,6 @@ body {
     padding-right: 20px !important;
   }
   
-  /* Hero sections need extra spacing */
-  .section-hero,
-  [class*="hero"],
-  .page-title-home2 {
-    padding-top: 20px !important;
-    padding-bottom: 48px !important;
-  }
-}
-
-/* Add padding to first sections to prevent content overlap */
-section:first-of-type,
-.main-content > section:first-child,
-.main-content > div:first-child {
-  padding-top: 20px !important;
 }
 
 #wrapper {

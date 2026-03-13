@@ -76,7 +76,7 @@ export default function Header2() {
         width: '100%',
         background: '#ffffff',
         borderBottom: '1px solid #e5e7eb',
-        padding: '12px 0',
+        padding: '7px 0',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
       }}
     >

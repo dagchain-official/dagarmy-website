@@ -21,6 +21,7 @@ export default function HackathonComingSoon() {
       <Header2 />
       
       <div
+        className={styles.container}
         style={{
           minHeight: '100vh',
           background: '#ffffff',

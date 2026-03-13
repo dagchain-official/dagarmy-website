@@ -29,8 +29,7 @@
    ============================================ */
 @media (max-width: 768px) {
   .page-title-home2 {
-    padding-top: 20px !important;
-    padding-bottom: 48px !important;
+    padding-bottom: 60px !important;
   }
 
   /* Stack columns vertically */
