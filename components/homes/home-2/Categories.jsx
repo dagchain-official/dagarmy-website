@@ -143,9 +143,13 @@ export default function Categories() {
         <div className={`row ${styles.categoriesGrid}`}>
           {dagarmyCategories.map((elm, globalIndex) => {
             const isHovered = hoveredIndex === globalIndex;
-            const shouldPopUp = globalIndex === 6 || globalIndex === 7 || globalIndex === 8;
             const currentCycleIndex = currentCycle * 3;
             const isVisibleInCycle = globalIndex >= currentCycleIndex && globalIndex < currentCycleIndex + 3;
+            
+            // Position in cycle: 0, 1, 2 (card 1, card 2, card 3)
+            // Only card 3 (position 2) in each cycle opens up
+            const positionInCycle = globalIndex % 3;
+            const shouldPopUp = positionInCycle === 2;
             
             return (
               <div className={`col-lg-4 ${styles.categoryCol} ${!isVisibleInCycle ? styles.hiddenMobile : ''}`} key={globalIndex}>
@@ -165,12 +169,11 @@ export default function Categories() {
                         background: '#fff',
                         border: isHovered ? '2px solid #000000' : '1px solid #f3f4f6',
                         boxShadow: isHovered ? '0 12px 24px -5px rgba(0, 0, 0, 0.2)' : '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transition: 'border 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '18px',
                         cursor: 'default',
-                        transform: isHovered ? 'translateY(-5px)' : 'translateY(0)',
                         overflow: 'visible',
                         minHeight: '88px',
                         width: '100%'
@@ -193,7 +196,7 @@ export default function Categories() {
                           })}
                         </div>
                       </div>
-                      <div className="content" style={{ flex: 1 }}>
+                      <div className={`content ${styles.categoryTitle}`} style={{ flex: 1 }}>
                         <h5 style={{
                           margin: 0,
                           fontSize: '15px',
