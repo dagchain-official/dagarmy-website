@@ -16,7 +16,7 @@
 }
 
 .animatedSigninBtn span {
-  font-family: 'Nasalization', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: #ffffff;
@@ -26,8 +26,9 @@
   position: relative;
   display: inline-block;
   z-index: 1;
-  padding: 0px 1px;
-  letter-spacing: normal;
+  padding: 0;
+  letter-spacing: 0;
+  min-width: 0.28em;
 }
 
 .animatedSigninBtn:hover span {
