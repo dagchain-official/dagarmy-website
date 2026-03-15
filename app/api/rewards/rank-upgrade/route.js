@@ -23,18 +23,22 @@ const RANK_ORDER = [
 export async function POST(request) {
   try {
     const supabase = supabaseAdmin;
-    const { user_email } = await request.json();
+    const { user_email, wallet_address } = await request.json();
 
-    if (!user_email) {
-      return NextResponse.json({ error: 'user_email is required' }, { status: 400 });
+    if (!user_email && !wallet_address) {
+      return NextResponse.json({ error: 'user_email or wallet_address is required' }, { status: 400 });
     }
 
-    // Get user
-    const { data: user, error: userError } = await supabase
+    // Get user by email or wallet
+    let userQuery = supabase
       .from('users')
-      .select('id, email, full_name, username, tier, current_rank, total_points_earned, total_points_burned')
-      .eq('email', user_email)
-      .single();
+      .select('id, email, full_name, username, tier, current_rank, total_points_earned, total_points_burned');
+    if (user_email) {
+      userQuery = userQuery.eq('email', user_email);
+    } else {
+      userQuery = userQuery.eq('wallet_address', wallet_address.toLowerCase());
+    }
+    const { data: user, error: userError } = await userQuery.single();
 
     if (userError || !user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

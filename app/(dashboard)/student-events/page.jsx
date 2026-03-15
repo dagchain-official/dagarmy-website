@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
-import Header2 from "@/components/headers/Header2";
 
 const EVENT_COLORS = {
   workshop: { bg: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', badge: '#ede9fe', text: '#6366f1' },
@@ -476,18 +475,12 @@ export default function StudentEventsPage() {
   });
 
   return (
-    <div id="wrapper">
-      <Header2 />
-      <div className="main-content pt-0">
-        <div className="page-inner" style={{ padding: '0' }}>
-          <div style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
-            {/* Sidebar */}
-            <div style={{ width: '240px', flexShrink: 0, padding: '24px 16px', position: 'sticky', top: '0', height: '100vh', overflowY: 'auto' }}>
-              <DashboardNav2 />
-            </div>
-
-            {/* Main content */}
-            <div style={{ flex: 1, minWidth: 0, padding: '32px 36px', background: '#f6f8fb' }}>
+    <>
+    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+        <DashboardNav2 />
+      </div>
+      <div style={{ flex: 1, minWidth: 0, padding: '32px 36px', background: '#f0f2f5' }}>
 
               {/* Page header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
@@ -563,10 +556,8 @@ export default function StudentEventsPage() {
                   ))}
                 </div>
               )}
-            </div>
-          </div>
-        </div>
       </div>
+    </div>
 
       {/* Create modal */}
       {showCreate && userData?.id && (
@@ -596,6 +587,15 @@ export default function StudentEventsPage() {
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
         @keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
       `}</style>
-    </div>
+    </>
   );
 }
+
+
+
+
+
+
+
+
+

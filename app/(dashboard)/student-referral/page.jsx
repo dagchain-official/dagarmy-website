@@ -1,11 +1,14 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
-import Header2 from "@/components/headers/Header2";
-import Footer1 from "@/components/footers/Footer1";
-import { Users, Copy, Check, ShoppingCart, Crown, ChevronRight, ChevronDown, GitBranch } from "lucide-react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function StudentReferralPage() {
+  const router = useRouter();
+  useEffect(() => { router.replace('/student-my-team'); }, []);
+  return null;
+}
+
+function _OriginalStudentReferralPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -238,15 +241,21 @@ export default function StudentReferralPage() {
     );
   };
 
-  const BentoCard = useCallback(({ children, style = {}, hover = true, delay = 0 }) => (
+  const nm = {
+    bg: '#f0f2f5',
+    shadow: '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)',
+    shadowSm: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)',
+    shadowInset: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)',
+  };
+
+  const NmCard = useCallback(({ children, style = {}, hover = true, inset = false, delay = 0 }) => (
     <div
       style={{
-        background: '#fff',
+        background: nm.bg,
         borderRadius: '20px',
         padding: '28px',
-        border: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)',
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        boxShadow: inset ? nm.shadowInset : nm.shadowSm,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
         overflow: 'hidden',
         opacity: mounted ? 1 : 0,
@@ -254,12 +263,12 @@ export default function StudentReferralPage() {
         transitionDelay: `${delay}ms`,
         ...style
       }}
-      onMouseEnter={hover ? (e) => {
-        e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)';
+      onMouseEnter={hover && !inset ? (e) => {
+        e.currentTarget.style.boxShadow = nm.shadow;
         e.currentTarget.style.transform = 'translateY(-3px)';
       } : undefined}
-      onMouseLeave={hover ? (e) => {
-        e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)';
+      onMouseLeave={hover && !inset ? (e) => {
+        e.currentTarget.style.boxShadow = nm.shadowSm;
         e.currentTarget.style.transform = 'translateY(0)';
       } : undefined}
     >{children}</div>
@@ -267,25 +276,17 @@ export default function StudentReferralPage() {
 
   if (loading) {
     return (
-      <div id="wrapper">
-        <Header2 />
-        <div className="main-content pt-0">
-          <div className="page-inner" style={{ padding: "0" }}>
-            <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-              <div style={{ width: "240px", flexShrink: 0, padding: "24px 16px", position: "sticky", top: "0", height: "100vh", overflowY: "auto", background: "#fff" }}>
-                <DashboardNav2 />
-              </div>
-              <div style={{ flex: 1, padding: '32px 36px', background: '#f6f8fb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid #e2e8f0', borderTopColor: '#6366f1', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
-                  <p style={{ fontSize: '14px', color: '#94a3b8', fontWeight: '500' }}>Loading referral data...</p>
-                  <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-                </div>
-              </div>
-            </div>
+      <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+        <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+          <DashboardNav2 />
+        </div>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid rgba(0,0,0,0.08)', borderTopColor: '#6366f1', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
+            <p style={{ fontSize: '14px', color: '#94a3b8', fontWeight: '500' }}>Loading referral data...</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
           </div>
         </div>
-        <Footer1 />
       </div>
     );
   }
@@ -293,15 +294,11 @@ export default function StudentReferralPage() {
   const referralLink = `https://dagarmy.network/signup?ref=${referralData.referralCode}`;
 
   return (
-    <div id="wrapper">
-      <Header2 />
-      <div className="main-content pt-0">
-        <div className="page-inner" style={{ padding: "0" }}>
-          <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-            <div style={{ width: "240px", flexShrink: 0, background: "#fff", padding: "32px 16px", position: "sticky", top: "0", height: "100vh", overflowY: "auto" }}>
-              <DashboardNav2 />
-            </div>
-            <div style={{ flex: 1, padding: '32px 36px', background: '#f6f8fb', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+        <DashboardNav2 />
+      </div>
+      <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
 
               {/* Page Header */}
               <div style={{ marginBottom: '28px', opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(-8px)', transition: 'all 0.5s ease', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
@@ -336,39 +333,39 @@ export default function StudentReferralPage() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
 
                 {/* Total Referrals */}
-                <BentoCard delay={50} style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none' }}>
+                <NmCard delay={50} style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', boxShadow: '8px 8px 20px rgba(0,0,0,0.18), -4px -4px 12px rgba(255,255,255,0.5)' }}>
                   <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
                   <div style={{ position: 'relative' }}>
                     <span style={{ fontSize: '12px', fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '16px' }}>Total Referrals</span>
                     <p style={{ fontSize: '32px', fontWeight: '800', color: '#fff', letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>{referralData.totalReferrals}</p>
                     <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '8px' }}>All time</p>
                   </div>
-                </BentoCard>
+                </NmCard>
 
                 {/* Successful */}
-                <BentoCard delay={100}>
+                <NmCard delay={100}>
                   <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '16px' }}>Successful</span>
                   <p style={{ fontSize: '32px', fontWeight: '800', color: '#10b981', letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>{referralData.successfulReferrals}</p>
                   <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '8px' }}>Completed sign-ups</p>
-                </BentoCard>
+                </NmCard>
 
                 {/* Pending */}
-                <BentoCard delay={150}>
+                <NmCard delay={150}>
                   <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '16px' }}>Pending</span>
                   <p style={{ fontSize: '32px', fontWeight: '800', color: '#f59e0b', letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>{referralData.pendingReferrals}</p>
                   <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '8px' }}>Awaiting completion</p>
-                </BentoCard>
+                </NmCard>
 
                 {/* Points Earned from Referrals */}
-                <BentoCard delay={200}>
+                <NmCard delay={200}>
                   <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '16px' }}>Points Earned</span>
                   <p style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>{(referralData.totalPointsEarned || 0).toLocaleString()}</p>
                   <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '8px' }}>DAG Points from referrals</p>
-                </BentoCard>
+                </NmCard>
               </div>
 
               {/* Referral Code Bar */}
-              <BentoCard delay={250} style={{ marginBottom: '20px', padding: '24px 28px' }}>
+              <NmCard delay={250} style={{ marginBottom: '20px', padding: '24px 28px' }}>
                 <div style={{ marginBottom: '16px' }}>
                   <h2 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>Your Referral Code</h2>
                   <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Share this code or link to invite others to DAG Army</p>
@@ -383,7 +380,7 @@ export default function StudentReferralPage() {
                       {referralData.referralCode || '—'}
                     </p>
                   </div>
-                  <div style={{ flex: 2, minWidth: '200px', background: '#f8fafc', borderRadius: '10px', padding: '10px 14px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ flex: 2, minWidth: '200px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '10px 14px', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' }}>
                     <p style={{ fontSize: '10px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Referral Link</p>
                     <p style={{ fontSize: '12px', fontWeight: '600', color: '#475569', margin: 0, wordBreak: 'break-all' }}>{referralLink}</p>
                   </div>
@@ -410,10 +407,10 @@ export default function StudentReferralPage() {
                     {copied ? 'Copied!' : 'Copy Link'}
                   </button>
                 </div>
-              </BentoCard>
+              </NmCard>
 
               {/* How Referrals Work */}
-              <BentoCard delay={300} hover={false} style={{ marginBottom: '20px', padding: '28px 32px' }}>
+              <NmCard delay={300} hover={false} style={{ marginBottom: '20px', padding: '28px 32px' }}>
                 <div style={{ marginBottom: '20px' }}>
                   <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', letterSpacing: '-0.3px' }}>How Referrals Work</h2>
                   <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Earn DAG Points every time someone joins using your link</p>
@@ -467,10 +464,10 @@ export default function StudentReferralPage() {
                     </div>
                   ))}
                 </div>
-              </BentoCard>
+              </NmCard>
 
               {/* Sales DAG Points Info Card */}
-              <BentoCard delay={350} hover={false} style={{ marginBottom: '20px', padding: '20px 28px', background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)', border: '1.5px solid #a7f3d0' }}>
+              <NmCard delay={350} hover={false} style={{ marginBottom: '20px', padding: '20px 28px', background: 'linear-gradient(135deg, #dcfce7 0%, #d1fae5 100%)', boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '13px', background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}>
                     <ShoppingCart size={20} color="#fff" />
@@ -491,13 +488,13 @@ export default function StudentReferralPage() {
                     <div style={{ fontSize: '10px', fontWeight: '700', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.5px' }}>pts per $</div>
                   </div>
                 </div>
-              </BentoCard>
+              </NmCard>
 
               {/* ══ REFERRAL TREE ══ */}
               <div style={{ marginBottom: '20px', opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(12px)', transition: 'all 0.5s ease 450ms' }}>
-                <div style={{ background: '#fff', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)', overflow: 'hidden' }}>
+                <div style={{ background: '#f0f2f5', borderRadius: '20px', boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)', overflow: 'hidden' }}>
                   {/* Header */}
-                  <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <GitBranch size={18} color="#fff" />
@@ -509,11 +506,11 @@ export default function StudentReferralPage() {
                     </div>
                     {treeMeta && (
                       <div style={{ display: 'flex', gap: '12px' }}>
-                        <div style={{ textAlign: 'center', padding: '8px 16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                        <div style={{ textAlign: 'center', padding: '8px 16px', background: '#f0f2f5', borderRadius: '10px', boxShadow: 'inset 4px 4px 9px rgba(0,0,0,0.12), inset -3px -3px 7px rgba(255,255,255,0.9)' }}>
                           <div style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>{treeMeta.totalDownline}</div>
                           <div style={{ fontSize: '10px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Total Network</div>
                         </div>
-                        <div style={{ textAlign: 'center', padding: '8px 16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                        <div style={{ textAlign: 'center', padding: '8px 16px', background: '#f0f2f5', borderRadius: '10px', boxShadow: 'inset 4px 4px 9px rgba(0,0,0,0.12), inset -3px -3px 7px rgba(255,255,255,0.9)' }}>
                           <div style={{ fontSize: '18px', fontWeight: '900', color: '#10b981', letterSpacing: '-0.5px' }}>{treeMeta.maxDepth}</div>
                           <div style={{ fontSize: '10px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Max Depth</div>
                         </div>
@@ -522,7 +519,7 @@ export default function StudentReferralPage() {
                   </div>
 
                   {/* Depth legend */}
-                  <div style={{ padding: '12px 28px', background: '#fafafa', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                  <div style={{ padding: '12px 28px', background: 'rgba(0,0,0,0.03)', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Levels:</span>
                     {['You', 'Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5+'].map((label, i) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
@@ -563,14 +560,14 @@ export default function StudentReferralPage() {
               </div>
 
               {/* Referral Earnings Breakdown */}
-              <BentoCard delay={400} hover={false} style={{ padding: '28px 32px' }}>
+              <NmCard delay={400} inset={true} hover={false} style={{ padding: '28px 32px' }}>
                 <div style={{ marginBottom: '20px' }}>
                   <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', letterSpacing: '-0.3px' }}>Referral Earnings Breakdown</h2>
                   <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>DAG Points you earn per referral scenario</p>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
                   {/* Table header */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '8px 14px', background: '#f8fafc', borderRadius: '8px', marginBottom: '4px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '8px 14px', background: 'rgba(0,0,0,0.05)', borderRadius: '8px', marginBottom: '4px' }}>
                     {['Scenario', 'Your Tier', 'DAG Points Earned'].map((h, i) => (
                       <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: i === 2 ? 'right' : 'left' }}>{h}</span>
                     ))}
@@ -584,7 +581,7 @@ export default function StudentReferralPage() {
                     <div
                       key={idx}
                       style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '12px 14px', alignItems: 'center', borderBottom: idx < 3 ? '1px solid #f1f5f9' : 'none', borderRadius: '6px', background: row.highlight ? row.bg : 'transparent' }}
-                      onMouseEnter={e => { if (!row.highlight) e.currentTarget.style.background = '#f8fafc'; }}
+                      onMouseEnter={e => { if (!row.highlight) e.currentTarget.style.background = 'rgba(0,0,0,0.03)'; }}
                       onMouseLeave={e => { if (!row.highlight) e.currentTarget.style.background = 'transparent'; }}
                     >
                       <span style={{ fontSize: '13px', color: '#334155', fontWeight: '500' }}>{row.scenario}</span>
@@ -599,20 +596,25 @@ export default function StudentReferralPage() {
                   ))}
                 </div>
                 {!isLieutenant && (
-                  <div style={{ marginTop: '16px', padding: '12px 16px', background: '#eef2ff', borderRadius: '10px', border: '1px solid #c7d2fe', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(99,102,241,0.08)', borderRadius: '10px', boxShadow: 'inset 3px 3px 7px rgba(99,102,241,0.12), inset -2px -2px 5px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <Crown size={16} color="#6366f1" />
                     <p style={{ fontSize: '12px', color: '#4338ca', margin: 0, fontWeight: '600' }}>
                       Upgrade to <strong>DAG LIEUTENANT</strong> to earn a 20% bonus on all referral points — turning 500 into 600 and 2,500 into 3,000.
                     </p>
                   </div>
                 )}
-              </BentoCard>
+              </NmCard>
 
-            </div>
-          </div>
-        </div>
       </div>
-      <Footer1 />
     </div>
   );
 }
+
+
+
+
+
+
+
+
+

@@ -98,8 +98,8 @@ export async function PUT(request, { params }) {
         pointsAwarded += ltBonus;
       }
 
-      // 3. If ranked DAG LIEUTENANT, award rank bonus on base
-      if (isLT && submitter?.current_rank && submitter.current_rank !== 'None') {
+      // 3. If ranked (any tier), award rank bonus on base
+      if (submitter?.current_rank && submitter.current_rank !== 'None') {
         const rankKey = 'rank_upgrade_bonus_' + submitter.current_rank.toLowerCase();
         const rankBonusRate = configMap[rankKey] || 0;
         if (rankBonusRate > 0) {

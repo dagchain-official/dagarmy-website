@@ -899,15 +899,17 @@ export default function RewardsManagementComprehensive() {
       {/* RANK POINT BONUSES TAB                             */}
       {/* ═══════════════════════════════════════════════════ */}
       {activeTab === 'rank_bonuses' && (<>
-        <SH title="Rank-Based DAG Point Bonuses" desc="Extra % bonus on base referral DAG Points for ranked DAG LIEUTENANT members" section="rank_bonuses" />
+        <SH title="Rank-Based DAG Point Bonuses" desc="Extra % bonus on base referral DAG Points for all ranked members (SOLDIER & LIEUTENANT)" section="rank_bonuses" />
 
         {/* Explanation card */}
         <B style={{ marginBottom: '16px', background: '#f8fafc', border: '1px solid #e2e8f0' }} hover={false}>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
             <Info size={18} style={{ color: '#6366f1', flexShrink: 0, marginTop: '2px' }} />
             <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
-              <strong style={{ color: '#0f172a' }}>How it works:</strong> When a ranked DAG LIEUTENANT earns referral points, they receive an additional percentage bonus on the <strong style={{ color: '#0f172a' }}>base credit amount only</strong> (not on the existing 20% LT bonus).
-              <br />Example: INITIATOR rank holder gets a referral join (base 500 pts) + LT 20% bonus (100 pts) + <strong style={{ color: '#6366f1' }}>Rank 10% bonus on base (50 pts)</strong> = 650 total.
+              <strong style={{ color: '#0f172a' }}>How it works:</strong> Any ranked member (DAG SOLDIER or DAG LIEUTENANT) earns an additional % bonus on the <strong style={{ color: '#0f172a' }}>base referral credit only</strong>.
+              <br />Each rank has its <strong style={{ color: '#0f172a' }}>own fixed rate</strong> — it is <strong style={{ color: '#e11d48' }}>not cumulative</strong> with previous ranks. Achieving VANGUARD replaces the INITIATOR bonus entirely.
+              <br />The 20% DAG LIEUTENANT tier bonus is <strong style={{ color: '#0f172a' }}>separate</strong> and stacks on top for LT members only.
+              <br />Example (LT, INITIATOR rank): referral join base 500 pts + LT 20% (100 pts) + <strong style={{ color: '#6366f1' }}>Rank 10% on base (50 pts)</strong> = 650 total.
               <br />Each rank requires a <strong style={{ color: '#0f172a' }}>fresh burn</strong> of DAG Points. Total cumulative burn to reach MYTHIC: 177,400 pts.
             </div>
           </div>
@@ -976,7 +978,21 @@ export default function RewardsManagementComprehensive() {
       {/* RANK COMMISSIONS TAB                               */}
       {/* ═══════════════════════════════════════════════════ */}
       {activeTab === 'rank_commissions' && (<>
-        <SH title="Rank-Based Sales Commissions" desc="Enhanced direct sales rates for ranked DAG LIEUTENANT members" section="rank_commissions" />
+        <SH title="Rank-Based Sales Commissions" desc="Enhanced Level 1 direct sales commission rates for all ranked members (SOLDIER & LIEUTENANT)" section="rank_commissions" />
+
+        {/* Explanation card */}
+        <B style={{ marginBottom: '16px', background: '#f8fafc', border: '1px solid #e2e8f0' }} hover={false}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+            <Info size={18} style={{ color: '#10b981', flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
+              <strong style={{ color: '#0f172a' }}>How it works:</strong> Applies to <strong style={{ color: '#0f172a' }}>Level 1 (direct) sales commissions only</strong> — both DAG SOLDIER and DAG LIEUTENANT members with a rank benefit.
+              <br />Each rank has its <strong style={{ color: '#0f172a' }}>own fixed rate</strong> — it is <strong style={{ color: '#e11d48' }}>not cumulative</strong> with previous ranks. VANGUARD (12%) replaces INITIATOR (10%) entirely.
+              <br />Level 2 (3%) and Level 3 (2%) commissions are <strong style={{ color: '#0f172a' }}>unaffected</strong> by rank — only L1 direct sales are enhanced.
+              <br />Example: a CHAMPION ranked member earns <strong style={{ color: '#10b981' }}>17%</strong> on every direct node sale instead of the base 7%.
+            </div>
+          </div>
+        </B>
+
         <B style={{ padding: '0' }}>
           {[
             ['INITIATOR','rank_commission_initiator',Target,'#10b981','#f0fdf4'],
@@ -1007,7 +1023,7 @@ export default function RewardsManagementComprehensive() {
                 </div>
                 <div>
                   <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', margin: 0 }}>{i+1}. {t} Commission</h4>
-                  <p style={{ fontSize: '11px', color: '#94a3b8', margin: '1px 0 0' }}>Direct sales rate for {t}</p>
+                  <p style={{ fontSize: '11px', color: '#94a3b8', margin: '1px 0 0' }}>L1 direct sales rate for {t} — replaces base 7%</p>
                 </div>
                 {editingSection === 'rank_commissions' ? ri(k, '80px') : <Val v={val || 0} suffix="%" size="20px" />}
               </div>

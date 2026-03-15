@@ -83,6 +83,41 @@ export async function PATCH(request, context) {
       return NextResponse.json({ error: 'Failed to update withdrawal request' }, { status: 500 });
     }
 
+    // Settle or restore commissions based on the new withdrawal status
+    if (data?.users?.id && data?.reward_month) {
+      const commCurrency = data.currency || 'USD';
+      const monthEnd = new Date(data.reward_month + '-01');
+      monthEnd.setMonth(monthEnd.getMonth() + 1); // exclusive upper bound
+
+      if (status === 'paid') {
+        // Flip all 'requested' commissions for this user+currency+month → 'paid'
+        const { error: commErr } = await supabaseAdmin
+          .from('sales_commissions')
+          .update({ payment_status: 'paid', paid_at: new Date().toISOString() })
+          .eq('user_id', data.users.id)
+          .eq('currency', commCurrency)
+          .eq('payment_status', 'requested')
+          .lt('created_at', monthEnd.toISOString());
+
+        if (commErr) {
+          console.error('Error settling commissions on withdrawal paid:', commErr.message);
+        }
+      } else if (status === 'rejected') {
+        // Revert 'requested' commissions back to 'pending' (earned) — restores balance
+        const { error: commErr } = await supabaseAdmin
+          .from('sales_commissions')
+          .update({ payment_status: 'pending' })
+          .eq('user_id', data.users.id)
+          .eq('currency', commCurrency)
+          .eq('payment_status', 'requested')
+          .lt('created_at', monthEnd.toISOString());
+
+        if (commErr) {
+          console.error('Error reverting commissions on withdrawal rejected:', commErr.message);
+        }
+      }
+    }
+
     return NextResponse.json({ success: true, request: data });
   } catch (error) {
     console.error('Exception in PATCH /api/admin/withdrawals/[id]:', error);

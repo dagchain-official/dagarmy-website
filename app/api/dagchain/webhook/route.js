@@ -303,35 +303,35 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
   console.log('[DAGChain webhook] handleNodePurchased raw data payload:', JSON.stringify(data))
 
   // Handle all field name variants DAGChain might send
-  const nodeType     = data.nodeType     || data.node_type     || data.type         || null
-  const nodeId       = data.nodeId       || data.node_id       || data.id           || null
-  const tier         = data.tier         || data.nodeTier      || data.node_tier    || null
-  const amountUsd    = data.amountUsd    || data.amount_usd    || data.amount       || data.price || null
-  const currency     = data.currency     || data.coin          || 'USD'
-  const status       = data.status       || 'active'
-  const purchasedAt  = data.purchasedAt  || data.purchased_at  || timestamp || new Date().toISOString()
+  const nodeType    = data.nodeType    || data.node_type    || data.type          || null
+  const nodeId      = data.nodeId      || data.node_id      || data.id            || null
+  const tier        = data.tier        || data.nodeTier     || data.node_tier     || null
+  const saleAmount  = parseFloat(data.amountUsdt || data.amount_usdt || data.amountUsd || data.amount_usd || data.amount || data.price || 0)
+  const currency    = (data.currency   || data.coin         || 'USDT').toUpperCase()
+  const status      = data.status      || 'active'
+  const purchasedAt = data.purchasedAt || data.purchased_at || timestamp || new Date().toISOString()
 
-  // Normalise node_type to match DB CHECK constraint: must be 'validator' or 'storage'
+  // Normalise node_type to match DB CHECK constraint: 'validator' or 'storage'
   const resolvedType = String(nodeType || '').toLowerCase().includes('validator') ? 'validator' : 'storage'
 
-  // Find the DAGARMY user by email first, fall back to dagchain_user_id
-  const { data: user } = email
-    ? await supabaseAdmin.from('users').select('id').eq('email', email).maybeSingle()
-    : await supabaseAdmin.from('users').select('id').eq('dagchain_user_id', userId).maybeSingle()
+  // Find the DAGARMY user (the buyer) by email first, fall back to dagchain_user_id
+  const { data: buyer } = email
+    ? await supabaseAdmin.from('users').select('id, tier').eq('email', email).maybeSingle()
+    : await supabaseAdmin.from('users').select('id, tier').eq('dagchain_user_id', userId).maybeSingle()
 
   // Insert node purchase record
   const { error: insertError } = await supabaseAdmin.from('dagchain_nodes').insert({
-    user_id: user?.id || null,
+    user_id:          buyer?.id || null,
     dagchain_user_id: userId || null,
-    email: email || null,
-    node_type: resolvedType,
-    node_id: nodeId || null,
-    tier: tier || null,
-    amount_usd: amountUsd || null,
-    currency: currency || null,
-    status: status,
-    purchased_at: purchasedAt,
-    raw_data: data,
+    email:            email || null,
+    node_type:        resolvedType,
+    node_id:          nodeId || null,
+    tier:             tier || null,
+    amount_usd:       saleAmount || null,
+    currency:         currency,
+    status:           status,
+    purchased_at:     purchasedAt,
+    raw_data:         data,
   })
 
   if (insertError) {
@@ -339,14 +339,14 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
     throw new Error(`Failed to insert node purchase: ${insertError.message}`)
   }
 
-  console.log(`[DAGChain webhook] Node purchase recorded — type=${resolvedType}, user=${email || userId}`)
+  console.log(`[DAGChain webhook] Node purchase recorded — type=${resolvedType}, user=${email || userId}, amount=${saleAmount} ${currency}`)
 
-  // Update user's dagchain_data with node summary
-  if (user) {
+  // Update buyer's dagchain_data with node summary
+  if (buyer) {
     const { data: existingUser } = await supabaseAdmin
       .from('users')
       .select('dagchain_data')
-      .eq('id', user.id)
+      .eq('id', buyer.id)
       .single()
 
     const existing = existingUser?.dagchain_data || {}
@@ -359,7 +359,118 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
         dagchain_data: { ...existing, nodes, last_node_purchase_at: purchasedAt },
         dagchain_synced_at: new Date().toISOString(),
       })
-      .eq('id', user.id)
+      .eq('id', buyer.id)
+  }
+
+  // ── Distribute USDT commissions up 3 referral levels ──────────────────────
+  if (saleAmount > 0 && buyer?.id) {
+    // Fetch base commission rates + all rank-based L1 overrides
+    const { data: rateRows } = await supabaseAdmin
+      .from('rewards_config')
+      .select('config_key, config_value')
+      .in('config_key', [
+        'soldier_direct_sales_commission',
+        'soldier_level2_sales_commission',
+        'soldier_level3_sales_commission',
+        'max_commission_levels',
+        'rank_commission_initiator',
+        'rank_commission_vanguard',
+        'rank_commission_guardian',
+        'rank_commission_striker',
+        'rank_commission_invoker',
+        'rank_commission_commander',
+        'rank_commission_champion',
+        'rank_commission_conqueror',
+        'rank_commission_paragon',
+        'rank_commission_mythic',
+      ])
+
+    const rates = {}
+    ;(rateRows || []).forEach(r => { rates[r.config_key] = parseFloat(r.config_value || 0) })
+
+    // Base rates for L2/L3 — L1 is resolved per-upline based on rank
+    const baseL1Rate = (rates['soldier_direct_sales_commission'] || 7) / 100
+    const l2Rate     = (rates['soldier_level2_sales_commission']  || 3) / 100
+    const l3Rate     = (rates['soldier_level3_sales_commission']  || 2) / 100
+    const baseLevelRates = [baseL1Rate, l2Rate, l3Rate]
+
+    // Rank → config key mapping for L1 overrides
+    const RANK_RATE_KEY = {
+      INITIATOR:  'rank_commission_initiator',
+      VANGUARD:   'rank_commission_vanguard',
+      GUARDIAN:   'rank_commission_guardian',
+      STRIKER:    'rank_commission_striker',
+      INVOKER:    'rank_commission_invoker',
+      COMMANDER:  'rank_commission_commander',
+      CHAMPION:   'rank_commission_champion',
+      CONQUEROR:  'rank_commission_conqueror',
+      PARAGON:    'rank_commission_paragon',
+      MYTHIC:     'rank_commission_mythic',
+    }
+
+    const maxLevels = Math.min(parseInt(rates['max_commission_levels'] || 3), 3)
+
+    const productLabel = `DAGChain ${resolvedType.charAt(0).toUpperCase() + resolvedType.slice(1)} Node`
+    const saleRef      = data.nodeId || data.node_id || `node_${Date.now()}`
+
+    let currentUserId = buyer.id
+    for (let level = 1; level <= maxLevels; level++) {
+      // Find who referred currentUserId
+      const { data: referralRow } = await supabaseAdmin
+        .from('referrals')
+        .select('referrer_id')
+        .eq('referred_id', currentUserId)
+        .maybeSingle()
+
+      if (!referralRow?.referrer_id) break  // no upline at this level
+
+      const uplineId = referralRow.referrer_id
+
+      // For L1: resolve rank-based rate using the upline's current_rank
+      let rate = baseLevelRates[level - 1]
+      let uplineRank = null
+      if (level === 1) {
+        const { data: uplineUser } = await supabaseAdmin
+          .from('users')
+          .select('current_rank, tier')
+          .eq('id', uplineId)
+          .maybeSingle()
+
+        uplineRank = uplineUser?.current_rank?.toUpperCase() || null
+        const rankKey = uplineRank ? RANK_RATE_KEY[uplineRank] : null
+        if (rankKey && rates[rankKey] > 0) {
+          rate = rates[rankKey] / 100  // use rank-based override (10%–20%)
+        }
+      }
+
+      const commAmount = parseFloat((saleAmount * rate).toFixed(6))
+
+      // Insert commission row for this upline beneficiary
+      const { error: commErr } = await supabaseAdmin.from('sales_commissions').insert({
+        user_id:               uplineId,
+        buyer_id:              buyer.id,
+        sale_id:               `${saleRef}_l${level}`,
+        product_type:          'DAGCHAIN_NODE',
+        product_name:          productLabel,
+        sale_amount:           saleAmount,
+        commission_percentage: parseFloat((rate * 100).toFixed(4)),
+        commission_amount:     commAmount,
+        commission_level:      level,
+        currency:              currency,
+        seller_tier:           buyer.tier || 'DAG SOLDIER',
+        seller_rank:           level === 1 ? (uplineRank || null) : null,
+        payment_status:        'pending',
+      })
+
+      if (commErr) {
+        console.error(`[DAGChain webhook] Commission insert error L${level}:`, commErr.message)
+      } else {
+        console.log(`[DAGChain webhook] L${level} commission queued — upline=${uplineId}, rank=${uplineRank || 'none'}, rate=${(rate*100).toFixed(2)}%, amount=${commAmount} ${currency}`)
+      }
+
+      // Move up the chain
+      currentUserId = uplineId
+    }
   }
 }
 
@@ -402,6 +513,8 @@ async function handleRewardIssued({ userId, email, data = {} }) {
   const existing = user.dagchain_data || {}
   const currentPoints = existing.points || 0
   const addedPoints = data.points || data.amount || 0
+  const currentUsdt = parseFloat(existing.usdt_earned || 0)
+  const addedUsdt = parseFloat(data.usdt || data.usdt_amount || data.usdt_earned || 0)
 
   await supabaseAdmin
     .from('users')
@@ -409,6 +522,7 @@ async function handleRewardIssued({ userId, email, data = {} }) {
       dagchain_data: {
         ...existing,
         points: currentPoints + addedPoints,
+        usdt_earned: currentUsdt + addedUsdt,
         last_reward_at: new Date().toISOString(),
       },
       dagchain_synced_at: new Date().toISOString(),

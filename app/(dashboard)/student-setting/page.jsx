@@ -1,8 +1,6 @@
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import PageTitle2 from "@/components/dashboard/PageTitle2";
 import Setttings from "@/components/dashboard/Setttings2";
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
 import React from "react";
 
 export const metadata = {
@@ -12,31 +10,17 @@ export const metadata = {
 
 export default function StudentSettingPage() {
   return (
-    <>
-      <div id="wrapper">
-        <Header2 />
-        <div className="main-content pt-0">
-          <div className="page-inner" style={{ padding: "0" }}>
-            <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-              <div style={{ 
-                width: "240px", 
-                flexShrink: 0,
-                padding: "24px 16px",
-                position: "sticky",
-                top: "0",
-                height: "100vh",
-                overflowY: "auto"
-              }}>
-                <DashboardNav2 />
-              </div>
-              <div style={{ flex: 1 }}>
-                <Setttings />
-              </div>
-            </div>
-          </div>
-        </div>
-        <Footer1 />
+    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+        <DashboardNav2 />
       </div>
-    </>
+      <div style={{ flex: 1, background: '#f0f2f5' }}>
+        <Setttings />
+      </div>
+    </div>
   );
 }
+
+
+
+

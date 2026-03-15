@@ -1,8 +1,6 @@
-﻿"use client";
+"use client";
 import React, { useState, useEffect, useCallback } from "react";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
-import Header2 from "@/components/headers/Header2";
-import Footer1 from "@/components/footers/Footer1";
 
 const STATUS_META = {
   open:            { label: "Open",           color: "#2563eb", bg: "#dbeafe", border: "#bfdbfe" },
@@ -35,9 +33,9 @@ const CATS = [
 const FAQS = [
   { q:"How long does it take to get a response?", a:"Our support team typically responds within 24 hours on business days. Urgent issues are usually addressed within a few hours." },
   { q:"How do I access my course materials?", a:'Navigate to "My Courses" in the sidebar. All enrolled course materials, videos, and downloads are available there. If you cannot see a course you enrolled in, please submit a ticket.' },
-  { q:"My DAG Points are not showing correctly — what should I do?", a:"Points are updated in real-time. If there is a discrepancy, wait 5 minutes and refresh. If the issue persists, submit a ticket under the Rewards category with the transaction details." },
+  { q:"My DAG Points are not showing correctly � what should I do?", a:"Points are updated in real-time. If there is a discrepancy, wait 5 minutes and refresh. If the issue persists, submit a ticket under the Rewards category with the transaction details." },
   { q:"How do I get my referral commission?", a:"Referral commissions are tracked automatically when someone signs up using your referral link. You can view your referral earnings on the Rewards page." },
-  { q:"I forgot my password — how do I reset it?", a:"On the login page, click Forgot Password and enter your registered email. You will receive a reset link within a few minutes. Check your spam folder if you do not see it." },
+  { q:"I forgot my password � how do I reset it?", a:"On the login page, click Forgot Password and enter your registered email. You will receive a reset link within a few minutes. Check your spam folder if you do not see it." },
   { q:"Can I upgrade my membership tier?", a:"Yes! Visit the Rewards page and click the Upgrade to DAG Lieutenant button. The upgrade requires a one-time fee and unlocks additional earning potential and bonuses." },
   { q:"How do I download my certificate after completing a course?", a:"Go to the Certifications section in your dashboard. Completed course certificates are available to download as PDF once all modules and assessments are finished." },
   { q:"What happens after I submit a support ticket?", a:'You will see the ticket appear in "My Tickets" with status "Open". Our team will review it and reply directly in the ticket thread. You will also receive a bell notification when we respond.' },
@@ -131,10 +129,11 @@ export default function StudentSupportPage() {
   const lbl = { fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.6px", marginBottom:"8px", display:"block" };
 
   return (
-    <div style={{ minHeight:"100vh", background:"#f8fafc", display:"flex", flexDirection:"column" }}>
-      <Header2 />
-      <div style={{ display:"flex", flex:1 }}>
-        <DashboardNav2 />
+    <div style={{ minHeight:"100vh", background:"#f0f2f5", display:"flex", flexDirection:"column" }}>
+        <div style={{ display:"flex", flex:1 }}>
+          <div style={{ width:'248px', flexShrink:0, padding:'20px 12px', position:'sticky', top:'0', height:'100vh', overflowY:'auto', background:'#f0f2f5' }}>
+            <DashboardNav2 />
+          </div>
         <main style={{ flex:1, padding:"32px 28px", minWidth:0 }}>
 
           {/* HERO BANNER */}
@@ -377,7 +376,15 @@ export default function StudentSupportPage() {
           )}
         </main>
       </div>
-      <Footer1 />
     </div>
   );
 }
+
+
+
+
+
+
+
+
+

@@ -1,20 +1,17 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
-import Header2 from "@/components/headers/Header2";
-import Footer1 from "@/components/footers/Footer1";
-import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
-import { 
-  Award, DollarSign, 
-  ChevronRight, Trophy, Zap, Crown, ArrowUp, Flame, Shield, Lock
-} from "lucide-react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function StudentRewardsPage() {
+  const router = useRouter();
+  useEffect(() => { router.replace('/student-my-team'); }, []);
+  return null;
+}
+
+function _OriginalStudentRewardsPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const [upgrading, setUpgrading] = useState(false);
-  const [upgradeMessage, setUpgradeMessage] = useState(null);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
@@ -36,7 +33,7 @@ export default function StudentRewardsPage() {
 
   // Redeem modal
   const [showRedeemModal, setShowRedeemModal] = useState(false);
-  const [redeemType, setRedeemType] = useState('daggpt'); // 'daggpt' | 'dagcoin'
+  const [redeemType, setRedeemType] = useState('dagcoin');
   const [redeemAmount, setRedeemAmount] = useState(1);
   const [redeeming, setRedeeming] = useState(false);
   const [redeemMessage, setRedeemMessage] = useState(null);
@@ -157,39 +154,8 @@ export default function StudentRewardsPage() {
     }
   };
 
-  const handleRankUpgrade = async (nextRankName, burnCost) => {
-    if (!user?.email) return;
-    const confirmed = window.confirm(
-      `Burn ${burnCost.toLocaleString()} DAG Points to upgrade to ${nextRankName}?\n\nThis action cannot be undone.`
-    );
-    if (!confirmed) return;
-    try {
-      setUpgrading(true);
-      setUpgradeMessage(null);
-      const res = await fetch('/api/rewards/rank-upgrade', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_email: user.email })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setUpgradeMessage({ type: 'success', text: `Upgraded to ${data.newRank}! Burned ${data.pointsBurned.toLocaleString()} DAG Points.` });
-        fetchRewardData(user.email);
-      } else {
-        setUpgradeMessage({ type: 'error', text: data.error || 'Upgrade failed' });
-      }
-    } catch (err) {
-      console.error('Rank upgrade error:', err);
-      setUpgradeMessage({ type: 'error', text: 'Network error. Please try again.' });
-    } finally {
-      setUpgrading(false);
-      setTimeout(() => setUpgradeMessage(null), 5000);
-    }
-  };
-
   const REDEEM_CONFIG = {
-    daggpt:  { ratio: 5,   label: 'DAGGPT Credits',    unit: 'Credit',  color: '#6366f1', light: '#eef2ff', border: '#c7d2fe', desc: 'Use credits on the DAGGPT AI platform' },
-    dagcoin: { ratio: 500, label: 'DAGCHAIN Gas Coins', unit: 'Coin',    color: '#f59e0b', light: '#fffbeb', border: '#fde68a', desc: 'Native gas coin on the DAGCHAIN blockchain' },
+    dagcoin: { ratio: 500, label: 'DAGCHAIN Gas Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb', border: '#fde68a', desc: 'Native gas coin on the DAGCHAIN blockchain' },
   };
 
   const handleRedeem = async () => {
@@ -235,16 +201,22 @@ export default function StudentRewardsPage() {
 
   const isLieutenant = rewardData.tier === 'DAG LIEUTENANT' || rewardData.tier === 'DAG_LIEUTENANT';
 
-  const BentoCard = useCallback(({ children, span = '1', style = {}, hover = true, delay = 0 }) => (
+  const nm = {
+    bg: '#f0f2f5',
+    shadow: '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)',
+    shadowSm: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)',
+    shadowInset: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)',
+  };
+
+  const NmCard = useCallback(({ children, span = '1', style = {}, hover = true, inset = false, delay = 0 }) => (
     <div
       style={{
         gridColumn: `span ${span}`,
-        background: '#fff',
+        background: nm.bg,
         borderRadius: '20px',
         padding: '28px',
-        border: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)',
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        boxShadow: inset ? nm.shadowInset : nm.shadowSm,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
         overflow: 'hidden',
         opacity: mounted ? 1 : 0,
@@ -252,12 +224,12 @@ export default function StudentRewardsPage() {
         transitionDelay: `${delay}ms`,
         ...style
       }}
-      onMouseEnter={hover ? (e) => {
-        e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)';
+      onMouseEnter={hover && !inset ? (e) => {
+        e.currentTarget.style.boxShadow = nm.shadow;
         e.currentTarget.style.transform = 'translateY(-3px)';
       } : undefined}
-      onMouseLeave={hover ? (e) => {
-        e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)';
+      onMouseLeave={hover && !inset ? (e) => {
+        e.currentTarget.style.boxShadow = nm.shadowSm;
         e.currentTarget.style.transform = 'translateY(0)';
       } : undefined}
     >{children}</div>
@@ -273,25 +245,17 @@ export default function StudentRewardsPage() {
 
   if (loading) {
     return (
-      <div id="wrapper">
-        <Header2 />
-        <div className="main-content pt-0">
-          <div className="page-inner" style={{ padding: "0" }}>
-            <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-              <div style={{ width: "240px", flexShrink: 0, padding: "24px 16px", position: "sticky", top: "0", height: "100vh", overflowY: "auto", background: "#fff" }}>
-                <DashboardNav2 />
-              </div>
-              <div style={{ flex: 1, padding: '32px 36px', background: '#f6f8fb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid #e2e8f0', borderTopColor: '#6366f1', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
-                  <p style={{ fontSize: '14px', color: '#94a3b8', fontWeight: '500' }}>Loading rewards...</p>
-                  <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-                </div>
-              </div>
-            </div>
+      <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+        <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+          <DashboardNav2 />
+        </div>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid rgba(0,0,0,0.08)', borderTopColor: '#6366f1', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
+            <p style={{ fontSize: '14px', color: '#94a3b8', fontWeight: '500' }}>Loading rewards...</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
           </div>
         </div>
-        <Footer1 />
       </div>
     );
   }
@@ -310,15 +274,12 @@ export default function StudentRewardsPage() {
     : 100;
 
   return (
-    <div id="wrapper">
-      <Header2 />
-      <div className="main-content pt-0">
-        <div className="page-inner" style={{ padding: "0" }}>
-          <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-            <div style={{ width: "240px", flexShrink: 0, background: "#fff", padding: "32px 16px", position: "sticky", top: "0", height: "100vh", overflowY: "auto" }}>
-              <DashboardNav2 />
-            </div>
-            <div style={{ flex: 1, padding: '32px 36px', background: '#f6f8fb', minHeight: '100vh' }}>
+    <>
+    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+        <DashboardNav2 />
+      </div>
+      <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
 
               {/* Header */}
               <div style={{ marginBottom: '28px', opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(-8px)', transition: 'all 0.5s ease', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
@@ -364,7 +325,7 @@ export default function StudentRewardsPage() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
 
                 {/* DAG Points */}
-                <BentoCard delay={50} style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none' }}>
+                <NmCard delay={50} style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', boxShadow: '8px 8px 20px rgba(0,0,0,0.18), -4px -4px 12px rgba(255,255,255,0.5)' }}>
                   <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
                   <div style={{ position: 'relative' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
@@ -375,10 +336,10 @@ export default function StudentRewardsPage() {
                     </p>
                     <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '8px' }}>Available balance</p>
                   </div>
-                </BentoCard>
+                </NmCard>
 
                 {/* Current Rank */}
-                <BentoCard delay={100} style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', border: 'none' }}>
+                <NmCard delay={100} style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', boxShadow: '8px 8px 20px rgba(0,0,0,0.22), -4px -4px 12px rgba(255,255,255,0.2)' }}>
                   <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
                   <div style={{ position: 'relative' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
@@ -391,10 +352,10 @@ export default function StudentRewardsPage() {
                       {rewardData.tier === 'DAG_LIEUTENANT' || rewardData.tier === 'DAG LIEUTENANT' ? 'DAG LIEUTENANT' : 'DAG SOLDIER'}
                     </p>
                   </div>
-                </BentoCard>
+                </NmCard>
 
                 {/* USD Earned */}
-                <BentoCard delay={150}>
+                <NmCard delay={150}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>USD Earned</span>
                     {rewardData.usdEarned >= 10 && (
@@ -418,7 +379,7 @@ export default function StudentRewardsPage() {
                       <a href="/student-setting" style={{ fontSize: '11px', color: '#d97706', fontWeight: '700', textDecoration: 'underline' }}>Add in Settings</a>
                     </div>
                   )}
-                </BentoCard>
+                </NmCard>
               </div>
 
               {/* ══ POINTS SUMMARY STRIP ══ */}
@@ -543,7 +504,7 @@ export default function StudentRewardsPage() {
               })()}
 
               {/* Rank Progression Section */}
-              <BentoCard delay={300} hover={false} style={{ marginBottom: '20px', padding: '28px 32px' }}>
+              <NmCard delay={300} hover={false} style={{ marginBottom: '20px', padding: '28px 32px' }}>
                 {/* Header */}
                 <div style={{ marginBottom: '24px' }}>
                   <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>Rank Progression</h2>
@@ -654,24 +615,9 @@ export default function StudentRewardsPage() {
 
                       </div>
 
-                      {/* Right: upgrade button or pts needed */}
+                      {/* Points needed indicator */}
                       <div style={{ flexShrink: 0 }}>
-                        {canUpgrade ? (
-                          <button
-                            onClick={() => handleRankUpgrade(nextRank.name, burnCost)}
-                            disabled={upgrading}
-                            style={{
-                              padding: '10px 20px', borderRadius: '10px', fontSize: '13px', fontWeight: '700',
-                              background: upgrading ? '#94a3b8' : nextRank.color, color: '#fff', border: 'none',
-                              cursor: upgrading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap',
-                              boxShadow: upgrading ? 'none' : `0 4px 14px ${nextRank.color}40`,
-                              display: 'flex', alignItems: 'center', gap: '7px', transition: 'all 0.2s'
-                            }}
-                          >
-                            <Flame size={14} />
-                            {upgrading ? 'Burning...' : 'Upgrade Now'}
-                          </button>
-                        ) : (
+                        {!canUpgrade && (
                           <div style={{
                             padding: '10px 16px', borderRadius: '10px', fontSize: '11px', fontWeight: '600',
                             background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
@@ -681,28 +627,26 @@ export default function StudentRewardsPage() {
                             <div>pts needed</div>
                           </div>
                         )}
+                        {canUpgrade && (
+                          <div style={{
+                            padding: '10px 16px', borderRadius: '10px', fontSize: '11px', fontWeight: '600',
+                            background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0',
+                            whiteSpace: 'nowrap', textAlign: 'center', lineHeight: '1.4'
+                          }}>
+                            <div style={{ fontSize: '13px', fontWeight: '800', color: '#16a34a' }}>✓ Ready</div>
+                            <div>Use Dashboard to upgrade</div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* Upgrade message */}
-                    {upgradeMessage && (
-                      <div style={{
-                        padding: '12px 18px', borderRadius: '10px',
-                        background: upgradeMessage.type === 'success' ? '#f0fdf4' : '#fef2f2',
-                        border: `1px solid ${upgradeMessage.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-                        color: upgradeMessage.type === 'success' ? '#166534' : '#991b1b',
-                        fontSize: '13px', fontWeight: '600', textAlign: 'center'
-                      }}>
-                        {upgradeMessage.text}
-                      </div>
-                    )}
                   </>
                 )}
-              </BentoCard>
+              </NmCard>
 
 
               {/* ══ TRANSACTION HISTORY ══ */}
-              <BentoCard delay={400} hover={false} style={{ padding: '28px 32px' }}>
+              <NmCard delay={400} hover={false} inset={true} style={{ padding: '28px 32px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Points Transaction History</h3>
                   <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>Last 30 transactions</span>
@@ -716,7 +660,7 @@ export default function StudentRewardsPage() {
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
                     {/* Table header */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr 120px 100px 140px', padding: '8px 14px', background: '#f8fafc', borderRadius: '8px', marginBottom: '4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr 120px 100px 140px', padding: '8px 14px', background: 'rgba(0,0,0,0.04)', borderRadius: '8px', marginBottom: '4px' }}>
                       {['Txn ID', 'Description', 'Type', 'Points', 'Date'].map((h, i) => (
                         <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: i >= 3 ? 'right' : 'left' }}>{h}</span>
                       ))}
@@ -735,7 +679,7 @@ export default function StudentRewardsPage() {
                         <div
                           key={tx.id || idx}
                           style={{ display: 'grid', gridTemplateColumns: '200px 1fr 120px 100px 140px', padding: '11px 14px', alignItems: 'center', borderBottom: idx < rewardData.txHistory.length - 1 ? '1px solid #f1f5f9' : 'none', borderRadius: '6px' }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.03)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
                           {/* Transaction ID with copy */}
@@ -766,12 +710,11 @@ export default function StudentRewardsPage() {
                     })}
                   </div>
                 )}
-              </BentoCard>
+              </NmCard>
 
-            </div>
-          </div>
-        </div>
       </div>
+    </div>
+
       {/* ══ BURN DAG POINTS MODAL ══ */}
       {showBurnModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowBurnModal(false)}>
@@ -865,22 +808,13 @@ export default function StudentRewardsPage() {
                 <span style={{ fontSize: '20px', fontWeight: '900', color: '#4f46e5', letterSpacing: '-0.5px' }}>{rewardData.dagPoints.toLocaleString()}</span>
               </div>
 
-              {/* Redemption type selector */}
-              <p style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '10px' }}>Select Redemption Type</p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-                {Object.entries(REDEEM_CONFIG).map(([key, cfg]) => (
-                  <button
-                    key={key}
-                    onClick={() => { setRedeemType(key); setRedeemAmount(1); }}
-                    style={{ padding: '14px 16px', borderRadius: '12px', border: redeemType === key ? `2px solid ${cfg.color}` : '2px solid #e2e8f0', background: redeemType === key ? cfg.light : '#f8fafc', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}
-                  >
-                    <div style={{ fontSize: '13px', fontWeight: '800', color: redeemType === key ? cfg.color : '#0f172a', marginBottom: '4px' }}>{cfg.label}</div>
-                    <div style={{ fontSize: '11px', color: redeemType === key ? cfg.color : '#94a3b8', fontWeight: '500' }}>{cfg.desc}</div>
-                    <div style={{ fontSize: '11px', fontWeight: '700', color: redeemType === key ? cfg.color : '#64748b', marginTop: '8px', padding: '3px 8px', borderRadius: '6px', background: redeemType === key ? `${cfg.color}18` : '#f1f5f9', display: 'inline-block' }}>
-                      {cfg.ratio} pts = 1 {cfg.unit}
-                    </div>
-                  </button>
-                ))}
+              {/* DAGCHAIN Gas Coin info */}
+              <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#f59e0b', marginBottom: '3px' }}>DAGCHAIN Gas Coins</div>
+                  <div style={{ fontSize: '12px', color: '#92400e', fontWeight: '500' }}>Native gas coin on the DAGCHAIN blockchain</div>
+                </div>
+                <div style={{ padding: '4px 10px', borderRadius: '8px', background: '#f59e0b18', fontSize: '12px', fontWeight: '700', color: '#f59e0b', whiteSpace: 'nowrap' }}>500 pts = 1 Coin</div>
               </div>
 
               {/* Amount input */}
@@ -1132,7 +1066,6 @@ export default function StudentRewardsPage() {
         </div>
       )}
 
-      <Footer1 />
 
       {/* ── Lieutenant Upgrade Perks Modal ── */}
       {showUpgradeModal && (
@@ -1142,6 +1075,15 @@ export default function StudentRewardsPage() {
           loading={stripeLoading === 'full'}
         />
       )}
-    </div>
+    </>
   );
 }
+
+
+
+
+
+
+
+
+

@@ -110,8 +110,8 @@ export async function POST(request) {
       transactions.push({ type: 'referral_join_lieutenant_bonus', amount: bonusAmount });
     }
 
-    // If referrer is DAG LIEUTENANT with a rank, award rank bonus on base amount
-    if (isLieutenant && referrer.current_rank && referrer.current_rank !== 'None') {
+    // If referrer has a rank, award rank bonus on base amount (applies to both SOLDIER and LIEUTENANT)
+    if (referrer.current_rank && referrer.current_rank !== 'None') {
       const rankKey = 'rank_upgrade_bonus_' + referrer.current_rank.toLowerCase();
       const rankBonusRate = configMap[rankKey] || 0;
       if (rankBonusRate > 0) {

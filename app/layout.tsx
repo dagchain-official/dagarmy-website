@@ -57,11 +57,11 @@ export default function RootLayout({
       <body className="counter-scroll">
         <Web3Provider>
           <Context>
-            <div style={{ paddingTop: '50px' }}>
+            <div style={{ paddingTop: pathname?.startsWith('/student-') ? '0' : '50px' }}>
               {children}
             </div>
           </Context>
-          {!pathname?.startsWith("/admin") && <ChatWidget />}
+          {!pathname?.startsWith("/admin") && !pathname?.startsWith("/student-") && <ChatWidget />}
         </Web3Provider>
         <Analytics />
       </body>

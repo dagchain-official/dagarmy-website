@@ -139,6 +139,21 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Failed to submit withdrawal request' }, { status: 500 });
     }
 
+    // Mark matching earned (pending) commissions as 'requested' so user can see they are in-flight
+    // Match by currency: USD withdrawal covers USD commissions, crypto/USDT covers USDT commissions
+    const commCurrency = payoutMethod === 'crypto' ? 'USDT' : 'USD';
+    const monthStart = new Date(`${rewardMonth}-01T00:00:00.000Z`).toISOString();
+    const monthEndDate = new Date(year, month, 1); // first day of next month (month is already +1 from split)
+    const monthEnd = monthEndDate.toISOString();
+
+    await supabaseAdmin
+      .from('sales_commissions')
+      .update({ payment_status: 'requested' })
+      .eq('user_id', userId)
+      .eq('currency', commCurrency)
+      .eq('payment_status', 'pending')
+      .lt('created_at', monthEnd);
+
     return NextResponse.json({
       success: true,
       request: newRequest,

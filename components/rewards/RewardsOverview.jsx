@@ -5,13 +5,6 @@ import AnimatedDownloadButton from './AnimatedDownloadButton';
 import styles from './RewardsOverview.module.css';
 
 export default function RewardsOverview() {
-  const scrollToDocs = () => {
-    const docsSection = document.getElementById('rewards-documentation');
-    if (docsSection) {
-      docsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div style={{ background: '#ffffff' }}>
       {/* Hero Section - Editorial Style */}
@@ -67,42 +60,8 @@ export default function RewardsOverview() {
                 A reward system that values what you actually contribute—not just when you joined.
               </p>
 
-              {/* Dual Button Layout */}
-              <div className={styles.buttonContainer} style={{
-                display: 'flex',
-                gap: '16px',
-                alignItems: 'center'
-              }}>
-                {/* Primary Button - View Documentation */}
-                <button
-                  onClick={scrollToDocs}
-                  style={{
-                    padding: '14px 32px',
-                    background: '#000000',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '15px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.background = '#1a1a1a';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.background = '#000000';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  View Full Documentation
-                </button>
-
-                {/* Animated Download Button */}
+              {/* Download Button */}
+              <div className={styles.buttonContainer}>
                 <AnimatedDownloadButton />
               </div>
             </div>

@@ -2,8 +2,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase/client";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
-import Header2 from "@/components/headers/Header2";
-import Footer1 from "@/components/footers/Footer1";
 import { ChampionCard, MiniChip, CrownIcon, CATS, HOF_CSS } from "@/components/hall-of-fame/HofComponents";
 
 function getLast12Months() {
@@ -78,20 +76,12 @@ export default function HallOfFamePage() {
   const archiveMonths = MONTHS.slice(1);
 
   return (
-    <div id="wrapper">
+    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
       <style>{HOF_CSS}</style>
-      <Header2 />
-      <div className="main-content pt-0">
-        <div className="page-inner" style={{ padding: "0" }}>
-          <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-
-            {/* ── Sidebar ── */}
-            <div style={{ width: "240px", flexShrink: 0, padding: "24px 16px", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
-              <DashboardNav2 />
-            </div>
-
-            {/* ── Main ── */}
-            <div style={{ flex: 1, background: "#f6f8fb", minWidth: 0, overflowX: "hidden", padding: "36px 40px 56px" }}>
+      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
+        <DashboardNav2 />
+      </div>
+      <div style={{ flex: 1, background: '#f0f2f5', minWidth: 0, overflowX: 'hidden', padding: '36px 40px 56px' }}>
 
               {/* ══ PAGE HEADER ══ */}
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "24px", marginBottom: "28px", flexWrap: "wrap" }}>
@@ -107,7 +97,7 @@ export default function HallOfFamePage() {
               </div>
 
               {/* ══ MONTH SELECTOR ══ */}
-              <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "14px 18px", marginBottom: "28px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+              <div style={{ background: '#f0f2f5', borderRadius: "12px", border: "1px solid #e2e8f0", padding: "14px 18px", marginBottom: "28px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                   <span style={{ fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.8px", flexShrink: 0 }}>Select Month</span>
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -150,7 +140,7 @@ export default function HallOfFamePage() {
 
               {/* ══ CHAMPION CARDS ══ */}
               {error ? (
-                <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #fee2e2", padding: "40px", textAlign: "center" }}>
+                <div style={{ background: '#f0f2f5', borderRadius: "12px", border: "1px solid #fee2e2", padding: "40px", textAlign: "center" }}>
                   <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "#fee2e2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                   </div>
@@ -175,13 +165,13 @@ export default function HallOfFamePage() {
 
               {/* ══ ARCHIVE ══ */}
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
-                <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: "#fff", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: '#f0f2f5', border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
                 </div>
                 <h2 style={{ fontSize: "14px", fontWeight: "700", color: "#0f172a", margin: 0 }}>Past Champions Archive</h2>
               </div>
 
-              <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #e2e8f0", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+              <div style={{ background: '#f0f2f5', borderRadius: "12px", border: "1px solid #e2e8f0", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
                 {archiveMonths.map((m, idx) => {
                   const isExpanded = expandedArchive === m.value;
                   const data = archiveData[m.value];
@@ -253,11 +243,16 @@ export default function HallOfFamePage() {
                 })}
               </div>
 
-            </div>
-          </div>
-        </div>
       </div>
-      <Footer1 />
     </div>
   );
 }
+
+
+
+
+
+
+
+
+

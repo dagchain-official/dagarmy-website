@@ -4,7 +4,7 @@ import React from "react";
 export const CATS = {
   points: {
     key: "points",
-    label: "DAG Points",
+    label: "Top DAG Points Earner",
     sublabel: "Most points earned this month",
     color: "#6366f1",
     light: "#eef2ff",
@@ -13,7 +13,7 @@ export const CATS = {
     valueLabel: "Points Earned",
     suffix: " pts",
     prefix: "",
-    rank: "2nd",
+    rank: "1st",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -22,7 +22,7 @@ export const CATS = {
   },
   sales: {
     key: "sales",
-    label: "Top Earner",
+    label: "Top Sales Commission Earner",
     sublabel: "Highest commission earned this month",
     color: "#d97706",
     light: "#fffbeb",
@@ -31,7 +31,7 @@ export const CATS = {
     valueLabel: "Commission",
     suffix: "",
     prefix: "$",
-    rank: "1st",
+    rank: "3rd",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="1" x2="12" y2="23"/>
@@ -50,7 +50,7 @@ export const CATS = {
     valueLabel: "Referrals",
     suffix: "",
     prefix: "",
-    rank: "3rd",
+    rank: "2nd",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>

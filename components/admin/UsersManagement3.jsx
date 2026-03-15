@@ -47,7 +47,7 @@ export default function UsersManagement3() {
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d) return;
-        const isMaster = d.admin?.is_master;
+        const isMaster = d.admin?.is_master_admin;
         const hasRewards = (d.admin?.permissions || []).includes('rewards.write');
         setCanManageRewards(isMaster || hasRewards);
       })
