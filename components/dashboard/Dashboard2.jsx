@@ -1038,7 +1038,7 @@ export default function Dashboard2() {
                             <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>Referral Link</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: '#f0f2f5', borderRadius: '10px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)' }}>
                                 <span style={{ flex: 1, fontSize: '11px', fontWeight: '600', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                    {typeof window !== 'undefined' ? `${window.location.origin}/register?ref=${referralCode}` : `dagarmy.com/register?ref=${referralCode}`}
+                                    {typeof window !== 'undefined' ? `${window.location.origin}/register?ref=${referralCode}` : `dagarmy.network/register?ref=${referralCode}`}
                                 </span>
                                 <button onClick={async () => {
                                     const link = `${window.location.origin}/register?ref=${referralCode}`;
@@ -1057,7 +1057,7 @@ export default function Dashboard2() {
                                     {
                                         name: 'WhatsApp',
                                         color: '#25D366',
-                                        href: () => `https://wa.me/?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.com'}/register?ref=${referralCode}`)}`,  
+                                        href: () => `https://wa.me/?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,  
                                         icon: (
                                             <svg viewBox="0 0 32 32" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.5L4 29l7.75-1.813A11.94 11.94 0 0 0 16 28c6.627 0 12-5.373 12-12S22.627 3 16 3z" fill="#25D366"/>
@@ -1068,7 +1068,7 @@ export default function Dashboard2() {
                                     {
                                         name: 'X',
                                         color: '#000000',
-                                        href: () => `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.com'}/register?ref=${referralCode}`)}`,  
+                                        href: () => `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,  
                                         icon: (
                                             <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
@@ -1099,7 +1099,7 @@ export default function Dashboard2() {
                                     {
                                         name: 'Facebook',
                                         color: '#1877F2',
-                                        href: () => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.com'}/register?ref=${referralCode}`)}`,  
+                                        href: () => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,  
                                         icon: (
                                             <svg viewBox="0 0 32 32" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
                                                 <rect width="32" height="32" rx="8" fill="#1877F2"/>
@@ -1110,7 +1110,7 @@ export default function Dashboard2() {
                                     {
                                         name: 'Telegram',
                                         color: '#2AABEE',
-                                        href: () => `https://t.me/share/url?url=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.com'}/register?ref=${referralCode}`)}&text=${encodeURIComponent('Join DAGArmy using my referral link and start earning!')}`,  
+                                        href: () => `https://t.me/share/url?url=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}&text=${encodeURIComponent('Join DAGArmy using my referral link and start earning!')}`,  
                                         icon: (
                                             <svg viewBox="0 0 32 32" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
                                                 <rect width="32" height="32" rx="16" fill="#2AABEE"/>
