@@ -118,6 +118,17 @@ export default function Dashboard2() {
                 const data = await response.json();
                 
                 if (data.user) {
+                    // Redirect to profile completion if not yet done
+                    if (!data.user.profile_completed) {
+                        window.dispatchEvent(new CustomEvent('dagarmy:show-profile-completion', {
+                            detail: {
+                                email: data.user.email,
+                                walletAddress: data.user.wallet_address
+                            }
+                        }));
+                        window.location.href = '/';
+                        return;
+                    }
                     setUserData(data.user);
                     const fullName = data.user.full_name ||
                         (`${data.user.first_name || ''} ${data.user.last_name || ''}`).trim() ||
@@ -132,22 +143,7 @@ export default function Dashboard2() {
                     if (data.user.current_rank !== undefined) {
                         setCurrentRank(data.user.current_rank || 'None');
                     }
-                    // Fetch live dag points from transactions — use userId as primary identifier
-                    const identifier = data.user.id
-                        ? `userId=${data.user.id}`
-                        : data.user.email
-                            ? `email=${encodeURIComponent(data.user.email)}`
-                            : data.user.wallet_address
-                                ? `wallet=${data.user.wallet_address}`
-                                : null;
-                    if (identifier) {
-                        fetch(`/api/rewards/user?${identifier}`)
-                            .then(r => r.json())
-                            .then(rd => { if (rd.success) setDagPoints(rd.data.dagPoints || 0); })
-                            .catch(() => { if (data.user.dag_points !== undefined) setDagPoints(data.user.dag_points); });
-                    } else if (data.user.dag_points !== undefined) {
-                        setDagPoints(data.user.dag_points);
-                    }
+                    setDagPoints(data.user.dag_points || 0);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -155,7 +151,7 @@ export default function Dashboard2() {
         }
         
         fetchUserData();
-    }, [address]);
+    }, [address, userProfile]);
 
     // Fetch referral code and stats
     useEffect(() => {
@@ -247,9 +243,9 @@ export default function Dashboard2() {
             }
         }
         async function fetchUsdEarned() {
-            if (!userData?.email) return;
+            if (!userData?.id) return;
             try {
-                const res = await fetch(`/api/rewards/user?email=${encodeURIComponent(userData.email)}`);
+                const res = await fetch(`/api/rewards/user?userId=${userData.id}`);
                 const data = await res.json();
                 if (data.success) setUsdEarned(data.data?.usdEarned || 0);
             } catch (err) {
