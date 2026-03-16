@@ -73,6 +73,12 @@ export async function POST(request) {
       );
     }
 
+    // Update referred user's referred_by_user_id field
+    await supabase
+      .from('users')
+      .update({ referred_by_user_id: codeData.user_id })
+      .eq('id', userId);
+
     return NextResponse.json({
       success: true,
       message: 'Referral tracked successfully'

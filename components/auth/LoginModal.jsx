@@ -114,6 +114,18 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
+  // Listen for profile completion trigger from AuthContext (email-only Reown users)
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail?.email) setSocialEmail(e.detail.email);
+      if (e.detail?.walletAddress) setStoredWalletAddress(e.detail.walletAddress);
+      setShowProfileCompletion(true);
+      setIsCheckingProfile(false);
+    };
+    window.addEventListener('dagarmy:show-profile-completion', handler);
+    return () => window.removeEventListener('dagarmy:show-profile-completion', handler);
+  }, []);
+
   const handleRoleSelection = async () => {
     if (selectedRole && address) {
       // Store wallet address before it becomes undefined

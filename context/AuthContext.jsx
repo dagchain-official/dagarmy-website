@@ -323,9 +323,29 @@ export function AuthProvider({ children }) {
           // User saved to database
           profile.supabaseId = result.user.id;
           profile.isNewUser = result.isNewUser;
+          profile.profile_completed = result.user.profile_completed || false;
         }
       } catch (error) {
         console.error('❌ Failed to save user to Supabase:', error);
+      }
+
+      // If profile is not completed, fire event for LoginModal to show profile form
+      // Do NOT redirect to dashboard yet
+      if (!profile.isAdmin && !profile.profile_completed) {
+        localStorage.setItem('dagarmy_user', JSON.stringify({
+          id: profile.supabaseId,
+          email: profile.email,
+          full_name: profile.name,
+          wallet_address: address,
+          is_admin: false,
+          is_master_admin: false
+        }));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('dagarmy:show-profile-completion', {
+            detail: { email: profile.email, walletAddress: address }
+          }));
+        }
+        return;
       }
 
       const finalRole = profile.isAdmin ? 'admin' : 'student';
