@@ -99,12 +99,18 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   }, [isAuthenticated, userRole, showProfileCompletion, onClose]);
 
-  // Reset state when modal opens
+  // Reset state when modal opens + capture ?ref= referral code from URL
   useEffect(() => {
     if (isOpen) {
       setShowProfileCompletion(false);
       setIsCheckingProfile(false);
       setShowRoleSelection(false);
+      // Save referral code from URL to localStorage so ProfileCompletion can use it
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get('ref');
+        if (ref) localStorage.setItem('pending_referral_code', ref.toUpperCase());
+      }
     }
   }, [isOpen]);
 

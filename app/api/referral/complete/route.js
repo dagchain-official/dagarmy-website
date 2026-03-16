@@ -129,12 +129,14 @@ export async function POST(request) {
       }
     }
 
-    // Update referral record with points earned on join
+    // Update referral record with points earned on join and mark completed
     await supabase
       .from('referrals')
       .update({
+        status: 'completed',
         points_earned_on_join: totalPointsAwarded,
-        total_points_earned: totalPointsAwarded
+        total_points_earned: totalPointsAwarded,
+        completed_at: new Date().toISOString()
       })
       .eq('id', referral.id);
 

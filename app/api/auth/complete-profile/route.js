@@ -158,6 +158,31 @@ export async function POST(request) {
 
     console.log('✅ Profile completed successfully:', data);
 
+    // Track referral + award join points to upline (fire-and-forget, non-blocking)
+    if (body.referral_code && data?.id) {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      // Step 1: Create the referrals row
+      fetch(`${baseUrl}/api/referral/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ referralCode: body.referral_code, userId: data.id }),
+      })
+        .then(async (trackRes) => {
+          const trackData = await trackRes.json();
+          if (trackRes.ok && trackData.success) {
+            // Step 2: Award join points to upline
+            fetch(`${baseUrl}/api/referral/complete`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ referredUserId: data.id }),
+            }).catch(err => console.error('⚠️ referral/complete failed (non-blocking):', err));
+          } else {
+            console.log('ℹ️ Referral track skipped:', trackData.error || 'already tracked');
+          }
+        })
+        .catch(err => console.error('⚠️ referral/track failed (non-blocking):', err));
+    }
+
     // Notify DAGChain of new user (fire-and-forget)
     // Fetch user's own referral code to include in payload
     const { data: ownReferralCode } = await supabaseAdmin.rpc('get_or_create_referral_code', {

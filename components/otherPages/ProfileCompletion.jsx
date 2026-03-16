@@ -10,8 +10,17 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
     firstName: '',
     lastName: '',
     countryCode: '+91',
-    whatsappNumber: ''
+    whatsappNumber: '',
+    referralCode: ''
   });
+
+  // Pre-fill referral code from localStorage if user arrived via referral link
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('pending_referral_code');
+      if (saved) setFormData(prev => ({ ...prev, referralCode: saved }));
+    }
+  }, []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -82,6 +91,9 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
     setIsSubmitting(true);
     setIsCompleting(true); // Disable beforeunload warning
 
+    const referralCode = formData.referralCode.trim().toUpperCase() ||
+      (typeof window !== 'undefined' ? localStorage.getItem('pending_referral_code') : null);
+
     const requestBody = {
       wallet_address: userAddress,
       email: socialEmail || null,
@@ -89,6 +101,7 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       last_name: formData.lastName.trim(),
       country_code: formData.countryCode,
       whatsapp_number: formData.whatsappNumber.trim(),
+      ...(referralCode ? { referral_code: referralCode } : {}),
     };
 
     console.log('📤 Submitting profile completion:', requestBody);
@@ -109,7 +122,10 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
       }
 
       console.log('✅ Profile completed:', data);
-      
+
+      // Clear referral code from localStorage after successful use
+      if (typeof window !== 'undefined') localStorage.removeItem('pending_referral_code');
+
       // Remove beforeunload listener before redirecting
       window.onbeforeunload = null;
       
@@ -314,6 +330,38 @@ export default function ProfileCompletion({ userAddress, socialEmail, onComplete
                 fontSize: '16px',
                 outline: 'none',
                 transition: 'border-color 0.2s',
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#1f2937'}
+              onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '8px',
+              fontWeight: '600',
+              color: '#333',
+              fontSize: '14px'
+            }}>
+              Referral Code <span style={{ fontWeight: '400', color: '#9ca3af' }}>(optional)</span>
+            </label>
+            <input
+              type="text"
+              name="referralCode"
+              value={formData.referralCode}
+              onChange={handleChange}
+              placeholder="Enter referral code if you have one"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '2px solid #e0e0e0',
+                borderRadius: '8px',
+                fontSize: '16px',
+                outline: 'none',
+                transition: 'border-color 0.2s',
+                textTransform: 'uppercase',
+                letterSpacing: '2px',
               }}
               onFocus={(e) => e.target.style.borderColor = '#1f2937'}
               onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
