@@ -132,12 +132,14 @@ export default function Dashboard2() {
                     if (data.user.current_rank !== undefined) {
                         setCurrentRank(data.user.current_rank || 'None');
                     }
-                    // Fetch live dag points from transactions (avoids stale dag_points column)
-                    const identifier = data.user.email
-                        ? `email=${encodeURIComponent(data.user.email)}`
-                        : data.user.wallet_address
-                            ? `wallet=${data.user.wallet_address}`
-                            : null;
+                    // Fetch live dag points from transactions — use userId as primary identifier
+                    const identifier = data.user.id
+                        ? `userId=${data.user.id}`
+                        : data.user.email
+                            ? `email=${encodeURIComponent(data.user.email)}`
+                            : data.user.wallet_address
+                                ? `wallet=${data.user.wallet_address}`
+                                : null;
                     if (identifier) {
                         fetch(`/api/rewards/user?${identifier}`)
                             .then(r => r.json())

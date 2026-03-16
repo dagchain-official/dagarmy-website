@@ -78,17 +78,10 @@ export default function Setttings() {
           const stored = localStorage.getItem('dagarmy_user');
           if (stored) {
             const parsed = JSON.parse(stored);
-            if (parsed?.id) {
-              // We have the Supabase ID directly — fetch by id via email or set userData directly
-              // Use email if available, otherwise we already have the id
-              if (parsed.email) {
-                fetchUrl = `/api/auth/user?email=${encodeURIComponent(parsed.email)}`;
-              } else {
-                // Set userData directly from localStorage so handlePaymentSubmit gets the id
-                setUserData(parsed);
-                setLoading(false);
-                return;
-              }
+            if (parsed?.email) {
+              fetchUrl = `/api/auth/user?email=${encodeURIComponent(parsed.email)}`;
+            } else if (parsed?.wallet_address) {
+              fetchUrl = `/api/auth/user?wallet=${parsed.wallet_address.toLowerCase()}`;
             }
           }
         } catch (_) {}

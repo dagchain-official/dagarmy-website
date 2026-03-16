@@ -10,19 +10,22 @@ const supabase = createClient(
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const email = searchParams.get('email');
+    const userId = searchParams.get('userId');
+    const email  = searchParams.get('email');
     const wallet = searchParams.get('wallet');
 
-    if (!email && !wallet) {
+    if (!userId && !email && !wallet) {
       return NextResponse.json(
-        { error: 'email or wallet is required' },
+        { error: 'userId, email or wallet is required' },
         { status: 400 }
       );
     }
 
-    // Fetch user data with reward information — prefer email, fall back to wallet
+    // Prefer userId (most reliable), then email, then wallet
     let userQuery = supabase.from('users').select('*');
-    if (email) {
+    if (userId) {
+      userQuery = userQuery.eq('id', userId);
+    } else if (email) {
       userQuery = userQuery.eq('email', email);
     } else {
       userQuery = userQuery.eq('wallet_address', wallet.toLowerCase());
