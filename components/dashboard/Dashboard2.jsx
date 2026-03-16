@@ -884,8 +884,8 @@ export default function Dashboard2() {
                     </div>
                 </NmCard>
 
-                {/* ━━━ ROW 2: Calendar (8) + Upcoming+Referral (4) ━━━ */}
-                <NmCard span="8" style={{ padding: '24px' }}>
+                {/* ━━━ ROW 2: Calendar — full width ━━━ */}
+                <NmCard span="12" style={{ padding: '24px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                         <div>
                             <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Schedule Calendar</h3>
@@ -1009,8 +1009,8 @@ export default function Dashboard2() {
                     })()}
                 </NmCard>
 
-                {/* ━━━ Col 2: Upcoming Events + Referral Code (4 cols) ━━━ */}
-                <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                {/* ━━━ ROW 3: Referral + Redeem + Withdraw — 3 equal columns ━━━ */}
+                <div style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px', alignItems: 'start' }}>
 
                     {/* Referral Card */}
                     <NmCard span="1" style={{ padding: '24px' }}>
@@ -1153,10 +1153,7 @@ export default function Dashboard2() {
                         </div>
                     </NmCard>
 
-                    {/* ━━━ Redeem + Withdraw row ━━━ */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-
-                        {/* Redeem DAG Points card */}
+                    {/* Redeem DAG Points card */}
                         <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
                             {/* Header */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
@@ -1293,7 +1290,6 @@ export default function Dashboard2() {
                             })()}
                         </NmCard>
 
-                    </div>
                 </div>
 
             {/* ━━━ DAGChain Integration Panel ━━━ */}
