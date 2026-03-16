@@ -62,6 +62,7 @@ export async function POST(request) {
     
     if (email) {
       // Use upsert with email as the unique identifier
+      const full_name = `${first_name.trim()} ${last_name.trim()}`;
       const result = await supabase
         .from('users')
         .upsert({
@@ -69,6 +70,7 @@ export async function POST(request) {
           wallet_address: wallet_address ? wallet_address.toLowerCase() : null,
           first_name,
           last_name,
+          full_name,
           country_code: country_code || '+91',
           whatsapp_number,
           profile_completed: true,
@@ -99,11 +101,13 @@ export async function POST(request) {
         data = null;
         error = lookupError;
       } else if (existing) {
+        const full_name = `${first_name.trim()} ${last_name.trim()}`;
         const result = await supabase
           .from('users')
           .update({
             first_name,
             last_name,
+            full_name,
             country_code: country_code || '+91',
             whatsapp_number,
             profile_completed: true,
@@ -115,6 +119,7 @@ export async function POST(request) {
         data = result.data;
         error = result.error;
       } else {
+        const full_name = `${first_name.trim()} ${last_name.trim()}`;
         const result = await supabase
           .from('users')
           .insert({
@@ -122,6 +127,7 @@ export async function POST(request) {
             email: null,
             first_name,
             last_name,
+            full_name,
             country_code: country_code || '+91',
             whatsapp_number,
             profile_completed: true,

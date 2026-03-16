@@ -50,6 +50,8 @@ export async function GET(request) {
     const avatar = (name, bg = '6366f1') =>
       `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=${bg}&color=fff`;
 
+    const displayName = (u) => u.full_name || (u.email ? u.email.split('@')[0] : 'Member');
+
     const fmt = (rows, valueKey, extraFn = () => ({})) => {
       const sorted = [...rows].sort((a, b) =>
         ascending ? a[valueKey] - b[valueKey] : b[valueKey] - a[valueKey]
@@ -57,8 +59,8 @@ export async function GET(request) {
       return sorted.map((u, i) => ({
         rank: i + 1,
         id: u.id,
-        name: u.full_name || 'Anonymous',
-        avatar: u.avatar_url || avatar(u.full_name),
+        name: displayName(u),
+        avatar: u.avatar_url || avatar(displayName(u)),
         value: u[valueKey] || 0,
         tier: u.tier,
         current_rank: u.current_rank || null,
@@ -91,7 +93,7 @@ export async function GET(request) {
         if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
 
         const { data: users, error: uErr } = await supabase
-          .from('users').select('id,full_name,avatar_url,tier,current_rank,created_at')
+          .from('users').select('id,full_name,email,avatar_url,tier,current_rank,created_at')
           .in('id', ids).eq('role', 'student');
         if (uErr) throw uErr;
 
@@ -102,37 +104,60 @@ export async function GET(request) {
           points_burned: byUser[u.id]?.burned || 0,
           points_redeemed: byUser[u.id]?.redeemed || 0,
         }));
-        const leaderboard = fmt(rows, 'dag_points', u => ({ points_earned: u.points_earned, points_burned: u.points_burned, points_redeemed: u.points_redeemed }));
-        return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+        const sorted = [...rows].sort((a, b) => {
+          if (b.points_earned !== a.points_earned) return b.points_earned - a.points_earned;
+          return new Date(a.created_at) - new Date(b.created_at);
+        });
+        const leaderboard = sorted.map((u, i) => ({
+          rank: i + 1, id: u.id, name: displayName(u),
+          avatar: u.avatar_url || avatar(displayName(u)),
+          value: u.dag_points || 0, tier: u.tier, current_rank: u.current_rank || null,
+          isCurrentUser: u.id === currentUserId,
+          points_earned: u.points_earned, points_burned: u.points_burned, points_redeemed: u.points_redeemed,
+        }));
+        return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
       }
 
       // All-time
       const { data: users, error } = await supabase
         .from('users')
-        .select('id,full_name,avatar_url,dag_points,total_points_earned,tier,current_rank,created_at')
-        .eq('role', 'student').limit(200);
+        .select('id,full_name,email,avatar_url,dag_points,total_points_earned,tier,current_rank,created_at')
+        .eq('role', 'student').limit(2000);
       if (error) throw error;
 
-      // Fetch all negative transactions to split burned vs redeemed
+      // Fetch ALL transactions to compute earned/burned/redeemed live (avoids total_points_earned drift)
       const { data: txAll } = await supabase
         .from('points_transactions')
         .select('user_id, points, transaction_type')
-        .in('user_id', (users || []).map(u => u.id))
-        .lt('points', 0);
+        .in('user_id', (users || []).map(u => u.id));
 
+      const earnMap = {};
       const burnMap = {};
       const redeemMap = {};
       (txAll || []).forEach(t => {
-        if (t.transaction_type === 'rank_burn') burnMap[t.user_id] = (burnMap[t.user_id] || 0) + Math.abs(t.points);
+        if (t.points > 0) earnMap[t.user_id] = (earnMap[t.user_id] || 0) + t.points;
+        else if (t.transaction_type === 'rank_burn') burnMap[t.user_id] = (burnMap[t.user_id] || 0) + Math.abs(t.points);
         else redeemMap[t.user_id] = (redeemMap[t.user_id] || 0) + Math.abs(t.points);
       });
 
-      const leaderboard = fmt(users || [], 'dag_points', u => ({
-        points_earned: u.total_points_earned || 0,
+      const rows = (users || []).map(u => ({
+        ...u,
+        points_earned: earnMap[u.id] || 0,
         points_burned: burnMap[u.id] || 0,
         points_redeemed: redeemMap[u.id] || 0,
       }));
-      return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+      const sorted = [...rows].sort((a, b) => {
+        if (b.points_earned !== a.points_earned) return b.points_earned - a.points_earned;
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      const leaderboard = sorted.map((u, i) => ({
+        rank: i + 1, id: u.id, name: displayName(u),
+        avatar: u.avatar_url || avatar(displayName(u)),
+        value: u.dag_points || 0, tier: u.tier, current_rank: u.current_rank || null,
+        isCurrentUser: u.id === currentUserId,
+        points_earned: u.points_earned, points_burned: u.points_burned, points_redeemed: u.points_redeemed,
+      }));
+      return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
     }
 
     // ── REFERRAL leaderboard ───────────────────────────────────────────────────
@@ -157,7 +182,7 @@ export async function GET(request) {
         if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
 
         const { data: users, error: uErr } = await supabase
-          .from('users').select('id,full_name,avatar_url,tier,current_rank')
+          .from('users').select('id,full_name,email,avatar_url,tier,current_rank')
           .in('id', ids).eq('role', 'student');
         if (uErr) throw uErr;
 
@@ -167,7 +192,7 @@ export async function GET(request) {
           successful_referrals: byUser[u.id]?.successful || 0,
         }));
         const leaderboard = fmt(rows, 'referral_count', u => ({ successful: u.successful_referrals }));
-        return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+        return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
       }
 
       // All-time: join referral_stats
@@ -175,14 +200,14 @@ export async function GET(request) {
         .from('referral_stats')
         .select('user_id, total_referrals, successful_referrals, total_points_earned')
         .order('total_referrals', { ascending })
-        .limit(200);
+        .limit(2000);
       if (sErr) throw sErr;
 
       const ids = (stats || []).map(s => s.user_id);
       if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
 
       const { data: users, error: uErr } = await supabase
-        .from('users').select('id,full_name,avatar_url,tier,current_rank')
+        .from('users').select('id,full_name,email,avatar_url,tier,current_rank')
         .in('id', ids).eq('role', 'student');
       if (uErr) throw uErr;
 
@@ -199,7 +224,7 @@ export async function GET(request) {
         successful: u.successful_referrals,
         referral_points: u.referral_points,
       }));
-      return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+      return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
     }
 
     // ── SALES leaderboard ──────────────────────────────────────────────────────
@@ -220,24 +245,24 @@ export async function GET(request) {
         if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
 
         const { data: users, error: uErr } = await supabase
-          .from('users').select('id,full_name,avatar_url,tier,current_rank')
+          .from('users').select('id,full_name,email,avatar_url,tier,current_rank')
           .in('id', ids).eq('role', 'student');
         if (uErr) throw uErr;
 
         const rows = (users || []).map(u => ({ ...u, total_usd_earned: byUser[u.id] || 0 }));
         const leaderboard = fmt(rows, 'total_usd_earned');
-        return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+        return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
       }
 
       // All-time
       const { data: users, error } = await supabase
         .from('users')
-        .select('id,full_name,avatar_url,total_usd_earned,tier,current_rank')
-        .eq('role', 'student').limit(200);
+        .select('id,full_name,email,avatar_url,total_usd_earned,tier,current_rank')
+        .eq('role', 'student').limit(2000);
       if (error) throw error;
 
       const leaderboard = fmt(users || [], 'total_usd_earned');
-      return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+      return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
     }
 
     // ── CERTIFICATIONS leaderboard ─────────────────────────────────────────────
@@ -256,13 +281,13 @@ export async function GET(request) {
       if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
 
       const { data: users, error: uErr } = await supabase
-        .from('users').select('id,full_name,avatar_url,tier,current_rank')
+        .from('users').select('id,full_name,email,avatar_url,tier,current_rank')
         .in('id', ids).eq('role', 'student');
       if (uErr) throw uErr;
 
       const rows = (users || []).map(u => ({ ...u, cert_count: byUser[u.id] || 0 }));
       const leaderboard = fmt(rows, 'cert_count');
-      return NextResponse.json({ leaderboard: leaderboard.slice(0, 50), currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
+      return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
     }
 
     return NextResponse.json({ error: 'Invalid type', leaderboard: [] }, { status: 400 });

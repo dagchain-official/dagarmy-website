@@ -723,28 +723,28 @@ export default function UsersManagement3() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '32px' }}>
         {[
           { 
-            title: 'Total Users', 
-            value: loading ? '...' : stats.totalUsers.toLocaleString(), 
-            change: `+${stats.growthRate}% this month`,
+            title: 'Total Students', 
+            value: loading ? '...' : (stats.totalStudents ?? stats.totalUsers ?? 0).toLocaleString(), 
+            change: `${(stats.totalAdmins ?? 0)} admin${(stats.totalAdmins ?? 0) !== 1 ? 's' : ''} excluded`,
             icon: Users,
             color: '#1f2937',
             bgGradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
             lightBg: '#f8fafc'
           },
           { 
-            title: 'Active Users', 
-            value: loading ? '...' : stats.activeUsers.toLocaleString(),
-            change: `${stats.totalUsers > 0 ? Math.round((stats.activeUsers / stats.totalUsers) * 100) : 0}% of total`,
-            icon: Activity,
+            title: 'Admin / Staff', 
+            value: loading ? '...' : (stats.totalAdmins ?? 0).toLocaleString(),
+            change: `${(stats.totalUsers ?? 0)} total across all roles`,
+            icon: Shield,
             color: '#374151',
             bgGradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
             lightBg: '#f8fafc'
           },
           { 
-            title: 'Instructors', 
-            value: loading ? '...' : (stats.usersByRole?.instructor || 0).toString(),
-            change: `${stats.usersByRole?.instructor || 0} active instructors`,
-            icon: GraduationCap,
+            title: 'Active Students', 
+            value: loading ? '...' : (stats.activeStudents ?? stats.activeUsers ?? 0).toLocaleString(),
+            change: `${stats.totalStudents > 0 ? Math.round(((stats.activeStudents ?? stats.activeUsers ?? 0) / (stats.totalStudents ?? 1)) * 100) : 0}% of students`,
+            icon: Activity,
             color: '#4b5563',
             bgGradient: 'linear-gradient(135deg, #4b5563 0%, #374151 100%)',
             lightBg: '#f8fafc'
@@ -752,7 +752,7 @@ export default function UsersManagement3() {
           { 
             title: 'New This Week', 
             value: loading ? '...' : stats.newUsersThisWeek.toString(),
-            change: `+${stats.newUsersThisWeek} new registrations`,
+            change: `+${stats.growthRate}% growth rate`,
             icon: TrendingUp,
             color: '#6b7280',
             bgGradient: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',

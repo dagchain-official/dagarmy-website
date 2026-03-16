@@ -60,9 +60,19 @@ export async function GET(request) {
 
     // Calculate statistics
     const totalUsers = users.length;
+    const studentUsers = users.filter(u => (u.role || 'student') === 'student');
+    const totalStudents = studentUsers.length;
+    const totalAdmins = users.filter(u => u.role === 'admin').length;
+
     const activeUsers = users.filter(user => {
-      // Consider users active if they've logged in within the last 30 days
-      const lastActive = new Date(user.last_sign_in_at || user.created_at);
+      const lastActive = new Date(user.last_login || user.created_at);
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      return lastActive > thirtyDaysAgo;
+    }).length;
+
+    const activeStudents = studentUsers.filter(user => {
+      const lastActive = new Date(user.last_login || user.created_at);
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       return lastActive > thirtyDaysAgo;
@@ -75,10 +85,10 @@ export async function GET(request) {
       return acc;
     }, {});
 
-    // Calculate growth (users created in last 7 days)
+    // Calculate growth (users created in last 7 days) — students only
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const newUsersThisWeek = users.filter(user => 
+    const newUsersThisWeek = studentUsers.filter(user =>
       new Date(user.created_at) > sevenDaysAgo
     ).length;
 
@@ -102,11 +112,14 @@ export async function GET(request) {
       users,
       stats: {
         totalUsers,
+        totalStudents,
+        totalAdmins,
         activeUsers,
+        activeStudents,
         usersByRole,
         newUsersThisWeek,
         weeklyGrowth,
-        growthRate: totalUsers > 0 ? ((newUsersThisWeek / totalUsers) * 100).toFixed(1) : 0
+        growthRate: totalStudents > 0 ? ((newUsersThisWeek / totalStudents) * 100).toFixed(1) : 0
       }
     });
 

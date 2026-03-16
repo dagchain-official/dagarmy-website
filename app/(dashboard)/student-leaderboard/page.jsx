@@ -2,9 +2,21 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase/client";
 import DashboardNav2 from "@/components/dashboard/DashboardNav2";
-import Header2 from "@/components/headers/Header2";
-import Footer1 from "@/components/footers/Footer1";
 import { ChampionCard, MiniChip, CrownIcon, CATS, HOF_CSS } from "@/components/hall-of-fame/HofComponents";
+
+/* ── Neumorphic palette (matches Dashboard / UpgradesBenefits) ── */
+const nm = {
+  bg:            '#f0f2f5',
+  shadow:        '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)',
+  shadowSm:      '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.88)',
+  shadowXs:      '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.85)',
+  shadowInset:   'inset 3px 3px 7px rgba(0,0,0,0.1), inset -3px -3px 6px rgba(255,255,255,0.85)',
+  border:        'rgba(0,0,0,0.06)',
+  accent:        '#4f46e5',
+  textPrimary:   '#1e293b',
+  textDark:      '#334155',
+  textMuted:     '#94a3b8',
+};
 
 const TABS = [
   { id: 'points',         label: 'DAG Points',    color: '#6366f1', bg: '#eef2ff', colLabel: 'DAG POINTS',    valuePrefix: '', valueSuffix: ' pts', description: 'Ranked by DAG Points', icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> },
@@ -39,6 +51,8 @@ export default function StudentLeaderboardPage() {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentUserRank, setCurrentUserRank] = useState(null);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 20;
 
   // ── Hall of Fame state ──
   const [hofMonth, setHofMonth] = useState(MONTHS[0].value);
@@ -58,6 +72,7 @@ export default function StudentLeaderboardPage() {
     try {
       setLoading(true);
       setError(null);
+      setPage(1);
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 12000);
       const response = await fetch(
@@ -91,6 +106,9 @@ export default function StudentLeaderboardPage() {
       setLoading(false);
     }
   }, [activeTab, timeFilter, sortDir, currentUserId]);
+
+  // reset page when filters change
+  useEffect(() => { setPage(1); }, [activeTab, timeFilter, sortDir]);
 
   useEffect(() => { if (activeTab !== 'halloffame') fetchLeaderboard(); }, [fetchLeaderboard, activeTab]);
 
@@ -142,332 +160,491 @@ export default function StudentLeaderboardPage() {
     { value: 'week-2', label: 'Last Week' },
   ];
 
-  const posGrad = ['linear-gradient(135deg,#fcd34d,#f59e0b)', 'linear-gradient(135deg,#e2e8f0,#94a3b8)', 'linear-gradient(135deg,#fed7aa,#f97316)'];
-  const posText = ['#92400e', '#334155', '#7c2d12'];
-
   return (
-    <div id="wrapper">
-      <Header2 />
-      <div className="main-content pt-0">
-        <div className="page-inner" style={{ padding: '0' }}>
-          <div style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
-            <div style={{ width: '240px', flexShrink: 0, padding: '24px 16px', position: 'sticky', top: 0, height: '100vh', overflowY: 'auto' }}>
-              <DashboardNav2 />
+    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: nm.bg }}>
+      <style>{HOF_CSS}{`
+        @keyframes nmSpin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+        @keyframes nmFadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .nm-tab-btn:hover { box-shadow: 5px 5px 12px rgba(0,0,0,0.12), -4px -4px 9px rgba(255,255,255,0.88) !important; }
+        .nm-row:hover { background: rgba(255,255,255,0.6) !important; }
+        .nm-filter-btn:hover { box-shadow: 3px 3px 7px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.85) !important; }
+        .nm-archive-row:hover { background: rgba(255,255,255,0.55) !important; cursor:pointer; }
+      `}</style>
+
+      {/* ── Sidebar ── */}
+      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', background: nm.bg }}>
+        <DashboardNav2 />
+      </div>
+
+      {/* ── Main Content ── */}
+      <div style={{ flex: 1, minWidth: 0, padding: '32px 24px 48px', overflowY: 'auto' }}>
+
+        {/* ── Page Header ── */}
+        <div style={{ marginBottom: '28px', animation: 'nmFadeUp 0.4s ease' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '6px' }}>
+            <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={nm.accent} strokeWidth="1.8">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 22h16" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
-
-            <div style={{ flex: 1, padding: '36px 40px', paddingTop: '80px', background: '#f6f8fb', minWidth: 0 }}>
-              <style>{HOF_CSS}{`@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}`}</style>
-
-              {/* ── Page Header ── */}
-              <div style={{ marginBottom: '28px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M4 22h16" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.5px' }}>Leaderboard</h1>
-                </div>
-                <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>Compete across 4 categories — Points, Referrals, Sales &amp; Hall of Fame</p>
-              </div>
-
-              {/* ── 4 Category Tab Cards ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '14px', marginBottom: '20px' }}>
-                {TABS.map(t => (
-                  <button key={t.id} onClick={() => { setActiveTab(t.id); setLeaderboardData([]); }}
-                    style={{ padding: '18px 20px', borderRadius: '16px', cursor: 'pointer', textAlign: 'left', border: activeTab === t.id ? `2px solid ${t.color}` : '2px solid transparent', background: activeTab === t.id ? t.bg : '#fff', boxShadow: activeTab === t.id ? `0 4px 16px ${t.color}25` : '0 1px 4px rgba(0,0,0,0.05)', transition: 'all 0.2s' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                      <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: activeTab === t.id ? t.color : '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', color: activeTab === t.id ? '#fff' : '#94a3b8', flexShrink: 0 }}>{t.icon}</div>
-                      <span style={{ fontSize: '13px', fontWeight: '700', color: activeTab === t.id ? t.color : '#64748b' }}>{t.label}</span>
-                    </div>
-                    <p style={{ fontSize: '11px', color: activeTab === t.id ? t.color : '#94a3b8', margin: 0, lineHeight: 1.4 }}>{t.description}</p>
-                  </button>
-                ))}
-              </div>
-
-              {/* ── Hall of Fame Panel ── */}
-              {activeTab === 'halloffame' && (
-                <div>
-                  <div style={{ background: '#fff', borderRadius: '14px', border: '1px solid #e2e8f0', padding: '14px 18px', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.8px', flexShrink: 0 }}>Select Month</span>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {MONTHS.map(m => (
-                          <button key={m.value} className="hof-month-btn" onClick={() => setHofMonth(m.value)}
-                            style={{ padding: '5px 12px', borderRadius: '7px', fontSize: '12px', fontWeight: hofMonth === m.value ? '700' : '500', cursor: 'pointer', border: hofMonth === m.value ? '1.5px solid #d97706' : '1.5px solid #e2e8f0', background: hofMonth === m.value ? '#fffbeb' : 'transparent', color: hofMonth === m.value ? '#b45309' : '#64748b', outline: 'none' }}>
-                            {m.isCurrent ? `${m.short} (Current)` : m.short}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                    <CrownIcon size={15} color="#d97706" />
-                    <span style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a' }}>
-                      {hofLoading ? 'Loading...' : hofError ? 'Error loading data' : `${hofMonthLabel} Champions`}
-                    </span>
-                    {!hofLoading && !hofError && <span style={{ fontSize: '12px', color: '#94a3b8' }}> one winner per category</span>}
-                  </div>
-                  {hofError ? (
-                    <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #fee2e2', padding: '40px', textAlign: 'center', marginBottom: '32px' }}>
-                      <p style={{ fontSize: '14px', color: '#dc2626', fontWeight: '600', marginBottom: '14px' }}>{hofError}</p>
-                      <button onClick={() => fetchHofChampions(hofMonth)} style={{ padding: '8px 20px', borderRadius: '8px', border: 'none', background: '#d97706', color: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>Try Again</button>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '36px' }}>
-                      {CAT_ORDER.map(cat => (
-                        <ChampionCard key={cat} champion={hofChampions?.[cat]} category={cat} isCurrentUser={hofChampions?.[cat]?.id === currentUserId} isLoading={hofLoading} />
-                      ))}
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-                    </div>
-                    <h2 style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Past Champions Archive</h2>
-                  </div>
-                  <div style={{ background: '#fff', borderRadius: '14px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-                    {hofArchiveMonths.map((m, idx) => {
-                      const isExpanded = hofExpandedArchive === m.value;
-                      const archData = hofArchiveData[m.value];
-                      const isLoadingA = hofArchiveLoading[m.value];
-                      const isLast = idx === hofArchiveMonths.length - 1;
-                      return (
-                        <div key={m.value} style={{ borderBottom: isLast ? 'none' : '1px solid #f1f5f9' }}>
-                          <div className="hof-archive-row" onClick={() => toggleHofArchive(m.value)}
-                            style={{ display: 'flex', alignItems: 'center', padding: '13px 20px', background: isExpanded ? '#fafbfc' : '#fff', gap: '16px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '180px', flexShrink: 0 }}>
-                              <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: '#fffbeb', border: '1px solid #fde68a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <CrownIcon size={12} color="#d97706" />
-                              </div>
-                              <span style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{m.label}</span>
-                            </div>
-                            {!isExpanded && (
-                              <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
-                                {CAT_ORDER.map((cat, ci) => (
-                                  <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 16px', borderLeft: ci > 0 ? '1px solid #f1f5f9' : 'none' }}>
-                                    <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: CATS[cat].color, flexShrink: 0 }} />
-                                    <MiniChip champion={archData?.[cat]} category={cat} />
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5"
-                              style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s', flexShrink: 0, marginLeft: 'auto' }}>
-                              <polyline points="6 9 12 15 18 9" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          </div>
-                          {isExpanded && (
-                            <div style={{ padding: '20px', background: '#fafbfc', borderTop: '1px solid #f1f5f9' }}>
-                              {isLoadingA ? (
-                                <div style={{ textAlign: 'center', padding: '28px' }}>
-                                  <div style={{ width: '26px', height: '26px', border: '3px solid #fef3c7', borderTop: '3px solid #d97706', borderRadius: '50%', animation: 'hof-spin 0.8s linear infinite', margin: '0 auto' }} />
-                                </div>
-                              ) : (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
-                                  {CAT_ORDER.map(cat => (
-                                    <ChampionCard key={cat} champion={archData?.[cat]} category={cat} isCurrentUser={archData?.[cat]?.id === currentUserId} isLoading={false} />
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* ── Filter & Sort Bar (hidden on HOF tab) ── */}
-              {activeTab !== 'halloffame' && <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', background: '#fff', borderRadius: '14px', padding: '12px 20px', border: '1px solid #e2e8f0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginRight: '4px' }}>Period</span>
-                  {TIME_OPTIONS.map(opt => (
-                    <button key={opt.value} onClick={() => setTimeFilter(opt.value)}
-                      style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', border: timeFilter === opt.value ? `1.5px solid ${tab.color}` : '1.5px solid #e2e8f0', background: timeFilter === opt.value ? tab.bg : '#f8fafc', color: timeFilter === opt.value ? tab.color : '#64748b', transition: 'all 0.15s' }}>
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Sort</span>
-                  <button onClick={() => setSortDir('desc')} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', border: sortDir === 'desc' ? `1.5px solid ${tab.color}` : '1.5px solid #e2e8f0', background: sortDir === 'desc' ? tab.bg : '#f8fafc', color: sortDir === 'desc' ? tab.color : '#64748b' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 4h13M3 8h9M3 12h5M17 20V4M17 20l-4-4M17 20l4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    Highest First
-                  </button>
-                  <button onClick={() => setSortDir('asc')} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', border: sortDir === 'asc' ? `1.5px solid ${tab.color}` : '1.5px solid #e2e8f0', background: sortDir === 'asc' ? tab.bg : '#f8fafc', color: sortDir === 'asc' ? tab.color : '#64748b' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 20h13M3 16h9M3 12h5M17 4v16M17 4l-4 4M17 4l4 4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    Lowest First
-                  </button>
-                </div>
-              </div>}
-
-              {/* ── Leaderboard content (hidden on HOF tab) ── */}
-              {activeTab !== 'halloffame' && <>
-
-              {/* ── Loading ── */}
-              {loading && (
-                <div style={{ background: '#fff', borderRadius: '16px', padding: '60px', textAlign: 'center', border: '1px solid #e2e8f0' }}>
-                  <div style={{ width: '36px', height: '36px', border: `3px solid ${tab.bg}`, borderTop: `3px solid ${tab.color}`, borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 14px' }} />
-                  <p style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>Loading {tab.label} leaderboard...</p>
-                  <style>{``}</style>
-                </div>
-              )}
-
-              {/* ── Error ── */}
-              {!loading && error && (
-                <div style={{ background: '#fff', borderRadius: '16px', padding: '48px', textAlign: 'center', border: '1px solid #fee2e2' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                  </div>
-                  <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#dc2626', marginBottom: '6px' }}>Failed to load</h3>
-                  <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>{error}</p>
-                  <button onClick={fetchLeaderboard} style={{ padding: '8px 20px', borderRadius: '8px', border: 'none', background: '#6366f1', color: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>Try Again</button>
-                </div>
-              )}
-
-              {/* ── Empty ── */}
-              {!loading && !error && leaderboardData.length === 0 && (
-                <div style={{ background: '#fff', borderRadius: '16px', padding: '60px', textAlign: 'center', border: '1px solid #e2e8f0' }}>
-                  <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: tab.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', color: tab.color }}>
-                    {tab.icon}
-                  </div>
-                  <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '6px' }}>No data yet</h3>
-                  <p style={{ fontSize: '13px', color: '#94a3b8' }}>No {tab.label.toLowerCase()} rankings found for this period.</p>
-                </div>
-              )}
-
-              {/* ── Main Table ── */}
-              {!loading && !error && leaderboardData.length > 0 && (
-                <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-
-                  {/* Table column header */}
-                  <div style={{ display: 'grid', gridTemplateColumns: activeTab === 'points' ? '56px 1fr 120px 120px 120px 120px 120px 120px' : activeTab === 'sales' ? '56px 1fr 130px 130px 130px 130px' : '56px 1fr 130px 130px 130px', padding: '12px 24px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                    {(activeTab === 'points'
-                      ? ['#', 'MEMBER', 'TIER', 'RANK', 'EARNED', 'BURNED', 'REDEEMED', 'NET POINTS']
-                      : activeTab === 'sales' ? ['#', 'MEMBER', 'TIER', 'RANK', 'USD EARNED', 'USDT EARNED'] : ['#', 'MEMBER', 'TIER', 'RANK', tab.colLabel]
-                    ).map((h, i) => (
-                      <div key={h} style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: i === 0 ? 'center' : i >= 4 ? 'right' : 'left', paddingLeft: i === 1 ? '49px' : i === 2 ? '8px' : i === 3 ? '60px' : '0' }}>{h}</div>
-                    ))}
-                  </div>
-
-                  {/* Rows */}
-                  {leaderboardData.map((u, idx) => {
-                    const isTop3 = u.rank <= 3;
-                    const rColor = RANK_COLORS[u.current_rank] || '#94a3b8';
-                    const isMe = u.isCurrentUser;
-                    const isPoints = activeTab === 'points';
-                    return (
-                      <div key={u.id || idx}
-                        style={{ display: 'grid', gridTemplateColumns: isPoints ? '56px 1fr 120px 120px 120px 120px 120px 120px' : activeTab === 'sales' ? '56px 1fr 130px 130px 130px 130px' : '56px 1fr 130px 130px 130px', padding: '13px 24px', alignItems: 'center', borderBottom: idx < leaderboardData.length - 1 ? '1px solid #f1f5f9' : 'none', background: isMe ? `${tab.color}08` : '#fff', transition: 'background 0.15s' }}
-                        onMouseEnter={e => { if (!isMe) e.currentTarget.style.background = '#f8fafc'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = isMe ? `${tab.color}08` : '#fff'; }}
-                      >
-                        {/* Position */}
-                        <div style={{ textAlign: 'center' }}>
-                          {isTop3 ? (
-                            <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: posGrad[u.rank - 1], display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <span style={{ fontSize: '13px', fontWeight: '800', color: posText[u.rank - 1] }}>{u.rank}</span>
-                            </div>
-                          ) : (
-                            <span style={{ fontSize: '13px', fontWeight: '700', color: '#94a3b8' }}>{u.rank}</span>
-                          )}
-                        </div>
-
-                        {/* Member */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '11px', minWidth: 0 }}>
-                          <img src={u.avatar} alt={u.name} style={{ width: '38px', height: '38px', borderRadius: '50%', border: `2px solid ${isTop3 ? tab.color + '50' : '#e2e8f0'}`, flexShrink: 0, objectFit: 'cover' }} />
-                          <div style={{ minWidth: 0 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                              <span style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{u.name}</span>
-                              {isMe && <span style={{ fontSize: '10px', fontWeight: '700', color: tab.color, background: tab.bg, padding: '1px 7px', borderRadius: '100px', flexShrink: 0 }}>YOU</span>}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Tier */}
-                        <div>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', borderRadius: '7px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.4px', background: u.tier === 'DAG_LIEUTENANT' ? '#dcfce7' : '#f1f5f9', color: u.tier === 'DAG_LIEUTENANT' ? '#10b981' : '#64748b', border: `1px solid ${u.tier === 'DAG_LIEUTENANT' ? '#bbf7d0' : '#e2e8f0'}` }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            {u.tier === 'DAG_LIEUTENANT' ? 'Lieutenant' : 'Soldier'}
-                          </span>
-                        </div>
-
-                        {/* DAG Rank */}
-                        <div style={{ textAlign: 'right' }}>
-                          {(() => {
-                            const rank = u.current_rank || 'STARTER';
-                            const rc = RANK_COLORS[rank] || '#6b7280';
-                            return (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', borderRadius: '7px', fontSize: '11px', fontWeight: '700', letterSpacing: '0.4px', background: rc + '15', color: rc, border: `1px solid ${rc}30` }}>
-                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: rc, flexShrink: 0, display: 'inline-block' }} />
-                                {rank}
-                              </span>
-                            );
-                          })()}
-                        </div>
-
-                        {/* Value — for non-points tabs */}
-                        {!isPoints && (
-                          <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '15px', fontWeight: '800', color: tab.color }}>{fmtValue(u.value)}</div>
-                            <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginTop: '1px' }}>{activeTab === 'sales' ? 'USD EARNED' : tab.colLabel}</div>
-                          </div>
-                        )}
-
-                        {/* USDT Earned — sales tab only */}
-                        {activeTab === 'sales' && (
-                          <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '15px', fontWeight: '800', color: '#0ea5e9' }}>{u.usdt_earned != null ? `$${Number(u.usdt_earned).toLocaleString()}` : '—'}</div>
-                            <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginTop: '1px' }}>USDT</div>
-                          </div>
-                        )}
-
-                        {/* Points tab: Earned, Burned, Redeemed, Net columns */}
-                        {isPoints && (
-                          <>
-                            <div style={{ textAlign: 'right' }}>
-                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#10b981' }}>{(u.points_earned || 0).toLocaleString()}</div>
-                              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginTop: '1px' }}>pts earned</div>
-                            </div>
-                            <div style={{ textAlign: 'right' }}>
-                              <div style={{ fontSize: '14px', fontWeight: '700', color: (u.points_burned || 0) > 0 ? '#ef4444' : '#cbd5e1' }}>{(u.points_burned || 0).toLocaleString()}</div>
-                              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginTop: '1px' }}>rank burns</div>
-                            </div>
-                            <div style={{ textAlign: 'right' }}>
-                              <div style={{ fontSize: '14px', fontWeight: '700', color: (u.points_redeemed || 0) > 0 ? '#f59e0b' : '#cbd5e1' }}>{(u.points_redeemed || 0).toLocaleString()}</div>
-                              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginTop: '1px' }}>redeemed</div>
-                            </div>
-                            <div style={{ textAlign: 'right' }}>
-                              <div style={{ fontSize: '14px', fontWeight: '800', color: tab.color }}>{fmtValue(u.value)}</div>
-                              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginTop: '1px' }}>net pts</div>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Your rank callout */}
-              {currentUserRank && !loading && (
-                <div style={{ marginTop: '16px', padding: '12px 20px', background: tab.bg, borderRadius: '12px', border: `1px solid ${tab.color}30`, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={tab.color} strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: tab.color }}>Your rank: <strong>#{currentUserRank}</strong> on the {tab.label} leaderboard</span>
-                </div>
-              )}
-              </>}
-
+            <div>
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: nm.textPrimary, margin: 0, letterSpacing: '-0.4px' }}>Leaderboard</h1>
+              <p style={{ fontSize: '13px', color: nm.textDark, margin: 0, fontWeight: '500' }}>Compete across 4 categories — Points, Referrals, Sales &amp; Hall of Fame</p>
             </div>
           </div>
         </div>
+
+        {/* ── 4 Category Tab Cards ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '14px', marginBottom: '22px' }}>
+          {TABS.map((t, i) => {
+            const active = activeTab === t.id;
+            return (
+              <button key={t.id} className="nm-tab-btn"
+                onClick={() => { setActiveTab(t.id); setLeaderboardData([]); }}
+                style={{
+                  padding: '18px 20px', borderRadius: '18px', cursor: 'pointer', textAlign: 'left', border: 'none',
+                  background: nm.bg, outline: 'none',
+                  boxShadow: active ? nm.shadowInset : nm.shadowSm,
+                  transition: 'all 0.2s ease',
+                  animation: `nmFadeUp 0.4s ease ${i * 60}ms both`,
+                }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                  <div style={{
+                    width: '36px', height: '36px', borderRadius: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    background: active ? nm.bg : nm.bg,
+                    boxShadow: active ? `inset 2px 2px 5px rgba(0,0,0,0.12), inset -2px -2px 4px rgba(255,255,255,0.8)` : nm.shadowXs,
+                    color: active ? t.color : nm.textDark,
+                  }}>{t.icon}</div>
+                  <span style={{ fontSize: '13px', fontWeight: '800', color: active ? t.color : nm.textDark }}>{t.label}</span>
+                </div>
+                <p style={{ fontSize: '11px', color: active ? t.color : nm.textDark, margin: 0, lineHeight: 1.5, fontWeight: '500' }}>{t.description}</p>
+                {active && <div style={{ marginTop: '10px', height: '3px', borderRadius: '2px', background: t.color, boxShadow: `0 0 8px ${t.color}60`, width: '40px' }} />}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ══ HALL OF FAME PANEL ══ */}
+        {activeTab === 'halloffame' && (
+          <div style={{ animation: 'nmFadeUp 0.4s ease' }}>
+            {/* Month selector */}
+            <div style={{ background: nm.bg, borderRadius: '16px', boxShadow: nm.shadowSm, padding: '16px 20px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textDark, textTransform: 'uppercase', letterSpacing: '0.8px', flexShrink: 0 }}>Select Month</span>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {MONTHS.map(m => (
+                    <button key={m.value} onClick={() => setHofMonth(m.value)}
+                      style={{
+                        padding: '5px 13px', borderRadius: '9px', fontSize: '11px', fontWeight: hofMonth === m.value ? '700' : '500',
+                        cursor: 'pointer', border: 'none', outline: 'none',
+                        background: nm.bg,
+                        boxShadow: hofMonth === m.value ? nm.shadowInset : nm.shadowXs,
+                        color: hofMonth === m.value ? '#b45309' : nm.textDark,
+                        transition: 'all 0.15s',
+                      }}>
+                      {m.isCurrent ? `${m.short} (Current)` : m.short}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Champions heading */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: nm.bg, boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CrownIcon size={14} color="#d97706" />
+              </div>
+              <span style={{ fontSize: '14px', fontWeight: '700', color: nm.textPrimary }}>
+                {hofLoading ? 'Loading...' : hofError ? 'Error loading data' : `${hofMonthLabel} Champions`}
+              </span>
+              {!hofLoading && !hofError && <span style={{ fontSize: '12px', color: nm.textDark, fontWeight: '500' }}>— one winner per category</span>}
+            </div>
+
+            {hofError ? (
+              <div style={{ background: nm.bg, borderRadius: '16px', boxShadow: nm.shadowSm, padding: '40px', textAlign: 'center', marginBottom: '28px' }}>
+                <p style={{ fontSize: '14px', color: '#dc2626', fontWeight: '600', marginBottom: '14px' }}>{hofError}</p>
+                <button onClick={() => fetchHofChampions(hofMonth)} style={{ padding: '8px 22px', borderRadius: '10px', border: 'none', background: nm.bg, boxShadow: nm.shadowSm, color: '#d97706', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Try Again</button>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '32px' }}>
+                {CAT_ORDER.map(cat => (
+                  <ChampionCard key={cat} champion={hofChampions?.[cat]} category={cat} isCurrentUser={hofChampions?.[cat]?.id === currentUserId} isLoading={hofLoading} />
+                ))}
+              </div>
+            )}
+
+            {/* Archive */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+              <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: nm.bg, boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={nm.textDark} strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              </div>
+              <h2 style={{ fontSize: '14px', fontWeight: '700', color: nm.textPrimary, margin: 0 }}>Past Champions Archive</h2>
+            </div>
+            <div style={{ background: nm.bg, borderRadius: '16px', boxShadow: nm.shadowSm, overflow: 'hidden' }}>
+              {hofArchiveMonths.map((m, idx) => {
+                const isExpanded = hofExpandedArchive === m.value;
+                const archData = hofArchiveData[m.value];
+                const isLoadingA = hofArchiveLoading[m.value];
+                const isLast = idx === hofArchiveMonths.length - 1;
+                return (
+                  <div key={m.value} style={{ borderBottom: isLast ? 'none' : `1px solid ${nm.border}` }}>
+                    <div className="nm-archive-row" onClick={() => toggleHofArchive(m.value)}
+                      style={{ display: 'flex', alignItems: 'center', padding: '13px 20px', gap: '16px', transition: 'background 0.15s' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '180px', flexShrink: 0 }}>
+                        <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: nm.bg, boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <CrownIcon size={12} color="#d97706" />
+                        </div>
+                        <span style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary }}>{m.label}</span>
+                      </div>
+                      {!isExpanded && (
+                        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
+                          {CAT_ORDER.map((cat, ci) => (
+                            <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 14px', borderLeft: ci > 0 ? `1px solid ${nm.border}` : 'none' }}>
+                              <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: CATS[cat].color, flexShrink: 0 }} />
+                              <MiniChip champion={archData?.[cat]} category={cat} />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={nm.textDark} strokeWidth="2.5"
+                        style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s', flexShrink: 0, marginLeft: 'auto' }}>
+                        <polyline points="6 9 12 15 18 9" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    {isExpanded && (
+                      <div style={{ padding: '20px', borderTop: `1px solid ${nm.border}` }}>
+                        {isLoadingA ? (
+                          <div style={{ textAlign: 'center', padding: '28px' }}>
+                            <div style={{ width: '26px', height: '26px', border: '3px solid rgba(0,0,0,0.06)', borderTop: '3px solid #d97706', borderRadius: '50%', animation: 'nmSpin 0.8s linear infinite', margin: '0 auto' }} />
+                          </div>
+                        ) : (
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+                            {CAT_ORDER.map(cat => (
+                              <ChampionCard key={cat} champion={archData?.[cat]} category={cat} isCurrentUser={archData?.[cat]?.id === currentUserId} isLoading={false} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ══ LEADERBOARD TABS (Points / Referrals / Sales) ══ */}
+        {activeTab !== 'halloffame' && (
+          <div style={{ animation: 'nmFadeUp 0.4s ease' }}>
+
+            {/* ── Filter & Sort Bar ── */}
+            <div style={{ background: nm.bg, borderRadius: '16px', boxShadow: nm.shadowSm, padding: '14px 20px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+              {/* Period */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textDark, textTransform: 'uppercase', letterSpacing: '0.6px', marginRight: '2px' }}>Period</span>
+                {TIME_OPTIONS.map(opt => (
+                  <button key={opt.value} className="nm-filter-btn"
+                    onClick={() => setTimeFilter(opt.value)}
+                    style={{
+                      padding: '6px 14px', borderRadius: '9px', fontSize: '12px', fontWeight: '600',
+                      cursor: 'pointer', border: 'none', outline: 'none', transition: 'all 0.15s',
+                      background: nm.bg,
+                      boxShadow: timeFilter === opt.value ? nm.shadowInset : nm.shadowXs,
+                      color: timeFilter === opt.value ? tab.color : nm.textDark,
+                    }}>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              {/* Sort + Pagination */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textDark, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Sort</span>
+                  {[
+                    { val: 'desc', label: 'Highest', icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 4h13M3 8h9M3 12h5M17 20V4M17 20l-4-4M17 20l4-4" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+                    { val: 'asc',  label: 'Lowest',  icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 20h13M3 16h9M3 12h5M17 4v16M17 4l-4 4M17 4l4 4" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+                  ].map(s => (
+                    <button key={s.val} className="nm-filter-btn"
+                      onClick={() => setSortDir(s.val)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '5px',
+                        padding: '6px 14px', borderRadius: '9px', fontSize: '12px', fontWeight: '600',
+                        cursor: 'pointer', border: 'none', outline: 'none', transition: 'all 0.15s',
+                        background: nm.bg,
+                        boxShadow: sortDir === s.val ? nm.shadowInset : nm.shadowXs,
+                        color: sortDir === s.val ? tab.color : nm.textDark,
+                      }}>
+                      {s.icon}{s.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Top Pagination */}
+                {!loading && !error && leaderboardData.length > PAGE_SIZE && (() => {
+                  const totalPages = Math.ceil(leaderboardData.length / PAGE_SIZE);
+                  return (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', borderLeft: `1px solid ${nm.border}`, paddingLeft: '12px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textDark, marginRight: '2px' }}>{page}/{totalPages}</span>
+                      <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                        style={{ width: '28px', height: '28px', borderRadius: '8px', border: 'none', outline: 'none', cursor: page === 1 ? 'default' : 'pointer', background: nm.bg, boxShadow: page === 1 ? nm.shadowInset : nm.shadowXs, color: page === 1 ? nm.textMuted : nm.textPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                        <button key={p} onClick={() => setPage(p)}
+                          style={{ minWidth: '28px', height: '28px', padding: '0 6px', borderRadius: '8px', border: 'none', outline: 'none', cursor: 'pointer', background: nm.bg, boxShadow: page === p ? nm.shadowInset : nm.shadowXs, color: page === p ? tab.color : nm.textPrimary, fontSize: '12px', fontWeight: page === p ? '800' : '600', transition: 'all 0.15s' }}>
+                          {p}
+                        </button>
+                      ))}
+                      <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                        style={{ width: '28px', height: '28px', borderRadius: '8px', border: 'none', outline: 'none', cursor: page === totalPages ? 'default' : 'pointer', background: nm.bg, boxShadow: page === totalPages ? nm.shadowInset : nm.shadowXs, color: page === totalPages ? nm.textMuted : nm.textPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+
+            {/* ── Loading ── */}
+            {loading && (
+              <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadowSm, padding: '64px', textAlign: 'center' }}>
+                <div style={{ width: '38px', height: '38px', border: `3px solid ${nm.border}`, borderTop: `3px solid ${tab.color}`, borderRadius: '50%', animation: 'nmSpin 0.8s linear infinite', margin: '0 auto 16px' }} />
+                <p style={{ fontSize: '14px', color: nm.textDark, fontWeight: '600', margin: 0 }}>Loading {tab.label} leaderboard...</p>
+              </div>
+            )}
+
+            {/* ── Error ── */}
+            {!loading && error && (
+              <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadowSm, padding: '52px', textAlign: 'center' }}>
+                <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: nm.bg, boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#dc2626', marginBottom: '6px' }}>Failed to load</h3>
+                <p style={{ fontSize: '13px', color: nm.textDark, marginBottom: '18px' }}>{error}</p>
+                <button onClick={fetchLeaderboard} style={{ padding: '9px 24px', borderRadius: '10px', border: 'none', background: nm.bg, boxShadow: nm.shadowSm, color: nm.accent, fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Try Again</button>
+              </div>
+            )}
+
+            {/* ── Empty ── */}
+            {!loading && !error && leaderboardData.length === 0 && (
+              <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadowSm, padding: '64px', textAlign: 'center' }}>
+                <div style={{ width: '54px', height: '54px', borderRadius: '16px', background: nm.bg, boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: tab.color }}>
+                  {tab.icon}
+                </div>
+                <h3 style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary, marginBottom: '6px' }}>No data yet</h3>
+                <p style={{ fontSize: '13px', color: nm.textDark, margin: 0 }}>No {tab.label.toLowerCase()} rankings found for this period.</p>
+              </div>
+            )}
+
+            {/* ── Main Table ── */}
+            {!loading && !error && leaderboardData.length > 0 && (
+              <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadowSm, overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+
+                {/* Column headers */}
+                {(() => {
+                  const isPoints = activeTab === 'points';
+                  const isSales = activeTab === 'sales';
+                  const cols = isPoints
+                    ? '48px 7fr 1.5fr 1fr 1fr 1fr 1fr 1fr'
+                    : isSales ? '48px 7fr 1.5fr 1fr 1.5fr 1.5fr' : '48px 7fr 2fr 2fr 2fr';
+                  const headers = isPoints
+                    ? ['#', 'MEMBER', 'TIER', 'DAG RANK', 'EARNED', 'BURNED', 'REDEEMED', 'NET POINTS']
+                    : isSales ? ['#', 'MEMBER', 'TIER', 'DAG RANK', 'USD EARNED', 'USDT EARNED']
+                    : ['#', 'MEMBER', 'TIER', 'DAG RANK', tab.colLabel];
+                  return (
+                    <div style={{ display: 'grid', gridTemplateColumns: cols, padding: '11px 16px', borderBottom: `1px solid ${nm.border}` }}>
+                      {headers.map((h, i) => (
+                        <div key={h} style={{ fontSize: '10px', fontWeight: '700', color: nm.textDark, textTransform: 'uppercase', letterSpacing: '0.7px', textAlign: i === 0 ? 'center' : i >= 4 ? 'right' : 'left', paddingLeft: i === 1 ? '16px' : (i === 2 || i === 3) ? '44px' : '0' }}>{h}</div>
+                      ))}
+                    </div>
+                  );
+                })()}
+
+                {/* Rows */}
+                {leaderboardData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map((u, idx) => {
+                  const isPoints = activeTab === 'points';
+                  const isSales = activeTab === 'sales';
+                  const cols = isPoints
+                    ? '48px 7fr 1.5fr 1fr 1fr 1fr 1fr 1fr'
+                    : isSales ? '48px 7fr 1.5fr 1fr 1.5fr 1.5fr' : '48px 7fr 2fr 2fr 2fr';
+                  const isTop3 = u.rank <= 3;
+                  const isMe = u.isCurrentUser;
+                  const rc = RANK_COLORS[u.current_rank] || '#94a3b8';
+                  const posGrad = ['linear-gradient(135deg,#fcd34d,#f59e0b)', 'linear-gradient(135deg,#e2e8f0,#94a3b8)', 'linear-gradient(135deg,#fed7aa,#f97316)'];
+                  const posText = ['#92400e', '#334155', '#7c2d12'];
+                  const pageSlice = leaderboardData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+                  return (
+                    <div key={u.id || idx} className="nm-row"
+                      style={{
+                        display: 'grid', gridTemplateColumns: cols,
+                        padding: '8px 16px', alignItems: 'center',
+                        borderBottom: idx < pageSlice.length - 1 ? `1px solid ${nm.border}` : 'none',
+                        background: isMe ? `${tab.color}08` : 'transparent',
+                        transition: 'background 0.15s',
+                      }}>
+
+                      {/* Position */}
+                      <div style={{ textAlign: 'center' }}>
+                        {isTop3 ? (
+                          <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: posGrad[u.rank - 1], display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '2px 2px 6px rgba(0,0,0,0.15)' }}>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: posText[u.rank - 1] }}>{u.rank}</span>
+                          </div>
+                        ) : (
+                          <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadowXs, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary }}>{u.rank}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Member */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, paddingLeft: '16px' }}>
+                        <img src={u.avatar} alt={u.name}
+                          style={{ width: '38px', height: '38px', borderRadius: '50%', flexShrink: 0, objectFit: 'cover',
+                            boxShadow: isTop3 ? `0 0 0 2px ${tab.color}60, ${nm.shadowXs}` : nm.shadowXs }} />
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                            <span style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{u.name}</span>
+                            {isMe && (
+                              <span style={{ fontSize: '9px', fontWeight: '800', color: tab.color, background: nm.bg, boxShadow: nm.shadowXs, padding: '2px 7px', borderRadius: '100px', flexShrink: 0, letterSpacing: '0.5px' }}>YOU</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Tier */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <img
+                            src={u.tier === 'DAG_LIEUTENANT' ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'}
+                            alt={u.tier === 'DAG_LIEUTENANT' ? 'Lieutenant' : 'Soldier'}
+                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                          />
+                        </div>
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center',
+                          padding: '4px 9px', borderRadius: '8px', fontSize: '11px', fontWeight: '700',
+                          textTransform: 'uppercase', letterSpacing: '0.3px',
+                          background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary, whiteSpace: 'nowrap',
+                        }}>
+                          {u.tier === 'DAG_LIEUTENANT' ? 'Lieutenant' : 'Soldier'}
+                        </span>
+                      </div>
+
+                      {/* DAG Rank */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <img
+                            src={`/images/badges/dag-${(u.current_rank || 'STARTER').toLowerCase()}.svg`}
+                            alt={u.current_rank || 'STARTER'}
+                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                            onError={e => { e.currentTarget.parentElement.style.display = 'none'; }}
+                          />
+                        </div>
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center',
+                          padding: '4px 9px', borderRadius: '8px', fontSize: '11px', fontWeight: '700',
+                          letterSpacing: '0.3px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary, whiteSpace: 'nowrap',
+                        }}>
+                          {u.current_rank || 'STARTER'}
+                        </span>
+                      </div>
+
+                      {/* Value — referral tab */}
+                      {!isPoints && !isSales && (
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary }}>{fmtValue(u.value)}</div>
+                          <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>{tab.colLabel}</div>
+                        </div>
+                      )}
+
+                      {/* Sales: USD */}
+                      {isSales && (
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary }}>{fmtValue(u.value)}</div>
+                          <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>USD</div>
+                        </div>
+                      )}
+
+                      {/* Sales: USDT */}
+                      {isSales && (
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary }}>{u.usdt_earned != null ? `$${Number(u.usdt_earned).toLocaleString()}` : '—'}</div>
+                          <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>USDT</div>
+                        </div>
+                      )}
+
+                      {/* Points: Earned / Burned / Redeemed / Net */}
+                      {isPoints && (
+                        <>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary }}>{(u.points_earned || 0).toLocaleString()}</div>
+                            <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>earned</div>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary }}>{(u.points_burned || 0).toLocaleString()}</div>
+                            <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>burned</div>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary }}>{(u.points_redeemed || 0).toLocaleString()}</div>
+                            <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>redeemed</div>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '16px', fontWeight: '800', color: nm.textPrimary }}>{fmtValue(u.value)}</div>
+                            <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>net pts</div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* ── Pagination ── */}
+            {!loading && !error && leaderboardData.length > PAGE_SIZE && (() => {
+              const totalPages = Math.ceil(leaderboardData.length / PAGE_SIZE);
+              const pages = [];
+              for (let p = 1; p <= totalPages; p++) pages.push(p);
+              return (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', padding: '12px 20px', background: nm.bg, borderRadius: '14px', boxShadow: nm.shadowSm }}>
+                  <span style={{ fontSize: '12px', fontWeight: '600', color: nm.textDark }}>
+                    Showing {((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, leaderboardData.length)} of {leaderboardData.length}
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                      style={{ width: '32px', height: '32px', borderRadius: '9px', border: 'none', outline: 'none', cursor: page === 1 ? 'default' : 'pointer', background: nm.bg, boxShadow: page === 1 ? nm.shadowInset : nm.shadowXs, color: page === 1 ? nm.textMuted : nm.textDark, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
+                    {pages.map(p => (
+                      <button key={p} onClick={() => setPage(p)}
+                        style={{ minWidth: '32px', height: '32px', padding: '0 8px', borderRadius: '9px', border: 'none', outline: 'none', cursor: 'pointer', background: nm.bg, boxShadow: page === p ? nm.shadowInset : nm.shadowXs, color: page === p ? tab.color : nm.textPrimary, fontSize: '13px', fontWeight: page === p ? '800' : '600', transition: 'all 0.15s' }}>
+                        {p}
+                      </button>
+                    ))}
+                    <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                      style={{ width: '32px', height: '32px', borderRadius: '9px', border: 'none', outline: 'none', cursor: page === totalPages ? 'default' : 'pointer', background: nm.bg, boxShadow: page === totalPages ? nm.shadowInset : nm.shadowXs, color: page === totalPages ? nm.textMuted : nm.textDark, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ── Your rank callout ── */}
+            {currentUserRank && !loading && (
+              <div style={{ marginTop: '16px', padding: '13px 20px', background: nm.bg, borderRadius: '14px', boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: nm.bg, boxShadow: `inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.8)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={tab.color} strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <span style={{ fontSize: '13px', fontWeight: '600', color: nm.textPrimary }}>Your rank: <strong style={{ color: tab.color }}>#{currentUserRank}</strong> on the {tab.label} leaderboard</span>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
-      <Footer1 />
     </div>
   );
 }

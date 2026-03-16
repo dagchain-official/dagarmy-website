@@ -185,7 +185,7 @@ export default function AdminDashboard2() {
     if (!userData || !programData) {
       return { totalStudents: 0, totalModules: 0, totalLessons: 0, totalRevenue: 0, activeUsers: 0, completionRate: 0, certificatesIssued: 0, totalEnrollments: 0, newUsersThisWeek: 0, growthRate: 0 };
     }
-    const totalStudents = userData.stats.totalUsers;
+    const totalStudents = userData.stats.totalStudents ?? userData.stats.totalUsers;
     const totalModules = programData.stats?.totalModules || 0;
     const totalLessons = programData.stats?.totalLessons || 0;
     const totalEnrollments = programData.stats?.totalEnrollments || 0;
