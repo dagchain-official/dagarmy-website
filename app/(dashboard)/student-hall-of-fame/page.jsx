@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase/client";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import { ChampionCard, MiniChip, CrownIcon, CATS, HOF_CSS } from "@/components/hall-of-fame/HofComponents";
 
 function getLast12Months() {
@@ -76,12 +75,8 @@ export default function HallOfFamePage() {
   const archiveMonths = MONTHS.slice(1);
 
   return (
-    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
+    <div style={{ flex: 1, background: '#f0f2f5', minWidth: 0, overflowX: 'hidden', padding: '36px 40px 56px' }}>
       <style>{HOF_CSS}</style>
-      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
-        <DashboardNav2 />
-      </div>
-      <div style={{ flex: 1, background: '#f0f2f5', minWidth: 0, overflowX: 'hidden', padding: '36px 40px 56px' }}>
 
               {/* ══ PAGE HEADER ══ */}
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "24px", marginBottom: "28px", flexWrap: "wrap" }}>
@@ -243,7 +238,6 @@ export default function HallOfFamePage() {
                 })}
               </div>
 
-      </div>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 
 const STATUS_META = {
   open:            { label: "Open",           color: "#2563eb", bg: "#dbeafe", border: "#bfdbfe" },
@@ -129,12 +128,7 @@ export default function StudentSupportPage() {
   const lbl = { fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.6px", marginBottom:"8px", display:"block" };
 
   return (
-    <div style={{ minHeight:"100vh", background:"#f0f2f5", display:"flex", flexDirection:"column" }}>
-        <div style={{ display:"flex", flex:1 }}>
-          <div style={{ width:'248px', flexShrink:0, padding:'20px 12px', position:'sticky', top:'0', height:'100vh', overflowY:'auto', background:'#f0f2f5' }}>
-            <DashboardNav2 />
-          </div>
-        <main style={{ flex:1, padding:"32px 28px", minWidth:0 }}>
+    <main style={{ flex:1, padding:"32px 28px", minWidth:0, background:"#f0f2f5", minHeight:"100vh" }}>
 
           {/* HERO BANNER */}
           <div style={{ background:"linear-gradient(135deg,#1e3a5f 0%,#2563eb 60%,#7c3aed 100%)", borderRadius:"20px", padding:"40px 48px", marginBottom:"32px", position:"relative", overflow:"hidden" }}>
@@ -374,9 +368,7 @@ export default function StudentSupportPage() {
               )}
             </div>
           )}
-        </main>
-      </div>
-    </div>
+    </main>
   );
 }
 

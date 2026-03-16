@@ -1,5 +1,4 @@
 import Dashboard2 from "@/components/dashboard/Dashboard2";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import React from "react";
 
 export const dynamic = 'force-dynamic';
@@ -11,9 +10,7 @@ export const metadata = {
 
 export default function StudentDashboardPage() {
   return (
-    <DashboardLayout>
-      <Dashboard2 />
-    </DashboardLayout>
+    <Dashboard2 />
   );
 }
 

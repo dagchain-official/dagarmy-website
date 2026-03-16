@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import ReferralContent from "@/components/dashboard/ReferralContent";
 import RewardsContent from "@/components/dashboard/RewardsContent";
 import MyBusinessContent from "@/components/dashboard/MyBusinessContent";
@@ -23,11 +22,7 @@ export default function StudentMyTeamPage() {
   ];
 
   return (
-    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
-      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
-        <DashboardNav2 />
-      </div>
-      <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
+    <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
 
         {/* Page Header */}
         <div style={{ marginBottom: '24px', opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(-8px)', transition: 'all 0.5s ease' }}>
@@ -78,7 +73,6 @@ export default function StudentMyTeamPage() {
           <UpgradesBenefitsContent mounted={mounted} />
         </div>
 
-      </div>
     </div>
   );
 }

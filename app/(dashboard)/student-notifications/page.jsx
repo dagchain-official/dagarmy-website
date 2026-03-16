@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import { Bell, CheckCircle, AlertCircle, Info, Award, BookOpen, Users, Settings, Trash2 } from "lucide-react";
 
 export default function StudentNotificationsPage() {
@@ -101,11 +100,7 @@ export default function StudentNotificationsPage() {
   };
 
   return (
-    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
-      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
-        <DashboardNav2 />
-      </div>
-      <div style={{ flex: 1, padding: '40px', background: '#f0f2f5' }}>
+    <div style={{ flex: 1, padding: '40px', background: '#f0f2f5' }}>
         {/* Header */}
         <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
           <div>
@@ -381,7 +376,6 @@ export default function StudentNotificationsPage() {
             Manage Settings
           </button>
         </div>
-      </div>
     </div>
   );
 }

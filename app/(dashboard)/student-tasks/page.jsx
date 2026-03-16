@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import {
   Zap, CheckCircle, Clock, XCircle, ExternalLink, Link2, Image,
   Upload, X, Send, Filter, Trophy, TrendingUp, Star,
@@ -144,27 +143,18 @@ export default function StudentTasksPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
-        <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
-          <DashboardNav2 />
-        </div>
-        <div style={{ flex: 1, padding: '40px', background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ flex: 1, padding: '40px', background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ width: '40px', height: '40px', border: '3px solid rgba(0,0,0,0.08)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
             <p style={{ fontSize: '14px', color: '#64748b', fontWeight: '600' }}>Loading tasks...</p>
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
           </div>
-        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
-      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
-        <DashboardNav2 />
-      </div>
-      <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
+    <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
 
               {/* Header */}
               <div style={{ marginBottom: '28px' }}>
@@ -420,7 +410,6 @@ export default function StudentTasksPage() {
                 </div>
               )}
 
-      </div>
     </div>
   );
 }

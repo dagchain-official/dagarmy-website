@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase/client";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 import { ChampionCard, MiniChip, CrownIcon, CATS, HOF_CSS } from "@/components/hall-of-fame/HofComponents";
 
 /* ── Neumorphic palette (matches Dashboard / UpgradesBenefits) ── */
@@ -161,7 +160,7 @@ export default function StudentLeaderboardPage() {
   ];
 
   return (
-    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: nm.bg }}>
+    <div style={{ flex: 1, minWidth: 0, padding: '32px 24px 48px', overflowY: 'auto', background: nm.bg }}>
       <style>{HOF_CSS}{`
         @keyframes nmSpin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
         @keyframes nmFadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
@@ -171,13 +170,6 @@ export default function StudentLeaderboardPage() {
         .nm-archive-row:hover { background: rgba(255,255,255,0.55) !important; cursor:pointer; }
       `}</style>
 
-      {/* ── Sidebar ── */}
-      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', background: nm.bg }}>
-        <DashboardNav2 />
-      </div>
-
-      {/* ── Main Content ── */}
-      <div style={{ flex: 1, minWidth: 0, padding: '32px 24px 48px', overflowY: 'auto' }}>
 
         {/* ── Page Header ── */}
         <div style={{ marginBottom: '28px', animation: 'nmFadeUp 0.4s ease' }}>
@@ -644,7 +636,6 @@ export default function StudentLeaderboardPage() {
           </div>
         )}
 
-      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
-import DashboardNav2 from "@/components/dashboard/DashboardNav2";
 
 const EVENT_COLORS = {
   workshop: { bg: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', badge: '#ede9fe', text: '#6366f1' },
@@ -476,11 +475,7 @@ export default function StudentEventsPage() {
 
   return (
     <>
-    <div style={{ display: 'flex', width: '100%', minHeight: '100vh', background: '#f0f2f5' }}>
-      <div style={{ width: '248px', flexShrink: 0, position: 'sticky', top: '0', height: '100vh', overflowY: 'auto', background: '#f0f2f5' }}>
-        <DashboardNav2 />
-      </div>
-      <div style={{ flex: 1, minWidth: 0, padding: '32px 36px', background: '#f0f2f5' }}>
+    <div style={{ flex: 1, minWidth: 0, padding: '32px 36px', background: '#f0f2f5' }}>
 
               {/* Page header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
@@ -556,7 +551,6 @@ export default function StudentEventsPage() {
                   ))}
                 </div>
               )}
-      </div>
     </div>
 
       {/* Create modal */}
