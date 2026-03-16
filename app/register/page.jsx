@@ -1,8 +1,8 @@
 "use client";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function RegisterPage() {
+function RegisterRedirect() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -13,4 +13,12 @@ export default function RegisterPage() {
   }, []);
 
   return null;
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterRedirect />
+    </Suspense>
+  );
 }
