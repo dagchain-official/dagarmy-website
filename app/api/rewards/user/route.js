@@ -11,20 +11,23 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
+    const wallet = searchParams.get('wallet');
 
-    if (!email) {
+    if (!email && !wallet) {
       return NextResponse.json(
-        { error: 'Email is required' },
+        { error: 'email or wallet is required' },
         { status: 400 }
       );
     }
 
-    // Fetch user data with reward information
-    const { data: user, error: userError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', email)
-      .single();
+    // Fetch user data with reward information — prefer email, fall back to wallet
+    let userQuery = supabase.from('users').select('*');
+    if (email) {
+      userQuery = userQuery.eq('email', email);
+    } else {
+      userQuery = userQuery.eq('wallet_address', wallet.toLowerCase());
+    }
+    const { data: user, error: userError } = await userQuery.single();
 
     if (userError || !user) {
       return NextResponse.json(
@@ -89,22 +92,24 @@ export async function GET(request) {
     const ic = {};
     (incentiveConfig || []).forEach(r => { ic[r.config_key] = r.config_value; });
 
-    // Calculate available points (earned - burned)
-    const availablePoints = (user.total_points_earned || 0) - (user.total_points_burned || 0);
-
-    // Split burned vs redeemed from points_transactions
-    const { data: negTxs } = await supabase
+    // Compute all point stats live from transactions (avoids stale stored columns)
+    const { data: allTxs } = await supabase
       .from('points_transactions')
       .select('points, transaction_type')
-      .eq('user_id', user.id)
-      .lt('points', 0);
+      .eq('user_id', user.id);
 
+    let totalPointsEarnedLive = 0;
     let totalPointsBurned = 0;
     let totalPointsRedeemed = 0;
-    (negTxs || []).forEach(t => {
-      if (t.transaction_type === 'rank_burn') totalPointsBurned += Math.abs(t.points);
-      else totalPointsRedeemed += Math.abs(t.points);
+    (allTxs || []).forEach(t => {
+      if (t.points > 0) {
+        totalPointsEarnedLive += t.points;
+      } else {
+        if (t.transaction_type === 'rank_burn') totalPointsBurned += Math.abs(t.points);
+        else totalPointsRedeemed += Math.abs(t.points);
+      }
     });
+    const availablePoints = totalPointsEarnedLive - totalPointsBurned - totalPointsRedeemed;
 
     // Get ranking system config for DAG SOLDIER
     const { data: rankingConfig } = await supabase

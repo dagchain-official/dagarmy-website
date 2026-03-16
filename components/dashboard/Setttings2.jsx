@@ -12,6 +12,11 @@ export default function Setttings() {
   const [paymentSaving, setPaymentSaving] = useState(false);
   const [paymentSaved, setPaymentSaved] = useState(false);
   const [paymentError, setPaymentError] = useState('');
+  const [referralInput, setReferralInput] = useState('');
+  const [referralApplying, setReferralApplying] = useState(false);
+  const [referralMsg, setReferralMsg] = useState(null);
+  const [existingReferrer, setExistingReferrer] = useState(null);
+  const [referralChecked, setReferralChecked] = useState(false);
   const [paymentForm, setPaymentForm] = useState({
     preferred_payout: 'bank',
     bep20_address: '',
@@ -100,6 +105,16 @@ export default function Setttings() {
         
         if (data.user) {
           setUserData(data.user);
+          // Check if user already has a referral
+          if (data.user.id) {
+            fetch(`/api/referral/status?userId=${data.user.id}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d.referrer) setExistingReferrer(d.referrer);
+                setReferralChecked(true);
+              })
+              .catch(() => setReferralChecked(true));
+          }
           setFormData({
             first_name: data.user.first_name || '',
             last_name: data.user.last_name || '',
@@ -1257,6 +1272,85 @@ export default function Setttings() {
                 )}
               </button>
             </form>
+          </div>
+        </div>
+
+        {/* Referral Code Card */}
+        <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden', marginTop: '0' }}>
+          <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1f36', margin: 0 }}>Referral Code</h2>
+              <p style={{ fontSize: '12px', color: '#6b7280', margin: '2px 0 0' }}>Link yourself to the person who invited you</p>
+            </div>
+          </div>
+          <div style={{ padding: '24px 28px' }}>
+            {!referralChecked ? (
+              <p style={{ fontSize: '13px', color: '#9ca3af', margin: 0 }}>Loading...</p>
+            ) : existingReferrer ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 18px', background: '#f0fdf4', borderRadius: '10px', border: '1px solid #a7f3d0' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <div>
+                  <p style={{ fontSize: '13px', fontWeight: '700', color: '#065f46', margin: 0 }}>Referred by {existingReferrer.name}</p>
+                  <p style={{ fontSize: '12px', color: '#047857', margin: '2px 0 0' }}>Referral code applied. This cannot be changed.</p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <p style={{ fontSize: '13px', color: '#374151', marginBottom: '14px' }}>You have not applied a referral code yet. Enter one below — this can only be done once.</p>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <input
+                    type="text"
+                    value={referralInput}
+                    onChange={e => { setReferralInput(e.target.value.toUpperCase()); setReferralMsg(null); }}
+                    placeholder="Enter referral code"
+                    maxLength={20}
+                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '14px', fontFamily: 'monospace', letterSpacing: '2px', textTransform: 'uppercase', outline: 'none' }}
+                    onFocus={e => e.target.style.borderColor = '#10b981'}
+                    onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                    disabled={referralApplying}
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!referralInput.trim()) return;
+                      setReferralApplying(true);
+                      setReferralMsg(null);
+                      try {
+                        const res = await fetch('/api/referral/apply-code', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ userId: userData?.id, referralCode: referralInput.trim() }),
+                        });
+                        const d = await res.json();
+                        if (res.ok && d.success) {
+                          setExistingReferrer(d.referrer);
+                          setReferralMsg({ type: 'success', text: d.message });
+                        } else {
+                          setReferralMsg({ type: 'error', text: d.error || 'Failed to apply code.' });
+                        }
+                      } catch {
+                        setReferralMsg({ type: 'error', text: 'Something went wrong. Please try again.' });
+                      } finally {
+                        setReferralApplying(false);
+                      }
+                    }}
+                    disabled={referralApplying || !referralInput.trim()}
+                    style={{ padding: '10px 20px', background: referralApplying || !referralInput.trim() ? '#d1d5db' : '#10b981', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: referralApplying || !referralInput.trim() ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', transition: 'background 0.2s' }}
+                    onMouseEnter={e => { if (!referralApplying && referralInput.trim()) e.currentTarget.style.background = '#059669'; }}
+                    onMouseLeave={e => { if (!referralApplying && referralInput.trim()) e.currentTarget.style.background = '#10b981'; }}
+                  >
+                    {referralApplying ? 'Applying...' : 'Apply'}
+                  </button>
+                </div>
+                {referralMsg && (
+                  <p style={{ fontSize: '13px', fontWeight: '500', color: referralMsg.type === 'success' ? '#065f46' : '#dc2626', marginTop: '10px', padding: '10px 14px', background: referralMsg.type === 'success' ? '#f0fdf4' : '#fef2f2', borderRadius: '8px', border: `1px solid ${referralMsg.type === 'success' ? '#a7f3d0' : '#fecaca'}` }}>
+                    {referralMsg.text}
+                  </p>
+                )}
+              </>
+            )}
           </div>
         </div>
 

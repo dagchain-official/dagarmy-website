@@ -123,18 +123,28 @@ export default function Dashboard2() {
                         (`${data.user.first_name || ''} ${data.user.last_name || ''}`).trim() ||
                         'Student';
                     setUserName(fullName);
-                    
                     if (data.user.avatar_url) {
                         setUserAvatar(data.user.avatar_url);
-                    }
-                    if (data.user.dag_points !== undefined) {
-                        setDagPoints(data.user.dag_points);
                     }
                     if (data.user.tier) {
                         setUserTier(data.user.tier);
                     }
                     if (data.user.current_rank !== undefined) {
                         setCurrentRank(data.user.current_rank || 'None');
+                    }
+                    // Fetch live dag points from transactions (avoids stale dag_points column)
+                    const identifier = data.user.email
+                        ? `email=${encodeURIComponent(data.user.email)}`
+                        : data.user.wallet_address
+                            ? `wallet=${data.user.wallet_address}`
+                            : null;
+                    if (identifier) {
+                        fetch(`/api/rewards/user?${identifier}`)
+                            .then(r => r.json())
+                            .then(rd => { if (rd.success) setDagPoints(rd.data.dagPoints || 0); })
+                            .catch(() => { if (data.user.dag_points !== undefined) setDagPoints(data.user.dag_points); });
+                    } else if (data.user.dag_points !== undefined) {
+                        setDagPoints(data.user.dag_points);
                     }
                 }
             } catch (error) {
