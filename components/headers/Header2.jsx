@@ -92,7 +92,7 @@ export default function Header2() {
     >
       <div className="header-inner">
         {/* Single Row: Logo - Search - Menu - Login - Register */}
-        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 3vw, 60px)', maxWidth: '1400px', margin: '0 auto', padding: '0 clamp(12px, 2vw, 24px)' }}>
+        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 40px)', maxWidth: '1320px', margin: '0 auto', padding: '0 clamp(12px, 2vw, 24px)' }}>
           
           {/* Logo Section */}
           <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: 'clamp(140px, 13vw, 180px)' }}>
@@ -111,7 +111,7 @@ export default function Header2() {
           {/* Navigation Menu */}
           <nav style={{
             display: 'flex',
-            gap: 'clamp(6px, 1.2vw, 24px)',
+            gap: 'clamp(4px, 0.8vw, 16px)',
             alignItems: 'center',
             flex: 1
           }}>
@@ -122,7 +122,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -145,7 +145,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -168,7 +168,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -191,7 +191,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -292,7 +292,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -315,7 +315,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -338,7 +338,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -361,7 +361,7 @@ export default function Header2() {
               textDecoration: 'none',
               whiteSpace: 'nowrap',
               display: 'inline-block',
-              padding: '7px 16px',
+              padding: '6px 12px',
               borderRadius: '50px',
               background: '#ffffff',
               boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -2px -2px 6px rgba(255,255,255,0.9)',
@@ -400,7 +400,7 @@ export default function Header2() {
                   background: '#ffffff',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: '7px 16px',
+                  padding: '6px 12px',
                   borderRadius: '50px',
                   display: 'inline-flex',
                   alignItems: 'center',
