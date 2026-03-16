@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDisconnect } from "wagmi";
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
@@ -19,6 +19,7 @@ export default function Header2() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, userRole, isAdmin } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { disconnect } = useDisconnect();
   const udaanCloseTimeoutRef = useRef(null);
   const supportCloseTimeoutRef = useRef(null);
@@ -49,6 +50,13 @@ export default function Header2() {
       }
     }, 100);
   };
+
+  // Auto-open signin modal when redirected from /register
+  useEffect(() => {
+    if (!isAuthenticated && searchParams.get('signin') === '1') {
+      handleSignInClick();
+    }
+  }, [searchParams]);
 
   // Listen for sign-in trigger from other components (e.g. Pledge modal)
   useEffect(() => {

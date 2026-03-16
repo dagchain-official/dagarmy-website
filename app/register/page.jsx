@@ -1,21 +1,16 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
-import Register from "@/components/otherPages/Register";
-import React from "react";
-
-export const metadata = {
-  title: "Register || DAGARMY - Master AI, Blockchain & Data Visualization",
-  description: "Join DAGARMY with your wallet or social account. Start learning AI, Blockchain, and Data Visualization.",
-};
+"use client";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RegisterPage() {
-  return (
-    <>
-      <div id="wrapper">
-        <Header2 />
-        <Register />
-        <Footer1 />
-      </div>
-    </>
-  );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    const target = ref ? `/?ref=${ref}&signin=1` : `/?signin=1`;
+    router.replace(target);
+  }, []);
+
+  return null;
 }
