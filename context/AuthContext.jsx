@@ -340,7 +340,9 @@ export function AuthProvider({ children }) {
           is_admin: false,
           is_master_admin: false
         }));
-        if (typeof window !== 'undefined') {
+        // Only fire event if LoginModal hasn't already shown the form via checkUserProfile
+        if (typeof window !== 'undefined' && !sessionStorage.getItem('dagarmy_profile_form_shown')) {
+          sessionStorage.setItem('dagarmy_profile_form_shown', '1');
           window.dispatchEvent(new CustomEvent('dagarmy:show-profile-completion', {
             detail: { email: profile.email, walletAddress: address }
           }));

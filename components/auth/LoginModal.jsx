@@ -49,7 +49,8 @@ export default function LoginModal({ isOpen, onClose }) {
             setStoredWalletAddress(address);
             
             if (!data.user.profile_completed) {
-              // Show profile completion form for existing users without completed profile
+              // Show profile completion form - do NOT call login() here,
+              // AuthContext.login() will also fire the event causing a double form
               setShowProfileCompletion(true);
               setIsCheckingProfile(false);
               return;
@@ -59,22 +60,16 @@ export default function LoginModal({ isOpen, onClose }) {
               await login();
             }
           } else {
-            // New user - show profile completion form
-            
-            // Extract email from embeddedWalletInfo for social logins (check multiple paths)
+            // New user - extract email and show profile form directly
+            // Do NOT call login() here - AuthContext.login() fires dagarmy:show-profile-completion
+            // which would show the form a second time
             const extractedEmail = embeddedWalletInfo?.user?.email || 
                                   embeddedWalletInfo?.email ||
                                   embeddedWalletInfo?.user?.emailAddress ||
                                   null;
-            
-            if (extractedEmail) {
-              console.log('📧 Extracted email from embeddedWalletInfo:', extractedEmail);
-              setSocialEmail(extractedEmail);
-            } else {
-              console.log('⚠️ No email found in embeddedWalletInfo');
-            }
-            
+            if (extractedEmail) setSocialEmail(extractedEmail);
             setStoredWalletAddress(address);
+            sessionStorage.setItem('dagarmy_profile_form_shown', '1');
             setShowProfileCompletion(true);
             setIsCheckingProfile(false);
             return;
@@ -167,8 +162,8 @@ export default function LoginModal({ isOpen, onClose }) {
 
   const handleProfileComplete = async (userData) => {
     console.log('✅ Profile completed, now authenticating user');
+    sessionStorage.removeItem('dagarmy_profile_form_shown');
     setShowProfileCompletion(false);
-    // Login without role parameter - role will be determined automatically
     await login();
   };
 
