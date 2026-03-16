@@ -52,7 +52,7 @@ const AnimatedNoText = () => {
         }
       `}</style>
       <span style={{
-        fontSize: '42px',
+        fontSize: 'clamp(28px, 3vw, 42px)',
         fontWeight: '800',
         color: '#1f2937',
         letterSpacing: '-0.02em',
@@ -74,7 +74,7 @@ const AnimatedNoText = () => {
             className={index === currentIndex ? 'animated-text' : ''}
             style={{
               position: 'absolute',
-              fontSize: '20px',
+              fontSize: 'clamp(15px, 1.4vw, 20px)',
               fontWeight: '600',
               color: '#1f2937',
               opacity: index === currentIndex ? 1 : 0,
@@ -105,7 +105,7 @@ export default function Hero() {
             <div className="col-lg-6">
               <div className="content" style={{ paddingTop: '60px', paddingBottom: '0', marginBottom: '0' }}>
                 <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{
-                  fontSize: '58px',
+                  fontSize: 'clamp(36px, 4vw, 58px)',
                   lineHeight: '1.2',
                   marginBottom: '24px',
                   color: '#1f2937'
@@ -123,7 +123,7 @@ export default function Hero() {
                   
                   {/* Main description paragraph */}
                   <p style={{
-                    fontSize: '17px',
+                    fontSize: 'clamp(14px, 1.2vw, 17px)',
                     lineHeight: '1.7',
                     color: '#4b5563',
                     marginBottom: '0',

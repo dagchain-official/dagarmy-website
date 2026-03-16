@@ -531,7 +531,7 @@ export default function Dashboard2() {
     };
 
     return (
-        <div style={{ padding: '32px 36px', width: '100%', background: '#f0f2f5', minHeight: '100vh' }}>
+        <div style={{ padding: 'clamp(16px, 3vw, 32px) clamp(16px, 3vw, 36px)', width: '100%', background: '#f0f2f5', minHeight: '100vh' }}>
 
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 

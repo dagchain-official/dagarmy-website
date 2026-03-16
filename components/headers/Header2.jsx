@@ -92,10 +92,10 @@ export default function Header2() {
     >
       <div className="header-inner">
         {/* Single Row: Logo - Search - Menu - Login - Register */}
-        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: '80px', maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
+        <div className="header-inner-wrap" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 3vw, 60px)', maxWidth: '1400px', margin: '0 auto', padding: '0 clamp(12px, 2vw, 24px)' }}>
           
           {/* Logo Section */}
-          <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: '180px' }}>
+          <div id="site-logo" className="flex items-center gap-3" style={{ minWidth: 'clamp(140px, 13vw, 180px)' }}>
             <Link href={`/`} rel="home" className="flex items-center gap-3">
               <Image
                 id="logo-header"
@@ -104,14 +104,14 @@ export default function Header2() {
                 width={62}
                 height={18}
               />
-              <span className="fw-7" style={{ color: '#1f2937', fontFamily: 'Nasalization, sans-serif', fontSize: '25px' }}>DAGARMY</span>
+              <span className="fw-7" style={{ color: '#1f2937', fontFamily: 'Nasalization, sans-serif', fontSize: 'clamp(17px, 1.6vw, 25px)' }}>DAGARMY</span>
             </Link>
           </div>
 
           {/* Navigation Menu */}
           <nav style={{
             display: 'flex',
-            gap: '32px',
+            gap: 'clamp(6px, 1.2vw, 24px)',
             alignItems: 'center',
             flex: 1
           }}>
