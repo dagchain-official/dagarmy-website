@@ -27,8 +27,8 @@ export default function DashboardLayout({ children }) {
           flexShrink: 0,
           position: "sticky",
           top: 0,
-          height: "100vh",
-          overflowY: "auto",
+          alignSelf: "flex-start",
+          minHeight: "100vh",
           background: "#f0f2f5",
         }}>
           <DashboardNav2 />

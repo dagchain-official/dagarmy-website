@@ -1154,7 +1154,7 @@ export default function Dashboard2() {
                     </NmCard>
 
                     {/* ━━━ Redeem + Withdraw row ━━━ */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
                         {/* Redeem DAG Points card */}
                         <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
