@@ -654,7 +654,7 @@ export default function Dashboard2() {
                 {/* ━━━ ROW 1: 6 equal cards (span 2 each) ━━━ */}
 
                 {/* Card 1: Welcome / Profile */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '200px', gap: '12px' }} hover={false}>
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }} hover={false}>
                     <div style={{
                         width: '96px', height: '96px', borderRadius: '50%',
                         background: '#f0f2f5',
@@ -676,7 +676,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 2: Tier Badge */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '200px', gap: '12px' }}>
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }}>
                     <img
                         src={isLieutenant ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'}
                         alt={tierLabel}
@@ -688,7 +688,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 3: Rank Badge */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '200px', gap: '12px' }}>
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }}>
                     {(() => {
                         const rankName = currentRank === 'None' ? 'starter' : currentRank.toLowerCase();
                         const badgeMap = {
@@ -718,7 +718,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 4: DAG Points */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', minHeight: '200px', padding: '20px 20px 28px' }}>
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="#6366f1" stroke="none">
@@ -737,7 +737,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 5: DGC Coins */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', minHeight: '200px', padding: '20px 20px 28px' }}>
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -757,7 +757,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 6: Referrals */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', minHeight: '200px', padding: '20px 20px 28px' }}>
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -1010,7 +1010,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* ━━━ ROW 3: Referral + Redeem + Withdraw — 3 equal columns ━━━ */}
-                <div style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px', alignItems: 'start' }}>
+                <div style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px', alignItems: 'stretch' }}>
 
                     {/* Referral Card */}
                     <NmCard span="1" style={{ padding: '24px' }}>
