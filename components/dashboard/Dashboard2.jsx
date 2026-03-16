@@ -1293,7 +1293,7 @@ export default function Dashboard2() {
                 </div>
 
             {/* ━━━ DAGChain Integration Panel ━━━ */}
-            {(dagchainData || dagchainLoading) && (
+            {false && dagchainData && (
                 <NmCard span="12" hover={false} style={{ padding: '0', overflow: 'hidden', marginTop: '4px' }}>
                     {/* Header */}
                     <div style={{ padding: '20px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
