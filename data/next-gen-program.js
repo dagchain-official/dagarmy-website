@@ -10,8 +10,8 @@ export const nextGenProgram = {
   rating: 4.9,
   level: "Beginner to Advanced",
   language: "English",
-  certificate: true,
-  certificateType: "On-Chain (NFT) Verified Credentials",
+  certificate: false,
+  certificateType: "Program Completion",
   
   tracks: [
     { name: "Yellow Track", duration: "2 Weeks (04 Days)", modules: [1, 2] },
@@ -319,7 +319,7 @@ export const nextGenProgram = {
           id: "8.5",
           title: "Graduation: The Final Briefing",
           type: "graduation",
-          description: "Final briefing on the Global Market. Awarding of On-Chain (NFT) Verified Credentials.",
+          description: "Final briefing on the Global Market. Program completion and next steps.",
           duration: "0.8 Hours"
         }
       ]
@@ -346,7 +346,7 @@ export const nextGenProgram = {
     "Create and deploy smart contracts and tokens",
     "Design professional data visualizations and dashboards",
     "Develop autonomous AI agent workflows",
-    "Receive On-Chain NFT verified credentials"
+    "Receive a program completion credential"
   ],
 
   prerequisites: [

@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function StudentSettingPage() {
   return (
-    <div style={{ flex: 1, background: '#f0f2f5' }}>
+    <div style={{ flex: 1, background: '#eef0f5' }}>
         <Setttings />
     </div>
   );

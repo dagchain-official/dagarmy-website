@@ -1,424 +1,438 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Zap, CheckCircle, Clock, XCircle, ExternalLink, Link2, Image,
-  Upload, X, Send, Filter, Trophy, TrendingUp, Star,
+  Zap, CheckCircle, Clock, XCircle, ExternalLink, Link2,
+  X, Send, Trophy, Target, Sun, Users,
   Youtube, Twitter, Facebook, Instagram, MessageCircle, Hash,
   BookOpen, Linkedin, Pin, Music, BarChart3, Globe,
-  ThumbsUp, MessageSquare, Share2, Tag, Play, Film, UserPlus, RefreshCw, Users
+  ThumbsUp, MessageSquare, Share2, Tag, Play, Film, UserPlus, RefreshCw
 } from "lucide-react";
 
+/* ─── Design tokens ─────────────────────────────────────── */
+const BG       = '#eef0f5';
+const S_UP     = '6px 6px 14px rgba(0,0,0,0.12), -5px -5px 12px rgba(255,255,255,0.95)';
+const S_UP_LG  = '10px 10px 24px rgba(0,0,0,0.13), -8px -8px 20px rgba(255,255,255,1)';
+const S_IN     = 'inset 5px 5px 12px rgba(0,0,0,0.11), inset -4px -4px 10px rgba(255,255,255,0.9)';
+const S_IN_SM  = 'inset 3px 3px 7px rgba(0,0,0,0.10), inset -2px -2px 6px rgba(255,255,255,0.85)';
+const PURPLE   = '#6366f1';
+const S_PURPLE = '5px 5px 14px rgba(99,102,241,0.40), -3px -3px 8px rgba(255,255,255,0.6)';
+
+/* ─── Platform / type maps ──────────────────────────────── */
 const PLATFORMS = [
-  { value: 'youtube', label: 'YouTube', color: '#FF0000', bg: '#FEE2E2', icon: Youtube },
-  { value: 'twitter', label: 'Twitter / X', color: '#1DA1F2', bg: '#DBEAFE', icon: Twitter },
-  { value: 'facebook', label: 'Facebook', color: '#1877F2', bg: '#DBEAFE', icon: Facebook },
-  { value: 'instagram', label: 'Instagram', color: '#E4405F', bg: '#FCE7F3', icon: Instagram },
-  { value: 'telegram', label: 'Telegram', color: '#0088CC', bg: '#CFFAFE', icon: MessageCircle },
-  { value: 'discord', label: 'Discord', color: '#5865F2', bg: '#EDE9FE', icon: Hash },
-  { value: 'medium', label: 'Medium', color: '#000000', bg: '#F1F5F9', icon: BookOpen },
-  { value: 'linkedin', label: 'LinkedIn', color: '#0A66C2', bg: '#DBEAFE', icon: Linkedin },
-  { value: 'pinterest', label: 'Pinterest', color: '#E60023', bg: '#FEE2E2', icon: Pin },
-  { value: 'tiktok', label: 'TikTok', color: '#000000', bg: '#F1F5F9', icon: Music },
-  { value: 'coinmarketcap', label: 'CoinMarketCap', color: '#17181B', bg: '#F1F5F9', icon: BarChart3 },
+  { value: 'youtube',       label: 'YouTube',       icon: Youtube      },
+  { value: 'twitter',       label: 'Twitter / X',   icon: Twitter      },
+  { value: 'facebook',      label: 'Facebook',      icon: Facebook     },
+  { value: 'instagram',     label: 'Instagram',     icon: Instagram    },
+  { value: 'telegram',      label: 'Telegram',      icon: MessageCircle},
+  { value: 'discord',       label: 'Discord',       icon: Hash         },
+  { value: 'medium',        label: 'Medium',        icon: BookOpen     },
+  { value: 'linkedin',      label: 'LinkedIn',      icon: Linkedin     },
+  { value: 'pinterest',     label: 'Pinterest',     icon: Pin          },
+  { value: 'tiktok',        label: 'TikTok',        icon: Music        },
+  { value: 'coinmarketcap', label: 'CoinMarketCap', icon: BarChart3    },
 ];
 
-const TASK_TYPE_ICONS = {
+const TYPE_ICONS = {
   subscribe: UserPlus, follow: UserPlus, like: ThumbsUp, comment: MessageSquare,
-  share: Share2, tag: Tag, watch_video: Play, create_shorts: Film,
-  create_video: Film, repost: RefreshCw, join: Users
+  share: Share2, tag: Tag, watch: Play, watch_video: Play,
+  create_shorts: Film, create_short: Film, create_reel: Film,
+  create_video: Film, create_post: MessageSquare, create_thread: MessageSquare,
+  story_mention: Tag, review: Trophy, repost: RefreshCw, retweet: RefreshCw, join: Users,
 };
 
-const getPlatform = (v) => PLATFORMS.find(p => p.value === v) || { label: v, color: '#64748b', bg: '#f1f5f9', icon: Globe };
+const getPlatform = (v) => PLATFORMS.find(p => p.value === v) || { label: v, icon: Globe };
 
-export default function StudentTasksPage() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [tasks, setTasks] = useState([]);
-  const [stats, setStats] = useState({ total_tasks: 0, completed: 0, pending: 0, available: 0, total_points_earned: 0 });
-  const [isLieutenant, setIsLieutenant] = useState(false);
-  const [ltBonusRate, setLtBonusRate] = useState(20);
-  const [platformFilter, setPlatformFilter] = useState('all');
+/* ─── Status config ─────────────────────────────────────── */
+const STATUS = {
+  available: { label: 'Available',      dot: PURPLE,    text: PURPLE   },
+  pending:   { label: 'Pending Review', dot: '#f59e0b', text: '#d97706'},
+  completed: { label: 'Completed',      dot: '#10b981', text: '#059669'},
+  expired:   { label: 'Expired',        dot: '#94a3b8', text: '#94a3b8'},
+};
+
+export default function StudentMissionsPage() {
+  const [user, setUser]               = useState(null);
+  const [loading, setLoading]         = useState(true);
+  const [tasks, setTasks]             = useState([]);
+  const [stats, setStats]             = useState({ total_tasks:0, completed:0, pending:0, available:0, total_points_earned:0 });
+  const [isLieutenant, setIsLT]       = useState(false);
+  const [ltBonusRate, setLtRate]      = useState(20);
+  const [activeTab, setActiveTab]     = useState('daily');
   const [statusFilter, setStatusFilter] = useState('all');
   const [submitModal, setSubmitModal] = useState(null);
-  const [proofUrl, setProofUrl] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
-  const [mounted, setMounted] = useState(false);
+  const [proofUrl, setProofUrl]       = useState('');
+  const [submitting, setSubmitting]   = useState(false);
+  const [message, setMessage]         = useState({ type:'', text:'' });
+  const [mounted, setMounted]         = useState(false);
 
-  useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
+  useEffect(() => { requestAnimationFrame(() => setMounted(true)); }, []);
 
   useEffect(() => {
-    const userStr = localStorage.getItem('dagarmy_user');
-    if (userStr) {
-      const userData = JSON.parse(userStr);
-      setUser(userData);
-      fetchTasks(userData.email);
-    } else {
-      setLoading(false);
-    }
+    const u = localStorage.getItem('dagarmy_user');
+    if (u) { const d = JSON.parse(u); setUser(d); fetchTasks(d.email); }
+    else setLoading(false);
   }, []);
 
   const fetchTasks = async (email) => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/social-tasks/user?user_email=${encodeURIComponent(email)}`);
+      const res  = await fetch(`/api/social-tasks/user?user_email=${encodeURIComponent(email)}`);
       const data = await res.json();
       if (data.success) {
         setTasks(data.tasks || []);
         setStats(data.stats || {});
-        setIsLieutenant(data.is_lieutenant || false);
-        setLtBonusRate(data.lt_bonus_rate || 20);
+        setIsLT(data.is_lieutenant || false);
+        setLtRate(data.lt_bonus_rate || 20);
       }
-    } catch (e) {
-      console.error('Error fetching tasks:', e);
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   };
 
   const handleSubmit = async () => {
-    if (!proofUrl.trim()) {
-      setMessage({ type: 'error', text: 'Please provide a proof URL or screenshot link' });
-      return;
-    }
+    if (!proofUrl.trim()) { setMessage({ type:'error', text:'Please provide a proof URL' }); return; }
     setSubmitting(true);
     try {
-      const res = await fetch('/api/social-tasks/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          task_id: submitModal.id,
-          user_email: user.email,
-          proof_url: proofUrl.trim()
-        })
+      const res  = await fetch('/api/social-tasks/submit', {
+        method:'POST', headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ task_id: submitModal.id, user_email: user.email, proof_url: proofUrl.trim() }),
       });
       const data = await res.json();
       if (data.success) {
-        setMessage({ type: 'success', text: 'Proof submitted! Waiting for admin review.' });
-        setSubmitModal(null);
-        setProofUrl('');
+        setMessage({ type:'success', text:'Proof submitted! Waiting for admin review.' });
+        setSubmitModal(null); setProofUrl('');
         fetchTasks(user.email);
-      } else {
-        setMessage({ type: 'error', text: data.error || 'Submission failed' });
-      }
-    } catch (e) {
-      setMessage({ type: 'error', text: e.message });
-    } finally {
-      setSubmitting(false);
-    }
+      } else setMessage({ type:'error', text: data.error || 'Submission failed' });
+    } catch (e) { setMessage({ type:'error', text: e.message }); }
+    finally { setSubmitting(false); }
   };
 
-  // Filter tasks
-  const filteredTasks = tasks.filter(t => {
-    if (platformFilter !== 'all' && t.platform !== platformFilter) return false;
-    if (statusFilter !== 'all' && t.user_status !== statusFilter) return false;
-    return true;
-  });
+  const dailyTasks     = tasks.filter(t => t.mission_type === 'daily');
+  const communityTasks = tasks.filter(t => t.mission_type !== 'daily');
+  const activeTasks    = activeTab === 'daily' ? dailyTasks : communityTasks;
+  const filtered       = statusFilter === 'all' ? activeTasks : activeTasks.filter(t => t.user_status === statusFilter);
+  const dailyDone      = dailyTasks.filter(t => t.user_status === 'completed').length;
+  const communityDone  = communityTasks.filter(t => t.user_status === 'completed').length;
 
-  // Group by platform
-  const groupedByPlatform = {};
-  filteredTasks.forEach(t => {
-    if (!groupedByPlatform[t.platform]) groupedByPlatform[t.platform] = [];
-    groupedByPlatform[t.platform].push(t);
-  });
-
-  const BentoCard = useCallback(({ children, style = {}, hover = true, ...props }) => (
-    <div style={{
-      background: '#fff', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.06)',
-      boxShadow: '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)',
-      transition: 'all 0.3s ease', position: 'relative', overflow: 'hidden',
-      opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(12px)', ...style
-    }}
-    onMouseEnter={hover ? e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; } : undefined}
-    onMouseLeave={hover ? e => { e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.02)'; e.currentTarget.style.transform = 'translateY(0)'; } : undefined}
-    {...props}>{children}</div>
-  ), [mounted]);
-
-  const statusColors = {
-    available: { bg: '#f0fdf4', color: '#15803d', label: 'Available' },
-    pending: { bg: '#fffbeb', color: '#b45309', label: 'Pending Review' },
-    completed: { bg: '#eef2ff', color: '#4338ca', label: 'Completed' },
-    expired: { bg: '#f1f5f9', color: '#64748b', label: 'Expired' },
-  };
-
-  if (loading) {
-    return (
-      <div style={{ flex: 1, padding: '40px', background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ width: '40px', height: '40px', border: '3px solid rgba(0,0,0,0.08)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
-            <p style={{ fontSize: '14px', color: '#64748b', fontWeight: '600' }}>Loading tasks...</p>
-            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-          </div>
+  /* ─── Loading ─────────────────────────────────────────── */
+  if (loading) return (
+    <div style={{ flex:1, background:BG, display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh' }}>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ width:'56px', height:'56px', borderRadius:'18px', background:BG, boxShadow:S_UP_LG, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px' }}>
+          <div style={{ width:'24px', height:'24px', border:`3px solid rgba(99,102,241,0.2)`, borderTopColor:PURPLE, borderRadius:'50%', animation:'spin 0.8s linear infinite' }} />
+        </div>
+        <p style={{ fontSize:'14px', color:'#64748b', fontWeight:'700', margin:0 }}>Loading missions...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div style={{ flex: 1, padding: '32px 36px', background: '#f0f2f5', minHeight: '100vh' }}>
+    <div style={{ width:'100%', padding:'32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
+      <style>{`
+        @keyframes spin    { to { transform: rotate(360deg); } }
+        @keyframes nm-up   { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes pulse-ring {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.35), ${S_UP}; }
+          50%       { box-shadow: 0 0 0 4px rgba(239,68,68,0.10), ${S_UP}; }
+        }
+        .nm-card:hover { box-shadow: ${S_UP_LG} !important; }
+        .nm-btn-ghost:hover { box-shadow: ${S_UP_LG} !important; }
+      `}</style>
 
-              {/* Header */}
-              <div style={{ marginBottom: '28px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '14px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Zap size={20} style={{ color: '#fff' }} />
-                  </div>
-                  <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.5px' }}>Social Tasks</h1>
-                </div>
-                <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
-                  Complete social media tasks to earn DAG Points
-                  {isLieutenant && <span style={{ color: '#6366f1', fontWeight: '600' }}> (+{ltBonusRate}% DAG LIEUTENANT bonus)</span>}
-                </p>
-              </div>
+      {/* ── Header ─────────────────────────────────────────── */}
+      <div style={{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'32px', animation: mounted ? 'nm-up 0.4s ease-out both' : 'none' }}>
+        <div style={{ width:'52px', height:'52px', borderRadius:'16px', background:BG, boxShadow:S_UP, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          <Target size={24} style={{ color:PURPLE }} />
+        </div>
+        <div>
+          <h1 style={{ fontSize:'26px', fontWeight:'800', color:'#0f172a', margin:'0 0 2px', letterSpacing:'-0.5px', fontFamily:'Nasalization, sans-serif' }}>Missions</h1>
+          <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
+            Complete missions to earn DAG Points
+            {isLieutenant && <span style={{ color:PURPLE, fontWeight:'700' }}> · +{ltBonusRate}% LT Bonus active</span>}
+          </p>
+        </div>
+      </div>
 
-              {/* Message */}
-              {message.text && (
-                <div style={{ marginBottom: '16px', padding: '12px 20px', borderRadius: '12px', fontSize: '13px', fontWeight: '600',
-                  background: message.type === 'success' ? '#f0fdf4' : '#fef2f2',
-                  color: message.type === 'success' ? '#15803d' : '#dc2626',
-                  border: `1px solid ${message.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  {message.text}
-                  <button onClick={() => setMessage({ type: '', text: '' })} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', padding: '2px' }}><X size={14} /></button>
-                </div>
-              )}
+      {/* ── Stat tiles ─────────────────────────────────────── */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:'16px', marginBottom:'32px' }}>
+        {[
+          { label:'Daily',         value: dailyTasks.length,          icon: <Sun size={20} style={{ color:PURPLE }} /> },
+          { label:'Community',     value: communityTasks.length,      icon: <Users size={20} style={{ color:PURPLE }} /> },
+          { label:'Available',     value: stats.available,            icon: <Zap size={20} style={{ color:PURPLE }} /> },
+          { label:'Pending',       value: stats.pending,              icon: <Clock size={20} style={{ color:PURPLE }} /> },
+          { label:'Completed',     value: stats.completed,            icon: <CheckCircle size={20} style={{ color:PURPLE }} /> },
+          { label:'Points Earned', value: stats.total_points_earned,  icon: <Trophy size={20} style={{ color:PURPLE }} /> },
+        ].map((s, i) => {
+          const isAvailableTile = i === 2;
+          const tileHasAlert   = isAvailableTile && (stats.available > 0);
+          return (
+          <div key={i} style={{ background:BG, borderRadius:'18px', padding:'18px 14px', boxShadow:S_UP, display:'flex', flexDirection:'column', alignItems:'center', gap:'10px',
+            animation: mounted ? `nm-up 0.38s ease-out ${i * 0.05}s both` : 'none', transition:'box-shadow 0.2s',
+            ...(tileHasAlert ? { border:'1.5px solid #ef4444', animation: mounted ? `nm-up 0.38s ease-out ${i * 0.05}s both, pulse-ring 2s ease-in-out infinite` : 'none' } : { border:'1.5px solid transparent' }) }}
+            className="nm-card">
+            <div style={{ width:'40px', height:'40px', borderRadius:'13px', background:BG, boxShadow:S_IN, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              {s.icon}
+            </div>
+            <div style={{ fontSize:'22px', fontWeight:'900', color:'#0f172a', letterSpacing:'-1px', lineHeight:1 }}>{s.value ?? 0}</div>
+            <div style={{ fontSize:'10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.6px', textAlign:'center' }}>{s.label}</div>
+          </div>
+          );
+        })}
+      </div>
 
-              {/* Stats Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
-                {[
-                  { label: 'Available', value: stats.available, color: '#10b981', bg: '#f0fdf4', icon: Zap },
-                  { label: 'Pending', value: stats.pending, color: '#f59e0b', bg: '#fffbeb', icon: Clock },
-                  { label: 'Completed', value: stats.completed, color: '#6366f1', bg: '#eef2ff', icon: CheckCircle },
-                  { label: 'Points Earned', value: stats.total_points_earned, color: '#8b5cf6', bg: '#f5f3ff', icon: Trophy },
-                ].map((s, i) => {
-                  const Icon = s.icon;
-                  return (
-                    <BentoCard key={i} style={{ padding: '20px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div>
-                          <p style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 6px' }}>{s.label}</p>
-                          <p style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: 0 }}>{s.value}</p>
-                        </div>
-                        <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Icon size={20} style={{ color: s.color }} />
-                        </div>
+      {/* ── Message ────────────────────────────────────────── */}
+      {message.text && (
+        <div style={{ marginBottom:'20px', padding:'13px 18px', borderRadius:'14px', background:BG, boxShadow:S_IN,
+          color: message.type === 'success' ? '#059669' : '#dc2626', fontSize:'13px', fontWeight:'600',
+          display:'flex', justifyContent:'space-between', alignItems:'center',
+          animation:'nm-up 0.3s ease-out both' }}>
+          {message.text}
+          <button onClick={() => setMessage({ type:'', text:'' })} style={{ background:'none', border:'none', cursor:'pointer', color:'inherit', padding:'2px' }}><X size={14} /></button>
+        </div>
+      )}
+
+      {/* ── Mission type tabs ──────────────────────────────── */}
+      <div style={{ display:'inline-flex', gap:'0', marginBottom:'28px', background:BG, borderRadius:'18px', padding:'5px', boxShadow:S_IN,
+        animation: mounted ? 'nm-up 0.4s ease-out 0.08s both' : 'none' }}>
+        {[
+          { key:'daily',     label:'Daily Missions',     icon: Sun,   count: dailyTasks.length,     done: dailyDone,     availCount: dailyTasks.filter(t=>t.user_status==='available').length     },
+          { key:'community', label:'Community Missions', icon: Users, count: communityTasks.length, done: communityDone, availCount: communityTasks.filter(t=>t.user_status==='available').length },
+        ].map(tab => {
+          const Icon = tab.icon;
+          const active = activeTab === tab.key;
+          const tabHasAvail = tab.availCount > 0;
+          return (
+            <button key={tab.key} onClick={() => { setActiveTab(tab.key); setStatusFilter('all'); }}
+              style={{ display:'flex', alignItems:'center', gap:'8px', padding:'10px 22px', borderRadius:'13px', cursor:'pointer', fontSize:'13px', fontWeight:'700', transition:'all 0.2s',
+                background: active ? PURPLE : 'transparent',
+                color:      active ? '#fff' : '#64748b',
+                boxShadow:  active ? S_PURPLE : 'none',
+                border: !active && tabHasAvail ? '1.5px solid #ef4444' : '1.5px solid transparent' }}>
+              <Icon size={15} />
+              {tab.label}
+              <span style={{ fontSize:'11px', fontWeight:'800', padding:'2px 8px', borderRadius:'100px', transition:'all 0.2s',
+                background: active ? 'rgba(255,255,255,0.22)' : BG,
+                color:      active ? '#fff' : PURPLE,
+                boxShadow:  active ? 'none' : S_IN_SM }}>
+                {tab.done}/{tab.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Status filter pills ─────────────────────────────── */}
+      <div style={{ display:'flex', gap:'10px', marginBottom:'28px', animation: mounted ? 'nm-up 0.4s ease-out 0.12s both' : 'none' }}>
+        {['all','available','pending','completed'].map(s => {
+          const active = statusFilter === s;
+          const isAvailPill = s === 'available';
+          const pillHasAlert = isAvailPill && activeTasks.filter(t=>t.user_status==='available').length > 0;
+          return (
+            <button key={s} onClick={() => setStatusFilter(s)}
+              style={{ padding:'9px 20px', borderRadius:'12px', cursor:'pointer', fontSize:'12px', fontWeight:'700', textTransform:'capitalize', transition:'all 0.2s',
+                background: active ? PURPLE : BG,
+                color:      active ? '#fff' : '#64748b',
+                boxShadow:  active ? S_PURPLE : S_UP,
+                border: !active && pillHasAlert ? '1.5px solid #ef4444' : '1.5px solid transparent' }}>
+              {s === 'all' ? 'All' : s.replace('_',' ')}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Mission cards ──────────────────────────────────── */}
+      {filtered.length === 0 ? (
+        <div style={{ background:BG, borderRadius:'24px', boxShadow:S_IN, padding:'64px', textAlign:'center' }}>
+          <div style={{ width:'64px', height:'64px', borderRadius:'20px', background:BG, boxShadow:S_UP, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px' }}>
+            <Target size={28} style={{ color:'#c7d2fe' }} />
+          </div>
+          <p style={{ fontSize:'16px', fontWeight:'800', color:'#0f172a', margin:'0 0 6px' }}>
+            {tasks.length === 0 ? 'No missions available yet' : `No ${statusFilter === 'all' ? '' : statusFilter + ' '}${activeTab} missions`}
+          </p>
+          <p style={{ fontSize:'13px', color:'#94a3b8', margin:0 }}>
+            {tasks.length === 0 ? 'Check back soon — missions will appear here.' : 'Try a different filter.'}
+          </p>
+        </div>
+      ) : (
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'20px' }}>
+          {filtered.map((task, i) => {
+            const plat      = getPlatform(task.platform);
+            const PlatIcon  = plat.icon;
+            const TypeIcon  = TYPE_ICONS[task.task_type] || Zap;
+            const sb        = STATUS[task.user_status] || STATUS.available;
+            const isAvail   = task.user_status === 'available';
+            return (
+              <div key={task.id} className="nm-card"
+                style={{ background: task.user_status === 'completed' ? 'rgba(226,232,240,0.6)' : BG,
+                  borderRadius:'22px', overflow:'hidden',
+                  boxShadow: task.user_status === 'available' ? `${S_UP}, 0 0 0 1.5px #ef4444` : task.user_status === 'completed' ? '4px 4px 12px rgba(0,0,0,0.07), -3px -3px 8px rgba(255,255,255,0.8)' : S_UP,
+                  border: task.user_status === 'available' ? '1.5px solid #ef4444' : task.user_status === 'completed' ? '1.5px solid #10b981' : '1.5px solid transparent',
+                  opacity: task.user_status === 'completed' ? 0.72 : 1,
+                  animation:`nm-up 0.35s ease-out ${i * 0.04}s both`, transition:'box-shadow 0.25s, opacity 0.25s' }}>
+
+                {/* Card body */}
+                <div style={{ padding:'22px 22px 16px' }}>
+
+                  {/* Platform row */}
+                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'16px' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
+                      {/* Platform icon — inset circle */}
+                      <div style={{ width:'42px', height:'42px', borderRadius:'14px', background:BG, boxShadow:S_IN, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                        <PlatIcon size={20} style={{ color:PURPLE }} />
                       </div>
-                    </BentoCard>
-                  );
-                })}
-              </div>
-
-              {/* Filters */}
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap', alignItems: 'center' }}>
-                {/* Platform filter */}
-                <div style={{ display: 'flex', gap: '4px', background: '#fff', borderRadius: '12px', padding: '4px', border: '1px solid rgba(0,0,0,0.06)', flexWrap: 'wrap' }}>
-                  <button onClick={() => setPlatformFilter('all')}
-                    style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '600',
-                      background: platformFilter === 'all' ? '#0f172a' : 'transparent', color: platformFilter === 'all' ? '#fff' : '#64748b' }}>
-                    All
-                  </button>
-                  {PLATFORMS.map(p => {
-                    const Icon = p.icon;
-                    const count = tasks.filter(t => t.platform === p.value).length;
-                    if (count === 0) return null;
-                    return (
-                      <button key={p.value} onClick={() => setPlatformFilter(p.value)}
-                        style={{ padding: '6px 10px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px',
-                          background: platformFilter === p.value ? p.bg : 'transparent', color: platformFilter === p.value ? p.color : '#64748b' }}>
-                        <Icon size={12} /> {p.label}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Status filter */}
-                <div style={{ display: 'flex', gap: '4px', background: '#fff', borderRadius: '12px', padding: '4px', border: '1px solid rgba(0,0,0,0.06)' }}>
-                  {['all', 'available', 'pending', 'completed'].map(s => (
-                    <button key={s} onClick={() => setStatusFilter(s)}
-                      style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '600', textTransform: 'capitalize',
-                        background: statusFilter === s ? '#0f172a' : 'transparent', color: statusFilter === s ? '#fff' : '#64748b' }}>
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tasks */}
-              {filteredTasks.length === 0 ? (
-                <BentoCard style={{ padding: '60px', textAlign: 'center' }} hover={false}>
-                  <Zap size={40} style={{ color: '#cbd5e1', margin: '0 auto 16px' }} />
-                  <p style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '0 0 6px' }}>No tasks found</p>
-                  <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
-                    {tasks.length === 0 ? 'No social tasks available yet. Check back soon!' : 'Try adjusting your filters.'}
-                  </p>
-                </BentoCard>
-              ) : (
-                Object.entries(groupedByPlatform).map(([platform, platformTasks]) => {
-                  const plat = getPlatform(platform);
-                  const PlatIcon = plat.icon;
-                  return (
-                    <div key={platform} style={{ marginBottom: '28px' }}>
-                      {/* Platform header */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: plat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <PlatIcon size={16} style={{ color: plat.color }} />
-                        </div>
-                        <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>{plat.label}</h2>
-                        <span style={{ fontSize: '11px', fontWeight: '600', color: '#94a3b8' }}>{platformTasks.length} task{platformTasks.length !== 1 ? 's' : ''}</span>
-                      </div>
-
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '14px' }}>
-                        {platformTasks.map(task => {
-                          const st = statusColors[task.user_status] || statusColors.available;
-                          const TypeIcon = TASK_TYPE_ICONS[task.task_type] || Zap;
-                          return (
-                            <BentoCard key={task.id} style={{ padding: 0 }}>
-                              <div style={{ padding: '20px 22px 14px' }}>
-                                {/* Status badge + type */}
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <TypeIcon size={14} style={{ color: '#64748b' }} />
-                                    <span style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', textTransform: 'capitalize' }}>
-                                      {task.task_type.replace('_', ' ')}
-                                    </span>
-                                  </div>
-                                  <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 10px', borderRadius: '100px', background: st.bg, color: st.color, textTransform: 'uppercase' }}>
-                                    {st.label}
-                                  </span>
-                                </div>
-
-                                {/* Title */}
-                                <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: '0 0 6px', lineHeight: '1.4' }}>{task.title}</h3>
-                                {task.description && (
-                                  <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5', margin: '0 0 14px' }}>{task.description}</p>
-                                )}
-
-                                {/* Points */}
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '4px' }}>
-                                  <span style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a' }}>{task.effective_points}</span>
-                                  <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8' }}>DAG pts</span>
-                                  {task.lt_bonus > 0 && (
-                                    <span style={{ fontSize: '10px', fontWeight: '700', color: '#6366f1', marginLeft: '6px', padding: '2px 6px', borderRadius: '100px', background: '#eef2ff' }}>
-                                      +{task.lt_bonus} LT bonus
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Footer */}
-                              <div style={{ padding: '12px 22px', borderTop: '1px solid rgba(0,0,0,0.04)', background: '#fafbfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                {task.target_url && (
-                                  <a href={task.target_url} target="_blank" rel="noopener noreferrer"
-                                    style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: '600', color: plat.color, textDecoration: 'none' }}>
-                                    <ExternalLink size={12} /> Open Link
-                                  </a>
-                                )}
-                                {!task.target_url && <span />}
-
-                                {task.user_status === 'available' && (
-                                  <button onClick={() => { setSubmitModal(task); setProofUrl(''); }}
-                                    style={{ padding: '7px 16px', borderRadius: '10px', border: 'none', background: '#0f172a', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.15s' }}
-                                    onMouseEnter={e => e.currentTarget.style.background = '#1e293b'}
-                                    onMouseLeave={e => e.currentTarget.style.background = '#0f172a'}>
-                                    <Send size={12} /> Submit Proof
-                                  </button>
-                                )}
-                                {task.user_status === 'pending' && (
-                                  <span style={{ fontSize: '11px', fontWeight: '600', color: '#b45309', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <Clock size={12} /> Awaiting review
-                                  </span>
-                                )}
-                                {task.user_status === 'completed' && (
-                                  <span style={{ fontSize: '11px', fontWeight: '600', color: '#4338ca', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <CheckCircle size={12} /> Done
-                                  </span>
-                                )}
-                              </div>
-                            </BentoCard>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-
-              {/* Submit Proof Modal */}
-              {submitModal && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
-                  onClick={e => { if (e.target === e.currentTarget) setSubmitModal(null); }}>
-                  <div style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '480px', boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}>
-                    {/* Modal header */}
-                    <div style={{ padding: '24px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                       <div>
-                        <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>Submit Proof</h2>
-                        <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>{submitModal.title}</p>
-                      </div>
-                      <button onClick={() => setSubmitModal(null)}
-                        style={{ width: '32px', height: '32px', borderRadius: '10px', border: 'none', background: '#f1f5f9', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                        <X size={16} />
-                      </button>
-                    </div>
-
-                    <div style={{ padding: '20px 28px 28px' }}>
-                      {/* Instructions */}
-                      <div style={{ padding: '14px 16px', borderRadius: '12px', background: '#f8fafc', border: '1px solid rgba(0,0,0,0.04)', marginBottom: '16px' }}>
-                        <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: '1.6' }}>
-                          <strong style={{ color: '#0f172a' }}>How to submit:</strong> Complete the task, then paste the proof URL below (e.g., your comment link, screenshot URL, or profile link showing the follow/subscription).
-                        </p>
-                      </div>
-
-                      {/* Target link */}
-                      {submitModal.target_url && (
-                        <a href={submitModal.target_url} target="_blank" rel="noopener noreferrer"
-                          style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#6366f1', textDecoration: 'none', marginBottom: '16px', padding: '10px 14px', borderRadius: '10px', background: '#eef2ff' }}>
-                          <ExternalLink size={14} /> Open task link to complete the action first
-                        </a>
-                      )}
-
-                      {/* Proof URL input */}
-                      <div style={{ marginBottom: '16px' }}>
-                        <label style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', marginBottom: '6px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Proof URL</label>
-                        <div style={{ position: 'relative' }}>
-                          <Link2 size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-                          <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} placeholder="https://..."
-                            style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.08)', fontSize: '13px', outline: 'none', boxSizing: 'border-box' }}
-                            onFocus={e => e.target.style.borderColor = '#6366f1'} onBlur={e => e.target.style.borderColor = 'rgba(0,0,0,0.08)'}
-                            onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }} />
+                        <div style={{ fontSize:'11px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.6px' }}>{plat.label}</div>
+                        <div style={{ display:'flex', alignItems:'center', gap:'4px', marginTop:'3px' }}>
+                          <TypeIcon size={11} style={{ color:PURPLE }} />
+                          <span style={{ fontSize:'11px', fontWeight:'700', color:PURPLE, textTransform:'capitalize' }}>{task.task_type.replace(/_/g,' ')}</span>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Points preview */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderRadius: '10px', background: '#f0fdf4', marginBottom: '16px' }}>
-                        <span style={{ fontSize: '12px', fontWeight: '600', color: '#15803d' }}>Points you will earn</span>
-                        <span style={{ fontSize: '18px', fontWeight: '800', color: '#15803d' }}>{submitModal.effective_points} pts</span>
-                      </div>
-
-                      {/* Submit button */}
-                      <button onClick={handleSubmit} disabled={submitting}
-                        style={{ width: '100%', padding: '12px', borderRadius: '12px', border: 'none', background: submitting ? '#94a3b8' : '#0f172a', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: submitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s' }}>
-                        {submitting ? (
-                          <>
-                            <div style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                            Submitting...
-                          </>
-                        ) : (
-                          <><Send size={16} /> Submit Proof</>
-                        )}
-                      </button>
+                    {/* Status badge */}
+                    <div style={{ display:'flex', alignItems:'center', gap:'5px', padding:'5px 11px', borderRadius:'100px', background:BG, boxShadow:S_IN_SM }}>
+                      <div style={{ width:'6px', height:'6px', borderRadius:'50%', background:sb.dot, flexShrink:0 }} />
+                      <span style={{ fontSize:'10px', fontWeight:'800', color:sb.text, textTransform:'uppercase', letterSpacing:'0.4px', whiteSpace:'nowrap' }}>{sb.label}</span>
                     </div>
                   </div>
+
+                  {/* Title */}
+                  <h3 style={{ fontSize:'14px', fontWeight:'800', color:'#0f172a', margin:'0 0 6px', lineHeight:1.4 }}>{task.title}</h3>
+
+                  {/* Description */}
+                  {task.description && (
+                    <p style={{ fontSize:'12px', color:'#64748b', margin:'0 0 16px', lineHeight:1.6 }}>{task.description}</p>
+                  )}
+
+                  {/* Points display */}
+                  <div style={{ display:'flex', alignItems:'center', gap:'10px', marginTop: task.description ? 0 : '12px' }}>
+                    <div style={{ padding:'8px 14px', borderRadius:'12px', background:BG, boxShadow:S_IN, display:'flex', alignItems:'baseline', gap:'5px' }}>
+                      <span style={{ fontSize:'22px', fontWeight:'900', color:PURPLE, letterSpacing:'-0.5px' }}>{task.effective_points}</span>
+                      <span style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8' }}>pts</span>
+                    </div>
+                    {task.lt_bonus > 0 && (
+                      <div style={{ padding:'6px 12px', borderRadius:'10px', background:BG, boxShadow:S_IN_SM }}>
+                        <span style={{ fontSize:'10px', fontWeight:'800', color:PURPLE }}>+{task.lt_bonus} LT bonus</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+                {/* Card footer */}
+                <div style={{ margin:'0 16px 16px', borderRadius:'14px', background:BG, boxShadow:S_IN, padding:'10px 14px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:'8px' }}>
+                  {/* Left: open link */}
+                  {task.target_url ? (
+                    <a href={task.target_url} target="_blank" rel="noopener noreferrer"
+                      style={{ display:'flex', alignItems:'center', gap:'5px', fontSize:'11px', fontWeight:'700', color:PURPLE, textDecoration:'none' }}>
+                      <ExternalLink size={12} /> Open Link
+                    </a>
+                  ) : <span />}
+
+                  {/* Right: action */}
+                  {isAvail && (
+                    <button onClick={() => { setSubmitModal(task); setProofUrl(''); }}
+                      style={{ display:'flex', alignItems:'center', gap:'5px', padding:'8px 18px', borderRadius:'10px', border:'none', background:PURPLE, color:'#fff', fontSize:'12px', fontWeight:'700', cursor:'pointer', boxShadow:S_PURPLE, transition:'all 0.15s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#4f46e5'}
+                      onMouseLeave={e => e.currentTarget.style.background = PURPLE}>
+                      <Send size={12} /> Submit
+                    </button>
+                  )}
+                  {task.user_status === 'pending' && (
+                    <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#d97706' }}>
+                      <Clock size={12} /> Under Review
+                    </span>
+                  )}
+                  {task.user_status === 'completed' && (
+                    <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#059669' }}>
+                      <CheckCircle size={12} /> Completed
+                    </span>
+                  )}
+                  {task.user_status === 'expired' && (
+                    <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#94a3b8' }}>
+                      <XCircle size={12} /> Expired
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ── Submit Proof Modal ─────────────────────────────── */}
+      {submitModal && (
+        <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.45)', backdropFilter:'blur(8px)', zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px' }}
+          onClick={e => { if (e.target === e.currentTarget) setSubmitModal(null); }}>
+          <div style={{ background:BG, borderRadius:'28px', width:'100%', maxWidth:'460px', boxShadow:'16px 16px 40px rgba(0,0,0,0.18), -10px -10px 30px rgba(255,255,255,0.95)', animation:'nm-up 0.3s ease-out both' }}>
+
+            {/* Modal header */}
+            <div style={{ padding:'24px 26px 16px', display:'flex', alignItems:'flex-start', justifyContent:'space-between' }}>
+              <div>
+                <h2 style={{ fontSize:'17px', fontWeight:'800', color:'#0f172a', margin:'0 0 4px' }}>Submit Proof</h2>
+                <p style={{ fontSize:'12px', color:'#64748b', margin:0, maxWidth:'320px', lineHeight:1.4 }}>{submitModal.title}</p>
+              </div>
+              <button onClick={() => setSubmitModal(null)}
+                style={{ width:'36px', height:'36px', borderRadius:'12px', border:'none', background:BG, boxShadow:S_UP, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'#64748b', flexShrink:0, marginLeft:'12px' }}
+                onMouseEnter={e => e.currentTarget.style.color = PURPLE}
+                onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>
+                <X size={15} />
+              </button>
+            </div>
+
+            <div style={{ padding:'4px 26px 26px', display:'flex', flexDirection:'column', gap:'14px' }}>
+
+              {/* Instruction box */}
+              <div style={{ padding:'13px 16px', borderRadius:'14px', background:BG, boxShadow:S_IN, fontSize:'12px', color:'#64748b', lineHeight:1.65 }}>
+                Complete the mission first, then paste a proof link below (screenshot URL, post link, profile link, etc.)
+              </div>
+
+              {/* Open link button */}
+              {submitModal.target_url && (
+                <a href={submitModal.target_url} target="_blank" rel="noopener noreferrer"
+                  style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 16px', borderRadius:'14px', background:BG, boxShadow:S_UP, fontSize:'12px', fontWeight:'700', color:PURPLE, textDecoration:'none', transition:'box-shadow 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.boxShadow = S_UP_LG}
+                  onMouseLeave={e => e.currentTarget.style.boxShadow = S_UP}>
+                  <ExternalLink size={14} /> Open mission link first
+                </a>
               )}
 
+              {/* Proof URL input */}
+              <div>
+                <label style={{ fontSize:'10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.7px', marginBottom:'8px', display:'block' }}>Proof URL</label>
+                <div style={{ position:'relative' }}>
+                  <Link2 size={14} style={{ position:'absolute', left:'14px', top:'50%', transform:'translateY(-50%)', color:'#94a3b8', pointerEvents:'none' }} />
+                  <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} placeholder="https://..."
+                    style={{ width:'100%', padding:'12px 14px 12px 38px', borderRadius:'14px', border:'none', outline:'none', fontSize:'13px', background:BG, boxShadow:S_IN, boxSizing:'border-box', color:'#0f172a' }}
+                    onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }} />
+                </div>
+              </div>
+
+              {/* Points preview */}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 18px', borderRadius:'14px', background:BG, boxShadow:S_IN }}>
+                <span style={{ fontSize:'12px', fontWeight:'700', color:'#64748b' }}>You will earn</span>
+                <div style={{ display:'flex', alignItems:'baseline', gap:'4px' }}>
+                  <span style={{ fontSize:'24px', fontWeight:'900', color:PURPLE, letterSpacing:'-0.5px' }}>{submitModal.effective_points}</span>
+                  <span style={{ fontSize:'12px', fontWeight:'700', color:'#94a3b8' }}>DAG pts</span>
+                </div>
+              </div>
+
+              {/* Submit button */}
+              <button onClick={handleSubmit} disabled={submitting}
+                style={{ width:'100%', padding:'14px', borderRadius:'16px', border:'none',
+                  background: submitting ? BG : PURPLE,
+                  color:      submitting ? '#94a3b8' : '#fff',
+                  fontSize:'14px', fontWeight:'700', cursor: submitting ? 'not-allowed' : 'pointer',
+                  display:'flex', alignItems:'center', justifyContent:'center', gap:'8px',
+                  boxShadow: submitting ? S_IN : S_PURPLE, transition:'all 0.2s' }}>
+                {submitting
+                  ? <><div style={{ width:'16px', height:'16px', border:'2px solid rgba(100,116,139,0.3)', borderTopColor:'#64748b', borderRadius:'50%', animation:'spin 0.8s linear infinite' }} /> Submitting...</>
+                  : <><Send size={15} /> Submit Proof</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
-
-
-
-
-
-
-
 

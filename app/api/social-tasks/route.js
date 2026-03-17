@@ -7,6 +7,7 @@ export async function GET(request) {
     const supabase = supabaseAdmin;
     const { searchParams } = new URL(request.url);
     const activeOnly = searchParams.get('active') !== 'false';
+    const missionType = searchParams.get('mission_type'); // 'daily' | 'community' | null (all)
 
     let query = supabase
       .from('social_tasks')
@@ -15,6 +16,10 @@ export async function GET(request) {
 
     if (activeOnly) {
       query = query.eq('is_active', true);
+    }
+
+    if (missionType) {
+      query = query.eq('mission_type', missionType);
     }
 
     const { data, error } = await query;
@@ -32,7 +37,7 @@ export async function POST(request) {
   try {
     const supabase = supabaseAdmin;
     const body = await request.json();
-    const { platform, task_type, title, description, points, target_url, max_completions_per_user, expires_at, user_email } = body;
+    const { platform, task_type, title, description, points, target_url, max_completions_per_user, expires_at, mission_type, scheduled_date, user_email } = body;
 
     if (!user_email) {
       return NextResponse.json({ error: 'Unauthorized - Email required' }, { status: 401 });
@@ -64,6 +69,9 @@ export async function POST(request) {
         target_url: target_url || null,
         max_completions_per_user: max_completions_per_user || 1,
         expires_at: expires_at || null,
+        mission_type: mission_type || 'community',
+        scheduled_date: scheduled_date || null,
+        is_active: scheduled_date ? false : true,
         created_by: userData.id
       })
       .select()

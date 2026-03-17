@@ -89,22 +89,46 @@ export default function MyCourses() {
   const nmShadow = '8px 8px 20px rgba(0,0,0,0.12), -6px -6px 16px rgba(255,255,255,0.95)';
   const nmInset  = 'inset 6px 6px 14px rgba(0,0,0,0.12), inset -4px -4px 12px rgba(255,255,255,0.9)';
 
-  // ── Stat tiles
-  const statTiles = [
-    { label: 'Duration',  value: nextGenProgram.totalDuration, icon: <Ico.Clock s={18} c="#6366f1" /> },
-    { label: 'Modules',   value: `${nextGenProgram.totalModules}`, icon: <Ico.Layers s={18} c="#6366f1" /> },
-    { label: 'Lessons',   value: `${totalLessons}`, icon: <Ico.Book s={18} c="#6366f1" /> },
-    { label: 'Certificate', value: 'NFT', icon: <Ico.Award s={18} c="#6366f1" /> },
-    { label: 'Assignments', value: `${ASSIGNMENTS.length}`, icon: <Ico.Target s={18} c="#6366f1" /> },
-    { label: 'Level',     value: nextGenProgram.level.split(' ')[0], icon: <Ico.Signal s={18} c="#6366f1" /> },
-  ];
+  // ── Stat tiles — per tab
+  const totalPoints = ASSIGNMENTS.reduce((s, a) => s + a.points, 0);
+  const completedPoints = ASSIGNMENTS.filter(a => a.status === 'completed').reduce((s, a) => s + a.points, 0);
 
-  const assignStats = [
-    { label: 'Total',       value: ASSIGNMENTS.length,                                       icon: <Ico.Book s={16} c="#6366f1" /> },
-    { label: 'In Progress', value: ASSIGNMENTS.filter(a => a.status === 'in-progress').length, icon: <Ico.Clock s={16} c="#6366f1" /> },
-    { label: 'Completed',   value: ASSIGNMENTS.filter(a => a.status === 'completed').length,   icon: <Ico.Check s={16} c="#6366f1" /> },
-    { label: 'Pending',     value: ASSIGNMENTS.filter(a => a.status === 'pending').length,     icon: <Ico.Target s={16} c="#6366f1" /> },
-  ];
+  const TAB_TILES = {
+    courses: [
+      { label: 'Modules',   value: `${nextGenProgram.totalModules}`,  icon: <Ico.Layers s={18} c="#6366f1" /> },
+      { label: 'Lessons',   value: `${totalLessons}`,                 icon: <Ico.Book   s={18} c="#6366f1" /> },
+      { label: 'Duration',  value: nextGenProgram.totalDuration,       icon: <Ico.Clock  s={18} c="#6366f1" /> },
+      { label: 'Phases',    value: '3',                                icon: <Ico.Signal s={18} c="#6366f1" /> },
+      { label: 'Level',     value: nextGenProgram.level.split(' ')[0], icon: <Ico.Award  s={18} c="#6366f1" /> },
+      { label: 'Language',  value: nextGenProgram.language,            icon: <Ico.Target s={18} c="#6366f1" /> },
+    ],
+    bootcamp: [
+      { label: 'Weeks',        value: '4',          icon: <Ico.Clock  s={18} c="#6366f1" /> },
+      { label: 'Phases',       value: '4',          icon: <Ico.Layers s={18} c="#6366f1" /> },
+      { label: 'Deliverables', value: '4',          icon: <Ico.Target s={18} c="#6366f1" /> },
+      { label: 'Build Type',   value: 'No-Code',    icon: <Ico.Award  s={18} c="#6366f1" /> },
+      { label: 'Validation',   value: 'Live',       icon: <Ico.Signal s={18} c="#6366f1" /> },
+      { label: 'Outcome',      value: 'MVP',        icon: <Ico.Book   s={18} c="#6366f1" /> },
+    ],
+    assignments: [
+      { label: 'Total',       value: `${ASSIGNMENTS.length}`,                                          icon: <Ico.Book   s={18} c="#6366f1" /> },
+      { label: 'Pending',     value: `${ASSIGNMENTS.filter(a => a.status === 'pending').length}`,      icon: <Ico.Clock  s={18} c="#6366f1" /> },
+      { label: 'In Progress', value: `${ASSIGNMENTS.filter(a => a.status === 'in-progress').length}`,  icon: <Ico.Arrow  s={18} c="#6366f1" /> },
+      { label: 'Completed',   value: `${ASSIGNMENTS.filter(a => a.status === 'completed').length}`,    icon: <Ico.Check  s={18} c="#6366f1" /> },
+      { label: 'Points Earned', value: `${completedPoints}`,                                           icon: <Ico.Award  s={18} c="#6366f1" /> },
+      { label: 'Total Points',  value: `${totalPoints}`,                                               icon: <Ico.Target s={18} c="#6366f1" /> },
+    ],
+    overview: [
+      { label: 'Programs',       value: '2',                                icon: <Ico.Award  s={18} c="#6366f1" /> },
+      { label: 'Course Hours',   value: nextGenProgram.totalDuration,       icon: <Ico.Clock  s={18} c="#6366f1" /> },
+      { label: 'Bootcamp',       value: '4 Weeks',                          icon: <Ico.Layers s={18} c="#6366f1" /> },
+      { label: 'Modules',        value: `${nextGenProgram.totalModules}`,   icon: <Ico.Book   s={18} c="#6366f1" /> },
+      { label: 'Lessons',        value: `${totalLessons}`,                  icon: <Ico.Signal s={18} c="#6366f1" /> },
+      { label: 'Assignments',    value: `${ASSIGNMENTS.length}`,            icon: <Ico.Target s={18} c="#6366f1" /> },
+    ],
+  };
+  const statTiles = TAB_TILES[activeTab] || TAB_TILES.courses;
+
 
   return (
     <div style={{ width: '100%', color: '#0f172a' }}>
@@ -120,21 +144,21 @@ export default function MyCourses() {
             <Ico.Book s={20} c="#6366f1" />
           </div>
           <div>
-            <h1 style={{ fontSize: '31px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.5px', fontFamily: 'Nasalization, sans-serif' }}>My Courses</h1>
-            <p style={{ fontSize: '20px', color: '#0f172a', margin: 0, fontWeight: '500' }}>{nextGenProgram.subtitle}</p>
+            <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.5px', fontFamily: 'Nasalization, sans-serif' }}>My Courses</h1>
+            <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, fontWeight: '500' }}>{nextGenProgram.subtitle}</p>
           </div>
         </div>
       </div>
 
       {/* ═══ STAT TILES ═══ */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px', marginBottom: '28px', animation: mounted ? 'nm-up 0.5s ease-out 0.05s both' : 'none' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px', marginBottom: '28px' }}>
         {statTiles.map((st, i) => (
-          <div key={i} style={{ background: '#f0f2f5', borderRadius: '16px', padding: '16px 14px', boxShadow: nmShadow, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div key={`${activeTab}-${i}`} style={{ background: '#f0f2f5', borderRadius: '16px', padding: '16px 14px', boxShadow: nmShadow, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', animation: mounted ? `nm-up 0.35s ease-out ${i * 0.05}s both` : 'none' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: '11px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {st.icon}
             </div>
-            <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px', lineHeight: 1 }}>{st.value}</div>
-            <div style={{ fontSize: '17px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'center' }}>{st.label}</div>
+            <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px', lineHeight: 1 }}>{st.value}</div>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'center' }}>{st.label}</div>
           </div>
         ))}
       </div>
@@ -150,7 +174,7 @@ export default function MyCourses() {
           <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
             display: 'flex', alignItems: 'center', gap: '7px',
             padding: '10px 20px', borderRadius: '12px', border: 'none', cursor: 'pointer',
-            fontSize: '19px', fontWeight: '700',
+            fontSize: '13px', fontWeight: '700',
             background: activeTab === tab.key ? '#6366f1' : '#f0f2f5',
             color: activeTab === tab.key ? '#fff' : '#0f172a',
             boxShadow: activeTab === tab.key
@@ -174,7 +198,7 @@ export default function MyCourses() {
             <input
               type="text" placeholder="Search modules or lessons..."
               value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-              style={{ width: '100%', padding: '12px 16px 12px 44px', borderRadius: '14px', border: 'none', outline: 'none', fontSize: '19px', fontWeight: '500', color: '#0f172a', background: '#f0f2f5', boxShadow: nmInset, boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '12px 16px 12px 44px', borderRadius: '14px', border: 'none', outline: 'none', fontSize: '13px', fontWeight: '500', color: '#0f172a', background: '#f0f2f5', boxShadow: nmInset, boxSizing: 'border-box' }}
               onFocus={e => e.target.style.boxShadow = 'inset 4px 4px 10px rgba(99,102,241,0.2), inset -3px -3px 8px rgba(255,255,255,0.9)'}
               onBlur={e => e.target.style.boxShadow = nmInset}
             />
@@ -204,14 +228,14 @@ export default function MyCourses() {
                     >
                       {/* Module header row */}
                       <div style={{ padding: '20px 22px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '14px', flexShrink: 0, background: '#f0f2f5', boxShadow: isOpen ? nmInset : nmShadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: '800', color: '#6366f1' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '14px', flexShrink: 0, background: '#f0f2f5', boxShadow: isOpen ? nmInset : nmShadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '800', color: '#6366f1' }}>
                           {String(mod.number).padStart(2, '0')}
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#0f172a', margin: '0 0 4px', lineHeight: 1.3, fontFamily: 'Nasalization, sans-serif' }}>{mod.title}</h3>
+                          <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', margin: '0 0 4px', lineHeight: 1.3 }}>{mod.title}</h3>
                           <div style={{ display: 'flex', gap: '10px' }}>
-                            <span style={{ fontSize: '18px', fontWeight: '600', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '3px' }}><Ico.Book s={14} c="#6366f1" /> {mod.lessons.length} lessons</span>
-                            <span style={{ fontSize: '18px', fontWeight: '600', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '3px' }}><Ico.Clock s={14} c="#6366f1" /> {mod.duration}</span>
+                            <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px' }}><Ico.Book s={12} c="#6366f1" /> {mod.lessons.length} lessons</span>
+                            <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px' }}><Ico.Clock s={12} c="#6366f1" /> {mod.duration}</span>
                           </div>
                         </div>
                         <div style={{ color: '#6366f1', transition: 'transform 0.25s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
@@ -222,14 +246,14 @@ export default function MyCourses() {
                       {/* Focus blurb when closed */}
                       {mod.focus && !isOpen && (
                         <div style={{ padding: '0 22px 16px', marginTop: '-4px' }}>
-                          <p style={{ fontSize: '18px', color: '#0f172a', margin: 0, lineHeight: 1.5, fontStyle: 'italic' }}>{mod.focus}</p>
+                          <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.5, fontStyle: 'italic' }}>{mod.focus}</p>
                         </div>
                       )}
 
                       {/* Expanded lessons */}
                       {isOpen && (
                         <div onClick={e => e.stopPropagation()} style={{ padding: '0 22px 22px' }}>
-                          <p style={{ fontSize: '18px', color: '#0f172a', margin: '0 0 14px', lineHeight: 1.5 }}>
+                          <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 14px', lineHeight: 1.5 }}>
                             <strong>Focus:</strong> {mod.focus}
                           </p>
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', alignItems: 'stretch' }}>
@@ -245,15 +269,15 @@ export default function MyCourses() {
                                   {/* Coming Soon badge */}
                                   <span style={{ position: 'absolute', top: '12px', right: '12px', fontSize: '11px', fontWeight: '800', color: '#6366f1', letterSpacing: '0.4px' }}>Coming Soon</span>
                                   <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '6px', paddingRight: '90px' }}>
-                                    <div style={{ width: '24px', height: '24px', borderRadius: '7px', flexShrink: 0, background: '#f0f2f5', boxShadow: 'inset 3px 3px 6px rgba(99,102,241,0.2), inset -2px -2px 5px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '800', color: '#6366f1' }}>
-                                      {lIdx + 1}
+                                    <div style={{ width: '24px', height: '24px', borderRadius: '7px', flexShrink: 0, background: '#6366f1', boxShadow: '3px 3px 6px rgba(99,102,241,0.35), -2px -2px 5px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '800', color: '#fff' }}>
+                                      {String.fromCharCode(65 + lIdx)}
                                     </div>
-                                    <div style={{ fontSize: '19px', fontWeight: '700', color: '#0f172a', lineHeight: 1.4 }}>{les.title}</div>
+                                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', lineHeight: 1.4 }}>{les.title}</div>
                                   </div>
-                                  <div style={{ fontSize: '18px', color: '#0f172a', lineHeight: 1.55, flexGrow: 1, paddingLeft: '34px' }}>{les.description}</div>
+                                  <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.55, flexGrow: 1, paddingLeft: '34px' }}>{les.description}</div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '10px', paddingLeft: '34px' }}>
-                                    <span style={{ padding: '2px 8px', borderRadius: '6px', background: '#f0f2f5', boxShadow: '3px 3px 6px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '800', color: tb.color, letterSpacing: '0.5px' }}>{tb.label}</span>
-                                    <span style={{ fontSize: '17px', fontWeight: '600', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '3px' }}><Ico.Clock s={13} c="#6366f1" /> {les.duration}</span>
+                                    <span style={{ padding: '2px 8px', borderRadius: '6px', background: '#f0f2f5', boxShadow: '3px 3px 6px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '10px', fontWeight: '800', color: tb.color, letterSpacing: '0.5px' }}>{tb.label}</span>
+                                    <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px' }}><Ico.Clock s={12} c="#6366f1" /> {les.duration}</span>
                                   </div>
                                 </div>
                               );
@@ -278,15 +302,15 @@ export default function MyCourses() {
           <NmCard hover={false} style={{ padding: '28px 32px', marginBottom: '28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <div style={{ fontSize: '18px', fontWeight: '800', color: '#6366f1', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>The Transformation Path</div>
-                <h2 style={{ fontSize: '31px', fontWeight: '900', color: '#0f172a', margin: '0 0 6px', fontFamily: 'Nasalization, sans-serif' }}>4 Weeks of <span style={{ color: '#6366f1' }}>Measured Execution</span></h2>
-                <p style={{ fontSize: '19px', color: '#0f172a', margin: 0, maxWidth: '480px', lineHeight: 1.6 }}>A disciplined AI Startup build cycle designed to convert intent into execution.</p>
+                <div style={{ fontSize: '11px', fontWeight: '800', color: '#6366f1', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>The Transformation Path</div>
+                <h2 style={{ fontSize: '22px', fontWeight: '900', color: '#0f172a', margin: '0 0 6px' }}>4 Weeks of <span style={{ color: '#6366f1' }}>Measured Execution</span></h2>
+                <p style={{ fontSize: '13px', color: '#64748b', margin: 0, maxWidth: '480px', lineHeight: 1.6 }}>A disciplined AI Startup build cycle designed to convert intent into execution.</p>
               </div>
               <div style={{ display: 'flex', gap: '28px' }}>
                 {[{ v: '4', l: 'Defined Phases' }, { v: '4', l: 'Deliverables' }, { v: 'Live', l: 'Market Validation' }].map((s, i) => (
                   <div key={i} style={{ textAlign: 'center', padding: '12px 18px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 6px rgba(0,0,0,0.07), inset -3px -3px 6px rgba(255,255,255,0.9)' }}>
-                    <div style={{ fontSize: '24px', fontWeight: '900', color: '#6366f1' }}>{s.v}</div>
-                    <div style={{ fontSize: '17px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px' }}>{s.l}</div>
+                    <div style={{ fontSize: '20px', fontWeight: '900', color: '#6366f1' }}>{s.v}</div>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px' }}>{s.l}</div>
                   </div>
                 ))}
               </div>
@@ -383,12 +407,12 @@ export default function MyCourses() {
                       {String(w.week).padStart(2, '0')}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '17px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '3px' }}>Week {w.week}</div>
-                      <div style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', fontFamily: 'Nasalization, sans-serif' }}>{w.title}</div>
-                      <div style={{ fontSize: '18px', fontWeight: '600', color: '#0f172a', marginTop: '2px' }}>{w.subtitle}</div>
+                      <div style={{ fontSize: '11px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '3px' }}>Week {w.week}</div>
+                      <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>{w.title}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '2px' }}>{w.subtitle}</div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a' }}>{w.deliverables.length} Deliverables</span>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>{w.deliverables.length} Deliverables</span>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: isOpenW ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.25s' }}><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
                   </div>
@@ -396,30 +420,30 @@ export default function MyCourses() {
                   {/* Collapsed preview */}
                   {!isOpenW && (
                     <div style={{ padding: '0 24px 18px' }}>
-                      <p style={{ fontSize: '19px', color: '#0f172a', margin: 0, lineHeight: 1.6 }}>{w.description.slice(0, 120)}…</p>
+                      <p style={{ fontSize: '13px', color: '#64748b', margin: 0, lineHeight: 1.6 }}>{w.description.slice(0, 120)}…</p>
                     </div>
                   )}
 
                   {/* Expanded content */}
                   {isOpenW && (
                     <div onClick={e => e.stopPropagation()} style={{ padding: '0 24px 24px' }}>
-                      <p style={{ fontSize: '19px', color: '#0f172a', margin: '0 0 20px', lineHeight: 1.65 }}>{w.description}</p>
+                      <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 20px', lineHeight: 1.65 }}>{w.description}</p>
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                         {/* Objective */}
                         <div style={{ padding: '18px', borderRadius: '14px', background: '#f0f2f5', boxShadow: nmShadow }}>
-                          <div style={{ fontSize: '17px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>Objective</div>
-                          <p style={{ fontSize: '19px', color: '#0f172a', margin: 0, lineHeight: 1.6 }}>{w.objective}</p>
+                          <div style={{ fontSize: '11px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>Objective</div>
+                          <p style={{ fontSize: '13px', color: '#64748b', margin: 0, lineHeight: 1.6 }}>{w.objective}</p>
                         </div>
 
                         {/* Tools */}
                         <div style={{ padding: '18px', borderRadius: '14px', background: '#f0f2f5', boxShadow: nmShadow }}>
-                          <div style={{ fontSize: '17px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>Tools Used</div>
+                          <div style={{ fontSize: '11px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>Tools Used</div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {w.tools.map((t, ti) => (
                               <div key={ti} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                <span style={{ fontSize: '19px', fontWeight: '700', color: '#0f172a' }}>{t.name}</span>
-                                <span style={{ fontSize: '18px', color: '#0f172a' }}>{t.desc}</span>
+                                <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>{t.name}</span>
+                                <span style={{ fontSize: '12px', color: '#64748b' }}>{t.desc}</span>
                               </div>
                             ))}
                           </div>
@@ -428,15 +452,15 @@ export default function MyCourses() {
 
                       {/* Deliverables */}
                       <div style={{ marginTop: '16px' }}>
-                        <div style={{ fontSize: '17px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Deliverables</div>
+                        <div style={{ fontSize: '11px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px' }}>Deliverables</div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
                           {w.deliverables.map((d, di) => (
                             <div key={di} style={{ padding: '14px 16px', borderRadius: '12px', background: '#f0f2f5', boxShadow: nmShadow, display: 'flex', flexDirection: 'column', gap: '4px' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: w.accent, flexShrink: 0 }} />
-                                <span style={{ fontSize: '19px', fontWeight: '700', color: '#0f172a' }}>{d.title}</span>
+                                <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>{d.title}</span>
                               </div>
-                              <span style={{ fontSize: '18px', color: '#0f172a', lineHeight: 1.5, paddingLeft: '14px' }}>{d.desc}</span>
+                              <span style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5, paddingLeft: '14px' }}>{d.desc}</span>
                             </div>
                           ))}
                         </div>
@@ -444,8 +468,8 @@ export default function MyCourses() {
 
                       {/* Outcome */}
                       <div style={{ marginTop: '16px', padding: '16px 20px', borderRadius: '14px', background: '#f0f2f5', boxShadow: `inset 3px 3px 7px rgba(0,0,0,0.07), inset -3px -3px 7px rgba(255,255,255,0.85)`, borderLeft: `3px solid ${w.accent}` }}>
-                        <div style={{ fontSize: '17px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>Outcome</div>
-                        <p style={{ fontSize: '19px', color: '#0f172a', margin: 0, lineHeight: 1.6, fontStyle: 'italic' }}>{w.outcome}</p>
+                        <div style={{ fontSize: '11px', fontWeight: '800', color: w.accent, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>Outcome</div>
+                        <p style={{ fontSize: '13px', color: '#64748b', margin: 0, lineHeight: 1.6, fontStyle: 'italic' }}>{w.outcome}</p>
                       </div>
                     </div>
                   )}
@@ -464,9 +488,9 @@ export default function MyCourses() {
                 { v: 'Founder', l: 'Positioning Path', d: 'Pitch, traction, evaluation' },
               ].map((s, i) => (
                 <div key={i} style={{ textAlign: 'center', padding: '14px', borderRadius: '14px', background: '#f0f2f5', boxShadow: nmInset }}>
-                  <div style={{ fontSize: '24px', fontWeight: '900', color: '#6366f1', marginBottom: '4px' }}>{s.v}</div>
-                  <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', marginBottom: '3px' }}>{s.l}</div>
-                  <div style={{ fontSize: '17px', color: '#0f172a' }}>{s.d}</div>
+                  <div style={{ fontSize: '20px', fontWeight: '900', color: '#6366f1', marginBottom: '4px' }}>{s.v}</div>
+                  <div style={{ fontSize: '12px', fontWeight: '800', color: '#0f172a', marginBottom: '3px' }}>{s.l}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>{s.d}</div>
                 </div>
               ))}
             </div>
@@ -477,27 +501,12 @@ export default function MyCourses() {
       {/* ═══ TAB: ASSIGNMENTS ═══ */}
       {activeTab === 'assignments' && (
         <div style={{ animation: mounted ? 'nm-up 0.4s ease-out both' : 'none' }}>
-          {/* Assignment stats */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
-            {assignStats.map((st, i) => (
-              <div key={i} style={{ background: '#f0f2f5', borderRadius: '16px', padding: '18px 16px', boxShadow: nmShadow, display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {st.icon}
-                </div>
-                <div>
-                  <div style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px', lineHeight: 1 }}>{st.value}</div>
-                  <div style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{st.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* Filter tabs */}
           <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
             {['all', 'pending', 'in-progress', 'completed'].map(f => (
               <button key={f} onClick={() => setAssignFilter(f)} style={{
                 padding: '8px 16px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                fontSize: '18px', fontWeight: '700', textTransform: 'capitalize',
+                fontSize: '13px', fontWeight: '700', textTransform: 'capitalize',
                 background: assignFilter === f ? '#6366f1' : '#f0f2f5',
                 color: assignFilter === f ? '#fff' : '#0f172a',
                 boxShadow: assignFilter === f
@@ -528,23 +537,23 @@ export default function MyCourses() {
                     <div style={{ flex: 1 }}>
                       {/* Title + priority */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
-                        <h3 style={{ fontSize: '23px', fontWeight: '800', color: '#0f172a', margin: 0, fontFamily: 'Nasalization, sans-serif' }}>{a.title}</h3>
-                        <span style={{ padding: '2px 10px', borderRadius: '8px', background: '#f0f2f5', boxShadow: '3px 3px 6px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '800', color: priorityColor, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{a.priority}</span>
+                        <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>{a.title}</h3>
+                        <span style={{ padding: '2px 10px', borderRadius: '8px', background: '#f0f2f5', boxShadow: '3px 3px 6px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '10px', fontWeight: '800', color: priorityColor, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{a.priority}</span>
                       </div>
-                      <p style={{ fontSize: '19px', color: '#0f172a', margin: '0 0 10px', lineHeight: 1.5 }}>{a.description}</p>
+                      <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 10px', lineHeight: 1.5 }}>{a.description}</p>
                       {/* Meta row */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '18px', fontWeight: '600', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Ico.Book s={15} c="#6366f1" /> {a.course}
+                        <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <Ico.Book s={13} c="#6366f1" /> {a.course}
                         </span>
-                        <span style={{ fontSize: '18px', fontWeight: '600', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Ico.Layers s={15} c="#6366f1" /> {a.module}
+                        <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <Ico.Layers s={13} c="#6366f1" /> {a.module}
                         </span>
-                        <span style={{ fontSize: '18px', fontWeight: '600', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Ico.Clock s={15} c="#6366f1" /> Due: {new Date(a.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <Ico.Clock s={13} c="#6366f1" /> Due: {new Date(a.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                         {a.status !== 'completed' && (
-                          <span style={{ fontSize: '18px', fontWeight: '700', color: isOverdue ? '#ef4444' : days <= 3 ? '#D97706' : '#059669', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: '700', color: isOverdue ? '#ef4444' : days <= 3 ? '#D97706' : '#059669', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <Ico.Arrow s={12} c={isOverdue ? '#ef4444' : days <= 3 ? '#D97706' : '#059669'} />
                             {isOverdue ? `${Math.abs(days)}d overdue` : `${days}d left`}
                           </span>
@@ -554,12 +563,12 @@ export default function MyCourses() {
 
                     {/* Right side: status + points + grade */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', flexShrink: 0 }}>
-                      <div style={{ padding: '6px 14px', borderRadius: '10px', background: '#f0f2f5', boxShadow: nmInset, fontSize: '19px', fontWeight: '700', color: statusColor, textTransform: 'capitalize' }}>
+                      <div style={{ padding: '6px 14px', borderRadius: '10px', background: '#f0f2f5', boxShadow: nmInset, fontSize: '12px', fontWeight: '700', color: statusColor, textTransform: 'capitalize' }}>
                         {a.status.replace('-', ' ')}
                       </div>
-                      <div style={{ fontSize: '19px', fontWeight: '700', color: '#0f172a' }}>{a.points} pts</div>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>{a.points} pts</div>
                       {a.grade && (
-                        <div style={{ padding: '6px 14px', borderRadius: '10px', background: '#6366f1', color: '#fff', fontSize: '19px', fontWeight: '800', boxShadow: '4px 4px 10px rgba(99,102,241,0.3)' }}>Grade: {a.grade}%</div>
+                        <div style={{ padding: '6px 14px', borderRadius: '10px', background: '#6366f1', color: '#fff', fontSize: '12px', fontWeight: '800', boxShadow: '4px 4px 10px rgba(99,102,241,0.3)' }}>Grade: {a.grade}%</div>
                       )}
                     </div>
                   </div>
@@ -568,16 +577,16 @@ export default function MyCourses() {
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                     {a.status !== 'completed' ? (
                       <>
-                        <button style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#f0f2f5', boxShadow: nmShadow, fontSize: '18px', fontWeight: '700', color: '#0f172a', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                        <button style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#f0f2f5', boxShadow: nmShadow, fontSize: '13px', fontWeight: '700', color: '#0f172a', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                           Download Materials
                         </button>
-                        <button style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#6366f1', color: '#fff', fontSize: '18px', fontWeight: '700', cursor: 'pointer', boxShadow: '5px 5px 12px rgba(99,102,241,0.35), -3px -3px 8px rgba(255,255,255,0.8)' }}>
+                        <button style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#6366f1', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '5px 5px 12px rgba(99,102,241,0.35), -3px -3px 8px rgba(255,255,255,0.8)' }}>
                           {a.status === 'in-progress' ? 'Continue Working' : 'Start Assignment'}
                         </button>
                       </>
                     ) : (
-                      <button style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#f0f2f5', boxShadow: nmInset, fontSize: '18px', fontWeight: '700', color: '#6366f1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                      <button style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#f0f2f5', boxShadow: nmInset, fontSize: '13px', fontWeight: '700', color: '#6366f1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                         <Ico.Check s={14} c="#6366f1" /> View Submission
                       </button>
                     )}
@@ -591,61 +600,198 @@ export default function MyCourses() {
 
       {/* ═══ TAB: PROGRAM OVERVIEW ═══ */}
       {activeTab === 'overview' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', animation: mounted ? 'nm-up 0.4s ease-out both' : 'none' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: mounted ? 'nm-up 0.4s ease-out both' : 'none' }}>
 
-          {/* What You Will Master */}
-          <NmCard hover={false} style={{ padding: '28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '11px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Ico.Check s={16} c="#6366f1" />
-              </div>
-              <h3 style={{ fontSize: '23px', fontWeight: '800', color: '#0f172a', margin: 0, fontFamily: 'Nasalization, sans-serif' }}>What You Will Master</h3>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {nextGenProgram.outcomes.map((o, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 14px', borderRadius: '12px', background: '#f0f2f5', boxShadow: nmShadow }}>
-                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: '5px' }} />
-                  <span style={{ fontSize: '19px', fontWeight: '600', color: '#0f172a', lineHeight: 1.5 }}>{o}</span>
-                </div>
-              ))}
-            </div>
-          </NmCard>
+          {/* ── Two column cards ── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px' }}>
 
-          {/* Prerequisites + Details */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            <NmCard hover={false} style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '11px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Ico.Signal s={16} c="#6366f1" />
+            {/* ── LEFT: Course Content ── */}
+            <NmCard hover={false} style={{ padding: '0', overflow: 'hidden' }}>
+              {/* Card header */}
+              <div style={{ padding: '18px 22px 16px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}>
+                  <Ico.Layers s={18} c="#fff" />
                 </div>
-                <h3 style={{ fontSize: '23px', fontWeight: '800', color: '#0f172a', margin: 0, fontFamily: 'Nasalization, sans-serif' }}>Prerequisites</h3>
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Program 1</div>
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Course Content</h3>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {nextGenProgram.prerequisites.map((p, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 14px', borderRadius: '12px', background: '#f0f2f5', boxShadow: nmShadow }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: '5px' }} />
-                    <span style={{ fontSize: '19px', fontWeight: '600', color: '#0f172a', lineHeight: 1.5 }}>{p}</span>
+
+              <div style={{ padding: '18px 22px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Quick stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                  {[
+                    { v: '8', l: 'Modules' },
+                    { v: '32', l: 'Lessons' },
+                    { v: '32h', l: 'Duration' },
+                    { v: '4', l: 'Lessons/Module' },
+                  ].map((s, i) => (
+                    <div key={i} style={{ padding: '10px 8px', borderRadius: '10px', background: '#f0f2f5', boxShadow: nmInset, textAlign: 'center' }}>
+                      <div style={{ fontSize: '16px', fontWeight: '900', color: '#6366f1', lineHeight: 1 }}>{s.v}</div>
+                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px', marginTop: '3px' }}>{s.l}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Learning Phases */}
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '8px' }}>3 Learning Phases</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {[
+                      { label: 'Phase 1', modules: 'Modules 1–2', desc: 'AI & Vibe Coding' },
+                      { label: 'Phase 2', modules: 'Modules 3–6', desc: 'Web3, Blockchain & Agentic Systems' },
+                      { label: 'Phase 3', modules: 'Modules 7–8', desc: 'Data Engineering & BI' },
+                    ].map((t, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', borderRadius: '10px', background: 'rgba(99,102,241,0.06)' }}>
+                        <div style={{ minWidth: '52px', fontSize: '10px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t.label}</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <span style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>{t.desc}</span>
+                          <span style={{ fontSize: '11px', color: '#94a3b8', marginLeft: '6px' }}>{t.modules}</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* What you master */}
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '8px' }}>What You Will Master</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    {nextGenProgram.outcomes.map((o, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                        <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: '5px' }} />
+                        <span style={{ fontSize: '12px', color: '#0f172a', lineHeight: 1.5 }}>{o}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  {[
+                    { l: 'Format',   v: '8 Integrated Modules' },
+                    { l: 'Language', v: 'English' },
+                    { l: 'Level',    v: 'Beginner to Advanced' },
+                    { l: 'Duration', v: '32 Hours Total' },
+                  ].map((d, i) => (
+                    <div key={i} style={{ padding: '9px 12px', borderRadius: '10px', background: '#f0f2f5', boxShadow: nmInset }}>
+                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '2px' }}>{d.l}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>{d.v}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Prerequisites */}
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '8px' }}>Prerequisites</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    {nextGenProgram.prerequisites.map((p, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                        <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: '5px' }} />
+                        <span style={{ fontSize: '12px', color: '#0f172a', lineHeight: 1.5 }}>{p}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </NmCard>
 
-            <NmCard hover={false} style={{ padding: '24px' }}>
-              <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '14px' }}>Program Details</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                {[
-                  { l: 'Format',      v: nextGenProgram.format },
-                  { l: 'Language',    v: nextGenProgram.language },
-                  { l: 'Level',       v: nextGenProgram.level },
-                  { l: 'Certificate', v: nextGenProgram.certificateType },
-                ].map((d, i) => (
-                  <div key={i} style={{ padding: '10px 12px', borderRadius: '12px', background: '#f0f2f5', boxShadow: nmInset }}>
-                    <div style={{ fontSize: '17px', fontWeight: '700', color: '#0f172a', letterSpacing: '0.4px', textTransform: 'uppercase', marginBottom: '3px' }}>{d.l}</div>
-                    <div style={{ fontSize: '19px', fontWeight: '700', color: '#0f172a' }}>{d.v}</div>
+            {/* ── RIGHT: Bootcamp ── */}
+            <NmCard hover={false} style={{ padding: '0', overflow: 'hidden' }}>
+              {/* Card header */}
+              <div style={{ padding: '18px 22px 16px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}>
+                  <Ico.Award s={18} c="#fff" />
+                </div>
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Program 2</div>
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>AI Startup Bootcamp</h3>
+                </div>
+              </div>
+
+              <div style={{ padding: '18px 22px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Quick stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                  {[
+                    { v: '4', l: 'Weeks' },
+                    { v: '4', l: 'Deliverables' },
+                    { v: 'Live', l: 'Validation' },
+                    { v: 'Founder', l: 'Path' },
+                  ].map((s, i) => (
+                    <div key={i} style={{ padding: '10px 8px', borderRadius: '10px', background: '#f0f2f5', boxShadow: nmInset, textAlign: 'center' }}>
+                      <div style={{ fontSize: '16px', fontWeight: '900', color: '#6366f1', lineHeight: 1 }}>{s.v}</div>
+                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px', marginTop: '3px' }}>{s.l}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 4 Phases */}
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '8px' }}>4 Execution Phases</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {[
+                      { week: 'Week 1', title: 'Problem Discovery',          desc: 'Structured idea validation & user research' },
+                      { week: 'Week 2', title: 'AI MVP Development',         desc: 'No-code build sprint & prototype creation' },
+                      { week: 'Week 3', title: 'Validation & Market Testing', desc: 'Live user testing & iteration cycles' },
+                      { week: 'Week 4', title: 'Pitch & Founder Positioning', desc: 'Structured evaluation & traction metrics' },
+                    ].map((p, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '9px 12px', borderRadius: '10px', background: 'rgba(99,102,241,0.06)' }}>
+                        <div style={{ minWidth: '52px', fontSize: '10px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', paddingTop: '1px' }}>{p.week}</div>
+                        <div>
+                          <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>{p.title}</div>
+                          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '1px' }}>{p.desc}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* What you get */}
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '8px' }}>What You Will Build</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    {[
+                      'A validated, tested problem statement',
+                      'A working no-code AI MVP prototype',
+                      'Real user feedback & traction metrics',
+                      'A 5-minute investor-ready pitch',
+                      'Measurable early-stage traction signals',
+                      'Defined path toward the Founder Track',
+                    ].map((o, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                        <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: '5px' }} />
+                        <span style={{ fontSize: '12px', color: '#0f172a', lineHeight: 1.5 }}>{o}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  {[
+                    { l: 'Format',     v: '4-Week Sprint Cycle' },
+                    { l: 'Structure',  v: 'Discovery → Build → Test → Pitch' },
+                    { l: 'Outcome',    v: 'Live AI Startup MVP' },
+                    { l: 'Selection',  v: '3-Stage Evaluation Model' },
+                  ].map((d, i) => (
+                    <div key={i} style={{ padding: '9px 12px', borderRadius: '10px', background: '#f0f2f5', boxShadow: nmInset }}>
+                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '2px' }}>{d.l}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>{d.v}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mission statement */}
+                <div style={{ padding: '12px 16px', borderRadius: '12px', background: 'rgba(99,102,241,0.06)', borderLeft: '3px solid #6366f1' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '5px' }}>Mission</div>
+                  <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.6, fontStyle: 'italic' }}>
+                    Convert intent into execution. In 4 weeks you move from idea to a live, validated AI startup — not theory, not slides.
+                  </p>
+                </div>
               </div>
             </NmCard>
+
           </div>
         </div>
       )}

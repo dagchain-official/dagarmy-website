@@ -23,7 +23,7 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Unauthorized - Master Admin access required' }, { status: 403 });
     }
 
-    const allowedFields = ['platform', 'task_type', 'title', 'description', 'points', 'target_url', 'is_active', 'max_completions_per_user', 'expires_at'];
+    const allowedFields = ['platform', 'task_type', 'title', 'description', 'points', 'target_url', 'is_active', 'max_completions_per_user', 'expires_at', 'mission_type', 'scheduled_date'];
     const sanitized = {};
     for (const key of allowedFields) {
       if (updates[key] !== undefined) sanitized[key] = updates[key];

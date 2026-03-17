@@ -123,6 +123,15 @@ const dashboardItems = [
     ),
     label: "Settings/Profile",
   },
+  {
+    href: "/dag-lieutenant",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    label: "DAG Lieutenant",
+  },
 ];
 
 
@@ -164,6 +173,24 @@ export default function DashboardNav2() {
   const pathname = usePathname();
   const router = useRouter();
   const { logout } = useAuth();
+  const [availableMissions, setAvailableMissions] = useState(0);
+
+  useEffect(() => {
+    const fetchAvailable = async () => {
+      try {
+        const stored = localStorage.getItem('dagarmy_user');
+        if (!stored) return;
+        const { email } = JSON.parse(stored);
+        if (!email) return;
+        const res = await fetch(`/api/social-tasks/user?user_email=${encodeURIComponent(email)}`);
+        const data = await res.json();
+        if (data.success) setAvailableMissions(data.stats?.available || 0);
+      } catch {}
+    };
+    fetchAvailable();
+    const interval = setInterval(fetchAvailable, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
 
   const handleLogout = async () => {
@@ -228,13 +255,25 @@ export default function DashboardNav2() {
 
       {/* Nav items */}
       <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <style>{`
+          @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.55); opacity: 0.75; }
+          }
+        `}</style>
         {dashboardItems.map((item, index) => {
           const isActive = pathname === item.href;
+          const isMission = item.href === '/student-tasks';
+          const hasMissions = isMission && availableMissions > 0;
+          const itemStyle = {
+            ...getItemStyle(isActive),
+            ...(hasMissions ? { border: '1.5px solid #ef4444', boxShadow: isActive ? nm.shadowActiveAccent : `${nm.shadowSm}, 0 0 0 0 rgba(239,68,68,0.15)` } : {}),
+          };
           return (
             <React.Fragment key={index}>
               <div
                 onClick={() => handleNavigation(item.href)}
-                style={getItemStyle(isActive)}
+                style={itemStyle}
                 onMouseEnter={(e) => onEnter(e, isActive)}
                 onMouseLeave={(e) => onLeave(e, isActive)}
               >
@@ -244,7 +283,16 @@ export default function DashboardNav2() {
                 <span style={{ fontSize: '13.5px', fontWeight: isActive ? '650' : '500', letterSpacing: '-0.1px', color: 'inherit', flex: 1 }}>
                   {item.label}
                 </span>
-                {isActive && (
+                {hasMissions && (
+                  <div style={{
+                    width: '9px', height: '9px', borderRadius: '50%',
+                    background: '#ef4444',
+                    flexShrink: 0,
+                    animation: 'pulse-dot 1.4s ease-in-out infinite',
+                    boxShadow: '0 0 0 2px rgba(239,68,68,0.25)',
+                  }} />
+                )}
+                {isActive && !hasMissions && (
                   <div style={{
                     marginLeft: 'auto',
                     width: '4px',
@@ -293,29 +341,29 @@ export default function DashboardNav2() {
               borderRadius: '12px',
               marginBottom: '5px',
               textDecoration: 'none',
-              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-              border: '1px solid rgba(99,102,241,0.25)',
-              boxShadow: '4px 4px 10px rgba(0,0,0,0.15), -2px -2px 6px rgba(255,255,255,0.05)',
+              background: nm.bg,
+              border: '1.5px solid #1a4a8a',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.10), -3px -3px 8px rgba(255,255,255,0.9), inset 0 1px 0 rgba(98,207,244,0.15)',
               transition: 'all 0.18s ease',
               cursor: 'pointer',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(3px)'; e.currentTarget.style.boxShadow = '6px 4px 14px rgba(0,0,0,0.20), -2px -2px 6px rgba(255,255,255,0.05)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.15), -2px -2px 6px rgba(255,255,255,0.05)'; }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(3px)'; e.currentTarget.style.boxShadow = '6px 5px 14px rgba(0,0,0,0.13), -3px -3px 8px rgba(255,255,255,0.9), inset 0 1px 0 rgba(98,207,244,0.15)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.10), -3px -3px 8px rgba(255,255,255,0.9), inset 0 1px 0 rgba(98,207,244,0.15)'; }}
           >
             <div style={{
-              width: '26px', height: '26px', borderRadius: '7px',
-              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              width: '30px', height: '30px', borderRadius: '50%', flexShrink: 0,
+              background: nm.bg,
+              boxShadow: '3px 3px 7px rgba(0,0,0,0.12), -2px -2px 5px rgba(255,255,255,0.95)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
             }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img src="/images/logo/dagchain-logo.png" alt="DAGCHAIN" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
             </div>
             <div>
-              <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#f1f5f9', letterSpacing: '-0.1px' }}>DAGCHAIN</div>
+              <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#1e293b', letterSpacing: '-0.1px' }}>DAGCHAIN</div>
               <div style={{ fontSize: '9.5px', color: '#94a3b8', marginTop: '1px' }}>dagchain.network</div>
             </div>
-            <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5">
+            <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" strokeLinecap="round" strokeLinejoin="round"/>
               <polyline points="15 3 21 3 21 9" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -333,30 +381,29 @@ export default function DashboardNav2() {
               padding: '9px 12px',
               borderRadius: '12px',
               textDecoration: 'none',
-              background: 'linear-gradient(135deg, #052e16 0%, #14532d 100%)',
-              border: '1px solid rgba(34,197,94,0.22)',
-              boxShadow: '4px 4px 10px rgba(0,0,0,0.15), -2px -2px 6px rgba(255,255,255,0.04)',
+              background: nm.bg,
+              border: '1.5px solid #1a4a8a',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.10), -3px -3px 8px rgba(255,255,255,0.9), inset 0 1px 0 rgba(98,207,244,0.15)',
               transition: 'all 0.18s ease',
               cursor: 'pointer',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(3px)'; e.currentTarget.style.boxShadow = '6px 4px 14px rgba(0,0,0,0.20), -2px -2px 6px rgba(255,255,255,0.04)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.15), -2px -2px 6px rgba(255,255,255,0.04)'; }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(3px)'; e.currentTarget.style.boxShadow = '6px 5px 14px rgba(0,0,0,0.13), -3px -3px 8px rgba(255,255,255,0.9), inset 0 1px 0 rgba(98,207,244,0.15)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '4px 4px 10px rgba(0,0,0,0.10), -3px -3px 8px rgba(255,255,255,0.9), inset 0 1px 0 rgba(98,207,244,0.15)'; }}
           >
             <div style={{
-              width: '26px', height: '26px', borderRadius: '7px',
-              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              width: '30px', height: '30px', borderRadius: '50%', flexShrink: 0,
+              background: nm.bg,
+              boxShadow: '3px 3px 7px rgba(0,0,0,0.12), -2px -2px 5px rgba(255,255,255,0.95)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
             }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5">
-                <circle cx="12" cy="12" r="10" strokeLinecap="round"/>
-                <path d="M12 8v4l3 3" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img src="/images/logo/daggpt-logo.png" alt="DAGGPT" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
             </div>
             <div>
-              <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#f1f5f9', letterSpacing: '-0.1px' }}>DAGGPT</div>
+              <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#1e293b', letterSpacing: '-0.1px' }}>DAGGPT</div>
               <div style={{ fontSize: '9.5px', color: '#94a3b8', marginTop: '1px' }}>daggpt.network</div>
             </div>
-            <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5">
+            <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" strokeLinecap="round" strokeLinejoin="round"/>
               <polyline points="15 3 21 3 21 9" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round"/>
