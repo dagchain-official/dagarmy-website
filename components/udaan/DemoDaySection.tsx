@@ -7,6 +7,11 @@ import {
   useTransform,
   useSpring,
 } from "framer-motion";
+import ScreeningStageSlider from "./ScreeningStageSlider";
+import ValidationStageSlider from "./ValidationStageSlider";
+import PipelineGlanceSlider from "./PipelineGlanceSlider";
+import DemoFinalsSlider from "./DemoFinalsSlider";
+import BottomLineSlider from "./BottomLineSlider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -109,7 +114,7 @@ export default function DemoDaySection() {
                     borderRadius: 100, padding: "6px 16px", marginBottom: 20,
                   }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: gradBg }} />
-                  <span style={{
+                  <span className="whitespace-nowrap" style={{
                     fontFamily: "Nasalization, sans-serif",
                     fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
                     textTransform: "uppercase" as const, color: "#6366f1",
@@ -117,6 +122,7 @@ export default function DemoDaySection() {
                 </motion.div>
 
                 <motion.h2
+                  className="demo-day-hero-title"
                   initial={{ opacity: 0, y: 20 }}
                   animate={headerInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.65, delay: 0.08, ease }}
@@ -125,8 +131,9 @@ export default function DemoDaySection() {
                     fontSize: "clamp(36px, 4vw, 60px)", lineHeight: 1.1,
                     letterSpacing: "-0.03em", color: "#0c0c14", marginBottom: 16,
                   }}>
-                  Road to{" "}
-                  <span style={grad}>Demo Day Finals</span>
+                  <span className="hidden md:inline">Road to{" "}</span>
+                  <span className="block md:hidden text-3xl font-bold">Road to <span className="text-purple-600" style={grad}>Demo Day Finals</span></span>
+                  <span className="hidden md:inline" style={grad}>Demo Day Finals</span>
                 </motion.h2>
 
                 <motion.p
@@ -143,6 +150,7 @@ export default function DemoDaySection() {
 
               {/* Right: stats */}
               <motion.div
+                className="demo-day-hero-stats hidden md:flex"
                 initial={{ opacity: 0, x: 24 }}
                 animate={headerInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.22, ease }}
@@ -231,11 +239,27 @@ export default function DemoDaySection() {
           </span>
         </motion.div>
 
+        {/* Mobile Screening Slider */}
+        <div className="demo-day-screening-slider block md:hidden" style={{ marginBottom: 32 }}>
+          <ScreeningStageSlider />
+        </div>
+
+        {/* Mobile Validation Slider */}
+        <div className="demo-day-validation-slider block md:hidden" style={{ marginBottom: 32 }}>
+          <ValidationStageSlider />
+        </div>
+
+        {/* Mobile Pipeline Glance Slider */}
+        <div className="demo-day-pipeline-glance-slider block md:hidden" style={{ marginBottom: 32 }}>
+          <PipelineGlanceSlider />
+        </div>
+
         {/* Stage cards — asymmetric bento */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto", gap: 16 }}>
+        <div className="demo-day-stage-cards hidden md:grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto", gap: 16 }}>
 
           {/* ── STAGE 1: Screening — spans full top row ── */}
           <motion.div
+            className="demo-day-screening-desktop"
             initial={{ opacity: 0, y: 32 }}
             animate={stagesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.08, ease }}
@@ -339,6 +363,7 @@ export default function DemoDaySection() {
 
           {/* ── STAGE 1 stat card — 1 col tall ── */}
           <motion.div
+            className="demo-day-pipeline-glance-desktop"
             initial={{ opacity: 0, x: 24 }}
             animate={stagesInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.14, ease }}
@@ -406,6 +431,7 @@ export default function DemoDaySection() {
 
           {/* ── STAGE 2: Validation & Mentor Review — spans 2 cols ── */}
           <motion.div
+            className="demo-day-validation-desktop"
             initial={{ opacity: 0, y: 32 }}
             animate={stagesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.18, ease }}
@@ -509,8 +535,107 @@ export default function DemoDaySection() {
 
         </div>
 
+        {/* Mobile Demo Day Finals Card */}
+        <div className="demo-day-finals-mobile block md:hidden" style={{ marginBottom: 32, padding: "0 16px" }}>
+          <div style={{
+            background: "linear-gradient(135deg, #f8f8fb 0%, #f2f0ff 100%)",
+            border: "1px solid rgba(99,102,241,0.2)",
+            borderRadius: 20,
+            padding: 24,
+            display: "flex",
+            flexDirection: "column" as const,
+            gap: 20,
+          }}>
+            {/* Top accent bar */}
+            <div style={{ height: 4, background: "linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa)", marginLeft: -24, marginRight: -24, marginTop: -24 }} />
+
+            {/* Static Header */}
+            <div style={{ display: "flex", flexDirection: "column" as const, gap: 16 }}>
+              {/* Tag */}
+              <div style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "rgba(99,102,241,0.12)",
+                borderRadius: 6,
+                padding: "4px 12px",
+                alignSelf: "flex-start",
+              }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: gradBg }} />
+                <span style={{
+                  fontFamily: "'Nasalization', sans-serif",
+                  fontSize: 9,
+                  fontWeight: 700,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase" as const,
+                  color: "#6366f1",
+                }}>Stage 3 · Finals</span>
+              </div>
+
+              {/* Heading */}
+              <h3 style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 800,
+                fontSize: 28,
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
+                color: "#0c0c14",
+                marginBottom: 0,
+              }}>Demo Day Finals</h3>
+
+              {/* Subtitle */}
+              <p style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#7070a0",
+                lineHeight: 1.65,
+                marginBottom: 0,
+              }}>
+                Execution becomes reputation.
+              </p>
+
+              {/* Badges */}
+              <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8, marginTop: 8 }}>
+                {["AI Jury", "Investor Pitch", "Live Demo"].map((tag) => (
+                  <div key={tag} style={{
+                    background: "#fff",
+                    border: "1px solid rgba(99,102,241,0.2)",
+                    borderRadius: 100,
+                    padding: "6px 14px",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: "#6366f1",
+                  }}>{tag}</div>
+                ))}
+              </div>
+            </div>
+
+            {/* Inner Slider */}
+            <DemoFinalsSlider />
+
+            {/* Static Footer */}
+            <div style={{
+              borderTop: "1px solid rgba(99,102,241,0.12)",
+              paddingTop: 16,
+              marginTop: 8,
+            }}>
+              <p style={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#0c0c14",
+                lineHeight: 1.7,
+                marginBottom: 0,
+              }}>
+                Your MVP becomes your <span style={grad}>proof.</span><br />
+                Your traction becomes your <span style={grad}>signal.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* ── STAGE 3: Demo Day Finals — full width feature card ── */}
         <motion.div
+          className="demo-day-finals-desktop"
           initial={{ opacity: 0, y: 40 }}
           animate={stagesInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.28, ease }}
@@ -660,6 +785,7 @@ export default function DemoDaySection() {
         {/* ── CLOSING MANIFESTO STRIP ── */}
         <div ref={closingRef}>
           <motion.div
+            className="demo-day-bottom-line-desktop"
             initial={{ opacity: 0, y: 24 }}
             animate={closingInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, ease }}
@@ -743,7 +869,132 @@ export default function DemoDaySection() {
           </motion.div>
         </div>
 
+        {/* Mobile Bottom Line Slider */}
+        <div className="demo-day-bottom-line-mobile block md:hidden" style={{ paddingTop: 32, paddingBottom: 32 }}>
+          <BottomLineSlider />
+        </div>
+
       </div>
+
+      {/* Mobile CSS */}
+      <style jsx>{`
+        /* Desktop: Hide sliders */
+        @media (min-width: 769px) {
+          .demo-day-screening-slider,
+          .demo-day-validation-slider,
+          .demo-day-pipeline-glance-slider,
+          .demo-day-finals-mobile,
+          .demo-day-bottom-line-mobile {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* TASK 1: Hero Section Alignment & Cleanup */
+          
+          /* Hero section - stack vertically */
+          .wrap > div:first-child {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+
+          /* Hero title - mobile font size and line breaks */
+          .demo-day-hero-title {
+            line-height: 1.2 !important;
+          }
+
+          .demo-day-hero-title .text-3xl {
+            font-size: 1.875rem !important;
+            line-height: 2.25rem !important;
+          }
+
+          /* Hero subtitle */
+          .demo-day-hero-title + p {
+            font-size: 14px !important;
+          }
+
+          /* TASK 2: Hide Desktop Stats */
+          .demo-day-hero-stats {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* TASK 3: Hide Desktop Stage Cards */
+          .demo-day-stage-cards {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* NEW TASK 1: Hide Desktop Validation Card */
+          .demo-day-validation-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* NEW TASK 2: Hide Desktop Pipeline Glance Sidebar */
+          .demo-day-pipeline-glance-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* FINAL TASK 1: Hide Desktop Demo Day Finals */
+          .demo-day-finals-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* FINAL TASK 2: Hide Desktop Bottom Line */
+          .demo-day-bottom-line-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

@@ -1,0 +1,165 @@
+/* How You Earn Section Mobile Responsive Styles */
+/* Desktop (≥768px) remains 100% untouched */
+
+/* Mobile: 768px and below - Stack vertically */
+@media (max-width: 768px) {
+  /* Change grid to single column, Score/Stats on top */
+  .howYouEarnGrid {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 32px !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Remove desktop borders and padding */
+  .howYouEarnChecklist {
+    border-right: none !important;
+    padding-right: 0 !important;
+    gap: 20px !important;
+  }
+
+  .scoreDashboard {
+    padding-left: 0 !important;
+    text-align: center !important;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 24px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Reduce panel padding on mobile */
+  .howYouEarnPanel {
+    padding: 28px 20px !important;
+  }
+
+  /* Reduce score font size for mobile */
+  .scoreValue {
+    font-size: 36px !important;
+  }
+
+  .scoreMax {
+    font-size: 24px !important;
+  }
+
+  /* Compact checklist items */
+  .checklistItem {
+    margin-bottom: 0 !important;
+  }
+
+  .checklistTitle {
+    font-size: 16px !important;
+  }
+
+  .checklistDesc {
+    font-size: 14px !important;
+  }
+
+  /* Slightly smaller check icons */
+  .checkIcon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .checkIcon svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Large phones: 430px and below */
+@media (max-width: 430px) {
+  .howYouEarnPanel {
+    padding: 24px 16px !important;
+  }
+
+  .scoreValue {
+    font-size: 32px !important;
+  }
+
+  .scoreMax {
+    font-size: 20px !important;
+  }
+
+  .scoreLabel {
+    font-size: 10px !important;
+  }
+
+  .checklistTitle {
+    font-size: 15px !important;
+  }
+
+  .checklistDesc {
+    font-size: 13px !important;
+  }
+
+  /* Even more compact spacing */
+  .howYouEarnChecklist {
+    gap: 16px !important;
+  }
+
+  .checkIcon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .checkIcon svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+}
+
+/* Standard phones: 390px */
+@media (max-width: 390px) {
+  .scoreValue {
+    font-size: 28px !important;
+  }
+
+  .scoreMax {
+    font-size: 18px !important;
+  }
+
+  .checklistTitle {
+    font-size: 14px !important;
+  }
+
+  .checklistDesc {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+}
+
+/* Small phones: 375px and below */
+@media (max-width: 375px) {
+  .howYouEarnPanel {
+    padding: 20px 12px !important;
+  }
+
+  .scoreValue {
+    font-size: 26px !important;
+  }
+
+  .scoreMax {
+    font-size: 16px !important;
+  }
+
+  .checklistTitle {
+    font-size: 13px !important;
+  }
+
+  .checklistDesc {
+    font-size: 11px !important;
+  }
+
+  .howYouEarnChecklist {
+    gap: 14px !important;
+  }
+
+  .checkIcon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .checkIcon svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}

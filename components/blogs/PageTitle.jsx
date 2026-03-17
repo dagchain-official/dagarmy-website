@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 export default function PageTitle({ title = "DAGARMY Blog" }) {
@@ -14,16 +15,31 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
   };
 
   return (
-    <div
-      className="section-blog-hero"
-      style={{
-        padding: "60px 0 30px",
-        background: "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
-        position: "relative",
-        overflow: "hidden",
-        borderBottom: "1px solid #e5e7eb",
-      }}
-    >
+    <>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .blog-stats-bar {
+            flex-direction: column !important;
+            gap: 16px !important;
+            padding: 16px 20px !important;
+            width: 100% !important;
+            max-width: calc(100% - 32px) !important;
+          }
+          .blog-stats-divider {
+            display: none !important;
+          }
+        }
+      `}</style>
+      <div
+        className="section-blog-hero"
+        style={{
+          padding: "60px 0 30px",
+          background: "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
+          position: "relative",
+          overflow: "hidden",
+          borderBottom: "1px solid #e5e7eb",
+        }}
+      >
       {/* Subtle Decorative Elements */}
       <div
         style={{
@@ -54,10 +70,16 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
         }}
       />
 
-      <div className="tf-container" style={{ position: "relative", zIndex: 2 }}>
-        <div className="row">
+      <div className="tf-container" style={{ position: "relative", zIndex: 2, margin: '0 auto' }}>
+        <div className="row" style={{ margin: '0 auto' }}>
           <div className="col-12">
-            <div className="content text-center">
+            <div className="content text-center" style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              margin: '0 auto',
+              width: '100%'
+            }}>
               {/* Tag Badge - Without Icon */}
               <div
                 className="wow fadeInUp"
@@ -118,7 +140,7 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
 
               {/* Stats Bar */}
               <div
-                className="wow fadeInUp"
+                className="wow fadeInUp blog-stats-bar"
                 data-wow-delay="0.3s"
                 style={{
                   display: "inline-flex",
@@ -156,7 +178,7 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
                   </div>
                 </div>
 
-                <div style={{
+                <div className="blog-stats-divider" style={{
                   width: "1px",
                   height: "40px",
                   background: "#e5e7eb"
@@ -185,7 +207,7 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
                   </div>
                 </div>
 
-                <div style={{
+                <div className="blog-stats-divider" style={{
                   width: "1px",
                   height: "40px",
                   background: "#e5e7eb"
@@ -218,6 +240,7 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

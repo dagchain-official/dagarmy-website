@@ -1,6 +1,10 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import ExecutionCardsSlider from "./ExecutionCardsSlider";
+import MarketStatsSlider from "./MarketStatsSlider";
+import WhyThisMattersSlider from "./WhyThisMattersSlider";
+import BottomCardsSlider from "./BottomCardsSlider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const dm = "var(--font-dm, 'DM Sans', sans-serif)";
@@ -23,6 +27,7 @@ export default function ExecutionSection() {
   const inView = useInView(sRef, { once: true, margin: "-80px" as any });
 
   return (
+    <>
     <section ref={sRef} style={{
       position: "relative",
       background: "#ffffff",
@@ -51,6 +56,7 @@ export default function ExecutionSection() {
 
         {/* ── SECTION LABEL ── */}
         <motion.div
+          className="execution-section-label"
           initial={{ opacity: 0, x: -16 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6, ease }}
@@ -74,7 +80,7 @@ export default function ExecutionSection() {
         </motion.div>
 
         {/* ── HERO ROW: big statement left + two stacked pills right ── */}
-        <div style={{
+        <div className="execution-hero-row" style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
           gap: "clamp(48px, 7vw, 112px)",
@@ -84,6 +90,7 @@ export default function ExecutionSection() {
 
           {/* LEFT — massive typographic statement */}
           <motion.div
+            className="execution-left-text"
             initial={{ opacity: 0, y: 36 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.85, delay: 0.08, ease }}
@@ -133,9 +140,15 @@ export default function ExecutionSection() {
           </motion.div>
 
           {/* RIGHT — two stacked content blocks */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 2, paddingTop: 8 }}>
+          <div className="execution-cards-desktop" style={{ display: "flex", flexDirection: "column", gap: 2, paddingTop: 8 }}>
+
+            {/* Mobile Slider */}
+            <div className="execution-cards-mobile" style={{ display: 'none' }}>
+              <ExecutionCardsSlider />
+            </div>
 
             {/* Block A — Execution Over Theory */}
+            <div className="desktop-content-block">
             <ContentBlock
               delay={0.2}
               number="A"
@@ -156,8 +169,10 @@ export default function ExecutionSection() {
                 </div>
               }
             />
+            </div>
 
             {/* Block B — Not passive learning */}
+            <div className="desktop-content-block">
             <ContentBlock
               delay={0.3}
               number="B"
@@ -176,17 +191,119 @@ export default function ExecutionSection() {
                 </p>
               }
             />
+            </div>
           </div>
         </div>
 
         {/* ── MARKET REALITY STRIP ── */}
-        <MarketStrip inView={inView} />
+        {/* Mobile Why This Matters Slider */}
+        <div className="block md:hidden mb-12">
+          <WhyThisMattersSlider />
+        </div>
+
+        {/* Desktop Market Strip */}
+        <div className="hidden md:block">
+          <MarketStrip inView={inView} />
+        </div>
 
         {/* ── CLOSING MANIFESTO ── */}
-        <ClosingManifesto inView={inView} />
+        {/* Mobile Bottom Cards Slider */}
+        <div className="block md:hidden">
+          <BottomCardsSlider />
+        </div>
+
+        {/* Desktop Closing Manifesto */}
+        <div className="hidden md:block">
+          <ClosingManifesto inView={inView} />
+        </div>
 
       </div>
     </section>
+
+    {/* Mobile CSS Overhaul */}
+    <style jsx>{`
+      @media (max-width: 768px) {
+        /* Section padding reduction */
+        section {
+          padding-top: 60px !important;
+          padding-bottom: 60px !important;
+        }
+
+        /* Section label - reduce spacing */
+        .execution-section-label {
+          margin-bottom: 32px !important;
+          padding: 0 16px !important;
+        }
+
+        /* Hero row - stack vertically with gaps */
+        .execution-hero-row {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 32px !important;
+          margin-bottom: 48px !important;
+          padding: 0 16px !important;
+        }
+
+        /* Left text block - reduce typography */
+        .execution-left-text h2 {
+          font-size: clamp(28px, 8vw, 36px) !important;
+          line-height: 1.15 !important;
+          letter-spacing: -0.02em !important;
+          margin-bottom: 20px !important;
+        }
+
+        .execution-left-text p {
+          font-size: 14px !important;
+          line-height: 1.7 !important;
+          max-width: 100% !important;
+        }
+
+        /* TASK 1: Hide duplicate desktop A/B cards */
+        .desktop-content-block {
+          display: none !important;
+        }
+
+        /* Show mobile slider for A/B cards */
+        .execution-cards-mobile {
+          display: block !important;
+        }
+
+        /* Responsive visibility now handled by Tailwind classes (hidden md:block / block md:hidden) */
+      }
+
+      @media (max-width: 430px) {
+        section {
+          padding-top: 50px !important;
+          padding-bottom: 50px !important;
+        }
+
+        .execution-hero-row {
+          gap: 28px !important;
+          margin-bottom: 40px !important;
+        }
+
+        .execution-left-text h2 {
+          font-size: clamp(24px, 7vw, 32px) !important;
+        }
+
+        .execution-left-text p {
+          font-size: 13px !important;
+        }
+
+        .market-strip {
+          margin-bottom: 40px !important;
+        }
+
+        .closing-manifesto > div {
+          padding: 24px 18px !important;
+        }
+
+        .closing-manifesto > div:last-child p {
+          font-size: 16px !important;
+        }
+      }
+    `}</style>
+    </>
   );
 }
 
@@ -254,6 +371,7 @@ function MarketStrip({ inView }: { inView: boolean }) {
 
   return (
     <motion.div
+      className="market-strip"
       initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: 0.4, ease }}
@@ -268,7 +386,7 @@ function MarketStrip({ inView }: { inView: boolean }) {
       }}
     >
       {/* Label panel */}
-      <div style={{
+      <div className="market-strip-label" style={{
         padding: "clamp(28px, 3vw, 44px)",
         background: "#0a0a0f",
         display: "flex", flexDirection: "column", justifyContent: "center",
@@ -287,10 +405,16 @@ function MarketStrip({ inView }: { inView: boolean }) {
         }} />
       </div>
 
+      {/* Mobile Stats Slider */}
+      <div className="market-strip-stats-mobile" style={{ display: 'none' }}>
+        <MarketStatsSlider />
+      </div>
+
       {/* Two stat panels */}
       {stats.map((s, i) => (
         <div
           key={i}
+          className="market-strip-stat-desktop"
           style={{
             padding: "clamp(28px, 3vw, 44px)",
             borderRight: i === 0 ? "1px solid rgba(0,0,10,0.07)" : "none",
@@ -331,6 +455,7 @@ function MarketStrip({ inView }: { inView: boolean }) {
 function ClosingManifesto({ inView }: { inView: boolean }) {
   return (
     <motion.div
+      className="closing-manifesto"
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: 0.55, ease }}

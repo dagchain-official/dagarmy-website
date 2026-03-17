@@ -7,6 +7,13 @@ import {
   useTransform,
   useSpring,
 } from "framer-motion";
+import ConstitutionBulletSlider from "./ConstitutionBulletSlider";
+import ConstitutionStatsSlider from "./ConstitutionStatsSlider";
+import NoToxicitySlider from "./NoToxicitySlider";
+import ZeroPoliticsSlider from "./ZeroPoliticsSlider";
+import NoFakeClaimsSlider from "./NoFakeClaimsSlider";
+import AdvancementSlider from "./AdvancementSlider";
+import IntegrityGuardrailSlider from "./IntegrityGuardrailSlider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const INDIGO = "#6366f1";
@@ -47,8 +54,74 @@ export default function UdaanCodeSection() {
   return (
     <section ref={sectionRef} style={{ background: "#ffffff", padding: "0", position: "relative", overflow: "hidden" }}>
 
+      {/* Mobile Hero Section */}
+      <div className="constitution-hero-mobile block md:hidden" style={{
+        background: "#f4f3ff",
+        borderBottom: "1px solid #ddd9ff",
+        padding: "32px 24px 0",
+      }}>
+        {/* Top Tag */}
+        <div style={{
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase" as const,
+          color: INDIGO,
+          fontFamily: "'Nasalization', sans-serif",
+          marginBottom: 24,
+          whiteSpace: "nowrap" as const,
+        }}>Constitution Framework · DAG Army</div>
+
+        {/* Main Heading - Stacked Vertically */}
+        <h2 style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontWeight: 900,
+          letterSpacing: "-0.03em",
+          margin: "0 0 24px",
+        }}>
+          <span style={{
+            display: "block",
+            fontSize: 36,
+            fontWeight: 900,
+            color: "#0c0c14",
+            lineHeight: 1.1,
+          }}>Udaan Code</span>
+          <span style={{
+            display: "block",
+            fontSize: 36,
+            fontWeight: 900,
+            lineHeight: 1.1,
+            ...gradText,
+          }}>Constitution</span>
+          <span style={{
+            display: "block",
+            fontSize: 36,
+            fontWeight: 900,
+            color: "#0c0c14",
+            lineHeight: 1.1,
+          }}>in Action.</span>
+        </h2>
+
+        {/* Static Subtitle */}
+        <p style={{
+          fontSize: 14,
+          color: "#5a5a72",
+          lineHeight: 1.75,
+          marginTop: 24,
+          marginBottom: 20,
+        }}>
+          Community Governance · Builder Discipline · Ethical Startup Culture
+        </p>
+
+        {/* Inner Slider (Bullet Points) */}
+        <ConstitutionBulletSlider />
+
+        {/* Mobile Stats Slider */}
+        <ConstitutionStatsSlider />
+      </div>
+
       {/* ── FULL-BLEED HERO MASTHEAD ── */}
-      <div style={{
+      <div className="constitution-hero-desktop" style={{
         background: "#f4f3ff",
         borderBottom: "1px solid #ddd9ff",
         padding: "80px 0 0",
@@ -130,7 +203,7 @@ export default function UdaanCodeSection() {
           </div>
 
           {/* Bottom stat bar */}
-          <div style={{ borderTop: "1px solid #ddd9ff", display: "flex", alignItems: "stretch", overflow: "hidden" }}>
+          <div className="constitution-stats-desktop" style={{ borderTop: "1px solid #ddd9ff", display: "flex", alignItems: "stretch", overflow: "hidden" }}>
             {[
               { num: "3", label: "Core Principles" },
               { num: "0", label: "Tolerance for Shortcuts" },
@@ -155,8 +228,63 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
+      {/* Mobile No Toxicity Section */}
+      <div className="no-toxicity-mobile flex md:hidden" style={{
+        borderBottom: "1px solid #ebebf5",
+        padding: "32px 16px",
+        background: "#ffffff",
+      }}>
+        <div style={{
+          display: "flex",
+          flexDirection: "row" as const,
+          width: "100%",
+          gap: 16,
+        }}>
+          {/* Static Left Column */}
+          <div style={{
+            width: "25%",
+            display: "flex",
+            flexDirection: "column" as const,
+            alignItems: "flex-start",
+            paddingTop: 8,
+          }}>
+            <div style={{
+              fontFamily: "'Nasalization', sans-serif",
+              fontSize: 48,
+              fontWeight: 700,
+              color: "rgba(99,102,241,0.12)",
+              lineHeight: 1,
+              marginBottom: 8,
+            }}>01</div>
+            <div style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase" as const,
+              color: INDIGO,
+              fontFamily: "'Nasalization', sans-serif",
+            }}>Policy</div>
+            <div style={{
+              width: 2,
+              height: 60,
+              background: `linear-gradient(180deg, ${INDIGO} 0%, transparent 100%)`,
+              marginTop: 16,
+            }} />
+          </div>
+
+          {/* Dynamic Right Column */}
+          <div style={{
+            flex: 1,
+            minWidth: 0,
+            position: "relative" as const,
+          }}>
+            <NoToxicitySlider />
+          </div>
+        </div>
+      </div>
+
       {/* ── ARTICLE 01: No Toxicity ── white bg */}
-      <div ref={p1Ref} style={{ borderBottom: "1px solid #ebebf5" }}>
+      <div ref={p1Ref} className="no-toxicity-desktop" style={{ borderBottom: "1px solid #ebebf5" }}>
         <div style={{ ...wrapStyle }}>
           <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", minHeight: 320 }}>
             {/* Left rail */}
@@ -218,8 +346,65 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
+      {/* Mobile Zero Politics Section */}
+      <div className="zero-politics-mobile flex md:hidden" style={{
+        borderBottom: "1px solid #ebebf5",
+        padding: "32px 16px",
+        background: "#fafafa",
+      }}>
+        <div style={{
+          display: "flex",
+          flexDirection: "row" as const,
+          width: "100%",
+          gap: 16,
+        }}>
+          {/* Dynamic Left Column */}
+          <div style={{
+            flex: 1,
+            minWidth: 0,
+            position: "relative" as const,
+          }}>
+            <ZeroPoliticsSlider />
+          </div>
+
+          {/* Static Right Column */}
+          <div style={{
+            width: "20%",
+            display: "flex",
+            flexDirection: "column" as const,
+            alignItems: "flex-end",
+            paddingTop: 8,
+          }}>
+            <div style={{
+              fontFamily: "'Nasalization', sans-serif",
+              fontSize: 48,
+              fontWeight: 700,
+              color: "rgba(99,102,241,0.12)",
+              lineHeight: 1,
+              marginBottom: 8,
+              textAlign: "right" as const,
+            }}>02</div>
+            <div style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase" as const,
+              color: INDIGO,
+              fontFamily: "'Nasalization', sans-serif",
+              textAlign: "right" as const,
+            }}>Rule</div>
+            <div style={{
+              width: 2,
+              height: 60,
+              background: `linear-gradient(180deg, ${INDIGO} 0%, transparent 100%)`,
+              marginTop: 16,
+            }} />
+          </div>
+        </div>
+      </div>
+
       {/* ── ARTICLE 02: Zero Politics — full-bleed #fafafa band ── */}
-      <div ref={p2Ref} style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
+      <div ref={p2Ref} className="zero-politics-desktop" style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
         <div style={{ ...wrapStyle }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 200px", minHeight: 300 }}>
             <div style={{ padding: "64px 64px 64px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", borderRight: "1px solid #ebebf5" }}>
@@ -281,8 +466,58 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
+      {/* Mobile No Fake Claims Section */}
+      <div className="no-fake-claims-mobile flex md:hidden" style={{
+        borderBottom: "1px solid #ebebf5",
+        padding: "32px 16px",
+        background: "#ffffff",
+      }}>
+        <div style={{
+          display: "flex",
+          flexDirection: "row" as const,
+          width: "100%",
+          gap: 16,
+        }}>
+          {/* Static Left Column */}
+          <div style={{
+            width: "20%",
+            display: "flex",
+            flexDirection: "column" as const,
+            alignItems: "flex-start",
+            paddingTop: 8,
+          }}>
+            <div style={{
+              fontFamily: "'Nasalization', sans-serif",
+              fontSize: 48,
+              fontWeight: 700,
+              color: "rgba(99,102,241,0.12)",
+              lineHeight: 1,
+              marginBottom: 8,
+            }}>03</div>
+            <div style={{
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase" as const,
+              color: INDIGO,
+              fontFamily: "'Nasalization', sans-serif",
+              lineHeight: 1.3,
+            }}>Integrity Standard</div>
+          </div>
+
+          {/* Dynamic Right Column */}
+          <div style={{
+            flex: 1,
+            minWidth: 0,
+            position: "relative" as const,
+          }}>
+            <NoFakeClaimsSlider />
+          </div>
+        </div>
+      </div>
+
       {/* ── ARTICLE 03: No Fake Claims — white bg ── */}
-      <div ref={p3Ref} style={{ borderBottom: "1px solid #ebebf5" }}>
+      <div ref={p3Ref} className="no-fake-claims-desktop" style={{ borderBottom: "1px solid #ebebf5" }}>
         <div style={{ ...wrapStyle }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -352,8 +587,55 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
+      {/* Mobile Advancement Rule Section */}
+      <div className="advancement-mobile flex flex-col md:hidden" style={{
+        borderBottom: "1px solid #ebebf5",
+        padding: "32px 24px",
+        background: "#fafafa",
+      }}>
+        {/* Top Tag */}
+        <div style={{
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase" as const,
+          color: "#9494aa",
+          fontFamily: "'Nasalization', sans-serif",
+          marginBottom: 16,
+          whiteSpace: "nowrap" as const,
+        }}>The Advancement Rule</div>
+
+        {/* Main Heading (2 lines) */}
+        <h3 style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontWeight: 900,
+          fontSize: 28,
+          lineHeight: 1.15,
+          letterSpacing: "-0.025em",
+          color: "#0c0c14",
+          marginTop: 8,
+          marginBottom: 20,
+        }}>
+          Advancement follows one rule:{" "}
+          <span style={gradText}>Contribution First.</span>
+        </h3>
+
+        {/* Paragraph (3 lines max) */}
+        <p style={{
+          fontSize: 14,
+          color: "#5a5a72",
+          lineHeight: 1.7,
+          marginBottom: 28,
+        }}>
+          You earn recognition by launching, validating, mentoring, or supporting other builders. Status is never transactional. Rank reflects demonstrated execution and service.
+        </p>
+
+        {/* Slider with Static Heading */}
+        <AdvancementSlider />
+      </div>
+
       {/* ── CONTRIBUTION FIRST — full-bleed #fafafa ── */}
-      <div style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
+      <div className="advancement-desktop" style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
         <div style={{ ...wrapStyle }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", minHeight: 280 }}>
             <motion.div
@@ -410,8 +692,133 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
+      {/* Mobile Responsible Founder Culture Section */}
+      <div className="responsible-culture-mobile flex flex-col md:hidden" style={{
+        borderBottom: "1px solid #ebebf5",
+        padding: "32px 24px",
+        background: "#ffffff",
+      }}>
+        {/* Top Tag */}
+        <div style={{
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase" as const,
+          color: "#9494aa",
+          fontFamily: "'Nasalization', sans-serif",
+          marginBottom: 16,
+          whiteSpace: "nowrap" as const,
+        }}>Responsible Founder Culture</div>
+
+        {/* Main Heading */}
+        <h2 style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontWeight: 900,
+          fontSize: 28,
+          lineHeight: 1.2,
+          letterSpacing: "-0.025em",
+          color: "#0c0c14",
+          marginTop: 8,
+          marginBottom: 16,
+        }}>
+          This alignment builds more than startups. It builds a{" "}
+          <span style={gradText}>Responsible Founder Culture</span>.
+        </h2>
+
+        {/* Paragraph */}
+        <p style={{
+          fontSize: 14,
+          color: "#5a5a72",
+          lineHeight: 1.75,
+          marginTop: 16,
+          marginBottom: 24,
+        }}>
+          Udaan strengthens its positioning as an <strong style={{ color: "#0c0c14" }}>Ethical AI Community</strong> and a Responsible Startup Ecosystem.
+        </p>
+
+        {/* Status Badges (Vertical Stacking) */}
+        <div style={{
+          display: "flex",
+          flexDirection: "column" as const,
+          gap: 12,
+          marginTop: 24,
+          width: "100%",
+        }}>
+          {[
+            { label: "Fast execution", note: "Encouraged", ok: true },
+            { label: "Shortcut behavior", note: "Not Permitted", ok: false },
+            { label: "Builder discipline", note: "Required", ok: true },
+          ].map((row, i) => (
+            <div key={i} style={{
+              display: "flex",
+              flexDirection: "row" as const,
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: "#fafafa",
+              padding: "12px 16px",
+              borderRadius: 12,
+              width: "100%",
+            }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "#3a3a5c" }}>{row.label}</span>
+              <span style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: row.ok ? "#16a34a" : "#e53935",
+                background: row.ok ? "rgba(22,163,74,0.08)" : "rgba(229,57,53,0.08)",
+                border: `1px solid ${row.ok ? "rgba(22,163,74,0.2)" : "rgba(229,57,53,0.2)"}`,
+                borderRadius: 100,
+                padding: "4px 14px",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase" as const,
+                whiteSpace: "nowrap" as const,
+              }}>{row.note}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Integrity as the Guardrail Section */}
+        <div style={{
+          marginTop: 40,
+          paddingTop: 32,
+          borderTop: "1px solid #e5e5f0",
+        }}>
+          {/* Static Heading */}
+          <div style={{
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase" as const,
+            color: "#9494aa",
+            fontFamily: "'Nasalization', sans-serif",
+            marginBottom: 24,
+          }}>Integrity as the Guardrail</div>
+
+          {/* Slider */}
+          <IntegrityGuardrailSlider />
+
+          {/* Bottom Static Line */}
+          <div style={{
+            marginTop: 32,
+            paddingTop: 24,
+            borderTop: "1px solid #e5e5f0",
+          }}>
+            <p style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#3a3a5c",
+              lineHeight: 1.75,
+              textAlign: "center" as const,
+              marginBottom: 0,
+            }}>
+              Inside this ecosystem, authority is not assigned—it is{" "}
+              <span style={gradText}>demonstrated through action</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* ── RESPONSIBLE CULTURE + GUARDRAIL — white bg ── */}
-      <div ref={guardRef} style={{ borderBottom: "1px solid #ebebf5" }}>
+      <div ref={guardRef} className="responsible-culture-desktop" style={{ borderBottom: "1px solid #ebebf5" }}>
         <div style={{ ...wrapStyle }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <motion.div
@@ -513,8 +920,100 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
-      {/* ── CLOSING DECLARATION ── */}
-      <div ref={closingRef} style={{ padding: "96px 0", position: "relative", overflow: "hidden" }}>
+      {/* Mobile Constitutional Declaration Section */}
+      <div className="constitutional-mobile flex flex-col md:hidden" style={{
+        background: "#fafafa",
+        padding: "48px 24px",
+        width: "100%",
+      }}>
+        <div style={{
+          display: "flex",
+          flexDirection: "column" as const,
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center" as const,
+          width: "100%",
+        }}>
+          {/* Top Tag */}
+          <div style={{
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase" as const,
+            color: "#9494aa",
+            fontFamily: "'Nasalization', sans-serif",
+            marginBottom: 24,
+            whiteSpace: "nowrap" as const,
+          }}>Constitutional Declaration</div>
+
+          {/* Main Heading (2 lines) */}
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 900,
+            fontSize: 28,
+            lineHeight: 1.2,
+            letterSpacing: "-0.025em",
+            marginBottom: 48,
+            width: "100%",
+          }}>
+            <span style={{
+              display: "block",
+              color: "#0c0c14",
+              marginBottom: 8,
+            }}>When builders operate within discipline,</span>
+            <span style={{
+              display: "block",
+              ...gradText,
+            }}>the ecosystem compounds in credibility.</span>
+          </h2>
+
+          {/* Three Pillars (Vertical Stack with Animation) */}
+          <div style={{
+            display: "flex",
+            flexDirection: "column" as const,
+            gap: 32,
+            width: "100%",
+            marginTop: 12,
+          }}>
+            {[
+              { tag: "The Rule", text: "Contribution First. Always." },
+              { tag: "The Standard", text: "Trust is an operational asset." },
+              { tag: "The Code", text: "That is the code." },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: i * 0.15, ease: [0.4, 0, 0.2, 1] }}
+                style={{
+                  textAlign: "center" as const,
+                  width: "100%",
+                }}
+              >
+                <div style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase" as const,
+                  color: INDIGO,
+                  fontFamily: "'Nasalization', sans-serif",
+                  marginBottom: 8,
+                }}>{item.tag}</div>
+                <div style={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: "#0c0c14",
+                  lineHeight: 1.5,
+                }}>{item.text}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── CLOSING: CONSTITUTIONAL DECLARATION ── */}
+      <div ref={closingRef} className="constitutional-desktop" style={{ background: "#fafafa", padding: "80px 0", position: "relative", overflow: "hidden" }}>
         {[0, 1, 2, 3, 4].map(i => (
           <motion.div key={i}
             initial={{ scaleX: 0 }}
@@ -587,6 +1086,131 @@ export default function UdaanCodeSection() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Mobile CSS */}
+      <style jsx>{`
+        /* Desktop: Hide mobile sections */
+        @media (min-width: 769px) {
+          .constitution-hero-mobile,
+          .no-toxicity-mobile,
+          .zero-politics-mobile,
+          .no-fake-claims-mobile,
+          .responsible-culture-mobile,
+          .advancement-mobile,
+          .constitutional-mobile {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* Hide Desktop Hero */
+          .constitution-hero-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop Stats Bar */
+          .constitution-stats-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop No Toxicity */
+          .no-toxicity-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop Zero Politics */
+          .zero-politics-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop No Fake Claims */
+          .no-fake-claims-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop Responsible Culture */
+          .responsible-culture-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop Advancement */
+          .advancement-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* Hide Desktop Constitutional Declaration */
+          .constitutional-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+        }
+      `}</style>
 
     </section>
   );

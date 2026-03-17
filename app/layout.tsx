@@ -56,9 +56,17 @@ export default function RootLayout({
       <body className="counter-scroll">
         <Web3Provider>
           <Context>
-            <div style={{ paddingTop: '50px' }}>
+            <main style={{ 
+              position: 'relative',
+              width: '100%', 
+              maxWidth: '100vw', 
+              overflowX: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              paddingTop: '50px'
+            }}>
               {children}
-            </div>
+            </main>
           </Context>
           {!pathname?.startsWith("/admin") && <ChatWidget />}
         </Web3Provider>

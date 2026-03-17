@@ -1,5 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import MobileSlider from "@/components/rewards/MobileSlider";
+import TierMobileSlider from "@/components/ambassador/TierMobileSlider";
+import CreatorCardsSlider from "@/components/ambassador/CreatorCardsSlider";
+import BenefitsSlider from "@/components/ambassador/BenefitsSlider";
 
 /* ── Icons ─────────────────────────────────────────────────── */
 const Ic = {
@@ -62,6 +67,132 @@ function FAQ({ q, a }) {
   );
 }
 
+/* ── Stats Slider Mobile ───────────────────────────────────── */
+function StatsSliderMobile() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % 2);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const slides = [
+    // Slide 1: 150+ and 40+
+    [
+      { n: '150+', l: 'Active Ambassadors' },
+      { n: '40+', l: 'Countries Represented' }
+    ],
+    // Slide 2: 2M+ and 3
+    [
+      { n: '2M+', l: 'Combined Reach' },
+      { n: '3', l: 'Ecosystem Products' }
+    ]
+  ];
+
+  return (
+    <div className="stats-mobile" style={{ display: 'none', maxWidth: '500px', margin: '0 auto', padding: '32px 24px', position: 'relative', overflow: 'hidden', minHeight: '140px' }}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -40 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}
+        >
+          {slides[currentSlide].map((s, i) => (
+            <div key={i} style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 'clamp(32px, 8vw, 42px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1 }}>
+                {s.n}
+              </div>
+              <div style={{ marginTop: '8px', fontSize: '11px', color: '#999', fontWeight: '600', letterSpacing: '0.3px', lineHeight: 1.4 }}>
+                {s.l}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Dot indicators */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
+        {[0, 1].map(i => (
+          <div
+            key={i}
+            style={{
+              width: currentSlide === i ? '24px' : '8px',
+              height: '8px',
+              borderRadius: '4px',
+              background: currentSlide === i ? '#111' : '#ddd',
+              transition: 'all 0.3s ease'
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Requirements Slider Mobile ────────────────────────────── */
+function RequirementsSliderMobile() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const requirements = [
+    { n: '01', t: 'Active Audience', d: 'You have a real, engaged audience on at least one platform.' },
+    { n: '02', t: 'Consistent Creator', d: 'You publish content regularly and have an established presence.' },
+    { n: '03', t: 'Explain Clearly', d: 'You can explain AI or blockchain concepts in simple, accessible language.' }
+  ];
+
+  return (
+    <div style={{ position: 'relative', overflow: 'hidden', minHeight: '200px' }}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -40 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          style={{ background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '32px 24px', textAlign: 'center' }}
+        >
+          <p style={{ margin: '0 0 10px', fontSize: '28px', fontWeight: '900', color: '#f0f0f0', letterSpacing: '-1px' }}>
+            {requirements[currentSlide].n}
+          </p>
+          <p style={{ margin: '0 0 6px', fontWeight: '700', fontSize: '15px', color: '#111' }}>
+            {requirements[currentSlide].t}
+          </p>
+          <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>
+            {requirements[currentSlide].d}
+          </p>
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Dot indicators */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}>
+        {[0, 1, 2].map(i => (
+          <div
+            key={i}
+            style={{
+              width: currentSlide === i ? '24px' : '8px',
+              height: '8px',
+              borderRadius: '4px',
+              background: currentSlide === i ? '#111' : '#ddd',
+              transition: 'all 0.3s ease'
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Apply Modal ───────────────────────────────────────────── */
 function ApplyModal({ onClose, onSuccess }) {
   const [form, setForm] = useState({ full_name: '', email: '', country: '', telegram: '', social_links: '', follower_count: '', content_niche: '', statement: '' });
@@ -96,9 +227,9 @@ function ApplyModal({ onClose, onSuccess }) {
 
   return (
     <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(6px)' }}>
-      <div style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '600px', maxHeight: '92vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 32px 80px rgba(0,0,0,0.18)' }}>
+      <div className="apply-modal-container" style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '600px', maxHeight: '92vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 32px 80px rgba(0,0,0,0.18)' }}>
         {/* Header */}
-        <div style={{ padding: '28px 32px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div className="apply-modal-header" style={{ padding: '28px 32px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <p style={{ margin: '0 0 4px', fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', color: '#999' }}>Ambassador Program</p>
             <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#111', letterSpacing: '-0.5px' }}>Submit Your Application</h2>
@@ -108,8 +239,8 @@ function ApplyModal({ onClose, onSuccess }) {
           </button>
         </div>
         {/* Form */}
-        <form onSubmit={submit} style={{ overflowY: 'auto', padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <form onSubmit={submit} className="apply-modal-form" style={{ overflowY: 'auto', padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
               <label style={lbl}>Full Name <span style={{ color: '#e00' }}>*</span></label>
               <input value={form.full_name} onChange={set('full_name')} placeholder="Your full name" {...inp()} />
@@ -119,7 +250,7 @@ function ApplyModal({ onClose, onSuccess }) {
               <input type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" {...inp()} />
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
               <label style={lbl}>Country <span style={{ color: '#e00' }}>*</span></label>
               <input value={form.country} onChange={set('country')} placeholder="India, UAE, USA..." {...inp()} />
@@ -133,7 +264,7 @@ function ApplyModal({ onClose, onSuccess }) {
             <label style={lbl}>Social Media Links</label>
             <input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn — paste all links" {...inp()} />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
               <label style={lbl}>Total Followers / Subscribers</label>
               <input value={form.follower_count} onChange={set('follower_count')} placeholder="e.g. 25,000" {...inp()} />
@@ -269,7 +400,7 @@ export default function AmbassadorPage() {
     <div style={{ background: '#fff', minHeight: '100vh', color: '#111', fontFamily: 'inherit' }}>
 
       {/* ═══ HERO ═════════════════════════════════════════════ */}
-      <section style={{ position: 'relative', overflow: 'hidden', padding: '130px 24px 100px', background: '#fff' }}>
+      <section className="hero-section" style={{ position: 'relative', overflow: 'hidden', padding: '130px 24px 100px', background: '#fff' }}>
         {/* Subtle grid */}
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(#f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.6 }} />
         {/* Gradient overlay top */}
@@ -298,14 +429,14 @@ export default function AmbassadorPage() {
           </div>
 
           {/* Headline — word by word */}
-          <h1 style={{ fontSize: 'clamp(42px, 6vw, 76px)', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1.0, margin: '0 0 28px', color: '#111' }}>
+          <h1 className="hero-heading" style={{ fontSize: 'clamp(42px, 6vw, 76px)', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1.0, margin: '0 0 28px', color: '#111' }}>
             {['Represent', 'the', 'Future', 'of'].map((w, i) => (
-              <span key={i} className="amb-word" style={{ display: 'inline-block', marginRight: '0.28em', opacity: 0 }}>{w}</span>
+              <span key={i} className="amb-word" style={{ display: 'inline-block', marginRight: '0.28em' }}>{w}</span>
             ))}
             <br />
             {['AI', '&', 'Blockchain'].map((w, i) => (
               <span key={i} className="amb-word" style={{
-                display: 'inline-block', marginRight: '0.28em', opacity: 0,
+                display: 'inline-block', marginRight: '0.28em',
                 background: i === 1 ? 'none' : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                 WebkitBackgroundClip: i === 1 ? 'none' : 'text',
                 WebkitTextFillColor: i === 1 ? '#111' : 'transparent',
@@ -314,11 +445,11 @@ export default function AmbassadorPage() {
             ))}
           </h1>
 
-          <p className="amb-hero-sub" style={{ fontSize: '18px', color: '#666', lineHeight: 1.75, maxWidth: '580px', margin: '0 auto 44px', opacity: 0 }}>
+          <p className="amb-hero-sub hero-paragraph" style={{ fontSize: '18px', color: '#666', lineHeight: 1.75, maxWidth: '580px', margin: '0 auto 44px' }}>
             Join the official DAG Army Ambassador Program. Build your personal brand, earn performance rewards, and grow alongside a global AI-native blockchain ecosystem.
           </p>
 
-          <div className="amb-hero-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
+          <div className="amb-hero-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <CTABtn dark onClick={() => setModal(true)}>
               Apply Now — It&apos;s Free <Ic.arrow />
             </CTABtn>
@@ -335,8 +466,8 @@ export default function AmbassadorPage() {
       </section>
 
       {/* ═══ STATS ════════════════════════════════════════════ */}
-      <section style={{ borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', background: '#fafafa' }}>
-        <div className="amb-stats-row" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+      <section className="stats-section" style={{ borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', background: '#fafafa' }}>
+        <div className="amb-stats-row stats-desktop" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
           {[
             { n: 150, suf: '+', l: 'Active Ambassadors' },
             { n: 40, suf: '+', l: 'Countries Represented' },
@@ -352,12 +483,15 @@ export default function AmbassadorPage() {
             </div>
           ))}
         </div>
+
+        {/* Mobile Stats Slider */}
+        <StatsSliderMobile />
       </section>
 
       {/* ═══ ABOUT ════════════════════════════════════════════ */}
-      <section id="about-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-          <div className="amb-reveal">
+      <section id="about-section" className="ecosystem-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
+        <div className="ecosystem-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          <div className="amb-reveal ecosystem-text">
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Ecosystem</p>
             <h2 style={{ fontSize: 'clamp(30px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
               Three products.<br />One unified vision.
@@ -365,9 +499,11 @@ export default function AmbassadorPage() {
             <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
               DAG Army is a global community building the infrastructure for a decentralized, AI-powered future. Ambassadors are the backbone of this movement.
             </p>
-            <CTABtn dark onClick={() => setModal(true)}>Join the Movement <Ic.arrow /></CTABtn>
+            <div className="ecosystem-cta-desktop">
+              <CTABtn dark onClick={() => setModal(true)}>Join the Movement <Ic.arrow /></CTABtn>
+            </div>
           </div>
-          <div className="amb-grid amb-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="amb-grid amb-reveal ecosystem-cards-desktop" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               { label: 'DAG Army', sub: 'Community-driven AI & Web3 movement', dot: '#3b82f6' },
               { label: 'DAGGPT', sub: 'Multi-module AI platform — one subscription, all tools', dot: '#8b5cf6' },
@@ -389,13 +525,35 @@ export default function AmbassadorPage() {
               </div>
             ))}
           </div>
+          <div className="ecosystem-cards-mobile" style={{ display: 'none', flexDirection: 'column', gap: '12px' }}>
+            {[
+              { label: 'DAG Army', sub: 'Community-driven AI & Web3 movement', dot: '#3b82f6' },
+              { label: 'DAGGPT', sub: 'Multi-module AI platform — one subscription, all tools', dot: '#8b5cf6' },
+              { label: 'DAGChain', sub: 'AI-native Layer 1 blockchain infrastructure', dot: '#10b981' },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: '16px',
+                padding: '18px 20px', border: '1px solid #f0f0f0', borderRadius: '14px',
+                background: '#fff', width: '100%', boxSizing: 'border-box',
+              }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: item.dot, flexShrink: 0 }} />
+                <div>
+                  <p style={{ margin: 0, fontWeight: '700', fontSize: '14px', color: '#111' }}>{item.label}</p>
+                  <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#888', lineHeight: 1.5 }}>{item.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="ecosystem-cta-mobile" style={{ display: 'none', width: '100%', textAlign: 'center', marginTop: '24px' }}>
+            <CTABtn dark onClick={() => setModal(true)}>Join the Movement <Ic.arrow /></CTABtn>
+          </div>
         </div>
       </section>
 
       {/* ═══ WHO CAN APPLY ════════════════════════════════════ */}
-      <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
+      <section className="eligibility-section" style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div className="amb-reveal" style={{ marginBottom: '64px' }}>
+          <div className="amb-reveal eligibility-header" style={{ marginBottom: '64px' }}>
             <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Eligibility</p>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
               <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0, lineHeight: 1.1 }}>Who Can Apply?</h2>
@@ -403,7 +561,7 @@ export default function AmbassadorPage() {
             </div>
           </div>
 
-          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
+          <div className="amb-grid creator-cards-desktop" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
             {[
               { type: 'YouTubers', req: '1,000+ subscribers' },
               { type: 'Instagram Creators', req: '1,000+ followers' },
@@ -427,8 +585,61 @@ export default function AmbassadorPage() {
             ))}
           </div>
 
+          {/* Creator Cards Mobile Slider */}
+          <div className="creator-cards-mobile" style={{ display: 'none' }}>
+            <CreatorCardsSlider
+              items={[
+                // Cycle 1: YouTubers + Instagram Creators
+                <div key="cycle1" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>YouTubers</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>1,000+ subscribers</p>
+                  </div>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>Instagram Creators</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>1,000+ followers</p>
+                  </div>
+                </div>,
+                // Cycle 2: Facebook Creators + AI Educators
+                <div key="cycle2" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>Facebook Creators</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>1,000+ followers</p>
+                  </div>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>AI Educators</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Any platform</p>
+                  </div>
+                </div>,
+                // Cycle 3: Blockchain Analysts + Web3 Influencers
+                <div key="cycle3" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>Blockchain Analysts</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Any platform</p>
+                  </div>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>Web3 Influencers</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Any platform</p>
+                  </div>
+                </div>,
+                // Cycle 4: Tech Community Leaders + Regional Creators
+                <div key="cycle4" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>Tech Community Leaders</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Discord, Telegram</p>
+                  </div>
+                  <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '14px', padding: '20px 18px' }}>
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#111' }}>Regional Creators</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>All languages welcome</p>
+                  </div>
+                </div>,
+              ]}
+              autoPlayInterval={4000}
+            />
+          </div>
+
           {/* Requirements */}
-          <div className="amb-reveal" style={{ marginTop: '48px', background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '40px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '28px' }}>
+          <div className="amb-reveal requirements-desktop" style={{ marginTop: '48px', background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '40px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '28px' }}>
             {[
               { n: '01', t: 'Active Audience', d: 'You have a real, engaged audience on at least one platform.' },
               { n: '02', t: 'Consistent Creator', d: 'You publish content regularly and have an established presence.' },
@@ -441,19 +652,26 @@ export default function AmbassadorPage() {
               </div>
             ))}
           </div>
+
+          {/* Requirements Mobile Animated */}
+          <div className="requirements-mobile" style={{ display: 'none', marginTop: '32px' }}>
+            <RequirementsSliderMobile />
+          </div>
         </div>
       </section>
 
       {/* ═══ BENEFITS ═════════════════════════════════════════ */}
-      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div className="amb-reveal" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
+      <section className="benefits-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
+        <div className="amb-reveal benefits-header" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
           <div>
             <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>What You Get</p>
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', margin: 0, lineHeight: 1.1 }}>Ambassador Benefits</h2>
           </div>
-          <CTABtn dark onClick={() => setModal(true)}>Apply Now <Ic.arrow /></CTABtn>
+          <div className="benefits-cta-desktop">
+            <CTABtn dark onClick={() => setModal(true)}>Apply Now <Ic.arrow /></CTABtn>
+          </div>
         </div>
-        <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+        <div className="amb-grid benefits-cards-desktop" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {benefits.map((b, i) => (
             <div key={i} className="amb-card" style={{
               padding: '28px', border: '1px solid #f0f0f0', borderRadius: '18px',
@@ -471,65 +689,309 @@ export default function AmbassadorPage() {
             </div>
           ))}
         </div>
+
+        {/* Benefits Row 1 Mobile Slider */}
+        <div className="benefits-slider-1-mobile" style={{ display: 'none' }}>
+          <BenefitsSlider
+            items={benefits.slice(0, 3).map((b, i) => (
+              <div key={i} style={{
+                padding: '28px', border: '1px solid #f0f0f0', borderRadius: '18px',
+                background: '#fff', width: '100%'
+              }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px', color: '#111' }}>
+                  {b.icon}
+                </div>
+                <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#111', letterSpacing: '-0.3px' }}>{b.label}</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{b.desc}</p>
+              </div>
+            ))}
+            autoPlayInterval={4000}
+          />
+        </div>
+
+        {/* Benefits Row 2 Mobile Slider */}
+        <div className="benefits-slider-2-mobile" style={{ display: 'none', marginTop: '24px' }}>
+          <BenefitsSlider
+            items={benefits.slice(3, 6).map((b, i) => (
+              <div key={i} style={{
+                padding: '28px', border: '1px solid #f0f0f0', borderRadius: '18px',
+                background: '#fff', width: '100%'
+              }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px', color: '#111' }}>
+                  {b.icon}
+                </div>
+                <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#111', letterSpacing: '-0.3px' }}>{b.label}</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: '#888', lineHeight: 1.7 }}>{b.desc}</p>
+              </div>
+            ))}
+            autoPlayInterval={4000}
+          />
+        </div>
+
+        {/* Benefits CTA Mobile */}
+        <div className="benefits-cta-mobile" style={{ display: 'none', marginTop: '32px', textAlign: 'center' }}>
+          <CTABtn dark onClick={() => setModal(true)}>Apply Now <Ic.arrow /></CTABtn>
+        </div>
       </section>
 
       {/* ═══ TIERS ════════════════════════════════════════════ */}
-      <section style={{ background: '#111', padding: '120px 24px' }}>
+      <section className="tiers-section" style={{ background: 'linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%)', padding: '120px 24px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div className="amb-reveal" style={{ marginBottom: '64px', textAlign: 'center' }}>
-            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#555' }}>Program Levels</p>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#fff', letterSpacing: '-1.5px', margin: '0 0 16px' }}>Ambassador Tiers</h2>
-            <p style={{ color: '#666', fontSize: '15px', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>Grow through levels based on your reach and performance. Tiers are reviewed and upgraded periodically.</p>
+            <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#6b7280' }}>Program Levels</p>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#111827', letterSpacing: '-1.5px', margin: '0 0 16px' }}>Ambassador Tiers</h2>
+            <p style={{ color: '#374151', fontSize: '15px', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>Grow through levels based on your reach and performance. Tiers are reviewed and upgraded periodically.</p>
           </div>
-          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-            {tiers.map((t, i) => (
-              <div key={i} className="amb-card" style={{
-                background: t.featured ? '#fff' : '#1a1a1a',
-                border: t.featured ? 'none' : '1px solid #222',
-                borderRadius: '20px', padding: '32px 28px',
-                position: 'relative', transition: 'transform 0.25s',
-                transform: t.featured ? 'translateY(-8px)' : 'none',
-              }}>
-                {t.featured && (
-                  <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#111', color: '#fff', borderRadius: '100px', padding: '4px 14px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                    Most Popular
-                  </div>
-                )}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: t.color }} />
-                  <span style={{ fontSize: '18px', fontWeight: '900', color: t.featured ? '#111' : '#fff', letterSpacing: '-0.5px' }}>{t.name}</span>
-                </div>
-                <p style={{ margin: '0 0 24px', fontSize: '13px', color: t.featured ? '#888' : '#555' }}>{t.req}</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {t.perks.map((p, j) => (
-                    <div key={j} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: t.featured ? '#f5f5f5' : '#222', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: t.featured ? '#111' : '#555', marginTop: '1px' }}>
-                        <Ic.check />
-                      </div>
-                      <span style={{ fontSize: '13px', color: t.featured ? '#444' : '#666', lineHeight: 1.5 }}>{p}</span>
+          <div className="amb-grid tiers-cards-desktop" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+            {tiers.map((t, i) => {
+              const isSilver = t.name === 'Silver';
+              const isGold = t.name === 'Gold';
+              const isPlatinum = t.name === 'Platinum';
+              
+              return (
+                <div key={i} className="amb-card" style={{
+                  background: isSilver ? '#111827' : isGold ? '#fff' : 'linear-gradient(135deg, #050505 0%, #111111 100%)',
+                  border: isSilver ? '1px solid #374151' : isGold ? 'none' : '1px solid #2a2a2a',
+                  borderTop: isGold ? '3px solid transparent' : 'none',
+                  backgroundImage: isGold ? 'linear-gradient(#fff, #fff), linear-gradient(to right, #bf953f, #fcf6ba, #b38728)' : isPlatinum ? 'linear-gradient(135deg, #050505 0%, #111111 100%), url(/images/logo/logo.png)' : 'none',
+                  backgroundOrigin: isGold ? 'padding-box, border-box' : 'initial',
+                  backgroundClip: isGold ? 'padding-box, border-box' : 'initial',
+                  backgroundPosition: isPlatinum ? 'center, center' : 'initial',
+                  backgroundRepeat: isPlatinum ? 'no-repeat, no-repeat' : 'initial',
+                  backgroundSize: isPlatinum ? 'auto, 60%' : 'initial',
+                  borderRadius: '20px',
+                  padding: '32px 28px',
+                  position: 'relative',
+                  transition: 'all 0.25s',
+                  transform: isGold ? 'translateY(-8px)' : 'none',
+                  boxShadow: isPlatinum ? '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)' : 'none',
+                }}>
+                  {isPlatinum && (
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '20px', background: 'url(/images/logo/logo.png) center/60% no-repeat', opacity: 0.08, pointerEvents: 'none', zIndex: 0 }} />
+                  )}
+                  {isGold && (
+                    <div style={{ 
+                      position: 'absolute', 
+                      top: '-12px', 
+                      left: '50%', 
+                      transform: 'translateX(-50%)', 
+                      background: 'linear-gradient(to right, #bf953f, #fcf6ba, #b38728)',
+                      color: '#000', 
+                      borderRadius: '100px', 
+                      padding: '5px 16px', 
+                      fontSize: '10px', 
+                      fontWeight: '800', 
+                      letterSpacing: '1px', 
+                      textTransform: 'uppercase', 
+                      whiteSpace: 'nowrap',
+                      boxShadow: '0 4px 12px rgba(191, 149, 63, 0.4)'
+                    }}>
+                      Most Popular
                     </div>
-                  ))}
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <div style={{ 
+                      width: '10px', 
+                      height: '10px', 
+                      borderRadius: '50%', 
+                      background: isSilver ? '#9ca3af' : isGold ? 'linear-gradient(to right, #bf953f, #b38728)' : 'linear-gradient(135deg, #c0c0c0, #e8e8e8)'
+                    }} />
+                    <span style={{ 
+                      fontSize: '18px', 
+                      fontWeight: '900', 
+                      color: isSilver ? '#e5e7eb' : isGold ? '#111' : '#fff', 
+                      letterSpacing: '-0.5px',
+                      background: isGold ? 'linear-gradient(to right, #bf953f, #b38728)' : isPlatinum ? 'linear-gradient(135deg, #c0c0c0, #e8e8e8)' : 'none',
+                      WebkitBackgroundClip: isGold || isPlatinum ? 'text' : 'initial',
+                      WebkitTextFillColor: isGold || isPlatinum ? 'transparent' : 'initial',
+                      backgroundClip: isGold || isPlatinum ? 'text' : 'initial',
+                      position: 'relative',
+                      zIndex: 1
+                    }}>{t.name}</span>
+                  </div>
+                  <p style={{ margin: '0 0 24px', fontSize: '13px', color: isSilver ? '#9ca3af' : isGold ? '#888' : '#a8a8a8', position: 'relative', zIndex: 1 }}>{t.req}</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {t.perks.map((p, j) => (
+                      <div key={j} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                        <div style={{ 
+                          width: '18px', 
+                          height: '18px', 
+                          borderRadius: '50%', 
+                          background: isSilver ? '#374151' : isGold ? 'linear-gradient(to right, #bf953f, #b38728)' : '#2a2a2a',
+                          border: isPlatinum ? '1px solid #4a4a4a' : 'none',
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center', 
+                          flexShrink: 0, 
+                          color: isSilver ? '#9ca3af' : isPlatinum ? '#c0c0c0' : '#fff', 
+                          marginTop: '1px',
+                          position: 'relative',
+                          zIndex: 1
+                        }}>
+                          <Ic.check />
+                        </div>
+                        <span style={{ fontSize: '13px', color: isSilver ? '#d1d5db' : isGold ? '#444' : '#d1d5db', lineHeight: 1.5, position: 'relative', zIndex: 1 }}>{p}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={() => setModal(true)} style={{
+                    width: '100%', 
+                    marginTop: '28px', 
+                    background: isSilver ? '#374151' : isGold ? '#111' : '#1a1a1a',
+                    color: '#fff', 
+                    border: isPlatinum ? '1px solid #4a4a4a' : 'none',
+                    borderRadius: '10px', 
+                    padding: '12px', 
+                    fontSize: '13px', 
+                    fontWeight: '700',
+                    cursor: 'pointer', 
+                    transition: 'all 0.2s', 
+                    letterSpacing: '-0.2px',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
+                    onMouseEnter={e => { 
+                      e.currentTarget.style.background = isSilver ? '#4b5563' : isGold ? '#333' : '#2a2a2a';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = isSilver ? '0 4px 12px rgba(55, 65, 81, 0.4)' : isGold ? '0 4px 12px rgba(0,0,0,0.3)' : '0 4px 12px rgba(192, 192, 192, 0.2)';
+                      if (isPlatinum) e.currentTarget.style.borderColor = '#6a6a6a';
+                    }}
+                    onMouseLeave={e => { 
+                      e.currentTarget.style.background = isSilver ? '#374151' : isGold ? '#111' : '#1a1a1a';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                      if (isPlatinum) e.currentTarget.style.borderColor = '#4a4a4a';
+                    }}
+                  >
+                    Apply for {t.name}
+                  </button>
                 </div>
-                <button onClick={() => setModal(true)} style={{
-                  width: '100%', marginTop: '28px', background: t.featured ? '#111' : '#222',
-                  color: t.featured ? '#fff' : '#666', border: t.featured ? 'none' : '1px solid #333',
-                  borderRadius: '10px', padding: '12px', fontSize: '13px', fontWeight: '700',
-                  cursor: 'pointer', transition: 'all 0.2s', letterSpacing: '-0.2px',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.background = t.featured ? '#333' : '#2a2a2a'; e.currentTarget.style.color = '#fff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = t.featured ? '#111' : '#222'; e.currentTarget.style.color = t.featured ? '#fff' : '#666'; }}
-                >
-                  Apply for {t.name}
-                </button>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+
+          {/* Tiers Mobile Slider */}
+          <div className="tiers-cards-mobile" style={{ display: 'none' }}>
+            <TierMobileSlider
+              items={tiers.map((t, i) => {
+                const isSilver = t.name === 'Silver';
+                const isGold = t.name === 'Gold';
+                const isPlatinum = t.name === 'Platinum';
+                
+                return (
+                  <div key={i} style={{
+                    background: isSilver ? '#111827' : isGold ? '#fff' : 'linear-gradient(135deg, #050505 0%, #111111 100%)',
+                    border: isSilver ? '1px solid #374151' : isGold ? 'none' : '1px solid #2a2a2a',
+                    borderTop: isGold ? '3px solid transparent' : 'none',
+                    backgroundImage: isGold ? 'linear-gradient(#fff, #fff), linear-gradient(to right, #bf953f, #fcf6ba, #b38728)' : isPlatinum ? 'linear-gradient(135deg, #050505 0%, #111111 100%), url(/images/logo/logo.png)' : 'none',
+                    backgroundOrigin: isGold ? 'padding-box, border-box' : 'initial',
+                    backgroundClip: isGold ? 'padding-box, border-box' : 'initial',
+                    backgroundPosition: isPlatinum ? 'center, center' : 'initial',
+                    backgroundRepeat: isPlatinum ? 'no-repeat, no-repeat' : 'initial',
+                    backgroundSize: isPlatinum ? 'auto, 60%' : 'initial',
+                    borderRadius: '20px',
+                    padding: '32px 28px',
+                    position: 'relative',
+                    width: '100%',
+                    boxShadow: isPlatinum ? '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)' : 'none',
+                  }}>
+                    {isPlatinum && (
+                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '20px', background: 'url(/images/logo/logo.png) center/60% no-repeat', opacity: 0.08, pointerEvents: 'none', zIndex: 0 }} />
+                    )}
+                    {isGold && (
+                      <div style={{ 
+                        position: 'absolute', 
+                        top: '-12px', 
+                        left: '50%', 
+                        transform: 'translateX(-50%)', 
+                        background: 'linear-gradient(to right, #bf953f, #fcf6ba, #b38728)',
+                        color: '#000', 
+                        borderRadius: '100px', 
+                        padding: '5px 16px', 
+                        fontSize: '10px', 
+                        fontWeight: '800', 
+                        letterSpacing: '1px', 
+                        textTransform: 'uppercase', 
+                        whiteSpace: 'nowrap',
+                        boxShadow: '0 4px 12px rgba(191, 149, 63, 0.4)'
+                      }}>
+                        Most Popular
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                      <div style={{ 
+                        width: '10px', 
+                        height: '10px', 
+                        borderRadius: '50%', 
+                        background: isSilver ? '#9ca3af' : isGold ? 'linear-gradient(to right, #bf953f, #b38728)' : 'linear-gradient(135deg, #c0c0c0, #e8e8e8)'
+                      }} />
+                      <span style={{ 
+                        fontSize: '18px', 
+                        fontWeight: '900', 
+                        color: isSilver ? '#e5e7eb' : isGold ? '#111' : '#fff', 
+                        letterSpacing: '-0.5px',
+                        background: isGold ? 'linear-gradient(to right, #bf953f, #b38728)' : isPlatinum ? 'linear-gradient(135deg, #c0c0c0, #e8e8e8)' : 'none',
+                        WebkitBackgroundClip: isGold || isPlatinum ? 'text' : 'initial',
+                        WebkitTextFillColor: isGold || isPlatinum ? 'transparent' : 'initial',
+                        backgroundClip: isGold || isPlatinum ? 'text' : 'initial',
+                        position: 'relative',
+                        zIndex: 1
+                      }}>{t.name}</span>
+                    </div>
+                    <p style={{ margin: '0 0 24px', fontSize: '13px', color: isSilver ? '#9ca3af' : isGold ? '#888' : '#a8a8a8', position: 'relative', zIndex: 1 }}>{t.req}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {t.perks.map((p, j) => (
+                        <div key={j} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                          <div style={{ 
+                            width: '18px', 
+                            height: '18px', 
+                            borderRadius: '50%', 
+                            background: isSilver ? '#374151' : isGold ? 'linear-gradient(to right, #bf953f, #b38728)' : '#2a2a2a',
+                            border: isPlatinum ? '1px solid #4a4a4a' : 'none',
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            flexShrink: 0, 
+                            color: isSilver ? '#9ca3af' : isPlatinum ? '#c0c0c0' : '#fff', 
+                            marginTop: '1px',
+                            position: 'relative',
+                            zIndex: 1
+                          }}>
+                            <Ic.check />
+                          </div>
+                          <span style={{ fontSize: '13px', color: isSilver ? '#d1d5db' : isGold ? '#444' : '#d1d5db', lineHeight: 1.5, position: 'relative', zIndex: 1 }}>{p}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <button onClick={() => setModal(true)} style={{
+                      width: '100%', 
+                      marginTop: '28px', 
+                      background: isSilver ? '#374151' : isGold ? '#111' : '#1a1a1a',
+                      color: '#fff', 
+                      border: isPlatinum ? '1px solid #4a4a4a' : 'none',
+                      borderRadius: '10px', 
+                      padding: '12px', 
+                      fontSize: '13px', 
+                      fontWeight: '700',
+                      cursor: 'pointer', 
+                      transition: 'all 0.2s', 
+                      letterSpacing: '-0.2px',
+                      position: 'relative',
+                      zIndex: 1
+                    }}>
+                      Apply for {t.name}
+                    </button>
+                  </div>
+                );
+              })}
+            />
           </div>
         </div>
       </section>
 
       {/* ═══ RESPONSIBILITIES ═════════════════════════════════ */}
-      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
+      <section className="responsibilities-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
+        <div className="responsibilities-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
           <div className="amb-reveal">
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Your Role</p>
             <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What you&apos;ll do as an Ambassador</h2>
@@ -550,48 +1012,98 @@ export default function AmbassadorPage() {
             </div>
           </div>
 
-          <div className="amb-reveal">
+          <div className="amb-reveal content-ideas-column">
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Content Ideas</p>
             <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What to create</h2>
-            <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              {[
-                'Product walkthroughs', 'AI tool demos',
-                'Validator node guides', 'Blockchain basics',
-                'Use-case tutorials', 'Ecosystem overviews',
-                'Live Q&A sessions', 'Community updates',
-              ].map((c, i) => (
-                <div key={i} className="amb-card" style={{
-                  background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '12px',
-                  padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#444',
-                  display: 'flex', alignItems: 'center', gap: '10px',
-                  transition: 'all 0.2s',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#111'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fafafa'; e.currentTarget.style.color = '#444'; e.currentTarget.style.borderColor = '#f0f0f0'; }}
-                >
-                  <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
-                  {c}
-                </div>
-              ))}
+            
+            {/* Desktop Slider */}
+            <div className="content-ideas-slider-desktop" style={{ height: '100%' }}>
+              <MobileSlider
+                items={[
+                  // Slide 1: First 4 cards
+                  <div key="slide1" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', gap: '10px' }}>
+                    {[
+                      'Product walkthroughs',
+                      'Validator node guides',
+                      'Use-case tutorials',
+                      'Live Q&A sessions'
+                    ].map((c, i) => (
+                      <div key={i} style={{
+                        background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '12px',
+                        padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#444',
+                        display: 'flex', alignItems: 'center', gap: '10px',
+                        transition: 'all 0.2s',
+                      }}>
+                        <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
+                        {c}
+                      </div>
+                    ))}
+                  </div>,
+                  // Slide 2: Last 4 cards
+                  <div key="slide2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', gap: '10px' }}>
+                    {[
+                      'AI tool demos',
+                      'Blockchain basics',
+                      'Ecosystem overviews',
+                      'Community updates'
+                    ].map((c, i) => (
+                      <div key={i} style={{
+                        background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '12px',
+                        padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#444',
+                        display: 'flex', alignItems: 'center', gap: '10px',
+                        transition: 'all 0.2s',
+                      }}>
+                        <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
+                        {c}
+                      </div>
+                    ))}
+                  </div>
+                ]}
+                autoPlayInterval={5000}
+              />
+            </div>
+
+            {/* Mobile Grid (Original) */}
+            <div className="content-ideas-grid-mobile" style={{ display: 'none' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                {[
+                  'Product walkthroughs', 'AI tool demos',
+                  'Validator node guides', 'Blockchain basics',
+                  'Use-case tutorials', 'Ecosystem overviews',
+                  'Live Q&A sessions', 'Community updates',
+                ].map((c, i) => (
+                  <div key={i} style={{
+                    background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '12px',
+                    padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#444',
+                    display: 'flex', alignItems: 'center', gap: '10px',
+                    transition: 'all 0.2s',
+                  }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
+                    {c}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ═══ WHY JOIN — FULL WIDTH BANNER ═════════════════════ */}
-      <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-          <div className="amb-reveal">
+      <section className="opportunity-section" style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {/* TOP: Text Block */}
+          <div className="amb-reveal opportunity-text-block" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 48px auto' }}>
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Opportunity</p>
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
               Early contributors benefit from early positioning.
             </h2>
-            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
+            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: 0 }}>
               AI and blockchain are reshaping global infrastructure. As a DAG Army Ambassador, you grow alongside a Layer 1 network from day one.
             </p>
-            <CTABtn dark onClick={() => setModal(true)}>Apply Now — Free <Ic.arrow /></CTABtn>
           </div>
-          <div className="amb-grid" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+          {/* MIDDLE: Cards Grid */}
+          <div className="opportunity-cards-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', width: '100%', marginBottom: '40px' }}>
             {[
               'Build authority in AI + Web3',
               'Earn performance-based rewards',
@@ -600,16 +1112,33 @@ export default function AmbassadorPage() {
               'Become part of a long-term movement',
               'Expand your global network',
             ].map((r, i) => (
-              <div key={i} className="amb-card" style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '16px 18px', background: '#fff', border: '1px solid #eee', borderRadius: '12px', transition: 'all 0.2s' }}
+              <div key={i} className="amb-card" style={{ 
+                display: 'flex', 
+                gap: '14px', 
+                alignItems: 'center', 
+                padding: '20px', 
+                background: '#fff', 
+                border: '1px solid #eee', 
+                borderRadius: '12px', 
+                transition: 'all 0.2s',
+                width: '100%',
+                height: 'auto',
+                boxSizing: 'border-box'
+              }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.borderColor = '#ddd'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.05)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.borderColor = '#eee'; e.currentTarget.style.boxShadow = 'none'; }}
               >
                 <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#fff' }}>
                   <Ic.check />
                 </div>
-                <span style={{ fontSize: '14px', fontWeight: '500', color: '#333' }}>{r}</span>
+                <span style={{ fontSize: '14px', fontWeight: '500', color: '#333', wordWrap: 'break-word' }}>{r}</span>
               </div>
             ))}
+          </div>
+
+          {/* BOTTOM: Button */}
+          <div style={{ margin: '0 auto' }}>
+            <CTABtn dark onClick={() => setModal(true)}>Apply Now — Free <Ic.arrow /></CTABtn>
           </div>
         </div>
       </section>
@@ -655,7 +1184,394 @@ export default function AmbassadorPage() {
           .amb-two-col { grid-template-columns: 1fr !important; gap: 48px !important; }
           .amb-three-col { grid-template-columns: 1fr !important; }
           .amb-stats-row { grid-template-columns: repeat(2, 1fr) !important; }
+          
+          /* Ecosystem Section Mobile Layout */
+          .ecosystem-section {
+            padding: 60px 16px !important;
+          }
+          .ecosystem-container {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 32px !important;
+          }
+          .ecosystem-text {
+            order: 1 !important;
+          }
+          .ecosystem-text p:first-child {
+            font-size: 10px !important;
+          }
+          .ecosystem-text h2 {
+            font-size: 28px !important;
+            letter-spacing: -1px !important;
+          }
+          .ecosystem-text p:nth-child(3) {
+            font-size: 14px !important;
+            margin-bottom: 0 !important;
+          }
+          .ecosystem-cards-desktop {
+            display: none !important;
+          }
+          .ecosystem-cards-mobile {
+            display: block !important;
+            order: 2 !important;
+          }
+          .ecosystem-cta-desktop {
+            display: none !important;
+          }
+          .ecosystem-cta-mobile {
+            display: block !important;
+            order: 3 !important;
+          }
+          .ecosystem-cta-mobile button {
+            width: 100% !important;
+            max-width: 100% !important;
+            justify-content: center !important;
+          }
         }
+        @media (max-width: 430px) {
+          .ecosystem-section {
+            padding: 50px 14px !important;
+          }
+          .ecosystem-text h2 {
+            font-size: 26px !important;
+          }
+          .ecosystem-text p:nth-child(3) {
+            font-size: 13px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .ecosystem-section {
+            padding: 50px 12px !important;
+          }
+          .ecosystem-text h2 {
+            font-size: 24px !important;
+          }
+        }
+        
+        /* Eligibility Section Mobile Layout */
+        @media (max-width: 768px) {
+          .eligibility-section {
+            padding: 60px 16px !important;
+          }
+          .eligibility-header p:first-child {
+            font-size: 10px !important;
+          }
+          .eligibility-header h2 {
+            font-size: 28px !important;
+          }
+          .eligibility-header p:last-child {
+            font-size: 13px !important;
+            max-width: 100% !important;
+          }
+          .creator-cards-desktop {
+            display: none !important;
+          }
+          .creator-cards-mobile {
+            display: block !important;
+          }
+          .requirements-desktop {
+            display: none !important;
+          }
+          .requirements-mobile {
+            display: block !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .eligibility-section {
+            padding: 50px 14px !important;
+          }
+          .eligibility-header h2 {
+            font-size: 26px !important;
+          }
+          .eligibility-header p:last-child {
+            font-size: 12px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .eligibility-section {
+            padding: 50px 12px !important;
+          }
+          .eligibility-header h2 {
+            font-size: 24px !important;
+          }
+        }
+        
+        /* Benefits Section Mobile Layout */
+        @media (max-width: 768px) {
+          .benefits-section {
+            padding: 60px 16px !important;
+          }
+          .benefits-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            margin-bottom: 32px !important;
+          }
+          .benefits-header p {
+            font-size: 10px !important;
+          }
+          .benefits-header h2 {
+            font-size: 28px !important;
+          }
+          .benefits-cards-desktop {
+            display: none !important;
+          }
+          .benefits-slider-1-mobile {
+            display: block !important;
+          }
+          .benefits-slider-2-mobile {
+            display: block !important;
+          }
+          .benefits-cta-desktop {
+            display: none !important;
+          }
+          .benefits-cta-mobile {
+            display: block !important;
+          }
+          .benefits-cta-mobile button {
+            width: 100% !important;
+            max-width: 100% !important;
+            justify-content: center !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .benefits-section {
+            padding: 50px 14px !important;
+          }
+          .benefits-header h2 {
+            font-size: 26px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .benefits-section {
+            padding: 50px 12px !important;
+          }
+          .benefits-header h2 {
+            font-size: 24px !important;
+          }
+        }
+        
+        /* Tiers Section Mobile Layout */
+        @media (max-width: 768px) {
+          .tiers-section {
+            padding: 60px 16px !important;
+          }
+          .tiers-cards-desktop {
+            display: none !important;
+          }
+          .tiers-cards-mobile {
+            display: block !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .tiers-section {
+            padding: 50px 14px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .tiers-section {
+            padding: 50px 12px !important;
+          }
+        }
+        
+        /* Responsibilities Section Mobile Layout */
+        @media (max-width: 768px) {
+          .responsibilities-section {
+            padding: 60px 16px !important;
+          }
+          .responsibilities-container {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 40px !important;
+            width: 100% !important;
+          }
+          .content-ideas-slider-desktop {
+            display: none !important;
+          }
+          .content-ideas-grid-mobile {
+            display: block !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .responsibilities-section {
+            padding: 50px 14px !important;
+          }
+          .responsibilities-container {
+            gap: 32px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .responsibilities-section {
+            padding: 50px 12px !important;
+          }
+        }
+        
+        /* Opportunity Section Mobile Layout */
+        @media (max-width: 768px) {
+          .opportunity-section {
+            padding: 60px 16px !important;
+          }
+          .opportunity-text-block {
+            margin-bottom: 32px !important;
+          }
+          .opportunity-cards-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+            margin-bottom: 32px !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .opportunity-section {
+            padding: 50px 14px !important;
+          }
+          .opportunity-text-block {
+            margin-bottom: 28px !important;
+          }
+          .opportunity-cards-grid {
+            gap: 14px !important;
+            margin-bottom: 28px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .opportunity-section {
+            padding: 50px 12px !important;
+          }
+          .opportunity-text-block {
+            margin-bottom: 24px !important;
+          }
+          .opportunity-cards-grid {
+            gap: 12px !important;
+            margin-bottom: 24px !important;
+          }
+        }
+        
+        /* Apply Modal Mobile Layout */
+        @media (max-width: 768px) {
+          .apply-modal-container {
+            width: 95% !important;
+            max-width: 400px !important;
+            max-height: 85vh !important;
+          }
+          .apply-modal-header {
+            padding: 20px 24px 16px !important;
+          }
+          .apply-modal-form {
+            padding: 24px !important;
+            overflow-y: auto !important;
+            max-height: calc(85vh - 80px) !important;
+          }
+          .form-row {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .apply-modal-container {
+            width: 95% !important;
+            max-width: 380px !important;
+          }
+          .apply-modal-header {
+            padding: 18px 20px 14px !important;
+          }
+          .apply-modal-form {
+            padding: 20px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .apply-modal-container {
+            width: 95% !important;
+            max-width: 350px !important;
+          }
+          .apply-modal-header {
+            padding: 16px 18px 12px !important;
+          }
+          .apply-modal-form {
+            padding: 18px !important;
+          }
+        }
+        
+        /* Hero Section Mobile Layout & Typography */
+        @media (max-width: 768px) {
+          .hero-section {
+            overflow: visible !important;
+            padding: 80px 16px 40px !important;
+            min-height: auto !important;
+            height: auto !important;
+          }
+          .hero-heading {
+            font-size: clamp(36px, 10vw, 52px) !important;
+            line-height: 1.2 !important;
+            letter-spacing: -2px !important;
+            margin: 0 0 20px !important;
+          }
+          .hero-paragraph {
+            padding: 0 16px !important;
+            font-size: 16px !important;
+            margin: 0 auto 32px !important;
+          }
+          .amb-hero-badge {
+            margin-bottom: 24px !important;
+          }
+          .amb-hero-actions {
+            gap: 10px !important;
+            margin-bottom: 32px !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .hero-section {
+            padding: 70px 14px 30px !important;
+          }
+          .hero-heading {
+            font-size: clamp(32px, 9vw, 44px) !important;
+            line-height: 1.25 !important;
+            margin: 0 0 16px !important;
+          }
+          .hero-paragraph {
+            font-size: 15px !important;
+            margin: 0 auto 28px !important;
+          }
+          .amb-hero-badge {
+            margin-bottom: 20px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .hero-section {
+            padding: 60px 12px 24px !important;
+          }
+          .hero-heading {
+            font-size: clamp(28px, 8.5vw, 38px) !important;
+            line-height: 1.3 !important;
+            letter-spacing: -1.5px !important;
+            margin: 0 0 14px !important;
+          }
+          .hero-paragraph {
+            font-size: 14px !important;
+            padding: 0 12px !important;
+            margin: 0 auto 24px !important;
+          }
+          .amb-hero-badge {
+            margin-bottom: 16px !important;
+          }
+          .amb-hero-actions {
+            margin-bottom: 24px !important;
+          }
+        }
+        
+        /* Stats Section Mobile Layout */
+        @media (max-width: 768px) {
+          .stats-section {
+            padding-bottom: 40px !important;
+          }
+          .stats-desktop {
+            display: none !important;
+          }
+          .stats-mobile {
+            display: block !important;
+            min-height: 180px !important;
+            padding-bottom: 20px !important;
+          }
+        }
+        
+        /* Custom sliders (CreatorCardsSlider, BenefitsSlider) have no pagination dots built-in */
       `}</style>
 
       {modal && <ApplyModal onClose={() => setModal(false)} onSuccess={() => { setModal(false); setSuccess(true); }} />}

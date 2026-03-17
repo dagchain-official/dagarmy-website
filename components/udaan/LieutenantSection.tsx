@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import LieutenantIntroCardsSlider from "./LieutenantIntroCardsSlider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -88,7 +89,7 @@ export default function LieutenantSection() {
 
             {/* Headline */}
             <div>
-              <div style={{
+              <div className="lieutenant-hero-tag" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 background: "rgba(251,191,36,0.12)",
                 border: "1px solid rgba(251,191,36,0.25)",
@@ -97,14 +98,14 @@ export default function LieutenantSection() {
                 marginBottom: 20,
               }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: "linear-gradient(135deg, #f59e0b, #fbbf24)" }} />
-                <span style={{
+                <span className="whitespace-nowrap" style={{
                   fontFamily: "Nasalization, sans-serif",
                   fontSize: 11, fontWeight: 700,
                   letterSpacing: "0.14em", textTransform: "uppercase" as const,
                   color: "#fbbf24",
                 }}>Execution Rank · DAG Army</span>
               </div>
-              <h2 style={{
+              <h2 className="lieutenant-hero-title" style={{
                 fontFamily: "DM Sans, sans-serif",
                 fontWeight: 800,
                 fontSize: "clamp(36px, 4vw, 60px)",
@@ -113,8 +114,9 @@ export default function LieutenantSection() {
                 color: "#fff",
                 marginBottom: 16,
               }}>
-                Lieutenant: The Builder<br />
-                <span style={goldGrad}>Who Executes</span>
+                <span className="hidden md:inline">Lieutenant: The Builder<br /></span>
+                <span className="block md:hidden text-3xl">Lieutenant: The Builder</span>
+                <span className="block text-3xl" style={goldGrad}>Who Executes</span>
               </h2>
               <p style={{ fontSize: 16, fontWeight: 500, color: "#9494aa", marginBottom: 0 }}>
                 The Rank That Is Earned
@@ -122,7 +124,7 @@ export default function LieutenantSection() {
             </div>
 
             {/* Right stat block */}
-            <div style={{
+            <div className="lieutenant-hero-stats hidden md:flex" style={{
               borderLeft: "1px solid rgba(255,255,255,0.08)",
               paddingLeft: 48,
               display: "flex",
@@ -149,7 +151,12 @@ export default function LieutenantSection() {
 
       {/* ── BENTO GRID ── */}
       <div className="wrap">
-        <div style={{
+        {/* Mobile Intro Cards Slider */}
+        <div className="lieutenant-intro-slider block md:hidden" style={{ marginBottom: 16 }}>
+          <LieutenantIntroCardsSlider />
+        </div>
+
+        <div className="lieutenant-bento-grid" style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
           gap: 16,
@@ -158,11 +165,13 @@ export default function LieutenantSection() {
           {/* A: Identity — spans 2 cols */}
           <motion.div
             {...fadeUp(0.1)}
+            className="lieutenant-card-a hidden md:block"
             style={{
               gridColumn: "1 / 3",
               background: "#fff",
               borderRadius: 20,
               padding: "40px 44px",
+              display: "block",
             }}
           >
             <div style={{
@@ -202,6 +211,7 @@ export default function LieutenantSection() {
             {/* B: AI Economy — light card with bold statement design */}
             <motion.div
               {...fadeUp(0.15)}
+              className="lieutenant-card-b hidden md:flex"
               style={{
                 gridColumn: "3 / 4",
                 background: "linear-gradient(145deg, #f0f0ff 0%, #eae8ff 100%)",
@@ -258,6 +268,7 @@ export default function LieutenantSection() {
           {/* C: Execution capability list — 1 col */}
           <motion.div
             {...fadeUp(0.2)}
+            className="lieutenant-card-c"
             style={{
               gridColumn: "1 / 2",
               background: "#fff",
@@ -362,9 +373,10 @@ export default function LieutenantSection() {
 
         </div>
 
-        {/* ── BOTTOM MANIFESTO — light ── */}
+        {/* ── BOTTOM MANIFESTO — light (DESKTOP) ── */}
         <motion.div
           {...fadeUp(0.35)}
+          className="hidden md:grid"
           style={{
             marginTop: 16,
             background: "#fff",
@@ -431,7 +443,210 @@ export default function LieutenantSection() {
           </div>
         </motion.div>
 
+        {/* ── BOTTOM MANIFESTO — MOBILE ONLY ── */}
+        <motion.div
+          {...fadeUp(0.35)}
+          className="flex flex-col w-full md:hidden"
+          style={{
+            marginTop: 16,
+            background: "#fff",
+            border: "1px solid rgba(12,12,20,0.09)",
+            borderRadius: 20,
+            padding: "24px",
+          }}
+        >
+          {/* Top Heading */}
+          <div style={{ marginBottom: 32 }}>
+            <span className="text-xs uppercase text-gray-400 font-semibold tracking-wider mb-2 block" style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "#9494aa",
+              marginBottom: 16,
+            }}>The Bottom Line</span>
+            <span className="block text-2xl font-bold text-gray-900" style={{
+              fontSize: 22,
+              fontWeight: 800,
+              lineHeight: 1.35,
+              color: "#0c0c14",
+              marginBottom: 8,
+            }}>Being a Soldier is preparation.</span>
+            <span className="block text-2xl font-bold" style={{
+              fontSize: 22,
+              fontWeight: 800,
+              lineHeight: 1.35,
+              ...grad,
+            }}>Becoming a Lieutenant is evolution.</span>
+          </div>
+
+          {/* Rank Specification Table */}
+          <div>
+            <span className="text-xs uppercase text-gray-400 font-semibold tracking-wider mb-4 block" style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "#9494aa",
+              marginBottom: 16,
+            }}>Rank Specification</span>
+            
+            {/* Row 1 */}
+            <div className="flex justify-between items-center py-3 border-b border-gray-100" style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px 0",
+              borderBottom: "1px solid rgba(12,12,20,0.07)",
+            }}>
+              <span className="text-sm text-gray-500" style={{ fontSize: 13, color: "#9494aa", fontWeight: 600 }}>Rank Type</span>
+              <span className="text-sm font-semibold text-gray-900" style={{ fontSize: 14, color: "#0c0c14", fontWeight: 700 }}>Execution</span>
+            </div>
+
+            {/* Row 2 */}
+            <div className="flex justify-between items-center py-3 border-b border-gray-100" style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px 0",
+              borderBottom: "1px solid rgba(12,12,20,0.07)",
+            }}>
+              <span className="text-sm text-gray-500" style={{ fontSize: 13, color: "#9494aa", fontWeight: 600 }}>Entry via</span>
+              <span className="text-sm font-semibold text-gray-900" style={{ fontSize: 14, color: "#0c0c14", fontWeight: 700 }}>Shipped work</span>
+            </div>
+
+            {/* Row 3 */}
+            <div className="flex justify-between items-center py-3" style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px 0",
+            }}>
+              <span className="text-sm text-gray-500" style={{ fontSize: 13, color: "#9494aa", fontWeight: 600 }}>Output</span>
+              <span className="text-sm font-semibold text-gray-900" style={{ fontSize: 14, color: "#0c0c14", fontWeight: 700 }}>AI MVP + Traction</span>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
+
+      {/* Mobile CSS */}
+      <style jsx>{`
+        /* Desktop: Hide sliders */
+        @media (min-width: 769px) {
+          .lieutenant-intro-slider {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* TASK 1: Hero Section Alignment & Cleanup */
+          
+          /* Hero section padding */
+          section > div:first-child {
+            margin-bottom: 32px !important;
+          }
+
+          section > div:first-child .wrap {
+            padding-top: 48px !important;
+            padding-bottom: 48px !important;
+          }
+
+          /* Hero grid - stack vertically */
+          section > div:first-child .wrap > div {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+            text-align: center !important;
+          }
+
+          /* Badge - center on mobile */
+          section > div:first-child .wrap > div > div:first-child {
+            justify-self: center !important;
+          }
+
+          /* Hero title - reduce font size and ensure vertical stacking */
+          .lieutenant-hero-title {
+            line-height: 1.2 !important;
+            text-align: center !important;
+          }
+
+          .lieutenant-hero-title .text-3xl {
+            font-size: 1.875rem !important;
+            line-height: 2.25rem !important;
+          }
+
+          /* Hero subtitle - center */
+          .lieutenant-hero-title + p {
+            text-align: center !important;
+            font-size: 14px !important;
+          }
+
+          /* TASK 2: Bento Grid - Hide Desktop Cards */
+          .lieutenant-bento-grid {
+            display: block !important;
+          }
+
+          /* Hide desktop intro cards A and B on mobile */
+          .lieutenant-card-a,
+          .lieutenant-card-b {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* TASK 3: Execution Capability Card - Full Width Static */
+          .lieutenant-card-c {
+            grid-column: 1 / -1 !important;
+            padding: 28px 24px !important;
+            margin: 0 16px 16px 16px !important;
+            width: calc(100% - 32px) !important;
+            display: flex !important;
+            flex-direction: column !important;
+          }
+
+          .lieutenant-card-c > div:first-child {
+            font-size: 10px !important;
+            margin-bottom: 20px !important;
+          }
+
+          .lieutenant-card-c > div:nth-child(2) {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0 !important;
+          }
+
+          .lieutenant-card-c > div:nth-child(2) > div {
+            padding: 12px 0 !important;
+          }
+
+          .lieutenant-card-c > div:nth-child(2) > div > span:first-child {
+            font-size: 10px !important;
+            min-width: 20px !important;
+          }
+
+          .lieutenant-card-c > div:nth-child(2) > div > span:last-child {
+            font-size: 13px !important;
+            line-height: 1.5 !important;
+          }
+
+          .lieutenant-card-c > div:last-child {
+            margin-top: 20px !important;
+            padding-top: 16px !important;
+          }
+
+          .lieutenant-card-c > div:last-child p {
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

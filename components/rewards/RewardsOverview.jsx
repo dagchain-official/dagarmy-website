@@ -1,10 +1,35 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimatedDownloadButton from './AnimatedDownloadButton';
+import MobileSlider from './MobileSlider';
+import { PhilosophyCard } from './RewardsOverviewMobile';
+import { LearningIcon, SharingIcon, CreatingIcon, ChecklistCard } from './HowYouEarnMobile';
+import { BurnToRiseCard } from './BurnToRiseMobile';
+import PathCycleSlider from './PathCycleSlider';
+import { EcosystemCard } from './EcosystemCardMobile';
 import styles from './RewardsOverview.module.css';
+import howYouEarnStyles from './HowYouEarn.module.css';
+import burnToRiseStyles from './BurnToRise.module.css';
+import pathStyles from './ChooseYourPath.module.css';
+import grantsStyles from './EcosystemGrants.module.css';
+import './RewardsPhilosophy.module.css';
 
 export default function RewardsOverview() {
+  const [windowWidth, setWindowWidth] = useState(1024);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setWindowWidth(window.innerWidth);
+    
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = isMounted && windowWidth < 768;
+
   const scrollToDocs = () => {
     const docsSection = document.getElementById('rewards-documentation');
     if (docsSection) {
@@ -135,11 +160,11 @@ export default function RewardsOverview() {
         </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section style={{ padding: '80px 0', background: '#F5F7FA' }}>
+      {/* The Philosophy Section */}
+      <section className="philosophySection" style={{ padding: '80px 0', background: '#F5F7FA' }}>
         <div className="tf-container">
           <div style={{ textAlign: 'center', marginBottom: '48px', maxWidth: '900px', margin: '0 auto 48px' }}>
-            <h2 style={{
+            <h2 className="philosophyTitle" style={{
               fontFamily: 'Georgia, serif',
               fontSize: '48px',
               fontWeight: '700',
@@ -149,7 +174,7 @@ export default function RewardsOverview() {
             }}>
               The Philosophy
             </h2>
-            <p style={{
+            <p className="philosophySubtitle" style={{
               fontSize: '18px',
               lineHeight: '1.7',
               color: '#4b5563',
@@ -157,7 +182,7 @@ export default function RewardsOverview() {
             }}>
               Most tech communities promise "easy rewards" just for being early. We don't.
             </p>
-            <p style={{
+            <p className="philosophyHighlight" style={{
               fontSize: '20px',
               lineHeight: '1.6',
               color: '#000000',
@@ -177,156 +202,188 @@ export default function RewardsOverview() {
             </p>
           </div>
 
-          {/* Master Manifesto Panel */}
+          {/* Master Manifesto Panel - Desktop & Mobile Conditional */}
           <div style={{
             maxWidth: '1400px',
             margin: '0 auto'
           }}>
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.85)',
-              border: '1px solid #d1d5db',
-              borderRadius: '12px',
-              padding: '44px 48px',
-              backdropFilter: 'blur(10px)'
-            }}>
+            {/* DESKTOP VIEW - Grid Layout (≥768px) */}
+            {!isMobile && (
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '0'
+                background: 'rgba(255, 255, 255, 0.85)',
+                border: '1px solid #d1d5db',
+                borderRadius: '12px',
+                padding: '44px 48px',
+                backdropFilter: 'blur(10px)'
               }}>
-                {/* Column 1: No Free Rides */}
                 <div style={{
-                  paddingRight: '44px',
-                  borderRight: '1px solid #d1d5db',
-                  textAlign: 'left'
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '0'
                 }}>
-                  <p style={{
-                    fontSize: '10px',
-                    fontWeight: '700',
-                    color: '#6366f1',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1.5px',
-                    marginBottom: '12px'
-                  }}>
-                    MERIT PRINCIPLE
-                  </p>
-                  <h3 style={{
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '28px',
-                    fontWeight: '700',
-                    color: '#000000',
-                    marginBottom: '14px',
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.15'
-                  }}>
-                    No Free Rides
-                  </h3>
+                  {/* Column 1: No Free Rides */}
                   <div style={{
-                    width: '48px',
-                    height: '2px',
-                    background: '#6366f1',
-                    marginBottom: '14px'
-                  }} />
-                  <p style={{
-                    fontSize: '15px',
-                    color: '#4b5563',
-                    lineHeight: '1.6',
-                    margin: 0,
-                    maxWidth: '340px'
+                    paddingRight: '44px',
+                    borderRight: '1px solid #d1d5db',
+                    textAlign: 'left'
                   }}>
-                    You don't get rewarded just for signing up. You get recognized for <span style={{ fontWeight: '600', color: '#374151' }}>learning, building, and leading</span>.
-                  </p>
-                </div>
-                
-                {/* Column 2: Equal Ground */}
-                <div style={{
-                  paddingLeft: '44px',
-                  paddingRight: '44px',
-                  borderRight: '1px solid #d1d5db',
-                  textAlign: 'left'
-                }}>
-                  <p style={{
-                    fontSize: '10px',
-                    fontWeight: '700',
-                    color: '#6366f1',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1.5px',
-                    marginBottom: '12px'
-                  }}>
-                    EQUAL ENTRY FRAMEWORK
-                  </p>
-                  <h3 style={{
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '28px',
-                    fontWeight: '700',
-                    color: '#000000',
-                    marginBottom: '14px',
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.15'
-                  }}>
-                    Equal Ground
-                  </h3>
+                    <p style={{
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      color: '#6366f1',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1.5px',
+                      marginBottom: '12px'
+                    }}>
+                      MERIT PRINCIPLE
+                    </p>
+                    <h3 style={{
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '28px',
+                      fontWeight: '700',
+                      color: '#000000',
+                      marginBottom: '14px',
+                      letterSpacing: '-0.01em',
+                      lineHeight: '1.15'
+                    }}>
+                      No Free Rides
+                    </h3>
+                    <div style={{
+                      width: '48px',
+                      height: '2px',
+                      background: '#6366f1',
+                      marginBottom: '14px'
+                    }} />
+                    <p style={{
+                      fontSize: '15px',
+                      color: '#4b5563',
+                      lineHeight: '1.6',
+                      margin: 0,
+                      maxWidth: '340px'
+                    }}>
+                      You don't get rewarded just for signing up. You get recognized for <span style={{ fontWeight: '600', color: '#374151' }}>learning, building, and leading</span>.
+                    </p>
+                  </div>
+                  
+                  {/* Column 2: Equal Ground */}
                   <div style={{
-                    width: '48px',
-                    height: '2px',
-                    background: '#6366f1',
-                    marginBottom: '14px'
-                  }} />
-                  <p style={{
-                    fontSize: '15px',
-                    color: '#4b5563',
-                    lineHeight: '1.6',
-                    margin: 0,
-                    maxWidth: '340px'
+                    paddingLeft: '44px',
+                    paddingRight: '44px',
+                    borderRight: '1px solid #d1d5db',
+                    textAlign: 'left'
                   }}>
-                    It doesn't matter who you know. Everyone starts at the exact same rank: <span style={{ fontWeight: '600', color: '#374151' }}>DAG Soldier</span>.
-                  </p>
-                </div>
-                
-                {/* Column 3: Real Value */}
-                <div style={{
-                  paddingLeft: '44px',
-                  textAlign: 'left'
-                }}>
-                  <p style={{
-                    fontSize: '10px',
-                    fontWeight: '700',
-                    color: '#6366f1',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1.5px',
-                    marginBottom: '12px'
-                  }}>
-                    SUSTAINABLE VALUE MODEL
-                  </p>
-                  <h3 style={{
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '28px',
-                    fontWeight: '700',
-                    color: '#000000',
-                    marginBottom: '14px',
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.15'
-                  }}>
-                    Real Value
-                  </h3>
+                    <p style={{
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      color: '#6366f1',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1.5px',
+                      marginBottom: '12px'
+                    }}>
+                      EQUAL ENTRY FRAMEWORK
+                    </p>
+                    <h3 style={{
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '28px',
+                      fontWeight: '700',
+                      color: '#000000',
+                      marginBottom: '14px',
+                      letterSpacing: '-0.01em',
+                      lineHeight: '1.15'
+                    }}>
+                      Equal Ground
+                    </h3>
+                    <div style={{
+                      width: '48px',
+                      height: '2px',
+                      background: '#6366f1',
+                      marginBottom: '14px'
+                    }} />
+                    <p style={{
+                      fontSize: '15px',
+                      color: '#4b5563',
+                      lineHeight: '1.6',
+                      margin: 0,
+                      maxWidth: '340px'
+                    }}>
+                      It doesn't matter who you know. Everyone starts at the exact same rank: <span style={{ fontWeight: '600', color: '#374151' }}>DAG Soldier</span>.
+                    </p>
+                  </div>
+                  
+                  {/* Column 3: Real Value */}
                   <div style={{
-                    width: '48px',
-                    height: '2px',
-                    background: '#6366f1',
-                    marginBottom: '14px'
-                  }} />
-                  <p style={{
-                    fontSize: '15px',
-                    color: '#4b5563',
-                    lineHeight: '1.6',
-                    margin: 0,
-                    maxWidth: '340px'
+                    paddingLeft: '44px',
+                    textAlign: 'left'
                   }}>
-                    Our rewards come from <span style={{ fontWeight: '600', color: '#374151' }}>actual ecosystem growth</span>, not speculative bubbles.
-                  </p>
+                    <p style={{
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      color: '#6366f1',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1.5px',
+                      marginBottom: '12px'
+                    }}>
+                      SUSTAINABLE VALUE MODEL
+                    </p>
+                    <h3 style={{
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '28px',
+                      fontWeight: '700',
+                      color: '#000000',
+                      marginBottom: '14px',
+                      letterSpacing: '-0.01em',
+                      lineHeight: '1.15'
+                    }}>
+                      Real Value
+                    </h3>
+                    <div style={{
+                      width: '48px',
+                      height: '2px',
+                      background: '#6366f1',
+                      marginBottom: '14px'
+                    }} />
+                    <p style={{
+                      fontSize: '15px',
+                      color: '#4b5563',
+                      lineHeight: '1.6',
+                      margin: 0,
+                      maxWidth: '340px'
+                    }}>
+                      Our rewards come from <span style={{ fontWeight: '600', color: '#374151' }}>actual ecosystem growth</span>, not speculative bubbles.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* MOBILE VIEW - Cycle Loop Slider (<768px) */}
+            {isMobile && (
+              <div style={{ padding: '0 16px' }}>
+                <MobileSlider
+                  items={[
+                    <PhilosophyCard 
+                      key="merit"
+                      tag="MERIT PRINCIPLE"
+                      title="No Free Rides"
+                      description="You don't get rewarded just for signing up. You get recognized for learning, building, and leading."
+                    />,
+                    <PhilosophyCard 
+                      key="equal"
+                      tag="EQUAL ENTRY FRAMEWORK"
+                      title="Equal Ground"
+                      description="It doesn't matter who you know. Everyone starts at the exact same rank: DAG Soldier."
+                    />,
+                    <PhilosophyCard 
+                      key="value"
+                      tag="SUSTAINABLE VALUE MODEL"
+                      title="Real Value"
+                      description="Our rewards come from actual ecosystem growth, not speculative bubbles."
+                    />
+                  ]}
+                  autoPlayInterval={4000}
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -358,26 +415,28 @@ export default function RewardsOverview() {
             </p>
             
             {/* Professional Master Panel */}
-            <div style={{
+            <div className={howYouEarnStyles.howYouEarnPanel} style={{
               background: 'rgba(255, 255, 255, 0.85)',
               border: '1px solid #d1d5db',
               borderRadius: '12px',
               padding: '44px 48px',
               backdropFilter: 'blur(10px)'
             }}>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '48px',
-                alignItems: 'start',
-                textAlign: 'left'
-              }}>
-                {/* Left: Contribution Pillars */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', paddingRight: '24px', borderRight: '1px solid #e5e7eb' }}>
-                  {/* Learning */}
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                      <div style={{
+              {/* DESKTOP VIEW - 2 Column Grid (≥768px) */}
+              {!isMobile && (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '48px',
+                  alignItems: 'start',
+                  textAlign: 'left'
+                }}>
+                  {/* Left: Contribution Pillars */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', paddingRight: '24px', borderRight: '1px solid #e5e7eb' }}>
+                    {/* Learning */}
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                        <div style={{
                         width: '40px',
                         height: '40px',
                         background: 'rgba(99, 102, 241, 0.08)',
@@ -387,130 +446,124 @@ export default function RewardsOverview() {
                         justifyContent: 'center',
                         flexShrink: 0
                       }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
+                        <LearningIcon />
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <h4 style={{ 
-                          fontSize: '18px', 
-                          fontWeight: '700', 
-                          color: '#000000', 
-                          marginBottom: '6px'
-                        }}>
-                          Learning
-                        </h4>
-                        <p style={{ 
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ 
+                            fontSize: '18px', 
+                            fontWeight: '700', 
+                            color: '#000000', 
+                            marginBottom: '6px'
+                          }}>
+                            Learning
+                          </h4>
+                          <p style={{ 
                           fontSize: '15px', 
                           color: '#4b5563', 
                           lineHeight: '1.6',
                           margin: 0
                         }}>
-                          Mastering the ecosystem tools.
-                        </p>
+                            Mastering the ecosystem tools.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    {/* Sharing */}
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                        <div style={{
+                          width: '40px',
+                          height: '40px',
+                          background: 'rgba(99, 102, 241, 0.08)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}>
+                          <SharingIcon />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ 
+                            fontSize: '18px', 
+                            fontWeight: '700', 
+                            color: '#000000', 
+                            marginBottom: '6px'
+                          }}>
+                            Sharing
+                          </h4>
+                          <p style={{ 
+                          fontSize: '15px', 
+                          color: '#4b5563', 
+                          lineHeight: '1.6',
+                          margin: 0
+                        }}>
+                            Referring quality members (not spamming).
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    {/* Creating */}
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                        <div style={{
+                        width: '40px',
+                        height: '40px',
+                        background: 'rgba(99, 102, 241, 0.08)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                          <CreatingIcon />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ 
+                            fontSize: '18px', 
+                            fontWeight: '700', 
+                            color: '#000000', 
+                            marginBottom: '6px'
+                          }}>
+                            Creating
+                          </h4>
+                          <p style={{ 
+                          fontSize: '15px', 
+                          color: '#4b5563', 
+                          lineHeight: '1.6',
+                          margin: 0
+                        }}>
+                            Making videos, content, and meaningful comments.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 
-                  {/* Sharing */}
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                      <div style={{
-                        width: '40px',
-                        height: '40px',
-                        background: 'rgba(99, 102, 241, 0.08)',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
+                  {/* Right: Reputation Score Dashboard */}
+                  <div style={{ paddingLeft: '24px' }}>
+                    <div style={{ marginBottom: '28px' }}>
+                      <p style={{ 
+                        fontSize: '11px', 
+                        color: '#6366f1', 
+                        marginBottom: '12px',
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1.5px'
                       }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <h4 style={{ 
-                          fontSize: '18px', 
-                          fontWeight: '700', 
-                          color: '#000000', 
-                          marginBottom: '6px'
-                        }}>
-                          Sharing
-                        </h4>
-                        <p style={{ 
-                          fontSize: '15px', 
-                          color: '#4b5563', 
-                          lineHeight: '1.6',
-                          margin: 0
-                        }}>
-                          Referring quality members (not spamming).
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                
-                  {/* Creating */}
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                      <div style={{
-                        width: '40px',
-                        height: '40px',
-                        background: 'rgba(99, 102, 241, 0.08)',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
+                        YOUR REPUTATION SCORE
+                      </p>
+                      <h3 style={{ 
+                        fontSize: '48px', 
+                        fontWeight: '700', 
+                        color: '#000000', 
+                        marginBottom: '16px',
+                        lineHeight: '1'
                       }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <h4 style={{ 
-                          fontSize: '18px', 
-                          fontWeight: '700', 
-                          color: '#000000', 
-                          marginBottom: '6px'
-                        }}>
-                          Creating
-                        </h4>
-                        <p style={{ 
-                          fontSize: '15px', 
-                          color: '#4b5563', 
-                          lineHeight: '1.6',
-                          margin: 0
-                        }}>
-                          Making videos, content, and meaningful comments.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              
-                {/* Right: Reputation Score Dashboard */}
-                <div style={{ paddingLeft: '24px' }}>
-                  <div style={{ marginBottom: '28px' }}>
-                    <p style={{ 
-                      fontSize: '11px', 
-                      color: '#6366f1', 
-                      marginBottom: '12px',
-                      fontWeight: '700',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1.5px'
-                    }}>
-                      YOUR REPUTATION SCORE
-                    </p>
-                    <h3 style={{ 
-                      fontSize: '48px', 
-                      fontWeight: '700', 
-                      color: '#000000', 
-                      marginBottom: '16px',
-                      lineHeight: '1'
-                    }}>
-                      847 <span style={{ fontSize: '32px', color: '#9ca3af' }}>/ 1000</span>
-                    </h3>
+                        847 <span style={{ fontSize: '32px', color: '#9ca3af' }}>/ 1000</span>
+                      </h3>
                     
                     {/* Progress Bar */}
                     <div style={{
@@ -547,11 +600,111 @@ export default function RewardsOverview() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '15px', color: '#4b5563' }}>Projects Built</span>
-                      <span style={{ fontSize: '18px', fontWeight: '700', color: '#000000' }}>5</span>
+                        <span style={{ fontSize: '18px', fontWeight: '700', color: '#000000' }}>5</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {/* MOBILE VIEW - Vertical Stack with Slider (<768px) */}
+              {isMobile && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                  {/* Top: Reputation Score Dashboard (Centered) */}
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ marginBottom: '24px' }}>
+                      <p className={howYouEarnStyles.scoreLabel} style={{ 
+                        fontSize: '11px', 
+                        color: '#6366f1', 
+                        marginBottom: '12px',
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1.5px'
+                      }}>
+                        YOUR REPUTATION SCORE
+                      </p>
+                      <h3 className={howYouEarnStyles.scoreValue} style={{ 
+                        fontSize: '48px', 
+                        fontWeight: '700', 
+                        color: '#000000', 
+                        marginBottom: '16px',
+                        lineHeight: '1'
+                      }}>
+                        847 <span className={howYouEarnStyles.scoreMax} style={{ fontSize: '32px', color: '#9ca3af' }}>/ 1000</span>
+                      </h3>
+                      
+                      {/* Progress Bar - Centered */}
+                      <div style={{
+                        width: '100%',
+                        maxWidth: '280px',
+                        height: '6px',
+                        background: '#e5e7eb',
+                        borderRadius: '3px',
+                        overflow: 'hidden',
+                        margin: '0 auto'
+                      }}>
+                        <div style={{
+                          width: '84.7%',
+                          height: '100%',
+                          background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
+                          borderRadius: '3px'
+                        }} />
+                      </div>
+                    </div>
+                    
+                    {/* Stats - Centered */}
+                    <div style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      gap: '12px',
+                      paddingTop: '20px',
+                      borderTop: '1px solid #e5e7eb',
+                      maxWidth: '280px',
+                      margin: '0 auto'
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '14px', color: '#4b5563' }}>Courses Completed</span>
+                        <span style={{ fontSize: '16px', fontWeight: '700', color: '#000000' }}>12</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '14px', color: '#4b5563' }}>Community Contributions</span>
+                        <span style={{ fontSize: '16px', fontWeight: '700', color: '#000000' }}>28</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '14px', color: '#4b5563' }}>Projects Built</span>
+                        <span style={{ fontSize: '16px', fontWeight: '700', color: '#000000' }}>5</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom: Checklist Slider */}
+                  <div style={{ padding: '0 16px' }}>
+                    <MobileSlider
+                      items={[
+                        <ChecklistCard 
+                          key="learning"
+                          icon={<LearningIcon />}
+                          title="Learning"
+                          description="Mastering the ecosystem tools."
+                        />,
+                        <ChecklistCard 
+                          key="sharing"
+                          icon={<SharingIcon />}
+                          title="Sharing"
+                          description="Referring quality members (not spamming)."
+                        />,
+                        <ChecklistCard 
+                          key="creating"
+                          icon={<CreatingIcon />}
+                          title="Creating"
+                          description="Making videos, content, and meaningful comments."
+                        />
+                      ]}
+                      autoPlayInterval={4000}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* Important Notice Block */}
@@ -587,7 +740,7 @@ export default function RewardsOverview() {
       <section style={{ padding: '80px 0', background: '#F5F7FA' }}>
         <div className="tf-container">
           <div style={{ maxWidth: '1300px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 style={{
+            <h2 className={burnToRiseStyles.burnTitle} style={{
               fontFamily: 'Georgia, serif',
               fontSize: '48px',
               fontWeight: '700',
@@ -603,7 +756,7 @@ export default function RewardsOverview() {
               }}>Burn</span> To Rise
             </h2>
             
-            <p style={{
+            <p className={burnToRiseStyles.burnSubtitle} style={{
               fontSize: '18px',
               lineHeight: '1.7',
               color: '#4b5563',
@@ -614,7 +767,7 @@ export default function RewardsOverview() {
               Collecting points is good, but <span style={{ fontWeight: '600', color: '#000000' }}>Rank</span> is better. To move up the ladder—from Starter to Mythic—you must make a choice.
             </p>
             
-            <p style={{
+            <p className={burnToRiseStyles.burnSubtitle} style={{
               fontSize: '18px',
               lineHeight: '1.7',
               color: '#000000',
@@ -630,7 +783,7 @@ export default function RewardsOverview() {
             </p>
             
             {/* Rank Progression Visual */}
-            <div style={{
+            <div className={burnToRiseStyles.burnBadgeFlow} style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -639,8 +792,8 @@ export default function RewardsOverview() {
               marginBottom: '40px'
             }}>
               {/* Starter Rank */}
-              <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                <div style={{
+              <div className={burnToRiseStyles.burnBadgeItem} style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
+                <div className={burnToRiseStyles.burnBadgeImage} style={{
                   width: '140px',
                   height: '140px',
                   margin: '0 auto 16px',
@@ -652,7 +805,7 @@ export default function RewardsOverview() {
                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                   />
                 </div>
-                <h4 style={{
+                <h4 className={burnToRiseStyles.burnBadgeTitle} style={{
                   fontSize: '16px',
                   fontWeight: '600',
                   color: '#000000',
@@ -660,29 +813,32 @@ export default function RewardsOverview() {
                 }}>
                   Starter
                 </h4>
-                <p style={{ fontSize: '13px', color: '#9ca3af' }}>Starting Point</p>
+                <p className={burnToRiseStyles.burnBadgeDesc} style={{ fontSize: '13px', color: '#9ca3af' }}>Starting Point</p>
               </div>
               
               {/* Progress Line with Burn Button */}
-              <div style={{ 
+              <div className={burnToRiseStyles.burnProgressLine} style={{ 
                 position: 'relative',
                 flex: '0 0 300px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                {/* Animated Gradient Line */}
-                <div style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '3px',
-                  background: 'linear-gradient(90deg, #9ca3af 0%, #6366f1 50%, #8b5cf6 100%)',
-                  borderRadius: '2px',
-                  opacity: 0.6
-                }} />
+                {/* Animated Gradient Line - Hidden on Mobile */}
+                {!isMobile && (
+                  <div style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '3px',
+                    background: 'linear-gradient(90deg, #9ca3af 0%, #6366f1 50%, #8b5cf6 100%)',
+                    borderRadius: '2px',
+                    opacity: 0.6
+                  }} />
+                )}
                 
                 {/* Burn Button */}
                 <button
+                  className={burnToRiseStyles.burnButton}
                   style={{
                     position: 'relative',
                     zIndex: 3,
@@ -713,8 +869,8 @@ export default function RewardsOverview() {
               </div>
               
               {/* Mythic Rank */}
-              <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                <div style={{
+              <div className={burnToRiseStyles.burnBadgeItem} style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
+                <div className={burnToRiseStyles.burnBadgeImage} style={{
                   width: '140px',
                   height: '140px',
                   margin: '0 auto 16px',
@@ -726,7 +882,7 @@ export default function RewardsOverview() {
                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                   />
                 </div>
-                <h4 style={{
+                <h4 className={burnToRiseStyles.burnBadgeTitle} style={{
                   fontSize: '16px',
                   fontWeight: '600',
                   color: '#000000',
@@ -734,7 +890,7 @@ export default function RewardsOverview() {
                 }}>
                   Mythic
                 </h4>
-                <p style={{ fontSize: '13px', color: '#9ca3af' }}>Elite Status</p>
+                <p className={burnToRiseStyles.burnBadgeDesc} style={{ fontSize: '13px', color: '#9ca3af' }}>Elite Status</p>
               </div>
             </div>
             
@@ -747,11 +903,13 @@ export default function RewardsOverview() {
               backdropFilter: 'blur(10px)',
               marginBottom: '32px'
             }}>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '0'
-              }}>
+              {/* DESKTOP VIEW - 3 Column Grid (≥768px) */}
+              {!isMobile && (
+                <div className={burnToRiseStyles.burnCardsGrid} style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '0'
+                }}>
                 {/* Column 1: The Commitment */}
                 <div style={{
                   paddingRight: '32px',
@@ -845,6 +1003,40 @@ export default function RewardsOverview() {
                   </p>
                 </div>
               </div>
+              )}
+
+              {/* MOBILE VIEW - Slider (<768px) */}
+              {isMobile && (
+                <div className={burnToRiseStyles.burnCardsSlider}>
+                  <MobileSlider
+                    items={[
+                      <BurnToRiseCard 
+                        key="commitment"
+                        cardIndex={0}
+                        title="The Commitment"
+                        description="Burning wipes your point balance to zero."
+                      />,
+                      <BurnToRiseCard 
+                        key="reward"
+                        cardIndex={1}
+                        title="The Reward"
+                        description={
+                          <>
+                            In exchange, you permanently unlock a <span style={{ fontWeight: '600', color: '#a78bfa' }}>higher Rank</span>.
+                          </>
+                        }
+                      />,
+                      <BurnToRiseCard 
+                        key="benefit"
+                        cardIndex={2}
+                        title="The Benefit"
+                        description="Higher ranks unlock significantly higher privileges and reward efficiency."
+                      />
+                    ]}
+                    autoPlayInterval={4000}
+                  />
+                </div>
+              )}
             </div>
             
             <p style={{ 
@@ -907,7 +1099,7 @@ export default function RewardsOverview() {
               Two Roles. One Mission. <span className="text-purple-600" style={{ fontWeight: '600' }}>Building 100,000 AI Founders by 2030.</span>
             </p>
             <div style={{
-              width: '500px',
+              width: '350px',
               height: '2.5px',
               background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
               margin: '0 auto',
@@ -915,14 +1107,16 @@ export default function RewardsOverview() {
             }} />
           </motion.div>
           
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px', marginBottom: '60px', maxWidth: '1250px', margin: '0 auto 60px' }}>
-            {/* Card 1: The Standard Protocol */}
-            <motion.div 
+          {/* DESKTOP VIEW - Horizontal Layout (≥768px) */}
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px', marginBottom: '60px', maxWidth: '1250px', margin: '0 auto 60px' }}>
+              {/* Card 1: DAG Soldier */}
+              <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.0 }}
               viewport={{ once: true }}
-              className="border border-gray-200 bg-white rounded-2xl transition-all duration-300"
+              className={`${pathStyles.pathCard} border border-gray-200 bg-white rounded-2xl transition-all duration-300`}
               style={{ padding: '28px', display: 'flex', flexDirection: 'column', minHeight: '500px', boxShadow: '0 10px 40px rgba(0, 0, 0, 0.05)' }}
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.08)'}
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.05)'}
@@ -932,41 +1126,41 @@ export default function RewardsOverview() {
                 <img 
                   src="/images/dagbadges/DAG SOLDIER.svg" 
                   alt="DAG Soldier Badge"
-                  className="w-32 h-32 object-contain"
+                  className={`${pathStyles.pathBadgeImage} w-32 h-32 object-contain`}
                 />
               </div>
               
               {/* Header */}
-              <h3 className="font-serif text-3xl font-bold text-black text-center mb-2">
+              <h3 className={`${pathStyles.pathCardTitle} font-serif text-3xl font-bold text-black text-center mb-2`}>
                 DAG Soldier
               </h3>
               
               {/* Focus */}
-              <p className="text-center text-base font-semibold" style={{ marginBottom: '10px', letterSpacing: '0.3px' }}>
+              <p className={`${pathStyles.pathCardFocus} text-center text-base font-semibold`} style={{ marginBottom: '10px', letterSpacing: '0.3px' }}>
                 <span style={{ color: '#9ca3af', fontWeight: '500' }}>Focus:</span> <span className="text-blue-600">Skill Development</span>
               </p>
               
               {/* Description */}
-              <p className="text-gray-600 text-center leading-relaxed" style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.55' }}>
+              <p className={`${pathStyles.pathCardDescription} text-gray-600 text-center leading-relaxed`} style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.55' }}>
                 The foundational entry point for members building practical AI capability. Access the ecosystem to understand business logic and automation.
               </p>
               
               {/* List */}
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
-                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li className={pathStyles.pathListItem} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
+                  <svg className={pathStyles.pathListIcon} style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Open Learning Sessions</span>
                 </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
-                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li className={pathStyles.pathListItem} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
+                  <svg className={pathStyles.pathListIcon} style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>AI Business & Automation Fundamentals</span>
                 </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
-                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li className={pathStyles.pathListItem} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(249, 250, 251, 0.8)', borderRadius: '8px', border: '1px solid rgba(229, 231, 235, 0.6)' }}>
+                  <svg className={pathStyles.pathListIcon} style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Contribution-Based Reputation Growth</span>
@@ -974,15 +1168,15 @@ export default function RewardsOverview() {
               </ul>
               
               {/* Footer */}
-              <div className="-mx-8 -mb-8 rounded-b-2xl" style={{ background: 'rgba(0, 0, 0, 0.02)', borderTop: '1px solid rgba(0, 0, 0, 0.06)', padding: '16px 24px', marginTop: 'auto' }}>
+              <div className={`${pathStyles.pathFooter} -mx-8 -mb-8 rounded-b-2xl`} style={{ background: 'rgba(0, 0, 0, 0.02)', borderTop: '1px solid rgba(0, 0, 0, 0.06)', padding: '16px 24px', marginTop: 'auto' }}>
                 <p className="text-sm text-gray-700 text-center" style={{ fontWeight: '500', lineHeight: '1.5', margin: 0 }}>
                   Transition from Learner to Builder through consistent action.
                 </p>
               </div>
             </motion.div>
             
-            {/* Progression Arrow */}
-            <div style={{ 
+            {/* Desktop Progression Arrow */}
+            <div className={pathStyles.desktopArrow} style={{ 
               position: 'relative',
               flex: '0 0 80px',
               display: 'flex',
@@ -1009,13 +1203,13 @@ export default function RewardsOverview() {
               </div>
             </div>
             
-            {/* Card 2: The Leadership Protocol */}
+            {/* Card 2: DAG Lieutenant */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 2.0 }}
               viewport={{ once: true }}
-              className="relative rounded-2xl transition-all duration-300"
+              className={`${pathStyles.pathCard} relative rounded-2xl transition-all duration-300`}
               style={{
                 padding: '28px',
                 display: 'flex',
@@ -1036,41 +1230,41 @@ export default function RewardsOverview() {
                 <img 
                   src="/images/dagbadges/DAG LIEUTENANT.svg" 
                   alt="DAG Lieutenant Badge"
-                  className="w-32 h-32 object-contain"
+                  className={`${pathStyles.pathBadgeImage} w-32 h-32 object-contain`}
                 />
               </div>
               
               {/* Header */}
-              <h3 className="font-serif text-3xl font-bold text-black text-center mb-2">
+              <h3 className={`${pathStyles.pathCardTitle} font-serif text-3xl font-bold text-black text-center mb-2`}>
                 DAG Lieutenant
               </h3>
               
               {/* Focus */}
-              <p className="text-center text-base font-semibold" style={{ marginBottom: '10px', letterSpacing: '0.3px' }}>
+              <p className={`${pathStyles.pathCardFocus} text-center text-base font-semibold`} style={{ marginBottom: '10px', letterSpacing: '0.3px' }}>
                 <span style={{ color: '#9ca3af', fontWeight: '500' }}>Focus:</span> <span className="text-purple-600">Building & Contribution</span>
               </p>
               
               {/* Description */}
-              <p className="text-gray-600 text-center leading-relaxed" style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.55' }}>
+              <p className={`${pathStyles.pathCardDescription} text-gray-600 text-center leading-relaxed`} style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.55' }}>
                 The advanced operating mode for builders ready to launch, execute, and lead within the ecosystem.
               </p>
               
               {/* List */}
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
-                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li className={pathStyles.pathListItem} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <svg className={pathStyles.pathListIcon} style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Launch & Validate Real AI Projects</span>
                 </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
-                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li className={pathStyles.pathListItem} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <svg className={pathStyles.pathListIcon} style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Access to Structured Builder Sprints</span>
                 </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
-                  <svg style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li className={pathStyles.pathListItem} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(243, 232, 255, 0.3)', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <svg className={pathStyles.pathListIcon} style={{ width: '20px', height: '20px', color: '#10b981', marginTop: '2px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <span style={{ fontSize: '14px', color: '#374151', fontWeight: '500', lineHeight: '1.5' }}>Eligible for Demo Day & Startup Tracks</span>
@@ -1078,13 +1272,21 @@ export default function RewardsOverview() {
               </ul>
               
               {/* Footer */}
-              <div className="-mx-8 -mb-8 rounded-b-2xl" style={{ background: 'rgba(124, 92, 255, 0.06)', borderTop: '1px solid rgba(124, 92, 255, 0.2)', padding: '16px 24px', marginTop: 'auto' }}>
+              <div className={`${pathStyles.pathFooter} -mx-8 -mb-8 rounded-b-2xl`} style={{ background: 'rgba(124, 92, 255, 0.06)', borderTop: '1px solid rgba(124, 92, 255, 0.2)', padding: '16px 24px', marginTop: 'auto' }}>
                 <p className="text-sm text-gray-700 text-center" style={{ fontWeight: '500', lineHeight: '1.5', margin: 0 }}>
                   Lieutenant status reflects commitment to execution, not entitlement. Advancement is earned through real-world output.
                 </p>
               </div>
             </motion.div>
-          </div>
+            </div>
+          )}
+
+          {/* MOBILE VIEW - Cycle Loop Animation (<768px) */}
+          {isMobile && (
+            <div style={{ maxWidth: '500px', margin: '0 auto', padding: '0 16px 60px' }}>
+              <PathCycleSlider />
+            </div>
+          )}
         </div>
       </section>
 
@@ -1092,7 +1294,7 @@ export default function RewardsOverview() {
       <section style={{ padding: '80px 0', background: '#F5F7FA' }}>
         <div className="tf-container">
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <h2 style={{
+            <h2 className={grantsStyles.grantsHeading} style={{
               fontFamily: 'Georgia, serif',
               fontSize: '48px',
               fontWeight: '700',
@@ -1104,7 +1306,7 @@ export default function RewardsOverview() {
               Ecosystem Grants & Fellowships
             </h2>
             
-            <p style={{
+            <p className={grantsStyles.grantsSubtitle} style={{
               fontSize: '18px',
               lineHeight: '1.7',
               color: '#4b5563',
@@ -1116,8 +1318,8 @@ export default function RewardsOverview() {
               We view our top contributors as partners. The ecosystem is structured to provide merit-based resource allocation, operating similar to a research grant or corporate fellowship.
             </p>
             
-            {/* Institutional Master Panel */}
-            <div style={{
+            {/* Desktop - Institutional Master Panel */}
+            <div className={grantsStyles.grantsPanel} style={{
               background: 'rgba(255, 255, 255, 0.6)',
               border: '1px solid #e5e7eb',
               borderRadius: '12px',
@@ -1261,6 +1463,35 @@ export default function RewardsOverview() {
                 </div>
               </div>
             </div>
+
+            {/* Mobile - Slider */}
+            {isMobile && (
+              <div className={grantsStyles.grantsMobileSlider}>
+                <MobileSlider
+                  items={[
+                    <EcosystemCard
+                      key="meritocratic"
+                      tag="RESOURCE ACCESS FRAMEWORK"
+                      title="Meritocratic Efficiency"
+                      description="Your rank dictates your resource access. As you progress from Starter to Mythic, the ecosystem unlocks higher efficiency tiers, ensuring that long-term contributors receive a larger share of the value they generate."
+                    />,
+                    <EcosystemCard
+                      key="performance"
+                      tag="IMPACT RECOGNITION SYSTEM"
+                      title="Performance Fellowships"
+                      description="Consistency is the primary metric we reward. Contributors who demonstrate sustained, monthly impact are eligible for the Discretionary Excellence Fund—a resource pool reserved specifically for those actively driving ecosystem stability."
+                    />,
+                    <EcosystemCard
+                      key="ambassador"
+                      tag="LEADERSHIP SUPPORT INFRASTRUCTURE"
+                      title="Ambassador Logistics Program"
+                      description="For our most dedicated leaders, support extends beyond the digital platform. High-impact contributors can qualify for the Lifestyle Support Tier, which provides assistance for real-world logistical needs—such as travel and operational costs—to facilitate their leadership duties."
+                    />
+                  ]}
+                  autoPlayInterval={5000}
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>

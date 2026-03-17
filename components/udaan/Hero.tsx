@@ -23,14 +23,14 @@ function useCounter(to: number, duration = 2.2) {
   return { val, ref };
 }
 
-function Stat({ num, suffix = "", label, delay = 0 }: { num: number; suffix?: string; label: string; delay?: number }) {
+function Stat({ num, suffix = "", label, delay = 0, align = "left" }: { num: number; suffix?: string; label: string; delay?: number; align?: "left" | "right" }) {
   const { val, ref } = useCounter(num);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay, ease }}
-      style={{ display: "flex", flexDirection: "column", gap: 6 }}
+      style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: align === "right" ? "flex-end" : "flex-start" }}
     >
       <div style={{
         fontFamily: "'Nasalization', sans-serif",
@@ -60,6 +60,27 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const [textWidth, setTextWidth] = useState(0);
+  const [currentStatPair, setCurrentStatPair] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile screen
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Cycle stats every 3 seconds on mobile
+  useEffect(() => {
+    if (!isMobile) return;
+    const interval = setInterval(() => {
+      setCurrentStatPair(prev => (prev + 1) % 2);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isMobile]);
 
   useEffect(() => {
     const measure = () => {
@@ -83,14 +104,106 @@ export default function Hero() {
   }, [mx, my]);
 
   return (
-    <section ref={sectionRef} style={{
-      position: "relative",
-      background: "#ffffff",
-      minHeight: "100vh",
-      overflow: "hidden",
-      display: "flex",
-      flexDirection: "column",
-    }}>
+    <>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .udaan-mission-manifesto-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            align-items: stretch !important;
+          }
+          .udaan-mission {
+            order: 1 !important;
+            text-align: left !important;
+            width: 100% !important;
+          }
+          .udaan-mission p {
+            font-size: 11px !important;
+            line-height: 1.5 !important;
+          }
+          .udaan-cta {
+            order: 2 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            padding-top: 0 !important;
+            width: 100% !important;
+          }
+          .udaan-cta button {
+            font-size: 12px !important;
+            padding: 14px 28px !important;
+          }
+          .udaan-cta span {
+            font-size: 10px !important;
+          }
+          .udaan-manifesto {
+            order: 3 !important;
+            text-align: left !important;
+            width: 100% !important;
+          }
+          .udaan-manifesto p {
+            font-size: 11px !important;
+            line-height: 1.5 !important;
+          }
+          .udaan-stats-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 0 !important;
+            transition: all 0.3s ease-in-out !important;
+          }
+          .udaan-stat-item {
+            border-right: 1px solid rgba(0,0,10,0.06) !important;
+            padding: 0 16px !important;
+          }
+          .udaan-stat-item:nth-child(2n) {
+            border-right: none !important;
+            text-align: right !important;
+          }
+          .udaan-stat-item:first-child {
+            padding-left: 0 !important;
+            text-align: left !important;
+          }
+          .udaan-stat-item:nth-child(2) {
+            padding-right: 0 !important;
+          }
+        }
+        @media (max-width: 430px) {
+          .udaan-mission-manifesto-grid {
+            gap: 3% !important;
+            grid-template-columns: 48.5% 48.5% !important;
+            padding-left: 14px !important;
+            padding-right: 14px !important;
+          }
+          .udaan-mission p,
+          .udaan-manifesto p {
+            font-size: 11px !important;
+          }
+          .udaan-stat-item {
+            padding: 0 12px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .udaan-mission-manifesto-grid {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+          .udaan-mission p,
+          .udaan-manifesto p {
+            font-size: 10.5px !important;
+          }
+        }
+      `}</style>
+      <section ref={sectionRef} style={{
+        position: "relative",
+        background: "#ffffff",
+        minHeight: "100vh",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}>
 
       {/* ── CURSOR AURA ── */}
       <motion.div style={{
@@ -277,6 +390,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.68, ease }}
+            className="udaan-mission-manifesto-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr auto 1fr",
@@ -288,7 +402,7 @@ export default function Hero() {
             }}
           >
             {/* Left: Mission */}
-            <div>
+            <div className="udaan-mission">
               <div style={{
                 fontSize: 10, fontWeight: 600, letterSpacing: "0.18em",
                 textTransform: "uppercase", color: "#a0a0c0",
@@ -301,6 +415,7 @@ export default function Hero() {
                 lineHeight: 1.7,
                 color: "#4a4a6a",
                 fontWeight: 400,
+                margin: 0,
               }}>
                 <strong style={{ color: "#0a0a0f", fontWeight: 600 }}>100,000 AI Startup Founders by 2030.</strong>
                 {" "}Rank through contribution inside a disciplined AI Startup Ecosystem.
@@ -308,7 +423,7 @@ export default function Hero() {
             </div>
 
             {/* Center: CTA */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, paddingTop: 28 }}>
+            <div className="udaan-cta" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, paddingTop: 28 }}>
               <motion.button
                 onClick={() => window.dispatchEvent(new CustomEvent("dagarmy:open-signin"))}
                 whileHover={{ scale: 1.04, boxShadow: "0 20px 56px rgba(99,102,241,0.38)" }}
@@ -339,7 +454,7 @@ export default function Hero() {
             </div>
 
             {/* Right: Manifesto */}
-            <div style={{ textAlign: "right" }}>
+            <div className="udaan-manifesto">
               <div style={{
                 fontSize: 10, fontWeight: 600, letterSpacing: "0.18em",
                 textTransform: "uppercase", color: "#a0a0c0",
@@ -352,6 +467,7 @@ export default function Hero() {
                 lineHeight: 1.7,
                 color: "#4a4a6a",
                 fontWeight: 400,
+                margin: 0,
               }}>
                 AI is reshaping ownership and opportunity.
                 The question is not whether AI will define the future —
@@ -365,6 +481,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.88, ease }}
+            className="udaan-stats-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
@@ -378,15 +495,20 @@ export default function Hero() {
               { num: 3, suffix: "", label: "Nations Unified", delay: 0.97 },
               { num: 1, suffix: "M+", label: "Jobs Targeted", delay: 1.04 },
               { num: 100000, suffix: "", label: "Founders by 2030", delay: 1.11 },
-            ].map((s, i) => (
-              <div key={i} style={{
-                borderRight: i < 3 ? "1px solid rgba(0,0,10,0.06)" : "none",
-                paddingLeft: i > 0 ? "clamp(20px, 2.5vw, 40px)" : 0,
-                paddingRight: i < 3 ? "clamp(20px, 2.5vw, 40px)" : 0,
-              }}>
-                <Stat num={s.num} suffix={s.suffix} label={s.label} delay={s.delay} />
-              </div>
-            ))}
+            ].map((s, i) => {
+              const shouldShow = !isMobile || Math.floor(i / 2) === currentStatPair;
+              const isRightColumn = i % 2 === 1;
+              return (
+                <div key={i} className="udaan-stat-item" style={{
+                  borderRight: i < 3 ? "1px solid rgba(0,0,10,0.06)" : "none",
+                  paddingLeft: i > 0 ? "clamp(20px, 2.5vw, 40px)" : 0,
+                  paddingRight: i < 3 ? "clamp(20px, 2.5vw, 40px)" : 0,
+                  display: shouldShow ? 'block' : 'none',
+                }}>
+                  <Stat num={s.num} suffix={s.suffix} label={s.label} delay={s.delay} align={isRightColumn ? "right" : "left"} />
+                </div>
+              );
+            })}
           </motion.div>
         </div>
       </motion.div>
@@ -462,5 +584,6 @@ export default function Hero() {
       </motion.div>
 
     </section>
+    </>
   );
 }

@@ -1,6 +1,9 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import SoldierIntroCardsSlider from "./SoldierIntroCardsSlider";
+import SoldierTransitionSlider from "./SoldierTransitionSlider";
+import SoldierProgressStepsSlider from "./SoldierProgressStepsSlider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -81,7 +84,7 @@ export default function SoldierSection() {
 
             {/* Headline */}
             <div>
-              <div style={{
+              <div className="soldier-hero-tag" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 background: "rgba(99,102,241,0.15)",
                 border: "1px solid rgba(99,102,241,0.3)",
@@ -90,14 +93,14 @@ export default function SoldierSection() {
                 marginBottom: 20,
               }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: gradBg }} />
-                <span style={{
+                <span className="whitespace-nowrap" style={{
                   fontFamily: "Nasalization, sans-serif",
                   fontSize: 11, fontWeight: 700,
                   letterSpacing: "0.14em", textTransform: "uppercase" as const,
                   color: "#a5b4fc",
                 }}>Foundation Rank · DAG Army</span>
               </div>
-              <h2 style={{
+              <h2 className="soldier-hero-title" style={{
                 fontFamily: "DM Sans, sans-serif",
                 fontWeight: 800,
                 fontSize: "clamp(36px, 4vw, 60px)",
@@ -106,8 +109,9 @@ export default function SoldierSection() {
                 color: "#fff",
                 marginBottom: 16,
               }}>
-                Soldier: The Learner<br />
-                <span style={grad}>in Formation</span>
+                <span className="hidden md:inline">Soldier: The Learner<br /></span>
+                <span className="block md:hidden">Soldier: The Learner</span>
+                <span className="block" style={grad}>in Formation</span>
               </h2>
               <p style={{
                 fontSize: 16, fontWeight: 500, color: "#9494aa", letterSpacing: "0.01em", marginBottom: 0,
@@ -117,7 +121,7 @@ export default function SoldierSection() {
             </div>
 
             {/* Right stat block */}
-            <div style={{
+            <div className="soldier-hero-stats hidden md:flex" style={{
               borderLeft: "1px solid rgba(255,255,255,0.08)",
               paddingLeft: 48,
               display: "flex",
@@ -145,7 +149,12 @@ export default function SoldierSection() {
 
       {/* ── BENTO GRID ── */}
       <div className="wrap">
-        <div style={{
+        {/* Mobile Intro Cards Slider */}
+        <div className="soldier-intro-slider block md:hidden" style={{ marginBottom: 16 }}>
+          <SoldierIntroCardsSlider />
+        </div>
+
+        <div className="soldier-bento-grid" style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
           gridTemplateRows: "auto auto",
@@ -155,6 +164,7 @@ export default function SoldierSection() {
           {/* A: Identity — spans 2 cols */}
           <motion.div
             {...fadeUp(0.1)}
+            className="soldier-card-a hidden md:flex"
             style={{
               gridColumn: "1 / 3",
               background: "#f8f8fb",
@@ -190,6 +200,7 @@ export default function SoldierSection() {
             {/* B: Mindset shift — 1 col, light */}
             <motion.div
               {...fadeUp(0.15)}
+              className="soldier-card-b hidden md:flex"
               style={{
                 gridColumn: "3 / 4",
                 background: "linear-gradient(145deg, #f0f0ff 0%, #eae8ff 100%)",
@@ -216,7 +227,7 @@ export default function SoldierSection() {
                   textTransform: "uppercase" as const, color: "#9494aa", marginBottom: 20,
                 }}>From Tool Usage to Real Value</div>
                 <p style={{ fontSize: 15, lineHeight: 1.8, color: "#5a5a72", marginBottom: 0 }}>
-                  AI adoption is expanding rapidly. But adoption alone does not create distinction.
+                  AI adoption is expanding rapidly.But adoption alone does not create distinction.
                 </p>
               </div>
               <div style={{ borderTop: "1px solid rgba(99,102,241,0.15)", paddingTop: 24 }}>
@@ -244,6 +255,7 @@ export default function SoldierSection() {
           {/* C: Skills list — 1 col */}
           <motion.div
             {...fadeUp(0.2)}
+            className="soldier-card-c"
             style={{
               gridColumn: "1 / 2",
               background: "#fff",
@@ -288,6 +300,7 @@ export default function SoldierSection() {
           {/* D: Skill-to-startup transition — spans 2 cols */}
           <motion.div
             {...fadeUp(0.25)}
+            className="soldier-card-d"
             style={{
               gridColumn: "2 / 4",
               borderRadius: 20,
@@ -297,7 +310,7 @@ export default function SoldierSection() {
               flexDirection: "column" as const,
             }}
           >
-            <div style={{
+            <div className="soldier-transition-header" style={{
               padding: "24px 36px",
               borderBottom: "1px solid rgba(12,12,20,0.07)",
               background: "#fff",
@@ -307,7 +320,13 @@ export default function SoldierSection() {
                 textTransform: "uppercase" as const, color: "#9494aa",
               }}>The Skill-to-Startup Transition</div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", flex: 1 }}>
+            
+            {/* Mobile Transition Slider */}
+            <div className="soldier-transition-slider block md:hidden" style={{ padding: "16px 0" }}>
+              <SoldierTransitionSlider />
+            </div>
+
+            <div className="soldier-transition-cards hidden md:grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", flex: 1 }}>
               {/* Old Q */}
                 <div style={{
                   padding: "40px 36px",
@@ -372,6 +391,7 @@ export default function SoldierSection() {
           {/* ── BOTTOM FULL-WIDTH MANIFESTO STRIP — light ── */}
           <motion.div
             {...fadeUp(0.35)}
+            className="soldier-progress-strip"
             style={{
               marginTop: 16,
               background: "#fff",
@@ -410,36 +430,16 @@ export default function SoldierSection() {
             {/* Divider */}
             <div style={{ width: 1, height: "100%", background: "rgba(12,12,20,0.08)", alignSelf: "stretch" }} />
 
-            {/* 4 pillars */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
-              {[
-                { num: "01", label: "Learn the system", desc: "Understand the DAG ecosystem" },
-                { num: "02", label: "Build foundations", desc: "Core AI skills and mindset" },
-                { num: "03", label: "Prepare for execution", desc: "Ready to move to action" },
-                { num: "04", label: "Advance to Lieutenant", desc: "Earn your execution rank" },
-              ].map((item) => (
-                <div key={item.num} style={{
-                  background: "linear-gradient(145deg, #f8f8fb 0%, #f2f2fa 100%)",
-                  border: "1px solid rgba(99,102,241,0.12)",
-                  borderRadius: 14,
-                  padding: "20px 16px",
-                  textAlign: "center" as const,
-                }}>
-                  <div style={{
-                    fontFamily: "Nasalization, sans-serif",
-                    fontSize: 20, fontWeight: 700,
-                    ...grad, marginBottom: 8,
-                  }}>{item.num}</div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#0c0c14", lineHeight: 1.3, marginBottom: 4 }}>{item.label}</div>
-                  <div style={{ fontSize: 11, fontWeight: 400, color: "#9494aa", lineHeight: 1.5 }}>{item.desc}</div>
-                </div>
-              ))}
+            {/* Progress Steps Slider - All Screen Sizes */}
+            <div className="soldier-progress-slider">
+              <SoldierProgressStepsSlider />
             </div>
           </motion.div>
 
         {/* ── CLOSING LINE ── */}
         <motion.div
           {...fadeUp(0.4)}
+          className="soldier-closing-banner"
           style={{
             marginTop: 16,
             borderRadius: 20,
@@ -456,6 +456,199 @@ export default function SoldierSection() {
         </motion.div>
 
       </div>
+
+      {/* Mobile CSS */}
+      <style jsx>{`
+        /* Desktop: Hide sliders */
+        @media (min-width: 769px) {
+          .soldier-intro-slider,
+          .soldier-transition-slider {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* TASK 1: Hero Section Alignment & Cleanup */
+          
+          /* Hero section padding */
+          section > div:first-child {
+            margin-bottom: 32px !important;
+          }
+
+          section > div:first-child .wrap {
+            padding-top: 48px !important;
+            padding-bottom: 48px !important;
+          }
+
+          /* Hero grid - stack vertically */
+          section > div:first-child .wrap > div {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+            text-align: center !important;
+          }
+
+          /* Badge - center on mobile */
+          section > div:first-child .wrap > div > div:first-child {
+            justify-self: center !important;
+          }
+
+          /* Hero title - reduce font size */
+          .soldier-hero-title {
+            font-size: clamp(32px, 8vw, 40px) !important;
+            line-height: 1.2 !important;
+            text-align: center !important;
+          }
+
+          /* Hero subtitle - center */
+          .soldier-hero-title + p {
+            text-align: center !important;
+            font-size: 14px !important;
+          }
+
+          /* TASK 2: Bento Grid - Hide Desktop Cards */
+          .soldier-bento-grid {
+            display: block !important;
+          }
+
+          /* Hide desktop intro cards A and B on mobile */
+          .soldier-card-a,
+          .soldier-card-b {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* TASK 3: What the Soldier Phase Builds - Full Width Static */
+          .soldier-card-c {
+            grid-column: 1 / -1 !important;
+            padding: 28px 24px !important;
+            margin: 0 16px 16px 16px !important;
+            width: calc(100% - 32px) !important;
+            display: flex !important;
+            flex-direction: column !important;
+          }
+
+          .soldier-card-c > div:first-child {
+            font-size: 10px !important;
+            margin-bottom: 20px !important;
+          }
+
+          .soldier-card-c > div:nth-child(2) > div {
+            padding: 12px 0 !important;
+          }
+
+          .soldier-card-c > div:nth-child(2) > div > span:first-child {
+            font-size: 10px !important;
+            min-width: 20px !important;
+          }
+
+          .soldier-card-c > div:nth-child(2) > div > span:last-child {
+            font-size: 13px !important;
+            line-height: 1.5 !important;
+          }
+
+          .soldier-card-c > div:last-child {
+            margin-top: 20px !important;
+            padding-top: 16px !important;
+          }
+
+          .soldier-card-c > div:last-child p {
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+          }
+
+          /* TASK 4: Skill-to-Startup Transition */
+          .soldier-card-d {
+            grid-column: 1 / -1 !important;
+            margin: 0 16px 16px 16px !important;
+            width: calc(100% - 32px) !important;
+          }
+
+          /* Hide desktop transition cards on mobile */
+          .soldier-transition-cards {
+            display: none !important;
+          }
+
+          .soldier-transition-header {
+            padding: 20px 24px !important;
+          }
+
+          .soldier-transition-header > div {
+            font-size: 10px !important;
+            text-align: center !important;
+          }
+
+          /* TASK 5: Progress Over Comfort & Bottom Banner */
+          .soldier-progress-strip {
+            margin: 16px 16px 0 16px !important;
+            padding: 24px 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 20px !important;
+            width: calc(100% - 32px) !important;
+            box-sizing: border-box !important;
+          }
+
+          .soldier-progress-strip > div:first-child {
+            display: none !important;
+          }
+
+          .soldier-progress-strip > div:nth-child(2) {
+            text-align: left !important;
+            padding: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+          }
+
+          .soldier-progress-strip > div:nth-child(2) > div {
+            font-size: 9px !important;
+            margin-bottom: 10px !important;
+            text-align: left !important;
+            letter-spacing: 0.12em !important;
+          }
+
+          .soldier-progress-strip > div:nth-child(2) > p {
+            font-size: 12px !important;
+            line-height: 1.7 !important;
+            text-align: left !important;
+            word-wrap: break-word !important;
+            white-space: normal !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+          }
+
+          .soldier-progress-strip > div:nth-child(3) {
+            display: none !important;
+          }
+
+          /* Progress slider on mobile */
+          .soldier-progress-slider {
+            width: 100% !important;
+            box-sizing: border-box !important;
+          }
+
+          /* Closing Banner */
+          .soldier-closing-banner {
+            margin: 16px 16px 0 16px !important;
+            padding: 24px 16px !important;
+            width: calc(100% - 32px) !important;
+          }
+
+          .soldier-closing-banner p {
+            font-size: 16px !important;
+            line-height: 1.5 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

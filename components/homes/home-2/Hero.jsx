@@ -99,6 +99,19 @@ export default function Hero() {
 
   return (
     <>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .bottom-btns {
+            flex-direction: column !important;
+            width: 100% !important;
+          }
+          .bottom-btns > * {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+          }
+        }
+      `}</style>
       <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingBottom: '0' }}>
         <div className="tf-container" style={{ background: '#fff' }}>
           <div className="row items-center" style={{ alignItems: 'center', minHeight: 'auto' }}>
@@ -143,12 +156,12 @@ export default function Hero() {
                     }}
                     className="wow fadeInUp"
                     data-wow-delay="0.4s"
-                    style={{ fontSize: '16px', height: '52px', minWidth: '160px' }}
+                    style={{ fontSize: '16px', height: '52px', minWidth: '160px', maxWidth: '100%' }}
                   />
                   <a
                     href="/courses"
                     className="custom-explore-btn relative flex items-center gap-1 bg-[#1f2937] px-8 border-2 border-[#1f2937] text-base rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
-                    style={{ textDecoration: 'none', height: '52px', minWidth: '200px', justifyContent: 'center' }}
+                    style={{ textDecoration: 'none', height: '52px', minWidth: '200px', maxWidth: '100%', justifyContent: 'center' }}
                   >
                     <svg
                       viewBox="0 0 24 24"

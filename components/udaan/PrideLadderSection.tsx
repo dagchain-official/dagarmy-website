@@ -8,6 +8,9 @@ import {
   useSpring,
   useMotionValue,
 } from "framer-motion";
+import PrideLadderIntroSlider from "./PrideLadderIntroSlider";
+import PrideLadderRankCardsSlider from "./PrideLadderRankCardsSlider";
+import IntegrityGuardrailSlider from "./IntegrityGuardrailSlider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const GRADIENT = "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)";
@@ -189,7 +192,7 @@ export default function PrideLadderSection() {
               marginBottom: 20,
             }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: GRADIENT, flexShrink: 0 }} />
-              <span style={{
+              <span className="whitespace-nowrap" style={{
                 fontFamily: "'Nasalization', sans-serif",
                 fontSize: 10,
                 letterSpacing: "0.12em",
@@ -199,7 +202,7 @@ export default function PrideLadderSection() {
                 Pride Ladder
               </span>
             </div>
-            <h2 style={{
+            <h2 className="pride-ladder-hero-title" style={{
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 800,
               fontSize: "clamp(36px, 4.5vw, 54px)",
@@ -208,8 +211,16 @@ export default function PrideLadderSection() {
               color: "#0c0c14",
               marginBottom: 16,
             }}>
-              Rank Through{" "}
-              <span style={{
+              <span className="hidden md:inline">Rank Through{" "}</span>
+              <span className="block md:hidden text-3xl">Rank Through{" "}
+                <span className="text-purple-600" style={{
+                  background: GRADIENT,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>Contribution</span>
+              </span>
+              <span className="hidden md:inline" style={{
                 background: GRADIENT,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -229,7 +240,7 @@ export default function PrideLadderSection() {
             </p>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: "0 0 auto" }}>
+          <div className="pride-ladder-hero-stats hidden md:flex" style={{ display: "flex", flexDirection: "column", gap: 12, flex: "0 0 auto" }}>
             {[
               { label: "RANKS", value: "02" },
               { label: "ENTRY", value: "Earned" },
@@ -278,9 +289,15 @@ export default function PrideLadderSection() {
           </div>
         </motion.div>
 
-        {/* ── PRINCIPLE STATEMENT ── */}
+        {/* ── PRINCIPLE STATEMENT (MOBILE SLIDER) ── */}
+        <div className="pride-ladder-intro-slider block md:hidden" style={{ marginBottom: 32 }}>
+          <PrideLadderIntroSlider />
+        </div>
+
+        {/* ── PRINCIPLE STATEMENT (DESKTOP) ── */}
         <FadeUp delay={0} style={{ marginBottom: 48 }}>
           <motion.div
+            className="pride-ladder-intro-cards hidden md:block"
             whileHover={{ scale: 1.006 }}
             transition={{ type: "spring", stiffness: 180, damping: 24 }}
             style={{
@@ -378,8 +395,13 @@ export default function PrideLadderSection() {
           </motion.div>
         </FadeUp>
 
-        {/* ── RANK CARDS ── */}
-        <div style={{
+        {/* ── RANK CARDS (MOBILE SLIDER) ── */}
+        <div className="pride-ladder-rank-slider block md:hidden" style={{ marginBottom: 32 }}>
+          <PrideLadderRankCardsSlider />
+        </div>
+
+        {/* ── RANK CARDS (DESKTOP) ── */}
+        <div className="pride-ladder-rank-cards hidden md:grid" style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
           gap: 24,
@@ -570,9 +592,9 @@ export default function PrideLadderSection() {
           </motion.div>
         </div>
 
-        {/* ── INTEGRITY GUARDRAIL ── */}
+        {/* ── INTEGRITY GUARDRAIL (DESKTOP) ── */}
         <FadeUp delay={0} style={{ marginBottom: 40 }}>
-          <div style={{
+          <div className="pride-ladder-integrity-desktop" style={{
             background: "#ffffff",
             border: "1px solid #e2e2ee",
             borderRadius: 20,
@@ -713,9 +735,64 @@ export default function PrideLadderSection() {
           </div>
         </FadeUp>
 
-        {/* ── CLOSING STATEMENT ── */}
+        {/* ── INTEGRITY GUARDRAIL (MOBILE) ── */}
+        <div className="pride-ladder-integrity-mobile block md:hidden" style={{ marginBottom: 32 }}>
+          <div style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column" as const,
+            padding: 24,
+            borderRadius: 20,
+            background: "#ffffff",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+            border: "1px solid #e2e2ee",
+          }}>
+            {/* Static Header */}
+            <h3 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 800,
+              fontSize: 20,
+              color: "#0c0c14",
+              letterSpacing: "-0.01em",
+              marginBottom: 24,
+            }}>Integrity as the Guardrail</h3>
+
+            {/* Inner Slider */}
+            <IntegrityGuardrailSlider />
+
+            {/* Static Footer */}
+            <div style={{
+              marginTop: 24,
+              padding: 16,
+              borderRadius: 12,
+              background: "rgba(99,102,241,0.05)",
+              textAlign: "center" as const,
+            }}>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 12,
+                fontWeight: 600,
+                color: "#6366f1",
+                marginBottom: 0,
+                lineHeight: 1.6,
+              }}>
+                Inside this ecosystem, authority is not assigned—it is{" "}
+                <span style={{
+                  background: GRADIENT,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: 700,
+                }}>demonstrated through action</span>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── CLOSING STATEMENT (DESKTOP) ── */}
         <FadeUp delay={0.1}>
           <motion.div
+            className="pride-ladder-bottom-line-desktop"
             whileHover={{ scale: 1.005 }}
             transition={{ type: "spring", stiffness: 180, damping: 22 }}
             style={{
@@ -764,7 +841,182 @@ export default function PrideLadderSection() {
           </motion.div>
         </FadeUp>
 
+        {/* ── CLOSING STATEMENT (MOBILE) ── */}
+        <div className="pride-ladder-bottom-line-mobile flex flex-col md:hidden" style={{ gap: 24, width: "100%" }}>
+          {/* Block 1 - Animate from LEFT */}
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            style={{
+              background: "#f0f0ff",
+              padding: "28px 24px",
+              borderRadius: 16,
+              border: "1px solid #e2e2ee",
+            }}
+          >
+            <div style={{
+              fontFamily: "'Nasalization', sans-serif",
+              fontSize: 9,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase" as const,
+              color: "#6366f1",
+              marginBottom: 12,
+            }}>The Bottom Line</div>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 22,
+              fontWeight: 800,
+              lineHeight: 1.3,
+              color: "#0c0c14",
+              marginBottom: 0,
+            }}>The Pride Ladder is not about status.</p>
+          </motion.div>
+
+          {/* Block 2 - Animate from RIGHT */}
+          <motion.div
+            initial={{ x: 100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: 0.15 }}
+            style={{
+              background: "#ffffff",
+              padding: "28px 24px",
+              borderRadius: 16,
+              border: "1px solid #e2e2ee",
+            }}
+          >
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 18,
+              fontWeight: 600,
+              lineHeight: 1.5,
+              color: "#5a5a72",
+              marginBottom: 0,
+            }}>
+              It is about{" "}
+              <span style={{
+                background: GRADIENT,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontWeight: 800,
+              }}>responsibility</span>{" "}
+              within a disciplined Builder-First Culture.
+            </p>
+          </motion.div>
+        </div>
+
       </div>
+
+      {/* Mobile CSS */}
+      <style jsx>{`
+        /* Desktop: Hide sliders and mobile sections */
+        @media (min-width: 769px) {
+          .pride-ladder-intro-slider,
+          .pride-ladder-rank-slider,
+          .pride-ladder-integrity-mobile,
+          .pride-ladder-bottom-line-mobile {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* TASK 1: Hero Section Alignment & Cleanup */
+          
+          /* Hero section - stack vertically */
+          section > div > div:first-child {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 24px !important;
+            text-align: left !important;
+          }
+
+          /* Hero title - mobile font size and line breaks */
+          .pride-ladder-hero-title {
+            line-height: 1.2 !important;
+          }
+
+          .pride-ladder-hero-title .text-3xl {
+            font-size: 1.875rem !important;
+            line-height: 2.25rem !important;
+          }
+
+          /* Hero subtitle */
+          .pride-ladder-hero-title + p {
+            font-size: 14px !important;
+          }
+
+          /* TASK 2: Hide Desktop Stats */
+          .pride-ladder-hero-stats {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* TASK 3: Hide Desktop Intro Cards */
+          .pride-ladder-intro-cards {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* TASK 4: Hide Desktop Rank Cards */
+          .pride-ladder-rank-cards {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* NEW: Hide Desktop Integrity Section */
+          .pride-ladder-integrity-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+
+          /* NEW: Hide Desktop Bottom Line Section */
+          .pride-ladder-bottom-line-desktop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
