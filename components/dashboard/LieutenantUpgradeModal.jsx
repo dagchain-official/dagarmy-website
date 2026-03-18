@@ -109,6 +109,21 @@ const PERKS = [
     accent: "#ef4444",
     bg: "rgba(239,68,68,0.07)",
   },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+      </svg>
+    ),
+    title: "Demo Day Finals",
+    subtitle: "Road to Demo Day — Udaan Program",
+    points: [
+      "Fast-track access to the 3-stage Udaan selection pipeline: Screening → Validation & Mentor Review → Demo Day Finals, filtering 1,000+ applicants to a curated founder cohort",
+      "Your MVP becomes your proof — Demo Day Finals are earned, not attended. Execution becomes reputation and your traction becomes your signal to investors and partners",
+    ],
+    accent: "#14b8a6",
+    bg: "rgba(20,184,166,0.07)",
+  },
 ];
 
 export default function LieutenantUpgradeModal({ onClose, onConfirm, loading }) {
@@ -183,7 +198,7 @@ export default function LieutenantUpgradeModal({ onClose, onConfirm, loading }) 
                 The Lieutenant's War Chest
               </h2>
               <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#64748b", fontWeight: "500" }}>
-                7 elite perks unlocked the moment you upgrade
+                8 elite perks unlocked the moment you upgrade
               </p>
             </div>
 

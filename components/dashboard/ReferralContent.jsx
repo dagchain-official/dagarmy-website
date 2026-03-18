@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { Users, Copy, Check, Crown, ChevronDown, GitBranch, TrendingUp, Clock, Award } from "lucide-react";
+import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 
 /* ── Neumorphic tokens ── */
 const nm = {
@@ -27,6 +28,8 @@ export default function ReferralContent({ mounted }) {
   const [treeLoading, setTreeLoading] = useState(false);
   const [treeError, setTreeError] = useState(null);
   const [collapsedNodes, setCollapsedNodes] = useState(new Set());
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [stripeLoading, setStripeLoading] = useState(false);
 
   const [referralData, setReferralData] = useState({
     referralCode: '',
@@ -82,6 +85,18 @@ export default function ReferralContent({ mounted }) {
       });
     } catch (error) { console.error('Error fetching referral data:', error); }
     finally { setLoading(false); }
+  };
+
+  const handleStripeUpgrade = async () => {
+    if (!user?.id || !user?.email) return;
+    setStripeLoading(true);
+    try {
+      const res = await fetch('/api/stripe/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, userEmail: user.email, test: false }) });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else alert(data.error || 'Could not start checkout. Please try again.');
+    } catch { alert('Network error. Please try again.'); }
+    finally { setStripeLoading(false); }
   };
 
   const copyReferralCode = () => {
@@ -184,7 +199,7 @@ export default function ReferralContent({ mounted }) {
   const referralLink = `https://dagarmy.network/signup?ref=${referralData.referralCode}`;
 
   return (
-    <div>
+    <>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
 
       {/* ── Stat cards ── */}
@@ -345,14 +360,15 @@ export default function ReferralContent({ mounted }) {
               <p style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 3px' }}>Upgrade to DAG Lieutenant</p>
               <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0 }}>Earn a 20% bonus on all referral points — 500 → 600 pts, 2500 → 3000 pts</p>
             </div>
-            <a
-              href="https://wa.me/message/DAGARMY" target="_blank" rel="noopener noreferrer"
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadowSm, color: nm.accent, fontSize: '12px', fontWeight: '700', textDecoration: 'none', flexShrink: 0, transition: 'all 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow = nm.shadow}
-              onMouseLeave={e => e.currentTarget.style.boxShadow = nm.shadowSm}
+            <button
+              onClick={() => setShowUpgradeModal(true)}
+              disabled={!!stripeLoading}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '10px', border: 'none', background: nm.bg, boxShadow: stripeLoading ? nm.shadowInset : nm.shadowSm, color: nm.accent, fontSize: '12px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', flexShrink: 0, transition: 'all 0.2s' }}
+              onMouseEnter={e => { if (!stripeLoading) e.currentTarget.style.boxShadow = nm.shadow; }}
+              onMouseLeave={e => { if (!stripeLoading) e.currentTarget.style.boxShadow = nm.shadowSm; }}
             >
-              Upgrade · $149
-            </a>
+              <Crown size={14} />{stripeLoading ? 'Redirecting...' : 'Upgrade · $149'}
+            </button>
           </div>
         </NmCard>
       )}
@@ -480,6 +496,14 @@ export default function ReferralContent({ mounted }) {
           </div>
         ))}
       </NmCard>
-    </div>
+
+      {showUpgradeModal && (
+        <LieutenantUpgradeModal
+          onClose={() => setShowUpgradeModal(false)}
+          onConfirm={() => { setShowUpgradeModal(false); handleStripeUpgrade(); }}
+          loading={stripeLoading}
+        />
+      )}
+    </>
   );
 }

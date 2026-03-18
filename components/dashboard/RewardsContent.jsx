@@ -323,29 +323,37 @@ export default function RewardsContent({ mounted }) {
           const pools = rewardData.incentivePools;
           if (!pools) return null;
           const POOL_META = [
-            { key: 'discretionary', title: 'Discretionary Incentive', subtitle: 'Monthly pool — resets every month', desc: 'Earn a share of the company revenue pool by hitting your monthly direct sales target.', color: '#10b981', bg: '#f0fdf4', border: '#a7f3d0', light: '#ecfdf5', iconPath: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' },
-            { key: 'lifestyle', title: 'Lifestyle Bonus', subtitle: 'Monthly pool — Car / Travel / Home', desc: 'Qualify for the lifestyle allowance pool covering car, travel, and home expenses.', color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe', light: '#f5f3ff', iconPath: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10' },
-            { key: 'executive', title: 'Executive Performance Incentive', subtitle: 'Quarterly pool — resets every quarter', desc: 'Top performers who hit the quarterly sales target share the executive incentive pool.', color: '#d97706', bg: '#fefce8', border: '#fde68a', light: '#fffbeb', iconPath: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
+            { key: 'discretionary', title: 'Discretionary Incentive', subtitle: 'Monthly pool — resets every month', color: '#10b981', iconPath: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', type: 'sales' },
+            { key: 'lifestyle', title: 'Lifestyle Bonus', subtitle: 'Monthly pool — Car / Travel / Home', color: '#6366f1', iconPath: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10', type: 'sales' },
+            { key: 'elite', title: 'DAG Army Elite Pool', subtitle: 'Ongoing — 2% of global revenue', color: '#7c3aed', iconPath: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z', type: 'elite' },
+            { key: 'executive', title: 'Executive Performance Incentive', subtitle: 'Quarterly pool — resets every quarter', color: '#d97706', iconPath: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z', type: 'sales' },
           ];
           return (
             <div style={{ marginBottom: '20px' }}>
               <div style={{ marginBottom: '14px' }}>
                 <h2 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 3px', letterSpacing: '-0.3px' }}>Incentive Pool Programs</h2>
-                <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Monthly &amp; quarterly revenue pools — qualify by hitting direct sales targets</p>
+                <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Revenue pools — qualify by hitting sales targets or building an active team</p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '14px' }}>
                 {POOL_META.map(pm => {
                   const pool = pools[pm.key];
                   if (!pool) return null;
-                  const pct = Math.min(100, pool.threshold > 0 ? (pool.currentSales / pool.threshold) * 100 : 0);
-                  const qualified = pool.currentSales >= pool.threshold;
-                  const remaining = Math.max(0, pool.threshold - pool.currentSales);
+                  const isElite = pm.type === 'elite';
+                  const qualified = isElite
+                    ? pool.activeReferrals >= pool.minReferrals
+                    : pool.currentSales >= pool.threshold;
+                  const pct = isElite
+                    ? Math.min(100, pool.minReferrals > 0 ? (pool.activeReferrals / pool.minReferrals) * 100 : 0)
+                    : Math.min(100, pool.threshold > 0 ? (pool.currentSales / pool.threshold) * 100 : 0);
+                  const remaining = isElite
+                    ? Math.max(0, pool.minReferrals - pool.activeReferrals)
+                    : Math.max(0, pool.threshold - pool.currentSales);
                   return (
                     <div key={pm.key} style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadowSm, overflow: 'hidden', opacity: pool.enabled ? 1 : 0.5, transition: 'all 0.3s' }}>
                       <div style={{ padding: '18px 20px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: nm.bg, boxShadow: qualified ? nm.shadowXs : nm.shadowInsetSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={qualified ? nm.accent : nm.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={pm.iconPath}/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={qualified ? pm.color : nm.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={pm.iconPath}/></svg>
                           </div>
                           <div>
                             <div style={{ fontSize: '13px', fontWeight: '800', color: nm.textPrimary, lineHeight: 1.2 }}>{pm.title}</div>
@@ -356,28 +364,45 @@ export default function RewardsContent({ mounted }) {
                           {!pool.enabled
                             ? <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: nm.textMuted, textTransform: 'uppercase' }}>Disabled</span>
                             : qualified
-                              ? <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: nm.accent, textTransform: 'uppercase' }}>Qualified</span>
+                              ? <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: pm.color, textTransform: 'uppercase' }}>Qualified</span>
                               : <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: nm.textSecondary, textTransform: 'uppercase' }}>In Progress</span>}
                         </div>
                       </div>
                       <div style={{ padding: '16px 20px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                          <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{pool.period === 'quarterly' ? 'This Quarter' : 'This Month'}</span>
-                          <span style={{ fontSize: '12px', fontWeight: '800', color: nm.textPrimary }}>${pool.currentSales.toFixed(0)} <span style={{ fontWeight: '500', color: nm.textMuted, fontSize: '11px' }}>/ ${pool.threshold.toLocaleString()}</span></span>
-                        </div>
-                        <div style={{ height: '5px', background: nm.bg, borderRadius: '3px', boxShadow: nm.shadowInsetSm, overflow: 'hidden', marginBottom: '10px' }}>
-                          <div style={{ height: '100%', borderRadius: '3px', background: qualified ? nm.accent : `rgba(79,70,229,0.4)`, width: `${pct}%`, transition: 'width 1s ease' }} />
-                        </div>
-                        {qualified
-                          ? <div style={{ fontSize: '12px', color: nm.accent, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Qualifies for {pool.poolPct}% pool this {pool.period === 'quarterly' ? 'quarter' : 'month'}</div>
-                          : <div style={{ fontSize: '11px', color: nm.textMuted, lineHeight: 1.5 }}><strong style={{ color: nm.textPrimary }}>${remaining.toFixed(0)} more</strong> in sales to qualify for the <strong style={{ color: nm.accent }}>{pool.poolPct}%</strong> pool</div>}
+                        {isElite ? (
+                          <>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Active Referrals</span>
+                              <span style={{ fontSize: '12px', fontWeight: '800', color: nm.textPrimary }}>{pool.activeReferrals} <span style={{ fontWeight: '500', color: nm.textMuted, fontSize: '11px' }}>/ {pool.minReferrals} required</span></span>
+                            </div>
+                            <div style={{ height: '5px', background: nm.bg, borderRadius: '3px', boxShadow: nm.shadowInsetSm, overflow: 'hidden', marginBottom: '10px' }}>
+                              <div style={{ height: '100%', borderRadius: '3px', background: qualified ? pm.color : `rgba(124,58,237,0.4)`, width: `${pct}%`, transition: 'width 1s ease' }} />
+                            </div>
+                            {qualified
+                              ? <div style={{ fontSize: '12px', color: pm.color, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Eligible for {pool.poolPct}% global revenue share</div>
+                              : <div style={{ fontSize: '11px', color: nm.textMuted, lineHeight: 1.5 }}><strong style={{ color: nm.textPrimary }}>{remaining} more</strong> active referrals needed to qualify for the <strong style={{ color: pm.color }}>{pool.poolPct}%</strong> Elite Pool</div>}
+                          </>
+                        ) : (
+                          <>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{pool.period === 'quarterly' ? 'This Quarter' : 'This Month'}</span>
+                              <span style={{ fontSize: '12px', fontWeight: '800', color: nm.textPrimary }}>${pool.currentSales.toFixed(0)} <span style={{ fontWeight: '500', color: nm.textMuted, fontSize: '11px' }}>/ ${pool.threshold.toLocaleString()}</span></span>
+                            </div>
+                            <div style={{ height: '5px', background: nm.bg, borderRadius: '3px', boxShadow: nm.shadowInsetSm, overflow: 'hidden', marginBottom: '10px' }}>
+                              <div style={{ height: '100%', borderRadius: '3px', background: qualified ? pm.color : `rgba(79,70,229,0.4)`, width: `${pct}%`, transition: 'width 1s ease' }} />
+                            </div>
+                            {qualified
+                              ? <div style={{ fontSize: '12px', color: pm.color, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Qualifies for {pool.poolPct}% pool this {pool.period === 'quarterly' ? 'quarter' : 'month'}</div>
+                              : <div style={{ fontSize: '11px', color: nm.textMuted, lineHeight: 1.5 }}><strong style={{ color: nm.textPrimary }}>${remaining.toFixed(0)} more</strong> in sales to qualify for the <strong style={{ color: pm.color }}>{pool.poolPct}%</strong> pool</div>}
+                          </>
+                        )}
                       </div>
                     </div>
                   );
                 })}
               </div>
               <div style={{ marginTop: '10px', padding: '12px 18px', background: nm.bg, borderRadius: '12px', boxShadow: nm.shadowInsetSm, fontSize: '12px', color: nm.textMuted, lineHeight: 1.6 }}>
-                <strong style={{ color: nm.textPrimary }}>How it works:</strong> A percentage of company net revenue is pooled each period. Everyone who meets the direct sales threshold shares the pool equally.
+                <strong style={{ color: nm.textPrimary }}>How it works:</strong> A percentage of company net revenue is pooled each period. Sales pools share equally among qualifiers. The Elite Pool requires 25+ active referrals (joined &amp; purchased) and shares 2% of total global revenue.
               </div>
             </div>
           );

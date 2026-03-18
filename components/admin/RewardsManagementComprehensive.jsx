@@ -59,7 +59,7 @@ export default function RewardsManagementComprehensive() {
     const ev = {};
     Object.keys(config).forEach(k => { ev[k] = String(config[k] ?? ''); });
     // Ensure all keys have defaults even if missing from DB
-    const defaults = { soldier_signup_bonus: '500', lieutenant_upgrade_base: '2500', lieutenant_bonus_rate: '20', lieutenant_upgrade_price_usd: '149', lieutenant_self_upgrade_bonus: '3000', soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '2500', lieutenant_refers_soldier_join: '600', lieutenant_refers_soldier_upgrade: '3000', ranking_system_enabled_for_soldier: '0', max_commission_levels: '3', rank_upgrade_bonus_initiator: '10', rank_upgrade_bonus_vanguard: '20', rank_upgrade_bonus_guardian: '30', rank_upgrade_bonus_striker: '40', rank_upgrade_bonus_invoker: '50', rank_upgrade_bonus_commander: '60', rank_upgrade_bonus_champion: '70', rank_upgrade_bonus_conqueror: '80', rank_upgrade_bonus_paragon: '90', rank_upgrade_bonus_mythic: '100', social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50', social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20', incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1', incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1', incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2', soldier_direct_sales_commission: '7', self_sale_dag_points_per_dollar: '25', referral_sale_dag_points_per_dollar: '25', sale_dag_points_lieutenant_bonus: '20' };
+    const defaults = { soldier_signup_bonus: '500', lieutenant_upgrade_base: '2500', lieutenant_bonus_rate: '20', lieutenant_upgrade_price_usd: '149', lieutenant_self_upgrade_bonus: '3000', soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '2500', lieutenant_refers_soldier_join: '600', lieutenant_refers_soldier_upgrade: '3000', ranking_system_enabled_for_soldier: '0', max_commission_levels: '3', rank_upgrade_bonus_initiator: '10', rank_upgrade_bonus_vanguard: '20', rank_upgrade_bonus_guardian: '30', rank_upgrade_bonus_striker: '40', rank_upgrade_bonus_invoker: '50', rank_upgrade_bonus_commander: '60', rank_upgrade_bonus_champion: '70', rank_upgrade_bonus_conqueror: '80', rank_upgrade_bonus_paragon: '90', rank_upgrade_bonus_mythic: '100', social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50', social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20', incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1', incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1', incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1', incentive_elite_pool_pct: '2', incentive_elite_min_referrals: '25', incentive_elite_enabled: '1', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2', soldier_direct_sales_commission: '7', self_sale_dag_points_per_dollar: '25', referral_sale_dag_points_per_dollar: '25', sale_dag_points_lieutenant_bonus: '20' };
     Object.keys(defaults).forEach(k => { if (!ev[k] && ev[k] !== '0') ev[k] = defaults[k]; });
     setEditValues(ev);
   };
@@ -99,7 +99,7 @@ export default function RewardsManagementComprehensive() {
       } else if (section === 'rank_commissions') {
         keys = ['rank_commission_initiator','rank_commission_vanguard','rank_commission_guardian','rank_commission_striker','rank_commission_invoker','rank_commission_commander','rank_commission_champion','rank_commission_conqueror','rank_commission_paragon','rank_commission_mythic'];
       } else if (section === 'incentive_pools') {
-        keys = ['incentive_discretionary_pool_pct','incentive_discretionary_sales_threshold','incentive_discretionary_enabled','incentive_lifestyle_pool_pct','incentive_lifestyle_sales_threshold','incentive_lifestyle_enabled','incentive_executive_pool_pct','incentive_executive_sales_threshold','incentive_executive_enabled'];
+        keys = ['incentive_discretionary_pool_pct','incentive_discretionary_sales_threshold','incentive_discretionary_enabled','incentive_lifestyle_pool_pct','incentive_lifestyle_sales_threshold','incentive_lifestyle_enabled','incentive_executive_pool_pct','incentive_executive_sales_threshold','incentive_executive_enabled','incentive_elite_pool_pct','incentive_elite_min_referrals','incentive_elite_enabled'];
       } else if (section === 'sales_dag_points') {
         keys = ['self_sale_dag_points_per_dollar','referral_sale_dag_points_per_dollar','sale_dag_points_lieutenant_bonus'];
       } else if (section === 'system') {
@@ -1191,11 +1191,58 @@ export default function RewardsManagementComprehensive() {
               </B>
             );
           })()}
+
+          {/* ── DAG Army Elite Pool ── */}
+          {(() => {
+            const poolPct = editingSection === 'incentive_pools' ? editValues.incentive_elite_pool_pct : (config.incentive_elite_pool_pct ?? 2);
+            const minRefs = editingSection === 'incentive_pools' ? editValues.incentive_elite_min_referrals : (config.incentive_elite_min_referrals ?? 25);
+            const enabled = editingSection === 'incentive_pools' ? editValues.incentive_elite_enabled : (config.incentive_elite_enabled ?? 1);
+            return (
+              <B style={{ padding: '0', border: `1px solid ${parseInt(enabled) ? '#ddd6fe' : 'rgba(0,0,0,0.06)'}` }}>
+                <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f5f3ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Crown size={18} style={{ color: '#7c3aed' }} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>DAG Army Elite Pool</h3>
+                      <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Ongoing — 2% of global revenue, requires 25+ active referrals</p>
+                    </div>
+                  </div>
+                  <div style={{ padding: '4px 12px', borderRadius: '20px', background: parseInt(enabled) ? '#f5f3ff' : '#f8fafc', border: `1px solid ${parseInt(enabled) ? '#ddd6fe' : '#e2e8f0'}`, fontSize: '11px', fontWeight: '700', color: parseInt(enabled) ? '#7c3aed' : '#94a3b8' }}>
+                    {parseInt(enabled) ? 'ACTIVE' : 'DISABLED'}
+                  </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
+                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool %</p>
+                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>% of total global revenue</p>
+                    {editingSection === 'incentive_pools' ? ri('incentive_elite_pool_pct', '80px') : <Val v={poolPct} suffix="%" size="22px" />}
+                  </div>
+                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Min Active Referrals</p>
+                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Referrals who joined &amp; purchased</p>
+                    {editingSection === 'incentive_pools' ? ri('incentive_elite_min_referrals', '80px') : <Val v={minRefs} size="22px" />}
+                  </div>
+                  <div style={{ padding: '18px 24px' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Status</p>
+                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Enable or disable this pool</p>
+                    {editingSection === 'incentive_pools' ? (
+                      <select value={editValues.incentive_elite_enabled || '1'} onChange={e => ov('incentive_elite_enabled', e.target.value)}
+                        style={{ padding: '8px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '700', cursor: 'pointer', background: '#f8fafc', outline: 'none', color: '#334155' }}>
+                        <option value="1">Enabled</option><option value="0">Disabled</option>
+                      </select>
+                    ) : <Val v={parseInt(enabled) ? 'ON' : 'OFF'} size="22px" color={parseInt(enabled) ? '#7c3aed' : '#94a3b8'} />}
+                  </div>
+                </div>
+              </B>
+            );
+          })()}
         </div>
 
         {/* Summary */}
         <B style={{ marginTop: '16px', padding: '20px 24px' }} hover={false}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: '10px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', margin: '0 0 4px' }}>Discretionary</p>
               <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Monthly | {config.incentive_discretionary_pool_pct ?? 3}% pool | ${Number(config.incentive_discretionary_sales_threshold ?? 1000).toLocaleString()} threshold</p>
@@ -1207,6 +1254,10 @@ export default function RewardsManagementComprehensive() {
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: '10px', fontWeight: '700', color: '#eab308', textTransform: 'uppercase', margin: '0 0 4px' }}>Executive</p>
               <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Quarterly | {config.incentive_executive_pool_pct ?? 2}% pool | ${Number(config.incentive_executive_sales_threshold ?? 10000).toLocaleString()} threshold</p>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 4px' }}>Elite Pool</p>
+              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Ongoing | {config.incentive_elite_pool_pct ?? 2}% global revenue | {config.incentive_elite_min_referrals ?? 25} active referrals</p>
             </div>
           </div>
         </B>

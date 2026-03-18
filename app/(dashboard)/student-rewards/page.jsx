@@ -408,6 +408,7 @@ function _OriginalStudentRewardsPage() {
                     desc: 'Earn a share of the company revenue pool by hitting your monthly direct sales target.',
                     color: '#10b981', bg: '#f0fdf4', border: '#a7f3d0', light: '#ecfdf5',
                     iconPath: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
+                    type: 'sales',
                   },
                   {
                     key: 'lifestyle',
@@ -416,6 +417,16 @@ function _OriginalStudentRewardsPage() {
                     desc: 'Qualify for the lifestyle allowance pool covering car, travel, and home expenses.',
                     color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe', light: '#f5f3ff',
                     iconPath: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10',
+                    type: 'sales',
+                  },
+                  {
+                    key: 'elite',
+                    title: 'DAG Army Elite Pool',
+                    subtitle: 'Ongoing — 2% of global revenue',
+                    desc: 'Earn a share of 2% of total global revenue by directly introducing 25+ active paying members.',
+                    color: '#7c3aed', bg: '#f5f3ff', border: '#ddd6fe', light: '#ede9fe',
+                    iconPath: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
+                    type: 'elite',
                   },
                   {
                     key: 'executive',
@@ -424,6 +435,7 @@ function _OriginalStudentRewardsPage() {
                     desc: 'Top performers who hit the quarterly sales target share the executive incentive pool.',
                     color: '#d97706', bg: '#fefce8', border: '#fde68a', light: '#fffbeb',
                     iconPath: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
+                    type: 'sales',
                   },
                 ];
                 return (
@@ -437,13 +449,20 @@ function _OriginalStudentRewardsPage() {
                         <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Monthly &amp; quarterly revenue pools — qualify by hitting direct sales targets</p>
                       </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '14px' }}>
                       {POOL_META.map(pm => {
                         const pool = pools[pm.key];
                         if (!pool) return null;
-                        const pct = Math.min(100, pool.threshold > 0 ? (pool.currentSales / pool.threshold) * 100 : 0);
-                        const qualified = pool.currentSales >= pool.threshold;
-                        const remaining = Math.max(0, pool.threshold - pool.currentSales);
+                        const isElite = pm.type === 'elite';
+                        const qualified = isElite
+                          ? pool.activeReferrals >= pool.minReferrals
+                          : pool.currentSales >= pool.threshold;
+                        const pct = isElite
+                          ? Math.min(100, pool.minReferrals > 0 ? (pool.activeReferrals / pool.minReferrals) * 100 : 0)
+                          : Math.min(100, pool.threshold > 0 ? (pool.currentSales / pool.threshold) * 100 : 0);
+                        const remaining = isElite
+                          ? Math.max(0, pool.minReferrals - pool.activeReferrals)
+                          : Math.max(0, pool.threshold - pool.currentSales);
                         return (
                           <div key={pm.key} style={{ background: '#fff', borderRadius: '18px', border: `1.5px solid ${qualified ? pm.border : '#e2e8f0'}`, overflow: 'hidden', opacity: pool.enabled ? 1 : 0.55, transition: 'all 0.3s' }}>
                             {/* Card header */}
@@ -469,26 +488,52 @@ function _OriginalStudentRewardsPage() {
                             </div>
                             {/* Progress */}
                             <div style={{ padding: '16px 20px' }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                                <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                                  {pool.period === 'quarterly' ? 'This Quarter' : 'This Month'}
-                                </span>
-                                <span style={{ fontSize: '12px', fontWeight: '800', color: qualified ? pm.color : '#0f172a' }}>
-                                  ${pool.currentSales.toFixed(0)} <span style={{ fontWeight: '500', color: '#94a3b8', fontSize: '11px' }}>/ ${pool.threshold.toLocaleString()}</span>
-                                </span>
-                              </div>
-                              <div style={{ height: '6px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
-                                <div style={{ height: '100%', borderRadius: '3px', background: qualified ? pm.color : `linear-gradient(90deg,${pm.color}80,${pm.color})`, width: `${pct}%`, transition: 'width 1s ease' }} />
-                              </div>
-                              {qualified ? (
-                                <div style={{ fontSize: '12px', color: pm.color, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                  You qualify for the {pool.poolPct}% revenue pool this {pool.period === 'quarterly' ? 'quarter' : 'month'}!
-                                </div>
+                              {isElite ? (
+                                <>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Active Referrals</span>
+                                    <span style={{ fontSize: '12px', fontWeight: '800', color: qualified ? pm.color : '#0f172a' }}>
+                                      {pool.activeReferrals} <span style={{ fontWeight: '500', color: '#94a3b8', fontSize: '11px' }}>/ {pool.minReferrals} required</span>
+                                    </span>
+                                  </div>
+                                  <div style={{ height: '6px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+                                    <div style={{ height: '100%', borderRadius: '3px', background: qualified ? pm.color : `linear-gradient(90deg,${pm.color}80,${pm.color})`, width: `${pct}%`, transition: 'width 1s ease' }} />
+                                  </div>
+                                  {qualified ? (
+                                    <div style={{ fontSize: '12px', color: pm.color, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                      You qualify for the {pool.poolPct}% global revenue pool!
+                                    </div>
+                                  ) : (
+                                    <div style={{ fontSize: '11px', color: '#64748b', lineHeight: 1.5 }}>
+                                      <strong style={{ color: '#0f172a' }}>{remaining} more</strong> active referrals (joined &amp; purchased) needed for the <strong style={{ color: pm.color }}>{pool.poolPct}%</strong> Elite Pool
+                                    </div>
+                                  )}
+                                </>
                               ) : (
-                                <div style={{ fontSize: '11px', color: '#64748b', lineHeight: 1.5 }}>
-                                  <strong style={{ color: '#0f172a' }}>${remaining.toFixed(0)} more</strong> in direct sales to qualify for the <strong style={{ color: pm.color }}>{pool.poolPct}%</strong> revenue pool
-                                </div>
+                                <>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                                      {pool.period === 'quarterly' ? 'This Quarter' : 'This Month'}
+                                    </span>
+                                    <span style={{ fontSize: '12px', fontWeight: '800', color: qualified ? pm.color : '#0f172a' }}>
+                                      ${pool.currentSales.toFixed(0)} <span style={{ fontWeight: '500', color: '#94a3b8', fontSize: '11px' }}>/ ${pool.threshold.toLocaleString()}</span>
+                                    </span>
+                                  </div>
+                                  <div style={{ height: '6px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+                                    <div style={{ height: '100%', borderRadius: '3px', background: qualified ? pm.color : `linear-gradient(90deg,${pm.color}80,${pm.color})`, width: `${pct}%`, transition: 'width 1s ease' }} />
+                                  </div>
+                                  {qualified ? (
+                                    <div style={{ fontSize: '12px', color: pm.color, fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                      You qualify for the {pool.poolPct}% revenue pool this {pool.period === 'quarterly' ? 'quarter' : 'month'}!
+                                    </div>
+                                  ) : (
+                                    <div style={{ fontSize: '11px', color: '#64748b', lineHeight: 1.5 }}>
+                                      <strong style={{ color: '#0f172a' }}>${remaining.toFixed(0)} more</strong> in direct sales to qualify for the <strong style={{ color: pm.color }}>{pool.poolPct}%</strong> revenue pool
+                                    </div>
+                                  )}
+                                </>
                               )}
                             </div>
                           </div>
@@ -497,7 +542,7 @@ function _OriginalStudentRewardsPage() {
                     </div>
                     {/* Info strip */}
                     <div style={{ marginTop: '10px', padding: '12px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '12px', color: '#64748b', lineHeight: 1.6 }}>
-                      <strong style={{ color: '#0f172a' }}>How it works:</strong> A percentage of company net revenue is pooled each period. Everyone who meets the direct sales threshold shares the pool equally. Sales targets reset fresh each month (or quarter for Executive).
+                      <strong style={{ color: '#0f172a' }}>How it works:</strong> A percentage of company net revenue is pooled each period. Sales pools share equally among qualifiers. The Elite Pool requires 25+ active referrals (joined &amp; purchased) and shares 2% of total global revenue.
                     </div>
                   </div>
                 );

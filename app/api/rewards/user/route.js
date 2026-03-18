@@ -91,9 +91,34 @@ export async function GET(request) {
         'incentive_discretionary_pool_pct', 'incentive_discretionary_sales_threshold', 'incentive_discretionary_enabled',
         'incentive_lifestyle_pool_pct', 'incentive_lifestyle_sales_threshold', 'incentive_lifestyle_enabled',
         'incentive_executive_pool_pct', 'incentive_executive_sales_threshold', 'incentive_executive_enabled',
+        'incentive_elite_pool_pct', 'incentive_elite_min_referrals', 'incentive_elite_enabled',
       ]);
     const ic = {};
     (incentiveConfig || []).forEach(r => { ic[r.config_key] = r.config_value; });
+
+    // Count active referrals for Elite Pool qualification
+    // Active = referred by this user AND has at least one paid sale/commission
+    const { data: referralRows } = await supabase
+      .from('referrals')
+      .select('referred_id')
+      .eq('referrer_id', user.id);
+    const referredIds = (referralRows || []).map(r => r.referred_id).filter(Boolean);
+    let activeReferralCount = 0;
+    if (referredIds.length > 0) {
+      const { count: paidCount } = await supabase
+        .from('sales_commissions')
+        .select('user_id', { count: 'exact', head: true })
+        .in('user_id', referredIds)
+        .eq('payment_status', 'paid');
+      // Count distinct active referred users via a set
+      const { data: paidRows } = await supabase
+        .from('sales_commissions')
+        .select('user_id')
+        .in('user_id', referredIds)
+        .eq('payment_status', 'paid');
+      const uniqueActive = new Set((paidRows || []).map(r => r.user_id));
+      activeReferralCount = uniqueActive.size;
+    }
 
     // Compute all point stats live from transactions (avoids stale stored columns)
     const { data: allTxs } = await supabase
@@ -201,6 +226,13 @@ export async function GET(request) {
             threshold: parseFloat(ic.incentive_executive_sales_threshold ?? 10000),
             currentSales: quarterDirectSales,
             period: 'quarterly',
+          },
+          elite: {
+            enabled: parseInt(ic.incentive_elite_enabled ?? 1) === 1,
+            poolPct: parseFloat(ic.incentive_elite_pool_pct ?? 2),
+            minReferrals: parseInt(ic.incentive_elite_min_referrals ?? 25),
+            activeReferrals: activeReferralCount,
+            period: 'ongoing',
           },
         },
       }

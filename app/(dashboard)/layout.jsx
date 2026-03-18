@@ -27,7 +27,10 @@ export default function DashboardLayout({ children }) {
           position: "sticky",
           top: 0,
           height: "100vh",
-          overflowY: "visible",
+          overflowY: "auto",
+          overflowX: "hidden",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
           background: "#f0f2f5",
         }}>
           <DashboardNav2 />

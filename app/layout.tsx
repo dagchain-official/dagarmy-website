@@ -57,7 +57,7 @@ export default function RootLayout({
       <body className="counter-scroll">
         <Web3Provider>
           <Context>
-            <div style={{ paddingTop: pathname?.startsWith('/student-') ? '0' : '50px' }}>
+            <div style={{ paddingTop: (pathname?.startsWith('/student-') || pathname?.startsWith('/dag-lieutenant')) ? '0' : '50px' }}>
               {children}
             </div>
           </Context>
