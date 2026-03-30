@@ -172,8 +172,51 @@ function getIconStyle(isActive) {
 export default function DashboardNav2() {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, userProfile } = useAuth();
   const [availableMissions, setAvailableMissions] = useState(0);
+
+  const handleDAGGPTRedirect = async () => {
+    // Get wallet address from localStorage if not in userProfile
+    let walletAddress = userProfile?.wallet_address;
+    
+    if (!walletAddress) {
+      try {
+        const stored = localStorage.getItem('dagarmy_user');
+        if (stored) {
+          const userData = JSON.parse(stored);
+          walletAddress = userData.wallet_address;
+        }
+      } catch (error) {
+        console.error('Error reading user data:', error);
+      }
+    }
+
+    if (!walletAddress) {
+      // If not logged in, just open DAGGPT
+      window.open('https://daggpt.network', '_blank');
+      return;
+    }
+
+    try {
+      // Generate SSO token
+      const response = await fetch('https://api.daggpt.network/api/auth/sso/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet_address: walletAddress })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.open(data.redirect_url, '_blank');
+      } else {
+        // Fallback to regular link if SSO fails
+        window.open('https://daggpt.network', '_blank');
+      }
+    } catch (error) {
+      console.error('SSO error:', error);
+      window.open('https://daggpt.network', '_blank');
+    }
+  };
 
   useEffect(() => {
     const fetchAvailable = async () => {
@@ -370,10 +413,8 @@ export default function DashboardNav2() {
             </svg>
           </a>
           {/* DAGGPT */}
-          <a
-            href="https://daggpt.network"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={handleDAGGPTRedirect}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -408,7 +449,7 @@ export default function DashboardNav2() {
               <polyline points="15 3 21 3 21 9" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </a>
+          </button>
         </div>
 
         {/* ── Logout ── */}
