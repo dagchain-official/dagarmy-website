@@ -158,7 +158,6 @@ export default function BecomeInstractor() {
                 href="#"
                 className="wow fadeInUp instructor-btn"
                 data-wow-delay="0.3s"
-                style={{ height: '52px', minWidth: '220px' }}
               />
             </div>
           </div>

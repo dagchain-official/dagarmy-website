@@ -1,7 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import BlogStatsCycle from "./BlogStatsCycle";
 
 export default function PageTitle({ title = "DAGARMY Blog" }) {
+  const [windowWidth, setWindowWidth] = useState(1024);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setWindowWidth(window.innerWidth);
+    
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth <= 768;
+
   // Split title to apply Nasalization to DAGARMY and Blog
   const renderTitle = () => {
     if (title === "DAGARMY Blog") {
@@ -138,7 +153,8 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
                 Insights on AI, Blockchain, and Data Visualization from the Vibe Coder Army
               </p>
 
-              {/* Stats Bar */}
+              {/* Stats Bar - Desktop Only */}
+              {!isMobile && (
               <div
                 className="wow fadeInUp blog-stats-bar"
                 data-wow-delay="0.3s"
@@ -236,6 +252,22 @@ export default function PageTitle({ title = "DAGARMY Blog" }) {
                   </div>
                 </div>
               </div>
+              )}
+
+              {/* Cycling Stats - Mobile Only */}
+              {isMobile && isMounted && (
+                <div
+                  className="wow fadeInUp"
+                  data-wow-delay="0.3s"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%"
+                  }}
+                >
+                  <BlogStatsCycle />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -147,11 +147,13 @@ export default function Blogs2() {
                   width: '100%',
                   margin: '0 auto 40px',
                   background: '#ffffff',
-                  borderRadius: '12px',
-                  padding: '24px',
-                  border: '2px solid #e5e7eb',
+                  borderRadius: '20px',
+                  padding: '28px',
+                  border: '1px solid rgba(0, 0, 0, 0.04)',
+                  boxShadow: '6px 6px 16px rgba(0, 0, 0, 0.09), -4px -4px 12px rgba(255, 255, 255, 0.9)',
                   position: 'relative',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease'
                 }}
               >
                 <h5 className="fw-6" style={{ fontSize: '18px', marginBottom: '16px', color: '#111827', fontWeight: '700', textAlign: 'center' }}>
@@ -167,12 +169,14 @@ export default function Blogs2() {
                     onFocus={() => searchQuery && suggestions.length > 0 && setShowSuggestions(true)}
                     style={{
                       width: '100%',
-                      padding: '14px 16px',
-                      borderRadius: '8px',
-                      border: showSuggestions ? '2px solid #1f2937' : '2px solid #e5e7eb',
+                      padding: '16px 18px',
+                      borderRadius: '12px',
+                      border: showSuggestions ? '1px solid #1f2937' : '1px solid rgba(0, 0, 0, 0.08)',
                       fontSize: '15px',
                       outline: 'none',
-                      transition: 'border-color 0.2s ease',
+                      transition: 'all 0.2s ease',
+                      background: '#ffffff',
+                      boxShadow: showSuggestions ? 'inset 2px 2px 6px rgba(0, 0, 0, 0.06), inset -1px -1px 4px rgba(255, 255, 255, 0.9)' : 'inset 1px 1px 3px rgba(0, 0, 0, 0.04), inset -1px -1px 3px rgba(255, 255, 255, 0.9)'
                     }}
                   />
                   
@@ -185,9 +189,9 @@ export default function Blogs2() {
                         left: 0,
                         right: 0,
                         background: '#ffffff',
-                        borderRadius: '8px',
-                        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
-                        border: '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        boxShadow: '6px 6px 20px rgba(0, 0, 0, 0.12), -2px -2px 10px rgba(255, 255, 255, 0.9)',
+                        border: '1px solid rgba(0, 0, 0, 0.06)',
                         maxHeight: '400px',
                         overflowY: 'auto',
                         zIndex: 1000,
@@ -361,21 +365,20 @@ export default function Blogs2() {
                         key={index}
                         style={{
                           background: "#ffffff",
-                          borderRadius: "10px",
-                          padding: "12px",
-                          marginBottom: "20px",
-                          border: "2px solid #e5e7eb",
+                          borderRadius: "20px",
+                          padding: "16px",
+                          marginBottom: "24px",
+                          border: "1px solid rgba(0, 0, 0, 0.04)",
+                          boxShadow: "6px 6px 16px rgba(0, 0, 0, 0.09), -4px -4px 12px rgba(255, 255, 255, 0.9)",
                           transition: "all 0.3s ease",
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = "translateY(-5px)";
-                          e.currentTarget.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.15)";
-                          e.currentTarget.style.borderColor = "#000000";
+                          e.currentTarget.style.transform = "translateY(-4px)";
+                          e.currentTarget.style.boxShadow = "10px 10px 24px rgba(0, 0, 0, 0.12), -6px -6px 16px rgba(255, 255, 255, 0.9)";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform = "translateY(0)";
-                          e.currentTarget.style.boxShadow = "none";
-                          e.currentTarget.style.borderColor = "#e5e7eb";
+                          e.currentTarget.style.boxShadow = "6px 6px 16px rgba(0, 0, 0, 0.09), -4px -4px 12px rgba(255, 255, 255, 0.9)";
                         }}
                       >
                         <div className="article-thumb image-wrap" style={{ marginBottom: "6px" }}>
@@ -383,7 +386,7 @@ export default function Blogs2() {
                             src={article.imageUrl}
                             alt={article.title}
                             style={{ 
-                              borderRadius: "8px",
+                              borderRadius: "16px",
                               width: '100%',
                               height: 'auto',
                               maxHeight: '400px',

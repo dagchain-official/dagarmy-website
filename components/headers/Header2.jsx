@@ -101,137 +101,113 @@ export default function Header2() {
           {/* Navigation Menu */}
           <nav style={{
             display: 'flex',
-            gap: '32px',
+            gap: '12px',
             alignItems: 'center',
             flex: 1
           }}>
             <Link href="/about" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               About
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/courses" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Course
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/careers" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Careers
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/ambassador" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Ambassador
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <div
               style={{ position: 'relative', paddingBottom: '8px' }}
@@ -312,164 +288,134 @@ export default function Header2() {
               }
             `}</style>
             <Link href="/jobs" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Jobs
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/mentorship" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Mentorship
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/rewards" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Rewards
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/hackathons" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Hackathons
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
             <Link href="/blog" style={{
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#4b5563',
               textDecoration: 'none',
-              transition: 'color 0.3s ease',
               whiteSpace: 'nowrap',
-              position: 'relative',
-              paddingBottom: '4px',
-              display: 'inline-block'
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '50px',
+              background: '#ffffff',
+              border: '1px solid rgba(249, 250, 251, 0.5)',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)',
+              transition: 'all 0.3s ease'
             }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1f2937';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '100%';
+                e.currentTarget.style.color = '#6366f1';
+                e.currentTarget.style.boxShadow = '4px 4px 12px rgba(0,0,0,0.06), -4px -4px 12px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#4b5563';
-                const underline = e.currentTarget.querySelector('.nav-underline');
-                if (underline) underline.style.width = '0%';
+                e.currentTarget.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.04), -2px -2px 10px rgba(255,255,255,1)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
               Blog
-              <span className="nav-underline" style={{
-                position: 'absolute',
-                bottom: '0',
-                left: '0',
-                width: '0%',
-                height: '2px',
-                background: '#1f2937',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }} />
             </Link>
           </nav>
 

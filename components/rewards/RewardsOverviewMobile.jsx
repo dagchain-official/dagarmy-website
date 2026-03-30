@@ -22,15 +22,16 @@ export const PhilosophyCards = [
 
 export const PhilosophyCard = ({ tag, title, description }) => (
   <div style={{
-    background: 'rgba(255, 255, 255, 0.95)',
-    border: '1px solid #e5e7eb',
-    borderRadius: '12px',
+    background: '#ffffff',
+    border: '1px solid rgba(0, 0, 0, 0.04)',
+    borderRadius: '16px',
     padding: '28px 20px',
     textAlign: 'center',
     minHeight: '280px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.04), 0px 1px 4px rgba(0, 0, 0, 0.03)'
   }}>
     <p style={{
       fontSize: '9px',
@@ -89,15 +90,17 @@ export const BurnCards = [
 
 export const BurnCard = ({ title, description }) => (
   <div style={{
-    background: 'rgba(255, 255, 255, 0.9)',
-    border: '1px solid #e5e7eb',
-    borderRadius: '12px',
-    padding: '28px 20px',
-    textAlign: 'center',
-    minHeight: '200px',
+    background: '#ffffff',
+    border: '1px solid rgba(0, 0, 0, 0.04)',
+    borderRadius: '16px',
+    padding: '32px 24px',
+    minHeight: '220px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.04), 0px 1px 4px rgba(0, 0, 0, 0.03)'
   }}>
     <div style={{
       width: '36px',
@@ -277,15 +280,16 @@ export const EcosystemCards = [
 
 export const EcosystemCard = ({ tag, title, description }) => (
   <div style={{
-    background: 'rgba(255, 255, 255, 0.9)',
-    border: '1px solid #e5e7eb',
-    borderRadius: '12px',
+    background: '#ffffff',
+    border: '1px solid rgba(0, 0, 0, 0.04)',
+    borderRadius: '16px',
     padding: '28px 20px',
     textAlign: 'center',
     minHeight: '320px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.04), 0px 1px 4px rgba(0, 0, 0, 0.03)'
   }}>
     <p style={{
       fontSize: '9px',

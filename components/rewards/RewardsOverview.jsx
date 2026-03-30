@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimatedDownloadButton from './AnimatedDownloadButton';
 import MobileSlider from './MobileSlider';
-import { PhilosophyCard } from './RewardsOverviewMobile';
+import { PhilosophyCard, EcosystemCard } from './RewardsOverviewMobile';
 import { LearningIcon, SharingIcon, CreatingIcon, ChecklistCard } from './HowYouEarnMobile';
 import { BurnToRiseCard } from './BurnToRiseMobile';
 import PathCycleSlider from './PathCycleSlider';
-import { EcosystemCard } from './EcosystemCardMobile';
 import styles from './RewardsOverview.module.css';
 import howYouEarnStyles from './HowYouEarn.module.css';
 import burnToRiseStyles from './BurnToRise.module.css';
@@ -92,42 +91,13 @@ export default function RewardsOverview() {
                 A reward system that values what you actually contribute—not just when you joined.
               </p>
 
-              {/* Dual Button Layout */}
+              {/* Download Button */}
               <div className={styles.buttonContainer} style={{
                 display: 'flex',
                 gap: '16px',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginTop: '32px'
               }}>
-                {/* Primary Button - View Documentation */}
-                <button
-                  onClick={scrollToDocs}
-                  style={{
-                    padding: '14px 32px',
-                    background: '#000000',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '15px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.background = '#1a1a1a';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.background = '#000000';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  View Full Documentation
-                </button>
-
-                {/* Animated Download Button */}
                 <AnimatedDownloadButton />
               </div>
             </div>
@@ -210,12 +180,22 @@ export default function RewardsOverview() {
             {/* DESKTOP VIEW - Grid Layout (≥768px) */}
             {!isMobile && (
               <div style={{
-                background: 'rgba(255, 255, 255, 0.85)',
-                border: '1px solid #d1d5db',
-                borderRadius: '12px',
-                padding: '44px 48px',
-                backdropFilter: 'blur(10px)'
+                background: '#ffffff',
+                border: '1px solid rgba(0, 0, 0, 0.04)',
+                borderRadius: '20px',
+                padding: '12px',
+                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0px 8px 30px rgba(0, 0, 0, 0.08), 0px 4px 12px rgba(0, 0, 0, 0.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)';
               }}>
+                <div style={{ padding: '32px 36px' }}>
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
@@ -353,6 +333,7 @@ export default function RewardsOverview() {
                     </p>
                   </div>
                 </div>
+                </div>
               </div>
             )}
 
@@ -416,12 +397,22 @@ export default function RewardsOverview() {
             
             {/* Professional Master Panel */}
             <div className={howYouEarnStyles.howYouEarnPanel} style={{
-              background: 'rgba(255, 255, 255, 0.85)',
-              border: '1px solid #d1d5db',
-              borderRadius: '12px',
-              padding: '44px 48px',
-              backdropFilter: 'blur(10px)'
+              background: '#ffffff',
+              border: '1px solid rgba(0, 0, 0, 0.04)',
+              borderRadius: '20px',
+              padding: '12px',
+              boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0px 8px 30px rgba(0, 0, 0, 0.08), 0px 4px 12px rgba(0, 0, 0, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)';
             }}>
+              <div style={{ padding: '32px 36px' }}>
               {/* DESKTOP VIEW - 2 Column Grid (≥768px) */}
               {!isMobile && (
                 <div style={{
@@ -732,6 +723,7 @@ export default function RewardsOverview() {
                 These points are yours alone. They are non-transferable and cannot be traded. You can't buy a reputation here; you have to earn it.
               </p>
             </div>
+            </div>
           </div>
         </div>
       </section>
@@ -797,7 +789,14 @@ export default function RewardsOverview() {
                   width: '140px',
                   height: '140px',
                   margin: '0 auto 16px',
-                  filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.08))'
+                  background: '#ffffff',
+                  border: '1px solid rgba(0, 0, 0, 0.04)',
+                  borderRadius: '20px',
+                  padding: '16px',
+                  boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}>
                   <img 
                     src="/BADGES  and  RANK png+svg/DAGARMY RANKS/STARTER RANK.svg" 
@@ -874,7 +873,14 @@ export default function RewardsOverview() {
                   width: '140px',
                   height: '140px',
                   margin: '0 auto 16px',
-                  filter: 'drop-shadow(0 6px 24px rgba(99, 102, 241, 0.25))'
+                  background: '#ffffff',
+                  border: '1px solid rgba(139, 92, 246, 0.15)',
+                  borderRadius: '20px',
+                  padding: '16px',
+                  boxShadow: '0px 4px 16px rgba(139, 92, 246, 0.12), 0px 2px 6px rgba(139, 92, 246, 0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}>
                   <img 
                     src="/images/ranks svgs/MYTHIC RANK.svg" 
@@ -896,13 +902,23 @@ export default function RewardsOverview() {
             
             {/* Professional Master Card with 3 Columns */}
             <div style={{
-              background: 'rgba(255, 255, 255, 0.7)',
-              border: '1px solid #e5e7eb',
-              borderRadius: '12px',
-              padding: '40px 36px',
-              backdropFilter: 'blur(10px)',
-              marginBottom: '32px'
+              background: '#ffffff',
+              border: '1px solid rgba(0, 0, 0, 0.04)',
+              borderRadius: '20px',
+              padding: '12px',
+              boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)',
+              marginBottom: '32px',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0px 8px 30px rgba(0, 0, 0, 0.08), 0px 4px 12px rgba(0, 0, 0, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)';
             }}>
+              <div style={{ padding: '28px 24px' }}>
               {/* DESKTOP VIEW - 3 Column Grid (≥768px) */}
               {!isMobile && (
                 <div className={burnToRiseStyles.burnCardsGrid} style={{
@@ -1053,6 +1069,7 @@ export default function RewardsOverview() {
                 backgroundClip: 'text'
               }}>long game</span>.
             </p>
+            </div>
           </div>
         </div>
       </section>
@@ -1116,10 +1133,26 @@ export default function RewardsOverview() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.0 }}
               viewport={{ once: true }}
-              className={`${pathStyles.pathCard} border border-gray-200 bg-white rounded-2xl transition-all duration-300`}
-              style={{ padding: '28px', display: 'flex', flexDirection: 'column', minHeight: '500px', boxShadow: '0 10px 40px rgba(0, 0, 0, 0.05)' }}
-              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.08)'}
-              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.05)'}
+              className={pathStyles.pathCard}
+              style={{ 
+                background: '#ffffff',
+                border: '1px solid rgba(0, 0, 0, 0.04)',
+                borderRadius: '20px',
+                padding: '28px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                minHeight: '500px', 
+                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0px 8px 30px rgba(0, 0, 0, 0.08), 0px 4px 12px rgba(0, 0, 0, 0.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)';
+              }}
             >
               {/* Badge Image */}
               <div className="flex justify-center mb-5">
@@ -1207,23 +1240,29 @@ export default function RewardsOverview() {
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 2.0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className={`${pathStyles.pathCard} relative rounded-2xl transition-all duration-300`}
-              style={{
-                padding: '28px',
-                display: 'flex',
-                flexDirection: 'column',
+              className={pathStyles.pathCard}
+              style={{ 
+                padding: '28px', 
+                display: 'flex', 
+                flexDirection: 'column', 
                 minHeight: '500px',
-                boxShadow: '0 15px 45px rgba(124, 92, 255, 0.12)',
-                background: 'rgba(239, 246, 255, 0.3)',
-                border: '2px solid transparent',
-                backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #3b82f6, #a855f7)',
-                backgroundOrigin: 'border-box',
-                backgroundClip: 'padding-box, border-box'
+                background: '#ffffff',
+                border: '1px solid rgba(124, 92, 255, 0.15)',
+                borderRadius: '20px',
+                boxShadow: '0px 4px 20px rgba(124, 92, 255, 0.12), 0px 2px 8px rgba(124, 92, 255, 0.08)',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                position: 'relative'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 20px 55px rgba(124, 92, 255, 0.18)'}
-              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 15px 45px rgba(124, 92, 255, 0.12)'}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0px 8px 30px rgba(124, 92, 255, 0.18), 0px 4px 12px rgba(124, 92, 255, 0.12)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0px 4px 20px rgba(124, 92, 255, 0.12), 0px 2px 8px rgba(124, 92, 255, 0.08)';
+              }}
             >
               {/* Badge Image */}
               <div className="flex justify-center mb-5">
@@ -1319,13 +1358,24 @@ export default function RewardsOverview() {
             </p>
             
             {/* Desktop - Institutional Master Panel */}
+            {!isMobile && (
             <div className={grantsStyles.grantsPanel} style={{
-              background: 'rgba(255, 255, 255, 0.6)',
-              border: '1px solid #e5e7eb',
-              borderRadius: '12px',
-              padding: '56px 48px',
-              backdropFilter: 'blur(10px)'
+              background: '#ffffff',
+              border: '1px solid rgba(0, 0, 0, 0.04)',
+              borderRadius: '20px',
+              padding: '12px',
+              boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0px 8px 30px rgba(0, 0, 0, 0.08), 0px 4px 12px rgba(0, 0, 0, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0px 4px 20px rgba(0, 0, 0, 0.06), 0px 2px 8px rgba(0, 0, 0, 0.04)';
             }}>
+              <div style={{ padding: '44px 36px' }}>
               {/* 3-Column Grid Layout with Vertical Separators */}
               <div style={{
                 display: 'grid',
@@ -1462,7 +1512,9 @@ export default function RewardsOverview() {
                   </p>
                 </div>
               </div>
+              </div>
             </div>
+            )}
 
             {/* Mobile - Slider */}
             {isMobile && (
