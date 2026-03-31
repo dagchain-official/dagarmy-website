@@ -374,10 +374,10 @@ export default function JobsPanel() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
+        <div className="jobs-layout">
 
           {/* ── Left Sidebar ── */}
-          <div style={{ width: '270px', flexShrink: 0, position: 'sticky', top: '100px' }}>
+          <div className="jobs-sidebar">
             <NmCard hover={false} style={{ padding: '24px' }}>
 
               {/* Search */}

@@ -160,11 +160,7 @@ export default function FinalCTA() {
           </div>
 
           {/* ── Stats grid ── */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 12,
-            maxWidth: 720,
+          <div className="udaan-finalcta-stats" style={{
             margin: '0 auto 56px',
           }}>
             {STATS.map(({ value, label }, i) => (

@@ -1,3 +1,4 @@
+import "./faq.css";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
 import FAQPage from "@/components/faq/FAQPage";

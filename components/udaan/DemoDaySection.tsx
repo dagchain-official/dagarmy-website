@@ -90,12 +90,7 @@ export default function DemoDaySection() {
           }} />
 
           <div className="wrap" style={{ paddingTop: 72, paddingBottom: 72 }} ref={headerRef}>
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              gap: "0 64px",
-              alignItems: "center",
-            }}>
+            <div className="udaan-demoday-header-grid">
               {/* Left: identity */}
               <div>
                 <motion.div
@@ -176,10 +171,10 @@ export default function DemoDaySection() {
               initial={{ opacity: 0, y: 12 }}
               animate={headerInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.42, ease }}
+              className="udaan-nextstep-header-stats"
               style={{
                 marginTop: 48, borderTop: "1px solid rgba(99,102,241,0.12)",
-                paddingTop: 28, display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
+                paddingTop: 28,
               }}
             >
               {[
@@ -232,7 +227,7 @@ export default function DemoDaySection() {
         </motion.div>
 
         {/* Stage cards — asymmetric bento */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto", gap: 16 }}>
+        <div className="udaan-bento-grid" style={{ gridTemplateRows: "auto auto" }}>
 
           {/* ── STAGE 1: Screening — spans full top row ── */}
           <motion.div
@@ -240,8 +235,8 @@ export default function DemoDaySection() {
             animate={stagesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.08, ease }}
             whileHover={{ y: -3, boxShadow: "0 16px 48px rgba(99,102,241,0.10)" }}
+            className="udaan-bento-span2"
             style={{
-              gridColumn: "1 / 3",
               background: "#f8f8fb",
               borderRadius: 20,
               overflow: "hidden",
@@ -251,7 +246,7 @@ export default function DemoDaySection() {
           >
             {/* Top accent bar */}
             <div style={{ height: 3, background: gradBg }} />
-            <div style={{
+            <div className="udaan-stage-two-col" style={{
               display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 280,
             }}>
               {/* Left */}
@@ -342,9 +337,8 @@ export default function DemoDaySection() {
             initial={{ opacity: 0, x: 24 }}
             animate={stagesInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.14, ease }}
+            className="udaan-bento-row2"
             style={{
-              gridColumn: "3 / 4",
-              gridRow: "1 / 3",
               background: "linear-gradient(145deg, #f0f0ff 0%, #eae8ff 100%)",
               border: "1px solid rgba(99,102,241,0.15)",
               borderRadius: 20,
@@ -410,8 +404,8 @@ export default function DemoDaySection() {
             animate={stagesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.18, ease }}
             whileHover={{ y: -3, boxShadow: "0 16px 48px rgba(99,102,241,0.10)" }}
+            className="udaan-bento-span2"
             style={{
-              gridColumn: "1 / 3",
               background: "#fff",
               borderRadius: 20,
               overflow: "hidden",
@@ -420,7 +414,7 @@ export default function DemoDaySection() {
             }}
           >
             <div style={{ height: 3, background: "linear-gradient(90deg, #7c3aed, #6366f1)" }} />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 280 }}>
+            <div className="udaan-stage-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 280 }}>
               {/* Left */}
               <div style={{ padding: "36px 40px", borderRight: "1px solid rgba(12,12,20,0.07)" }}>
                 <div style={{
@@ -536,7 +530,7 @@ export default function DemoDaySection() {
             letterSpacing: "-0.04em",
           }}>FINALS</div>
 
-          <div style={{
+          <div className="udaan-stage-three-col" style={{
             display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
             position: "relative", zIndex: 1,
           }}>
@@ -663,16 +657,13 @@ export default function DemoDaySection() {
             initial={{ opacity: 0, y: 24 }}
             animate={closingInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, ease }}
+            className="udaan-lt-manifesto"
             style={{
               marginTop: 16,
               background: "#fff",
               border: "1px solid rgba(12,12,20,0.09)",
               borderRadius: 20,
               padding: "52px 56px",
-              display: "grid",
-              gridTemplateColumns: "1fr 1px 1fr",
-              gap: "0 56px",
-              alignItems: "center",
               position: "relative",
               overflow: "hidden",
             }}

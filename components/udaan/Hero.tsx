@@ -58,16 +58,41 @@ function Stat({ num, suffix = "", label, delay = 0 }: { num: number; suffix?: st
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const blockRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const [textWidth, setTextWidth] = useState(0);
+  const textInnerRef = useRef<HTMLSpanElement>(null);
+  const planeRef = useRef<HTMLImageElement>(null);
+  const [planeEndX, setPlaneEndX] = useState(0);
+
+  // Stable ref so event listeners and onLoad always call the latest version
+  const computeEndRef = useRef<() => void>(() => {});
+  computeEndRef.current = () => {
+    if (!blockRef.current || !textRef.current) return;
+    // getBoundingClientRect gives screen-space coords — subtract block's left to get relative offset
+    const blockRect = blockRef.current.getBoundingClientRect();
+    const inner = textInnerRef.current ?? textRef.current;
+    const innerRect = inner.getBoundingClientRect();
+    const planeW = planeRef.current?.offsetWidth ?? 48;
+    // rawEndX = right edge of text relative to block's left edge + 8px gap
+    const rawEndX = (innerRect.right - blockRect.left) + 8;
+    // On desktop the block is inline-block shrink-wrapped to the text, so blockWidth ≈ textWidth.
+    // On mobile the block is 100% wide, so blockWidth >> textWidth — only cap in that case.
+    const isMobileLayout = innerRect.width < blockRect.width * 0.85;
+    const endX = isMobileLayout
+      ? Math.min(rawEndX, blockRect.width - planeW - 4)
+      : rawEndX;
+    setPlaneEndX(Math.max(endX, 1));
+  };
 
   useEffect(() => {
-    const measure = () => {
-      if (textRef.current) setTextWidth(textRef.current.offsetWidth);
+    // 600ms: past font load + first layout paint (text animation starts at 220ms)
+    const id = setTimeout(() => requestAnimationFrame(() => computeEndRef.current()), 600);
+    const onResize = () => computeEndRef.current();
+    window.addEventListener('resize', onResize);
+    return () => {
+      clearTimeout(id);
+      window.removeEventListener('resize', onResize);
     };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
   }, []);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const yContent = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "12%"]), { stiffness: 55, damping: 18 });
@@ -175,23 +200,16 @@ export default function Hero() {
 
           {/* UDAAN — Nasalization + split line + plane */}
           <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", textAlign: "center" }}>
-            <div style={{ position: "relative", display: "inline-block" }}>
+            <div ref={blockRef} className="udaan-hero-title-block">
               <motion.div
                 ref={textRef}
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: "0%", opacity: 1 }}
                 transition={{ duration: 0.9, delay: 0.22, ease }}
-                style={{
-                  fontFamily: "'Nasalization', sans-serif",
-                  fontWeight: 400,
-                  fontSize: "clamp(80px, 14vw, 200px)",
-                  letterSpacing: "0.12em",
-                  lineHeight: 0.92,
-                  color: "#0a0a0f",
-                  display: "block",
-                }}
+                className="udaan-hero-title-text"
+                style={{}}
               >
-                UDAAN
+                <span ref={textInnerRef} style={{ display: "inline-block" }}>UDAAN</span>
               </motion.div>
               {/* White split line sweeping left to right */}
               <motion.div
@@ -208,13 +226,15 @@ export default function Hero() {
                   transformOrigin: "left center",
                 }}
               />
-              {/* Plane — sweeps from x:0 to end of text width */}
-              {textWidth > 0 && (
+              {/* Plane — sweeps from x:0 to end of text width, capped to viewport */}
+              {planeEndX > 0 && (
                 <motion.img
+                  ref={planeRef}
                   src="/images/icons8-plane-100.png"
                   alt=""
+                  onLoad={() => computeEndRef.current()}
                   initial={{ x: 0 }}
-                  animate={{ x: textWidth }}
+                  animate={{ x: planeEndX }}
                   transition={{ duration: 2.0, delay: 0.9, ease }}
                   style={{
                     position: "absolute",
@@ -233,16 +253,11 @@ export default function Hero() {
 
           {/* Subtitle — single line */}
           <motion.div
+            className="udaan-hero-subtitle"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease }}
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.3em",
-              flexWrap: "nowrap",
-              whiteSpace: "nowrap",
               marginBottom: "clamp(48px, 6vh, 72px)",
             }}
           >
@@ -274,14 +289,11 @@ export default function Hero() {
 
           {/* ── MISSION + CTA ROW ── */}
           <motion.div
+            className="udaan-hero-mission-row"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.68, ease }}
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto 1fr",
-              alignItems: "start",
-              gap: "clamp(32px, 4vw, 64px)",
               paddingTop: "clamp(32px, 4vh, 48px)",
               borderTop: "1px solid rgba(0,0,10,0.07)",
               textAlign: "left",
@@ -362,12 +374,11 @@ export default function Hero() {
 
           {/* ── STATS ROW ── */}
           <motion.div
+            className="udaan-hero-stats-row"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.88, ease }}
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
               marginTop: "clamp(48px, 6vh, 72px)",
               paddingTop: "clamp(28px, 3.5vh, 40px)",
               borderTop: "1px solid rgba(0,0,10,0.06)",
@@ -438,14 +449,11 @@ export default function Hero() {
 
       {/* ── SCROLL INDICATOR ── */}
       <motion.div
+        className="udaan-hero-scroll-indicator"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.6 }}
-        style={{
-          position: "absolute", right: 40, bottom: 80,
-          zIndex: 3, display: "flex", flexDirection: "column",
-          alignItems: "center", gap: 12,
-        }}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}
       >
         <span style={{
           writingMode: "vertical-rl", fontSize: 9, fontWeight: 600,

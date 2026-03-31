@@ -59,12 +59,7 @@ export default function SoldierSection() {
         }} />
 
         <div className="wrap" style={{ paddingTop: 72, paddingBottom: 72 }}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "auto 1fr auto",
-            gap: "0 56px",
-            alignItems: "center",
-          }}>
+          <div className="udaan-rank-hero-grid">
             {/* Badge */}
             <div style={{ position: "relative" }}>
               <div style={{
@@ -117,7 +112,7 @@ export default function SoldierSection() {
             </div>
 
             {/* Right stat block */}
-            <div style={{
+            <div className="udaan-rank-stat-block" style={{
               borderLeft: "1px solid rgba(255,255,255,0.08)",
               paddingLeft: 48,
               display: "flex",
@@ -145,18 +140,13 @@ export default function SoldierSection() {
 
       {/* ── BENTO GRID ── */}
       <div className="wrap">
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gridTemplateRows: "auto auto",
-          gap: 16,
-        }}>
+        <div className="udaan-bento-grid" style={{ gridTemplateRows: "auto auto" }}>
 
           {/* A: Identity — spans 2 cols */}
           <motion.div
             {...fadeUp(0.1)}
+            className="udaan-bento-span2"
             style={{
-              gridColumn: "1 / 3",
               background: "#f8f8fb",
               borderRadius: 20,
               padding: "40px 44px",
@@ -191,7 +181,6 @@ export default function SoldierSection() {
             <motion.div
               {...fadeUp(0.15)}
               style={{
-                gridColumn: "3 / 4",
                 background: "linear-gradient(145deg, #f0f0ff 0%, #eae8ff 100%)",
                 border: "1px solid rgba(99,102,241,0.15)",
                 borderRadius: 20,
@@ -245,7 +234,6 @@ export default function SoldierSection() {
           <motion.div
             {...fadeUp(0.2)}
             style={{
-              gridColumn: "1 / 2",
               background: "#fff",
               border: "1px solid rgba(12,12,20,0.09)",
               borderRadius: 20,
@@ -288,8 +276,8 @@ export default function SoldierSection() {
           {/* D: Skill-to-startup transition — spans 2 cols */}
           <motion.div
             {...fadeUp(0.25)}
+            className="udaan-bento-span2"
             style={{
-              gridColumn: "2 / 4",
               borderRadius: 20,
               overflow: "hidden",
               border: "1px solid rgba(12,12,20,0.09)",
@@ -307,7 +295,7 @@ export default function SoldierSection() {
                 textTransform: "uppercase" as const, color: "#9494aa",
               }}>The Skill-to-Startup Transition</div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", flex: 1 }}>
+            <div className="udaan-transition-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", flex: 1 }}>
               {/* Old Q */}
                 <div style={{
                   padding: "40px 36px",
@@ -372,16 +360,13 @@ export default function SoldierSection() {
           {/* ── BOTTOM FULL-WIDTH MANIFESTO STRIP — light ── */}
           <motion.div
             {...fadeUp(0.35)}
-            style={{
+            className="udaan-soldier-manifesto"
+          style={{
               marginTop: 16,
               background: "#fff",
               border: "1px solid rgba(12,12,20,0.09)",
               borderRadius: 20,
               padding: "52px 56px",
-              display: "grid",
-              gridTemplateColumns: "1fr 1px 2fr",
-              gap: "0 56px",
-              alignItems: "center",
               position: "relative",
               overflow: "hidden",
             }}
@@ -411,7 +396,7 @@ export default function SoldierSection() {
             <div style={{ width: 1, height: "100%", background: "rgba(12,12,20,0.08)", alignSelf: "stretch" }} />
 
             {/* 4 pillars */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+            <div className="udaan-soldier-pillars-grid">
               {[
                 { num: "01", label: "Learn the system", desc: "Understand the DAG ecosystem" },
                 { num: "02", label: "Build foundations", desc: "Core AI skills and mindset" },

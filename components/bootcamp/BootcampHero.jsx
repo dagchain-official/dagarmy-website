@@ -34,13 +34,10 @@ export default function BootcampHero() {
               </div>
 
               <h1 
-                className="font-cardo wow fadeInUp" 
+                className="font-cardo wow fadeInUp bootcamp-hero-h1" 
                 style={{ 
-                  fontSize: '52px',
                   lineHeight: '1.15',
                   marginBottom: '24px',
-                  fontWeight: '700',
-                  color: '#1f2937'
                 }}
               >
                 AI-Driven Entrepreneur Bootcamp
@@ -127,16 +124,8 @@ export default function BootcampHero() {
               </div>
 
               <div 
-                className="wow fadeInUp" 
+                className="wow fadeInUp bootcamp-hero-stats" 
                 data-wow-delay="0.3s"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: '32px',
-                  maxWidth: '540px',
-                  paddingTop: '40px',
-                  borderTop: '1px solid #e5e7eb'
-                }}
               >
                 {successMetrics.map((item, index) => (
                   <div key={index}>
@@ -169,19 +158,7 @@ export default function BootcampHero() {
                 position: 'relative'
               }}
             >
-              <div style={{
-                width: '100%',
-                height: '500px',
-                background: '#f9fafb',
-                borderRadius: '12px',
-                border: '1px solid #e5e7eb',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#9ca3af',
-                fontSize: '14px',
-                fontWeight: '500'
-              }}>
+              <div className="bootcamp-hero-image">
                 [Hero Image Placeholder]
               </div>
             </div>

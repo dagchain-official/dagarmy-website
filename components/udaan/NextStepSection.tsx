@@ -280,13 +280,11 @@ export default function NextStepSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: [...ease], delay: 0.18 }}
+            className="udaan-nextstep-header-stats"
             style={{
               marginTop: 56,
               paddingTop: 40,
               borderTop: "1px solid rgba(255,255,255,0.08)",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              gap: 0,
             }}
           >
             {[
@@ -341,9 +339,8 @@ export default function NextStepSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [...ease], delay: 0.25 }}
+          className="udaan-reality-white-grid"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
             gap: 80,
             alignItems: "start",
             marginBottom: 80,
@@ -542,12 +539,8 @@ export default function NextStepSection() {
         </motion.div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 24,
-            marginBottom: 80,
-          }}
+          className="udaan-nextstep-grid"
+          style={{ marginBottom: 80 }}
         >
           {paths.map((item, i) => (
             <PathCard key={i} item={item} index={i} inView={inView} />

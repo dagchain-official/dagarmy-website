@@ -44,10 +44,10 @@ export default function BentoGrid() {
         </motion.div>
 
         {/* Bento grid — exact reference layout */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "auto", gap: 16 }}>
+        <div className="udaan-bento-grid">
 
           {/* Big card — spans 2 cols */}
-          <Card i={0} style={{ gridColumn: "span 2" }}>
+          <div className="udaan-bento-span2"><Card i={0}>
             <div style={{ background: "#111", borderRadius: 18, padding: 40, height: "100%", minHeight: 280, position: "relative", overflow: "hidden" }}>
               <div style={{ position: "absolute", right: -40, top: -40, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(91,75,236,0.2) 0%, transparent 70%)", pointerEvents: "none" }} />
               <div style={{ display:"inline-flex", alignItems:"center", padding:"5px 12px", borderRadius:999, fontSize:"11px", fontWeight:700, letterSpacing:"0.07em", textTransform:"uppercase", background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.12)", color:"rgba(255,255,255,0.6)", marginBottom:20 }}>Live Platform</div>
@@ -64,10 +64,10 @@ export default function BentoGrid() {
                 </div>
               </div>
             </div>
-          </Card>
+          </Card></div>
 
           {/* Tall card — spans 2 rows */}
-          <Card i={1} style={{ gridRow: "span 2" }}>
+          <div className="udaan-bento-row2"><Card i={1}>
             <div style={{ background:"#fff", border:"1px solid #f0f0f0", borderRadius:18, padding:28, height:"100%", minHeight:400, display:"flex", flexDirection:"column" }}>
               <div style={{ display:"inline-flex", alignItems:"center", gap:5, padding:"5px 12px", borderRadius:999, fontSize:"11px", fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", background:"rgba(16,185,129,0.08)", border:"1px solid rgba(16,185,129,0.18)", color:"#059669", marginBottom:20, alignSelf:"flex-start" }}><svg width="7" height="7" viewBox="0 0 7 7" fill="none"><polyline points="1 3.5 2.5 5 6 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg> Execution Focus</div>
               <h3 style={{ fontSize:"1.1rem", fontWeight:800, letterSpacing:"-0.02em", color:"#111", marginBottom:12 }}>Validate before you build</h3>
@@ -90,7 +90,7 @@ export default function BentoGrid() {
               </div>
 
               {/* Reaction stats */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 14 }}>
+              <div className="udaan-bento-reaction-grid" style={{ marginBottom: 14 }}>
                 {[{ v: "128", l: "Reactions", col: "#5b4bec" }, { v: "34", l: "Co-founder pings", col: "#10b981" }, { v: "12", l: "Mentors viewed", col: "#f59e0b" }].map(s => (
                   <div key={s.l} style={{ padding:"10px 8px", background:"#f5f5f5", borderRadius:10, textAlign:"center", border:"1px solid #eee" }}>
                     <div style={{ fontSize: "18px", fontWeight: 900, color: s.col, letterSpacing: "-0.04em" }}>{s.v}</div>
@@ -108,7 +108,7 @@ export default function BentoGrid() {
                 ))}
               </div>
             </div>
-          </Card>
+          </Card></div>
 
           {/* Metric card */}
           <Card i={2}>
@@ -147,8 +147,8 @@ export default function BentoGrid() {
           </Card>
 
           {/* Wide bottom card — spans 3 cols */}
-          <Card i={4} style={{ gridColumn: "span 3" }}>
-            <div style={{ background:"#fff", border:"1px solid #f0f0f0", borderRadius:18, padding:"28px 36px", display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:40 }}>
+          <div className="udaan-bento-span3"><Card i={4}>
+            <div style={{ background:"#fff", border:"1px solid #f0f0f0", borderRadius:18, padding:"28px 36px" }} className="udaan-bento-bottom-grid">
               {[
                 { title: "Idea Validation", desc: "Crowdsource before you code" },
                 { title: "Feedback Loops", desc: "Continuous iteration with peers" },
@@ -164,7 +164,7 @@ export default function BentoGrid() {
                 </div>
               ))}
             </div>
-          </Card>
+          </Card></div>
         </div>
       </div>
     </section>

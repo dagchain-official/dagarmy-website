@@ -35,7 +35,7 @@ export default function Reality() {
           </RevealBlock>
 
           {/* Body + panel in grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 460px", gap: 40, alignItems: "start" }}>
+          <div className="udaan-reality-dark-grid">
             {/* Left — body text */}
             <div>
               <RevealBlock i={2}>
@@ -133,7 +133,7 @@ export default function Reality() {
       {/* White section below */}
       <div style={{ background: "#fff", padding: "100px 0" }}>
         <div className="wrap">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
+          <div className="udaan-reality-white-grid">
             {/* Big statement left */}
             <div>
               <RevealBlock i={0}>
@@ -171,7 +171,7 @@ export default function Reality() {
             {/* Right — comparison cards */}
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <RevealBlock i={1}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="udaan-reality-comparison-cards">
                   {/* NOT THIS */}
                   <div style={{ padding:24, background:"#fafafa", border:"1px solid #f0f0f0", borderRadius:16 }}>
                     <span style={{ display:"inline-flex", alignItems:"center", gap:5, padding:"4px 10px", borderRadius:999, fontSize:"10px", fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.15)", color:"#f87171", marginBottom:16 }}><svg width="7" height="7" viewBox="0 0 7 7" fill="none"><path d="M1 1l5 5M6 1L1 6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg> Not This</span>

@@ -1,4 +1,5 @@
 "use client";
+import "../../app/rewards/rewards.css";
 import React from 'react';
 
 const nm = {
@@ -37,7 +38,7 @@ export default function RewardsOverviewNeo() {
       {/* ── Hero ── */}
       <section style={{ background: nm.bg, padding: '56px 24px 48px' }}>
         <div className="tf-container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="rewards-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', maxWidth: '1200px', margin: '0 auto' }}>
 
             {/* Left */}
             <div>
@@ -93,7 +94,7 @@ export default function RewardsOverviewNeo() {
             </div>
 
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '40px 36px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
+              <div className="rewards-three-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
                 {philosophyItems.map((item, i) => (
                   <div key={i} style={{ paddingLeft: i > 0 ? '36px' : 0, paddingRight: i < 2 ? '36px' : 0, borderRight: i < 2 ? '1px solid rgba(148,163,184,0.2)' : 'none' }}>
                     <p style={{ fontSize: '10px', fontWeight: '700', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '10px' }}>{item.label}</p>
@@ -120,7 +121,7 @@ export default function RewardsOverviewNeo() {
             </div>
 
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '36px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
+              <div className="rewards-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
 
                 {/* Left: pillars */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingRight: '24px', borderRight: '1px solid rgba(148,163,184,0.2)' }}>
@@ -213,7 +214,7 @@ export default function RewardsOverviewNeo() {
 
             {/* 3-col card */}
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '36px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
+              <div className="rewards-three-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
                 {[
                   { title: 'The Commitment', body: 'Burning wipes your point balance to zero.' },
                   { title: 'The Reward', body: 'In exchange, you permanently unlock a higher Rank.' },
@@ -243,7 +244,7 @@ export default function RewardsOverviewNeo() {
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '24px', alignItems: 'center' }}>
+            <div className="rewards-path-grid" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '24px', alignItems: 'center' }}>
 
               {/* Soldier card */}
               <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '28px', display: 'flex', flexDirection: 'column', transition: 'box-shadow 0.25s' }}
@@ -324,7 +325,7 @@ export default function RewardsOverviewNeo() {
             </div>
 
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '40px 36px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
+              <div className="rewards-three-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
                 {grantsItems.map((item, i) => (
                   <div key={i} style={{ paddingLeft: i > 0 ? '36px' : 0, paddingRight: i < 2 ? '36px' : 0, borderRight: i < 2 ? '1px solid rgba(148,163,184,0.2)' : 'none' }}>
                     <p style={{ fontSize: '10px', fontWeight: '700', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '10px' }}>{item.label}</p>

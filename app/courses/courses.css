@@ -1,0 +1,97 @@
+/* ═══════════════════════════════════════════════════════
+   COURSES PAGE — Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Page header ── */
+.courses-page-header {
+  padding: 48px 40px 32px;
+  text-align: center;
+}
+
+/* ── Course list wrapper ── */
+.courses-list-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Sidebar + Curriculum 2-col ── */
+.courses-course-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── Curriculum inner flex (module list + lesson detail) ── */
+.courses-curriculum-inner {
+  display: flex;
+  height: 580px;
+}
+
+/* ─────────────────────────────
+   TABLET  ≤ 1024px
+───────────────────────────── */
+@media (max-width: 1024px) {
+  .courses-course-grid {
+    grid-template-columns: 260px 1fr;
+  }
+}
+
+/* ─────────────────────────────
+   TABLET  ≤ 900px
+───────────────────────────── */
+@media (max-width: 900px) {
+  .courses-course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .courses-curriculum-inner {
+    flex-direction: column;
+    height: auto;
+  }
+
+  /* Module list on tablet stacks on top */
+  .courses-curriculum-inner > div:first-child {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .courses-page-header {
+    padding: 40px 24px 24px;
+  }
+
+  .courses-list-wrap {
+    padding: 0 16px;
+    gap: 28px;
+  }
+}
+
+/* ─────────────────────────────
+   MOBILE  ≤ 640px
+───────────────────────────── */
+@media (max-width: 640px) {
+  .courses-page-header {
+    padding: 32px 16px 20px;
+  }
+
+  .courses-list-wrap {
+    padding: 0 12px;
+    gap: 24px;
+  }
+
+  /* Make course hero card padding tighter */
+  .courses-list-wrap > div > div:first-child {
+    padding: 20px !important;
+  }
+
+  .courses-curriculum-inner > div:first-child {
+    max-height: 160px;
+  }
+}

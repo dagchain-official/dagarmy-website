@@ -66,12 +66,7 @@ export default function LieutenantSection() {
         }} />
 
         <div className="wrap" style={{ paddingTop: 72, paddingBottom: 72 }}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "auto 1fr auto",
-            gap: "0 56px",
-            alignItems: "center",
-          }}>
+          <div className="udaan-rank-hero-grid">
             {/* Badge */}
             <div style={{ position: "relative" }}>
               <div style={{
@@ -149,17 +144,13 @@ export default function LieutenantSection() {
 
       {/* ── BENTO GRID ── */}
       <div className="wrap">
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: 16,
-        }}>
+        <div className="udaan-bento-grid">
 
           {/* A: Identity — spans 2 cols */}
           <motion.div
             {...fadeUp(0.1)}
+            className="udaan-bento-span2"
             style={{
-              gridColumn: "1 / 3",
               background: "#fff",
               borderRadius: 20,
               padding: "40px 44px",
@@ -203,7 +194,6 @@ export default function LieutenantSection() {
             <motion.div
               {...fadeUp(0.15)}
               style={{
-                gridColumn: "3 / 4",
                 background: "linear-gradient(145deg, #f0f0ff 0%, #eae8ff 100%)",
                 border: "1px solid rgba(99,102,241,0.15)",
                 borderRadius: 20,
@@ -259,7 +249,6 @@ export default function LieutenantSection() {
           <motion.div
             {...fadeUp(0.2)}
             style={{
-              gridColumn: "1 / 2",
               background: "#fff",
               border: "1px solid rgba(12,12,20,0.09)",
               borderRadius: 20,
@@ -304,8 +293,8 @@ export default function LieutenantSection() {
               {/* D: Builder to Leader — spans 2 cols, light mode */}
               <motion.div
                 {...fadeUp(0.25)}
+                className="udaan-bento-span2"
                 style={{
-                  gridColumn: "2 / 4",
                     borderRadius: 20,
                     overflow: "hidden",
                     background: "#fff",
@@ -335,7 +324,7 @@ export default function LieutenantSection() {
                   <span style={grad}>A Lieutenant advances the mission.</span>
                 </p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 }}>
+                <div className="udaan-soldier-pillars-grid">
                   {[
                     { num: "01", label: "Support Soldiers", desc: "Mentor and guide incoming members" },
                     { num: "02", label: "Refine prototypes", desc: "Iterate on your AI product build" },
@@ -365,16 +354,13 @@ export default function LieutenantSection() {
         {/* ── BOTTOM MANIFESTO — light ── */}
         <motion.div
           {...fadeUp(0.35)}
+          className="udaan-lt-manifesto"
           style={{
             marginTop: 16,
             background: "#fff",
             border: "1px solid rgba(12,12,20,0.09)",
             borderRadius: 20,
             padding: "52px 56px",
-            display: "grid",
-            gridTemplateColumns: "1fr 1px 1fr",
-            gap: "0 56px",
-            alignItems: "center",
             position: "relative",
             overflow: "hidden",
           }}

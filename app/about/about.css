@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════════
+   ABOUT PAGE — Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Hero 2-col headline/intro ── */
+.about-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+/* ── Photo mosaic ── */
+.about-photo-mosaic {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(6, 80px);
+  gap: 10px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ── Three gaps cards ── */
+.about-gaps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── Vision 2-col layout ── */
+.about-vision-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+/* ── Section padding ── */
+.about-section {
+  padding: 64px 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.about-hero-section {
+  padding: 72px 40px 56px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* ─────────────────────────────
+   TABLET  ≤ 900px
+───────────────────────────── */
+@media (max-width: 900px) {
+  .about-hero-grid       { grid-template-columns: 1fr; gap: 24px; }
+  .about-vision-grid     { grid-template-columns: 1fr; gap: 32px; }
+  .about-gaps-grid       { grid-template-columns: 1fr; gap: 16px; }
+
+  .about-photo-mosaic {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 8px;
+  }
+
+  /* Flatten all mosaic spans on tablet */
+  .about-photo-mosaic > div {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    height: 180px;
+  }
+
+  /* Hide quote card on tablet (too small) */
+  .about-mosaic-quote { display: none !important; }
+
+  .about-section       { padding: 48px 24px; }
+  .about-hero-section  { padding: 48px 24px 40px; }
+}
+
+/* ─────────────────────────────
+   MOBILE  ≤ 640px
+───────────────────────────── */
+@media (max-width: 640px) {
+  .about-photo-mosaic > div { height: 140px; }
+
+  .about-section      { padding: 40px 16px; }
+  .about-hero-section { padding: 40px 16px 32px; }
+
+  /* CTA padding */
+  .about-cta-content  { padding: 48px 24px !important; }
+}
+
+/* ─────────────────────────────
+   SMALL MOBILE  ≤ 480px
+───────────────────────────── */
+@media (max-width: 480px) {
+  .about-photo-mosaic { grid-template-columns: 1fr; }
+  .about-photo-mosaic > div { height: 200px; }
+}

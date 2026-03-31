@@ -85,14 +85,14 @@ export default function AboutNeo() {
     <div style={{ background: nm.bg, minHeight: '100vh' }}>
 
       {/* ═══ HERO ═══ */}
-      <section style={{ padding: '72px 40px 56px', maxWidth: '1280px', margin: '0 auto' }}>
+      <section className="about-hero-section">
         {/* Label */}
         <p style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '16px', textAlign: 'center' }}>
           WHO WE ARE
         </p>
 
         {/* Headline + intro — two columns */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start', marginBottom: '48px' }}>
+        <div className="about-hero-grid">
           <h1 style={{ fontSize: '38px', fontWeight: '800', color: '#0f172a', lineHeight: '1.2', margin: 0 }}>
             We Are Building a{' '}
             <span style={{ fontFamily: 'Nasalization, sans-serif' }}>GLOBAL ARMY</span>{' '}
@@ -105,14 +105,7 @@ export default function AboutNeo() {
 
         {/* Photo grid — neumorphic frame */}
         <NmCard hover={false} style={{ padding: '16px', borderRadius: '24px' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gridTemplateRows: 'repeat(6, 80px)',
-            gap: '10px',
-            borderRadius: '16px',
-            overflow: 'hidden',
-          }}>
+          <div className="about-photo-mosaic">
             {/* Top-left wide */}
             <div style={{ gridColumn: '1/6', gridRow: '1/3', borderRadius: '12px', overflow: 'hidden', boxShadow: nm.shadowSm }}>
               <Image src="/images/about  us/herosectionimages/imageabout.png" alt="DAGARMY Team" width={600} height={400} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -134,7 +127,7 @@ export default function AboutNeo() {
               <Image src="/images/about  us/herosectionimages/image 4.png" alt="DAGARMY Growth" width={700} height={300} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
             </div>
             {/* Quote card */}
-            <div style={{
+            <div className="about-mosaic-quote" style={{
               gridColumn: '7/13', gridRow: '5/7',
               borderRadius: '12px', boxShadow: nm.shadowSm,
               background: nm.bg,
@@ -157,7 +150,7 @@ export default function AboutNeo() {
       </section>
 
       {/* ═══ THREE GAPS ═══ */}
-      <section style={{ padding: '64px 40px', maxWidth: '1280px', margin: '0 auto' }}>
+      <section className="about-section">
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <p style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>OUR PURPOSE</p>
           <h2 style={{ fontSize: '34px', fontWeight: '800', color: '#0f172a', marginBottom: '14px' }}>Bridging the Three Gaps</h2>
@@ -166,7 +159,7 @@ export default function AboutNeo() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+        <div className="about-gaps-grid">
           {gaps.map((gap, i) => (
             <NmCard
               key={gap.title}
@@ -210,8 +203,8 @@ export default function AboutNeo() {
       </section>
 
       {/* ═══ OUR VISION ═══ */}
-      <section style={{ padding: '64px 40px', maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
+      <section className="about-section">
+        <div className="about-vision-grid">
           {/* Image */}
           <NmCard hover={false} style={{ padding: '12px', borderRadius: '22px' }}>
             <div style={{ borderRadius: '14px', overflow: 'hidden' }}>
@@ -269,7 +262,7 @@ export default function AboutNeo() {
       </section>
 
       {/* ═══ BANNER / CTA ═══ */}
-      <section style={{ padding: '0 40px 80px', maxWidth: '1280px', margin: '0 auto' }}>
+      <section className="about-section" style={{ paddingTop: 0 }}>
         <NmCard hover={false} style={{ borderRadius: '24px', overflow: 'hidden', padding: 0, position: 'relative', minHeight: '320px' }}>
           {/* Background image */}
           <Image
@@ -285,7 +278,7 @@ export default function AboutNeo() {
             background: 'linear-gradient(90deg, rgba(5,8,20,0.88) 0%, rgba(5,8,20,0.70) 50%, rgba(5,8,20,0.55) 100%)',
           }} />
           {/* Content */}
-          <div style={{ position: 'relative', zIndex: 1, padding: '72px 60px', textAlign: 'center' }}>
+          <div className="about-cta-content" style={{ position: 'relative', zIndex: 1, padding: '72px 60px', textAlign: 'center' }}>
             <h2 style={{ fontSize: '42px', fontWeight: '800', color: '#ffffff', marginBottom: '18px', lineHeight: '1.3', fontFamily: 'Cardo, serif' }}>
               Join the Army.<br />Claim Your Future.
             </h2>

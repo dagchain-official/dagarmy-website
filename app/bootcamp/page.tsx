@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import "./bootcamp.css";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
 import BootcampHero from "@/components/bootcamp/BootcampHero";

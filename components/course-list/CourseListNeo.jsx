@@ -133,7 +133,7 @@ export default function CourseListNeo() {
     <div style={{ background: nm.bg, minHeight: '100vh', padding: '0 0 60px' }}>
 
       {/* Page header */}
-      <div style={{ background: nm.bg, padding: '48px 40px 32px', textAlign: 'center' }}>
+      <div className="courses-page-header" style={{ background: nm.bg }}>
         <p style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>
           TECH CAREER LEARNING
         </p>
@@ -146,7 +146,7 @@ export default function CourseListNeo() {
       </div>
 
       {/* Course list */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div className="courses-list-wrap">
         {courses.map((course) => {
           const currentModule = course.modules?.find(m => m.id === selectedModule[course.id]) || course.modules?.[0];
 
@@ -239,7 +239,7 @@ export default function CourseListNeo() {
               </NmCard>
 
               {/* ── Two-column: Sidebar + Curriculum ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', alignItems: 'start' }}>
+              <div className="courses-course-grid">
 
                 {/* LEFT SIDEBAR */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -339,7 +339,7 @@ export default function CourseListNeo() {
                   </div>
 
                   {course.modules?.length > 0 ? (
-                    <div style={{ display: 'flex', height: '580px' }}>
+                    <div className="courses-curriculum-inner">
 
                       {/* Module list */}
                       <div style={{

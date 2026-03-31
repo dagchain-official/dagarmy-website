@@ -1,6 +1,7 @@
 "use client";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
+import "../cookies-policy/policy.css";
 
 const sections = [
   {
@@ -137,7 +138,7 @@ export default function TermsOfServicePage() {
           <div style={{ background: "#fff", minHeight: "100vh" }}>
 
             {/* Hero */}
-            <div style={{ background: "#111", padding: "100px 0 64px" }}>
+            <div className="policy-hero" style={{ background: "#111", padding: "100px 0 64px" }}>
               <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}>
                 <div style={{
                   display: "inline-flex", alignItems: "center", padding: "5px 14px",

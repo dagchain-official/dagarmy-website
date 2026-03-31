@@ -1,4 +1,5 @@
 "use client";
+import "../../app/careers/careers.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { CAREERS, DEPARTMENTS, REGIONS } from "@/data/careers";
@@ -222,7 +223,7 @@ function JobCard({ job, isOpen, onToggle, onApply }) {
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+          <div className="careers-panels-grid">
             {responsibilities.length > 0 && (
               <NeuSectionPanel title="Responsibilities" accentColor="#6366f1">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
@@ -396,7 +397,7 @@ function ApplicationModal({ job, onClose, onSuccess }) {
         <div style={{ height: '1px', background: 'linear-gradient(90deg,transparent,#c7d2fe,transparent)', margin: '0 28px' }} />
 
         <form onSubmit={handleSubmit} style={{ padding: '20px 28px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+          <div className="careers-form-row">
             {[
               { key: 'name', label: 'Full Name', required: true, type: 'text', ph: 'John Doe' },
               { key: 'email', label: 'Email Address', required: true, type: 'email', ph: 'you@example.com' },

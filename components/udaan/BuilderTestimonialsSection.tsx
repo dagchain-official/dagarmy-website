@@ -138,7 +138,7 @@ export default function BuilderTestimonialsSection() {
 
   return (
     <section style={{ background: '#ffffff', paddingTop: 80, paddingBottom: 80 }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
+      <div className="udaan-testimonials-wrap" style={{ margin: '0 auto', padding: '0 20px' }}>
         
         {/* Section Header */}
         <div style={{ marginBottom: 60, textAlign: 'center' }}>
@@ -218,7 +218,8 @@ export default function BuilderTestimonialsSection() {
             </svg>
           </div>
 
-          {/* Profile Thumbnails Swiper */}
+          {/* Profile Thumbnails Swiper */
+          /* udaan-testimonials-nav wraps arrows + swipers */}
           <Swiper
             {...swiperOptions2}
             modules={[Navigation, Thumbs, Autoplay]}

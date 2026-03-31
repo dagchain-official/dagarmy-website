@@ -1,3 +1,4 @@
+import "./blog.css";
 import Blogs2 from "@/components/blogs/Blogs2";
 import PageTitle from "@/components/blogs/PageTitle";
 import Footer1 from "@/components/footers/Footer1";

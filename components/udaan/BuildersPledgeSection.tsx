@@ -24,7 +24,7 @@ export default function BuildersPledgeSection() {
         paddingBottom: 100,
       }}
     >
-      <div className="wrap" style={{ position: "relative", zIndex: 1, maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
+      <div className="wrap udaan-pledge-wrap" style={{ position: "relative", zIndex: 1, margin: "0 auto", padding: "0 24px" }}>
 
         {/* Section Header */}
         <motion.div

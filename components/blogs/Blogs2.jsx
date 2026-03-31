@@ -146,7 +146,7 @@ export default function Blogs2() {
         <div className="tf-container">
           <div className="row">
             <div className="col-12">
-              <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
+              <div className="blog-layout" style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
                 {/* ── Main post list ── */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   {loading ? (
@@ -175,13 +175,13 @@ export default function Blogs2() {
                       {filteredPosts.map((article, index) => (
                         <div
                           key={index}
-                          style={{ background: nm.bg, borderRadius: '14px', boxShadow: nm.shadow, overflow: 'hidden', transition: 'box-shadow 0.25s, transform 0.25s', display: 'flex', gap: 0, padding: '12px' }}
+                          className="blog-post-card" style={{ background: nm.bg, borderRadius: '14px', boxShadow: nm.shadow, overflow: 'hidden', transition: 'box-shadow 0.25s, transform 0.25s', display: 'flex', gap: 0, padding: '12px' }}
                           onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadowHover; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                           onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.transform = 'translateY(0)'; }}
                         >
                           {/* Thumbnail — left side, fixed width */}
                           {article.imageUrl && (
-                            <div style={{ width: '200px', minWidth: '200px', height: '260px', borderRadius: '10px', overflow: 'hidden', marginRight: '16px', flexShrink: 0, boxShadow: nm.shadowSm }}>
+                            <div className="blog-post-thumb" style={{ width: '200px', minWidth: '200px', height: '260px', borderRadius: '10px', overflow: 'hidden', marginRight: '16px', flexShrink: 0, boxShadow: nm.shadowSm }}>
                               <img src={article.imageUrl} alt={article.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={e => { e.target.src = '/images/blog/default-blog.jpg'; }} />
                             </div>
                           )}
@@ -235,7 +235,7 @@ export default function Blogs2() {
                 </div>
 
                 {/* ── Sidebar ── */}
-                <div style={{ width: '340px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div className="blog-sidebar" style={{ width: '340px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
                   {/* Search */}
                   <div ref={searchRef} style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '22px', position: 'relative' }}>

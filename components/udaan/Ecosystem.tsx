@@ -66,7 +66,7 @@ export default function Ecosystem() {
         </motion.div>
 
         {/* Tier tabs + content */}
-        <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 24 }}>
+        <div className="udaan-ecosystem-grid" style={{ gap: 24 }}>
           {/* Vertical nav */}
           <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 4 }}>
             {tiers.map((t, i) => (
@@ -142,7 +142,7 @@ export default function Ecosystem() {
 
                     <p style={{ fontSize: "14px", color: "#666", lineHeight: 1.7, marginBottom: 24, maxWidth: 600 }}>{t.desc}</p>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 28 }}>
+                    <div className="udaan-reality-white-grid" style={{ gap: 10, marginBottom: 28 }}>
                       {t.features.map(f => (
                         <div key={f} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                           <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1 5 3.5 7.5 9 2" stroke="#10b981" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>

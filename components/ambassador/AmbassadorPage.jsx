@@ -1,4 +1,5 @@
 "use client";
+import "../../app/ambassador/ambassador.css";
 import React, { useState, useEffect, useRef } from "react";
 
 /* ── Icons ─────────────────────────────────────────────────── */
@@ -109,7 +110,7 @@ function ApplyModal({ onClose, onSuccess }) {
         </div>
         {/* Form */}
         <form onSubmit={submit} style={{ overflowY: 'auto', padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="amb-form-row">
             <div>
               <label style={lbl}>Full Name <span style={{ color: '#e00' }}>*</span></label>
               <input value={form.full_name} onChange={set('full_name')} placeholder="Your full name" {...inp()} />
@@ -119,7 +120,7 @@ function ApplyModal({ onClose, onSuccess }) {
               <input type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" {...inp()} />
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="amb-form-row">
             <div>
               <label style={lbl}>Country <span style={{ color: '#e00' }}>*</span></label>
               <input value={form.country} onChange={set('country')} placeholder="India, UAE, USA..." {...inp()} />
@@ -133,7 +134,7 @@ function ApplyModal({ onClose, onSuccess }) {
             <label style={lbl}>Social Media Links</label>
             <input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn — paste all links" {...inp()} />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="amb-form-row">
             <div>
               <label style={lbl}>Total Followers / Subscribers</label>
               <input value={form.follower_count} onChange={set('follower_count')} placeholder="e.g. 25,000" {...inp()} />
@@ -356,7 +357,7 @@ export default function AmbassadorPage() {
 
       {/* ═══ ABOUT ════════════════════════════════════════════ */}
       <section id="about-section" style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+        <div className="amb-two-col" style={{ alignItems: 'center' }}>
           <div className="amb-reveal">
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Ecosystem</p>
             <h2 style={{ fontSize: 'clamp(30px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
@@ -428,7 +429,7 @@ export default function AmbassadorPage() {
           </div>
 
           {/* Requirements */}
-          <div className="amb-reveal" style={{ marginTop: '48px', background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '40px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '28px' }}>
+          <div className="amb-reveal amb-three-col" style={{ marginTop: '48px', background: '#fff', border: '1px solid #eee', borderRadius: '20px', padding: '40px 40px' }}>
             {[
               { n: '01', t: 'Active Audience', d: 'You have a real, engaged audience on at least one platform.' },
               { n: '02', t: 'Consistent Creator', d: 'You publish content regularly and have an established presence.' },
@@ -453,7 +454,7 @@ export default function AmbassadorPage() {
           </div>
           <CTABtn dark onClick={() => setModal(true)}>Apply Now <Ic.arrow /></CTABtn>
         </div>
-        <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+        <div className="amb-grid amb-three-col" style={{ gap: '16px' }}>
           {benefits.map((b, i) => (
             <div key={i} className="amb-card" style={{
               padding: '28px', border: '1px solid #f0f0f0', borderRadius: '18px',
@@ -481,7 +482,7 @@ export default function AmbassadorPage() {
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#fff', letterSpacing: '-1.5px', margin: '0 0 16px' }}>Ambassador Tiers</h2>
             <p style={{ color: '#666', fontSize: '15px', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>Grow through levels based on your reach and performance. Tiers are reviewed and upgraded periodically.</p>
           </div>
-          <div className="amb-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          <div className="amb-grid amb-three-col" style={{ gap: '16px' }}>
             {tiers.map((t, i) => (
               <div key={i} className="amb-card" style={{
                 background: t.featured ? '#fff' : '#1a1a1a',
@@ -529,7 +530,7 @@ export default function AmbassadorPage() {
 
       {/* ═══ RESPONSIBILITIES ═════════════════════════════════ */}
       <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '120px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
+        <div className="amb-two-col">
           <div className="amb-reveal">
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>Your Role</p>
             <h2 style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: '900', color: '#111', letterSpacing: '-1px', lineHeight: 1.15, margin: '0 0 24px' }}>What you&apos;ll do as an Ambassador</h2>
@@ -580,7 +581,7 @@ export default function AmbassadorPage() {
 
       {/* ═══ WHY JOIN — FULL WIDTH BANNER ═════════════════════ */}
       <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+        <div className="amb-two-col" style={{ maxWidth: '1000px', margin: '0 auto', alignItems: 'center' }}>
           <div className="amb-reveal">
             <p style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#999' }}>The Opportunity</p>
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontWeight: '900', color: '#111', letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 20px' }}>
@@ -651,11 +652,6 @@ export default function AmbassadorPage() {
 
       <style>{`
         @keyframes ambScrollLine { 0% { transform: scaleY(0); transform-origin: top; opacity: 1; } 50% { transform: scaleY(1); transform-origin: top; opacity: 1; } 100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; } }
-        @media (max-width: 768px) {
-          .amb-two-col { grid-template-columns: 1fr !important; gap: 48px !important; }
-          .amb-three-col { grid-template-columns: 1fr !important; }
-          .amb-stats-row { grid-template-columns: repeat(2, 1fr) !important; }
-        }
       `}</style>
 
       {modal && <ApplyModal onClose={() => setModal(false)} onSuccess={() => { setModal(false); setSuccess(true); }} />}

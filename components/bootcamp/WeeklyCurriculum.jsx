@@ -232,7 +232,7 @@ export default function WeeklyCurriculum() {
   const [openWeek, setOpenWeek] = useState(1);
 
   return (
-    <section id="curriculum" style={{ background: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
+    <section id="curriculum" className="bootcamp-section" style={{ background: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
       <div className="tf-container">
         <div className="row justify-content-center">
           <div className="col-lg-8 text-center">

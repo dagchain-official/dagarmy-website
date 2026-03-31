@@ -74,9 +74,7 @@ export default function ExecutionSection() {
         </motion.div>
 
         {/* ── HERO ROW: big statement left + two stacked pills right ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+        <div className="udaan-reality-white-grid" style={{
           gap: "clamp(48px, 7vw, 112px)",
           alignItems: "start",
           marginBottom: "clamp(80px, 10vh, 128px)",
@@ -257,14 +255,12 @@ function MarketStrip({ inView }: { inView: boolean }) {
       initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: 0.4, ease }}
+      className="udaan-execution-strip"
       style={{
-        display: "grid",
-        gridTemplateColumns: "auto 1fr 1fr",
-        gap: 0,
         marginBottom: "clamp(72px, 9vh, 112px)",
         border: "1px solid rgba(0,0,10,0.07)",
-          borderRadius: 20,
-          overflow: "hidden",
+        borderRadius: 20,
+        overflow: "hidden",
       }}
     >
       {/* Label panel */}
@@ -334,13 +330,12 @@ function ClosingManifesto({ inView }: { inView: boolean }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: 0.55, ease }}
+      className="udaan-execution-closing"
       style={{
-        display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 2,
-          alignItems: "stretch",
-          borderRadius: 20,
-          overflow: "hidden",
+        gap: 2,
+        alignItems: "stretch",
+        borderRadius: 20,
+        overflow: "hidden",
       }}
     >
       {/* Left — builder-first culture text */}

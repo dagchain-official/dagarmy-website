@@ -1,0 +1,30 @@
+/* ═══════════════════════════════════════════════════════
+   FAQ PAGE — Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Sidebar + content grid ── */
+.faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.faq-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+/* ─────────────────────────────
+   TABLET  ≤ 900px
+───────────────────────────── */
+@media (max-width: 900px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .faq-sidebar {
+    position: static;
+  }
+}

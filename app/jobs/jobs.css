@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════════════════
+   JOBS PAGE — Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Sidebar + listings flex layout ── */
+.jobs-layout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* ── Left sidebar ── */
+.jobs-sidebar {
+  width: 270px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+}
+
+/* ── Coming-soon card padding ── */
+.coming-soon-card {
+  padding: 52px 44px;
+}
+
+/* ─────────────────────────────
+   TABLET  ≤ 900px
+───────────────────────────── */
+@media (max-width: 900px) {
+  .jobs-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .jobs-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .coming-soon-card {
+    padding: 40px 28px;
+  }
+}
+
+/* ─────────────────────────────
+   MOBILE  ≤ 640px
+───────────────────────────── */
+@media (max-width: 640px) {
+  .coming-soon-card {
+    padding: 32px 20px;
+  }
+}

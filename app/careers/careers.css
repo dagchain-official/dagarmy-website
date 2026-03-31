@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════════════════
+   CAREERS PAGE — Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Job detail panels grid (responsibilities + requirements) ── */
+.careers-panels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* ── Application form name/email row ── */
+.careers-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* ─────────────────────────────
+   TABLET  ≤ 900px
+───────────────────────────── */
+@media (max-width: 900px) {
+  .careers-panels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─────────────────────────────
+   MOBILE  ≤ 640px
+───────────────────────────── */
+@media (max-width: 640px) {
+  .careers-form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

@@ -1,4 +1,5 @@
 "use client";
+import "../jobs/jobs.css";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -58,7 +59,7 @@ export default function HackathonComingSoon() {
         <div style={{ maxWidth: '660px', width: '100%' }}>
 
           {/* Main Card */}
-          <div style={{ background: nm.bg, borderRadius: '28px', boxShadow: nm.shadow, padding: '52px 44px', textAlign: 'center' }}>
+          <div className="coming-soon-card" style={{ background: nm.bg, borderRadius: '28px', boxShadow: nm.shadow, textAlign: 'center' }}>
             {/* Logo */}
             <div style={{ marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: nm.bg, boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>

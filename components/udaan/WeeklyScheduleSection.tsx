@@ -71,12 +71,11 @@ export default function WeeklyScheduleSection() {
 
         {/* ── Section header ── */}
         <motion.div
+          className="udaan-reality-white-grid"
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease }}
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
             gap: 48,
             alignItems: "flex-end",
             marginBottom: 72,
@@ -165,12 +164,7 @@ export default function WeeklyScheduleSection() {
         </motion.div>
 
         {/* ── Week cards ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 16,
-          marginBottom: 20,
-        }}>
+        <div className="udaan-weekly-grid" style={{ marginBottom: 20 }}>
           {weeks.map((w, i) => (
             <motion.div
               key={w.num}
@@ -307,13 +301,11 @@ export default function WeeklyScheduleSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.55, ease }}
+          className="udaan-weekly-arch-strip"
           style={{
             background: "#0c0c14",
             borderRadius: 20,
             padding: "36px 48px",
-            display: "grid",
-            gridTemplateColumns: "1fr 1px 1fr 1px 1fr 1px 1fr 1px 2fr",
-            alignItems: "center",
             overflow: "hidden",
             position: "relative",
           }}
@@ -329,62 +321,72 @@ export default function WeeklyScheduleSection() {
             pointerEvents: "none",
           }} />
 
-          {[
-            { val: "4", label: "Defined Phases", sub: "Structured weekly progression" },
-            { val: "4", label: "Tangible Deliverables", sub: "One measurable output per week" },
-            { val: "Live", label: "Market Validation", sub: "Real user feedback before scale" },
-            { val: "Founder", label: "Positioning Path", sub: "Pitch, traction, evaluation" },
-          ].flatMap((item, i) => {
-            const cell = (
-              <div key={item.label} style={{ padding: "0 32px" }}>
-                <div style={{
-                  fontFamily: "'Nasalization', sans-serif",
-                  fontSize: 28,
-                  fontWeight: 700,
-                  color: "#ffffff",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1,
-                  marginBottom: 6,
-                }}>
-                  {item.val}
-                </div>
-                <div style={{
-                  fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: "#ffffff",
-                  marginBottom: 3,
-                }}>
-                  {item.label}
-                </div>
-                <div style={{
-                  fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.4)",
-                  lineHeight: 1.4,
-                }}>
-                  {item.sub}
-                </div>
-              </div>
-            );
-            return i < 3
-              ? [cell, <div key={`sep-${i}`} style={{ width: 1, height: 56, background: "rgba(255,255,255,0.08)" }} />]
-              : [cell];
-          })}
+          {/* Stats + closing text row */}
+          <div className="udaan-arch-inner">
 
-          <div key="sep-end" style={{ width: 1, height: 56, background: "rgba(255,255,255,0.08)" }} />
+            {/* 4 stat cells with separators */}
+            <div className="udaan-arch-stats-grid">
+              {[
+                { val: "4", label: "Defined Phases", sub: "Structured weekly progression" },
+                { val: "4", label: "Tangible Deliverables", sub: "One measurable output per week" },
+                { val: "Live", label: "Market Validation", sub: "Real user feedback before scale" },
+                { val: "Founder", label: "Positioning Path", sub: "Pitch, traction, evaluation" },
+              ].flatMap((item, i) => {
+                const cell = (
+                  <div key={item.label} className="udaan-arch-cell">
+                    <div style={{
+                      fontFamily: "'Nasalization', sans-serif",
+                      fontSize: 28,
+                      fontWeight: 700,
+                      color: "#ffffff",
+                      letterSpacing: "-0.02em",
+                      lineHeight: 1,
+                      marginBottom: 6,
+                    }}>
+                      {item.val}
+                    </div>
+                    <div style={{
+                      fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: "#ffffff",
+                      marginBottom: 3,
+                    }}>
+                      {item.label}
+                    </div>
+                    <div style={{
+                      fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
+                      fontSize: 11,
+                      color: "rgba(255,255,255,0.4)",
+                      lineHeight: 1.4,
+                    }}>
+                      {item.sub}
+                    </div>
+                  </div>
+                );
+                return i < 3
+                  ? [cell, <div key={`sep-${i}`} className="udaan-arch-sep" style={{ width: 1, height: 56, background: "rgba(255,255,255,0.08)" }} />]
+                  : [cell];
+              })}
+            </div>
 
-          <div key="closing" style={{ padding: "0 32px" }}>
-            <p style={{
-              fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
-              fontSize: 13,
-              color: "rgba(255,255,255,0.55)",
-              lineHeight: 1.65,
-              margin: 0,
-            }}>
-              Each week ends with visible progress.<br />
-              <strong style={{ color: "rgba(255,255,255,0.9)", fontWeight: 700 }}>No passive participation.</strong>
-            </p>
+            {/* Vertical separator before closing text (desktop only) */}
+            <div className="udaan-arch-sep-end" style={{ width: 1, alignSelf: "stretch", background: "rgba(255,255,255,0.08)" }} />
+
+            {/* Closing text */}
+            <div className="udaan-arch-closing">
+              <p style={{
+                fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.55)",
+                lineHeight: 1.65,
+                margin: 0,
+              }}>
+                Each week ends with visible progress.<br />
+                <strong style={{ color: "rgba(255,255,255,0.9)", fontWeight: 700 }}>No passive participation.</strong>
+              </p>
+            </div>
+
           </div>
         </motion.div>
 

@@ -1,4 +1,5 @@
 "use client";
+import "../../app/faq/faq.css";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -362,10 +363,10 @@ export default function FAQPage() {
 
       {/* Main content */}
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '8px 24px 64px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 260px) 1fr', gap: '28px', alignItems: 'start' }}>
+        <div className="faq-layout" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 260px) 1fr', gap: '28px', alignItems: 'start' }}>
 
           {/* Sidebar */}
-          <aside style={{ position: 'sticky', top: '100px' }}>
+          <aside className="faq-sidebar" style={{ position: 'sticky', top: '100px' }}>
             <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 12px 4px' }}>Sections</p>
 
             <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>

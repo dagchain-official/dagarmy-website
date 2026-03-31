@@ -102,7 +102,7 @@ export default function Vision2030() {
       {/* ═══════════════════════════════════════════════════
           HERO ROW — Vision 2030 Masthead + Opening Statement
       ═══════════════════════════════════════════════════ */}
-      <div style={{
+      <div className="v2030-hero-row" style={{
         maxWidth: 1400, margin: "0 auto",
         padding: "120px 64px 0",
         position: "relative", zIndex: 1,
@@ -154,7 +154,7 @@ export default function Vision2030() {
       {/* ═══════════════════════════════════════════════════
           BENTO GRID ROW 1 — Stat + Landscape Image (no purple card here)
       ═══════════════════════════════════════════════════ */}
-      <div style={{
+      <div className="v2030-bento-row1" style={{
         maxWidth: 1400, margin: "0 auto",
         padding: "56px 64px 0",
         position: "relative", zIndex: 1,
@@ -228,7 +228,7 @@ export default function Vision2030() {
       {/* ═══════════════════════════════════════════════════
           BENTO GRID ROW 2 — Year + Cycle + Mission + Community + Purple card
       ═══════════════════════════════════════════════════ */}
-      <div style={{
+      <div className="v2030-bento-row2" style={{
         maxWidth: 1400, margin: "0 auto",
         padding: "16px 64px 0",
         position: "relative", zIndex: 1,
@@ -453,7 +453,7 @@ export default function Vision2030() {
         position: "relative", zIndex: 1,
       }}>
         <Reveal>
-          <div style={{
+          <div className="v2030-principle-strip" style={{
             background: "linear-gradient(135deg, #07070f 0%, #1a1a3e 100%)",
             borderRadius: 20,
             padding: "72px 80px",
@@ -500,7 +500,7 @@ export default function Vision2030() {
 
             {/* Right — 3 pillars + description */}
             <div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 40 }}>
+              <div className="v2030-pillars" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 40 }}>
                 {[
                   { label: "Structured", sub: "Ecosystem" },
                   { label: "Curated", sub: "Selection" },
@@ -547,7 +547,7 @@ export default function Vision2030() {
       {/* ═══════════════════════════════════════════════════
             YOUR NEXT STEP + CHOOSE YOUR PATH — Side by side
         ═══════════════════════════════════════════════════ */}
-        <div style={{
+        <div className="v2030-nextstep-row" style={{
           maxWidth: 1400, margin: "0 auto",
           padding: "16px 64px 0",
           position: "relative", zIndex: 1,
@@ -675,7 +675,7 @@ export default function Vision2030() {
 
             {/* Closing declaration — fills remaining height to align with left card bottom */}
             <Reveal delay={0.28} style={{ flex: 1 }}>
-              <div style={{
+              <div className="v2030-closing-decl" style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
                 gap: "0 48px",

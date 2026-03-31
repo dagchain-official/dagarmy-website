@@ -1,6 +1,7 @@
 "use client";
 import Header2 from "@/components/headers/Header2";
 import Footer1 from "@/components/footers/Footer1";
+import "./policy.css";
 
 const sections = [
   {
@@ -119,7 +120,7 @@ export default function CookiesPolicyPage() {
           <div style={{ background: "#fff", minHeight: "100vh" }}>
 
             {/* Hero */}
-            <div style={{ background: "#111", padding: "100px 0 64px" }}>
+            <div className="policy-hero" style={{ background: "#111", padding: "100px 0 64px" }}>
               <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}>
                 <div style={{
                   display: "inline-flex", alignItems: "center", padding: "5px 14px",
@@ -189,7 +190,7 @@ export default function CookiesPolicyPage() {
                     { type: "Analytics", purpose: "Aggregated usage data, error tracking", canDisable: "Yes" },
                     { type: "Marketing", purpose: "Communication tracking (consent-based only)", canDisable: "Yes" },
                   ].map((row, i) => (
-                    <div key={row.type} style={{
+                    <div key={row.type} className="cookie-table-row" style={{
                       display: "grid", gridTemplateColumns: "1.2fr 2fr 0.7fr",
                       borderBottom: i < 3 ? "1px solid #f0f0f0" : "none",
                       background: i % 2 === 0 ? "#fafafa" : "#fff",

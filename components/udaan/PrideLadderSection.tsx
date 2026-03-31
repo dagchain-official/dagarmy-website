@@ -283,9 +283,8 @@ export default function PrideLadderSection() {
           <motion.div
             whileHover={{ scale: 1.006 }}
             transition={{ type: "spring", stiffness: 180, damping: 24 }}
+            className="udaan-execution-closing"
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
               gap: 2,
               borderRadius: 20,
               overflow: "hidden",
@@ -379,9 +378,7 @@ export default function PrideLadderSection() {
         </FadeUp>
 
         {/* ── RANK CARDS ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+        <div className="udaan-prideladder-ranks" style={{
           gap: 24,
           marginBottom: 48,
         }}>
@@ -597,7 +594,7 @@ export default function PrideLadderSection() {
               }}>Non-negotiable</span>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+            <div className="udaan-reality-white-grid">
               <div style={{ padding: "36px 44px", borderRight: "1px solid #e2e2ee" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 2, background: "#ef4444", flexShrink: 0 }} />
@@ -718,9 +715,8 @@ export default function PrideLadderSection() {
           <motion.div
             whileHover={{ scale: 1.005 }}
             transition={{ type: "spring", stiffness: 180, damping: 22 }}
+            className="udaan-execution-closing"
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
               gap: 2, borderRadius: 20, overflow: "hidden",
               border: "1px solid #e2e2ee",
             }}

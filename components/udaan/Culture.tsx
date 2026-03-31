@@ -31,10 +31,10 @@ function DiffRow({ old: o, udaan: u, i }: { old: string; udaan: string; i: numbe
   return (
     <motion.div
       ref={ref}
+      className="udaan-culture-diff-row"
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: i * 0.08, ease }}
-      style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
     >
       {/* Old */}
       <motion.div
@@ -156,7 +156,7 @@ export default function Culture() {
             </h2>
           </motion.div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
+          <div className="udaan-culture-pillars">
             {pillars.map(({ title, desc }, i) => (
               <Pillar key={title} title={title} desc={desc} i={i} />
             ))}

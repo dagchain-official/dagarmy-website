@@ -66,7 +66,7 @@ export default function UdaanCodeSection() {
           y: watermarkY, opacity: watermarkOpacity,
         }}>CODE</motion.div>
 
-        <div style={{ ...wrapStyle, position: "relative", zIndex: 1 }}>
+        <div className="udaan-code-wrap" style={{ ...wrapStyle, position: "relative", zIndex: 1 }}>
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -80,7 +80,7 @@ export default function UdaanCodeSection() {
           </motion.div>
 
           {/* Masthead headline */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 64, alignItems: "flex-end", paddingBottom: 56 }}>
+          <div className="udaan-code-masthead" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 64, alignItems: "flex-end", paddingBottom: 56 }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -130,7 +130,7 @@ export default function UdaanCodeSection() {
           </div>
 
           {/* Bottom stat bar */}
-          <div style={{ borderTop: "1px solid #ddd9ff", display: "flex", alignItems: "stretch", overflow: "hidden" }}>
+          <div className="udaan-code-stat-bar" style={{ borderTop: "1px solid #ddd9ff", display: "flex", alignItems: "stretch", overflow: "hidden" }}>
             {[
               { num: "3", label: "Core Principles" },
               { num: "0", label: "Tolerance for Shortcuts" },
@@ -157,8 +157,8 @@ export default function UdaanCodeSection() {
 
       {/* ── ARTICLE 01: No Toxicity ── white bg */}
       <div ref={p1Ref} style={{ borderBottom: "1px solid #ebebf5" }}>
-        <div style={{ ...wrapStyle }}>
-          <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", minHeight: 320 }}>
+        <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
+          <div className="udaan-code-article-rail" style={{ display: "grid", gridTemplateColumns: "200px 1fr", minHeight: 320 }}>
             {/* Left rail */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -183,7 +183,7 @@ export default function UdaanCodeSection() {
             </motion.div>
 
             {/* Content */}
-            <div style={{ padding: "64px 0 64px 64px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
+            <div className="udaan-code-article-content udaan-code-two-col" style={{ padding: "64px 0 64px 64px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={p1In ? { opacity: 1, y: 0 } : {}}
@@ -220,9 +220,9 @@ export default function UdaanCodeSection() {
 
       {/* ── ARTICLE 02: Zero Politics — full-bleed #fafafa band ── */}
       <div ref={p2Ref} style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
-        <div style={{ ...wrapStyle }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 200px", minHeight: 300 }}>
-            <div style={{ padding: "64px 64px 64px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", borderRight: "1px solid #ebebf5" }}>
+        <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
+          <div className="udaan-code-article-rail-rev" style={{ display: "grid", gridTemplateColumns: "1fr 200px", minHeight: 300 }}>
+            <div className="udaan-code-two-col udaan-code-p2-content" style={{ padding: "64px 64px 64px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", borderRight: "1px solid #ebebf5" }}>
               <motion.div
                 initial={{ opacity: 0, x: -24 }}
                 animate={p2In ? { opacity: 1, x: 0 } : {}}
@@ -283,11 +283,12 @@ export default function UdaanCodeSection() {
 
       {/* ── ARTICLE 03: No Fake Claims — white bg ── */}
       <div ref={p3Ref} style={{ borderBottom: "1px solid #ebebf5" }}>
-        <div style={{ ...wrapStyle }}>
+        <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={p3In ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease }}
+            className="udaan-code-article-three-col"
             style={{ display: "grid", gridTemplateColumns: "200px 1fr 1fr", minHeight: 360, position: "relative", overflow: "hidden" }}
           >
             <div aria-hidden style={{
@@ -354,8 +355,8 @@ export default function UdaanCodeSection() {
 
       {/* ── CONTRIBUTION FIRST — full-bleed #fafafa ── */}
       <div style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
-        <div style={{ ...wrapStyle }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", minHeight: 280 }}>
+        <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
+          <div className="udaan-code-contribution-grid" style={{ display: "grid", gridTemplateColumns: "1fr 380px", minHeight: 280 }}>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -412,8 +413,8 @@ export default function UdaanCodeSection() {
 
       {/* ── RESPONSIBLE CULTURE + GUARDRAIL — white bg ── */}
       <div ref={guardRef} style={{ borderBottom: "1px solid #ebebf5" }}>
-        <div style={{ ...wrapStyle }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
+          <div className="udaan-code-guard-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={guardIn ? { opacity: 1, y: 0 } : {}}
@@ -463,7 +464,7 @@ export default function UdaanCodeSection() {
               style={{ padding: "64px 0 64px 48px" }}
             >
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "#9494aa", fontFamily: "'Nasalization', sans-serif", marginBottom: 20 }}>Integrity as the Guardrail</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
+              <div className="udaan-code-reject-accept" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
                     <div style={{ width: 18, height: 18, borderRadius: "50%", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -534,6 +535,7 @@ export default function UdaanCodeSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={closingIn ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease }}
+          className="udaan-code-wrap"
           style={{ ...wrapStyle, position: "relative", zIndex: 1, textAlign: "center" as const }}
         >
           <div style={{

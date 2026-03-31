@@ -1,0 +1,34 @@
+/* Shared policy page responsive styles */
+
+@media (max-width: 640px) {
+  .policy-hero {
+    padding: 72px 0 40px !important;
+  }
+  .cookie-table-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .cookie-table-row > div:nth-child(2) {
+    border-left: 1px solid #f0f0f0;
+  }
+  .cookie-table-row > div:nth-child(3) {
+    grid-column: 1 / -1;
+    border-left: none !important;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-hero {
+    padding: 64px 0 32px !important;
+  }
+  .cookie-table-row {
+    grid-template-columns: 1fr !important;
+  }
+  .cookie-table-row > div {
+    border-left: none !important;
+    border-top: 1px solid #f0f0f0;
+  }
+  .cookie-table-row > div:first-child {
+    border-top: none;
+  }
+}

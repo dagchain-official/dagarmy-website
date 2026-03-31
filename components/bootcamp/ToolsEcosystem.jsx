@@ -11,7 +11,7 @@ export default function ToolsEcosystem() {
   }, {});
 
   return (
-    <section style={{ background: '#f9fafb', paddingTop: '100px', paddingBottom: '100px' }}>
+    <section className="bootcamp-section" style={{ background: '#f9fafb', paddingTop: '100px', paddingBottom: '100px' }}>
       <div className="tf-container">
         <div className="row justify-content-center">
           <div className="col-lg-8 text-center">

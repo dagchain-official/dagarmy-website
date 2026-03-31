@@ -13,7 +13,7 @@ export default function EnrollmentCTA() {
   ];
 
   return (
-    <section id="enrollment" style={{ background: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
+    <section id="enrollment" className="bootcamp-section" style={{ background: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
       <div className="tf-container">
         <div className="row justify-content-center">
           <div className="col-lg-10">
@@ -26,7 +26,7 @@ export default function EnrollmentCTA() {
                 border: '1px solid #e5e7eb'
               }}
             >
-              <div style={{
+              <div className="bootcamp-enrollment-header" style={{
                 background: '#1f2937',
                 padding: '60px 40px',
                 textAlign: 'center',
@@ -40,7 +40,7 @@ export default function EnrollmentCTA() {
                 </p>
               </div>
 
-              <div style={{ padding: '60px 40px' }}>
+              <div className="bootcamp-enrollment-body" style={{ padding: '60px 40px' }}>
                 <div className="row">
                   <div className="col-lg-6">
                     <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '24px', color: '#1f2937' }}>
