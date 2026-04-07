@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { sendEmail, sendBulkEmails } from '@/lib/email';
+import { sendEmail } from '@/lib/email/smtp-client';
 import { webinarInvitationEmailTemplate } from '@/lib/email-templates';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+
+// The sender account — must match an entry in smtp-client.js ACCOUNT_MAP
+const SENDER_EMAIL = 'admin@dagchain.network';
 
 /**
  * POST /api/emails/webinar-invitation
@@ -43,26 +46,27 @@ export async function POST(request) {
     if (mode === 'test') {
       const html = webinarInvitationEmailTemplate({ userName: 'Test User' });
       
-      const result = await sendEmail({
-        to: testEmail,
-        subject,
-        html,
-      });
+      try {
+        const result = await sendEmail(SENDER_EMAIL, {
+          to: testEmail,
+          subject,
+          html,
+        });
 
-      if (!result.success) {
+        return NextResponse.json({
+          success: true,
+          message: 'Test email sent successfully',
+          mode: 'test',
+          recipient: testEmail,
+          messageId: result.messageId
+        });
+      } catch (sendErr) {
+        console.error('Failed to send test webinar email:', sendErr);
         return NextResponse.json(
-          { error: 'Failed to send test email', details: result.error },
+          { error: 'Failed to send test email', details: sendErr.message },
           { status: 500 }
         );
       }
-
-      return NextResponse.json({
-        success: true,
-        message: 'Test email sent successfully',
-        mode: 'test',
-        recipient: testEmail,
-        messageId: result.messageId
-      });
     }
 
     // All mode - send to all users
@@ -85,17 +89,34 @@ export async function POST(request) {
       );
     }
 
-    // Prepare bulk emails
-    const emails = users.map(user => ({
-      to: user.email,
-      subject,
-      html: webinarInvitationEmailTemplate({ 
-        userName: user.full_name || user.email.split('@')[0] 
-      }),
-    }));
+    // Send emails one-by-one with rate limiting
+    let sent = 0;
+    let failed = 0;
+    const results = [];
 
-    // Send bulk emails with rate limiting
-    const result = await sendBulkEmails(emails);
+    for (const user of users) {
+      const html = webinarInvitationEmailTemplate({ 
+        userName: user.full_name || user.email.split('@')[0] 
+      });
+
+      try {
+        const result = await sendEmail(SENDER_EMAIL, {
+          to: user.email,
+          subject,
+          html,
+        });
+        sent++;
+        results.push({ to: user.email, success: true, messageId: result.messageId });
+      } catch (err) {
+        failed++;
+        results.push({ to: user.email, success: false, error: err.message });
+      }
+
+      // Small delay between emails to respect SMTP rate limits
+      if (users.length > 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
 
     // Log the broadcast
     await supabase
@@ -104,20 +125,20 @@ export async function POST(request) {
         type: 'webinar_invitation',
         subject,
         total_recipients: users.length,
-        sent_count: result.sent,
-        failed_count: result.failed,
+        sent_count: sent,
+        failed_count: failed,
         sent_at: new Date().toISOString(),
       })
       .catch(() => {}); // Silent fail on logging
 
     return NextResponse.json({
       success: true,
-      message: `Webinar invitations sent to ${result.sent} of ${users.length} users`,
+      message: `Webinar invitations sent to ${sent} of ${users.length} users`,
       mode: 'all',
       total: users.length,
-      sent: result.sent,
-      failed: result.failed,
-      results: result.results
+      sent,
+      failed,
+      results
     });
 
   } catch (error) {
@@ -128,3 +149,4 @@ export async function POST(request) {
     );
   }
 }
+
