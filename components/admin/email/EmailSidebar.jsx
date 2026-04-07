@@ -39,7 +39,7 @@ function getFolderMeta(path, customColor) {
 
 export default function EmailSidebar({
   accountEmail, folders, activeFolder, loadingFolders,
-  activeView, onFolderClick, onCompose, onRefresh, onFoldersRefresh, onSignatureClick,
+  activeView, onFolderClick, onCompose, onRefresh, onFoldersRefresh, onSignatureClick, onWebinarClick,
 }) {
   const [refreshing, setRefreshing]         = useState(false);
   const [showCreate, setShowCreate]         = useState(false);
@@ -248,6 +248,19 @@ export default function EmailSidebar({
 
       {/* Footer */}
       <div style={{ padding: '12px 10px 16px', borderTop: '1px solid #e8edf5', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <button onClick={onWebinarClick} style={{
+          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
+          padding: '9px', cursor: 'pointer', border: `1px solid ${activeView === 'webinar' ? '#a5b4fc' : '#c7d2fe'}`,
+          borderRadius: '10px', fontSize: '12px', fontWeight: '700', transition: 'all 0.2s',
+          background: activeView === 'webinar' ? '#eef2ff' : 'transparent',
+          color: activeView === 'webinar' ? '#6366f1' : '#6366f1',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#a5b4fc'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = activeView === 'webinar' ? '#eef2ff' : 'transparent'; e.currentTarget.style.borderColor = activeView === 'webinar' ? '#a5b4fc' : '#c7d2fe'; }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+          Webinar Invitation
+        </button>
         <button onClick={onSignatureClick} style={{
           width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
           padding: '9px', cursor: 'pointer', border: `1px solid ${activeView === 'signature' ? '#a5b4fc' : '#c7d2fe'}`,

@@ -655,6 +655,15 @@ const API_ENDPOINTS = [
     body: "None",
     response: '{ connected, message }'
   },
+  {
+    category: "Emails",
+    method: "POST",
+    path: "/api/emails/webinar-invitation",
+    description: "Send webinar invitation emails to all users or a test email. Includes timezone-aware scheduling and Zoom webinar details.",
+    auth: "Admin",
+    body: '{ mode: "test" | "all", testEmail?: "email@example.com" }',
+    response: '{ success, mode, sent?, failed?, recipient? }'
+  },
 
 
   // ─── Notifications ───

@@ -7,6 +7,7 @@ import MessageList from "@/components/admin/email/MessageList";
 import MessageReader from "@/components/admin/email/MessageReader";
 import ComposeModal from "@/components/admin/email/ComposeModal";
 import SignatureEditor from "@/components/admin/email/SignatureEditor";
+import WebinarInvitation from "@/components/admin/email/WebinarInvitation";
 
 const LIMIT = 25;
 
@@ -27,7 +28,7 @@ function EmailPageInner() {
   const [composeDefaults, setComposeDefaults] = useState({});
   const [searchQuery, setSearchQuery]       = useState('');
   const [error, setError]                   = useState('');
-  const [activeView, setActiveView]         = useState('inbox'); // 'inbox' | 'signature'
+  const [activeView, setActiveView]         = useState('inbox'); // 'inbox' | 'signature' | 'webinar'
 
   // Auto-open compose if URL has composeTo / composeSubject params
   useEffect(() => {
@@ -309,12 +310,17 @@ function EmailPageInner() {
           onRefresh={() => loadMessages(activeFolder, currentPage)}
           onFoldersRefresh={loadFolders}
           onSignatureClick={() => setActiveView(activeView === 'signature' ? 'inbox' : 'signature')}
+          onWebinarClick={() => setActiveView(activeView === 'webinar' ? 'inbox' : 'webinar')}
         />
 
-        {/* Panels 2+3: either inbox view or signature editor */}
+        {/* Panels 2+3: either inbox view, signature editor, or webinar invitation */}
         {activeView === 'signature' ? (
           <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <SignatureEditor />
+          </div>
+        ) : activeView === 'webinar' ? (
+          <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <WebinarInvitation />
           </div>
         ) : (
           <>
