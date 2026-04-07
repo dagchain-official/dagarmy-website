@@ -114,7 +114,7 @@ export async function POST(request) {
         if (u.first_name) return u.first_name.trim();
         if (u.full_name && u.full_name.includes(' ') && !u.full_name.includes('@')) return u.full_name.trim();
         if (u.full_name && !u.full_name.includes('@') && u.full_name !== u.email?.split('@')[0]) return u.full_name.trim();
-        return u.email.split('@')[0];
+        return 'DAG Army Member';
       }
 
       // Send emails one-by-one
