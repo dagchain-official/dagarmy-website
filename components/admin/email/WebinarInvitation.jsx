@@ -3,6 +3,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const BATCH_SIZE = 25;
 
+// Build a proper display name from user fields
+function getDisplayName(u) {
+  // Prefer first_name + last_name if available
+  if (u.first_name && u.last_name) return `${u.first_name} ${u.last_name}`.trim();
+  if (u.first_name) return u.first_name.trim();
+  // Fall back to full_name only if it looks like a real name (not an email prefix)
+  if (u.full_name && u.full_name.includes(' ') && !u.full_name.includes('@')) return u.full_name.trim();
+  if (u.full_name && !u.full_name.includes('@') && u.full_name !== u.email?.split('@')[0]) return u.full_name.trim();
+  return '';
+}
+
 export default function WebinarInvitation() {
   const [mode, setMode] = useState('test');
   const [testEmail, setTestEmail] = useState('');
@@ -24,7 +35,9 @@ export default function WebinarInvitation() {
     fetch('/api/admin/users')
       .then(r => r.json())
       .then(d => {
-        const allUsers = (d.users || []).filter(u => u.email);
+        const allUsers = (d.users || [])
+          .filter(u => u.email)
+          .map(u => ({ ...u, displayName: getDisplayName(u) }));
         setUsers(allUsers);
       })
       .catch(() => {})
@@ -36,7 +49,7 @@ export default function WebinarInvitation() {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
-      (u.full_name || '').toLowerCase().includes(q) ||
+      (u.displayName || '').toLowerCase().includes(q) ||
       (u.email || '').toLowerCase().includes(q)
     );
   });
@@ -85,8 +98,8 @@ export default function WebinarInvitation() {
 
     const confirmed = window.confirm(
       `Send webinar invitations to the next ${batch.length} users?\n\n` +
-      `First: ${batch[0].full_name || batch[0].email}\n` +
-      `Last: ${batch[batch.length - 1].full_name || batch[batch.length - 1].email}\n\n` +
+      `First: ${batch[0].displayName || batch[0].email}\n` +
+      `Last: ${batch[batch.length - 1].displayName || batch[batch.length - 1].email}\n\n` +
       `Total remaining: ${unsent.length} users`
     );
     if (!confirmed) return;
@@ -356,7 +369,7 @@ export default function WebinarInvitation() {
                         }}>
                           <div style={{ color: '#94a3b8', fontSize: '11px' }}>{i + 1}</div>
                           <div style={{ fontWeight: '600', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {u.full_name || '—'}
+                            {u.displayName || '—'}
                           </div>
                           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#64748b' }}>
                             {u.email}
@@ -390,7 +403,7 @@ export default function WebinarInvitation() {
                         }}>
                           <div style={{ fontSize: '11px' }}>{i + 1}</div>
                           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {u.full_name || '—'}
+                            {u.displayName || '—'}
                           </div>
                           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {u.email}

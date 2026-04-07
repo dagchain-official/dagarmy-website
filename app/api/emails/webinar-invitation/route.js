@@ -90,7 +90,7 @@ export async function POST(request) {
       // Fetch the selected users
       const { data: users, error: fetchError } = await supabase
         .from('users')
-        .select('id, email, full_name')
+        .select('id, email, full_name, first_name, last_name')
         .in('id', userIds)
         .not('email', 'is', null);
 
@@ -108,6 +108,15 @@ export async function POST(request) {
         );
       }
 
+      // Helper to build proper display name
+      function getDisplayName(u) {
+        if (u.first_name && u.last_name) return `${u.first_name} ${u.last_name}`.trim();
+        if (u.first_name) return u.first_name.trim();
+        if (u.full_name && u.full_name.includes(' ') && !u.full_name.includes('@')) return u.full_name.trim();
+        if (u.full_name && !u.full_name.includes('@') && u.full_name !== u.email?.split('@')[0]) return u.full_name.trim();
+        return u.email.split('@')[0];
+      }
+
       // Send emails one-by-one
       let sent = 0;
       let failed = 0;
@@ -116,7 +125,7 @@ export async function POST(request) {
       const failedUserIds = [];
 
       for (const user of users) {
-        const userName = user.full_name || user.email.split('@')[0];
+        const userName = getDisplayName(user);
         const html = webinarInvitationEmailTemplate({ userName });
 
         try {
