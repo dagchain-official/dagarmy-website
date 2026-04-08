@@ -2,16 +2,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 const BATCH_SIZE = 25;
+const LS_SENT_KEY = 'webinar_sent_ids';
+const LS_FAILED_KEY = 'webinar_failed_ids';
 
 // Build a proper display name from user fields
 function getDisplayName(u) {
-  // Prefer first_name + last_name if available
   if (u.first_name && u.last_name) return `${u.first_name} ${u.last_name}`.trim();
   if (u.first_name) return u.first_name.trim();
-  // Fall back to full_name only if it looks like a real name (not an email prefix)
   if (u.full_name && u.full_name.includes(' ') && !u.full_name.includes('@')) return u.full_name.trim();
   if (u.full_name && !u.full_name.includes('@') && u.full_name !== u.email?.split('@')[0]) return u.full_name.trim();
   return '';
+}
+
+// Persist helpers
+function loadFromLS(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return new Set();
+    return new Set(JSON.parse(raw));
+  } catch { return new Set(); }
+}
+
+function saveToLS(key, set) {
+  try {
+    localStorage.setItem(key, JSON.stringify([...set]));
+  } catch {}
 }
 
 export default function WebinarInvitation() {
@@ -25,9 +40,16 @@ export default function WebinarInvitation() {
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sentUserIds, setSentUserIds] = useState(new Set());
-  const [failedUserIds, setFailedUserIds] = useState(new Set());
-  const [batchProgress, setBatchProgress] = useState(null); // { current, total, sent, failed }
+
+  // Persistent sent/failed state (survives page refresh)
+  const [sentUserIds, setSentUserIds] = useState(() => loadFromLS(LS_SENT_KEY));
+  const [failedUserIds, setFailedUserIds] = useState(() => loadFromLS(LS_FAILED_KEY));
+
+  // Manual checkbox selection
+  const [selectedIds, setSelectedIds] = useState(new Set());
+
+  // Filter tab: 'all' | 'pending' | 'sent'
+  const [viewTab, setViewTab] = useState('pending');
 
   // Load users on mount
   useEffect(() => {
@@ -44,7 +66,11 @@ export default function WebinarInvitation() {
       .finally(() => setLoadingUsers(false));
   }, []);
 
-  // Filter users by search
+  // Sync sent/failed to localStorage whenever they change
+  useEffect(() => { saveToLS(LS_SENT_KEY, sentUserIds); }, [sentUserIds]);
+  useEffect(() => { saveToLS(LS_FAILED_KEY, failedUserIds); }, [failedUserIds]);
+
+  // Derived lists
   const filteredUsers = users.filter(u => {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
@@ -54,11 +80,119 @@ export default function WebinarInvitation() {
     );
   });
 
-  // Separate pending and sent users
   const pendingUsers = filteredUsers.filter(u => !sentUserIds.has(u.id));
   const sentUsers = filteredUsers.filter(u => sentUserIds.has(u.id));
+  const displayedUsers = viewTab === 'sent' ? sentUsers : viewTab === 'pending' ? pendingUsers : filteredUsers;
 
-  // Send test email
+  // Stats
+  const totalUsers = users.length;
+  const totalSent = sentUserIds.size;
+  const totalRemaining = totalUsers - totalSent;
+
+  // ── Checkbox logic ──────────────────────────────────────────
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const selectAllVisible = () => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      // Only select pending ones from current tab view
+      displayedUsers
+        .filter(u => !sentUserIds.has(u.id))
+        .forEach(u => next.add(u.id));
+      return next;
+    });
+  };
+
+  const deselectAll = () => setSelectedIds(new Set());
+
+  const selectNext25 = () => {
+    const unsent = pendingUsers.filter(u => !selectedIds.has(u.id));
+    const toSelect = unsent.slice(0, BATCH_SIZE);
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      toSelect.forEach(u => next.add(u.id));
+      return next;
+    });
+  };
+
+  // How many of selected are actually pending (not already sent)
+  const selectedPendingIds = [...selectedIds].filter(id => !sentUserIds.has(id));
+
+  // ── Send selected ────────────────────────────────────────────
+  const handleSendSelected = useCallback(async () => {
+    if (selectedPendingIds.length === 0) {
+      setError('No pending users selected. Please check at least one user to send.');
+      return;
+    }
+
+    const toSend = selectedPendingIds.slice(0, BATCH_SIZE);
+    if (selectedPendingIds.length > BATCH_SIZE) {
+      const ok = window.confirm(
+        `You selected ${selectedPendingIds.length} users but the limit is ${BATCH_SIZE} per batch.\n` +
+        `Only the first ${BATCH_SIZE} will be sent. Continue?`
+      );
+      if (!ok) return;
+    } else {
+      const names = users
+        .filter(u => toSend.includes(u.id))
+        .slice(0, 3)
+        .map(u => u.displayName || u.email)
+        .join(', ');
+      const ok = window.confirm(
+        `Send webinar invitation to ${toSend.length} selected user(s)?\n\n` +
+        `Preview: ${names}${toSend.length > 3 ? ` ...and ${toSend.length - 3} more` : ''}`
+      );
+      if (!ok) return;
+    }
+
+    setError('');
+    setResult(null);
+    setSending(true);
+
+    try {
+      const res = await fetch('/api/emails/webinar-invitation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'batch', userIds: toSend }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Batch send failed');
+
+      // Persist results
+      setSentUserIds(prev => {
+        const next = new Set(prev);
+        (data.sentUserIds || []).forEach(id => next.add(id));
+        return next;
+      });
+      setFailedUserIds(prev => {
+        const next = new Set(prev);
+        (data.failedUserIds || []).forEach(id => next.add(id));
+        return next;
+      });
+
+      // Deselect successfully sent ones
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        (data.sentUserIds || []).forEach(id => next.delete(id));
+        return next;
+      });
+
+      setResult(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSending(false);
+    }
+  }, [selectedPendingIds, users]);
+
+  // ── Send test email ──────────────────────────────────────────
   const handleSendTest = async () => {
     if (!testEmail.trim()) {
       setError('Please enter a test email address');
@@ -67,7 +201,6 @@ export default function WebinarInvitation() {
     setError('');
     setResult(null);
     setSending(true);
-
     try {
       const res = await fetch('/api/emails/webinar-invitation', {
         method: 'POST',
@@ -85,131 +218,103 @@ export default function WebinarInvitation() {
     }
   };
 
-  // Send next batch of 25
-  const handleSendBatch = useCallback(async () => {
-    const unsent = users.filter(u => u.email && !sentUserIds.has(u.id));
-    if (unsent.length === 0) {
-      setError('All users have already been sent invitations!');
-      return;
-    }
+  // ── Reset sent state ─────────────────────────────────────────
+  const handleResetSent = () => {
+    if (!window.confirm('Reset all sent/failed tracking? This will NOT resend emails, but you will lose track of who was already sent.')) return;
+    const empty = new Set();
+    setSentUserIds(empty);
+    setFailedUserIds(empty);
+    setSelectedIds(new Set());
+    saveToLS(LS_SENT_KEY, empty);
+    saveToLS(LS_FAILED_KEY, empty);
+  };
 
-    const batch = unsent.slice(0, BATCH_SIZE);
-    const batchIds = batch.map(u => u.id);
-
-    const confirmed = window.confirm(
-      `Send webinar invitations to the next ${batch.length} users?\n\n` +
-      `First: ${batch[0].displayName || batch[0].email}\n` +
-      `Last: ${batch[batch.length - 1].displayName || batch[batch.length - 1].email}\n\n` +
-      `Total remaining: ${unsent.length} users`
-    );
-    if (!confirmed) return;
-
-    setError('');
-    setResult(null);
-    setSending(true);
-    setBatchProgress({ current: 0, total: batch.length, sent: 0, failed: 0 });
-
-    try {
-      const res = await fetch('/api/emails/webinar-invitation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'batch', userIds: batchIds }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error || 'Batch send failed');
-
-      // Mark successful users as sent
-      const newSent = new Set(sentUserIds);
-      const newFailed = new Set(failedUserIds);
-      (data.sentUserIds || []).forEach(id => newSent.add(id));
-      (data.failedUserIds || []).forEach(id => newFailed.add(id));
-      setSentUserIds(newSent);
-      setFailedUserIds(newFailed);
-
-      setBatchProgress({
-        current: batch.length,
-        total: batch.length,
-        sent: data.sent || 0,
-        failed: data.failed || 0,
-      });
-
-      setResult(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSending(false);
-    }
-  }, [users, sentUserIds, failedUserIds]);
-
-  const totalUsers = users.filter(u => u.email).length;
-  const totalSent = sentUserIds.size;
-  const totalRemaining = totalUsers - totalSent;
+  // ── Styles ────────────────────────────────────────────────────
+  const tabStyle = (active, color = '#0ea5e9') => ({
+    padding: '7px 16px', borderRadius: '8px', cursor: 'pointer',
+    fontSize: '12px', fontWeight: '700',
+    border: active ? `2px solid ${color}` : '1.5px solid #e2e8f0',
+    background: active ? `${color}15` : '#fff',
+    color: active ? color : '#94a3b8',
+    transition: 'all 0.15s',
+  });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-      {/* Header */}
+      {/* ── Header ── */}
       <div style={{
-        padding: '20px 24px 16px',
+        padding: '18px 24px 14px',
         borderBottom: '1px solid #e8edf5',
         background: '#fff',
         flexShrink: 0,
       }}>
-        <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>
-          Webinar Invitation Email
-        </h2>
-        <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
-          Send webinar invitation emails — batch of {BATCH_SIZE} at a time
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+          <div>
+            <h2 style={{ fontSize: '19px', fontWeight: '800', color: '#0f172a', margin: '0 0 3px' }}>
+              Webinar Invitation Email
+            </h2>
+            <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>
+              Select recipients with checkboxes — progress is saved across page refreshes
+            </p>
+          </div>
+          <button
+            onClick={handleResetSent}
+            title="Reset sent tracking (does not resend emails)"
+            style={{
+              padding: '6px 12px', borderRadius: '8px', border: '1.5px solid #fecaca',
+              background: '#fef2f2', color: '#dc2626', fontSize: '11px', fontWeight: '700',
+              cursor: 'pointer', whiteSpace: 'nowrap',
+            }}
+          >
+            🔄 Reset Tracking
+          </button>
+        </div>
       </div>
 
-      {/* Content */}
-      <div style={{ flex: 1, overflow: 'auto', padding: '20px 24px' }}>
+      {/* ── Content ── */}
+      <div style={{ flex: 1, overflow: 'auto', padding: '18px 24px' }}>
 
         {/* Stats Bar */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px',
-          marginBottom: '20px',
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px', marginBottom: '18px' }}>
           {[
             { label: 'Total Users', value: totalUsers, color: '#6366f1', bg: '#eef2ff' },
-            { label: 'Sent', value: totalSent, color: '#10b981', bg: '#f0fdf4' },
+            { label: 'Sent ✓', value: totalSent, color: '#10b981', bg: '#f0fdf4' },
             { label: 'Remaining', value: totalRemaining, color: '#f59e0b', bg: '#fffbeb' },
             { label: 'Failed', value: failedUserIds.size, color: '#ef4444', bg: '#fef2f2' },
           ].map(s => (
             <div key={s.label} style={{
-              background: s.bg, borderRadius: '12px', padding: '14px 16px',
-              border: `1px solid ${s.color}20`,
+              background: s.bg, borderRadius: '12px', padding: '12px 14px',
+              border: `1px solid ${s.color}25`,
             }}>
-              <div style={{ fontSize: '10px', fontWeight: '700', color: s.color, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{s.label}</div>
+              <div style={{ fontSize: '10px', fontWeight: '700', color: s.color, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>{s.label}</div>
               <div style={{ fontSize: '22px', fontWeight: '800', color: s.color }}>{s.value}</div>
             </div>
           ))}
         </div>
 
+        {/* Persistence note */}
+        <div style={{
+          background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px',
+          padding: '10px 14px', marginBottom: '16px',
+          display: 'flex', alignItems: 'center', gap: '8px',
+        }}>
+          <span style={{ fontSize: '15px' }}>💾</span>
+          <span style={{ fontSize: '12px', color: '#15803d', fontWeight: '600' }}>
+            Sent progress is automatically saved — refreshing this page will <strong>not</strong> lose your progress.
+          </span>
+        </div>
+
         {/* Mode Toggle */}
         <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-          <button onClick={() => setMode('test')} style={{
-            padding: '10px 20px', borderRadius: '10px', cursor: 'pointer', fontSize: '13px', fontWeight: '700',
-            border: mode === 'test' ? '2px solid #6366f1' : '1px solid #e2e8f0',
-            background: mode === 'test' ? '#eef2ff' : '#fff',
-            color: mode === 'test' ? '#6366f1' : '#94a3b8',
-            transition: 'all 0.15s',
-          }}>
+          <button onClick={() => setMode('test')} style={tabStyle(mode === 'test', '#6366f1')}>
             🧪 Test Mode
           </button>
-          <button onClick={() => setMode('batch')} style={{
-            padding: '10px 20px', borderRadius: '10px', cursor: 'pointer', fontSize: '13px', fontWeight: '700',
-            border: mode === 'batch' ? '2px solid #0ea5e9' : '1px solid #e2e8f0',
-            background: mode === 'batch' ? '#f0f9ff' : '#fff',
-            color: mode === 'batch' ? '#0ea5e9' : '#94a3b8',
-            transition: 'all 0.15s',
-          }}>
-            📧 Batch Send ({BATCH_SIZE}/shot)
+          <button onClick={() => setMode('batch')} style={tabStyle(mode === 'batch', '#0ea5e9')}>
+            📧 Batch Send
           </button>
         </div>
 
-        {/* Test Mode */}
+        {/* ── Test Mode ── */}
         {mode === 'test' && (
           <div style={{
             background: '#fff', borderRadius: '14px', border: '1px solid #e8edf5',
@@ -250,85 +355,124 @@ export default function WebinarInvitation() {
           </div>
         )}
 
-        {/* Batch Mode */}
+        {/* ── Batch Mode ── */}
         {mode === 'batch' && (
           <div style={{ marginBottom: '16px' }}>
-            {/* Batch Send Button + Info */}
+
+            {/* Action bar */}
             <div style={{
               background: 'linear-gradient(135deg, #f0f9ff, #e0f2fe)', borderRadius: '14px',
-              border: '2px solid #0ea5e9', padding: '20px', marginBottom: '16px',
+              border: '2px solid #0ea5e9', padding: '16px 20px', marginBottom: '14px',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                 <div>
-                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#0c4a6e', marginBottom: '4px' }}>
-                    📧 Send Next Batch
+                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#0c4a6e', marginBottom: '3px' }}>
+                    📧 Send to Selected Recipients
                   </div>
                   <div style={{ fontSize: '12px', color: '#475569' }}>
-                    {totalRemaining > 0
-                      ? `${Math.min(BATCH_SIZE, totalRemaining)} emails will be sent (${totalRemaining} remaining)`
-                      : 'All users have been sent!'}
+                    {selectedPendingIds.length > 0
+                      ? <><strong style={{ color: '#0284c7' }}>{selectedPendingIds.length}</strong> user{selectedPendingIds.length !== 1 ? 's' : ''} selected (max {BATCH_SIZE}/batch)</>
+                      : 'Tick checkboxes below to select who to send to'}
                   </div>
                 </div>
                 <button
-                  onClick={handleSendBatch}
-                  disabled={sending || totalRemaining === 0}
+                  onClick={handleSendSelected}
+                  disabled={sending || selectedPendingIds.length === 0}
                   style={{
-                    padding: '12px 28px', borderRadius: '10px', border: 'none',
-                    background: sending || totalRemaining === 0 ? '#e2e8f0' : 'linear-gradient(135deg,#0ea5e9,#0284c7)',
-                    color: sending || totalRemaining === 0 ? '#94a3b8' : '#fff',
-                    fontSize: '14px', fontWeight: '700',
-                    cursor: sending || totalRemaining === 0 ? 'not-allowed' : 'pointer',
-                    boxShadow: sending || totalRemaining === 0 ? 'none' : '0 4px 12px rgba(14,165,233,0.3)',
-                    whiteSpace: 'nowrap',
+                    padding: '11px 24px', borderRadius: '10px', border: 'none',
+                    background: sending || selectedPendingIds.length === 0 ? '#e2e8f0' : 'linear-gradient(135deg,#0ea5e9,#0284c7)',
+                    color: sending || selectedPendingIds.length === 0 ? '#94a3b8' : '#fff',
+                    fontSize: '13px', fontWeight: '700',
+                    cursor: sending || selectedPendingIds.length === 0 ? 'not-allowed' : 'pointer',
+                    boxShadow: selectedPendingIds.length > 0 && !sending ? '0 4px 12px rgba(14,165,233,0.3)' : 'none',
+                    whiteSpace: 'nowrap', transition: 'all 0.15s',
                   }}
                 >
                   {sending
-                    ? `Sending batch...`
-                    : totalRemaining === 0
-                      ? '✅ All Sent'
-                      : `Send Next ${Math.min(BATCH_SIZE, totalRemaining)} Emails`}
+                    ? `⏳ Sending ${selectedPendingIds.length}...`
+                    : selectedPendingIds.length > 0
+                      ? `✉️ Send to ${Math.min(selectedPendingIds.length, BATCH_SIZE)} Users`
+                      : '✉️ Send Selected'}
                 </button>
               </div>
 
-              {/* Progress bar during send */}
-              {sending && batchProgress && (
-                <div style={{ marginTop: '16px' }}>
-                  <div style={{ fontSize: '12px', color: '#0369a1', fontWeight: '600', marginBottom: '6px' }}>
-                    Sending batch... Please wait (do not close this page)
+              {/* Progress indicator while sending */}
+              {sending && (
+                <div style={{ marginTop: '12px' }}>
+                  <div style={{ fontSize: '11px', color: '#0369a1', fontWeight: '600', marginBottom: '5px' }}>
+                    Sending... Please wait, do NOT close this page
                   </div>
-                  <div style={{ height: '6px', background: '#bae6fd', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ height: '5px', background: '#bae6fd', borderRadius: '3px', overflow: 'hidden' }}>
                     <div style={{
-                      height: '100%', background: 'linear-gradient(90deg,#0ea5e9,#0284c7)',
-                      borderRadius: '3px', transition: 'width 0.5s',
-                      width: '100%', animation: 'pulse 1.5s ease-in-out infinite',
+                      height: '100%', width: '100%',
+                      background: 'linear-gradient(90deg,#0ea5e9,#0284c7)',
+                      animation: 'pulse 1.5s ease-in-out infinite',
                     }} />
                   </div>
                 </div>
               )}
 
-              {/* Rate limit note */}
-              <div style={{ marginTop: '12px', padding: '10px 14px', background: '#fffbeb', borderRadius: '8px', border: '1px solid #fde68a' }}>
+              <div style={{ marginTop: '10px', padding: '8px 12px', background: '#fffbeb', borderRadius: '8px', border: '1px solid #fde68a' }}>
                 <div style={{ fontSize: '11px', color: '#92400e', fontWeight: '600' }}>
-                  ⏱️ SMTP Rate Limit: Send {BATCH_SIZE} emails per batch, then wait 1 hour before sending the next batch.
+                  ⏱️ Max {BATCH_SIZE} emails per batch — wait ~1 hr between batches to avoid SMTP rate limits.
                 </div>
               </div>
             </div>
 
-            {/* Search */}
-            <div style={{ marginBottom: '12px' }}>
+            {/* Quick-select controls */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Quick Select:</span>
+              <button onClick={selectNext25} style={{
+                padding: '5px 12px', borderRadius: '6px', border: '1.5px solid #0ea5e9',
+                background: '#f0f9ff', color: '#0284c7', fontSize: '11px', fontWeight: '700', cursor: 'pointer',
+              }}>
+                ⚡ Next 25 Pending
+              </button>
+              <button onClick={selectAllVisible} style={{
+                padding: '5px 12px', borderRadius: '6px', border: '1.5px solid #6366f1',
+                background: '#eef2ff', color: '#6366f1', fontSize: '11px', fontWeight: '700', cursor: 'pointer',
+              }}>
+                ☑️ Select All Visible
+              </button>
+              <button onClick={deselectAll} style={{
+                padding: '5px 12px', borderRadius: '6px', border: '1.5px solid #e2e8f0',
+                background: '#f8fafc', color: '#64748b', fontSize: '11px', fontWeight: '700', cursor: 'pointer',
+              }}>
+                ✖ Deselect All
+              </button>
+              {selectedIds.size > 0 && (
+                <span style={{ fontSize: '11px', color: '#0284c7', fontWeight: '700', marginLeft: '4px' }}>
+                  ({selectedIds.size} checked)
+                </span>
+              )}
+            </div>
+
+            {/* Search + View tabs */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search users by name or email..."
+                placeholder="Search by name or email..."
                 style={{
-                  width: '100%', padding: '10px 14px', borderRadius: '10px',
+                  flex: 1, minWidth: '180px', padding: '9px 13px', borderRadius: '9px',
                   border: '1.5px solid #e8edf5', fontSize: '13px', outline: 'none',
                   fontFamily: 'inherit', boxSizing: 'border-box',
                 }}
                 onFocus={e => e.target.style.borderColor = '#0ea5e9'}
                 onBlur={e => e.target.style.borderColor = '#e8edf5'}
               />
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {[
+                  { key: 'pending', label: `⏳ Pending (${pendingUsers.length})`, color: '#f59e0b' },
+                  { key: 'sent', label: `✅ Sent (${sentUsers.length})`, color: '#10b981' },
+                  { key: 'all', label: `👥 All (${filteredUsers.length})`, color: '#6366f1' },
+                ].map(t => (
+                  <button key={t.key} onClick={() => setViewTab(t.key)} style={tabStyle(viewTab === t.key, t.color)}>
+                    {t.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Users Table */}
@@ -343,107 +487,136 @@ export default function WebinarInvitation() {
               }}>
                 {/* Table header */}
                 <div style={{
-                  display: 'grid', gridTemplateColumns: '40px 1fr 1fr 100px',
-                  padding: '10px 16px', background: '#f8fafc', borderBottom: '1px solid #e8edf5',
-                  fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px',
+                  display: 'grid', gridTemplateColumns: '44px 36px 1fr 1fr 100px',
+                  padding: '10px 14px', background: '#f8fafc', borderBottom: '1px solid #e8edf5',
+                  fontSize: '10px', fontWeight: '700', color: '#94a3b8',
+                  textTransform: 'uppercase', letterSpacing: '0.5px',
                 }}>
+                  <div>✓</div>
                   <div>#</div>
                   <div>Full Name</div>
                   <div>Email</div>
                   <div style={{ textAlign: 'center' }}>Status</div>
                 </div>
 
-                {/* Pending users section */}
-                {pendingUsers.length > 0 && (
-                  <>
-                    <div style={{ padding: '8px 16px', background: '#fffbeb', fontSize: '11px', fontWeight: '700', color: '#d97706', borderBottom: '1px solid #fde68a' }}>
-                      ⏳ Pending ({pendingUsers.length})
+                {/* Rows */}
+                <div style={{ maxHeight: '420px', overflow: 'auto' }}>
+                  {displayedUsers.length === 0 ? (
+                    <div style={{ padding: '32px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+                      {searchQuery ? 'No users match your search' : viewTab === 'sent' ? 'No emails sent yet' : 'No pending users'}
                     </div>
-                    <div style={{ maxHeight: '300px', overflow: 'auto' }}>
-                      {pendingUsers.map((u, i) => (
-                        <div key={u.id} style={{
-                          display: 'grid', gridTemplateColumns: '40px 1fr 1fr 100px',
-                          padding: '10px 16px', borderBottom: '1px solid #f1f5f9',
-                          fontSize: '12.5px', color: '#334155',
-                          background: i % 2 === 0 ? '#fff' : '#fafbfc',
-                        }}>
-                          <div style={{ color: '#94a3b8', fontSize: '11px' }}>{i + 1}</div>
-                          <div style={{ fontWeight: '600', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  ) : (
+                    displayedUsers.map((u, i) => {
+                      const isSent = sentUserIds.has(u.id);
+                      const isFailed = failedUserIds.has(u.id);
+                      const isSelected = selectedIds.has(u.id);
+
+                      return (
+                        <div
+                          key={u.id}
+                          onClick={() => { if (!isSent) toggleSelect(u.id); }}
+                          style={{
+                            display: 'grid', gridTemplateColumns: '44px 36px 1fr 1fr 100px',
+                            padding: '10px 14px',
+                            borderBottom: '1px solid #f1f5f9',
+                            fontSize: '12.5px', color: isSent ? '#94a3b8' : '#334155',
+                            background: isSelected
+                              ? '#eff6ff'
+                              : isSent
+                                ? (i % 2 === 0 ? '#fafffe' : '#f5fdf8')
+                                : (i % 2 === 0 ? '#fff' : '#fafbfc'),
+                            cursor: isSent ? 'default' : 'pointer',
+                            transition: 'background 0.1s',
+                          }}
+                        >
+                          {/* Checkbox */}
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            {isSent ? (
+                              <span style={{ fontSize: '16px' }}>✅</span>
+                            ) : (
+                              <div
+                                style={{
+                                  width: '18px', height: '18px', borderRadius: '5px',
+                                  border: isSelected ? '2px solid #0ea5e9' : '2px solid #cbd5e1',
+                                  background: isSelected ? '#0ea5e9' : '#fff',
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                  flexShrink: 0, transition: 'all 0.1s',
+                                }}
+                              >
+                                {isSelected && (
+                                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                  </svg>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Row number */}
+                          <div style={{ color: '#94a3b8', fontSize: '11px', paddingTop: '1px' }}>{i + 1}</div>
+
+                          {/* Name */}
+                          <div style={{
+                            fontWeight: isSent ? '400' : '600',
+                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            textDecoration: isSent ? 'line-through' : 'none',
+                            opacity: isSent ? 0.6 : 1,
+                          }}>
                             {u.displayName || '—'}
                           </div>
-                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#64748b' }}>
+
+                          {/* Email */}
+                          <div style={{
+                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            color: isSent ? '#94a3b8' : '#64748b',
+                            opacity: isSent ? 0.6 : 1,
+                          }}>
                             {u.email}
                           </div>
-                          <div style={{ textAlign: 'center' }}>
-                            {failedUserIds.has(u.id) ? (
-                              <span style={{ fontSize: '10px', fontWeight: '700', color: '#ef4444', background: '#fef2f2', padding: '2px 8px', borderRadius: '4px' }}>Failed</span>
+
+                          {/* Status badge */}
+                          <div style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {isSent ? (
+                              <span style={{ fontSize: '10px', fontWeight: '700', color: '#10b981', background: '#f0fdf4', padding: '3px 9px', borderRadius: '5px' }}>Sent ✓</span>
+                            ) : isFailed ? (
+                              <span style={{ fontSize: '10px', fontWeight: '700', color: '#ef4444', background: '#fef2f2', padding: '3px 9px', borderRadius: '5px' }}>Failed</span>
+                            ) : isSelected ? (
+                              <span style={{ fontSize: '10px', fontWeight: '700', color: '#0284c7', background: '#e0f2fe', padding: '3px 9px', borderRadius: '5px' }}>Selected</span>
                             ) : (
-                              <span style={{ fontSize: '10px', fontWeight: '700', color: '#f59e0b', background: '#fffbeb', padding: '2px 8px', borderRadius: '4px' }}>Pending</span>
+                              <span style={{ fontSize: '10px', fontWeight: '700', color: '#f59e0b', background: '#fffbeb', padding: '3px 9px', borderRadius: '5px' }}>Pending</span>
                             )}
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                {/* Sent users section */}
-                {sentUsers.length > 0 && (
-                  <>
-                    <div style={{ padding: '8px 16px', background: '#f0fdf4', fontSize: '11px', fontWeight: '700', color: '#16a34a', borderBottom: '1px solid #bbf7d0', borderTop: '1px solid #bbf7d0' }}>
-                      ✅ Sent ({sentUsers.length})
-                    </div>
-                    <div style={{ maxHeight: '200px', overflow: 'auto' }}>
-                      {sentUsers.map((u, i) => (
-                        <div key={u.id} style={{
-                          display: 'grid', gridTemplateColumns: '40px 1fr 1fr 100px',
-                          padding: '8px 16px', borderBottom: '1px solid #f1f5f9',
-                          fontSize: '12px', color: '#94a3b8',
-                          background: i % 2 === 0 ? '#fafffe' : '#f5fdf8',
-                        }}>
-                          <div style={{ fontSize: '11px' }}>{i + 1}</div>
-                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {u.displayName || '—'}
-                          </div>
-                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {u.email}
-                          </div>
-                          <div style={{ textAlign: 'center' }}>
-                            <span style={{ fontSize: '10px', fontWeight: '700', color: '#10b981', background: '#f0fdf4', padding: '2px 8px', borderRadius: '4px' }}>Sent ✓</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                {filteredUsers.length === 0 && (
-                  <div style={{ padding: '30px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
-                    {searchQuery ? 'No users match your search' : 'No users found'}
-                  </div>
-                )}
+                      );
+                    })
+                  )}
+                </div>
               </div>
             )}
           </div>
         )}
 
-        {/* Webinar Details Preview */}
+        {/* Webinar Details */}
         <div style={{
           background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '12px',
-          padding: '16px', marginBottom: '16px',
+          padding: '14px 16px', marginBottom: '16px',
         }}>
-          <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#111827', marginBottom: '10px' }}>
+          <h3 style={{ fontSize: '12px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
             📅 Webinar Details (embedded in email)
           </h3>
           <div style={{ fontSize: '12px', color: '#4b5563', lineHeight: '1.7' }}>
             <div><strong>Date:</strong> Wednesday, April 8, 2026</div>
             <div><strong>Platform:</strong> Zoom Webinar</div>
             <div><strong>Webinar ID:</strong> 827 8483 8030</div>
-            <div><strong>Link:</strong> <a href="https://us05web.zoom.us/webinar/82784838030" target="_blank" rel="noopener noreferrer" style={{ color: '#4158f9' }}>Join Webinar</a></div>
+            <div><strong>Link:</strong>{' '}
+              <a href="https://us05web.zoom.us/webinar/82784838030" target="_blank" rel="noopener noreferrer" style={{ color: '#4158f9' }}>
+                Join Webinar
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Error Message */}
+        {/* Error */}
         {error && (
           <div style={{
             padding: '12px 16px', borderRadius: '10px',
@@ -452,11 +625,11 @@ export default function WebinarInvitation() {
             marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
             <span>⚠️ {error}</span>
-            <button onClick={() => setError('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: '16px', padding: '0 4px' }}>×</button>
+            <button onClick={() => setError('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: '18px', padding: '0 4px' }}>×</button>
           </div>
         )}
 
-        {/* Success Message */}
+        {/* Success */}
         {result && (
           <div style={{
             padding: '14px 16px', borderRadius: '10px',
