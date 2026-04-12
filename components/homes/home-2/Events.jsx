@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Events.module.css";
+import "./Events.global.css";
 
 export default function Events() {
   const [showAll, setShowAll] = useState(false);

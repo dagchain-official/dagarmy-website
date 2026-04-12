@@ -5,37 +5,37 @@ import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModa
 
 /* ─── Circular Progress Ring ─── */
 function ProgressRing({ value = 0, size = 64, strokeWidth = 5, color = '#6366f1' }) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const [offset, setOffset] = useState(circumference);
-  useEffect(() => {
-    const timer = setTimeout(() => setOffset(circumference - (value / 100) * circumference), 200);
-    return () => clearTimeout(timer);
-  }, [value, circumference]);
-  return (
-    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-      <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#f1f5f9" strokeWidth={strokeWidth} />
-      <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke={color} strokeWidth={strokeWidth}
-        strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)' }} />
-    </svg>
-  );
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const [offset, setOffset] = useState(circumference);
+    useEffect(() => {
+        const timer = setTimeout(() => setOffset(circumference - (value / 100) * circumference), 200);
+        return () => clearTimeout(timer);
+    }, [value, circumference]);
+    return (
+        <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+            <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f1f5f9" strokeWidth={strokeWidth} />
+            <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={color} strokeWidth={strokeWidth}
+                strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
+                style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)' }} />
+        </svg>
+    );
 }
 
 /* ─── SVG Sparkline ─── */
 function Sparkline({ data, color = '#6366f1', width = 80, height = 32 }) {
-  if (!data || data.length < 2) return null;
-  const max = Math.max(...data); const min = Math.min(...data); const range = max - min || 1;
-  const points = data.map((v, i) => `${(i / (data.length - 1)) * width},${height - ((v - min) / range) * (height - 4) - 2}`).join(' ');
-  return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: 'block' }}>
-      <defs><linearGradient id={`sp-${color.replace('#','')}`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={color} stopOpacity="0.2" /><stop offset="100%" stopColor={color} stopOpacity="0" />
-      </linearGradient></defs>
-      <polygon points={`0,${height} ${points} ${width},${height}`} fill={`url(#sp-${color.replace('#','')})`} />
-      <polyline points={points} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+    if (!data || data.length < 2) return null;
+    const max = Math.max(...data); const min = Math.min(...data); const range = max - min || 1;
+    const points = data.map((v, i) => `${(i / (data.length - 1)) * width},${height - ((v - min) / range) * (height - 4) - 2}`).join(' ');
+    return (
+        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: 'block' }}>
+            <defs><linearGradient id={`sp-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={color} stopOpacity="0.2" /><stop offset="100%" stopColor={color} stopOpacity="0" />
+            </linearGradient></defs>
+            <polygon points={`0,${height} ${points} ${width},${height}`} fill={`url(#sp-${color.replace('#', '')})`} />
+            <polyline points={points} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
 }
 
 export default function Dashboard2() {
@@ -70,6 +70,7 @@ export default function Dashboard2() {
     const [userTier, setUserTier] = useState('DAG_SOLDIER');
     const [currentRank, setCurrentRank] = useState('None');
     const [mounted, setMounted] = useState(false);
+    const [pageOrigin, setPageOrigin] = useState('https://dagarmy.network');
     const [greeting, setGreeting] = useState('');
     const [currentTime, setCurrentTime] = useState(null);
     const [stripeLoading, setStripeLoading] = useState(false);
@@ -85,7 +86,7 @@ export default function Dashboard2() {
     const [eventCarouselIdx, setEventCarouselIdx] = useState(0);
     const [upgrading, setUpgrading] = useState(false);
     const [upgradeResult, setUpgradeResult] = useState(null);
-    
+
     useEffect(() => {
         const hour = new Date().getHours();
         if (hour < 12) setGreeting('Good Morning');
@@ -93,7 +94,7 @@ export default function Dashboard2() {
         else setGreeting('Good Evening');
         setCurrentTime(new Date());
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-        setTimeout(() => setMounted(true), 100);
+        setTimeout(() => { setMounted(true); setPageOrigin(window.location.origin); }, 100);
         return () => clearInterval(timer);
     }, []);
 
@@ -116,7 +117,7 @@ export default function Dashboard2() {
 
                 const response = await fetch(url);
                 const data = await response.json();
-                
+
                 if (data.user) {
                     // Redirect to profile completion if not yet done
                     if (!data.user.profile_completed) {
@@ -149,7 +150,7 @@ export default function Dashboard2() {
                 console.error('Error fetching user data:', error);
             }
         }
-        
+
         fetchUserData();
     }, [address, userProfile]);
 
@@ -286,7 +287,7 @@ export default function Dashboard2() {
             await navigator.clipboard.writeText(code);
             setDagchainCopied(true);
             setTimeout(() => setDagchainCopied(false), 2000);
-        } catch {}
+        } catch { }
     };
 
     // Fetch events for calendar (admin events + joined user events)
@@ -429,7 +430,7 @@ export default function Dashboard2() {
         return days;
     };
 
-    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
     const handleStripeUpgrade = async (test = false) => {
@@ -461,16 +462,16 @@ export default function Dashboard2() {
     const tierLabel = (userTier === 'DAG_LIEUTENANT' || userTier === 'DAG LIEUTENANT') ? 'DAG LIEUTENANT' : 'DAG SOLDIER';
 
     const RANKS = [
-        { name: 'INITIATOR',  cost: 700,   color: '#6b7280' },
-        { name: 'VANGUARD',   cost: 1500,  color: '#10b981' },
-        { name: 'GUARDIAN',   cost: 3200,  color: '#3b82f6' },
-        { name: 'STRIKER',    cost: 7000,  color: '#8b5cf6' },
-        { name: 'INVOKER',    cost: 10000, color: '#ec4899' },
-        { name: 'COMMANDER',  cost: 15000, color: '#f59e0b' },
-        { name: 'CHAMPION',   cost: 20000, color: '#ef4444' },
-        { name: 'CONQUEROR',  cost: 30000, color: '#dc2626' },
-        { name: 'PARAGON',    cost: 40000, color: '#7c3aed' },
-        { name: 'MYTHIC',     cost: 50000, color: '#fbbf24' },
+        { name: 'INITIATOR', cost: 700, color: '#6b7280' },
+        { name: 'VANGUARD', cost: 1500, color: '#10b981' },
+        { name: 'GUARDIAN', cost: 3200, color: '#3b82f6' },
+        { name: 'STRIKER', cost: 7000, color: '#8b5cf6' },
+        { name: 'INVOKER', cost: 10000, color: '#ec4899' },
+        { name: 'COMMANDER', cost: 15000, color: '#f59e0b' },
+        { name: 'CHAMPION', cost: 20000, color: '#ef4444' },
+        { name: 'CONQUEROR', cost: 30000, color: '#dc2626' },
+        { name: 'PARAGON', cost: 40000, color: '#7c3aed' },
+        { name: 'MYTHIC', cost: 50000, color: '#fbbf24' },
     ];
     const isLieutenant = userTier === 'DAG_LIEUTENANT' || userTier === 'DAG LIEUTENANT';
     const currentRankIdx = currentRank === 'None' ? -1 : RANKS.findIndex(r => r.name === currentRank);
@@ -571,7 +572,7 @@ export default function Dashboard2() {
                                     {/* Badge */}
                                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
                                         {(() => {
-                                            const badgeMap = { initiator:'/images/badges/dag-initiator.svg', vanguard:'/images/badges/dag-vanguard.svg', guardian:'/images/badges/dag-guardian.svg', striker:'/images/badges/dag-striker.svg', invoker:'/images/badges/dag-invoker.svg', commander:'/images/badges/dag-commander.svg', champion:'/images/badges/dag-champion.svg', conqueror:'/images/badges/dag-conqueror.svg', paragon:'/images/badges/dag-paragon.svg', mythic:'/images/badges/dag-mythic.svg' };
+                                            const badgeMap = { initiator: '/images/badges/dag-initiator.svg', vanguard: '/images/badges/dag-vanguard.svg', guardian: '/images/badges/dag-guardian.svg', striker: '/images/badges/dag-striker.svg', invoker: '/images/badges/dag-invoker.svg', commander: '/images/badges/dag-commander.svg', champion: '/images/badges/dag-champion.svg', conqueror: '/images/badges/dag-conqueror.svg', paragon: '/images/badges/dag-paragon.svg', mythic: '/images/badges/dag-mythic.svg' };
                                             const src = badgeMap[nextName.toLowerCase()];
                                             return src ? <img src={src} alt={nextName} style={{ width: '80px', height: '80px', objectFit: 'contain', filter: 'drop-shadow(0 6px 16px rgba(99,102,241,0.3))' }} /> : null;
                                         })()}
@@ -580,7 +581,7 @@ export default function Dashboard2() {
                                         <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Next Rank</div>
                                         <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px', marginBottom: '8px' }}>{nextName}</div>
                                         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '100px', background: canUpgrade ? 'rgba(99,102,241,0.1)' : 'rgba(239,68,68,0.08)' }}>
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill={canUpgrade ? '#6366f1' : '#ef4444'} stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill={canUpgrade ? '#6366f1' : '#ef4444'} stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
                                             <span style={{ fontSize: '13px', fontWeight: '700', color: canUpgrade ? '#6366f1' : '#ef4444' }}>{burnCost.toLocaleString()} DAG Points will be burned</span>
                                         </div>
                                     </div>
@@ -629,7 +630,7 @@ export default function Dashboard2() {
                                 onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.boxShadow = '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)'; } }}
                                 onMouseLeave={e => { if (!stripeLoading) { e.currentTarget.style.boxShadow = '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)'; } }}
                             >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 4l3 12h14l3-12" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 4v8m-4-4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 4l3 12h14l3-12" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v8m-4-4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" /></svg>
                                 {stripeLoading === 'full' ? 'Redirecting...' : 'Upgrade to Lieutenant'}
                                 <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 6px', borderRadius: '5px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
                             </button>
@@ -665,8 +666,8 @@ export default function Dashboard2() {
                             <img src={userAvatar} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                         ) : (
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round" />
+                                <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         )}
                     </div>
@@ -687,33 +688,16 @@ export default function Dashboard2() {
                     </span>
                 </NmCard>
 
-                {/* Card 3: Rank Badge */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }}>
-                    {(() => {
-                        const rankName = currentRank === 'None' ? 'starter' : currentRank.toLowerCase();
-                        const badgeMap = {
-                            starter: '/images/badges/dag-starter.svg',
-                            initiator: '/images/badges/dag-initiator.svg',
-                            vanguard: '/images/badges/dag-vanguard.svg',
-                            guardian: '/images/badges/dag-guardian.svg',
-                            striker: '/images/badges/dag-striker.svg',
-                            commander: '/images/badges/dag-commander.svg',
-                            champion: '/images/badges/dag-champion.svg',
-                            conqueror: '/images/badges/dag-conqueror.svg',
-                            paragon: '/images/badges/dag-paragon.svg',
-                            mythic: '/images/badges/dag-mythic.svg',
-                        };
-                        const badgeSrc = badgeMap[rankName] || '/images/badges/dag-starter.svg';
-                        return (
-                            <img
-                                src={badgeSrc}
-                                alt={rankName}
-                                style={{ width: '96px', height: '96px', objectFit: 'contain', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.12))' }}
-                            />
-                        );
-                    })()}
-                    <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(15,23,42,0.12), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#6366f1', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                        {currentRank === 'None' ? 'STARTER' : currentRank}
+                {/* Card 3: Commission Rate */}
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '8px', padding: '20px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '4px' }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                    </div>
+                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-2px', lineHeight: 1 }}>
+                        {isLieutenant ? '20' : '15'}<span style={{ fontSize: '18px' }}>%</span>
+                    </div>
+                    <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#6366f1', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        L1 Commission
                     </span>
                 </NmCard>
 
@@ -722,7 +706,7 @@ export default function Dashboard2() {
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="#6366f1" stroke="none">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                             </svg>
                         </div>
                     </div>
@@ -736,15 +720,15 @@ export default function Dashboard2() {
                     </span>
                 </NmCard>
 
-                {/* Card 5: DGC Coins */}
+                {/* Card 5: DGCC Coins */}
                 <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="8"/>
-                                <line x1="12" y1="8" x2="12" y2="16"/>
-                                <line x1="8" y1="10" x2="16" y2="10"/>
-                                <line x1="8" y1="14" x2="16" y2="14"/>
+                                <circle cx="12" cy="12" r="8" />
+                                <line x1="12" y1="8" x2="12" y2="16" />
+                                <line x1="8" y1="10" x2="16" y2="10" />
+                                <line x1="8" y1="14" x2="16" y2="14" />
                             </svg>
                         </div>
                     </div>
@@ -752,7 +736,7 @@ export default function Dashboard2() {
                         <div style={{ fontSize: '36px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1.5px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>00</div>
                     </div>
                     <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#6366f1', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                        DGC Coins
+                        DGCC Coins
                     </span>
                 </NmCard>
 
@@ -761,10 +745,10 @@ export default function Dashboard2() {
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
                         </div>
                     </div>
@@ -778,111 +762,73 @@ export default function Dashboard2() {
                     </span>
                 </NmCard>
 
-                {/* ━━━ ROW 1.5: Rank Progression Strip ━━━ */}
-                <NmCard span="12" hover={false} inset={true} style={{ padding: '28px 24px', minHeight: '143px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                {/* ━━━ ROW 1.5: Tier Benefits Strip ━━━ */}
+                <NmCard span="12" hover={false} inset={true} style={{ padding: '24px 28px' }}>
+                    <div style={{ display: 'flex', alignItems: 'stretch', gap: '20px' }}>
 
-                        {/* Left label */}
-                        <div style={{ flexShrink: 0, minWidth: '110px' }}>
-                            <div style={{ fontSize: '11px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '4px' }}>Rank</div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: currentRankData?.color || '#cbd5e1', flexShrink: 0 }} />
-                                <span style={{ fontSize: '13px', fontWeight: '800', color: currentRankData?.color || '#94a3b8', letterSpacing: '0.3px' }}>
-                                    {currentRank === 'None' ? 'STARTER' : currentRank}
-                                </span>
+                        {/* Left: Tier identity */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', flexShrink: 0, minWidth: '130px', padding: '10px 20px', background: '#f0f2f5', borderRadius: '16px', boxShadow: '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.88)' }}>
+                            <img
+                                src={isLieutenant ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'}
+                                alt={tierLabel}
+                                style={{ width: '56px', height: '56px', objectFit: 'contain', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.14))' }}
+                            />
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '9px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '3px' }}>Active Tier</div>
+                                <div style={{ fontSize: '13px', fontWeight: '900', color: '#4f46e5', letterSpacing: '-0.2px', whiteSpace: 'nowrap' }}>{tierLabel}</div>
                             </div>
                         </div>
 
-                        {/* Rank journey: current → next → mystery */}
-                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0' }}>
+                        {/* Divider */}
+                        <div style={{ width: '1px', background: 'rgba(0,0,0,0.07)', flexShrink: 0, alignSelf: 'stretch' }} />
 
-                            {/* Current rank node */}
-                            {(() => {
-                                const crName = currentRank === 'None' ? 'starter' : currentRank.toLowerCase();
-                                const badgeMap = { starter:'/images/badges/dag-starter.svg', initiator:'/images/badges/dag-initiator.svg', vanguard:'/images/badges/dag-vanguard.svg', guardian:'/images/badges/dag-guardian.svg', striker:'/images/badges/dag-striker.svg', commander:'/images/badges/dag-commander.svg', champion:'/images/badges/dag-champion.svg', conqueror:'/images/badges/dag-conqueror.svg', paragon:'/images/badges/dag-paragon.svg', mythic:'/images/badges/dag-mythic.svg' };
-                                return (
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-                                        <img src={badgeMap[crName] || '/images/badges/dag-starter.svg'} alt={crName}
-                                            style={{ width: '96px', height: '96px', objectFit: 'contain', filter: `drop-shadow(0 4px 12px ${currentRankData?.color || '#94a3b8'}60)` }} />
-                                    </div>
-                                );
-                            })()}
-
-                            {/* Progress bar connector */}
-                            <div style={{ flex: 1, padding: '0 16px', height: '48px', display: 'flex', alignItems: 'center', position: 'relative' }}>
-                                {(() => {
-                                    const canUpgrade = rankProgress >= 100;
-                                    const purpleWidth = canUpgrade ? 100 : Math.max(rankProgress, dagPoints > 0 ? 5 : 0);
-                                    const orangeWidth = 100 - purpleWidth;
-                                    return (
-                                        <div style={{ width: '100%', height: '48px', borderRadius: '24px', overflow: 'hidden', display: 'flex', border: '2px solid #000' }}>
-                                            {/* Achieved: purple */}
-                                            <div style={{
-                                                width: `${purpleWidth}%`,
-                                                height: '100%',
-                                                background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                flexShrink: 0, overflow: 'hidden'
-                                            }}>
-                                                {purpleWidth > 12 && (
-                                                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#fff', whiteSpace: 'nowrap', padding: '0 12px' }}>
-                                                        {canUpgrade ? `${dagPoints.toLocaleString()} pts — Ready to upgrade!` : `${dagPoints.toLocaleString()} pts`}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            {/* Remaining: light orange */}
-                                            {orangeWidth > 0 && (
-                                                <div style={{
-                                                    width: `${orangeWidth}%`,
-                                                    height: '100%',
-                                                    background: '#ffffff',
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    flexShrink: 0, overflow: 'hidden'
-                                                }}>
-                                                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#1e1b4b', whiteSpace: 'nowrap', padding: '0 12px' }}>
-                                                        {(nextRankData?.cost - dagPoints).toLocaleString()} pts needed
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })()}
-                            </div>
-
-                            {/* Next rank node */}
-                            {nextRankData && (() => {
-                                const nrName = nextRankData.name.toLowerCase();
-                                const badgeMap = { initiator:'/images/badges/dag-initiator.svg', vanguard:'/images/badges/dag-vanguard.svg', guardian:'/images/badges/dag-guardian.svg', striker:'/images/badges/dag-striker.svg', invoker:'/images/badges/dag-invoker.svg', commander:'/images/badges/dag-commander.svg', champion:'/images/badges/dag-champion.svg', conqueror:'/images/badges/dag-conqueror.svg', paragon:'/images/badges/dag-paragon.svg', mythic:'/images/badges/dag-mythic.svg' };
-                                return (
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-                                        <img src={badgeMap[nrName] || '/images/badges/dag-initiator.svg'} alt={nrName}
-                                            style={{ width: '96px', height: '96px', objectFit: 'contain' }} />
-                                    </div>
-                                );
-                            })()}
-
-                        </div>
-
-                        {/* Right: upgrade button only */}
-                        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                            {nextRankData ? (
-                                <button onClick={() => { setShowRankBurnModal(true); setUpgradeResult(null); }} style={{
-                                    padding: '10px 20px', borderRadius: '10px', fontSize: '12px', fontWeight: '800',
-                                    background: 'linear-gradient(145deg, #7c7ff5, #5a5de8)',
-                                    color: '#fff', border: 'none', cursor: 'pointer',
-                                    whiteSpace: 'nowrap', flexShrink: 0,
-                                    boxShadow: '4px 4px 10px rgba(99,102,241,0.4), -2px -2px 6px rgba(255,255,255,0.7), inset 1px 1px 2px rgba(255,255,255,0.3)'
-                                }}>Upgrade</button>
-                            ) : (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fbbf24' }} />
-                                    <span style={{ fontSize: '12px', fontWeight: '800', color: '#f59e0b' }}>MYTHIC ACHIEVED</span>
+                        {/* Rate cards grid */}
+                        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
+                            {[
+                                { label: 'L1 Commission', value: `${isLieutenant ? 20 : 15}%`, sub: 'on direct sales', color: '#4f46e5' },
+                                { label: 'L2 Commission', value: '3%', sub: 'on 2nd downline', color: '#10b981' },
+                                { label: 'L3 Commission', value: '2%', sub: 'on 3rd downline', color: '#f59e0b' },
+                                { label: 'Spend Earn Rate', value: `${isLieutenant ? 50 : 25}`, sub: 'pts per $1 spent', color: '#8b5cf6' },
+                                { label: 'Task Multiplier', value: isLieutenant ? '2×' : '1×', sub: isLieutenant ? 'LT bonus active' : 'base rate', color: '#06b6d4' },
+                            ].map(r => (
+                                <div key={r.label} style={{ textAlign: 'center', padding: '14px 12px', background: '#f0f2f5', borderRadius: '14px', boxShadow: '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.88)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                                    <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{r.label}</div>
+                                    <div style={{ fontSize: '26px', fontWeight: '900', color: r.color, letterSpacing: '-1px', lineHeight: 1 }}>{r.value}</div>
+                                    <div style={{ fontSize: '10px', fontWeight: '500', color: '#94a3b8' }}>{r.sub}</div>
                                 </div>
+                            ))}
+                        </div>
+
+                        {/* Divider */}
+                        <div style={{ width: '1px', background: 'rgba(0,0,0,0.07)', flexShrink: 0, alignSelf: 'stretch' }} />
+
+                        {/* Right: Pool status + optional upgrade button */}
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flexShrink: 0, minWidth: '200px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: '#f0f2f5', borderRadius: '12px', boxShadow: '4px 4px 10px rgba(0,0,0,0.09), -3px -3px 8px rgba(255,255,255,0.88)' }}>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 0 3px rgba(16,185,129,0.15)', flexShrink: 0 }} />
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '800', color: '#1e293b' }}>Fortune 500 Pool</div>
+                                    <div style={{ fontSize: '10px', color: '#10b981', fontWeight: '700', marginTop: '1px' }}>Enrolled ✓</div>
+                                </div>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: '#f0f2f5', borderRadius: '12px', boxShadow: '4px 4px 10px rgba(0,0,0,0.09), -3px -3px 8px rgba(255,255,255,0.88)' }}>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: isLieutenant ? '#7c3aed' : '#cbd5e1', boxShadow: isLieutenant ? '0 0 0 3px rgba(124,58,237,0.15)' : 'none', flexShrink: 0 }} />
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '800', color: '#1e293b' }}>Elite Pool</div>
+                                    <div style={{ fontSize: '10px', color: isLieutenant ? '#7c3aed' : '#94a3b8', fontWeight: '700', marginTop: '1px' }}>{isLieutenant ? 'Eligible · MainNet' : 'LT Only'}</div>
+                                </div>
+                            </div>
+                            {!isLieutenant && (
+                                <button onClick={() => setShowUpgradeModal(true)} style={{ padding: '10px 14px', borderRadius: '12px', fontSize: '12px', fontWeight: '800', background: 'linear-gradient(145deg, #7c7ff5, #5a5de8)', color: '#fff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '4px 4px 10px rgba(99,102,241,0.4), -2px -2px 6px rgba(255,255,255,0.7)', textAlign: 'center' }}>
+                                    Upgrade to LT — $149
+                                </button>
                             )}
                         </div>
 
                     </div>
                 </NmCard>
+
+
 
                 {/* ━━━ ROW 2: Calendar — full width ━━━ */}
                 <NmCard span="12" style={{ padding: '24px' }}>
@@ -893,20 +839,20 @@ export default function Dashboard2() {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <button onClick={prevMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
                             </button>
                             <span style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', minWidth: '140px', textAlign: 'center' }}>
                                 {monthNames[calendarMonth.getMonth()]} {calendarMonth.getFullYear()}
                             </span>
                             <button onClick={nextMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
                             </button>
                         </div>
                     </div>
 
                     {/* Calendar Header — 7 day labels */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', marginBottom: '8px', paddingBottom: '10px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                        {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((day) => (
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                             <div key={day} style={{ textAlign: 'center', fontSize: '11px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{day}</div>
                         ))}
                     </div>
@@ -922,8 +868,8 @@ export default function Dashboard2() {
                                 color: date.inactive ? '#cbd5e1' : '#0f172a',
                                 transition: 'all 0.2s ease',
                             }}
-                            onMouseEnter={(e) => { if (!date.inactive && !date.today) e.currentTarget.style.boxShadow = '7px 7px 16px rgba(0,0,0,0.16), -5px -5px 14px rgba(255,255,255,0.95)'; }}
-                            onMouseLeave={(e) => { if (!date.inactive && !date.today) e.currentTarget.style.boxShadow = '5px 5px 12px rgba(0,0,0,0.11), -4px -4px 10px rgba(255,255,255,0.9)'; }}
+                                onMouseEnter={(e) => { if (!date.inactive && !date.today) e.currentTarget.style.boxShadow = '7px 7px 16px rgba(0,0,0,0.16), -5px -5px 14px rgba(255,255,255,0.95)'; }}
+                                onMouseLeave={(e) => { if (!date.inactive && !date.today) e.currentTarget.style.boxShadow = '5px 5px 12px rgba(0,0,0,0.11), -4px -4px 10px rgba(255,255,255,0.9)'; }}
                             >
                                 <div style={{ marginBottom: '3px', fontWeight: date.today ? '800' : '600', color: date.today ? '#6366f1' : undefined }}>{date.day}</div>
                                 {date.events && date.events.length > 0 && (
@@ -972,7 +918,7 @@ export default function Dashboard2() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     {/* Left arrow */}
                                     <button disabled={eventCarouselIdx === 0} onClick={() => setEventCarouselIdx(i => Math.max(0, i - PAGE))} style={{ width: '30px', height: '30px', flexShrink: 0, borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: eventCarouselIdx === 0 ? 'none' : '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', cursor: eventCarouselIdx === 0 ? 'default' : 'pointer', opacity: eventCarouselIdx === 0 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
                                     </button>
                                     {/* Event cards */}
                                     <div style={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${Math.min(visible.length, PAGE)}, 1fr)`, gap: '8px' }}>
@@ -985,8 +931,8 @@ export default function Dashboard2() {
                                                 borderTop: `3px solid ${EVENT_COLORS[event.event_type] || EVENT_COLORS.default}`,
                                                 cursor: 'pointer', transition: 'all 0.2s ease'
                                             }}
-                                            onMouseEnter={e => { e.currentTarget.style.boxShadow = '7px 7px 16px rgba(0,0,0,0.16), -5px -5px 14px rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                                            onMouseLeave={e => { e.currentTarget.style.boxShadow = '5px 5px 12px rgba(0,0,0,0.11), -4px -4px 10px rgba(255,255,255,0.9)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                                                onMouseEnter={e => { e.currentTarget.style.boxShadow = '7px 7px 16px rgba(0,0,0,0.16), -5px -5px 14px rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                                onMouseLeave={e => { e.currentTarget.style.boxShadow = '5px 5px 12px rgba(0,0,0,0.11), -4px -4px 10px rgba(255,255,255,0.9)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                                             >
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '8px', background: `${EVENT_COLORS[event.event_type] || EVENT_COLORS.default}22`, flexShrink: 0 }}>
                                                     <span style={{ fontSize: '13px', fontWeight: '800', color: EVENT_COLORS[event.event_type] || EVENT_COLORS.default }}>{new Date(event.event_date).getDate()}</span>
@@ -1001,7 +947,7 @@ export default function Dashboard2() {
                                     </div>
                                     {/* Right arrow */}
                                     <button disabled={eventCarouselIdx >= maxIdx} onClick={() => setEventCarouselIdx(i => Math.min(maxIdx, i + PAGE))} style={{ width: '30px', height: '30px', flexShrink: 0, borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: eventCarouselIdx >= maxIdx ? 'none' : '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', cursor: eventCarouselIdx >= maxIdx ? 'default' : 'pointer', opacity: eventCarouselIdx >= maxIdx ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
                                     </button>
                                 </div>
                             </div>
@@ -1046,11 +992,11 @@ export default function Dashboard2() {
                             <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>Referral Link</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: '#f0f2f5', borderRadius: '10px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)' }}>
                                 <span style={{ flex: 1, fontSize: '11px', fontWeight: '600', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                    {typeof window !== 'undefined' ? `${window.location.origin}/register?ref=${referralCode}` : `dagarmy.network/register?ref=${referralCode}`}
+                                    {`${pageOrigin}/register?ref=${referralCode}`}
                                 </span>
                                 <button onClick={async () => {
                                     const link = `${window.location.origin}/register?ref=${referralCode}`;
-                                    try { await navigator.clipboard.writeText(link); setCopyLinkSuccess(true); setTimeout(() => setCopyLinkSuccess(false), 2000); } catch(e) {}
+                                    try { await navigator.clipboard.writeText(link); setCopyLinkSuccess(true); setTimeout(() => setCopyLinkSuccess(false), 2000); } catch (e) { }
                                 }} style={{ padding: '5px 12px', borderRadius: '7px', border: 'none', fontSize: '11px', fontWeight: '700', background: copyLinkSuccess ? '#dcfce7' : '#f0f2f5', color: copyLinkSuccess ? '#10b981' : '#0f172a', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0, boxShadow: copyLinkSuccess ? 'none' : '3px 3px 8px rgba(0,0,0,0.1), -2px -2px 6px rgba(255,255,255,0.9)' }}>
                                     {copyLinkSuccess ? 'Copied' : 'Copy'}
                                 </button>
@@ -1065,21 +1011,21 @@ export default function Dashboard2() {
                                     {
                                         name: 'WhatsApp',
                                         color: '#25D366',
-                                        href: () => `https://wa.me/?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,  
+                                        href: () => `https://wa.me/?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,
                                         icon: (
                                             <svg viewBox="0 0 32 32" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.5L4 29l7.75-1.813A11.94 11.94 0 0 0 16 28c6.627 0 12-5.373 12-12S22.627 3 16 3z" fill="#25D366"/>
-                                                <path d="M21.5 18.5c-.3-.15-1.75-.863-2.02-.963-.27-.1-.467-.15-.663.15-.2.3-.763.963-.937 1.163-.17.2-.343.225-.637.075-.3-.15-1.262-.463-2.4-1.475-.888-.788-1.487-1.762-1.663-2.062-.175-.3-.018-.463.13-.612.135-.135.3-.35.45-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.663-1.6-.913-2.188-.24-.575-.484-.496-.663-.505l-.563-.01c-.2 0-.525.075-.8.375s-1.05 1.025-1.05 2.5 1.075 2.9 1.225 3.1c.15.2 2.113 3.225 5.125 4.525.716.309 1.274.494 1.71.631.718.228 1.372.196 1.888.119.576-.086 1.75-.714 2-1.4.25-.688.25-1.275.175-1.4-.075-.125-.275-.2-.575-.35z" fill="#fff"/>
+                                                <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.5L4 29l7.75-1.813A11.94 11.94 0 0 0 16 28c6.627 0 12-5.373 12-12S22.627 3 16 3z" fill="#25D366" />
+                                                <path d="M21.5 18.5c-.3-.15-1.75-.863-2.02-.963-.27-.1-.467-.15-.663.15-.2.3-.763.963-.937 1.163-.17.2-.343.225-.637.075-.3-.15-1.262-.463-2.4-1.475-.888-.788-1.487-1.762-1.663-2.062-.175-.3-.018-.463.13-.612.135-.135.3-.35.45-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.663-1.6-.913-2.188-.24-.575-.484-.496-.663-.505l-.563-.01c-.2 0-.525.075-.8.375s-1.05 1.025-1.05 2.5 1.075 2.9 1.225 3.1c.15.2 2.113 3.225 5.125 4.525.716.309 1.274.494 1.71.631.718.228 1.372.196 1.888.119.576-.086 1.75-.714 2-1.4.25-.688.25-1.275.175-1.4-.075-.125-.275-.2-.575-.35z" fill="#fff" />
                                             </svg>
                                         )
                                     },
                                     {
                                         name: 'X',
                                         color: '#000000',
-                                        href: () => `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,  
+                                        href: () => `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Join DAGArmy using my referral link and start earning! ${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,
                                         icon: (
                                             <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
+                                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor" />
                                             </svg>
                                         )
                                     },
@@ -1091,39 +1037,39 @@ export default function Dashboard2() {
                                             <svg viewBox="0 0 32 32" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
                                                 <defs>
                                                     <radialGradient id="igGrad1" cx="30%" cy="107%" r="150%">
-                                                        <stop offset="0%" stopColor="#fdf497"/>
-                                                        <stop offset="5%" stopColor="#fdf497"/>
-                                                        <stop offset="45%" stopColor="#fd5949"/>
-                                                        <stop offset="60%" stopColor="#d6249f"/>
-                                                        <stop offset="90%" stopColor="#285AEB"/>
+                                                        <stop offset="0%" stopColor="#fdf497" />
+                                                        <stop offset="5%" stopColor="#fdf497" />
+                                                        <stop offset="45%" stopColor="#fd5949" />
+                                                        <stop offset="60%" stopColor="#d6249f" />
+                                                        <stop offset="90%" stopColor="#285AEB" />
                                                     </radialGradient>
                                                 </defs>
-                                                <rect x="2" y="2" width="28" height="28" rx="8" fill="url(#igGrad1)"/>
-                                                <circle cx="16" cy="16" r="6" fill="none" stroke="#fff" strokeWidth="2.2"/>
-                                                <circle cx="22.5" cy="9.5" r="1.5" fill="#fff"/>
+                                                <rect x="2" y="2" width="28" height="28" rx="8" fill="url(#igGrad1)" />
+                                                <circle cx="16" cy="16" r="6" fill="none" stroke="#fff" strokeWidth="2.2" />
+                                                <circle cx="22.5" cy="9.5" r="1.5" fill="#fff" />
                                             </svg>
                                         )
                                     },
                                     {
                                         name: 'Facebook',
                                         color: '#1877F2',
-                                        href: () => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,  
+                                        href: () => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}`,
                                         icon: (
                                             <svg viewBox="0 0 32 32" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                                                <rect width="32" height="32" rx="8" fill="#1877F2"/>
-                                                <path d="M21 16h-3v-2c0-.828.172-1 1-1h2V9h-3c-3 0-4 2-4 4v3h-2v4h2v9h4v-9h3l1-4z" fill="#fff"/>
+                                                <rect width="32" height="32" rx="8" fill="#1877F2" />
+                                                <path d="M21 16h-3v-2c0-.828.172-1 1-1h2V9h-3c-3 0-4 2-4 4v3h-2v4h2v9h4v-9h3l1-4z" fill="#fff" />
                                             </svg>
                                         )
                                     },
                                     {
                                         name: 'Telegram',
                                         color: '#2AABEE',
-                                        href: () => `https://t.me/share/url?url=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}&text=${encodeURIComponent('Join DAGArmy using my referral link and start earning!')}`,  
+                                        href: () => `https://t.me/share/url?url=${encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://dagarmy.network'}/register?ref=${referralCode}`)}&text=${encodeURIComponent('Join DAGArmy using my referral link and start earning!')}`,
                                         icon: (
                                             <svg viewBox="0 0 32 32" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                                                <rect width="32" height="32" rx="16" fill="#2AABEE"/>
-                                                <path d="M7 15.5l4.5 1.7 1.75 5.5 2.25-2.95 4.75 3.5 3.25-14-16 6.25z" fill="#fff"/>
-                                                <path d="M11.5 17.2l.5 5 1.75-5.25" fill="#d5e8f5"/>
+                                                <rect width="32" height="32" rx="16" fill="#2AABEE" />
+                                                <path d="M7 15.5l4.5 1.7 1.75 5.5 2.25-2.95 4.75 3.5 3.25-14-16 6.25z" fill="#fff" />
+                                                <path d="M11.5 17.2l.5 5 1.75-5.25" fill="#d5e8f5" />
                                             </svg>
                                         )
                                     },
@@ -1154,250 +1100,250 @@ export default function Dashboard2() {
                     </NmCard>
 
                     {/* Redeem DAG Points card */}
-                        <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
-                            {/* Header */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5"><polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/></svg>
-                                </div>
-                                <div>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Redeem</div>
-                                    <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Exchange for rewards</div>
-                                </div>
+                    <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+                        {/* Header */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5"><polyline points="17 11 12 6 7 11" /><line x1="12" y1="6" x2="12" y2="18" /></svg>
                             </div>
-
-                            {/* Available points */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 14px', marginBottom: '14px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>Available</span>
-                                <span style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>{dagPoints.toLocaleString()} <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>pts</span></span>
+                            <div>
+                                <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Redeem</div>
+                                <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Exchange for rewards</div>
                             </div>
+                        </div>
 
-                            {/* DAGCHAIN Gas Coin info */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -3px -3px 8px rgba(255,255,255,0.9)' }}>
-                                <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>DAGCHAIN Gas Coins</div>
-                                <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>500 pts = 1 Coin · Native gas on DAGCHAIN</div>
-                            </div>
+                        {/* Available points */}
+                        <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 14px', marginBottom: '14px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>Available</span>
+                            <span style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>{dagPoints.toLocaleString()} <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>pts</span></span>
+                        </div>
 
-                            {/* Stepper */}
-                            {(() => {
-                                const cfg = REDEEM_CONFIG[redeemType];
-                                const pointsCost = redeemAmount * cfg.ratio;
-                                const maxAmount = Math.floor(dagPoints / cfg.ratio);
-                                const canRedeem = redeemAmount > 0 && pointsCost <= dagPoints && maxAmount > 0;
-                                return (
-                                    <>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                                            <button onClick={() => setRedeemAmount(a => Math.max(1, a - 1))} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f0f2f5', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>−</button>
-                                            <div style={{ flex: 1, textAlign: 'center', padding: '6px 0', background: '#f0f2f5', borderRadius: '8px', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>{redeemAmount}</div>
-                                            <button onClick={() => setRedeemAmount(a => Math.min(Math.max(1, maxAmount), a + 1))} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f0f2f5', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>+</button>
+                        {/* DAGCHAIN Gas Coin info */}
+                        <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -3px -3px 8px rgba(255,255,255,0.9)' }}>
+                            <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>DAGCHAIN Gas Coins</div>
+                            <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>500 pts = 1 Coin · Native gas on DAGCHAIN</div>
+                        </div>
+
+                        {/* Stepper */}
+                        {(() => {
+                            const cfg = REDEEM_CONFIG[redeemType];
+                            const pointsCost = redeemAmount * cfg.ratio;
+                            const maxAmount = Math.floor(dagPoints / cfg.ratio);
+                            const canRedeem = redeemAmount > 0 && pointsCost <= dagPoints && maxAmount > 0;
+                            return (
+                                <>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                                        <button onClick={() => setRedeemAmount(a => Math.max(1, a - 1))} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f0f2f5', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>−</button>
+                                        <div style={{ flex: 1, textAlign: 'center', padding: '6px 0', background: '#f0f2f5', borderRadius: '8px', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>{redeemAmount}</div>
+                                        <button onClick={() => setRedeemAmount(a => Math.min(Math.max(1, maxAmount), a + 1))} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f0f2f5', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>+</button>
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: canRedeem ? '#0f172a' : '#ef4444', fontWeight: '600', textAlign: 'center', marginBottom: '12px' }}>
+                                        Costs <strong style={{ color: canRedeem ? '#0f172a' : '#ef4444' }}>{pointsCost.toLocaleString()} pts</strong>
+                                        {!canRedeem && maxAmount === 0 && ' — insufficient points'}
+                                        {!canRedeem && maxAmount > 0 && ` — need ${(pointsCost - dagPoints).toLocaleString()} more`}
+                                    </div>
+                                    {redeemMsg && (
+                                        <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: redeemMsg.type === 'success' ? '#6366f1' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
+                                            {redeemMsg.text}
                                         </div>
-                                        <div style={{ fontSize: '11px', color: canRedeem ? '#0f172a' : '#ef4444', fontWeight: '600', textAlign: 'center', marginBottom: '12px' }}>
-                                            Costs <strong style={{ color: canRedeem ? '#0f172a' : '#ef4444' }}>{pointsCost.toLocaleString()} pts</strong>
-                                            {!canRedeem && maxAmount === 0 && ' — insufficient points'}
-                                            {!canRedeem && maxAmount > 0 && ` — need ${(pointsCost - dagPoints).toLocaleString()} more`}
-                                        </div>
-                                        {redeemMsg && (
-                                            <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: redeemMsg.type === 'success' ? '#6366f1' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
-                                                {redeemMsg.text}
-                                            </div>
-                                        )}
-                                        <button onClick={handleDashboardRedeem} disabled={!canRedeem || redeeming} style={{ width: '100%', marginTop: 'auto', padding: '10px', borderRadius: '10px', border: 'none', background: canRedeem && !redeeming ? '#6366f1' : '#f0f2f5', color: canRedeem && !redeeming ? '#fff' : '#94a3b8', fontSize: '12px', fontWeight: '700', cursor: canRedeem && !redeeming ? 'pointer' : 'not-allowed', transition: 'all 0.2s', boxShadow: canRedeem && !redeeming ? '5px 5px 12px rgba(99,102,241,0.3), -3px -3px 8px rgba(255,255,255,0.9)' : 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' }}>
-                                            {redeeming ? 'Processing…' : 'Redeem DAG Points'}
-                                        </button>
-                                    </>
-                                );
-                            })()}
-                        </NmCard>
-
-                        {/* Withdraw USD / USDT card */}
-                        <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
-                            {/* Header */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                </div>
-                                <div>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Withdraw</div>
-                                    <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>USD or USDT payout</div>
-                                </div>
-                            </div>
-
-                            {/* Earnings */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 14px', marginBottom: '14px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>Earned</span>
-                                <span style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>${usdEarned.toFixed(2)}</span>
-                            </div>
-
-                            {/* Month picker */}
-                            <div style={{ marginBottom: '10px' }}>
-                                <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '5px' }}>Reward Month</div>
-                                <input type="month" value={withdrawMonth} onChange={e => setWithdrawMonth(e.target.value)}
-                                    max={(() => { const d = new Date(); d.setMonth(d.getMonth() - 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}`; })()}
-                                    style={{ width: '100%', padding: '7px 10px', border: 'none', borderRadius: '8px', fontSize: '12px', outline: 'none', boxSizing: 'border-box', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)', color: '#0f172a' }}
-                                    onFocus={e => e.target.style.boxShadow = 'inset 3px 3px 7px rgba(99,102,241,0.15), inset -2px -2px 5px rgba(255,255,255,0.9)'} onBlur={e => e.target.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)'}
-                                />
-                            </div>
-
-                            {/* Payout method */}
-                            <div style={{ marginBottom: '12px' }}>
-                                <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '5px' }}>Payout via</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-                                    <button type="button" onClick={() => setWithdrawPayoutMethod('bank')} style={{ padding: '8px', borderRadius: '9px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s', border: 'none', background: '#f0f2f5', boxShadow: withdrawPayoutMethod === 'bank' ? 'inset 4px 4px 9px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)' : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)' }}>
-                                        <div style={{ fontSize: '11px', fontWeight: '700', color: withdrawPayoutMethod === 'bank' ? '#6366f1' : '#0f172a', marginBottom: '2px' }}>Bank</div>
-                                        {paymentInfo?.bank_account_name
-                                            ? <div style={{ fontSize: '10px', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bank_name || 'Saved'}</div>
-                                            : <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Not set</div>
-                                        }
+                                    )}
+                                    <button onClick={handleDashboardRedeem} disabled={!canRedeem || redeeming} style={{ width: '100%', marginTop: 'auto', padding: '10px', borderRadius: '10px', border: 'none', background: canRedeem && !redeeming ? '#6366f1' : '#f0f2f5', color: canRedeem && !redeeming ? '#fff' : '#94a3b8', fontSize: '12px', fontWeight: '700', cursor: canRedeem && !redeeming ? 'pointer' : 'not-allowed', transition: 'all 0.2s', boxShadow: canRedeem && !redeeming ? '5px 5px 12px rgba(99,102,241,0.3), -3px -3px 8px rgba(255,255,255,0.9)' : 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' }}>
+                                        {redeeming ? 'Processing…' : 'Redeem DAG Points'}
                                     </button>
-                                    <button type="button" onClick={() => setWithdrawPayoutMethod('crypto')} style={{ padding: '8px', borderRadius: '9px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s', border: 'none', background: '#f0f2f5', boxShadow: withdrawPayoutMethod === 'crypto' ? 'inset 4px 4px 9px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)' : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)' }}>
-                                        <div style={{ fontSize: '11px', fontWeight: '700', color: withdrawPayoutMethod === 'crypto' ? '#6366f1' : '#0f172a', marginBottom: '2px' }}>USDT</div>
-                                        {paymentInfo?.bep20_address
-                                            ? <div style={{ fontSize: '10px', color: '#0f172a', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bep20_address.slice(0,10)}…</div>
-                                            : <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Not set</div>
-                                        }
-                                    </button>
-                                </div>
-                                {withdrawPayoutMethod === 'bank' && !paymentInfo?.bank_account_name && (
-                                    <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add bank details in <a href="/student-setting" style={{ color: '#6366f1' }}>Settings</a></div>
-                                )}
-                                {withdrawPayoutMethod === 'crypto' && !paymentInfo?.bep20_address && (
-                                    <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add BEP20 wallet in <a href="/student-setting" style={{ color: '#6366f1' }}>Settings</a></div>
-                                )}
-                            </div>
+                                </>
+                            );
+                        })()}
+                    </NmCard>
 
-                            {/* Duplicate request notice */}
-                            {withdrawHistory.some(r => r.reward_month === withdrawMonth) && (
-                                <div style={{ marginBottom: '10px', padding: '7px 10px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '10px', fontWeight: '600', color: '#6366f1' }}>
-                                    Request already submitted for {withdrawMonth} — Status: <strong>{withdrawHistory.find(r => r.reward_month === withdrawMonth)?.status}</strong>
-                                </div>
+                    {/* Withdraw USD / USDT card */}
+                    <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+                        {/* Header */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Withdraw</div>
+                                <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>USD or USDT payout</div>
+                            </div>
+                        </div>
+
+                        {/* Earnings */}
+                        <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 14px', marginBottom: '14px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>Earned</span>
+                            <span style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>${usdEarned.toFixed(2)}</span>
+                        </div>
+
+                        {/* Month picker */}
+                        <div style={{ marginBottom: '10px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '5px' }}>Reward Month</div>
+                            <input type="month" value={withdrawMonth} onChange={e => setWithdrawMonth(e.target.value)}
+                                max={(() => { const d = new Date(); d.setMonth(d.getMonth() - 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; })()}
+                                style={{ width: '100%', padding: '7px 10px', border: 'none', borderRadius: '8px', fontSize: '12px', outline: 'none', boxSizing: 'border-box', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)', color: '#0f172a' }}
+                                onFocus={e => e.target.style.boxShadow = 'inset 3px 3px 7px rgba(99,102,241,0.15), inset -2px -2px 5px rgba(255,255,255,0.9)'} onBlur={e => e.target.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)'}
+                            />
+                        </div>
+
+                        {/* Payout method */}
+                        <div style={{ marginBottom: '12px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '5px' }}>Payout via</div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                                <button type="button" onClick={() => setWithdrawPayoutMethod('bank')} style={{ padding: '8px', borderRadius: '9px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s', border: 'none', background: '#f0f2f5', boxShadow: withdrawPayoutMethod === 'bank' ? 'inset 4px 4px 9px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)' : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: withdrawPayoutMethod === 'bank' ? '#6366f1' : '#0f172a', marginBottom: '2px' }}>Bank</div>
+                                    {paymentInfo?.bank_account_name
+                                        ? <div style={{ fontSize: '10px', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bank_name || 'Saved'}</div>
+                                        : <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Not set</div>
+                                    }
+                                </button>
+                                <button type="button" onClick={() => setWithdrawPayoutMethod('crypto')} style={{ padding: '8px', borderRadius: '9px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s', border: 'none', background: '#f0f2f5', boxShadow: withdrawPayoutMethod === 'crypto' ? 'inset 4px 4px 9px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)' : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: withdrawPayoutMethod === 'crypto' ? '#6366f1' : '#0f172a', marginBottom: '2px' }}>USDT</div>
+                                    {paymentInfo?.bep20_address
+                                        ? <div style={{ fontSize: '10px', color: '#0f172a', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bep20_address.slice(0, 10)}…</div>
+                                        : <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Not set</div>
+                                    }
+                                </button>
+                            </div>
+                            {withdrawPayoutMethod === 'bank' && !paymentInfo?.bank_account_name && (
+                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add bank details in <a href="/student-setting" style={{ color: '#6366f1' }}>Settings</a></div>
                             )}
-
-                            {withdrawMsg && (
-                                <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: withdrawMsg.type === 'success' ? '#6366f1' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
-                                    {withdrawMsg.text}
-                                </div>
+                            {withdrawPayoutMethod === 'crypto' && !paymentInfo?.bep20_address && (
+                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add BEP20 wallet in <a href="/student-setting" style={{ color: '#6366f1' }}>Settings</a></div>
                             )}
+                        </div>
 
-                            {(() => {
-                                const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
-                                const alreadyExists = withdrawHistory.some(r => r.reward_month === withdrawMonth);
-                                const disabled = withdrawing || noDetails || alreadyExists || usdEarned < 10;
-                                return (
-                                    <button onClick={handleDashboardWithdraw} disabled={disabled} style={{ width: '100%', marginTop: 'auto', padding: '10px', borderRadius: '10px', border: 'none', background: disabled ? '#f0f2f5' : '#6366f1', color: disabled ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: '700', cursor: disabled ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: disabled ? 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' : '5px 5px 12px rgba(99,102,241,0.3), -3px -3px 8px rgba(255,255,255,0.9)' }}>
-                                        {withdrawing ? 'Submitting…' : usdEarned < 10 ? `Min. $10 required` : 'Request Withdrawal'}
-                                    </button>
-                                );
-                            })()}
-                        </NmCard>
+                        {/* Duplicate request notice */}
+                        {withdrawHistory.some(r => r.reward_month === withdrawMonth) && (
+                            <div style={{ marginBottom: '10px', padding: '7px 10px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '10px', fontWeight: '600', color: '#6366f1' }}>
+                                Request already submitted for {withdrawMonth} — Status: <strong>{withdrawHistory.find(r => r.reward_month === withdrawMonth)?.status}</strong>
+                            </div>
+                        )}
+
+                        {withdrawMsg && (
+                            <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: withdrawMsg.type === 'success' ? '#6366f1' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
+                                {withdrawMsg.text}
+                            </div>
+                        )}
+
+                        {(() => {
+                            const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
+                            const alreadyExists = withdrawHistory.some(r => r.reward_month === withdrawMonth);
+                            const disabled = withdrawing || noDetails || alreadyExists || usdEarned < 10;
+                            return (
+                                <button onClick={handleDashboardWithdraw} disabled={disabled} style={{ width: '100%', marginTop: 'auto', padding: '10px', borderRadius: '10px', border: 'none', background: disabled ? '#f0f2f5' : '#6366f1', color: disabled ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: '700', cursor: disabled ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: disabled ? 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' : '5px 5px 12px rgba(99,102,241,0.3), -3px -3px 8px rgba(255,255,255,0.9)' }}>
+                                    {withdrawing ? 'Submitting…' : usdEarned < 10 ? `Min. $10 required` : 'Request Withdrawal'}
+                                </button>
+                            );
+                        })()}
+                    </NmCard>
 
                 </div>
 
-            {/* ━━━ DAGChain Integration Panel ━━━ */}
-            {false && dagchainData && (
-                <NmCard span="12" hover={false} style={{ padding: '0', overflow: 'hidden', marginTop: '4px' }}>
-                    {/* Header */}
-                    <div style={{ padding: '20px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#0f172a,#1e3a5f)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2">
-                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
+                {/* ━━━ DAGChain Integration Panel ━━━ */}
+                {false && dagchainData && (
+                    <NmCard span="12" hover={false} style={{ padding: '0', overflow: 'hidden', marginTop: '4px' }}>
+                        {/* Header */}
+                        <div style={{ padding: '20px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#0f172a,#1e3a5f)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px' }}>DAGChain Account</div>
+                                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>Linked — synced from dagchain.network</div>
+                                </div>
                             </div>
-                            <div>
-                                <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px' }}>DAGChain Account</div>
-                                <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>Linked — synced from dagchain.network</div>
+                            <a href="https://dagchain.network" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '700', color: '#6366f1', textDecoration: 'none', padding: '7px 14px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)' }}>
+                                Open DAGChain
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                            </a>
+                        </div>
+
+                        {dagchainLoading ? (
+                            <div style={{ padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', color: '#94a3b8', fontSize: '13px' }}>
+                                <div style={{ width: '18px', height: '18px', border: '2px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                                Loading DAGChain data...
                             </div>
-                        </div>
-                        <a href="https://dagchain.network" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '700', color: '#6366f1', textDecoration: 'none', padding: '7px 14px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)' }}>
-                            Open DAGChain
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                        </a>
-                    </div>
+                        ) : (
+                            <div style={{ padding: '20px 28px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
 
-                    {dagchainLoading ? (
-                        <div style={{ padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', color: '#94a3b8', fontSize: '13px' }}>
-                            <div style={{ width: '18px', height: '18px', border: '2px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
-                            Loading DAGChain data...
-                        </div>
-                    ) : (
-                        <div style={{ padding: '20px 28px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-
-                            {/* Referral Code */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
-                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Code</div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '2px', flex: 1 }}>
-                                        {dagchainData?.referralCode || '—'}
+                                {/* Referral Code */}
+                                <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Code</div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '2px', flex: 1 }}>
+                                            {dagchainData?.referralCode || '—'}
+                                        </div>
+                                        {dagchainData?.referralCode && (
+                                            <button onClick={handleCopyDagchainCode} style={{ padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #c7d2fe', background: dagchainCopied ? '#eef2ff' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: '700', color: '#6366f1', transition: 'all 0.15s' }}>
+                                                {dagchainCopied ? (
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                                ) : (
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+                                                )}
+                                                {dagchainCopied ? 'Copied' : 'Copy'}
+                                            </button>
+                                        )}
                                     </div>
-                                    {dagchainData?.referralCode && (
-                                        <button onClick={handleCopyDagchainCode} style={{ padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #c7d2fe', background: dagchainCopied ? '#eef2ff' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: '700', color: '#6366f1', transition: 'all 0.15s' }}>
-                                            {dagchainCopied ? (
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                                            ) : (
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                            )}
-                                            {dagchainCopied ? 'Copied' : 'Copy'}
-                                        </button>
+                                    {dagchainData?.referredBy && (
+                                        <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '8px' }}>Referred by: <span style={{ fontWeight: '700', color: '#475569' }}>{dagchainData.referredBy}</span></div>
                                     )}
                                 </div>
-                                {dagchainData?.referredBy && (
-                                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '8px' }}>Referred by: <span style={{ fontWeight: '700', color: '#475569' }}>{dagchainData.referredBy}</span></div>
-                                )}
-                            </div>
 
-                            {/* Nodes */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
-                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Nodes Owned</div>
-                                <div style={{ display: 'flex', gap: '12px', marginBottom: '8px' }}>
-                                    <div style={{ flex: 1, background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', textAlign: 'center' }}>
-                                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>{dagchainData?.nodes?.validatorCount || 0}</div>
-                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>Validator</div>
+                                {/* Nodes */}
+                                <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Nodes Owned</div>
+                                    <div style={{ display: 'flex', gap: '12px', marginBottom: '8px' }}>
+                                        <div style={{ flex: 1, background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', textAlign: 'center' }}>
+                                            <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>{dagchainData?.nodes?.validatorCount || 0}</div>
+                                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>Validator</div>
+                                        </div>
+                                        <div style={{ flex: 1, background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', textAlign: 'center' }}>
+                                            <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>{dagchainData?.nodes?.storageCount || 0}</div>
+                                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>Storage</div>
+                                        </div>
                                     </div>
-                                    <div style={{ flex: 1, background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', textAlign: 'center' }}>
-                                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>{dagchainData?.nodes?.storageCount || 0}</div>
-                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>Storage</div>
-                                    </div>
+                                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>Total: <span style={{ fontWeight: '700', color: '#0f172a' }}>{dagchainData?.nodes?.total || 0}</span> nodes</div>
                                 </div>
-                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>Total: <span style={{ fontWeight: '700', color: '#0f172a' }}>{dagchainData?.nodes?.total || 0}</span> nodes</div>
-                            </div>
 
-                            {/* Referral Journey */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
-                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Journey</div>
-                                <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px' }}>
-                                    {dagchainData?.referralCount || 0}
+                                {/* Referral Journey */}
+                                <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Journey</div>
+                                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px' }}>
+                                        {dagchainData?.referralCount || 0}
+                                    </div>
+                                    <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>People referred on DAGChain</div>
+                                    {dagchainData?.referralStats && (
+                                        <div style={{ fontSize: '11px', color: '#475569', fontWeight: '600' }}>
+                                            Earnings: <span style={{ color: '#10b981' }}>${(dagchainData.referralStats.totalEarnings || 0).toFixed(2)}</span>
+                                        </div>
+                                    )}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>People referred on DAGChain</div>
-                                {dagchainData?.referralStats && (
-                                    <div style={{ fontSize: '11px', color: '#475569', fontWeight: '600' }}>
-                                        Earnings: <span style={{ color: '#10b981' }}>${(dagchainData.referralStats.totalEarnings || 0).toFixed(2)}</span>
-                                    </div>
-                                )}
-                            </div>
 
-                            {/* DAG Points + Rewards */}
-                            <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
-                                <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>DAGChain Points</div>
-                                <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
-                                    {(dagchainData?.points || 0).toLocaleString()}
+                                {/* DAG Points + Rewards */}
+                                <div style={{ background: '#f0f2f5', borderRadius: '14px', padding: '16px', boxShadow: 'inset 5px 5px 12px rgba(0,0,0,0.13), inset -4px -4px 10px rgba(255,255,255,0.9)' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>DAGChain Points</div>
+                                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1px', lineHeight: 1, marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+                                        {(dagchainData?.points || 0).toLocaleString()}
+                                    </div>
+                                    <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>Points earned on DAGChain</div>
+                                    {dagchainData?.rewards?.pending && (
+                                        <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: '700' }}>
+                                            Pending rewards available
+                                        </div>
+                                    )}
+                                    {dagchainData?.syncedAt && (
+                                        <div style={{ fontSize: '10px', color: '#cbd5e1', marginTop: '6px' }}>
+                                            Last synced: {new Date(dagchainData.syncedAt).toLocaleDateString()}
+                                        </div>
+                                    )}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>Points earned on DAGChain</div>
-                                {dagchainData?.rewards?.pending && (
-                                    <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: '700' }}>
-                                        Pending rewards available
-                                    </div>
-                                )}
-                                {dagchainData?.syncedAt && (
-                                    <div style={{ fontSize: '10px', color: '#cbd5e1', marginTop: '6px' }}>
-                                        Last synced: {new Date(dagchainData.syncedAt).toLocaleDateString()}
-                                    </div>
-                                )}
-                            </div>
 
-                        </div>
-                    )}
-                </NmCard>
-            )}
+                            </div>
+                        )}
+                    </NmCard>
+                )}
 
             </div>
 
@@ -1431,7 +1377,7 @@ export default function Dashboard2() {
                                     alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0
                                 }}>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                                     </svg>
                                 </button>
                             </div>
@@ -1443,7 +1389,7 @@ export default function Dashboard2() {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f0f2f5', boxShadow: 'inset 5px 5px 10px rgba(0,0,0,0.13), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
                                     </svg>
                                 </div>
                                 <div>
@@ -1474,7 +1420,7 @@ export default function Dashboard2() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f0f2f5', boxShadow: 'inset 5px 5px 10px rgba(0,0,0,0.13), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                                         </svg>
                                     </div>
                                     <div>
@@ -1490,7 +1436,7 @@ export default function Dashboard2() {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f0f2f5', boxShadow: 'inset 5px 5px 10px rgba(99,102,241,0.22), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2">
-                                                <path d="M15 10l5-3v10l-5-3z"/><rect x="2" y="6" width="13" height="12" rx="2" ry="2"/>
+                                                <path d="M15 10l5-3v10l-5-3z" /><rect x="2" y="6" width="13" height="12" rx="2" ry="2" />
                                             </svg>
                                         </div>
                                         <div>
@@ -1507,7 +1453,7 @@ export default function Dashboard2() {
                                         transition: 'all 0.2s'
                                     }}>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
                                         </svg>
                                         Join Meeting
                                     </a>

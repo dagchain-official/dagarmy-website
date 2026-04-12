@@ -1,13 +1,45 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+const PROTECTED_PATHS = [
+  '/student-dashboard',
+  '/admin',
+  '/(dashboard)',
+  '/rewards',
+  '/courses',
+  '/hackathons',
+];
+
+function isProtected(pathname: string): boolean {
+  return PROTECTED_PATHS.some(p => pathname.startsWith(p));
+}
+
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
+  const { pathname } = request.nextUrl;
 
-  // Add CSP header to allow WalletConnect iframes
+  // ── Auth protection ───────────────────────────────────────────────────────
+  if (isProtected(pathname)) {
+    const token = request.cookies.get('dagarmy_token')?.value;
+    if (!token) {
+      const loginUrl = new URL('/auth/login', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // ── Redirect logged-in users away from auth pages ─────────────────────────
+  if (pathname.startsWith('/auth/login') || pathname.startsWith('/auth/register')) {
+    const token = request.cookies.get('dagarmy_token')?.value;
+    if (token) {
+      return NextResponse.redirect(new URL('/student-dashboard', request.url));
+    }
+  }
+
+  // ── Minimal CSP (WalletConnect entries removed) ───────────────────────────
   response.headers.set(
     'Content-Security-Policy',
-    "frame-src 'self' https://*.walletconnect.com https://*.walletconnect.org https://verify.walletconnect.com https://verify.walletconnect.org https://secure.walletconnect.com https://secure.walletconnect.org https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org"
+    "frame-src 'self' https://accounts.google.com"
   );
 
   return response;
@@ -15,6 +47,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|api/download|.*\\.pdf$|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.gif$|.*\\.ico$|.*\\.webp$).*)',
+    // Skip: static files, images, API routes, and auth routes
+    '/((?!_next/static|_next/image|favicon.ico|api/|auth/|.*\.pdf$|.*\.png$|.*\.jpg$|.*\.jpeg$|.*\.svg$|.*\.gif$|.*\.ico$|.*\.webp$).*)',
   ],
 };

@@ -15,7 +15,7 @@ const nm = {
 };
 
 const LEVEL_META = {
-  1: { label: 'L1', color: '#4f46e5', rate: '7%', title: 'Level 1 — Direct' },
+  1: { label: 'L1', color: '#4f46e5', rate: null, title: 'Level 1 — Direct' },
   2: { label: 'L2', color: '#4f46e5', rate: '3%', title: 'Level 2 — 2nd Downline' },
   3: { label: 'L3', color: '#4f46e5', rate: '2%', title: 'Level 3 — 3rd Downline' },
 };
@@ -133,10 +133,11 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
     </div>
   );
 
-  const { summary, currentRank, effectiveL1Rate, baseL1Rate } = data;
+  const { summary, userTier } = data;
+  const isLieutenant = userTier === 'DAG_LIEUTENANT' || userTier === 'DAG LIEUTENANT';
+  const l1CommPct = isLieutenant ? 20 : 15;
   const totalUsd  = summary?.totalUsd  || 0;
   const totalUsdt = summary?.totalUsdt || 0;
-  const hasRankBoost = currentRank && effectiveL1Rate && effectiveL1Rate > (baseL1Rate || 7);
 
   return (
     <div>
@@ -158,7 +159,7 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
         </NmCard>
         {/* L1 */}
         <NmCard delay={100} style={{ padding: '18px 16px', textAlign: 'center' }}>
-          <p style={{ fontSize: '10px', fontWeight: '700', color: LEVEL_META[1].color, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 6px' }}>Level 1 · {effectiveL1Rate || baseL1Rate || 7}%</p>
+          <p style={{ fontSize: '10px', fontWeight: '700', color: LEVEL_META[1].color, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 6px' }}>Level 1 · {l1CommPct}%</p>
           <p style={{ fontSize: '26px', fontWeight: '900', color: nm.accent, letterSpacing: '-1px', lineHeight: 1, margin: '0 0 4px' }}>${(summary?.byLevel[1]?.usd||0).toFixed(2)}</p>
           <p style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 4px' }}>{(summary?.byLevel[1]?.usdt||0).toFixed(2)} <span style={{ fontSize: '11px' }}>USDT</span></p>
           <p style={{ fontSize: '11px', color: nm.textPrimary, margin: '2px 0 0', fontWeight: '500' }}>{summary?.byLevel[1]?.count||0} txns</p>
@@ -179,32 +180,20 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
         </NmCard>
       </div>
 
-      {/* ── Rank rate banner ── */}
+
+      {/* ── Tier commission banner ── */}
       <NmCard delay={250} hover={false} style={{ padding: '14px 20px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: nm.accent, flexShrink: 0 }} />
-          <span style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary }}>
-            Your Level 1 Direct Commission Rate:
+          <span style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary }}>Your Level 1 Direct Commission Rate:</span>
+          <span style={{ fontSize: '15px', fontWeight: '900', color: nm.accent, letterSpacing: '-0.3px' }}>{l1CommPct}%</span>
+          <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary }}>
+            {isLieutenant ? 'DAG LIEUTENANT' : 'DAG SOLDIER'}
           </span>
-          <span style={{ fontSize: '15px', fontWeight: '900', color: nm.accent, letterSpacing: '-0.3px' }}>
-            {effectiveL1Rate || baseL1Rate || 7}%
-          </span>
-          {hasRankBoost && (
-            <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary }}>
-              {currentRank} rank
-            </span>
-          )}
-          {!hasRankBoost && currentRank && (
-            <span style={{ fontSize: '11px', color: nm.textPrimary, fontWeight: '500' }}>(base rate — rank {currentRank} rate matches or not configured)</span>
-          )}
-          {!currentRank && (
-            <span style={{ fontSize: '11px', color: nm.textPrimary, fontWeight: '500' }}>(base rate — earn a rank to unlock higher rates up to 20%)</span>
-          )}
         </div>
-        <div style={{ fontSize: '11px', color: nm.textPrimary, fontWeight: '500' }}>
-          L2: 3% &nbsp;|&nbsp; L3: 2%
-        </div>
+        <div style={{ fontSize: '11px', color: nm.textPrimary, fontWeight: '500' }}>L2: 3%&nbsp;|&nbsp;L3: 2%</div>
       </NmCard>
+
 
       {/* ── Level breakdown cards ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px', marginBottom: '20px' }}>
@@ -229,7 +218,7 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
                     <div style={{ fontSize: '11px', color: nm.textPrimary, marginTop: '1px' }}>{cnt} transaction{cnt !== 1 ? 's' : ''}</div>
                   </div>
                 </div>
-                <span style={{ fontSize: '10px', fontWeight: '800', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: meta.color }}>{lvl === 1 ? `${effectiveL1Rate || baseL1Rate || 7}%` : meta.rate}</span>
+                <span style={{ fontSize: '10px', fontWeight: '800', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: meta.color }}>{lvl === 1 ? `${l1CommPct}%` : meta.rate}</span>
               </div>
               {/* USD row */}
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '4px' }}>
@@ -350,17 +339,12 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
                     {tx.product_name || '—'}
                   </div>
 
-                  {/* Level pill + rank badge for L1 */}
+                  {/* Level pill */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                     {isAdminGrant ? (
                       <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: nm.textPrimary, whiteSpace: 'nowrap' }}>Grant</span>
                     ) : (
                       <span style={{ fontSize: '10px', fontWeight: '800', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: lvlMeta.color, whiteSpace: 'nowrap' }}>{lvlMeta.label}</span>
-                    )}
-                    {tx.commission_level === 1 && tx.seller_rank && (
-                      <span style={{ fontSize: '9px', fontWeight: '700', padding: '2px 6px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary, whiteSpace: 'nowrap', letterSpacing: '0.2px' }}>
-                        {tx.seller_rank}
-                      </span>
                     )}
                   </div>
 

@@ -12,6 +12,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Reduce memory pressure — prevents OOM crash on large component files
+  productionBrowserSourceMaps: false,
+  webpack: (config, { dev, isServer }) => {
+    if (dev) {
+      // Disable source maps in dev to save memory
+      config.devtool = false;
+      // Reduce memory cache size
+      config.cache = {
+        type: 'filesystem',
+        maxMemoryGenerations: 1,
+      };
+    }
+    return config;
+  },
   async headers() {
     return [
       {

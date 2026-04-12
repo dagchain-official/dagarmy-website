@@ -1,0 +1,177 @@
+/* Mobile responsive styles for DownloadApp section */
+
+/* Desktop - maintain 2-column layout */
+.download-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Desktop benefit items - all visible vertically */
+.benefit-item {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile - Below 768px */
+@media (max-width: 767px) {
+  .section-mobile-app {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+  }
+
+  .section-mobile-app .tf-container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow-x: hidden !important;
+  }
+
+  .section-mobile-app .row {
+    margin: 0 !important;
+  }
+
+  .section-mobile-app [class*="col-"] {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Convert to single column layout */
+  .download-section {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Heading */
+  .section-mobile-app h2 {
+    font-size: 28px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Paragraph text */
+  .section-mobile-app p {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* What You Get card - appears after paragraph */
+  .benefits-card {
+    order: 2 !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+  }
+
+  .benefits-card h3 {
+    font-size: 20px !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Benefits list - enable sliding animation */
+  .benefits-list {
+    position: relative !important;
+    min-height: 200px !important;
+  }
+
+  /* Benefit items - hidden by default for sliding */
+  .benefit-item {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    display: block !important;
+    transition: opacity 0.3s ease-in-out !important;
+  }
+
+  /* Visible items in current slide */
+  .benefit-item.visible {
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Hide icons on mobile */
+  .benefit-icon {
+    display: none !important;
+  }
+
+  /* Add professional bullet marker before title on mobile */
+  .benefit-content strong::before {
+    content: '• ' !important;
+    color: #1a1a1a !important;
+    font-weight: 700 !important;
+    margin-right: 8px !important;
+  }
+
+  /* Add padding to description on mobile */
+  .benefit-content p {
+    padding-left: 20px !important;
+  }
+
+  /* Stats grid - appears after card */
+  .stats-grid {
+    order: 3 !important;
+    width: 100% !important;
+  }
+
+  /* Content wrapper */
+  .content-left {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* Small phones - 430px */
+@media (max-width: 430px) {
+  .section-mobile-app h2 {
+    font-size: 26px !important;
+  }
+
+  .benefits-card {
+    padding: 20px !important;
+  }
+
+  .benefits-card h3 {
+    font-size: 18px !important;
+  }
+}
+
+/* Small phones - 390px */
+@media (max-width: 390px) {
+  .section-mobile-app h2 {
+    font-size: 24px !important;
+  }
+
+  .benefits-card {
+    padding: 18px !important;
+  }
+}
+
+/* Small phones - 375px */
+@media (max-width: 375px) {
+  .section-mobile-app h2 {
+    font-size: 23px !important;
+  }
+}
+
+/* Small phones - 360px */
+@media (max-width: 360px) {
+  .section-mobile-app h2 {
+    font-size: 22px !important;
+  }
+}

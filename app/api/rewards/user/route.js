@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -12,164 +11,155 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
     const email  = searchParams.get('email');
-    const wallet = searchParams.get('wallet');
 
-    if (!userId && !email && !wallet) {
+    if (!userId && !email) {
       return NextResponse.json(
-        { error: 'userId, email or wallet is required' },
+        { error: 'userId or email is required' },
         { status: 400 }
       );
     }
 
-    // Prefer userId (most reliable), then email, then wallet
+    // Fetch user
     let userQuery = supabase.from('users').select('*');
-    if (userId) {
-      userQuery = userQuery.eq('id', userId);
-    } else if (email) {
-      userQuery = userQuery.eq('email', email);
-    } else {
-      userQuery = userQuery.eq('wallet_address', wallet.toLowerCase());
-    }
+    if (userId) userQuery = userQuery.eq('id', userId);
+    else         userQuery = userQuery.eq('email', email);
+
     const { data: user, error: userError } = await userQuery.single();
-
     if (userError || !user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Get or create referral code from referral_codes table
+    const isLieutenant =
+      user.tier === 'DAG_LIEUTENANT' || user.tier === 'DAG LIEUTENANT';
+
+    // ── 1. Referral code ────────────────────────────────────────────────────
     const { data: referralCodeData } = await supabase
       .rpc('get_or_create_referral_code', { p_user_id: user.id });
 
-    // Get referral count
+    // ── 2. Referral count ───────────────────────────────────────────────────
     const { count: referralCount } = await supabase
       .from('referrals')
       .select('*', { count: 'exact', head: true })
       .eq('referrer_id', user.id);
 
-    // Get total USD earned from sales commissions
+    // ── 3. USD earned (paid commissions only) ───────────────────────────────
     const { data: commissions } = await supabase
       .from('sales_commissions')
       .select('commission_amount')
       .eq('user_id', user.id)
       .eq('payment_status', 'paid');
 
-    const totalUsdEarned = commissions?.reduce((sum, c) => sum + parseFloat(c.commission_amount || 0), 0) || 0;
+    const totalUsdEarned =
+      commissions?.reduce((sum, c) => sum + parseFloat(c.commission_amount || 0), 0) || 0;
 
-    // Get USDT earned from DAGChain webhook data (stored in dagchain_data JSONB)
+    // ── 4. USDT earned ──────────────────────────────────────────────────────
     const totalUsdtEarned = parseFloat(user.dagchain_data?.usdt_earned || 0);
 
-    // Current month direct sales (for Discretionary + Lifestyle pools)
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-    const { data: monthSales } = await supabase
-      .from('sales_commissions')
-      .select('sale_amount')
-      .eq('user_id', user.id)
-      .eq('commission_level', 1)
-      .gte('created_at', monthStart);
-    const monthDirectSales = monthSales?.reduce((sum, c) => sum + parseFloat(c.sale_amount || 0), 0) || 0;
-
-    // Current quarter direct sales (for Executive pool)
-    const quarterMonth = Math.floor(now.getMonth() / 3) * 3;
-    const quarterStart = new Date(now.getFullYear(), quarterMonth, 1).toISOString();
-    const { data: quarterSales } = await supabase
-      .from('sales_commissions')
-      .select('sale_amount')
-      .eq('user_id', user.id)
-      .eq('commission_level', 1)
-      .gte('created_at', quarterStart);
-    const quarterDirectSales = quarterSales?.reduce((sum, c) => sum + parseFloat(c.sale_amount || 0), 0) || 0;
-
-    // Incentive pool config
-    const { data: incentiveConfig } = await supabase
-      .from('rewards_config')
-      .select('config_key, config_value')
-      .in('config_key', [
-        'incentive_discretionary_pool_pct', 'incentive_discretionary_sales_threshold', 'incentive_discretionary_enabled',
-        'incentive_lifestyle_pool_pct', 'incentive_lifestyle_sales_threshold', 'incentive_lifestyle_enabled',
-        'incentive_executive_pool_pct', 'incentive_executive_sales_threshold', 'incentive_executive_enabled',
-        'incentive_elite_pool_pct', 'incentive_elite_min_referrals', 'incentive_elite_enabled',
-      ]);
-    const ic = {};
-    (incentiveConfig || []).forEach(r => { ic[r.config_key] = r.config_value; });
-
-    // Count active referrals for Elite Pool qualification
-    // Active = referred by this user AND has at least one paid sale/commission
-    const { data: referralRows } = await supabase
-      .from('referrals')
-      .select('referred_id')
-      .eq('referrer_id', user.id);
-    const referredIds = (referralRows || []).map(r => r.referred_id).filter(Boolean);
-    let activeReferralCount = 0;
-    if (referredIds.length > 0) {
-      const { count: paidCount } = await supabase
-        .from('sales_commissions')
-        .select('user_id', { count: 'exact', head: true })
-        .in('user_id', referredIds)
-        .eq('payment_status', 'paid');
-      // Count distinct active referred users via a set
-      const { data: paidRows } = await supabase
-        .from('sales_commissions')
-        .select('user_id')
-        .in('user_id', referredIds)
-        .eq('payment_status', 'paid');
-      const uniqueActive = new Set((paidRows || []).map(r => r.user_id));
-      activeReferralCount = uniqueActive.size;
-    }
-
-    // Compute all point stats live from transactions (avoids stale stored columns)
+    // ── 5. DAG Points — live calculation from points_transactions ───────────
     const { data: allTxs } = await supabase
       .from('points_transactions')
       .select('points, transaction_type')
       .eq('user_id', user.id);
 
-    let totalPointsEarnedLive = 0;
-    let totalPointsBurned = 0;
-    let totalPointsRedeemed = 0;
+    let totalPointsEarnedLive  = 0;
+    let totalPointsBurned      = 0; // rank_burn only (refunded via migration 054)
+    let totalPointsRedeemed    = 0;
+
     (allTxs || []).forEach(t => {
       if (t.points > 0) {
         totalPointsEarnedLive += t.points;
       } else {
-        if (t.transaction_type === 'rank_burn') totalPointsBurned += Math.abs(t.points);
-        else totalPointsRedeemed += Math.abs(t.points);
+        if (t.transaction_type === 'rank_burn') totalPointsBurned  += Math.abs(t.points);
+        else                                     totalPointsRedeemed += Math.abs(t.points);
       }
     });
+
     const availablePoints = totalPointsEarnedLive - totalPointsBurned - totalPointsRedeemed;
 
-    // Get ranking system config for DAG SOLDIER
-    const { data: rankingConfig } = await supabase
+    // ── 6. Spend-based pts rate (for display in UI) ──────────────────────
+    const { data: spendCfg } = await supabase
       .from('rewards_config')
-      .select('config_value')
-      .eq('config_key', 'ranking_system_enabled_for_soldier')
+      .select('config_key, config_value')
+      .in('config_key', [
+        'spend_pts_per_dollar_soldier',
+        'spend_pts_per_dollar_lieutenant',
+        'soldier_l1_commission_pct',
+        'lieutenant_l1_commission_pct',
+        'l2_commission_pct',
+        'l3_commission_pct',
+        'task_multiplier_lieutenant',
+      ]);
+
+    const sc = {};
+    (spendCfg || []).forEach(r => { sc[r.config_key] = parseFloat(r.config_value); });
+
+    const spendPtsRate       = isLieutenant ? (sc.spend_pts_per_dollar_lieutenant ?? 50) : (sc.spend_pts_per_dollar_soldier ?? 25);
+    const l1CommissionPct    = isLieutenant ? (sc.lieutenant_l1_commission_pct ?? 20) : (sc.soldier_l1_commission_pct ?? 15);
+    const taskMultiplier     = isLieutenant ? (sc.task_multiplier_lieutenant ?? 2) : 1;
+
+    // ── 7. Fortune 500 pool data ────────────────────────────────────────────
+    const { data: f500Member } = await supabase
+      .from('fortune500_members')
+      .select('id, enrolled_at, is_active')
+      .eq('user_id', user.id)
       .single();
 
-    const rankingEnabledForSoldier = rankingConfig?.config_value === 1;
+    const { data: f500Config } = await supabase
+      .from('rewards_config')
+      .select('config_key, config_value')
+      .in('config_key', ['fortune500_enrollment_open', 'fortune500_pool_pct']);
 
-    // Fetch last 50 points transactions for history
+    const f5cfg = {};
+    (f500Config || []).forEach(r => { f5cfg[r.config_key] = r.config_value; });
+
+    // Current month pending or latest distribution
+    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+    const { data: f500Dist } = await supabase
+      .from('fortune500_distributions')
+      .select('pool_amount, member_count, per_member_amount, status, period')
+      .order('period', { ascending: false })
+      .limit(1)
+      .single();
+
+    const { count: f500MemberCount } = await supabase
+      .from('fortune500_members')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true);
+
+    // ── 8. Elite Pool data ──────────────────────────────────────────────────
+    const { data: eliteConfig } = await supabase
+      .from('rewards_config')
+      .select('config_key, config_value')
+      .in('config_key', ['elite_pool_active', 'elite_pool_blockchain_pct']);
+
+    const ec = {};
+    (eliteConfig || []).forEach(r => { ec[r.config_key] = r.config_value; });
+
+    const { count: ltMemberCount } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .in('tier', ['DAG_LIEUTENANT', 'DAG LIEUTENANT']);
+
+    // ── 9. Transaction history (last 100, all types) ────────────────────────
     const { data: pointsTxs } = await supabase
       .from('points_transactions')
       .select('id, transaction_id, points, transaction_type, description, created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
-      .limit(50);
+      .limit(60);
 
-    // Fetch USD commission transactions (all statuses — admin grants included)
     const { data: usdTxs } = await supabase
       .from('sales_commissions')
       .select('id, sale_id, commission_amount, payment_status, product_name, product_type, commission_level, created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
-      .limit(50);
+      .limit(40);
 
-    // Normalise USD rows to the same shape as points rows
     const normalisedUsd = (usdTxs || []).map(c => {
       const isAdminGrant = c.product_type === 'ADMIN_GRANT';
       const desc = isAdminGrant
         ? `Admin grant: ${c.product_name || 'USD credit'}`
-        : c.product_name || `Level ${c.commission_level} commission`;
+        : `${c.product_name || 'Product'} — Level ${c.commission_level} commission`;
       return {
         id: `usd_${c.id}`,
         transaction_id: c.sale_id || null,
@@ -182,61 +172,65 @@ export async function GET(request) {
       };
     });
 
-    // Merge and sort by date descending, cap at 100
     const txHistory = [...(pointsTxs || []), ...normalisedUsd]
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .slice(0, 100);
 
-    // Return user reward data
+    // ── Response ────────────────────────────────────────────────────────────
     return NextResponse.json({
       success: true,
       data: {
-        currentRank: user.current_rank || 'None',
-        dagPoints: availablePoints,
+        // Core
+        dagPoints: Math.max(availablePoints, 0),
+        tier: user.tier || 'DAG_SOLDIER',
+        isLieutenant,
+        referralCode: referralCodeData || '',
         totalReferrals: referralCount || 0,
+
+        // Earnings
         usdEarned: totalUsdEarned,
         usdtEarned: totalUsdtEarned,
-        referralCode: referralCodeData || '',
-        tier: user.tier || 'DAG SOLDIER',
-        totalPointsEarned: user.total_points_earned || 0,
-        totalPointsBurned,
+
+        // Points summary
+        totalPointsEarned: totalPointsEarnedLive,
+        totalPointsBurned,   // legacy (should be 0 after migration 054 refund)
         totalPointsRedeemed,
-        rankingEnabledForSoldier: rankingEnabledForSoldier,
-        txHistory: txHistory || [],
-        monthDirectSales,
-        quarterDirectSales,
-        incentivePools: {
-          discretionary: {
-            enabled: parseInt(ic.incentive_discretionary_enabled ?? 1) === 1,
-            poolPct: parseFloat(ic.incentive_discretionary_pool_pct ?? 3),
-            threshold: parseFloat(ic.incentive_discretionary_sales_threshold ?? 1000),
-            currentSales: monthDirectSales,
-            period: 'monthly',
-          },
-          lifestyle: {
-            enabled: parseInt(ic.incentive_lifestyle_enabled ?? 1) === 1,
-            poolPct: parseFloat(ic.incentive_lifestyle_pool_pct ?? 3),
-            threshold: parseFloat(ic.incentive_lifestyle_sales_threshold ?? 2000),
-            currentSales: monthDirectSales,
-            period: 'monthly',
-          },
-          executive: {
-            enabled: parseInt(ic.incentive_executive_enabled ?? 1) === 1,
-            poolPct: parseFloat(ic.incentive_executive_pool_pct ?? 2),
-            threshold: parseFloat(ic.incentive_executive_sales_threshold ?? 10000),
-            currentSales: quarterDirectSales,
-            period: 'quarterly',
-          },
-          elite: {
-            enabled: parseInt(ic.incentive_elite_enabled ?? 1) === 1,
-            poolPct: parseFloat(ic.incentive_elite_pool_pct ?? 2),
-            minReferrals: parseInt(ic.incentive_elite_min_referrals ?? 25),
-            activeReferrals: activeReferralCount,
-            period: 'ongoing',
-          },
+
+        // Rates (for display)
+        spendPtsRate,
+        l1CommissionPct,
+        l2CommissionPct: sc.l2_commission_pct ?? 3,
+        l3CommissionPct: sc.l3_commission_pct ?? 2,
+        taskMultiplier,
+
+        // Fortune 500 Pool
+        fortune500: {
+          enrolled: !!f500Member?.is_active,
+          enrolledAt: f500Member?.enrolled_at || null,
+          enrollmentOpen: parseInt(f5cfg.fortune500_enrollment_open ?? 1) === 1,
+          poolPct: parseFloat(f5cfg.fortune500_pool_pct ?? 10),
+          totalMembers: f500MemberCount || 0,
+          latestDistribution: f500Dist ? {
+            period: f500Dist.period,
+            poolAmount: parseFloat(f500Dist.pool_amount || 0),
+            perMemberAmount: parseFloat(f500Dist.per_member_amount || 0),
+            status: f500Dist.status,
+          } : null,
         },
-      }
+
+        // Elite Pool
+        elitePool: {
+          eligible: isLieutenant,
+          active: parseInt(ec.elite_pool_active ?? 0) === 1,
+          blockchainPct: parseFloat(ec.elite_pool_blockchain_pct ?? 50),
+          totalLtMembers: ltMemberCount || 0,
+        },
+
+        // Transaction history (no rank data)
+        txHistory,
+      },
     });
+
   } catch (error) {
     console.error('Error fetching user rewards:', error);
     return NextResponse.json(
@@ -245,5 +239,3 @@ export async function GET(request) {
     );
   }
 }
-
-

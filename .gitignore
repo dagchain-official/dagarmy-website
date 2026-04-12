@@ -25,6 +25,16 @@
 *.pem
 *.exe
 *.pdf
+*.zip
+
+# debug logs
+debug.log
+*.log
+
+# IDE / tooling folders
+.orchids/
+.windsurf/
+.npmrc
 
 # debug
 npm-debug.log*
@@ -48,3 +58,7 @@ next-env.d.ts
 
 # loose SQL files in root (migrations belong in supabase/migrations/ only)
 /*.sql
+
+# backup folders and data dumps
+backup_*/
+*.zip

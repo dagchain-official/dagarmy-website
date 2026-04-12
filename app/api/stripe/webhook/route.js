@@ -13,9 +13,15 @@ const supabase = createClient(
 
 /**
  * POST /api/stripe/webhook
- * Handles Stripe checkout.session.completed events.
- * Upgrades the user to DAG LIEUTENANT and awards referral points.
- * Must be registered in Stripe Dashboard with the signing secret.
+ * Handles Stripe checkout.session.completed events for DAG LIEUTENANT upgrades.
+ *
+ * On successful payment:
+ *  1. Upgrades user tier to DAG_LIEUTENANT directly (no points for the upgrader)
+ *  2. Sends confirmation email
+ *  3. Fires /api/referral/upgrade-reward which handles the REFERRER's:
+ *     a. Referral upgrade bonus points (500 or 1000 based on referrer tier)
+ *     b. Spend-based DAG Points ($149 × 25 or 50 based on referrer tier)
+ *     c. USD sales commissions for L1/L2/L3 upline
  */
 export async function POST(request) {
   const body = await request.text();
@@ -49,7 +55,7 @@ export async function POST(request) {
   }
 
   try {
-    // Check user is not already a lieutenant (idempotency guard)
+    // Idempotency check — skip if already a lieutenant
     const { data: user, error: userError } = await supabase
       .from('users')
       .select('id, tier, email, full_name, username')
@@ -66,20 +72,24 @@ export async function POST(request) {
       return NextResponse.json({ received: true, skipped: 'already_lieutenant' });
     }
 
-    // Upgrade to DAG LIEUTENANT
-    const { error: upgradeError } = await supabase.rpc('upgrade_to_lieutenant', {
-      p_user_id: userId,
-      p_payment_id: paymentIntentId || session.id,
-    });
+    // ── Step 1: Upgrade tier directly (NO points for upgrader per new rules) ──
+    const { error: upgradeError } = await supabase
+      .from('users')
+      .update({
+        tier: 'DAG_LIEUTENANT',
+        upgraded_at: new Date().toISOString(),
+        upgrade_payment_id: paymentIntentId || session.id,
+      })
+      .eq('id', userId);
 
     if (upgradeError) {
-      console.error('Stripe webhook: upgrade_to_lieutenant failed', upgradeError);
+      console.error('Stripe webhook: tier upgrade failed', upgradeError);
       return NextResponse.json({ error: upgradeError.message }, { status: 500 });
     }
 
-    console.log(`Stripe webhook: upgraded user ${userId} to DAG LIEUTENANT`);
+    console.log(`Stripe webhook: upgraded user ${userId} to DAG LIEUTENANT (tier only, no self-points)`);
 
-    // Send lieutenant upgrade confirmation email (fire-and-forget)
+    // ── Step 2: Send confirmation email (fire-and-forget) ─────────────────
     if (user?.email) {
       const displayName = user.full_name || user.username || 'Soldier';
       sendEmail('support@dagchain.network', {
@@ -89,19 +99,27 @@ export async function POST(request) {
       }).catch(err => console.error('Stripe webhook: lieutenant email failed (non-blocking):', err));
     }
 
-    // Award referral upgrade points to upline (fire-and-forget)
+    // ── Step 3: Fire referral rewards for the upline (fire-and-forget) ────
+    // This awards:
+    //   • Referral upgrade bonus pts (500 or 1000 based on referrer tier)
+    //   • Spend-based pts ($149 × 25 or 50 based on referrer tier)
+    //   • USD commission for L1/L2/L3 (15%/3%/2% or 20%/3%/2%)
     try {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network';
       await fetch(`${baseUrl}/api/referral/upgrade-reward`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ upgradedUserId: userId }),
+        body: JSON.stringify({
+          upgradedUserId: userId,
+          amountPaidUsd: 149,
+        }),
       });
     } catch (refErr) {
       console.error('Stripe webhook: referral upgrade-reward failed (non-blocking):', refErr);
     }
 
     return NextResponse.json({ received: true, upgraded: true, userId });
+
   } catch (error) {
     console.error('Stripe webhook error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });

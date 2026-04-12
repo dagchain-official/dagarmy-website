@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 import styles from "./Features.module.css";
+import "./Features.global.css";
 
 export default function Features() {
   const [userCountry, setUserCountry] = useState(null);

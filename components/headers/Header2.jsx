@@ -3,7 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useDisconnect } from "wagmi";
+// wagmi removed — no longer needed
+
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
 import { useAuth } from "@/context/AuthContext";
@@ -19,7 +20,8 @@ export default function Header2() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, userRole, isAdmin } = useAuth();
   const router = useRouter();
-  const { disconnect } = useDisconnect();
+  const { logout } = useAuth();
+
   const udaanCloseTimeoutRef = useRef(null);
   const supportCloseTimeoutRef = useRef(null);
 
@@ -33,21 +35,9 @@ export default function Header2() {
   const handleSignInClick = async () => {
     sessionStorage.removeItem('dagarmy_logged_out');
     
-    // Disconnect any existing wallet connection to show account selection
-    try {
-      await disconnect();
-    } catch (error) {
-      console.log('No wallet to disconnect:', error);
-    }
-    
+    // Wallet disconnection removed — now using email/Google auth
     setShowLoginModal(true);
-    
-    // Small delay to ensure disconnect completes before opening modal
-    setTimeout(() => {
-      if (typeof window !== 'undefined' && window.modal) {
-        window.modal.open();
-      }
-    }, 100);
+
   };
 
   // Auto-open signin modal when redirected from /register

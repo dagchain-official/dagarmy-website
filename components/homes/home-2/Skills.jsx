@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./Skills.module.css";
+import "./Skills.global.css";
 
 const skills = [
   "Intelligent Systems and Decision Tools",

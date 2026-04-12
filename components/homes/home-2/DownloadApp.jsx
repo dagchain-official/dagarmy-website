@@ -4,6 +4,7 @@ import Image from "next/image";
 import PremiumButton from "./PremiumButton";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 import styles from "./DownloadApp.module.css";
+import "./DownloadApp.global.css";
 
 export default function DownloadApp() {
   const [userCountry, setUserCountry] = useState(null);

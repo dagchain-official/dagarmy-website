@@ -1,0 +1,91 @@
+/* Mobile responsive styles for Become Instructor section */
+
+@media (max-width: 768px) {
+  .section-become-instructor {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+    overflow-x: hidden !important;
+  }
+
+  .section-become-instructor .tf-container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow-x: hidden !important;
+  }
+
+  .section-become-instructor .row {
+    flex-direction: column !important;
+    margin: 0 !important;
+  }
+
+  .section-become-instructor .col-md-5 {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin-bottom: 32px !important;
+  }
+
+  .section-become-instructor .image-left {
+    max-width: 100% !important;
+  }
+
+  .section-become-instructor .image-left img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .section-become-instructor .content-right {
+    max-width: 100% !important;
+  }
+
+  .section-become-instructor h2 {
+    font-size: 28px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .section-become-instructor p {
+    font-size: 15px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .section-become-instructor ul li {
+    margin-bottom: 12px !important;
+  }
+
+  .section-become-instructor ul li span {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .section-become-instructor {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+
+  .section-become-instructor h2 {
+    font-size: 26px !important;
+  }
+
+  .section-become-instructor p {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .section-become-instructor {
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .section-become-instructor h2 {
+    font-size: 24px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .section-become-instructor h2 {
+    font-size: 23px !important;
+  }
+}

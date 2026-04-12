@@ -1,0 +1,115 @@
+/* Fade-in animation for category cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.categoryCard {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Desktop layout - 3x3 grid for all 9 categories */
+@media (min-width: 1024px) {
+  .categoriesGrid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 24px 32px !important;
+    margin: 0 !important;
+  }
+
+  .categoryCol {
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Show all categories on desktop */
+  .hiddenMobile {
+    display: block !important;
+  }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 1023px) {
+  /* Hide cards that are not in current cycle */
+  .hiddenMobile {
+    display: none !important;
+  }
+
+  /* Reset desktop styles for mobile */
+  .categoriesGrid {
+    display: block !important;
+    gap: 0 !important;
+  }
+
+  .categoryCol {
+    width: 100% !important;
+    padding: 0 !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Allow text wrapping on mobile */
+  .categoryTitle h5 {
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-categories {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+  }
+
+  .section-categories .tf-container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow-x: hidden !important;
+  }
+
+  .section-categories .heading-section {
+    max-width: 100% !important;
+  }
+
+  .section-categories .heading-section h2 {
+    font-size: 28px !important;
+  }
+
+  .section-categories .row {
+    margin: 0 !important;
+  }
+
+  .section-categories [class*="col-"] {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .section-categories .icons-box {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .section-categories .heading-section h2 {
+    font-size: 26px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .section-categories .heading-section h2 {
+    font-size: 24px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .section-categories .heading-section h2 {
+    font-size: 23px !important;
+  }
+}

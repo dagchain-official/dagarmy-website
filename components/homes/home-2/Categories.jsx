@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./Categories.module.css";
+import "./Categories.global.css";
 
 const dagarmyCategories = [
   // Row 1: 1, 4, 7

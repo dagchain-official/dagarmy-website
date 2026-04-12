@@ -5,7 +5,7 @@ import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 import { menuItems, socialLinks } from "@/data/footerLinks";
-import styles from "./Footer1.module.css";
+import "./Footer1.css";
 
 export default function Footer1({ parentClass = "footer" }) {
   const formRef = useRef();
@@ -38,7 +38,7 @@ export default function Footer1({ parentClass = "footer" }) {
   };
   return (
     <>
-      <footer className={styles['footer-section'] || ''} style={{
+      <footer className="footer-section" style={{
         background: '#ffffff',
         position: 'relative',
         overflow: 'hidden'

@@ -14,22 +14,22 @@
 
 /* Hide navigation menu on mobile, show hamburger */
 @media (max-width: 1280px) {
-  :global(.mobile-nav-toggler) {
+  .mobile-nav-toggler {
     display: flex !important;
   }
   
-  :global(nav) {
+  nav {
     display: none !important;
   }
 }
 
 /* Show navigation menu on desktop, hide hamburger */
 @media (min-width: 1281px) {
-  :global(.mobile-nav-toggler) {
+  .mobile-nav-toggler {
     display: none !important;
   }
   
-  :global(nav) {
+  nav {
     display: flex !important;
   }
 }

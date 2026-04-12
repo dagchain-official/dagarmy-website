@@ -358,7 +358,7 @@ export default function ReferralContent({ mounted }) {
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 3px' }}>Upgrade to DAG Lieutenant</p>
-              <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0 }}>Earn a 20% bonus on all referral points — 500 → 600 pts, 2500 → 3000 pts</p>
+              <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0 }}>Unlock <strong>1,000 pts</strong> per referral join, <strong>1,000 pts</strong> per upgrade, and <strong>50 pts per $1</strong> spent by your directs — double your Soldier rates.</p>
             </div>
             <button
               onClick={() => setShowUpgradeModal(true)}
@@ -380,8 +380,8 @@ export default function ReferralContent({ mounted }) {
           {[
             { step: '01', title: 'Share Your Link',  desc: 'Copy your unique referral link and share it with your network.' },
             { step: '02', title: 'They Sign Up',     desc: 'Your referral creates an account as a DAG SOLDIER using your code.' },
-            { step: '03', title: 'Earn on Join',     desc: isLieutenant ? 'You earn 600 DAG Points (500 + 20% LT bonus) on each successful join.' : 'You earn 500 DAG Points when your referral successfully joins.' },
-            { step: '04', title: 'Earn on Upgrade',  desc: isLieutenant ? 'You earn 3,000 DAG Points if your referral upgrades to DAG LIEUTENANT.' : 'You earn 2,500 DAG Points if your referral upgrades to DAG LIEUTENANT.' },
+            { step: '03', title: 'Earn on Join',     desc: isLieutenant ? 'You earn 1,000 DAG Points when your referral successfully joins as a DAG SOLDIER.' : 'You earn 500 DAG Points when your referral successfully joins.' },
+            { step: '04', title: 'Earn on Upgrade',  desc: isLieutenant ? 'You earn 1,000 DAG Points if your referral upgrades to DAG LIEUTENANT.' : 'You earn 500 DAG Points if your referral upgrades to DAG LIEUTENANT.' },
           ].map(item => (
             <div key={item.step} style={{ background: nm.bg, borderRadius: '14px', padding: '16px 18px', boxShadow: nm.shadowXs, display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
               <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadowInsetSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -401,15 +401,15 @@ export default function ReferralContent({ mounted }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ flexShrink: 0 }}>
             <div style={{ background: nm.bg, borderRadius: '14px', padding: '14px 20px', boxShadow: nm.shadowInset, textAlign: 'center' }}>
-              <p style={{ fontSize: '26px', fontWeight: '900', color: nm.accent, letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>{isLieutenant ? '30' : '25'}</p>
+              <p style={{ fontSize: '26px', fontWeight: '900', color: nm.accent, letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>{isLieutenant ? '50' : '25'}</p>
               <p style={{ fontSize: '10px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.5px', margin: '4px 0 0' }}>pts / $</p>
             </div>
           </div>
           <div>
             <p style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 4px' }}>Earn on Referral Sales</p>
             <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0, lineHeight: 1.6 }}>
-              You earn <strong style={{ color: nm.textPrimary }}>{isLieutenant ? '30' : '25'} DAG Points per $</strong> on all sales made by your direct referrals.
-              {isLieutenant && ' Your DAG LIEUTENANT status gives you a +20% bonus.'}
+              You earn <strong style={{ color: nm.textPrimary }}>{isLieutenant ? '50' : '25'} DAG Points per $</strong> on all sales made by your direct referrals.
+              {isLieutenant && ' DAG LIEUTENANT rate is 2× the base Soldier rate.'}
             </p>
           </div>
         </div>
@@ -476,10 +476,10 @@ export default function ReferralContent({ mounted }) {
           ))}
         </div>
         {[
-          { scenario: 'Referral joins',   tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
-          { scenario: 'Referral joins',   tier: 'DAG LIEUTENANT', points: 600,  isYou: isLieutenant  },
-          { scenario: 'Referral upgrades', tier: 'DAG SOLDIER',   points: 2500, isYou: !isLieutenant },
-          { scenario: 'Referral upgrades', tier: 'DAG LIEUTENANT',points: 3000, isYou: isLieutenant  },
+          { scenario: 'Referral joins',    tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
+          { scenario: 'Referral joins',    tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
+          { scenario: 'Referral upgrades', tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
+          { scenario: 'Referral upgrades', tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
         ].map((row, idx) => (
           <div
             key={idx}

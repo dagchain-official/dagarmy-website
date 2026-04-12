@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 import styles from "./NextPhase.module.css";
+import "./NextPhase.global.css";
 
 export default function NextPhase() {
   const [userCountry, setUserCountry] = useState(null);

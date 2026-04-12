@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import PremiumButton from "./PremiumButton";
 import styles from "./BecomeInstractor.module.css";
+import "./BecomeInstractor.global.css";
 
 export default function BecomeInstractor() {
   return (

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { detectUserCountry, getDisplayCountry } from "@/lib/geoLocation";
 import styles from "./Facts.module.css";
+import "./Facts.global.css";
 
 export default function Facts() {
   const [userCountry, setUserCountry] = useState(null);

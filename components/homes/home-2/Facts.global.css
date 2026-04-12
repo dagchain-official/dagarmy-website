@@ -1,0 +1,212 @@
+/* Mobile responsive styles for Master AI, Blockchain & Data Visualisation section */
+
+/* Mobile - Below 768px */
+@media (max-width: 767px) {
+  .section-about-box {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+  }
+
+  .section-about-box .tf-container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow-x: hidden !important;
+  }
+
+  .section-about-box .row {
+    margin: 0 !important;
+  }
+
+  .section-about-box [class*="col-"] {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Maintain original 2-column grid layout, just scale down */
+  .section-about-box .box-img {
+    gap: 12px !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Left column - scale down proportionally */
+  .section-about-box .box-img .wrap-image-agent {
+    width: 38% !important;
+    padding-bottom: 5px !important;
+  }
+
+  /* Small vertical image - reduce size */
+  .section-about-box .box-img .wrap-image-agent .image {
+    max-width: 100% !important;
+    max-height: 200px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .section-about-box .box-img .wrap-image-agent .image img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  /* Expert Mentors card - keep original style, reduce size */
+  .section-about-box .box-img .box-agent {
+    padding: 12px 16px !important;
+    gap: 10px !important;
+  }
+
+  .section-about-box .box-img .box-agent > div:first-child {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .section-about-box .box-img .box-agent > div:first-child svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .section-about-box .box-img .box-agent .content h6 {
+    font-size: 13px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .section-about-box .box-img .box-agent .content p {
+    font-size: 11px !important;
+  }
+
+  /* Right column - scale down proportionally */
+  .section-about-box .box-img .wrap-images {
+    width: 58% !important;
+    gap: 12px !important;
+  }
+
+  /* Large images - reduce size */
+  .section-about-box .box-img .wrap-images .image {
+    max-width: 80% !important;
+    max-height: 240px !important;
+  }
+
+  .section-about-box .box-img .wrap-images .image img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  /* Content section spacing */
+  .section-about-box .content-wrap {
+    padding-top: 30px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Badge styling */
+  .section-about-box .box-sub-tag {
+    padding: 10px 16px !important;
+    margin-bottom: 14px !important;
+    font-size: 13px !important;
+  }
+
+  .section-about-box .box-sub-tag > div:first-child {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  /* Heading responsive sizing */
+  .section-about-box .title-content {
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* Text content */
+  .section-about-box .text-content {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Counter grid on mobile */
+  .section-about-box .counter.style-2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .section-about-box .counter.style-2 .number-counter {
+    padding: 12px !important;
+  }
+
+  .section-about-box .counter.style-2 .number-counter svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .section-about-box .counter.style-2 .number-counter p {
+    font-size: 10px !important;
+  }
+
+  /* Button styling */
+  .section-about-box .content-wrap a {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 48px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* Small phones - 430px */
+@media (max-width: 430px) {
+  .section-about-box .box-img .wrap-image-agent .image {
+    max-height: 180px !important;
+  }
+
+  .section-about-box .box-img .wrap-images .image {
+    max-height: 220px !important;
+  }
+
+  .section-about-box .title-content {
+    font-size: 22px !important;
+  }
+}
+
+/* Small phones - 390px */
+@media (max-width: 390px) {
+  .section-about-box .box-img {
+    gap: 10px !important;
+  }
+
+  .section-about-box .box-img .wrap-image-agent .image {
+    max-height: 160px !important;
+  }
+
+  .section-about-box .box-img .wrap-images .image {
+    max-height: 200px !important;
+  }
+
+  .section-about-box .box-img .wrap-images {
+    gap: 10px !important;
+  }
+
+  .section-about-box .title-content {
+    font-size: 20px !important;
+  }
+
+  .section-about-box .box-img .box-agent {
+    padding: 10px 14px !important;
+  }
+}
+
+/* Small phones - 375px */
+@media (max-width: 375px) {
+  .section-about-box .box-img .wrap-image-agent .image {
+    max-height: 150px !important;
+  }
+
+  .section-about-box .box-img .wrap-images .image {
+    max-height: 190px !important;
+  }
+
+  .section-about-box .title-content {
+    font-size: 19px !important;
+  }
+}

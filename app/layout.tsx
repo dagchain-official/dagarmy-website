@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "react-modal-video/css/modal-video.css";
 import Context from "@/context/Context";
 import ChatWidget from "@/components/chatbot/ChatWidget";
-import { Web3Provider } from "@/context/Web3Provider";
+import Web3Provider from "@/context/Web3Provider";
 import { usePathname } from "next/navigation";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
@@ -44,8 +44,11 @@ export default function RootLayout({
   useEffect(() => {
     // Skip WOW.js on admin pages — it causes re-render flicker
     if (pathname?.startsWith("/admin")) return;
-    const { WOW } = require("wowjs");
-    const wow = new WOW({
+    const wowModule = require("wowjs");
+    // wowjs exports differently under webpack vs Turbopack
+    const WOWConstructor = wowModule.WOW ?? wowModule.default?.WOW ?? wowModule.default ?? wowModule;
+    if (typeof WOWConstructor !== "function") return;
+    const wow = new WOWConstructor({
       mobile: false,
       live: false,
     });

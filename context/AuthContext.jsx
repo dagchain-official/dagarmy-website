@@ -1,436 +1,242 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useAppKitAccount, useAppKitState } from '@reown/appkit/react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
-// Helper function to save user to Supabase
-async function saveUserToSupabase(userData) {
-  try {
-    const response = await fetch('/api/auth/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
+// Token storage keys
+const TOKEN_KEY = 'dagarmy_token';
+const USER_KEY = 'dagarmy_user';
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      console.error('API Error Response:', errorData);
-      throw new Error(errorData.error || 'Failed to save user to Supabase');
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error saving user to Supabase:', error);
-    throw error;
-  }
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function decodeJWT(token) {
+  try { return JSON.parse(atob(token.split('.')[1])); } catch { return null; }
 }
 
+function isTokenExpired(token) {
+  const payload = decodeJWT(token);
+  if (!payload?.exp) return true;
+  return Date.now() >= payload.exp * 1000;
+}
+
+function getStoredToken() {
+  if (typeof window === 'undefined') return null;
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token || isTokenExpired(token)) {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    return null;
+  }
+  return token;
+}
+
+// ─── Provider ─────────────────────────────────────────────────────────────────
 export function AuthProvider({ children }) {
-  const { address, isConnected, connector } = useAccount();
-  const { caipAddress, isConnected: isAppKitConnected, embeddedWalletInfo } = useAppKitAccount();
-  const appKitState = useAppKitState();
-  const { disconnect } = useDisconnect();
-  const [userRole, setUserRole] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
-  const [hasLoggedOut, setHasLoggedOut] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isMasterAdmin, setIsMasterAdmin] = useState(false);
-  const hasUpdatedEmailRef = React.useRef(false);
-
-  // Check authentication cookie on mount
-  useEffect(() => {
-    const checkAuthCookie = () => {
-      const cookies = document.cookie.split(';');
-      const authCookie = cookies.find(c => c.trim().startsWith('dagarmy_authenticated='));
-      return authCookie ? authCookie.split('=')[1] === 'true' : false;
-    };
-
-    const isAuthenticatedFromCookie = checkAuthCookie();
-    if (isAuthenticatedFromCookie && isConnected) {
-      setIsAuthenticated(true);
-    }
-  }, [isConnected]);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const ssoChecked = useRef(false);
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    // Check if user explicitly logged out
-    const loggedOut = sessionStorage.getItem('dagarmy_logged_out');
-    if (loggedOut === 'true') {
-      setHasLoggedOut(true);
-      setUserRole(null);
-      setIsAuthenticated(false);
-      setUserProfile(null);
-      setIsAdmin(false);
-      setIsMasterAdmin(false);
-      return;
-    }
-    
-    if (!isConnected) {
-      // Only clear auth if no auth cookie exists
-      const cookies = document.cookie.split(';');
-      const authCookie = cookies.find(c => c.trim().startsWith('dagarmy_authenticated='));
-      if (!authCookie) {
-        setUserRole(null);
-        setIsAuthenticated(false);
-        setUserProfile(null);
-        setIsAdmin(false);
-        setIsMasterAdmin(false);
-      }
-    }
-  }, [isConnected, address, hasLoggedOut]);
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
-  // Guard to prevent repeated API calls from embeddedWalletInfo effect
-  const emailUpdateDoneRef = React.useRef(false);
-  const lastAddressRef = React.useRef(null);
-
-  // Reset guard when address changes
+  // ── Initialize: restore session from localStorage or SSO token ────────────
   useEffect(() => {
-    if (address !== lastAddressRef.current) {
-      emailUpdateDoneRef.current = false;
-      lastAddressRef.current = address;
-    }
-  }, [address]);
-
-  // Watch for embeddedWalletInfo to become available and update user email
-  useEffect(() => {
-    const updateUserEmail = async () => {
-      // Only proceed if we have wallet connected and embeddedWalletInfo
-      if (!address || !embeddedWalletInfo || !isConnected) {
-        return;
-      }
-
-      // Check if we've already updated email for this session to prevent infinite loop
-      if (hasUpdatedEmailRef.current) {
-        return;
-      }
-
-      // embeddedWalletInfo became available
-
-      // Try to extract email
-      const email = embeddedWalletInfo.user?.email || 
-                   embeddedWalletInfo.email ||
-                   embeddedWalletInfo.user?.emailAddress ||
-                   null;
-
-      const name = embeddedWalletInfo.user?.username || 
-                  embeddedWalletInfo.user?.name ||
-                  embeddedWalletInfo.user?.displayName ||
-                  embeddedWalletInfo.name ||
-                  (email ? email.split('@')[0] : null);
-
-      const avatar = embeddedWalletInfo.user?.avatar ||
-                    embeddedWalletInfo.user?.picture ||
-                    embeddedWalletInfo.user?.profileImage ||
-                    null;
-
-      // Email extracted from embeddedWalletInfo
-
-      if (email) {
-        // Mark that we're updating to prevent duplicate calls
-        hasUpdatedEmailRef.current = true;
-
-        // Update user in database with email
-        try {
-          // Updating user email in database
-          const response = await fetch('/api/auth/user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              wallet_address: address,
-              email: email,
-              role: 'student', // Default role for new users
-              full_name: name,
-              avatar_url: avatar,
-              auth_provider: embeddedWalletInfo.authProvider || 'social'
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            // User email updated successfully
-
-            // Update userProfile state
-            setUserProfile(prev => ({
-              ...prev,
-              email: email,
-              name: name,
-              avatar: avatar,
-              profile_completed: data.user?.profile_completed || false
-            }));
-
-            // Update localStorage
-            const storedUser = localStorage.getItem('dagarmy_user');
-            if (storedUser) {
-              const userData = JSON.parse(storedUser);
-              userData.email = email;
-              userData.full_name = name;
-              userData.profile_completed = data.user?.profile_completed || false;
-              localStorage.setItem('dagarmy_user', JSON.stringify(userData));
+    (async () => {
+      // 1. Check for incoming SSO token in URL
+      if (!ssoChecked.current && typeof window !== 'undefined') {
+        ssoChecked.current = true;
+        const params = new URLSearchParams(window.location.search);
+        const ssoToken = params.get('sso_token');
+        if (ssoToken) {
+          try {
+            const res = await fetch('/api/auth/sso/validate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token: ssoToken }),
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.token && data.user) {
+                localStorage.setItem(TOKEN_KEY, data.token);
+                localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+                if (isMounted.current) setUser(data.user);
+                const clean = new URL(window.location.href);
+                clean.searchParams.delete('sso_token');
+                window.history.replaceState({}, '', clean.toString());
+                setIsLoading(false);
+                return;
+              }
             }
+          } catch (e) {
+            console.warn('[AuthContext] SSO validation failed:', e);
+          }
+        }
+      }
 
-            // DON'T redirect automatically - let LoginModal handle profile completion flow
-            // Only redirect if profile is already completed
-            if (data.user?.profile_completed && window.location.href.includes('reown') || window.location.href.includes('walletconnect')) {
-              console.log('🔄 Profile completed, redirecting from OAuth page to dashboard...');
-              window.location.href = '/dashboard';
+      // 2. Handle Google OAuth callback
+      if (typeof window !== 'undefined' && window.location.pathname === '/auth/callback-complete') {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        const next = params.get('next') || '/';
+        if (token) {
+          localStorage.setItem(TOKEN_KEY, token);
+          try {
+            const res = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+            if (res.ok) {
+              const { user: freshUser } = await res.json();
+              localStorage.setItem(USER_KEY, JSON.stringify(freshUser));
+              if (isMounted.current) setUser(freshUser);
             }
-          }
-        } catch (error) {
-          console.error('❌ Failed to update user email:', error);
-          // Reset flag on error so it can retry
-          hasUpdatedEmailRef.current = false;
+          } catch {}
+          window.location.href = next;
+          return;
         }
-      } else {
-        // No email found in embeddedWalletInfo
-      }
-    };
-
-    updateUserEmail();
-  }, [embeddedWalletInfo, address, isConnected]);
-
-  const login = async () => {
-    if (address) {
-      // Clear the logged out flag on successful login
-      sessionStorage.removeItem('dagarmy_logged_out');
-          // Login initiated
-      
-      // Try to get user profile info from connector
-      const profile = {
-        address: address,
-        connectorType: connector?.name || 'Unknown',
-        loginMethod: connector?.name || 'Wallet',
-        timestamp: new Date().toISOString()
-      };
-
-      // Get email and name from embeddedWalletInfo (for social logins)
-      let userEmail = null;
-      let userName = null;
-      let userAvatar = null;
-
-      try {
-        // First, check if user exists in database (for returning users)
-        // Checking for existing user
-        const existingUserResponse = await fetch(`/api/auth/user?wallet=${address}`);
-        if (existingUserResponse.ok) {
-          const existingUserData = await existingUserResponse.json();
-          if (existingUserData.user) {
-            // Found existing user
-            userEmail = existingUserData.user.email;
-            userName = existingUserData.user.full_name;
-            userAvatar = existingUserData.user.avatar_url;
-            // NOTE: Do NOT trust is_admin from users table here.
-            // Admin status is determined solely by check-role API below.
-            profile.isAdmin = false;
-            profile.isMasterAdmin = false;
-          }
-        }
-
-        // If no existing user or no email, try to get from embeddedWalletInfo (social login)
-        if (!userEmail) {
-          // Attempting to extract email from Reown/AppKit
-          
-          if (embeddedWalletInfo) {
-            // Found embeddedWalletInfo
-            
-            // Try multiple paths to get email
-            userEmail = embeddedWalletInfo.user?.email || 
-                       embeddedWalletInfo.email ||
-                       embeddedWalletInfo.user?.emailAddress ||
-                       null;
-            
-            userName = embeddedWalletInfo.user?.username || 
-                      embeddedWalletInfo.user?.name ||
-                      embeddedWalletInfo.user?.displayName ||
-                      embeddedWalletInfo.name ||
-                      (userEmail ? userEmail.split('@')[0] : null);
-            
-            userAvatar = embeddedWalletInfo.user?.avatar ||
-                        embeddedWalletInfo.user?.picture ||
-                        embeddedWalletInfo.user?.profileImage ||
-                        null;
-            
-            // Extracted email and name from embeddedWalletInfo
-          } else {
-            // No embeddedWalletInfo available - wallet-only login
-          }
-        }
-
-        // If we have an email, check admin access
-        if (userEmail) {
-          profile.email = userEmail;
-          profile.name = userName;
-          profile.avatar = userAvatar;
-          profile.authProvider = embeddedWalletInfo?.authProvider || 'wallet';
-          
-          // Check admin access based on email (this will override any existing values)
-          // Checking admin access
-          const roleResponse = await fetch('/api/auth/check-role', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: userEmail })
-          });
-          
-          if (roleResponse.ok) {
-            const roleData = await roleResponse.json();
-            // Role check completed
-            
-            profile.isAdmin = roleData.isAdmin;
-            profile.isMasterAdmin = roleData.isMasterAdmin;
-            profile.adminRole = roleData.role;
-            profile.permissions = roleData.permissions;
-            
-            setIsAdmin(roleData.isAdmin);
-            setIsMasterAdmin(roleData.isMasterAdmin);
-          }
-        }
-      } catch (error) {
-        console.log('Could not fetch user profile:', error);
       }
 
-      // Save user to Supabase
-      try {
-        const finalRole = profile.isAdmin ? 'admin' : 'student';
-
-        // Extract Reown access token for DAGChain sync (server-side only, never stored client-side)
-        const reownAccessToken =
-          embeddedWalletInfo?.user?.accessToken ||
-          embeddedWalletInfo?.accessToken ||
-          embeddedWalletInfo?.user?.token ||
-          null;
-
-        const supabaseData = {
-          wallet_address: address,
-          email: profile.email || null,
-          role: finalRole,
-          full_name: profile.name || null,
-          avatar_url: profile.avatar || null,
-          auth_provider: profile.authProvider || 'wallet',
-          is_admin: profile.isAdmin || false,
-          is_master_admin: profile.isMasterAdmin || false,
-          reown_access_token: reownAccessToken,
-        };
-
-        // Saving user to database
-
-        const result = await saveUserToSupabase(supabaseData);
-        
-        if (result.success) {
-          // User saved to database
-          profile.supabaseId = result.user.id;
-          profile.isNewUser = result.isNewUser;
-          profile.profile_completed = result.user.profile_completed || false;
+      // 3. Restore from localStorage
+      const token = getStoredToken();
+      if (token) {
+        const storedUser = localStorage.getItem(USER_KEY);
+        if (storedUser) {
+          try {
+            const parsed = JSON.parse(storedUser);
+            if (isMounted.current) setUser(parsed);
+          } catch {}
         }
-      } catch (error) {
-        console.error('❌ Failed to save user to Supabase:', error);
+        // Validate with server in background
+        fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (!isMounted.current) return;
+            if (data?.user) {
+              setUser(data.user);
+              localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+            } else if (!data) {
+              setUser(null);
+              localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem(USER_KEY);
+            }
+          })
+          .catch(() => {});
       }
 
-      // If profile is not completed, fire event for LoginModal to show profile form
-      // Do NOT redirect to dashboard yet
-      if (!profile.isAdmin && !profile.profile_completed) {
-        localStorage.setItem('dagarmy_user', JSON.stringify({
-          id: profile.supabaseId,
-          email: profile.email,
-          full_name: profile.name,
-          wallet_address: address,
-          is_admin: false,
-          is_master_admin: false
-        }));
-        // Only fire event if LoginModal hasn't already shown the form via checkUserProfile
-        if (typeof window !== 'undefined' && !sessionStorage.getItem('dagarmy_profile_form_shown')) {
-          sessionStorage.setItem('dagarmy_profile_form_shown', '1');
-          window.dispatchEvent(new CustomEvent('dagarmy:show-profile-completion', {
-            detail: { email: profile.email, walletAddress: address }
-          }));
-        }
-        return;
-      }
+      if (isMounted.current) setIsLoading(false);
+    })();
+  }, []);
 
-      const finalRole = profile.isAdmin ? 'admin' : 'student';
-      
-      localStorage.setItem(`dagarmy_profile_${address}`, JSON.stringify(profile));
-      localStorage.setItem('dagarmy_role', finalRole);
+  // ── Login with email + password ───────────────────────────────────────────
+  const login = useCallback(async (email, password, fingerprintId) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, fingerprint_id: fingerprintId }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { success: false, error: data.error || data.message || 'Login failed' };
+
+      localStorage.setItem(TOKEN_KEY, data.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+      // Preserve existing DAGARMY localStorage keys
       localStorage.setItem('dagarmy_authenticated', 'true');
-      localStorage.setItem('dagarmy_user', JSON.stringify({
-        id: profile.supabaseId,
-        email: profile.email,
-        full_name: profile.name,
-        wallet_address: address,
-        is_admin: profile.isAdmin,
-        is_master_admin: profile.isMasterAdmin
-      }));
-      sessionStorage.removeItem('dagarmy_logged_out');
-      
-      // Set cookies
-      document.cookie = `dagarmy_role=${finalRole}; path=/; max-age=2592000`;
+      localStorage.setItem('dagarmy_role', data.user.role);
+      document.cookie = `dagarmy_role=${data.user.role}; path=/; max-age=2592000`;
       document.cookie = `dagarmy_authenticated=true; path=/; max-age=2592000`;
-      
-      setUserRole(finalRole);
-      setIsAuthenticated(true);
-      setUserProfile(profile);
-      setHasLoggedOut(false);
-      
-      // Auto-redirect to appropriate dashboard
-      console.log('🚀 Redirecting to', profile.isAdmin ? 'admin' : 'student', 'dashboard');
-      if (typeof window !== 'undefined') {
-        window.location.href = profile.isAdmin ? '/admin/dashboard' : '/student-dashboard';
-      }
-    }
-  };
 
-  const logout = async () => {
-    if (address) {
-      localStorage.removeItem(`dagarmy_role_${address}`);
-      localStorage.removeItem(`dagarmy_profile_${address}`);
+      setUser(data.user);
+
+      // Redirect based on role
+      const redirectPath = data.user.is_admin ? '/admin/dashboard' : '/student-dashboard';
+      window.location.href = redirectPath;
+
+      return { success: true };
+    } catch {
+      return { success: false, error: 'Network error. Please try again.' };
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Clear all authentication data
-    localStorage.removeItem('dagarmy_role');
-    localStorage.removeItem('dagarmy_authenticated');
-    localStorage.removeItem('dagarmy_user');
-    localStorage.removeItem('dagarmy_wallet');
-    
-    // Clear cookies
+  }, []);
+
+  // ── Login with Google ─────────────────────────────────────────────────────
+  const loginWithGoogle = useCallback(() => {
+    window.location.href = '/api/auth/google';
+  }, []);
+
+  // ── Logout ────────────────────────────────────────────────────────────────
+  const logout = useCallback(async () => {
+    try { await fetch('/api/auth/logout', { method: 'POST' }); } catch {}
+
+    ['dagarmy_token', 'dagarmy_user', 'dagarmy_authenticated', 'dagarmy_role',
+     'dagarmy_wallet', 'dagarmy_logged_out'].forEach(k => localStorage.removeItem(k));
     document.cookie = 'dagarmy_role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'dagarmy_authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    
-    // Set session flag to prevent auto-login
+    document.cookie = 'dagarmy_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     sessionStorage.setItem('dagarmy_logged_out', 'true');
-    
-    setUserRole(null);
-    setIsAuthenticated(false);
-    setUserProfile(null);
-    setHasLoggedOut(true);
-    setIsAdmin(false);
-    setIsMasterAdmin(false);
-    
-    // Disconnect wallet/social connection
-    await disconnect();
-  };
+
+    setUser(null);
+    window.location.href = '/';
+  }, []);
+
+  // ── Issue SSO token (cross-platform jump) ─────────────────────────────────
+  const issueSSOToken = useCallback(async (target) => {
+    const token = getStoredToken();
+    if (!token) return null;
+    try {
+      const res = await fetch('/api/auth/sso/issue-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ target }),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
+  }, []);
+
+  // ── Refresh user from server ──────────────────────────────────────────────
+  const refreshUser = useCallback(async () => {
+    const token = getStoredToken();
+    if (!token) return;
+    try {
+      const res = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const { user: fresh } = await res.json();
+        setUser(fresh);
+        localStorage.setItem(USER_KEY, JSON.stringify(fresh));
+      }
+    } catch {}
+  }, []);
 
   const value = {
-    address,
-    isConnected,
-    userRole,
-    isAuthenticated,
-    userProfile,
-    isAdmin,
-    isMasterAdmin,
+
+    user,
+    isAuthenticated: !!user,
+    isLoading,
+    // Backward-compat (existing DAGARMY components use these field names)
+    address: user?.wallet_address ?? null,
+    isConnected: !!user,
+    userRole: user?.role ?? null,
+    userProfile: user,
+    isAdmin: user?.is_admin ?? false,
+    isMasterAdmin: user?.is_master_admin ?? false,
+    // Actions
     login,
+    loginWithGoogle,
     logout,
+    issueSSOToken,
+    refreshUser,
+    getToken: getStoredToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
 }
+
+export default AuthContext;

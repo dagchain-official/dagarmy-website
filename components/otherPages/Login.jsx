@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
+// wagmi removed — using useAuth() for address and isConnected
+
 import { useAuth } from "@/context/AuthContext";
 import ProfileCompletion from "./ProfileCompletion";
 import "./SocialLogin.css";
@@ -10,8 +11,8 @@ import "./LoginOverride.css";
 
 export default function Login() {
   const router = useRouter();
-  const { address, isConnected } = useAccount();
-  const { login, isAuthenticated, userRole, userProfile } = useAuth();
+  const { login, isAuthenticated, userRole, userProfile, address, isConnected } = useAuth();
+
   const [selectedRole, setSelectedRole] = useState("");
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);

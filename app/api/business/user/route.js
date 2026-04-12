@@ -25,24 +25,7 @@ export async function GET(request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Resolve effective L1 commission rate for this user based on their current rank
-    const RANK_RATE_KEYS = [
-      'soldier_direct_sales_commission',
-      'rank_commission_initiator','rank_commission_vanguard','rank_commission_guardian',
-      'rank_commission_striker','rank_commission_invoker','rank_commission_commander',
-      'rank_commission_champion','rank_commission_conqueror','rank_commission_paragon',
-      'rank_commission_mythic',
-    ];
-    const { data: rateRows } = await supabase
-      .from('rewards_config')
-      .select('config_key, config_value')
-      .in('config_key', RANK_RATE_KEYS);
-    const rateMap = {};
-    (rateRows || []).forEach(r => { rateMap[r.config_key] = parseFloat(r.config_value || 0); });
-    const baseL1Rate = rateMap['soldier_direct_sales_commission'] || 7;
-    const rank = user.current_rank?.toUpperCase() || null;
-    const rankRateKey = rank ? `rank_commission_${rank.toLowerCase()}` : null;
-    const effectiveL1Rate = (rankRateKey && rateMap[rankRateKey] > 0) ? rateMap[rankRateKey] : baseL1Rate;
+    const tier = user.tier || 'DAG_SOLDIER';
 
     // Fetch all commission rows for this user
     const { data: commissions, error: commErr } = await supabase
@@ -114,10 +97,7 @@ export async function GET(request) {
       data: {
         transactions,
         summary,
-        tier: user.tier || 'DAG SOLDIER',
-        currentRank: rank,
-        effectiveL1Rate,
-        baseL1Rate,
+        userTier: tier,
       },
     });
   } catch (error) {

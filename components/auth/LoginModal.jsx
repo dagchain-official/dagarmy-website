@@ -1,531 +1,504 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
-import { useAppKitAccount } from "@reown/appkit/react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Shield, Mail, Lock, ArrowLeft, ChevronRight, Loader2, Eye, EyeOff, Check, AlertCircle, Wallet } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import ProfileCompletion from "../otherPages/ProfileCompletion";
-import "../otherPages/SocialLogin.css";
-import "../otherPages/LoginOverride.css";
+
+async function getFingerprint() {
+  try {
+    const FpJS = await import('@fingerprintjs/fingerprintjs');
+    const fp = await FpJS.default.load();
+    const { visitorId } = await fp.get();
+    return visitorId;
+  } catch { return null; }
+}
+
+const GoogleIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+  </svg>
+);
+
+// ── Shared input style — light theme, matches DAGCHAIN exactly
+const inputStyle = {
+  width: '100%',
+  padding: '11px 14px',
+  borderRadius: '12px',
+  border: '1.5px solid #e5e7eb',
+  background: '#fff',
+  color: '#111827',
+  fontSize: '14px',
+  outline: 'none',
+  transition: 'border-color 0.15s',
+};
+
+// ── Ghost option button (Google / Email rows)
+function OptionBtn({ icon, label, onClick, disabled }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '13px 16px',
+        borderRadius: '14px',
+        border: '1.5px solid #e5e7eb',
+        background: hov ? '#f9fafb' : '#fff',
+        color: '#111827',
+        fontSize: '14px',
+        fontWeight: 500,
+        cursor: 'pointer',
+        transition: 'all 0.15s',
+        opacity: disabled ? 0.5 : 1,
+      }}
+    >
+      {icon}
+      <span style={{ flex: 1, textAlign: 'left' }}>{label}</span>
+      <ChevronRight size={16} style={{ color: '#9ca3af' }} />
+    </button>
+  );
+}
+
+// ── Gradient CTA button (Connect Wallet / Create Account style)
+function GradientBtn({ children, type = 'button', onClick, disabled }) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        width: '100%',
+        padding: '13px 16px',
+        borderRadius: '14px',
+        border: 'none',
+        background: disabled ? '#d1d5db' : 'linear-gradient(90deg, #22d3ee 0%, #818cf8 50%, #a855f7 100%)',
+        color: '#fff',
+        fontSize: '14px',
+        fontWeight: 600,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        transition: 'opacity 0.15s, transform 0.1s',
+        boxShadow: disabled ? 'none' : '0 4px 20px rgba(99,102,241,0.3)',
+      }}
+      onMouseEnter={e => { if (!disabled) e.currentTarget.style.opacity = '0.92'; }}
+      onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+      onMouseDown={e => { if (!disabled) e.currentTarget.style.transform = 'scale(0.985)'; }}
+      onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Divider() {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0' }}>
+      <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }} />
+      <span style={{ fontSize: '12px', color: '#9ca3af' }}>or</span>
+      <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }} />
+    </div>
+  );
+}
 
 export default function LoginModal({ isOpen, onClose }) {
-  const router = useRouter();
-  const { address, isConnected } = useAccount();
-  const { embeddedWalletInfo } = useAppKitAccount();
-  const { login, isAuthenticated, userRole } = useAuth();
-  const [selectedRole, setSelectedRole] = useState("");
-  const [showRoleSelection, setShowRoleSelection] = useState(false);
-  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
-  const [socialEmail, setSocialEmail] = useState(null);
-  const [storedWalletAddress, setStoredWalletAddress] = useState(null);
-  const [isCheckingProfile, setIsCheckingProfile] = useState(false);
+  const { login, loginWithGoogle } = useAuth();
 
-  // When wallet connects, check if user needs profile completion
-  useEffect(() => {
-    const checkUserProfile = async () => {
-      if (isConnected && address && !isAuthenticated && isOpen && !isCheckingProfile && !showProfileCompletion) {
-        setIsCheckingProfile(true);
-        
-        // Force close Reown modal immediately to prevent "Retrieving user data" stuck state
-        if (typeof window !== 'undefined' && window.modal) {
-          try {
-            window.modal.close();
-          } catch (e) {
-            // Modal already closed
-          }
-        }
-        
-        // Add a small delay to ensure wallet info is available
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        try {
-          // Check if user exists and if profile is completed
-          const response = await fetch(`/api/auth/user?wallet=${address}`);
-          const data = await response.json();
-          
-          if (data.user) {
-            // User exists
-            setSocialEmail(data.user.email);
-            setStoredWalletAddress(address);
-            
-            if (!data.user.profile_completed) {
-              // Show profile completion form - do NOT call login() here,
-              // AuthContext.login() will also fire the event causing a double form
-              setShowProfileCompletion(true);
-              setIsCheckingProfile(false);
-              return;
-            } else {
-              // Profile completed, proceed with login
-              setIsCheckingProfile(false);
-              await login();
-            }
-          } else {
-            // New user - extract email and show profile form directly
-            // Do NOT call login() here - AuthContext.login() fires dagarmy:show-profile-completion
-            // which would show the form a second time
-            const extractedEmail = embeddedWalletInfo?.user?.email || 
-                                  embeddedWalletInfo?.email ||
-                                  embeddedWalletInfo?.user?.emailAddress ||
-                                  null;
-            if (extractedEmail) setSocialEmail(extractedEmail);
-            setStoredWalletAddress(address);
-            sessionStorage.setItem('dagarmy_profile_form_shown', '1');
-            setShowProfileCompletion(true);
-            setIsCheckingProfile(false);
-            return;
-          }
-        } catch (error) {
-          console.error('Error checking user profile:', error);
-          setIsCheckingProfile(false);
-          // On error, try to login anyway
-          await login();
-        }
-      }
-    };
-    
-    checkUserProfile();
-  }, [isConnected, address, isAuthenticated, isOpen, login, isCheckingProfile, embeddedWalletInfo]);
+  // view: 'main' | 'signin' | 'register' | 'forgot' | 'forgot_sent'
+  const [view, setView] = useState('main');
 
-  // When authenticated, close modal (AuthContext handles redirect)
-  useEffect(() => {
-    if (isAuthenticated && userRole && !showProfileCompletion) {
-      setShowRoleSelection(false);
-      onClose();
-    }
-  }, [isAuthenticated, userRole, showProfileCompletion, onClose]);
+  const [signEmail, setSignEmail]     = useState('');
+  const [signPassword, setSignPassword] = useState('');
+  const [showSignPwd, setShowSignPwd] = useState(false);
 
-  // Reset state when modal opens + capture ?ref= referral code from URL
+  const [regName, setRegName]         = useState('');
+  const [regEmail, setRegEmail]       = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [regConfirm, setRegConfirm]   = useState('');
+  const [regRole, setRegRole]         = useState('student');
+  const [showRegPwd, setShowRegPwd]   = useState(false);
+  const [referralCode, setReferralCode] = useState('');
+  const [refValid, setRefValid]       = useState(null);
+
+  const [mainReferral, setMainReferral] = useState('');
+
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [error, setError]             = useState('');
+  const [loading, setLoading]         = useState(false);
+  const fpRef = useRef(null);
+  const debounceRef = useRef(null);
+
   useEffect(() => {
     if (isOpen) {
-      setShowProfileCompletion(false);
-      setIsCheckingProfile(false);
-      setShowRoleSelection(false);
-      // Save referral code from URL to localStorage so ProfileCompletion can use it
-      if (typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search);
-        const ref = params.get('ref');
-        if (ref) localStorage.setItem('pending_referral_code', ref.toUpperCase());
-      }
+      setView('main'); setError('');
+      getFingerprint().then(fp => { fpRef.current = fp; });
     }
   }, [isOpen]);
 
-  // Listen for profile completion trigger from AuthContext (email-only Reown users)
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.detail?.email) setSocialEmail(e.detail.email);
-      if (e.detail?.walletAddress) setStoredWalletAddress(e.detail.walletAddress);
-      setShowProfileCompletion(true);
-      setIsCheckingProfile(false);
-    };
-    window.addEventListener('dagarmy:show-profile-completion', handler);
-    return () => window.removeEventListener('dagarmy:show-profile-completion', handler);
-  }, []);
+  useEffect(() => { setError(''); }, [view]);
 
-  const handleRoleSelection = async () => {
-    if (selectedRole && address) {
-      // Store wallet address before it becomes undefined
-      console.log('💾 Storing wallet address:', address);
-      setStoredWalletAddress(address);
-      
+  // referral validation
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const code = referralCode || mainReferral;
+    if (!code || code.trim().length < 3) { setRefValid(null); return; }
+    debounceRef.current = setTimeout(async () => {
       try {
-        const response = await fetch('/api/auth/user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            wallet_address: address,
-            role: selectedRole,
-          }),
-        });
-        
-        const data = await response.json();
-        console.log('📋 User data from API:', data);
-        
-        if (data.user) {
-          setSocialEmail(data.user.email);
-          
-          if (!data.user.profile_completed) {
-            console.log('📝 Profile not completed, showing profile completion form');
-            setShowProfileCompletion(true);
-            setShowRoleSelection(false);
-            return;
-          } else {
-            console.log('✅ Profile already completed, proceeding with login');
-          }
-        }
-      } catch (error) {
-        console.error('Error checking profile status:', error);
-      }
-      
-      await login(selectedRole);
-    }
-  };
-
-  const handleProfileComplete = async (userData) => {
-    console.log('✅ Profile completed, now authenticating user');
-    sessionStorage.removeItem('dagarmy_profile_form_shown');
-    setShowProfileCompletion(false);
-    await login();
-  };
-
-  const handleClose = () => {
-    setShowRoleSelection(false);
-    setShowProfileCompletion(false);
-    setSelectedRole("");
-    onClose();
-  };
-
-  // Debug logging
-  useEffect(() => {
-    console.log('🔍 LoginModal State:', {
-      isOpen,
-      showRoleSelection,
-      showProfileCompletion,
-      isAuthenticated,
-      userRole
-    });
-  }, [isOpen, showRoleSelection, showProfileCompletion, isAuthenticated, userRole]);
+        const res = await fetch(`/api/referral/validate?code=${code.trim()}`);
+        const data = await res.json();
+        setRefValid(data?.valid ?? false);
+      } catch { setRefValid(null); }
+    }, 600);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [referralCode, mainReferral]);
 
   if (!isOpen) return null;
 
-  // Only show modal if there's actual content to display
-  const shouldShowModal = showRoleSelection || showProfileCompletion;
-  
-  if (!shouldShowModal) return null;
+  const handleSignin = async (e) => {
+    e.preventDefault(); setError(''); setLoading(true);
+    const result = await login(signEmail, signPassword, fpRef.current);
+    setLoading(false);
+    if (!result?.success) setError(result?.error === 'wallet_only_user'
+      ? 'This account uses wallet login. Use "Forgot Password" to set a password.'
+      : result?.error || 'Invalid email or password');
+  };
 
+  const handleRegister = async (e) => {
+    e.preventDefault(); setError('');
+    if (regPassword !== regConfirm) { setError('Passwords do not match'); return; }
+    if (regPassword.length < 8) { setError('Password must be at least 8 characters'); return; }
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: regEmail, password: regPassword, full_name: regName, role: regRole, fingerprint_id: fpRef.current, referral_code: referralCode || mainReferral || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) setError(data.error || 'Registration failed');
+      else {
+        localStorage.setItem('dagarmy_token', data.token);
+        localStorage.setItem('dagarmy_user', JSON.stringify(data.user));
+        window.location.href = '/student-dashboard';
+      }
+    } catch { setError('Network error. Please try again.'); }
+    finally { setLoading(false); }
+  };
+
+  const handleForgot = async (e) => {
+    e.preventDefault(); setError(''); setLoading(true);
+    try {
+      await fetch('/api/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: forgotEmail }) });
+      setView('forgot_sent');
+    } catch { setError('Network error.'); }
+    finally { setLoading(false); }
+  };
+
+  // ── Card shell
   return (
-    <>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
       {/* Backdrop */}
-      <div 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          zIndex: 9998,
-          backdropFilter: 'blur(4px)'
-        }}
-        onClick={handleClose}
+      <motion.div
+        onClick={onClose}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
       />
 
-      {/* Loading Modal - Only show if explicitly checking profile */}
-      {isCheckingProfile && !showProfileCompletion && !showRoleSelection && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 9999,
-          width: '90%',
-          maxWidth: '400px',
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '40px',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            margin: '0 auto 20px',
-            border: '4px solid #f3f4f6',
-            borderTop: '4px solid #1f2937',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }} />
-          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', marginBottom: '8px' }}>
-            Checking Profile...
-          </h3>
-          <p style={{ fontSize: '14px', color: '#6b7280' }}>
-            Please wait while we verify your account
-          </p>
-        </div>
-      )}
+      {/* Card — EXACT DAGCHAIN light style */}
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10, scale: 0.97 }}
+        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '420px',
+          borderRadius: '20px',
+          background: '#f1f5f9',
+          border: '1px solid #e2e8f0',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.15)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: '14px', right: '14px', zIndex: 10,
+            width: '30px', height: '30px', borderRadius: '8px', border: 'none',
+            background: '#e2e8f0', color: '#6b7280', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#cbd5e1'; e.currentTarget.style.color = '#111827'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#6b7280'; }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
 
-      {/* Role Selection Modal */}
-      {showRoleSelection && !showProfileCompletion && !isCheckingProfile && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 9999,
-          width: '90%',
-          maxWidth: '500px',
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '40px',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-          animation: 'slideIn 0.3s ease-out'
-        }}>
-          <button
-            onClick={handleClose}
-            style={{
-              position: 'absolute',
-              top: '16px',
-              right: '16px',
-              background: 'none',
-              border: 'none',
-              fontSize: '24px',
-              cursor: 'pointer',
-              color: '#6b7280',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#f3f4f6';
-              e.currentTarget.style.color = '#1f2937';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#6b7280';
-            }}
-          >
-            ×
-          </button>
+        <div style={{ padding: '28px 28px 24px' }}>
+          <AnimatePresence mode="wait">
 
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <h2 style={{ 
-              fontSize: '24px', 
-              fontWeight: '700', 
-              color: '#1f2937',
-              marginBottom: '8px'
-            }}>
-              Select Your Role
-            </h2>
-            <p style={{ 
-              fontSize: '14px', 
-              color: '#6b7280',
-              margin: 0
-            }}>
-              Choose a role and start your learning journey
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-            <div
-              onClick={() => setSelectedRole("student")}
-              style={{
-                padding: '20px',
-                border: selectedRole === "student" ? '2px solid #1f2937' : '2px solid #e5e7eb',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backgroundColor: selectedRole === "student" ? '#f5f3ff' : 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px'
-              }}
-              onMouseEnter={(e) => {
-                if (selectedRole !== "student") {
-                  e.currentTarget.style.borderColor = '#d1d5db';
-                  e.currentTarget.style.backgroundColor = '#f9fafb';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedRole !== "student") {
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.backgroundColor = 'white';
-                }
-              }}
-            >
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '12px',
-                backgroundColor: selectedRole === "student" ? '#1f2937' : '#f3f4f6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '24px',
-                transition: 'all 0.2s'
-              }}>
-                🎓
-              </div>
-              <div style={{ flex: 1, textAlign: 'left' }}>
-                <h3 style={{ 
-                  fontSize: '16px', 
-                  fontWeight: '600', 
-                  color: '#1f2937',
-                  margin: '0 0 4px 0'
-                }}>
-                  Student
-                </h3>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#6b7280',
-                  margin: 0
-                }}>
-                  Access courses and track your learning progress
-                </p>
-              </div>
-              {selectedRole === "student" && (
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  backgroundColor: '#1f2937',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontSize: '14px'
-                }}>
-                  ✓
+            {/* ══ MAIN VIEW ══ */}
+            {view === 'main' && (
+              <motion.div key="main" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.18 }}>
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, #3b82f6, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(99,102,241,0.35)' }}>
+                    <Shield size={20} color="#fff" />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827', lineHeight: 1.2 }}>Welcome to DAGARMY</div>
+                    <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '2px' }}>Sign in or create your account</div>
+                  </div>
                 </div>
-              )}
-            </div>
 
-            <div
-              onClick={() => setSelectedRole("trainer")}
-              style={{
-                padding: '20px',
-                border: selectedRole === "trainer" ? '2px solid #1f2937' : '2px solid #e5e7eb',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backgroundColor: selectedRole === "trainer" ? '#f5f3ff' : 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px'
-              }}
-              onMouseEnter={(e) => {
-                if (selectedRole !== "trainer") {
-                  e.currentTarget.style.borderColor = '#d1d5db';
-                  e.currentTarget.style.backgroundColor = '#f9fafb';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedRole !== "trainer") {
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.backgroundColor = 'white';
-                }
-              }}
-            >
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '12px',
-                backgroundColor: selectedRole === "trainer" ? '#1f2937' : '#f3f4f6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '24px',
-                transition: 'all 0.2s'
-              }}>
-                👨‍🏫
-              </div>
-              <div style={{ flex: 1, textAlign: 'left' }}>
-                <h3 style={{ 
-                  fontSize: '16px', 
-                  fontWeight: '600', 
-                  color: '#1f2937',
-                  margin: '0 0 4px 0'
-                }}>
-                  Trainer/Mentor
-                </h3>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#6b7280',
-                  margin: 0
-                }}>
-                  Create courses and mentor students
-                </p>
-              </div>
-              {selectedRole === "trainer" && (
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  backgroundColor: '#1f2937',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontSize: '14px'
-                }}>
-                  ✓
+                {/* Referral */}
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                    Referral Code <span style={{ color: '#f59e0b', fontWeight: 400 }}>(optional)</span>
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      value={mainReferral}
+                      onChange={e => setMainReferral(e.target.value.toUpperCase())}
+                      placeholder="e.g. DAG1234ABCD"
+                      maxLength={12}
+                      style={{
+                        ...inputStyle,
+                        borderColor: refValid === true ? '#22c55e' : refValid === false ? '#ef4444' : '#e5e7eb',
+                        fontFamily: 'monospace',
+                        letterSpacing: '0.05em',
+                        paddingRight: mainReferral ? '36px' : '14px',
+                      }}
+                      onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                      onBlur={e => { e.target.style.borderColor = refValid === true ? '#22c55e' : refValid === false ? '#ef4444' : '#e5e7eb'; e.target.style.boxShadow = 'none'; }}
+                    />
+                    {refValid === true && <Check size={15} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#22c55e' }} />}
+                    {refValid === false && <AlertCircle size={15} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#ef4444' }} />}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
 
-          <button
-            onClick={handleRoleSelection}
-            disabled={!selectedRole}
-            style={{
-              width: '100%',
-              padding: '14px',
-              backgroundColor: selectedRole ? '#1f2937' : '#e5e7eb',
-              color: selectedRole ? 'white' : '#9ca3af',
-              border: 'none',
-              borderRadius: '10px',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: selectedRole ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px'
-            }}
-            onMouseEnter={(e) => {
-              if (selectedRole) {
-                e.currentTarget.style.backgroundColor = '#111827';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (selectedRole) {
-                e.currentTarget.style.backgroundColor = '#1f2937';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }
-            }}
-          >
-            Continue
-            <span style={{ fontSize: '18px' }}>→</span>
-          </button>
+                {/* Options */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <OptionBtn icon={<GoogleIcon />} label="Continue with Google" onClick={loginWithGoogle} disabled={loading} />
+                  <Divider />
+                  <OptionBtn icon={<Mail size={20} />} label="Continue with Email" onClick={() => setView('signin')} disabled={loading} />
+                  <Divider />
+                  <GradientBtn onClick={() => setView('register')} disabled={loading}>
+                    <Wallet size={18} />
+                    Create Account
+                  </GradientBtn>
+                </div>
+
+                <p style={{ marginTop: '16px', fontSize: '11px', color: '#9ca3af', textAlign: 'center', lineHeight: 1.5 }}>
+                  By continuing, you agree to our Terms of Service and Privacy Policy.
+                </p>
+              </motion.div>
+            )}
+
+            {/* ══ SIGN IN VIEW ══ */}
+            {view === 'signin' && (
+              <motion.div key="signin" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.18 }}>
+                <button onClick={() => setView('main')} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', marginBottom: '18px', padding: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#111827'} onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}>
+                  <ArrowLeft size={15} /> Back
+                </button>
+
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827', marginBottom: '4px' }}>Sign In</div>
+                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '20px' }}>Enter your email and password to continue.</div>
+
+                {error && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', fontSize: '13px', color: '#dc2626' }}>
+                    <AlertCircle size={15} style={{ marginTop: '1px', flexShrink: 0 }} />{error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSignin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Email Address</label>
+                    <input type="email" value={signEmail} onChange={e => setSignEmail(e.target.value)} required autoFocus placeholder="you@example.com" style={inputStyle}
+                      onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                      onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Password</label>
+                    <div style={{ position: 'relative' }}>
+                      <input type={showSignPwd ? 'text' : 'password'} value={signPassword} onChange={e => setSignPassword(e.target.value)} required placeholder="••••••••"
+                        style={{ ...inputStyle, paddingRight: '40px' }}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                      <button type="button" onClick={() => setShowSignPwd(!showSignPwd)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: 0 }}>
+                        {showSignPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                    <button type="button" onClick={() => setView('forgot')} style={{ fontSize: '12px', color: '#6366f1', background: 'none', border: 'none', cursor: 'pointer', float: 'right', marginTop: '4px', padding: 0 }}>
+                      Forgot password?
+                    </button>
+                  </div>
+                  <GradientBtn type="submit" disabled={loading}>
+                    {loading ? <><Loader2 size={15} className="animate-spin" /> Signing in...</> : 'Sign In'}
+                  </GradientBtn>
+                </form>
+
+                <p style={{ marginTop: '16px', fontSize: '13px', textAlign: 'center', color: '#6b7280' }}>
+                  Don't have an account?{' '}
+                  <button onClick={() => setView('register')} style={{ color: '#6366f1', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Create one</button>
+                </p>
+              </motion.div>
+            )}
+
+            {/* ══ REGISTER VIEW ══ */}
+            {view === 'register' && (
+              <motion.div key="register" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.18 }}>
+                <button onClick={() => setView('main')} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', marginBottom: '18px', padding: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#111827'} onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}>
+                  <ArrowLeft size={15} /> Back
+                </button>
+
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827', marginBottom: '4px' }}>Create Account</div>
+                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '18px' }}>Join DAGARMY and start your journey.</div>
+
+                {error && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', fontSize: '13px', color: '#dc2626' }}>
+                    <AlertCircle size={15} style={{ marginTop: '1px', flexShrink: 0 }} />{error}
+                  </div>
+                )}
+
+                <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Full Name</label>
+                    <input type="text" value={regName} onChange={e => setRegName(e.target.value)} required autoFocus placeholder="John Doe" style={inputStyle}
+                      onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                      onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Email Address</label>
+                    <input type="email" value={regEmail} onChange={e => setRegEmail(e.target.value)} required placeholder="you@example.com" style={inputStyle}
+                      onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                      onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Password</label>
+                      <div style={{ position: 'relative' }}>
+                        <input type={showRegPwd ? 'text' : 'password'} value={regPassword} onChange={e => setRegPassword(e.target.value)} required placeholder="Min 8 chars"
+                          style={{ ...inputStyle, paddingRight: '36px' }}
+                          onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                          onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                        <button type="button" onClick={() => setShowRegPwd(!showRegPwd)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: 0 }}>
+                          {showRegPwd ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Confirm</label>
+                      <input type="password" value={regConfirm} onChange={e => setRegConfirm(e.target.value)} required placeholder="Repeat"
+                        style={{ ...inputStyle, borderColor: regConfirm && regConfirm !== regPassword ? '#ef4444' : '#e5e7eb' }}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = regConfirm && regConfirm !== regPassword ? '#ef4444' : '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                    </div>
+                  </div>
+                  {/* Role */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>I am a</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                      {['student', 'trainer'].map(r => (
+                        <button key={r} type="button" onClick={() => setRegRole(r)} style={{
+                          padding: '9px', borderRadius: '10px', border: `2px solid ${regRole === r ? '#6366f1' : '#e5e7eb'}`,
+                          background: regRole === r ? '#eef2ff' : '#fff', color: regRole === r ? '#4f46e5' : '#374151',
+                          fontSize: '13px', fontWeight: 600, textTransform: 'capitalize', cursor: 'pointer', transition: 'all 0.15s',
+                        }}>
+                          {r}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Referral */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                      Referral Code <span style={{ color: '#9ca3af', fontWeight: 400 }}>(optional)</span>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <input type="text" value={referralCode} onChange={e => setReferralCode(e.target.value.toUpperCase())} maxLength={12} placeholder="e.g. DAG1234ABCD"
+                        style={{ ...inputStyle, borderColor: refValid === true ? '#22c55e' : refValid === false ? '#ef4444' : '#e5e7eb', fontFamily: 'monospace', letterSpacing: '0.05em', paddingRight: referralCode ? '36px' : '14px' }}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = refValid === true ? '#22c55e' : refValid === false ? '#ef4444' : '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                      {refValid === true && <Check size={14} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#22c55e' }} />}
+                      {refValid === false && <AlertCircle size={14} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#ef4444' }} />}
+                    </div>
+                  </div>
+
+                  <GradientBtn type="submit" disabled={loading}>
+                    {loading ? <><Loader2 size={15} className="animate-spin" /> Creating...</> : 'Create Account'}
+                  </GradientBtn>
+                </form>
+
+                <p style={{ marginTop: '14px', fontSize: '13px', textAlign: 'center', color: '#6b7280' }}>
+                  Already have an account?{' '}
+                  <button onClick={() => setView('signin')} style={{ color: '#6366f1', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Sign in</button>
+                </p>
+              </motion.div>
+            )}
+
+            {/* ══ FORGOT VIEW ══ */}
+            {view === 'forgot' && (
+              <motion.div key="forgot" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.18 }}>
+                <button onClick={() => setView('signin')} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', marginBottom: '18px', padding: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#111827'} onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}>
+                  <ArrowLeft size={15} /> Back
+                </button>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827', marginBottom: '4px' }}>Reset Password</div>
+                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '20px' }}>Enter your email and we'll send a reset link.</div>
+                {error && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', fontSize: '13px', color: '#dc2626' }}>
+                    <AlertCircle size={15} style={{ marginTop: '1px', flexShrink: 0 }} />{error}
+                  </div>
+                )}
+                <form onSubmit={handleForgot} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Email Address</label>
+                    <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} required autoFocus placeholder="you@example.com" style={inputStyle}
+                      onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                      onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                  </div>
+                  <GradientBtn type="submit" disabled={loading}>
+                    {loading ? <><Loader2 size={15} className="animate-spin" /> Sending...</> : 'Send Reset Link'}
+                  </GradientBtn>
+                </form>
+              </motion.div>
+            )}
+
+            {/* ══ FORGOT SENT ══ */}
+            {view === 'forgot_sent' && (
+              <motion.div key="forgot_sent" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.22 }} style={{ textAlign: 'center', padding: '16px 0' }}>
+                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                  <Check size={28} color="#16a34a" />
+                </div>
+                <div style={{ fontSize: '17px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>Check your inbox</div>
+                <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '24px' }}>
+                  If <strong style={{ color: '#111827' }}>{forgotEmail}</strong> is registered, a reset link is on its way.
+                </p>
+                <button onClick={() => { setView('signin'); setForgotEmail(''); }} style={{ fontSize: '13px', fontWeight: 600, color: '#6366f1', background: 'none', border: 'none', cursor: 'pointer' }}>
+                  ← Back to Sign In
+                </button>
+              </motion.div>
+            )}
+
+          </AnimatePresence>
         </div>
-      )}
-
-      {/* Profile Completion Modal */}
-      {showProfileCompletion && (
-        <ProfileCompletion
-          onComplete={handleProfileComplete}
-          onClose={handleClose}
-          userAddress={storedWalletAddress || address}
-          socialEmail={socialEmail}
-        />
-      )}
-
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translate(-50%, -48%);
-          }
-          to {
-            opacity: 1;
-            transform: translate(-50%, -50%);
-          }
-        }
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
-    </>
+      </motion.div>
+    </div>
   );
 }

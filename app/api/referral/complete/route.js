@@ -4,12 +4,12 @@ import { notifyReferralCompleted } from '@/services/dagchainWebhook';
 
 /**
  * POST /api/referral/complete
- * Award referral join points to the upline when a new user signs up via referral.
- * 
- * Scenarios handled:
- *   Scenario 1: Upline is DAG SOLDIER -> base join bonus (soldier_refers_soldier_join)
- *   Scenario 3: Upline is DAG LIEUTENANT -> base join bonus + 20% LT bonus (bifurcated)
- * 
+ * Award referral JOIN points to the upline when a new user signs up via referral.
+ *
+ * New Tier-based rules (rank system removed):
+ *   Referrer = DAG SOLDIER  → +500 pts  (soldier_refers_join)
+ *   Referrer = DAG LIEUTENANT → +1000 pts (lieutenant_refers_join)
+ *
  * Body: { referredUserId }
  */
 export async function POST(request) {
@@ -38,19 +38,19 @@ export async function POST(request) {
       );
     }
 
-    // Skip if already awarded join points
+    // Idempotency guard — skip if already awarded
     if (referral.points_earned_on_join > 0) {
       return NextResponse.json({
         success: true,
         message: 'Join points already awarded',
-        alreadyAwarded: true
+        alreadyAwarded: true,
       });
     }
 
-    // Get referrer's tier, rank and email
+    // Get referrer's tier
     const { data: referrer, error: referrerError } = await supabase
       .from('users')
-      .select('id, tier, current_rank, email')
+      .select('id, tier, email')
       .eq('id', referral.referrer_id)
       .single();
 
@@ -61,92 +61,60 @@ export async function POST(request) {
       );
     }
 
-    // Fetch config values (include rank upgrade bonus keys)
-    const rankBonusKeys = [
-      'rank_upgrade_bonus_initiator','rank_upgrade_bonus_vanguard','rank_upgrade_bonus_guardian',
-      'rank_upgrade_bonus_striker','rank_upgrade_bonus_invoker','rank_upgrade_bonus_commander',
-      'rank_upgrade_bonus_champion','rank_upgrade_bonus_conqueror','rank_upgrade_bonus_paragon',
-      'rank_upgrade_bonus_mythic'
-    ];
+    // Fetch tier-based config values
     const { data: configs } = await supabase
       .from('rewards_config')
       .select('config_key, config_value')
-      .in('config_key', ['soldier_refers_soldier_join', 'lieutenant_bonus_rate', ...rankBonusKeys]);
+      .in('config_key', ['soldier_refers_join', 'lieutenant_refers_join']);
 
     const configMap = {};
     configs?.forEach(c => { configMap[c.config_key] = c.config_value; });
 
-    const baseJoinBonus = configMap.soldier_refers_soldier_join || 500;
-    const bonusRate = configMap.lieutenant_bonus_rate || 20;
-    const isLieutenant = referrer.tier === 'DAG_LIEUTENANT';
+    const isLieutenant =
+      referrer.tier === 'DAG_LIEUTENANT' || referrer.tier === 'DAG LIEUTENANT';
 
-    let totalPointsAwarded = 0;
-    const transactions = [];
+    // Determine the single bonus amount based on referrer's tier
+    const bonusAmount = isLieutenant
+      ? (configMap.lieutenant_refers_join ?? 1000)
+      : (configMap.soldier_refers_join ?? 500);
 
-    // Award base join bonus to referrer
-    const { error: baseErr } = await supabase.rpc('add_dag_points', {
+    const tierLabel = isLieutenant ? 'DAG LIEUTENANT' : 'DAG SOLDIER';
+
+    // Award join bonus to referrer (single transaction, no splits)
+    const { error: awardErr } = await supabase.rpc('add_dag_points', {
       p_user_id: referrer.id,
-      p_points: baseJoinBonus,
-      p_transaction_type: 'referral_join_base',
-      p_description: `Referral join bonus - Base (${baseJoinBonus} DAG Points)`,
-      p_reference_id: referral.id
+      p_points: bonusAmount,
+      p_transaction_type: 'referral_join',
+      p_description: `Referral join bonus — ${tierLabel} referrer (+${bonusAmount} DAG Points)`,
+      p_reference_id: referral.id,
     });
-    if (baseErr) console.error('Error awarding base join bonus:', baseErr);
-    totalPointsAwarded += baseJoinBonus;
-    transactions.push({ type: 'referral_join_base', amount: baseJoinBonus });
 
-    // If referrer is DAG LIEUTENANT, award 20% bonus as separate transaction
-    if (isLieutenant) {
-      const bonusAmount = Math.round((baseJoinBonus * bonusRate) / 100);
-      const { error: bonusErr } = await supabase.rpc('add_dag_points', {
-        p_user_id: referrer.id,
-        p_points: bonusAmount,
-        p_transaction_type: 'referral_join_lieutenant_bonus',
-        p_description: `Referral join bonus - ${bonusRate}% Lieutenant Bonus on ${baseJoinBonus} (${bonusAmount} DAG Points)`,
-        p_reference_id: referral.id
-      });
-      if (bonusErr) console.error('Error awarding LT join bonus:', bonusErr);
-      totalPointsAwarded += bonusAmount;
-      transactions.push({ type: 'referral_join_lieutenant_bonus', amount: bonusAmount });
+    if (awardErr) {
+      console.error('Error awarding referral join bonus:', awardErr);
+      return NextResponse.json(
+        { error: 'Failed to award referral join bonus', details: awardErr.message },
+        { status: 500 }
+      );
     }
 
-    // If referrer has a rank, award rank bonus on base amount (applies to both SOLDIER and LIEUTENANT)
-    if (referrer.current_rank && referrer.current_rank !== 'None') {
-      const rankKey = 'rank_upgrade_bonus_' + referrer.current_rank.toLowerCase();
-      const rankBonusRate = configMap[rankKey] || 0;
-      if (rankBonusRate > 0) {
-        const rankBonusAmount = Math.round((baseJoinBonus * rankBonusRate) / 100);
-        const { error: rankErr } = await supabase.rpc('add_dag_points', {
-          p_user_id: referrer.id,
-          p_points: rankBonusAmount,
-          p_transaction_type: 'referral_join_rank_bonus',
-          p_description: `Referral join bonus - ${rankBonusRate}% ${referrer.current_rank} Rank Bonus on ${baseJoinBonus} (${rankBonusAmount} DAG Points)`,
-          p_reference_id: referral.id
-        });
-        if (rankErr) console.error('Error awarding rank join bonus:', rankErr);
-        totalPointsAwarded += rankBonusAmount;
-        transactions.push({ type: 'referral_join_rank_bonus', amount: rankBonusAmount, rank: referrer.current_rank, rate: rankBonusRate });
-      }
-    }
-
-    // Update referral record with points earned on join and mark completed
+    // Update referral record
     await supabase
       .from('referrals')
       .update({
         status: 'completed',
-        points_earned_on_join: totalPointsAwarded,
-        total_points_earned: totalPointsAwarded,
-        completed_at: new Date().toISOString()
+        points_earned_on_join: bonusAmount,
+        total_points_earned: bonusAmount,
+        completed_at: new Date().toISOString(),
       })
       .eq('id', referral.id);
 
-    // Notify DAGChain — they are the SSO source of truth for referrals (fire-and-forget)
-    // Pass emails so DAGChain can match users (DAGARMY users have no wallet, email is the identifier)
+    // Notify DAGChain (fire-and-forget)
     const { data: referredUser } = await supabase
       .from('users')
       .select('id, email')
       .eq('id', referredUserId)
       .single();
+
     notifyReferralCompleted(
       { id: referral.referrer_id, email: referrer.email },
       { id: referredUserId, email: referredUser?.email || null },
@@ -158,8 +126,7 @@ export async function POST(request) {
       success: true,
       message: 'Referral join points awarded',
       referrerTier: referrer.tier,
-      totalPointsAwarded,
-      transactions
+      bonusAmount,
     });
 
   } catch (error) {

@@ -83,11 +83,12 @@ export async function GET(request) {
 
         const byUser = {};
         (txs || []).forEach(t => {
-          if (!byUser[t.user_id]) byUser[t.user_id] = { net: 0, earned: 0, burned: 0, redeemed: 0 };
+          if (!byUser[t.user_id]) byUser[t.user_id] = { net: 0, earned: 0, redeemed: 0 };
           byUser[t.user_id].net += t.points;
-          if (t.points > 0) byUser[t.user_id].earned += t.points;
-          else if (t.transaction_type === 'rank_burn') byUser[t.user_id].burned += Math.abs(t.points);
-          else byUser[t.user_id].redeemed += Math.abs(t.points);
+          // rank_burn_refund is a balance correction, not a real earn event
+          if (t.points > 0 && t.transaction_type !== 'rank_burn_refund') byUser[t.user_id].earned += t.points;
+          else if (t.points < 0 && t.transaction_type !== 'rank_burn') byUser[t.user_id].redeemed += Math.abs(t.points);
+          // rank_burn transactions are ignored (deprecated, refunded)
         });
         const ids = Object.keys(byUser);
         if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
@@ -132,18 +133,17 @@ export async function GET(request) {
         .in('user_id', (users || []).map(u => u.id));
 
       const earnMap = {};
-      const burnMap = {};
       const redeemMap = {};
       (txAll || []).forEach(t => {
-        if (t.points > 0) earnMap[t.user_id] = (earnMap[t.user_id] || 0) + t.points;
-        else if (t.transaction_type === 'rank_burn') burnMap[t.user_id] = (burnMap[t.user_id] || 0) + Math.abs(t.points);
-        else redeemMap[t.user_id] = (redeemMap[t.user_id] || 0) + Math.abs(t.points);
+        // rank_burn_refund is a balance correction, not a real earn event — exclude from earned
+        if (t.points > 0 && t.transaction_type !== 'rank_burn_refund') earnMap[t.user_id] = (earnMap[t.user_id] || 0) + t.points;
+        // rank_burn transactions are deprecated/refunded — exclude from redeemed
+        else if (t.points < 0 && t.transaction_type !== 'rank_burn') redeemMap[t.user_id] = (redeemMap[t.user_id] || 0) + Math.abs(t.points);
       });
 
       const rows = (users || []).map(u => ({
         ...u,
         points_earned: earnMap[u.id] || 0,
-        points_burned: burnMap[u.id] || 0,
         points_redeemed: redeemMap[u.id] || 0,
       }));
       const sorted = [...rows].sort((a, b) => {
@@ -195,35 +195,33 @@ export async function GET(request) {
         return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
       }
 
-      // All-time: join referral_stats
-      const { data: stats, error: sErr } = await supabase
-        .from('referral_stats')
-        .select('user_id, total_referrals, successful_referrals, total_points_earned')
-        .order('total_referrals', { ascending })
-        .limit(2000);
-      if (sErr) throw sErr;
+      // All-time: count directly from referrals table (same source as time-scoped & Hall of Fame)
+      // Avoids stale referral_stats cache producing different numbers
+      const { data: allRefs, error: allRefErr } = await supabase
+        .from('referrals')
+        .select('referrer_id, status');
+      if (allRefErr) throw allRefErr;
 
-      const ids = (stats || []).map(s => s.user_id);
-      if (!ids.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
+      const byUserAll = {};
+      (allRefs || []).forEach(r => {
+        if (!byUserAll[r.referrer_id]) byUserAll[r.referrer_id] = { total: 0, successful: 0 };
+        byUserAll[r.referrer_id].total++;
+        if (r.status === 'completed') byUserAll[r.referrer_id].successful++;
+      });
+      const allIds = Object.keys(byUserAll);
+      if (!allIds.length) return NextResponse.json({ leaderboard: [], currentUserRank: null });
 
-      const { data: users, error: uErr } = await supabase
+      const { data: allUsers, error: allUErr } = await supabase
         .from('users').select('id,full_name,email,avatar_url,tier,current_rank')
-        .in('id', ids).eq('role', 'student');
-      if (uErr) throw uErr;
+        .in('id', allIds).eq('role', 'student');
+      if (allUErr) throw allUErr;
 
-      const userMap = Object.fromEntries((users || []).map(u => [u.id, u]));
-      const rows = (stats || [])
-        .filter(s => userMap[s.user_id])
-        .map(s => ({
-          ...userMap[s.user_id],
-          referral_count: s.total_referrals || 0,
-          successful_referrals: s.successful_referrals || 0,
-          referral_points: s.total_points_earned || 0,
-        }));
-      const leaderboard = fmt(rows, 'referral_count', u => ({
-        successful: u.successful_referrals,
-        referral_points: u.referral_points,
+      const allRows = (allUsers || []).map(u => ({
+        ...u,
+        referral_count:       byUserAll[u.id]?.total      || 0,
+        successful_referrals: byUserAll[u.id]?.successful || 0,
       }));
+      const leaderboard = fmt(allRows, 'referral_count', u => ({ successful: u.successful_referrals }));
       return NextResponse.json({ leaderboard, currentUserRank: leaderboard.find(u => u.id === currentUserId)?.rank || null });
     }
 

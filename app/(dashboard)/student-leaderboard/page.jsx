@@ -439,16 +439,16 @@ export default function StudentLeaderboardPage() {
                   const isPoints = activeTab === 'points';
                   const isSales = activeTab === 'sales';
                   const cols = isPoints
-                    ? '48px 7fr 1.5fr 1fr 1fr 1fr 1fr 1fr'
-                    : isSales ? '48px 7fr 1.5fr 1fr 1.5fr 1.5fr' : '48px 7fr 2fr 2fr 2fr';
+                    ? '48px 7fr 1.5fr 1fr 1fr 1fr'
+                    : isSales ? '48px 7fr 1.5fr 1.5fr 1.5fr' : '48px 7fr 2fr 2fr';
                   const headers = isPoints
-                    ? ['#', 'MEMBER', 'TIER', 'DAG RANK', 'EARNED', 'BURNED', 'REDEEMED', 'NET POINTS']
-                    : isSales ? ['#', 'MEMBER', 'TIER', 'DAG RANK', 'USD EARNED', 'USDT EARNED']
-                    : ['#', 'MEMBER', 'TIER', 'DAG RANK', tab.colLabel];
+                    ? ['#', 'MEMBER', 'TIER', 'EARNED', 'REDEEMED', 'NET POINTS']
+                    : isSales ? ['#', 'MEMBER', 'TIER', 'USD EARNED', 'USDT EARNED']
+                    : ['#', 'MEMBER', 'TIER', tab.colLabel];
                   return (
                     <div style={{ display: 'grid', gridTemplateColumns: cols, padding: '11px 16px', borderBottom: `1px solid ${nm.border}` }}>
                       {headers.map((h, i) => (
-                        <div key={h} style={{ fontSize: '10px', fontWeight: '700', color: nm.textDark, textTransform: 'uppercase', letterSpacing: '0.7px', textAlign: i === 0 ? 'center' : i >= 4 ? 'right' : 'left', paddingLeft: i === 1 ? '16px' : (i === 2 || i === 3) ? '44px' : '0' }}>{h}</div>
+                        <div key={h} style={{ fontSize: '10px', fontWeight: '700', color: nm.textDark, textTransform: 'uppercase', letterSpacing: '0.7px', textAlign: i === 0 ? 'center' : i >= 3 ? 'right' : 'left', paddingLeft: i === 1 ? '16px' : i === 2 ? '44px' : '0' }}>{h}</div>
                       ))}
                     </div>
                   );
@@ -459,8 +459,8 @@ export default function StudentLeaderboardPage() {
                   const isPoints = activeTab === 'points';
                   const isSales = activeTab === 'sales';
                   const cols = isPoints
-                    ? '48px 7fr 1.5fr 1fr 1fr 1fr 1fr 1fr'
-                    : isSales ? '48px 7fr 1.5fr 1fr 1.5fr 1.5fr' : '48px 7fr 2fr 2fr 2fr';
+                    ? '48px 7fr 1.5fr 1fr 1fr 1fr'
+                    : isSales ? '48px 7fr 1.5fr 1.5fr 1.5fr' : '48px 7fr 2fr 2fr';
                   const isTop3 = u.rank <= 3;
                   const isMe = u.isCurrentUser;
                   const rc = RANK_COLORS[u.current_rank] || '#94a3b8';
@@ -524,24 +524,7 @@ export default function StudentLeaderboardPage() {
                         </span>
                       </div>
 
-                      {/* DAG Rank */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <img
-                            src={`/images/badges/dag-${(u.current_rank || 'STARTER').toLowerCase()}.svg`}
-                            alt={u.current_rank || 'STARTER'}
-                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
-                            onError={e => { e.currentTarget.parentElement.style.display = 'none'; }}
-                          />
-                        </div>
-                        <span style={{
-                          display: 'inline-flex', alignItems: 'center',
-                          padding: '4px 9px', borderRadius: '8px', fontSize: '11px', fontWeight: '700',
-                          letterSpacing: '0.3px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary, whiteSpace: 'nowrap',
-                        }}>
-                          {u.current_rank || 'STARTER'}
-                        </span>
-                      </div>
+
 
                       {/* Value — referral tab */}
                       {!isPoints && !isSales && (
@@ -567,16 +550,12 @@ export default function StudentLeaderboardPage() {
                         </div>
                       )}
 
-                      {/* Points: Earned / Burned / Redeemed / Net */}
+                      {/* Points: Earned / Redeemed / Net */}
                       {isPoints && (
                         <>
                           <div style={{ textAlign: 'right' }}>
                             <div style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary }}>{(u.points_earned || 0).toLocaleString()}</div>
                             <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>earned</div>
-                          </div>
-                          <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary }}>{(u.points_burned || 0).toLocaleString()}</div>
-                            <div style={{ fontSize: '11px', color: nm.textDark, fontWeight: '600', marginTop: '2px' }}>burned</div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
                             <div style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary }}>{(u.points_redeemed || 0).toLocaleString()}</div>

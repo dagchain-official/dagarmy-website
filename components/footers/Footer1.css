@@ -8,13 +8,13 @@
 /* Mobile - Below 768px */
 @media (max-width: 767px) {
   /* Main footer container */
-  :global(footer) > div {
+  footer > div {
     padding: 40px 16px 32px 16px !important;
     max-width: 100% !important;
   }
 
   /* Footer grid - logo full width, then 3 columns for links */
-  :global(footer) > div > div:first-child {
+  footer > div > div:first-child {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 32px !important;
@@ -22,13 +22,13 @@
   }
 
   /* Logo section - full width */
-  :global(footer) > div > div:first-child > div:first-child {
+  footer > div > div:first-child > div:first-child {
     width: 100% !important;
     grid-column: 1 / -1 !important;
   }
 
   /* Create 3-column grid for Company, Advance, Legal */
-  :global(footer) > div > div:first-child {
+  footer > div > div:first-child {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 20px !important;
@@ -36,107 +36,107 @@
   }
 
   /* Logo section spans all 3 columns */
-  :global(footer) > div > div:first-child > div:first-child {
+  footer > div > div:first-child > div:first-child {
     grid-column: 1 / -1 !important;
     margin-bottom: 12px !important;
   }
 
   /* Logo and brand name */
-  :global(footer) > div > div:first-child > div:first-child > a > div {
+  footer > div > div:first-child > div:first-child > a > div {
     gap: 10px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child > a > div img {
+  footer > div > div:first-child > div:first-child > a > div img {
     width: 40px !important;
     height: 40px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child > a > div span {
+  footer > div > div:first-child > div:first-child > a > div span {
     font-size: 18px !important;
   }
 
   /* Contact info - phone, address, email */
-  :global(footer) > div > div:first-child > div:first-child p,
-  :global(footer) > div > div:first-child > div:first-child a {
+  footer > div > div:first-child > div:first-child p,
+  footer > div > div:first-child > div:first-child a {
     font-size: 13px !important;
     line-height: 1.6 !important;
   }
 
   /* Link columns - Company, Advance, Legal in 3-column grid */
-  :global(footer) > div > div:first-child > div:not(:first-child) {
+  footer > div > div:first-child > div:not(:first-child) {
     width: 100% !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) h5 {
+  footer > div > div:first-child > div:not(:first-child) h5 {
     font-size: 13px !important;
     margin-bottom: 12px !important;
     font-weight: 700 !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) ul li {
+  footer > div > div:first-child > div:not(:first-child) ul li {
     margin-bottom: 8px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a {
     font-size: 11px !important;
     line-height: 1.5 !important;
   }
 
   /* Bottom section - social icons and newsletter */
-  :global(footer) > div > div:last-child {
+  footer > div > div:last-child {
     flex-direction: column !important;
     gap: 24px !important;
     align-items: flex-start !important;
   }
 
   /* Social icons */
-  :global(footer) > div > div:last-child > div:first-child {
+  footer > div > div:last-child > div:first-child {
     width: 100% !important;
     justify-content: flex-start !important;
     flex-wrap: wrap !important;
     gap: 12px !important;
   }
 
-  :global(footer) > div > div:last-child > div:first-child a {
+  footer > div > div:last-child > div:first-child a {
     width: 36px !important;
     height: 36px !important;
   }
 
-  :global(footer) > div > div:last-child > div:first-child a svg {
+  footer > div > div:last-child > div:first-child a svg {
     width: 16px !important;
     height: 16px !important;
   }
 
   /* Newsletter form */
-  :global(footer) > div > div:last-child > div:last-child {
+  footer > div > div:last-child > div:last-child {
     width: 100% !important;
     max-width: 100% !important;
   }
 
-  :global(footer) > div > div:last-child > div:last-child form {
+  footer > div > div:last-child > div:last-child form {
     flex-direction: column !important;
     gap: 12px !important;
   }
 
-  :global(footer) > div > div:last-child > div:last-child form input {
+  footer > div > div:last-child > div:last-child form input {
     width: 100% !important;
     padding: 12px 16px !important;
     font-size: 14px !important;
   }
 
-  :global(footer) > div > div:last-child > div:last-child form button {
+  footer > div > div:last-child > div:last-child form button {
     width: 100% !important;
     padding: 12px 20px !important;
     font-size: 14px !important;
   }
 
   /* Backdrop DAGARMY text */
-  :global(footer) + div {
+  footer + div {
     padding: 32px 0 !important;
     overflow: visible !important;
   }
 
-  :global(footer) + div > div {
+  footer + div > div {
     font-size: clamp(60px, 20vw, 120px) !important;
     white-space: nowrap !important;
     overflow: visible !important;
@@ -145,101 +145,101 @@
 
 /* Small phones - 430px */
 @media (max-width: 430px) {
-  :global(footer) > div {
+  footer > div {
     padding: 32px 14px 28px 14px !important;
   }
 
-  :global(footer) > div > div:first-child {
+  footer > div > div:first-child {
     gap: 16px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child > a > div img {
+  footer > div > div:first-child > div:first-child > a > div img {
     width: 36px !important;
     height: 36px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child > a > div span {
+  footer > div > div:first-child > div:first-child > a > div span {
     font-size: 17px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child p,
-  :global(footer) > div > div:first-child > div:first-child a {
+  footer > div > div:first-child > div:first-child p,
+  footer > div > div:first-child > div:first-child a {
     font-size: 12px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) h5 {
+  footer > div > div:first-child > div:not(:first-child) h5 {
     font-size: 12px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a {
     font-size: 10px !important;
   }
 
-  :global(footer) + div > div {
+  footer + div > div {
     font-size: clamp(50px, 18vw, 100px) !important;
   }
 }
 
 /* Extra small devices - 390px */
 @media (max-width: 390px) {
-  :global(footer) > div {
+  footer > div {
     padding: 28px 12px 24px 12px !important;
   }
 
-  :global(footer) > div > div:first-child {
+  footer > div > div:first-child {
     gap: 14px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) h5 {
+  footer > div > div:first-child > div:not(:first-child) h5 {
     font-size: 11px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a {
     font-size: 9px !important;
   }
 
-  :global(footer) + div > div {
+  footer + div > div {
     font-size: clamp(45px, 16vw, 90px) !important;
   }
 }
 
 /* Smallest devices - 360px */
 @media (max-width: 360px) {
-  :global(footer) > div {
+  footer > div {
     padding: 24px 10px 20px 10px !important;
   }
 
-  :global(footer) > div > div:first-child {
+  footer > div > div:first-child {
     gap: 12px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child > a > div img {
+  footer > div > div:first-child > div:first-child > a > div img {
     width: 32px !important;
     height: 32px !important;
   }
 
-  :global(footer) > div > div:first-child > div:first-child > a > div span {
+  footer > div > div:first-child > div:first-child > a > div span {
     font-size: 16px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) h5 {
+  footer > div > div:first-child > div:not(:first-child) h5 {
     font-size: 10px !important;
     margin-bottom: 10px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) ul li {
+  footer > div > div:first-child > div:not(:first-child) ul li {
     margin-bottom: 6px !important;
   }
 
-  :global(footer) > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a {
     font-size: 8px !important;
   }
 
-  :global(footer) + div {
+  footer + div {
     padding: 24px 0 !important;
   }
 
-  :global(footer) + div > div {
+  footer + div > div {
     font-size: clamp(40px, 15vw, 80px) !important;
   }
 }

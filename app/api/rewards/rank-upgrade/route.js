@@ -1,145 +1,16 @@
-import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { sendEmail } from '@/lib/email/smtp-client';
-import { rankAchievementEmailTemplate } from '@/lib/email-templates';
 
 /**
  * POST /api/rewards/rank-upgrade
- * Burns DAG Points to upgrade the user's rank to the next level.
- * 
- * Rank progression is sequential:
- *   None -> INITIATOR -> VANGUARD -> GUARDIAN -> STRIKER -> INVOKER ->
- *   COMMANDER -> CHAMPION -> CONQUEROR -> PARAGON -> MYTHIC
- * 
- * Each rank requires a fresh burn of DAG Points (not cumulative).
- * Body: { user_email }
+ * DEPRECATED — the rank system has been removed as of migration 054.
+ * Returns 410 Gone.
  */
-
-const RANK_ORDER = [
-  'INITIATOR', 'VANGUARD', 'GUARDIAN', 'STRIKER', 'INVOKER',
-  'COMMANDER', 'CHAMPION', 'CONQUEROR', 'PARAGON', 'MYTHIC'
-];
-
-export async function POST(request) {
-  try {
-    const supabase = supabaseAdmin;
-    const { user_email, wallet_address } = await request.json();
-
-    if (!user_email && !wallet_address) {
-      return NextResponse.json({ error: 'user_email or wallet_address is required' }, { status: 400 });
-    }
-
-    // Get user by email or wallet
-    let userQuery = supabase
-      .from('users')
-      .select('id, email, full_name, username, tier, current_rank, total_points_earned, total_points_burned');
-    if (user_email) {
-      userQuery = userQuery.eq('email', user_email);
-    } else {
-      userQuery = userQuery.eq('wallet_address', wallet_address.toLowerCase());
-    }
-    const { data: user, error: userError } = await userQuery.single();
-
-    if (userError || !user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    // Determine next rank
-    const currentRank = user.current_rank || 'None';
-    const currentRankIndex = currentRank === 'None' ? -1 : RANK_ORDER.indexOf(currentRank);
-
-    if (currentRankIndex === -1 && currentRank !== 'None') {
-      return NextResponse.json({ error: 'Invalid current rank' }, { status: 400 });
-    }
-
-    const nextRankIndex = currentRankIndex + 1;
-    if (nextRankIndex >= RANK_ORDER.length) {
-      return NextResponse.json({ error: 'Already at maximum rank (MYTHIC)' }, { status: 400 });
-    }
-
-    const nextRank = RANK_ORDER[nextRankIndex];
-    const burnConfigKey = 'rank_burn_' + nextRank.toLowerCase();
-
-    // Fetch burn requirement from config
-    const { data: burnConfig } = await supabase
-      .from('rewards_config')
-      .select('config_value')
-      .eq('config_key', burnConfigKey)
-      .single();
-
-    if (!burnConfig) {
-      return NextResponse.json({ error: `Burn config not found for ${nextRank}` }, { status: 500 });
-    }
-
-    const burnCost = burnConfig.config_value;
-    const availablePoints = (user.total_points_earned || 0) - (user.total_points_burned || 0);
-
-    if (availablePoints < burnCost) {
-      return NextResponse.json({
-        error: 'Insufficient DAG Points',
-        required: burnCost,
-        available: availablePoints,
-        deficit: burnCost - availablePoints
-      }, { status: 400 });
-    }
-
-    // Burn points via add_dag_points with negative amount
-    const { error: burnError } = await supabase.rpc('add_dag_points', {
-      p_user_id: user.id,
-      p_points: -burnCost,
-      p_transaction_type: 'rank_burn',
-      p_description: `Burned ${burnCost} DAG Points to achieve ${nextRank} rank`,
-      p_reference_id: null
-    });
-
-    if (burnError) {
-      console.error('Error burning points for rank upgrade:', burnError);
-      return NextResponse.json({ error: 'Failed to burn points', details: burnError.message }, { status: 500 });
-    }
-
-    // Update user's current_rank
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({ current_rank: nextRank })
-      .eq('id', user.id);
-
-    if (updateError) {
-      console.error('Error updating user rank:', updateError);
-      return NextResponse.json({ error: 'Points burned but rank update failed', details: updateError.message }, { status: 500 });
-    }
-
-    const newAvailable = availablePoints - burnCost;
-
-    // Send rank achievement email (fire-and-forget)
-    if (user?.email) {
-      const displayName = user.full_name || user.username || 'Soldier';
-      sendEmail('support@dagchain.network', {
-        to: user.email,
-        subject: `You achieved ${nextRank} rank in DAG Army!`,
-        html: rankAchievementEmailTemplate({
-          userName: displayName,
-          newRank: nextRank,
-          previousRank: currentRank,
-          pointsBurned: burnCost,
-          availablePoints: newAvailable,
-        }),
-      }).catch(err => console.error('Rank achievement email failed (non-blocking):', err));
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: `Upgraded to ${nextRank}!`,
-      previousRank: currentRank,
-      newRank: nextRank,
-      pointsBurned: burnCost,
-      availablePoints: newAvailable
-    });
-
-  } catch (error) {
-    console.error('Exception in rank-upgrade API:', error);
-    return NextResponse.json(
-      { error: 'Internal server error', details: error.message },
-      { status: 500 }
-    );
-  }
+export async function POST() {
+  return NextResponse.json(
+    {
+      error: 'The rank system has been removed. This endpoint is no longer available.',
+      deprecated: true,
+    },
+    { status: 410 }
+  );
 }
