@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get('token') || '';
   const next  = searchParams.get('next') || '/student-dashboard';
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network';
 
   const html = `<!DOCTYPE html>
 <html>

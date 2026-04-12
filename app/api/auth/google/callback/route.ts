@@ -21,7 +21,7 @@ export async function GET(req: Request) {
   const code  = searchParams.get('code');
   const state = searchParams.get('state');
   const error = searchParams.get('error');
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network';
 
   if (error || !code) {
     return NextResponse.redirect(`${appUrl}/?google_error=cancelled`);

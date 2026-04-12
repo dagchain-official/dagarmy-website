@@ -8,7 +8,7 @@ const supabase = createClient(
 );
 
 const SMTP_FROM = process.env.SMTP_FROM_NAME || 'DAGARMY';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network';
 
 export async function POST(req: Request) {
   try {

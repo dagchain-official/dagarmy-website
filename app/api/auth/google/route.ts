@@ -8,7 +8,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ||
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const next = searchParams.get('redirect') || '/student-dashboard';
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network';
 
   const state = Buffer.from(JSON.stringify({ next, ts: Date.now() })).toString('base64url');
 

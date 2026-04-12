@@ -88,7 +88,7 @@ export async function POST(request) {
     }
 
     // 6. Award join points to upline (fire-and-forget)
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network';
     fetch(`${baseUrl}/api/referral/complete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
