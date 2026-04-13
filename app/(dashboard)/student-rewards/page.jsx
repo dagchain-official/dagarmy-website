@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import DashboardNav2 from "@/components/dashboard/DashboardNav2";
+import { Award, DollarSign, Crown, Flame, Check, ArrowUp } from "lucide-react";
 
 export default function StudentRewardsPage() {
   const [user, setUser] = useState(null);
