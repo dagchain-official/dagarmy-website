@@ -8,17 +8,12 @@ import crypto from 'crypto';
  *
  * Body: { user_email, destination: 'daggpt' | 'dagchain', amount }
  *
- * Flow:
- *  1. Validate user has sufficient dgcc_balance
- *  2. Deduct from users.dgcc_balance
- *  3. Record in dgcc_transfers
- *  4. Fire webhook to destination platform
- *  5. Return new balance + transfer_id
+ * Since DAGARMY and DAGGPT share the SAME Supabase project, the DAGGPT
+ * transfer is a direct in-DB write to user_credits — no webhook needed.
+ * DAGChain is a separate system and still uses a signed webhook.
  */
 
-const DAGGPT_API_URL   = process.env.DAGGPT_API_URL || 'https://api.daggpt.network';
 const DAGCHAIN_WEBHOOK = process.env.DAGCHAIN_WEBHOOK_URL || 'https://api.dagchain.network/api/v1/dag-army/webhook';
-const SHARED_SECRET    = process.env.SHARED_SSO_SECRET || '';
 const DAGCHAIN_SECRET  = process.env.DAGCHAIN_WEBHOOK_SECRET || '';
 
 function signPayload(payload, secret) {
@@ -77,11 +72,11 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Deduct from dgcc_balance
-    const newBalance = currentBalance - transferAmount;
+    // Deduct from users.dgcc_balance
+    const newDgccBalance = currentBalance - transferAmount;
     const { error: updateError } = await supabase
       .from('users')
-      .update({ dgcc_balance: newBalance })
+      .update({ dgcc_balance: newDgccBalance })
       .eq('id', user.id);
 
     if (updateError) {
@@ -92,84 +87,113 @@ export async function POST(request) {
       );
     }
 
-    // Build webhook payload
-    const timestamp = new Date().toISOString();
-    const webhookPayload = {
-      event:   'dgcc_transfer',
-      data: {
-        email:       user_email,
-        full_name:   user.full_name || '',
-        amount:      transferAmount,
-        destination,
-        timestamp,
-      },
-    };
+    // ── DAGGPT: Direct Supabase write (same DB — no webhook needed) ──────────
+    let credited = false;
+    let transferId = null;
 
-    // Record transfer in DB (initially webhook_status = 'pending')
-    const { data: transferRecord } = await supabase
-      .from('dgcc_transfers')
-      .insert({
-        user_id:         user.id,
-        destination,
-        amount:          transferAmount,
-        status:          'completed',
-        webhook_status:  'pending',
-        webhook_payload: webhookPayload,
-      })
-      .select('id')
-      .single();
+    if (destination === 'daggpt') {
+      // Find or create user_credits row for this user
+      const { data: creditRows } = await supabase
+        .from('user_credits')
+        .select('*')
+        .eq('user_id', user.id);
 
-    const transferId = transferRecord?.id;
+      const current = creditRows?.[0];
+      const newCreditBalance = (current?.balance || 0) + transferAmount;
 
-    // Fire webhook to destination
-    let webhookOk = false;
-    try {
-      if (destination === 'daggpt') {
-        const sig = signPayload(webhookPayload, SHARED_SECRET);
-        const resp = await fetch(`${DAGGPT_API_URL}/api/webhooks/dagarmy`, {
-          method:  'POST',
-          headers: {
-            'Content-Type':        'application/json',
-            'X-DAGARMY-Signature': sig,
-            'X-DAGARMY-Timestamp': timestamp,
-          },
-          body: JSON.stringify(webhookPayload),
-        });
-        webhookOk = resp.ok;
+      if (current) {
+        await supabase
+          .from('user_credits')
+          .update({
+            balance:         newCreditBalance,
+            total_purchased: (current.total_purchased || 0) + transferAmount,
+            updated_at:      new Date().toISOString(),
+          })
+          .eq('user_id', user.id);
       } else {
-        // DAGChain
+        await supabase
+          .from('user_credits')
+          .insert({
+            user_id:         user.id,
+            balance:         transferAmount,
+            total_purchased: transferAmount,
+            total_spent:     0,
+            total_bonus:     0,
+          });
+      }
+
+      // Record credit transaction
+      await supabase.from('credit_transactions').insert({
+        user_id:             user.id,
+        type:                'dgcc_transfer',
+        amount:              transferAmount,
+        balance_after:       newCreditBalance,
+        description:         `DGCC transfer from DAGARMY — ${transferAmount} DGCC Coin${transferAmount > 1 ? 's' : ''}`,
+        charged_usd:         0,
+        aggregator_cost_usd: 0,
+        profit_usd:          0,
+      });
+
+      credited = true;
+      console.log(`✅ [dgcc-transfer] Credited ${transferAmount} DGCC to user ${user_email} in DAGGPT (balance: ${newCreditBalance})`);
+    }
+
+    // ── DAGChain: Signed webhook to external system ──────────────────────────
+    let webhookOk = destination === 'daggpt'; // already handled above
+    const timestamp = new Date().toISOString();
+
+    if (destination === 'dagchain') {
+      const webhookPayload = {
+        event: 'dgcc_transfer',
+        data: {
+          email:       user_email,
+          full_name:   user.full_name || '',
+          amount:      transferAmount,
+          destination,
+          timestamp,
+        },
+      };
+      try {
         const sig = signPayload(webhookPayload, DAGCHAIN_SECRET);
         const resp = await fetch(DAGCHAIN_WEBHOOK, {
           method:  'POST',
           headers: {
-            'Content-Type':          'application/json',
-            'X-DAGArmy-Secret':      DAGCHAIN_SECRET,
-            'X-DAGArmy-Signature':   sig,
-            'X-DAGArmy-Timestamp':   timestamp,
+            'Content-Type':        'application/json',
+            'X-DAGArmy-Secret':    DAGCHAIN_SECRET,
+            'X-DAGArmy-Signature': sig,
+            'X-DAGArmy-Timestamp': timestamp,
           },
           body: JSON.stringify(webhookPayload),
         });
         webhookOk = resp.ok;
+        console.log(`[dgcc-transfer] DAGChain webhook ${webhookOk ? 'delivered' : 'failed'}`);
+      } catch (webhookErr) {
+        console.error(`[dgcc-transfer] DAGChain webhook error:`, webhookErr.message);
       }
-    } catch (webhookErr) {
-      console.error(`[dgcc-transfer] Webhook to ${destination} failed:`, webhookErr.message);
     }
 
-    // Update webhook delivery status
-    if (transferId) {
-      await supabase
-        .from('dgcc_transfers')
-        .update({ webhook_status: webhookOk ? 'delivered' : 'failed' })
-        .eq('id', transferId);
-    }
+    // Record transfer in dgcc_transfers table
+    const { data: transferRecord } = await supabase
+      .from('dgcc_transfers')
+      .insert({
+        user_id:        user.id,
+        destination,
+        amount:         transferAmount,
+        status:         'completed',
+        webhook_status: destination === 'daggpt' ? 'not_required' : (webhookOk ? 'delivered' : 'failed'),
+      })
+      .select('id')
+      .single();
+
+    transferId = transferRecord?.id;
 
     return NextResponse.json({
-      success:          true,
-      transfer_id:      transferId,
+      success:            true,
+      transfer_id:        transferId,
       destination,
       amount_transferred: transferAmount,
-      new_dgcc_balance: newBalance,
-      webhook_delivered: webhookOk,
+      new_dgcc_balance:   newDgccBalance,
+      credited,
       message: `${transferAmount} DGCC Coin${transferAmount > 1 ? 's' : ''} successfully transferred to ${destination === 'daggpt' ? 'DAGGPT' : 'DAGChain'}`,
     });
 
