@@ -63,7 +63,7 @@ export async function POST(request) {
     // Fetch user with current balances
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('id, total_points_earned, total_points_burned, dgcc_balance')
+      .select('id, dgcc_balance')
       .eq('email', user_email)
       .single();
 
@@ -71,7 +71,27 @@ export async function POST(request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const availablePoints = (user.total_points_earned || 0) - (user.total_points_burned || 0);
+    // ── Live points calculation from points_transactions ─────────────────────
+    // Mirrors the exact logic in /api/rewards/user so UI and API are in sync.
+    const { data: allTxs } = await supabase
+      .from('points_transactions')
+      .select('points, transaction_type')
+      .eq('user_id', user.id);
+
+    let totalEarned   = 0;
+    let totalBurned   = 0; // rank_burn only
+    let totalRedeemed = 0;
+
+    (allTxs || []).forEach(t => {
+      if (t.points > 0) {
+        totalEarned += t.points;
+      } else {
+        if (t.transaction_type === 'rank_burn') totalBurned   += Math.abs(t.points);
+        else                                     totalRedeemed += Math.abs(t.points);
+      }
+    });
+
+    const availablePoints = Math.max(totalEarned - totalBurned - totalRedeemed, 0);
 
     if (availablePoints < pointsCost) {
       return NextResponse.json({
