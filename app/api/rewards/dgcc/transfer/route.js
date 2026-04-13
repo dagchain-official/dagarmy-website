@@ -122,17 +122,18 @@ export async function POST(request) {
           });
       }
 
-      // Record credit transaction
-      await supabase.from('credit_transactions').insert({
-        user_id:             user.id,
-        type:                'dgcc_transfer',
-        amount:              transferAmount,
-        balance_after:       newCreditBalance,
-        description:         `DGCC transfer from DAGARMY — ${transferAmount} DGCC Coin${transferAmount > 1 ? 's' : ''}`,
-        charged_usd:         0,
-        aggregator_cost_usd: 0,
-        profit_usd:          0,
+      // Record credit transaction (use correct schema columns)
+      const { error: txErr } = await supabase.from('credit_transactions').insert({
+        user_id:         user.id,
+        type:            'dgcc_transfer',
+        amount:          transferAmount,
+        balance_after:   newCreditBalance,
+        description:     `DGCC transfer from DAGARMY — ${transferAmount} DGCC Coin${transferAmount > 1 ? 's' : ''}`,
+        charged_usd:     0,
+        charged_credits: 0,
+        profit_usd:      0,
       });
+      if (txErr) console.error('[dgcc-transfer] credit_transactions insert error:', txErr.message);
 
       credited = true;
       console.log(`✅ [dgcc-transfer] Credited ${transferAmount} DGCC to user ${user_email} in DAGGPT (balance: ${newCreditBalance})`);
