@@ -51,7 +51,7 @@ export default function Dashboard2() {
     const [copySuccess, setCopySuccess] = useState(false);
     const [copyLinkSuccess, setCopyLinkSuccess] = useState(false);
     // Redeem card state
-    const [redeemType, setRedeemType] = useState('dagcoin');
+    const [redeemType, setRedeemType] = useState('dgcc');
     const [redeemAmount, setRedeemAmount] = useState(1);
     const [redeeming, setRedeeming] = useState(false);
     const [redeemMsg, setRedeemMsg] = useState(null);
@@ -1251,15 +1251,15 @@ export default function Dashboard2() {
                             <span style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>{dagPoints.toLocaleString()} <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>pts</span></span>
                         </div>
 
-                        {/* DAGCHAIN Gas Coin info */}
+                        {/* DGCC Coins info */}
                         <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', boxShadow: '4px 4px 10px rgba(0,0,0,0.08), -3px -3px 8px rgba(255,255,255,0.9)' }}>
-                            <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>DAGCHAIN Gas Coins</div>
-                            <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>500 pts = 1 Coin · Native gas on DAGCHAIN</div>
+                            <div style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>DGCC Coins</div>
+                            <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>2500 pts = 1 DGCC Coin · Use in DAGGPT or DAGChain</div>
                         </div>
 
                         {/* Stepper */}
                         {(() => {
-                            const cfg = REDEEM_CONFIG[redeemType];
+                            const cfg = REDEEM_CONFIG[redeemType] || REDEEM_CONFIG.dgcc;
                             const pointsCost = redeemAmount * cfg.ratio;
                             const maxAmount = Math.floor(dagPoints / cfg.ratio);
                             const canRedeem = redeemAmount > 0 && pointsCost <= dagPoints && maxAmount > 0;
