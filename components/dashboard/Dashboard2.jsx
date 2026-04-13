@@ -67,6 +67,7 @@ export default function Dashboard2() {
     const [withdrawing, setWithdrawing] = useState(false);
     const [withdrawMsg, setWithdrawMsg] = useState(null);
     const [dagPoints, setDagPoints] = useState(0);
+    const [dgccBalance, setDgccBalance] = useState(0);
     const [userTier, setUserTier] = useState('DAG_SOLDIER');
     const [currentRank, setCurrentRank] = useState('None');
     const [mounted, setMounted] = useState(false);
@@ -86,6 +87,12 @@ export default function Dashboard2() {
     const [eventCarouselIdx, setEventCarouselIdx] = useState(0);
     const [upgrading, setUpgrading] = useState(false);
     const [upgradeResult, setUpgradeResult] = useState(null);
+    // DGCC Transfer modal
+    const [showTransferModal, setShowTransferModal] = useState(false);
+    const [transferDest, setTransferDest] = useState(null);
+    const [transferAmount, setTransferAmount] = useState(1);
+    const [transferring, setTransferring] = useState(false);
+    const [transferMsg, setTransferMsg] = useState(null);
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -145,6 +152,7 @@ export default function Dashboard2() {
                         setCurrentRank(data.user.current_rank || 'None');
                     }
                     setDagPoints(data.user.dag_points || 0);
+                    setDgccBalance(data.user.dgcc_balance || 0);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -334,11 +342,11 @@ export default function Dashboard2() {
 
     // Redeem DAG Points handler
     const REDEEM_CONFIG = {
-        dagcoin: { ratio: 500, label: 'DAGCHAIN Gas Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb' },
+        dgcc: { ratio: 2500, label: 'DGCC Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb' },
     };
     const handleDashboardRedeem = async () => {
         if (!userData?.email) return;
-        const cfg = REDEEM_CONFIG[redeemType];
+        const cfg = REDEEM_CONFIG[redeemType] || REDEEM_CONFIG.dgcc;
         const pointsCost = redeemAmount * cfg.ratio;
         if (pointsCost > dagPoints) return;
         setRedeeming(true);
@@ -347,12 +355,13 @@ export default function Dashboard2() {
             const res = await fetch('/api/rewards/redeem', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_email: userData.email, redemption_type: redeemType, amount: redeemAmount }),
+                body: JSON.stringify({ user_email: userData.email, redemption_type: 'dgcc', amount: redeemAmount }),
             });
             const data = await res.json();
             if (data.success) {
                 setRedeemMsg({ type: 'success', text: data.message });
                 setDagPoints(data.availablePoints);
+                setDgccBalance(data.dgcc_balance ?? (dgccBalance + redeemAmount));
                 setTimeout(() => { setRedeemMsg(null); setRedeemAmount(1); }, 3000);
             } else {
                 setRedeemMsg({ type: 'error', text: data.error || 'Redemption failed' });
@@ -361,6 +370,34 @@ export default function Dashboard2() {
             setRedeemMsg({ type: 'error', text: 'Network error. Please try again.' });
         } finally {
             setRedeeming(false);
+        }
+    };
+
+    // DGCC Transfer handler
+    const handleDgccTransfer = async () => {
+        if (!userData?.email || !transferDest) return;
+        const amt = Number(transferAmount);
+        if (!Number.isInteger(amt) || amt <= 0 || amt > dgccBalance) return;
+        setTransferring(true);
+        setTransferMsg(null);
+        try {
+            const res = await fetch('/api/rewards/dgcc/transfer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_email: userData.email, destination: transferDest, amount: amt }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setTransferMsg({ type: 'success', text: data.message });
+                setDgccBalance(data.new_dgcc_balance);
+                setTimeout(() => { setShowTransferModal(false); setTransferMsg(null); setTransferAmount(1); setTransferDest(null); }, 3000);
+            } else {
+                setTransferMsg({ type: 'error', text: data.error || 'Transfer failed' });
+            }
+        } catch (err) {
+            setTransferMsg({ type: 'error', text: 'Network error. Please try again.' });
+        } finally {
+            setTransferring(false);
         }
     };
 
@@ -608,6 +645,95 @@ export default function Dashboard2() {
                 );
             })()}
 
+            {/* ─── DGCC Transfer Modal ─── */}
+            {showTransferModal && (
+                <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(4px)' }}
+                    onClick={(e) => { if (e.target === e.currentTarget && !transferring) { setShowTransferModal(false); setTransferMsg(null); setTransferDest(null); } }}>
+                    <div style={{ width: '460px', background: '#f0f2f5', borderRadius: '24px', padding: '36px 32px', boxShadow: '20px 20px 60px rgba(0,0,0,0.25), -8px -8px 24px rgba(255,255,255,0.7)', position: 'relative' }}>
+                        {!transferring && !transferMsg && (
+                            <button onClick={() => { setShowTransferModal(false); setTransferMsg(null); setTransferDest(null); }}
+                                style={{ position: 'absolute', top: '16px', right: '16px', width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: '#e2e8f0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', color: '#64748b' }}>✕</button>
+                        )}
+
+                        {transferMsg?.type === 'success' ? (
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '52px', marginBottom: '12px' }}>🎉</div>
+                                <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', marginBottom: '6px' }}>Transfer Successful!</div>
+                                <div style={{ fontSize: '14px', color: '#10b981', fontWeight: '700', marginBottom: '4px' }}>{transferMsg.text}</div>
+                                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '8px' }}>New balance: <strong>{dgccBalance} DGCC</strong></div>
+                            </div>
+                        ) : transferMsg?.type === 'error' ? (
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '48px', marginBottom: '12px' }}>⚠️</div>
+                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#dc2626', marginBottom: '8px' }}>Transfer Failed</div>
+                                <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px' }}>{transferMsg.text}</div>
+                                <button onClick={() => setTransferMsg(null)} style={{ padding: '10px 24px', borderRadius: '10px', border: 'none', background: '#f1f5f9', cursor: 'pointer', fontWeight: '700', color: '#64748b' }}>Try Again</button>
+                            </div>
+                        ) : (
+                            <>
+                                {/* Header */}
+                                <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+                                    <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg,#f59e0b,#d97706)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="8"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/>
+                                        </svg>
+                                    </div>
+                                    <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.4px' }}>Transfer DGCC Coins</div>
+                                    <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Available: <strong style={{ color: '#92400e' }}>{dgccBalance} DGCC</strong></div>
+                                </div>
+
+                                {/* Destination Picker */}
+                                <div style={{ marginBottom: '24px' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Choose Destination</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                        {[
+                                            { key: 'daggpt', label: 'DAGGPT', icon: '🤖', desc: 'Use for AI generation', accent: '#6366f1' },
+                                            { key: 'dagchain', label: 'DAGChain', icon: '⛓️', desc: 'DAGChain blockchain', accent: '#10b981' },
+                                        ].map(opt => (
+                                            <button key={opt.key} onClick={() => setTransferDest(opt.key)}
+                                                style={{ padding: '16px 12px', borderRadius: '14px', border: `2px solid ${transferDest === opt.key ? opt.accent : '#e2e8f0'}`, background: transferDest === opt.key ? `${opt.accent}10` : '#f0f2f5', cursor: 'pointer', textAlign: 'left', boxShadow: transferDest === opt.key ? `0 0 0 4px ${opt.accent}15` : 'none', transition: 'all 0.2s' }}>
+                                                <div style={{ fontSize: '24px', marginBottom: '6px' }}>{opt.icon}</div>
+                                                <div style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a' }}>{opt.label}</div>
+                                                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{opt.desc}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Amount */}
+                                {transferDest && (
+                                    <div style={{ marginBottom: '24px' }}>
+                                        <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Amount (DGCC Coins)</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <input type="number" min="1" max={dgccBalance} value={transferAmount}
+                                                onChange={e => setTransferAmount(Math.max(1, Math.min(dgccBalance, parseInt(e.target.value) || 1)))}
+                                                style={{ flex: 1, padding: '12px 16px', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '18px', fontWeight: '800', color: '#0f172a', textAlign: 'center', outline: 'none', background: '#fff', boxShadow: 'inset 3px 3px 8px rgba(0,0,0,0.05)' }}
+                                            />
+                                            <button onClick={() => setTransferAmount(dgccBalance)}
+                                                style={{ padding: '12px 16px', borderRadius: '12px', border: 'none', background: '#f0f2f5', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#64748b', boxShadow: '4px 4px 10px rgba(0,0,0,0.1)' }}>MAX</button>
+                                        </div>
+                                        {transferAmount > dgccBalance && (
+                                            <div style={{ fontSize: '11px', color: '#ef4444', fontWeight: '600', marginTop: '6px' }}>Exceeds balance ({dgccBalance} DGCC)</div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Action Buttons */}
+                                <div style={{ display: 'flex', gap: '12px' }}>
+                                    <button onClick={() => { setShowTransferModal(false); setTransferMsg(null); setTransferDest(null); }}
+                                        style={{ flex: 1, padding: '14px', borderRadius: '12px', border: 'none', background: '#e2e8f0', cursor: 'pointer', fontWeight: '700', color: '#64748b', fontSize: '14px' }}>Cancel</button>
+                                    <button onClick={handleDgccTransfer}
+                                        disabled={!transferDest || !transferAmount || Number(transferAmount) > dgccBalance || transferring}
+                                        style={{ flex: 2, padding: '14px', borderRadius: '12px', border: 'none', background: (!transferDest || transferring) ? '#cbd5e1' : 'linear-gradient(135deg,#f59e0b,#d97706)', cursor: (!transferDest || transferring) ? 'not-allowed' : 'pointer', fontWeight: '800', color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: transferDest ? '4px 4px 12px rgba(245,158,11,0.4)' : 'none' }}>
+                                        {transferring ? (<><span style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />Transferring...</>) : `Transfer ${transferAmount} DGCC`}
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {/* ─── Header ─── */}
             <div style={{ marginBottom: '32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
@@ -721,21 +847,28 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 5: DGCC Coins */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
-                    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
-                        <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px', cursor: 'pointer' }}
+                  onClick={() => { setShowTransferModal(true); setTransferDest(null); setTransferAmount(1); setTransferMsg(null); }}
+                >
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(245,158,11,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="12" cy="12" r="8" />
                                 <line x1="12" y1="8" x2="12" y2="16" />
                                 <line x1="8" y1="10" x2="16" y2="10" />
                                 <line x1="8" y1="14" x2="16" y2="14" />
                             </svg>
                         </div>
+                        {dgccBalance > 0 && (
+                            <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '100px', background: '#fef3c7', color: '#d97706', border: '1px solid #fde68a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tap to Transfer</span>
+                        )}
                     </div>
                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ fontSize: '36px', fontWeight: '800', color: '#0f172a', letterSpacing: '-1.5px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>00</div>
+                        <div style={{ fontSize: '36px', fontWeight: '800', color: dgccBalance > 0 ? '#92400e' : '#0f172a', letterSpacing: '-1.5px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                            {dgccBalance > 0 ? dgccBalance.toLocaleString() : '00'}
+                        </div>
                     </div>
-                    <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#6366f1', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(245,158,11,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#f59e0b', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
                         DGCC Coins
                     </span>
                 </NmCard>

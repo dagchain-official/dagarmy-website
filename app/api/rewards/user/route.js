@@ -76,7 +76,7 @@ export async function GET(request) {
 
     const availablePoints = totalPointsEarnedLive - totalPointsBurned - totalPointsRedeemed;
 
-    // ── 6. Spend-based pts rate (for display in UI) ──────────────────────
+    // ── 6. Spend-based pts rate + DGCC ratio (for display in UI) ────────────
     const { data: spendCfg } = await supabase
       .from('rewards_config')
       .select('config_key, config_value')
@@ -88,10 +88,13 @@ export async function GET(request) {
         'l2_commission_pct',
         'l3_commission_pct',
         'task_multiplier_lieutenant',
+        'dgcc_points_ratio',
       ]);
 
     const sc = {};
     (spendCfg || []).forEach(r => { sc[r.config_key] = parseFloat(r.config_value); });
+
+    const dgccRatio = sc.dgcc_points_ratio || 2500;
 
     const spendPtsRate       = isLieutenant ? (sc.spend_pts_per_dollar_lieutenant ?? 50) : (sc.spend_pts_per_dollar_soldier ?? 25);
     const l1CommissionPct    = isLieutenant ? (sc.lieutenant_l1_commission_pct ?? 20) : (sc.soldier_l1_commission_pct ?? 15);
@@ -182,6 +185,8 @@ export async function GET(request) {
       data: {
         // Core
         dagPoints: Math.max(availablePoints, 0),
+        dgccBalance: user.dgcc_balance || 0,
+        dgccRatio,
         tier: user.tier || 'DAG_SOLDIER',
         isLieutenant,
         referralCode: referralCodeData || '',

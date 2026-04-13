@@ -1,15 +1,9 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 
 export default function StudentRewardsPage() {
-  const router = useRouter();
-  useEffect(() => { router.replace('/student-my-team'); }, []);
-  return null;
-}
-
-function _OriginalStudentRewardsPage() {
   const [user, setUser] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
@@ -33,7 +27,7 @@ function _OriginalStudentRewardsPage() {
 
   // Redeem modal
   const [showRedeemModal, setShowRedeemModal] = useState(false);
-  const [redeemType, setRedeemType] = useState('dagcoin');
+  const [redeemType, setRedeemType] = useState('dgcc');
   const [redeemAmount, setRedeemAmount] = useState(1);
   const [redeeming, setRedeeming] = useState(false);
   const [redeemMessage, setRedeemMessage] = useState(null);
@@ -155,7 +149,7 @@ function _OriginalStudentRewardsPage() {
   };
 
   const REDEEM_CONFIG = {
-    dagcoin: { ratio: 500, label: 'DAGCHAIN Gas Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb', border: '#fde68a', desc: 'Native gas coin on the DAGCHAIN blockchain' },
+    dgcc: { ratio: 2500, label: 'DGCC Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb', border: '#fde68a', desc: 'DAGChain Gas Coin — use in DAGGPT or transfer to DAGChain' },
   };
 
   const handleRedeem = async () => {

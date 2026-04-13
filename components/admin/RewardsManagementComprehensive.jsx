@@ -93,6 +93,7 @@ export default function RewardsManagementComprehensive() {
           self_sale_dag_points_per_dollar: 25, referral_sale_dag_points_per_dollar: 25,
           social_task_lt_bonus_rate: 20, social_task_like_share: 10, social_task_comments_watch: 10,
           social_task_create_shorts: 50, social_task_explainer_video: 100, social_task_subscribe: 150,
+          dgcc_points_ratio: 2500,
         };
         Object.keys(configDefaults).forEach(k => { if (obj[k] == null) obj[k] = configDefaults[k]; });
         setConfig(obj);
@@ -161,7 +162,7 @@ export default function RewardsManagementComprehensive() {
       } else if (section === 'sales_dag_points') {
         keys = ['self_sale_dag_points_per_dollar','referral_sale_dag_points_per_dollar','sale_dag_points_lieutenant_bonus'];
       } else if (section === 'system') {
-        keys = ['ranking_system_enabled_for_soldier','max_commission_levels'];
+        keys = ['ranking_system_enabled_for_soldier','max_commission_levels','dgcc_points_ratio'];
       }
       const results = [];
       for (const k of keys) {
@@ -1336,13 +1337,37 @@ export default function RewardsManagementComprehensive() {
             {editingSection === 'system' ? ri('max_commission_levels') : <Val v={config.max_commission_levels || 3} suffix="levels" />}
           </B>
 
-          <B hover={false} style={{ background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+          {/* DGCC Coin Ratio Card */}
+          <B style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid #fde68a', background: 'linear-gradient(135deg, #fffbeb, #fef9c3)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#f59e0b,#d97706)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="8"/><line x1="12" y1="8" x2="12" y2="16"/>
+                  <line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/>
+                </svg>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#92400e', margin: 0 }}>DGCC Coin Exchange Rate</h4>
+                <p style={{ fontSize: '11px', color: '#b45309', margin: '2px 0 0' }}>DAG Points required to redeem 1 DGCC Coin</p>
+              </div>
+            </div>
+            {editingSection === 'system' ? ri('dgcc_points_ratio', '120px') : (
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <Val v={config.dgcc_points_ratio || 2500} suffix="pts = 1 DGCC" size="24px" color="#92400e" />
+              </div>
+            )}
+            <p style={{ fontSize: '11px', color: '#b45309', margin: '12px 0 0', lineHeight: 1.5 }}>
+              Currently: <strong>{config.dgcc_points_ratio || 2500} DAG Points</strong> → 1 DGCC Coin
+            </p>
+          </B>
+
+          <B hover={false} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', gridColumn: 'span 2' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
               <Info size={18} style={{ color: '#94a3b8', flexShrink: 0, marginTop: '2px' }} />
               <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.7 }}>
                 <strong style={{ color: '#0f172a' }}>Tier Architecture:</strong> The system operates on a flat 2-tier model — <strong>DAG Soldier</strong> and <strong>DAG Lieutenant</strong>.
                 <br />Commission rates are fixed per tier (15%/3%/2% for Soldiers, 20%/3%/2% for Lieutenants).
-                <br />The old 10-rank burn system has been fully deprecated. All burned points have been refunded via migration 059.
+                <br />The DGCC exchange rate controls how many DAG Points users must spend to earn 1 DGCC Coin. Lower the number to make redemptions easier.
               </div>
             </div>
           </B>
