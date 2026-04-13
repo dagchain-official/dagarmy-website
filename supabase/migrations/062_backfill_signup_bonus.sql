@@ -17,8 +17,8 @@ BEGIN
       INSERT INTO public.user_credits (user_id, balance, total_purchased, total_spent, total_bonus)
       VALUES (r.id, bonus_amount, 0, 0, bonus_amount);
 
-      INSERT INTO public.credit_transactions (user_id, type, amount, balance_after, description, charged_usd, aggregator_cost_usd, profit_usd)
-      VALUES (r.id, 'bonus', bonus_amount, bonus_amount, 'Welcome bonus — 2 DGCC (retroactive signup grant)', 0, 0, 0);
+      INSERT INTO public.credit_transactions (user_id, type, amount, balance_after, description)
+      VALUES (r.id, 'bonus', bonus_amount, bonus_amount, 'Welcome bonus — 2 DGCC (retroactive signup grant)');
 
     -- ── Case 2: user has a credit row but total_bonus = 0 (no bonus yet) ─
     ELSIF EXISTS (SELECT 1 FROM public.user_credits WHERE user_id = r.id AND (total_bonus IS NULL OR total_bonus = 0)) THEN
@@ -30,14 +30,13 @@ BEGIN
         updated_at  = NOW()
       WHERE user_id = r.id;
 
-      INSERT INTO public.credit_transactions (user_id, type, amount, balance_after, description, charged_usd, aggregator_cost_usd, profit_usd)
+      INSERT INTO public.credit_transactions (user_id, type, amount, balance_after, description)
       SELECT
         r.id,
         'bonus',
         bonus_amount,
-        uc.balance,  -- balance AFTER the update above
-        'Welcome bonus — 2 DGCC (retroactive signup grant)',
-        0, 0, 0
+        uc.balance,
+        'Welcome bonus — 2 DGCC (retroactive signup grant)'
       FROM public.user_credits uc
       WHERE uc.user_id = r.id;
 
