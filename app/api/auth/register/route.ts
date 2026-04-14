@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { signPlatformJWT, hashPassword, checkFingerprint } from '@/lib/dagauth';
+import { notifyUserCreated } from '@/services/dagchainWebhook';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -114,7 +115,16 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. Issue JWT
+    // 6. Notify DAGChain of new user (fire-and-forget — never blocks registration)
+    notifyUserCreated({
+      id: user.id,
+      email: user.email,
+      full_name: user.full_name,
+      auth_provider: 'email',
+      referral_code_used: referral_code || null,
+    });
+
+    // 7. Issue JWT
     const token = await signPlatformJWT({
       sub: user.id,
       email: user.email,

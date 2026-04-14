@@ -151,6 +151,17 @@ export async function GET(req: Request) {
         return redirectError(appUrl, 'db_failed', createError?.message || 'insert_failed');
       }
       user = newUser;
+      // ── Notify DAGChain of brand-new Google sign-up (fire-and-forget) ──────
+      // Dynamic import avoids TS module resolution issues in this file
+      import('@/services/dagchainWebhook').then(({ notifyUserCreated }) => {
+        notifyUserCreated({
+          id: newUser.id,
+          email: newUser.email,
+          full_name: newUser.full_name,
+          auth_provider: 'google',
+          referral_code_used: null,
+        });
+      }).catch(() => {});
     } else {
       user = existingUser;
       // Update last login + avatar
