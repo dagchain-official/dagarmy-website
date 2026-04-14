@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email/smtp-client';
 import { lieutenantUpgradeEmailTemplate } from '@/lib/email-templates';
+import { notifyLieutenantUpgrade } from '@/services/dagchainWebhook';
 
 const RANK_ORDER = [
   'INITIATOR', 'VANGUARD', 'GUARDIAN', 'STRIKER', 'INVOKER',
@@ -90,6 +91,10 @@ export async function POST(request) {
     } catch (refErr) {
       console.error('Non-blocking: Failed to award referral upgrade points:', refErr);
     }
+
+    // Notify DAGChain of Lieutenant upgrade (fire-and-forget)
+    // Do this before we fetch updatedUser so we use the userId + payment_id
+    notifyLieutenantUpgrade({ id: userId, email: null }, payment_id || null);
 
     // Fetch updated user data (include email + name for the confirmation email)
     const { data: updatedUser, error: fetchError } = await supabase

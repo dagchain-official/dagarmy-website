@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { notifyDgccTransfer } from '@/services/dagchainWebhook';
 
 /**
  * POST /api/rewards/dgcc/transfer
@@ -13,15 +14,9 @@ import crypto from 'crypto';
  * DAGChain is a separate system and still uses a signed webhook.
  */
 
-const DAGCHAIN_WEBHOOK = process.env.DAGCHAIN_WEBHOOK_URL || 'https://api.dagchain.network/api/v1/dag-army/webhook';
-const DAGCHAIN_SECRET  = process.env.DAGCHAIN_WEBHOOK_SECRET || '';
-
-function signPayload(payload, secret) {
-  return crypto
-    .createHmac('sha256', secret)
-    .update(JSON.stringify(payload))
-    .digest('hex');
-}
+// DAGCHAIN_WEBHOOK_URL / DAGCHAIN_WEBHOOK_SECRET are only kept here for legacy
+// reference — the actual dispatch now goes through notifyDgccTransfer() which
+// uses the correct DAGARMY_OUTGOING_SECRET header.
 
 export async function POST(request) {
   try {
@@ -137,40 +132,18 @@ export async function POST(request) {
 
       credited = true;
       console.log(`✅ [dgcc-transfer] Credited ${transferAmount} DGCC to user ${user_email} in DAGGPT (balance: ${newCreditBalance})`);
+
+      // Notify DAGChain that user sent DGCC to DAGGPT (they credit staking bonus)
+      notifyDgccTransfer({ id: user.id, email: user_email }, transferAmount, 'daggpt', null);
     }
 
-    // ── DAGChain: Signed webhook to external system ──────────────────────────
+    // ── DAGChain: use shared webhook service (correct auth header) ───────────
     let webhookOk = destination === 'daggpt'; // already handled above
-    const timestamp = new Date().toISOString();
 
     if (destination === 'dagchain') {
-      const webhookPayload = {
-        event: 'dgcc_transfer',
-        data: {
-          email:       user_email,
-          full_name:   user.full_name || '',
-          amount:      transferAmount,
-          destination,
-          timestamp,
-        },
-      };
-      try {
-        const sig = signPayload(webhookPayload, DAGCHAIN_SECRET);
-        const resp = await fetch(DAGCHAIN_WEBHOOK, {
-          method:  'POST',
-          headers: {
-            'Content-Type':        'application/json',
-            'X-DAGArmy-Secret':    DAGCHAIN_SECRET,
-            'X-DAGArmy-Signature': sig,
-            'X-DAGArmy-Timestamp': timestamp,
-          },
-          body: JSON.stringify(webhookPayload),
-        });
-        webhookOk = resp.ok;
-        console.log(`[dgcc-transfer] DAGChain webhook ${webhookOk ? 'delivered' : 'failed'}`);
-      } catch (webhookErr) {
-        console.error(`[dgcc-transfer] DAGChain webhook error:`, webhookErr.message);
-      }
+      // notifyDgccTransfer is fire-and-forget — it never throws
+      notifyDgccTransfer({ id: user.id, email: user_email }, transferAmount, 'dagchain', null);
+      webhookOk = true; // mark ok; actual delivery is async with retries
     }
 
     // Record transfer in dgcc_transfers table

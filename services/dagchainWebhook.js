@@ -6,9 +6,13 @@
  * Auth:     X-DAGARMY-Secret header
  *
  * Events fired:
- *   user.created       — on profile completion (new user signup)
+ *   user.created       — on profile completion (new user signup via wallet/Reown)
+ *   user.created       — on email registration  (register/route.ts)
+ *   user.created       — on Google sign-up      (google/callback/route.ts)
  *   user.updated       — on profile update
- *   referral.completed — when a referral is processed (DAGChain is referral SSO source of truth)
+ *   referral.completed — when a referral is processed
+ *   tier.upgraded      — when a user upgrades to DAG LIEUTENANT ($149)
+ *   dgcc.transferred   — when a user transfers DGCC to DAGGPT or DAGChain
  *
  * Retry strategy: 3 attempts, exponential backoff (30s → 2m → 10m)
  * All calls are fire-and-forget (non-blocking) — never fails the caller.
@@ -195,4 +199,61 @@ export function notifyReferralCompleted(referrer, referred, referralCode, source
   };
 
   dispatch('referral.completed', referred.id, referred.email || null, data);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NEW EVENTS — Phase 2
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Fire tier.upgraded — call immediately after a user successfully upgrades to
+ * DAG LIEUTENANT ($149 payment confirmed).
+ * DAGChain uses this to allocate DGCC staking rewards for the upgraded user.
+ *
+ * @param {Object} user       - { id, email }
+ * @param {string|null} paymentId - Stripe/payment reference (optional)
+ */
+export function notifyLieutenantUpgrade(user, paymentId = null) {
+  const data = {
+    tier:       'DAG_LIEUTENANT',
+    upgradedAt: new Date().toISOString(),
+    paymentId:  paymentId || null,
+  };
+
+  dispatch('tier.upgraded', user.id, user.email || null, data);
+}
+
+/**
+ * Fire dgcc.transferred — call after a DGCC transfer completes (either to
+ * DAGGPT or to DAGChain directly).
+ *
+ * DAGChain uses this to:
+ *   - destination='daggpt'   → credit staking bonus for identical DGCC amount
+ *   - destination='dagchain' → record the incoming DGCC on their own ledger
+ *
+ * @param {Object} user        - { id, email }
+ * @param {number} amount      - DGCC Coins transferred (positive integer)
+ * @param {string} destination - 'daggpt' | 'dagchain'
+ * @param {string|null} transferId - DB row id from dgcc_transfers (for idempotency)
+ */
+export function notifyDgccTransfer(user, amount, destination, transferId = null) {
+  const data = {
+    amount,
+    destination,
+    transferId:    transferId || null,
+    transferredAt: new Date().toISOString(),
+  };
+
+  // Use transferId as idempotency extra, falling back to timestamp-based key
+  const idempotencyExtra = transferId || `${destination}_${amount}_${Date.now()}`;
+  const payload = {
+    event:     'dgcc.transferred',
+    timestamp: new Date().toISOString(),
+    userId:    String(user.id || ''),
+    email:     user.email || undefined,
+    data,
+    idempotencyKey: generateIdempotencyKey('dgcc.transferred', user.id, idempotencyExtra),
+  };
+
+  dispatch('dgcc.transferred', user.id, user.email || null, data);
 }
