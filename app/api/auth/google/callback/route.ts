@@ -22,9 +22,8 @@ function getSupabase() {
 }
 
 function getAppUrl(req: Request): string {
-  if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '');
-  }
+  // Always derive from the actual request — never trust NEXT_PUBLIC_APP_URL
+  // which is often set to http://localhost:3000 in .env.local and leaks into prod.
   const url = new URL(req.url);
   return `${url.protocol}//${url.host}`;
 }

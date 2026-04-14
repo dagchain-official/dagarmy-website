@@ -18,10 +18,10 @@ export async function GET(req: Request) {
   const userJson = searchParams.get('user') || '{}';
   const next  = searchParams.get('next') || '/student-dashboard';
 
-  // Derive the app URL from the request itself (avoids env var mismatch)
+  // Derive the app URL from the request itself (avoids NEXT_PUBLIC_APP_URL
+  // being set to http://localhost:3000 in .env.local leaking into production)
   const reqUrl = new URL(req.url);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '')
-    || `${reqUrl.protocol}//${reqUrl.host}`;
+  const appUrl = `${reqUrl.protocol}//${reqUrl.host}`;
 
   // Final destination — must be a same-origin path
   const destination = next.startsWith('/') ? `${appUrl}${next}` : next;
