@@ -12,10 +12,10 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const next = searchParams.get('redirect') || '/student-dashboard';
 
-  // Derive app URL from the request itself — avoids www vs non-www mismatch
+  // Always derive from request host — must match callback/route.ts exactly.
+  // NEVER use NEXT_PUBLIC_APP_URL here as it may be http://localhost:3000 in prod.
   const reqUrl = new URL(req.url);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '')
-    || `${reqUrl.protocol}//${reqUrl.host}`;
+  const appUrl = `${reqUrl.protocol}//${reqUrl.host}`;
 
   const redirectUri = `${appUrl}/api/auth/google/callback`;
   const state = Buffer.from(JSON.stringify({ next, ts: Date.now() })).toString('base64url');
