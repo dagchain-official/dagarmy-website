@@ -105,21 +105,28 @@ export function AuthProvider({ children }) {
             if (isMounted.current) setUser(parsed);
           } catch {}
         }
-        // Validate with server in background
+        // Validate with server in background — only clear session on explicit
+        // 401/403 (truly invalid token). Network errors / 5xx must never log the user out,
+        // as a cold-start or transient server hiccup was causing immediate post-login logouts.
         fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
-          .then(r => r.ok ? r.json() : null)
-          .then(data => {
-            if (!isMounted.current) return;
-            if (data?.user) {
-              setUser(data.user);
-              localStorage.setItem(USER_KEY, JSON.stringify(data.user));
-            } else if (!data) {
+          .then(async r => {
+            if (r.ok) {
+              const data = await r.json();
+              if (!isMounted.current) return;
+              if (data?.user) {
+                setUser(data.user);
+                localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+              }
+            } else if (r.status === 401 || r.status === 403) {
+              // Token is genuinely invalid/expired — clear session
+              if (!isMounted.current) return;
               setUser(null);
               localStorage.removeItem(TOKEN_KEY);
               localStorage.removeItem(USER_KEY);
             }
+            // Any other status (5xx, network error) → keep existing session untouched
           })
-          .catch(() => {});
+          .catch(() => { /* network error — keep session, don't log out */ });
       }
 
       if (isMounted.current) setIsLoading(false);
