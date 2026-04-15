@@ -53,7 +53,20 @@ export async function POST(request) {
   try {
     const supabase = supabaseAdmin;
     const body = await request.json();
-    const { distribution_id, action } = body;
+    const { distribution_id, action, user_email, notes } = body;
+
+    // ── Manual member enrollment ─────────────────────────────────────────────
+    if (action === 'add_member') {
+      if (!user_email) return NextResponse.json({ error: 'user_email is required' }, { status: 400 });
+      const { data: user, error: userErr } = await supabase
+        .from('users').select('id, email, full_name').eq('email', user_email.trim().toLowerCase()).single();
+      if (userErr || !user) return NextResponse.json({ error: 'User not found with that email' }, { status: 404 });
+      const { error: upsertErr } = await supabase
+        .from('fortune500_members')
+        .upsert({ user_id: user.id, is_active: true, enrolled_at: new Date().toISOString(), notes: notes || 'Manually enrolled by admin' }, { onConflict: 'user_id' });
+      if (upsertErr) return NextResponse.json({ error: 'Failed to enroll member', details: upsertErr.message }, { status: 500 });
+      return NextResponse.json({ success: true, message: `${user.full_name || user.email} enrolled in Fortune 500 Pool` });
+    }
 
     if (!distribution_id || !action) {
       return NextResponse.json({ error: 'distribution_id and action are required' }, { status: 400 });

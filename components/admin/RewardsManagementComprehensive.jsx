@@ -27,6 +27,14 @@ export default function RewardsManagementComprehensive() {
   const [ltPoolLoading, setLtPoolLoading] = useState(false);
   const [ltDistributing, setLtDistributing] = useState(false);
 
+  // Manual member enrollment state
+  const [f500AddEmail, setF500AddEmail] = useState('');
+  const [f500AddNotes, setF500AddNotes] = useState('');
+  const [f500Adding, setF500Adding] = useState(false);
+  const [ltAddEmail, setLtAddEmail] = useState('');
+  const [ltAddNotes, setLtAddNotes] = useState('');
+  const [ltAdding, setLtAdding] = useState(false);
+
   // Points Ledger state
   const [ledger, setLedger] = useState([]);
   const [ledgerLoading, setLedgerLoading] = useState(false);
@@ -91,6 +99,36 @@ export default function RewardsManagementComprehensive() {
       else sm('error', data.error || 'Distribution failed');
     } catch (e) { sm('error', 'Network error'); }
     finally { setLtDistributing(false); }
+  };
+
+  const handleAddF500Member = async () => {
+    if (!f500AddEmail.trim()) return;
+    try {
+      setF500Adding(true);
+      const res = await fetch('/api/admin/fortune500', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add_member', user_email: f500AddEmail.trim(), notes: f500AddNotes.trim() }),
+      });
+      const data = await res.json();
+      if (data.success) { sm('success', data.message); setF500AddEmail(''); setF500AddNotes(''); fetchF500Data(); }
+      else sm('error', data.error || 'Enrollment failed');
+    } catch (e) { sm('error', 'Network error'); }
+    finally { setF500Adding(false); }
+  };
+
+  const handleAddLtMember = async () => {
+    if (!ltAddEmail.trim()) return;
+    try {
+      setLtAdding(true);
+      const res = await fetch('/api/admin/dag-lt-pool', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add_member', user_email: ltAddEmail.trim(), notes: ltAddNotes.trim() }),
+      });
+      const data = await res.json();
+      if (data.success) { sm('success', data.message); setLtAddEmail(''); setLtAddNotes(''); fetchLtPoolData(); }
+      else sm('error', data.error || 'Enrollment failed');
+    } catch (e) { sm('error', 'Network error'); }
+    finally { setLtAdding(false); }
   };
 
   const fetchLedger = async () => {
@@ -1112,11 +1150,41 @@ export default function RewardsManagementComprehensive() {
                   )}
                 </div>
 
-                <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f8fafc', borderRadius: '0 0 18px 18px' }}>
+                <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f8fafc' }}>
                   <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.6 }}>
                     <strong style={{ color: '#0f172a' }}>Disbursement:</strong> When DAGGPT POSTs monthly revenue to <code style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>/api/pools/daggpt-revenue</code>, a pending distribution record is created automatically.
                     Admin clicks <strong>Distribute</strong> to release equal shares to all {f500Data.activeMemberCount} eligible members (those with $500+ ecosystem spend).
                   </p>
+                </div>
+
+                {/* Manual enrollment */}
+                <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#fff', borderRadius: '0 0 18px 18px' }}>
+                  <p style={{ fontSize: '11px', fontWeight: '800', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 12px' }}>Manually Enroll a Member</p>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                    <div style={{ flex: '1', minWidth: '200px' }}>
+                      <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 5px' }}>User Email</p>
+                      <input type="email" value={f500AddEmail} onChange={e => setF500AddEmail(e.target.value)}
+                        placeholder="member@email.com"
+                        onKeyDown={e => e.key === 'Enter' && handleAddF500Member()}
+                        style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '500', outline: 'none', background: '#f8fafc', boxSizing: 'border-box', color: '#0f172a' }}
+                        onFocus={e => e.target.style.borderColor = '#7c3aed'}
+                        onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                    </div>
+                    <div style={{ flex: '1', minWidth: '160px' }}>
+                      <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 5px' }}>Notes (optional)</p>
+                      <input type="text" value={f500AddNotes} onChange={e => setF500AddNotes(e.target.value)}
+                        placeholder="e.g. Override eligibility"
+                        style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '500', outline: 'none', background: '#f8fafc', boxSizing: 'border-box', color: '#0f172a' }}
+                        onFocus={e => e.target.style.borderColor = '#7c3aed'}
+                        onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                    </div>
+                    <button onClick={handleAddF500Member} disabled={f500Adding || !f500AddEmail.trim()}
+                      style={{ padding: '9px 20px', borderRadius: '10px', border: 'none', background: f500Adding || !f500AddEmail.trim() ? '#e2e8f0' : 'linear-gradient(135deg,#7c3aed,#6d28d9)', color: f500Adding || !f500AddEmail.trim() ? '#94a3b8' : '#fff', fontSize: '13px', fontWeight: '700', cursor: f500Adding || !f500AddEmail.trim() ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Plus size={14} />{f500Adding ? 'Adding...' : 'Add Member'}
+                    </button>
+                  </div>
                 </div>
               </B>
             );
@@ -1219,12 +1287,42 @@ export default function RewardsManagementComprehensive() {
                   )}
                 </div>
 
-                <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f0fdf4', borderRadius: '0 0 18px 18px' }}>
+                <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f0fdf4' }}>
                   <p style={{ fontSize: '12px', color: '#064e3b', margin: 0, lineHeight: 1.6 }}>
                     <strong style={{ color: '#0f172a' }}>Disbursement:</strong> When DAGGPT reports monthly revenue, 10% is automatically allocated to this pool.
                     Eligibility is re-evaluated monthly — any LT who qualified (self + 3 direct LT upgrades within 30 days of their own upgrade) appears as an eligible member.
                     Admin clicks <strong>Distribute</strong> to release equal shares to {ltPoolData.activeMemberCount} qualified members.
                   </p>
+                </div>
+
+                {/* Manual enrollment */}
+                <div style={{ padding: '16px 24px', borderTop: '1px solid #a7f3d0', background: '#fff', borderRadius: '0 0 18px 18px' }}>
+                  <p style={{ fontSize: '11px', fontWeight: '800', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 12px' }}>Manually Enroll a Member</p>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                    <div style={{ flex: '1', minWidth: '200px' }}>
+                      <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 5px' }}>User Email</p>
+                      <input type="email" value={ltAddEmail} onChange={e => setLtAddEmail(e.target.value)}
+                        placeholder="member@email.com"
+                        onKeyDown={e => e.key === 'Enter' && handleAddLtMember()}
+                        style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '500', outline: 'none', background: '#f8fafc', boxSizing: 'border-box', color: '#0f172a' }}
+                        onFocus={e => e.target.style.borderColor = '#059669'}
+                        onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                    </div>
+                    <div style={{ flex: '1', minWidth: '160px' }}>
+                      <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 5px' }}>Notes (optional)</p>
+                      <input type="text" value={ltAddNotes} onChange={e => setLtAddNotes(e.target.value)}
+                        placeholder="e.g. Override eligibility"
+                        style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '500', outline: 'none', background: '#f8fafc', boxSizing: 'border-box', color: '#0f172a' }}
+                        onFocus={e => e.target.style.borderColor = '#059669'}
+                        onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                    </div>
+                    <button onClick={handleAddLtMember} disabled={ltAdding || !ltAddEmail.trim()}
+                      style={{ padding: '9px 20px', borderRadius: '10px', border: 'none', background: ltAdding || !ltAddEmail.trim() ? '#e2e8f0' : 'linear-gradient(135deg,#059669,#047857)', color: ltAdding || !ltAddEmail.trim() ? '#94a3b8' : '#fff', fontSize: '13px', fontWeight: '700', cursor: ltAdding || !ltAddEmail.trim() ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Plus size={14} />{ltAdding ? 'Adding...' : 'Add Member'}
+                    </button>
+                  </div>
                 </div>
               </B>
             );
