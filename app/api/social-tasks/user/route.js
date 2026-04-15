@@ -55,7 +55,7 @@ export async function GET(request) {
     const configMap = {};
     configs?.forEach(c => { configMap[c.config_key] = c.config_value; });
 
-    const ltBonusRate = configMap.social_task_lt_bonus_rate || 20;
+    const ltBonusRate = configMap.social_task_lt_bonus_rate || 100;
     const isLT = user.tier === 'DAG_LIEUTENANT';
     const hasRank = user.current_rank && user.current_rank !== 'None';
     const rankKey = hasRank ? 'rank_upgrade_bonus_' + user.current_rank.toLowerCase() : null;

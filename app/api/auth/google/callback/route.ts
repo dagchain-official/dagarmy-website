@@ -140,10 +140,11 @@ export async function GET(req: Request) {
           avatar_url: profile.picture || null,
           auth_provider: 'google',
           email_verified: true,
+          profile_completed: true,   // Google accounts are pre-verified — no profile wizard needed
           role: 'student',
           is_active: true,
         })
-        .select('id, email, full_name, role, is_admin, is_master_admin, auth_provider, email_verified, avatar_url, is_active, wallet_address')
+        .select('id, email, full_name, role, is_admin, is_master_admin, auth_provider, email_verified, avatar_url, is_active, wallet_address, profile_completed')
         .single();
 
       if (createError || !newUser) {
@@ -164,10 +165,12 @@ export async function GET(req: Request) {
       }).catch(() => {});
     } else {
       user = existingUser;
-      // Update last login + avatar
+      // Update last login + avatar + ensure profile_completed is set
+      // (fixes users who logged in via Google before this field was populated)
       await supabase.from('users').update({
         avatar_url: profile.picture || user.avatar_url,
         auth_provider: user.auth_provider === 'wallet' ? 'google' : user.auth_provider,
+        profile_completed: true,   // ensure existing Google users are never stuck on redirect loop
         platform_last_login: {
           ...(user.platform_last_login || {}),
           dagarmy: new Date().toISOString(),

@@ -69,6 +69,13 @@ export default function Dashboard2() {
     const [dagPoints, setDagPoints] = useState(0);
     const [dgccBalance, setDgccBalance] = useState(0);
     const [userTier, setUserTier] = useState('DAG_SOLDIER');
+    // Live commission rates from rewards_config (admin-configurable)
+    const [commissionRates, setCommissionRates] = useState({
+        soldier_l1: 10,   // updated from 15 — admin can change via Rewards Engine
+        lieutenant_l1: 20,
+        l2: 3,
+        l3: 2,
+    });
     const [currentRank, setCurrentRank] = useState('None');
     const [mounted, setMounted] = useState(false);
     const [pageOrigin, setPageOrigin] = useState('https://dagarmy.network');
@@ -161,6 +168,29 @@ export default function Dashboard2() {
 
         fetchUserData();
     }, [address, userProfile]);
+
+    // Fetch live commission rates from rewards_config
+    useEffect(() => {
+        async function fetchCommissionRates() {
+            try {
+                const res = await fetch('/api/rewards/config');
+                const data = await res.json();
+                if (data.config && Array.isArray(data.config)) {
+                    const cfg = {};
+                    data.config.forEach(item => { cfg[item.config_key] = Number(item.config_value); });
+                    setCommissionRates(prev => ({
+                        soldier_l1:    cfg.soldier_l1_commission_pct    ?? prev.soldier_l1,
+                        lieutenant_l1: cfg.lieutenant_l1_commission_pct ?? prev.lieutenant_l1,
+                        l2:            cfg.l2_commission_pct             ?? prev.l2,
+                        l3:            cfg.l3_commission_pct             ?? prev.l3,
+                    }));
+                }
+            } catch (err) {
+                console.error('Failed to fetch commission rates:', err);
+            }
+        }
+        fetchCommissionRates();
+    }, []);
 
     // Fetch referral code and stats
     useEffect(() => {
@@ -747,6 +777,22 @@ export default function Dashboard2() {
                     </p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {/* ── Notification Bell ── */}
+                    <button
+                        onClick={() => window.location.href = '/student-notifications'}
+                        style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '13px', border: 'none', background: '#f0f2f5', cursor: 'pointer', boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)', color: '#64748b', transition: 'all 0.2s ease', flexShrink: 0 }}
+                        onMouseEnter={e => { e.currentTarget.style.boxShadow = '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)'; e.currentTarget.style.color = '#4f46e5'; }}
+                        onMouseLeave={e => { e.currentTarget.style.boxShadow = '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)'; e.currentTarget.style.color = '#64748b'; }}
+                        title="Notifications"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        {/* Notification dot indicator */}
+                        <div style={{ position: 'absolute', top: '9px', right: '9px', width: '8px', height: '8px', borderRadius: '50%', background: '#4f46e5', border: '2px solid #f0f2f5', boxShadow: '0 0 0 1px rgba(79,70,229,0.3)' }}/>
+                    </button>
+
                     {!isLieutenant && (
                         <>
                             <button
@@ -820,7 +866,7 @@ export default function Dashboard2() {
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                     </div>
                     <div style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-2px', lineHeight: 1 }}>
-                        {isLieutenant ? '20' : '15'}<span style={{ fontSize: '18px' }}>%</span>
+                        {isLieutenant ? commissionRates.lieutenant_l1 : commissionRates.soldier_l1}<span style={{ fontSize: '18px' }}>%</span>
                     </div>
                     <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#6366f1', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
                         L1 Commission
@@ -918,7 +964,7 @@ export default function Dashboard2() {
                         {/* Rate cards grid */}
                         <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
                             {[
-                                { label: 'L1 Commission', value: `${isLieutenant ? 20 : 15}%`, sub: 'on direct sales', color: '#4f46e5' },
+                                { label: 'L1 Commission', value: `${isLieutenant ? commissionRates.lieutenant_l1 : commissionRates.soldier_l1}%`, sub: 'on direct sales', color: '#4f46e5' },
                                 { label: 'L2 Commission', value: '3%', sub: 'on 2nd downline', color: '#10b981' },
                                 { label: 'L3 Commission', value: '2%', sub: 'on 3rd downline', color: '#f59e0b' },
                                 { label: 'Spend Earn Rate', value: `${isLieutenant ? 50 : 25}`, sub: 'pts per $1 spent', color: '#8b5cf6' },
@@ -963,7 +1009,7 @@ export default function Dashboard2() {
 
 
 
-                {/* ━━━ ROW 2: Calendar — full width ━━━ */}
+                {/* ━━━ ROW 2: Schedule Calendar ━━━ */}
                 <NmCard span="12" style={{ padding: '24px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                         <div>

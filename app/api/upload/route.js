@@ -27,9 +27,12 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Determine bucket — caller can pass `bucket` field, default to course-assets
+    const bucket = formData.get('bucket') || 'course-assets';
+
     // Upload to Supabase Storage
     const { data, error } = await supabase.storage
-      .from('course-assets')
+      .from(bucket)
       .upload(fileName, buffer, {
         contentType: file.type,
         upsert: false
@@ -45,7 +48,7 @@ export async function POST(request) {
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
-      .from('course-assets')
+      .from(bucket)
       .getPublicUrl(fileName);
 
     return NextResponse.json({
@@ -53,6 +56,7 @@ export async function POST(request) {
       url: publicUrl,
       path: fileName
     });
+
 
   } catch (error) {
     console.error('Upload error:', error);
