@@ -120,15 +120,17 @@ export async function GET(req: Request) {
 
   // ── STEP 3: Find or create user in Supabase ────────────────────────────────
   let user: any;
+  let existingUser: any;
   try {
     const supabase = getSupabase();
     const normalizedEmail = profile.email.toLowerCase().trim();
 
-    const { data: existingUser } = await supabase
+    const { data: existingUserData } = await supabase
       .from('users')
       .select('id, email, full_name, role, is_admin, is_master_admin, auth_provider, email_verified, avatar_url, is_active, wallet_address, platform_last_login')
       .eq('email', normalizedEmail)
       .single();
+    existingUser = existingUserData;
 
     if (!existingUser) {
       console.log('[Google callback] STEP 3: Creating new user for', normalizedEmail);
@@ -140,7 +142,7 @@ export async function GET(req: Request) {
           avatar_url: profile.picture || null,
           auth_provider: 'google',
           email_verified: true,
-          profile_completed: true,   // Google accounts are pre-verified — no profile wizard needed
+          profile_completed: false,  // New Google users must complete WhatsApp + name
           role: 'student',
           is_active: true,
         })
@@ -207,6 +209,7 @@ export async function GET(req: Request) {
   }
 
   // ── STEP 5: Redirect to set-session ───────────────────────────────────────
+  const isNewGoogleUser = !existingUser;
   const safeUser = {
     id: user.id,
     email: user.email,
@@ -219,8 +222,11 @@ export async function GET(req: Request) {
     profile_completed: user.profile_completed || false,
   };
 
+  // New Google users go to profile completion; returning users go to intended destination
+  const finalNext = isNewGoogleUser ? `/complete-profile?email=${encodeURIComponent(user.email)}` : next;
+
   const setSessionUrl = new URL(
-    `/api/auth/google/set-session?token=${encodeURIComponent(token)}&user=${encodeURIComponent(JSON.stringify(safeUser))}&next=${encodeURIComponent(next)}`,
+    `/api/auth/google/set-session?token=${encodeURIComponent(token)}&user=${encodeURIComponent(JSON.stringify(safeUser))}&next=${encodeURIComponent(finalNext)}`,
     appUrl
   );
 

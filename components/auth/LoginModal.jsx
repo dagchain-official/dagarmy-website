@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Mail, Lock, ArrowLeft, ChevronRight, Loader2, Eye, EyeOff, Check, AlertCircle, Wallet } from "lucide-react";
+import { Shield, Mail, Lock, ArrowLeft, ChevronRight, Loader2, Eye, EyeOff, Check, AlertCircle, Wallet, Phone, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 async function getFingerprint() {
@@ -133,6 +133,15 @@ export default function LoginModal({ isOpen, onClose }) {
 
   const [mainReferral, setMainReferral] = useState('');
 
+  // Profile completion step (shown after new email registration)
+  const [profileUserId, setProfileUserId] = useState(null);
+  const [profileEmail, setProfileEmail] = useState('');
+  const [profFirstName, setProfFirstName] = useState('');
+  const [profLastName, setProfLastName]   = useState('');
+  const [profCountry, setProfCountry]     = useState('+91');
+  const [profWhatsapp, setProfWhatsapp]   = useState('');
+  const [profSubmitting, setProfSubmitting] = useState(false);
+
   const [forgotEmail, setForgotEmail] = useState('');
   const [error, setError]             = useState('');
   const [loading, setLoading]         = useState(false);
@@ -142,7 +151,13 @@ export default function LoginModal({ isOpen, onClose }) {
   useEffect(() => {
     if (isOpen) {
       setView('main'); setError('');
+      setProfFirstName(''); setProfLastName(''); setProfWhatsapp(''); setProfCountry('+91'); setProfileUserId(null);
       getFingerprint().then(fp => { fpRef.current = fp; });
+      // Pre-fill referral from localStorage
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('pending_referral_code');
+        if (saved) { setMainReferral(saved); setReferralCode(saved); }
+      }
     }
   }, [isOpen]);
 
@@ -189,10 +204,48 @@ export default function LoginModal({ isOpen, onClose }) {
       else {
         localStorage.setItem('dagarmy_token', data.token);
         localStorage.setItem('dagarmy_user', JSON.stringify(data.user));
-        window.location.href = '/student-dashboard';
+        // New user — show profile completion step
+        if (data.isNewUser && !data.user?.profile_completed) {
+          setProfileUserId(data.user.id);
+          setProfileEmail(data.user.email || regEmail);
+          // Pre-split full_name into first/last if present
+          const parts = (data.user.full_name || regName || '').trim().split(' ');
+          setProfFirstName(parts[0] || regName);
+          setProfLastName(parts.slice(1).join(' ') || '');
+          setView('profile');
+        } else {
+          window.location.href = '/student-dashboard';
+        }
       }
     } catch { setError('Network error. Please try again.'); }
     finally { setLoading(false); }
+  };
+
+  const handleProfileComplete = async (e) => {
+    e.preventDefault(); setError('');
+    const digitsOnly = profWhatsapp.replace(/\D/g, '');
+    if (!profFirstName.trim()) { setError('First name is required'); return; }
+    if (!profLastName.trim()) { setError('Last name is required'); return; }
+    if (digitsOnly.length < 7 || digitsOnly.length > 15) { setError('Valid WhatsApp number required (7–15 digits)'); return; }
+    setProfSubmitting(true);
+    try {
+      const res = await fetch('/api/auth/complete-profile', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: profileEmail,
+          first_name: profFirstName.trim(),
+          last_name: profLastName.trim(),
+          country_code: profCountry,
+          whatsapp_number: profWhatsapp.trim(),
+          referral_code: referralCode || mainReferral || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Failed to save profile'); return; }
+      if (typeof window !== 'undefined') localStorage.removeItem('pending_referral_code');
+      window.location.href = '/student-dashboard';
+    } catch { setError('Network error. Please try again.'); }
+    finally { setProfSubmitting(false); }
   };
 
   const handleForgot = async (e) => {
@@ -449,6 +502,77 @@ export default function LoginModal({ isOpen, onClose }) {
                   Already have an account?{' '}
                   <button onClick={() => setView('signin')} style={{ color: '#6366f1', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Sign in</button>
                 </p>
+              </motion.div>
+            )}
+
+            {/* ══ PROFILE COMPLETION VIEW ══ */}
+            {view === 'profile' && (
+              <motion.div key="profile" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.18 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <User size={18} color="#fff" />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '17px', fontWeight: 700, color: '#111827', lineHeight: 1.2 }}>Complete Your Profile</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>One last step — tell us a bit about yourself</div>
+                  </div>
+                </div>
+
+                {error && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '10px 12px', marginBottom: '14px', fontSize: '13px', color: '#dc2626' }}>
+                    <AlertCircle size={15} style={{ marginTop: '1px', flexShrink: 0 }} />{error}
+                  </div>
+                )}
+
+                <form onSubmit={handleProfileComplete} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>First Name</label>
+                      <input type="text" value={profFirstName} onChange={e => setProfFirstName(e.target.value)} required autoFocus placeholder="John"
+                        style={inputStyle}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Last Name</label>
+                      <input type="text" value={profLastName} onChange={e => setProfLastName(e.target.value)} required placeholder="Doe"
+                        style={inputStyle}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                      WhatsApp Number <span style={{ color: '#ef4444' }}>*</span>
+                    </label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <select value={profCountry} onChange={e => setProfCountry(e.target.value)}
+                        style={{ ...inputStyle, width: '100px', flexShrink: 0, cursor: 'pointer', fontFamily: 'inherit' }}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }}>
+                        {[
+                          ['+1','US/CA'],['+ 44','UK'],['+91','IN'],['+971','UAE'],['+966','SA'],
+                          ['+92','PK'],['+880','BD'],['+234','NG'],['+254','KE'],['+27','ZA'],
+                          ['+49','DE'],['+33','FR'],['+39','IT'],['+34','ES'],['+55','BR'],
+                          ['+52','MX'],['+60','MY'],['+65','SG'],['+62','ID'],['+63','PH'],
+                          ['+84','VN'],['+66','TH'],['+20','EG'],['+212','MA'],['+213','DZ'],
+                        ].map(([code, label]) => (
+                          <option key={code} value={code}>{code} {label}</option>
+                        ))}
+                      </select>
+                      <input type="tel" value={profWhatsapp} onChange={e => setProfWhatsapp(e.target.value.replace(/[^0-9\s\-]/g, ''))} required placeholder="Enter number"
+                        style={{ ...inputStyle, flex: 1 }}
+                        onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+                        onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
+                    </div>
+                    <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '4px' }}>Used for team communications and support</p>
+                  </div>
+
+                  <GradientBtn type="submit" disabled={profSubmitting}>
+                    {profSubmitting ? <><Loader2 size={15} className="animate-spin" /> Saving...</> : <><Check size={15} /> Complete Setup</>}
+                  </GradientBtn>
+                </form>
               </motion.div>
             )}
 
