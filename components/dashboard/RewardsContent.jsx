@@ -48,8 +48,12 @@ export default function RewardsContent({ mounted }) {
     totalPointsEarned: 0, totalPointsBurned: 0, totalPointsRedeemed: 0,
     spendPtsRate: 25, l1CommissionPct: 15, l2CommissionPct: 3, l3CommissionPct: 2,
     taskMultiplier: 1, txHistory: [],
-    fortune500: { enrolled: false, enrollmentOpen: true, poolPct: 10, totalMembers: 0, latestDistribution: null },
-    elitePool: { eligible: false, active: false, blockchainPct: 50, totalLtMembers: 0 },
+    ecosystemSpend: 0,
+    incentivePools: {
+      fortune500: { isEligible: false, enrolled: false, enrollmentOpen: true, poolPct: 10, activeMemberCount: 0, lastPayoutAmount: null },
+      dag_lt_pool: { isEligible: false, enrolled: false, activeMemberCount: 0, lastPayoutAmount: null, directLtUpgrades: 0, daysLeft: null },
+      elite: { isEligible: false, active: false, blockchainPct: 50, totalLtMembers: 0 },
+    },
   });
 
   useEffect(() => {
@@ -144,7 +148,10 @@ export default function RewardsContent({ mounted }) {
     </div>
   );
 
-  const { dagPoints, isLieutenant, usdEarned, usdtEarned, totalPointsEarned, totalPointsBurned, totalPointsRedeemed, spendPtsRate, l1CommissionPct, l2CommissionPct, l3CommissionPct, taskMultiplier, fortune500, elitePool } = rewardData;
+  const { dagPoints, isLieutenant, usdEarned, usdtEarned, totalPointsEarned, totalPointsBurned, totalPointsRedeemed, spendPtsRate, l1CommissionPct, l2CommissionPct, l3CommissionPct, taskMultiplier, ecosystemSpend, incentivePools } = rewardData;
+  const fortune500 = incentivePools?.fortune500 || { isEligible: false, enrolled: false, enrollmentOpen: true, poolPct: 10, activeMemberCount: 0, lastPayoutAmount: null };
+  const ltPool = incentivePools?.dag_lt_pool || { isEligible: false, enrolled: false, activeMemberCount: 0, directLtUpgrades: 0, daysLeft: null };
+  const elitePool = incentivePools?.elite || { isEligible: false, active: false, blockchainPct: 50, totalLtMembers: 0 };
   const tierLabel = isLieutenant ? 'DAG LIEUTENANT' : 'DAG SOLDIER';
   const tierColor = isLieutenant ? '#7c3aed' : '#4f46e5';
 
@@ -265,97 +272,157 @@ export default function RewardsContent({ mounted }) {
           </div>
         </div>
 
-        {/* Incentive Pools — 2 new pools */}
+        {/* Incentive Pools */}
         <div style={{ marginBottom: '20px' }}>
           <div style={{ marginBottom: '14px' }}>
-            <h2 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 3px', letterSpacing: '-0.3px' }}>Incentive Pool Programs</h2>
+            <h2 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 3px', letterSpacing: '-0.3px' }}>Incentive Pools</h2>
             <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Revenue-sharing pools — passive income on top of your commissions</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
 
             {/* Fortune 500 Pool */}
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadowSm, overflow: 'hidden' }}>
-              <div style={{ padding: '20px 22px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Star size={18} color="#fff" fill="#fff" />
+              <div style={{ padding: '18px 20px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: fortune500.isEligible ? 'linear-gradient(135deg,#7c3aed,#6d28d9)' : '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Star size={17} color="#fff" fill="#fff" />
                   </div>
                   <div>
-                    <p style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: nm.textPrimary }}>Fortune 500</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '11px', color: nm.textMuted }}>10% of monthly DAGGPT revenue — equal split</p>
+                    <p style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: nm.textPrimary }}>Fortune 500 Pool</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '11px', color: nm.textMuted }}>10% monthly DAGGPT revenue</p>
                   </div>
                 </div>
-                <span style={{ flexShrink: 0, fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '20px', background: nm.bg, boxShadow: fortune500.enrolled ? nm.shadowXs : nm.shadowInsetSm, color: fortune500.enrolled ? '#10b981' : nm.textMuted, textTransform: 'uppercase' }}>
-                  {fortune500.enrolled ? 'Enrolled ✓' : 'Not Enrolled'}
+                <span style={{ flexShrink: 0, fontSize: '9px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: fortune500.isEligible ? '#f5f3ff' : nm.bg, boxShadow: fortune500.isEligible ? 'none' : nm.shadowInsetSm, color: fortune500.isEligible ? '#7c3aed' : nm.textMuted, border: fortune500.isEligible ? '1px solid #c4b5fd' : 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                  {fortune500.isEligible ? 'Eligible' : fortune500.enrolled ? 'Need $500 spend' : 'Not Enrolled'}
                 </span>
               </div>
-              <div style={{ padding: '18px 22px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
-                  <div style={{ background: nm.bg, borderRadius: '12px', padding: '12px 14px', boxShadow: nm.shadowInsetSm }}>
-                    <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Pool Members</p>
-                    <p style={{ margin: '4px 0 0', fontSize: '22px', fontWeight: '900', color: nm.textPrimary }}>{fortune500.totalMembers.toLocaleString()}</p>
+              <div style={{ padding: '16px 20px' }}>
+                <p style={{ fontSize: '11px', color: nm.textMuted, margin: '0 0 12px', lineHeight: 1.6 }}>
+                  <strong style={{ color: nm.textPrimary }}>Eligibility: </strong>DAG Soldier or Lieutenant with $500+ ecosystem spend
+                </p>
+                <div style={{ marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase' }}>Ecosystem Spend</span>
+                    <span style={{ fontSize: '11px', fontWeight: '800', color: (ecosystemSpend || 0) >= 500 ? '#7c3aed' : nm.textPrimary }}>${(ecosystemSpend || 0).toFixed(0)} / $500</span>
                   </div>
-                  <div style={{ background: nm.bg, borderRadius: '12px', padding: '12px 14px', boxShadow: nm.shadowInsetSm }}>
-                    <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Latest Per-Member</p>
-                    <p style={{ margin: '4px 0 0', fontSize: '22px', fontWeight: '900', color: nm.accent }}>
-                      {fortune500.latestDistribution ? `$${parseFloat(fortune500.latestDistribution.perMemberAmount || 0).toFixed(2)}` : '—'}
+                  <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg,#7c3aed,#6d28d9)', width: `${Math.min(100, ((ecosystemSpend || 0) / 500) * 100)}%`, transition: 'width 1s ease' }} />
+                  </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
+                    <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Members</p>
+                    <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.textPrimary }}>{(fortune500.activeMemberCount || 0).toLocaleString()}</p>
+                  </div>
+                  <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
+                    <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Last Payout</p>
+                    <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.accent }}>{fortune500.lastPayoutAmount ? `$${parseFloat(fortune500.lastPayoutAmount).toFixed(2)}` : '—'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* DAG LT Pool */}
+            <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadowSm, overflow: 'hidden', opacity: isLieutenant ? 1 : 0.75 }}>
+              <div style={{ padding: '18px 20px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: ltPool.isEligible ? 'linear-gradient(135deg,#059669,#047857)' : '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: nm.textPrimary }}>DAG LT Pool</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '11px', color: nm.textMuted }}>10% monthly DAGGPT revenue</p>
+                  </div>
+                </div>
+                <span style={{ flexShrink: 0, fontSize: '9px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: ltPool.isEligible ? '#f0fdf4' : nm.bg, boxShadow: ltPool.isEligible ? 'none' : nm.shadowInsetSm, color: ltPool.isEligible ? '#059669' : (!isLieutenant ? nm.textMuted : '#d97706'), border: ltPool.isEligible ? '1px solid #6ee7b7' : 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                  {ltPool.isEligible ? 'Eligible' : (!isLieutenant ? 'LT Only' : 'In Progress')}
+                </span>
+              </div>
+              <div style={{ padding: '16px 20px' }}>
+                {!isLieutenant ? (
+                  <div style={{ textAlign: 'center', padding: '14px 0' }}>
+                    <Lock size={24} color={nm.textMuted} />
+                    <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textSecondary, margin: '8px 0 12px' }}>DAG LIEUTENANT exclusive</p>
+                    <button onClick={() => setShowUpgradeModal(true)}
+                      style={{ padding: '9px 18px', borderRadius: '9px', border: 'none', background: 'linear-gradient(135deg,#059669,#047857)', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                    >Upgrade to Join — $149</button>
+                  </div>
+                ) : (
+                  <>
+                    <p style={{ fontSize: '11px', color: nm.textMuted, margin: '0 0 12px', lineHeight: 1.6 }}>
+                      <strong style={{ color: nm.textPrimary }}>Eligibility: </strong>Self upgrade + 3 direct LT referrals within 30 days
                     </p>
-                  </div>
-                </div>
-                {fortune500.latestDistribution && (
-                  <div style={{ marginBottom: '12px', padding: '10px 14px', background: nm.bg, borderRadius: '10px', boxShadow: nm.shadowXs, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '11px', color: nm.textSecondary }}>{fortune500.latestDistribution.period} pool: <strong style={{ color: nm.textPrimary }}>${parseFloat(fortune500.latestDistribution.poolAmount || 0).toFixed(2)}</strong></span>
-                    <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 8px', borderRadius: '6px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: fortune500.latestDistribution.status === 'distributed' ? '#10b981' : '#f59e0b', textTransform: 'uppercase' }}>{fortune500.latestDistribution.status}</span>
-                  </div>
+                    <div style={{ marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase' }}>Direct LT Referrals</span>
+                        <span style={{ fontSize: '11px', fontWeight: '800', color: (ltPool.directLtUpgrades || 0) >= 3 ? '#059669' : nm.textPrimary }}>{ltPool.directLtUpgrades || 0} / 3</span>
+                      </div>
+                      <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', borderRadius: '3px', background: '#059669', width: `${Math.min(100, ((ltPool.directLtUpgrades || 0) / 3) * 100)}%`, transition: 'width 1s ease' }} />
+                      </div>
+                      {ltPool.daysLeft !== null && ltPool.daysLeft > 0 && (
+                        <p style={{ fontSize: '10px', color: nm.textMuted, margin: '4px 0 0' }}>{ltPool.daysLeft} days left in qualification window</p>
+                      )}
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
+                        <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Members</p>
+                        <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.textPrimary }}>{(ltPool.activeMemberCount || 0).toLocaleString()}</p>
+                      </div>
+                      <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
+                        <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Last Payout</p>
+                        <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.accent }}>{ltPool.lastPayoutAmount ? `$${parseFloat(ltPool.lastPayoutAmount).toFixed(2)}` : '—'}</p>
+                      </div>
+                    </div>
+                  </>
                 )}
-                <div style={{ fontSize: '11px', color: nm.textMuted, lineHeight: 1.6, padding: '10px 14px', background: nm.bg, borderRadius: '10px', boxShadow: nm.shadowInsetSm }}>
-                  {fortune500.enrollmentOpen
-                    ? <><strong style={{ color: '#10b981' }}>✓ Enrollment Open</strong> — new members can still join. Closes at DAGCHAIN MainNet launch.</>
-                    : <><strong style={{ color: '#f59e0b' }}>Enrollment Closed</strong> — you must have been a member before MainNet launch to participate.</>}
-                </div>
               </div>
             </div>
 
             {/* DAG Army Elite Pool */}
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadowSm, overflow: 'hidden', opacity: isLieutenant ? 1 : 0.75 }}>
-              <div style={{ padding: '20px 22px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: isLieutenant ? 'linear-gradient(135deg,#7c3aed,#4f46e5)' : '#cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    {isLieutenant ? <Crown size={18} color="#fff" /> : <Lock size={18} color="#fff" />}
+              <div style={{ padding: '18px 20px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: isLieutenant ? 'linear-gradient(135deg,#7c3aed,#6d28d9)' : '#cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {isLieutenant ? <Crown size={17} color="#fff" /> : <Lock size={17} color="#fff" />}
                   </div>
                   <div>
-                    <p style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: nm.textPrimary }}>DAG Army Elite Pool</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '11px', color: nm.textMuted }}>50% of DAGCHAIN transaction fees — LTs only</p>
+                    <p style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: nm.textPrimary }}>DAG Army Elite Pool</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '11px', color: nm.textMuted }}>50% of DAGCHAIN tx fees</p>
                   </div>
                 </div>
-                <span style={{ flexShrink: 0, fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: elitePool.active ? '#10b981' : '#f59e0b', textTransform: 'uppercase' }}>
+                <span style={{ flexShrink: 0, fontSize: '9px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowInsetSm, color: elitePool.active ? '#10b981' : '#d97706', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                   {elitePool.active ? 'Active' : 'Coming Soon'}
                 </span>
               </div>
-              <div style={{ padding: '18px 22px' }}>
+              <div style={{ padding: '16px 20px' }}>
                 {!isLieutenant ? (
-                  <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                    <Lock size={28} color={nm.textMuted} style={{ marginBottom: '10px' }} />
-                    <p style={{ fontSize: '13px', fontWeight: '700', color: nm.textSecondary, margin: '0 0 14px' }}>DAG LIEUTENANT exclusive</p>
+                  <div style={{ textAlign: 'center', padding: '14px 0' }}>
+                    <Lock size={24} color={nm.textMuted} />
+                    <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textSecondary, margin: '8px 0 12px' }}>DAG LIEUTENANT exclusive</p>
                     <button onClick={() => setShowUpgradeModal(true)}
-                      style={{ padding: '10px 20px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}
+                      style={{ padding: '9px 18px', borderRadius: '9px', border: 'none', background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
                     >Upgrade to Join — $149</button>
                   </div>
                 ) : (
                   <>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
-                      <div style={{ background: nm.bg, borderRadius: '12px', padding: '12px 14px', boxShadow: nm.shadowInsetSm }}>
-                        <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Total LT Members</p>
-                        <p style={{ margin: '4px 0 0', fontSize: '22px', fontWeight: '900', color: nm.textPrimary }}>{elitePool.totalLtMembers.toLocaleString()}</p>
+                    <p style={{ fontSize: '11px', color: nm.textMuted, margin: '0 0 12px', lineHeight: 1.6 }}>
+                      <strong style={{ color: nm.textPrimary }}>Eligibility: </strong>All DAG Lieutenants — permanently enrolled. Activates Sep–Oct 2026.
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
+                        <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Total LTs</p>
+                        <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.textPrimary }}>{(elitePool.totalLtMembers || 0).toLocaleString()}</p>
                       </div>
-                      <div style={{ background: nm.bg, borderRadius: '12px', padding: '12px 14px', boxShadow: nm.shadowInsetSm }}>
-                        <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Pool Share</p>
-                        <p style={{ margin: '4px 0 0', fontSize: '22px', fontWeight: '900', color: '#7c3aed' }}>{elitePool.blockchainPct}%</p>
-                        <p style={{ margin: 0, fontSize: '10px', color: nm.textMuted }}>of chain fees</p>
+                      <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
+                        <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Pool Share</p>
+                        <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: '#7c3aed' }}>{elitePool.blockchainPct || 50}%</p>
+                        <p style={{ margin: 0, fontSize: '9px', color: nm.textMuted }}>of chain fees</p>
                       </div>
                     </div>
-                    <div style={{ fontSize: '11px', color: nm.textMuted, lineHeight: 1.6, padding: '10px 14px', background: nm.bg, borderRadius: '10px', boxShadow: nm.shadowInsetSm }}>
-                      <strong style={{ color: '#7c3aed' }}>✓ You are eligible</strong> — This pool activates at DAGCHAIN MainNet launch (Sep–Oct 2026). All DAG Lieutenants share {elitePool.blockchainPct}% of total DAGCHAIN transaction fees equally, in perpetuity.
+                    <div style={{ marginTop: '10px', fontSize: '11px', color: '#7c3aed', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      You are enrolled — activates at MainNet launch
                     </div>
                   </>
                 )}
