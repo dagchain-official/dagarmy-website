@@ -321,7 +321,7 @@ export default function Header2() {
               }}>
               Mentorship
             </Link>
-            <Link href="/rewards" style={{
+            <Link href="/rewards-overview" style={{
               fontSize: '14px',
               fontWeight: '500',
               color: '#4b5563',

@@ -1,5 +1,5 @@
 "use client";
-import "../../app/rewards/rewards.css";
+import "../../app/rewards-overview/rewards.css";
 import React from 'react';
 
 const nm = {
