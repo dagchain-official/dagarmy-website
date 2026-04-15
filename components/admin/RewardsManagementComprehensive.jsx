@@ -151,12 +151,9 @@ export default function RewardsManagementComprehensive() {
       social_task_like_share: '10', social_task_comments_watch: '10', social_task_create_shorts: '50',
       social_task_explainer_video: '100', social_task_subscribe: '150', social_task_lt_bonus_rate: '20',
       // Incentive pools
-      incentive_discretionary_pool_pct: '3', incentive_discretionary_sales_threshold: '1000', incentive_discretionary_enabled: '1',
-      incentive_lifestyle_pool_pct: '3', incentive_lifestyle_sales_threshold: '2000', incentive_lifestyle_enabled: '1',
-      incentive_executive_pool_pct: '2', incentive_executive_sales_threshold: '10000', incentive_executive_enabled: '1',
-      incentive_elite_pool_pct: '2', incentive_elite_min_referrals: '25', incentive_elite_enabled: '1',
-      // Fortune 500
       fortune500_pool_pct: '10', fortune500_enrollment_open: '1',
+      dag_lt_pool_pct: '10',
+      elite_pool_blockchain_pct: '50', elite_pool_active: '0', elite_pool_activate_date: 'Sep–Oct 2026',
       // Sales DAG points
       self_sale_dag_points_per_dollar: '25', referral_sale_dag_points_per_dollar: '25', sale_dag_points_lieutenant_bonus: '100',
     };
@@ -189,16 +186,22 @@ export default function RewardsManagementComprehensive() {
       } else if (section === 'fortune500') {
         keys = ['fortune500_pool_pct','fortune500_enrollment_open'];
       } else if (section === 'incentive_pools') {
-        keys = ['incentive_discretionary_pool_pct','incentive_discretionary_sales_threshold','incentive_discretionary_enabled','incentive_lifestyle_pool_pct','incentive_lifestyle_sales_threshold','incentive_lifestyle_enabled','incentive_executive_pool_pct','incentive_executive_sales_threshold','incentive_executive_enabled','incentive_elite_pool_pct','incentive_elite_min_referrals','incentive_elite_enabled'];
+        keys = ['fortune500_pool_pct','fortune500_enrollment_open','dag_lt_pool_pct','elite_pool_blockchain_pct','elite_pool_active','elite_pool_activate_date'];
       } else if (section === 'sales_dag_points') {
         keys = ['self_sale_dag_points_per_dollar','referral_sale_dag_points_per_dollar','sale_dag_points_lieutenant_bonus'];
       } else if (section === 'system') {
         keys = ['ranking_system_enabled_for_soldier','max_commission_levels','dgcc_points_ratio'];
       }
+      const STRING_KEYS = ['elite_pool_activate_date'];
       const results = [];
       for (const k of keys) {
-        const val = parseInt(editValues[k]);
-        const sendVal = isNaN(val) ? 0 : val;
+        let sendVal;
+        if (STRING_KEYS.includes(k)) {
+          sendVal = editValues[k] ?? '';
+        } else {
+          const val = parseInt(editValues[k]);
+          sendVal = isNaN(val) ? 0 : val;
+        }
         console.log('Saving:', k, '=', sendVal, '(raw:', editValues[k], ')');
         const res = await fetch('/api/rewards/config', {
           method: 'PUT', headers: { 'Content-Type': 'application/json' },
@@ -1040,16 +1043,21 @@ export default function RewardsManagementComprehensive() {
                 {/* Stats row */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                   <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool Source</p>
-                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>{poolPct}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>% DAGGPT Rev</span></p>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool %</p>
+                    {editingSection === 'incentive_pools' ? ri('fortune500_pool_pct', '90px') : <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>{poolPct}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>%</span></p>}
                   </div>
                   <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
                     <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Eligible Members</p>
                     {f500Loading ? <div style={{ fontSize: '13px', color: '#94a3b8' }}>Loading...</div> : <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>{f500Data.activeMemberCount.toLocaleString()}</p>}
                   </div>
                   <div style={{ padding: '18px 24px' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Min. Ecosystem Spend</p>
-                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>$500</p>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Enrollment Open</p>
+                    {editingSection === 'incentive_pools' ? (
+                      <select value={editValues.fortune500_enrollment_open ?? '1'} onChange={e => ov('fortune500_enrollment_open', e.target.value)}
+                        style={{ padding: '8px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '700', cursor: 'pointer', background: '#f8fafc', outline: 'none', color: '#334155' }}>
+                        <option value="1">Open</option><option value="0">Closed</option>
+                      </select>
+                    ) : <p style={{ fontSize: '22px', fontWeight: '800', color: parseInt(config.fortune500_enrollment_open ?? 1) ? '#059669' : '#94a3b8', margin: 0 }}>{parseInt(config.fortune500_enrollment_open ?? 1) ? 'OPEN' : 'CLOSED'}</p>}
                   </div>
                 </div>
 
@@ -1147,8 +1155,8 @@ export default function RewardsManagementComprehensive() {
                 {/* Stats row */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                   <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool Source</p>
-                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#059669', margin: 0 }}>{ltPoolPct}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>% DAGGPT Rev</span></p>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool %</p>
+                    {editingSection === 'incentive_pools' ? ri('dag_lt_pool_pct', '90px') : <p style={{ fontSize: '22px', fontWeight: '800', color: '#059669', margin: 0 }}>{ltPoolPct}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>%</span></p>}
                   </div>
                   <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
                     <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Eligible Members</p>
@@ -1236,7 +1244,16 @@ export default function RewardsManagementComprehensive() {
                   <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>50% of DAGCHAIN blockchain transaction fees — all DAG Lieutenants, forever</p>
                 </div>
               </div>
-              <div style={{ padding: '5px 14px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #fde68a', fontSize: '11px', fontWeight: '700', color: '#d97706' }}>COMING SOON</div>
+              {editingSection === 'incentive_pools' ? (
+                <select value={editValues.elite_pool_active ?? '0'} onChange={e => ov('elite_pool_active', e.target.value)}
+                  style={{ padding: '6px 12px', borderRadius: '10px', border: '2px solid #c4b5fd', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: '#fff', outline: 'none', color: '#5b21b6' }}>
+                  <option value="0">Coming Soon</option><option value="1">Active</option>
+                </select>
+              ) : (
+                <div style={{ padding: '5px 14px', borderRadius: '20px', background: parseInt(config.elite_pool_active ?? 0) ? '#f0fdf4' : '#fef3c7', border: `1px solid ${parseInt(config.elite_pool_active ?? 0) ? '#bbf7d0' : '#fde68a'}`, fontSize: '11px', fontWeight: '700', color: parseInt(config.elite_pool_active ?? 0) ? '#059669' : '#d97706' }}>
+                  {parseInt(config.elite_pool_active ?? 0) ? 'ACTIVE' : 'COMING SOON'}
+                </div>
+              )}
             </div>
             <div style={{ padding: '16px 24px', background: 'rgba(237,233,254,0.5)', borderBottom: '1px solid rgba(196,181,253,0.3)', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
               <Info size={15} style={{ color: '#7c3aed', flexShrink: 0, marginTop: '1px' }} />
@@ -1246,8 +1263,8 @@ export default function RewardsManagementComprehensive() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', borderBottom: '1px solid rgba(196,181,253,0.3)' }}>
               <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(196,181,253,0.3)' }}>
-                <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool Source</p>
-                <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>{config.elite_pool_blockchain_pct ?? 50}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>% Chain Fees</span></p>
+                <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool % of Chain Fees</p>
+                {editingSection === 'incentive_pools' ? ri('elite_pool_blockchain_pct', '90px') : <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>{config.elite_pool_blockchain_pct ?? 50}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>%</span></p>}
               </div>
               <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(196,181,253,0.3)' }}>
                 <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Eligible Members</p>
@@ -1255,12 +1272,20 @@ export default function RewardsManagementComprehensive() {
               </div>
               <div style={{ padding: '18px 24px' }}>
                 <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Activates At</p>
-                <p style={{ fontSize: '16px', fontWeight: '800', color: '#6d28d9', margin: 0 }}>Sep–Oct 2026</p>
+                {editingSection === 'incentive_pools' ? (
+                  <input type="text" value={editValues.elite_pool_activate_date ?? 'Sep–Oct 2026'}
+                    onChange={e => ov('elite_pool_activate_date', e.target.value)}
+                    placeholder="e.g. Sep–Oct 2026"
+                    style={{ padding: '8px 10px', borderRadius: '10px', border: '2px solid #c4b5fd', fontSize: '13px', fontWeight: '700', background: '#fff', outline: 'none', color: '#5b21b6', width: '100%', boxSizing: 'border-box' }}
+                  />
+                ) : (
+                  <p style={{ fontSize: '16px', fontWeight: '800', color: '#6d28d9', margin: 0 }}>{config.elite_pool_activate_date || 'Sep–Oct 2026'}</p>
+                )}
               </div>
             </div>
             <div style={{ padding: '14px 24px', background: 'rgba(237,233,254,0.4)', borderRadius: '0 0 18px 18px' }}>
               <p style={{ fontSize: '12px', color: '#5b21b6', margin: 0, lineHeight: 1.6 }}>
-                <strong>Admin action required at MainNet:</strong> Set <code style={{ background: 'rgba(196,181,253,0.4)', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>elite_pool_active = 1</code> in System settings to activate.
+                <strong>Admin action required at MainNet:</strong> Click <strong>Edit</strong> above and toggle the pool status to <strong>Active</strong> to activate at launch.
                 All current and future DAG Lieutenants are permanently enrolled — no enrollment cutoff.
               </p>
             </div>
