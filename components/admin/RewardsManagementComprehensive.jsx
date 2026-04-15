@@ -22,6 +22,11 @@ export default function RewardsManagementComprehensive() {
   const [f500Loading, setF500Loading] = useState(false);
   const [distributing, setDistributing] = useState(false);
 
+  // DAG LT Pool state
+  const [ltPoolData, setLtPoolData] = useState({ distributions: [], activeMemberCount: 0 });
+  const [ltPoolLoading, setLtPoolLoading] = useState(false);
+  const [ltDistributing, setLtDistributing] = useState(false);
+
   // Points Ledger state
   const [ledger, setLedger] = useState([]);
   const [ledgerLoading, setLedgerLoading] = useState(false);
@@ -33,7 +38,7 @@ export default function RewardsManagementComprehensive() {
 
   useEffect(() => {
     if (activeTab === 'ledger' && ledger.length === 0) fetchLedger();
-    if (activeTab === 'fortune500') fetchF500Data();
+    if (activeTab === 'incentive_pools') { fetchF500Data(); fetchLtPoolData(); }
   }, [activeTab]);
 
   const fetchF500Data = async () => {
@@ -47,7 +52,7 @@ export default function RewardsManagementComprehensive() {
   };
 
   const handleDistribute = async (distributionId) => {
-    if (!confirm('Distribute funds to all active Fortune 500 members? This cannot be undone.')) return;
+    if (!confirm('Distribute Fortune 500 funds to all eligible members? This cannot be undone.')) return;
     try {
       setDistributing(true);
       const res = await fetch('/api/admin/fortune500', {
@@ -60,6 +65,32 @@ export default function RewardsManagementComprehensive() {
       else sm('error', data.error || 'Distribution failed');
     } catch (e) { sm('error', 'Network error'); }
     finally { setDistributing(false); }
+  };
+
+  const fetchLtPoolData = async () => {
+    try {
+      setLtPoolLoading(true);
+      const res = await fetch('/api/admin/dag-lt-pool');
+      const data = await res.json();
+      if (data.success) setLtPoolData({ distributions: data.distributions || [], activeMemberCount: data.activeMemberCount || 0 });
+    } catch (e) { console.error(e); }
+    finally { setLtPoolLoading(false); }
+  };
+
+  const handleLtDistribute = async (distributionId) => {
+    if (!confirm('Distribute DAG LT Pool funds to all eligible members? This cannot be undone.')) return;
+    try {
+      setLtDistributing(true);
+      const res = await fetch('/api/admin/dag-lt-pool', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ distribution_id: distributionId, action: 'distribute' }),
+      });
+      const data = await res.json();
+      if (data.success) { sm('success', data.message); fetchLtPoolData(); }
+      else sm('error', data.error || 'Distribution failed');
+    } catch (e) { sm('error', 'Network error'); }
+    finally { setLtDistributing(false); }
   };
 
   const fetchLedger = async () => {
@@ -249,15 +280,14 @@ export default function RewardsManagementComprehensive() {
 
   const br = config.lieutenant_bonus_rate || 20;
   const tabs = [
-    { id: 'signup',         label: 'Signup Bonuses',   icon: Gift },
-    { id: 'referral',       label: 'Referral Scenarios', icon: Users },
-    { id: 'sales',          label: 'Sales Commissions', icon: DollarSign },
-    { id: 'sales_dag_points', label: 'Sales DAG Points', icon: ShoppingCart },
-    { id: 'social_tasks',   label: 'Social Tasks',     icon: Zap },
-    { id: 'incentive_pools', label: 'Incentive Pools', icon: Layers },
-    { id: 'fortune500',     label: 'Fortune 500 Pool', icon: Trophy },
-    { id: 'system',         label: 'System',           icon: Settings },
-    { id: 'ledger',         label: 'Points Ledger',    icon: FileText },
+    { id: 'signup',           label: 'Signup Bonuses',     icon: Gift },
+    { id: 'referral',         label: 'Referral Scenarios', icon: Users },
+    { id: 'sales',            label: 'Sales Commissions',  icon: DollarSign },
+    { id: 'sales_dag_points', label: 'Sales DAG Points',   icon: ShoppingCart },
+    { id: 'social_tasks',     label: 'Social Tasks',       icon: Zap },
+    { id: 'incentive_pools',  label: 'Incentive Pools',    icon: Layers },
+    { id: 'system',           label: 'System',             icon: Settings },
+    { id: 'ledger',           label: 'Points Ledger',      icon: FileText },
   ];
 
   /* ── Section header with edit/save ── */
@@ -952,340 +982,283 @@ export default function RewardsManagementComprehensive() {
         </B>
       </>)}
 
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* FORTUNE 500 POOL TAB                               */}
-      {/* ═══════════════════════════════════════════════════ */}
-      {activeTab === 'fortune500' && (<>
-        <SH title="Fortune 500 Pool" desc="10% of DAGGPT monthly revenue shared equally among all auto-enrolled Soldiers & Lieutenants — distribute monthly from here" section="fortune500" />
-
-        {/* Banner */}
-        <B style={{ marginBottom: '16px', background: 'linear-gradient(135deg,#faf5ff 0%,#ede9fe 100%)', border: '1.5px solid #c4b5fd' }} hover={false}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Trophy size={20} color="#fff" />
-            </div>
-            <div>
-              <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#4c1d95', margin: '0 0 6px' }}>How Fortune 500 Works</h4>
-              <p style={{ fontSize: '12px', color: '#5b21b6', margin: 0, lineHeight: 1.7 }}>
-                Every month, <strong>{config.fortune500_pool_pct ?? 10}% of all DAGGPT credit sales</strong> revenue is pooled.
-                This pool is split <strong>equally</strong> among every active Soldier and Lieutenant who is enrolled.
-                When DAGGPT reports monthly revenue (via API), a distribution record is created with status <strong>pending</strong>.
-                Click <strong>Distribute</strong> below to release the funds to all enrolled members.
-              </p>
-            </div>
-          </div>
-        </B>
-
-        {/* Config row + member count */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-          <B>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f5f3ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <DollarSign size={16} style={{ color: '#7c3aed' }} />
-              </div>
-              <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Pool %</h4>
-            </div>
-            {editingSection === 'fortune500' ? ri('fortune500_pool_pct', '80px') : <Val v={config.fortune500_pool_pct ?? 10} suffix="%" />}
-          </B>
-
-          <B>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: parseInt(config.fortune500_enrollment_open ?? 1) ? '#f0fdf4' : '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {parseInt(config.fortune500_enrollment_open ?? 1) ? <Unlock size={16} style={{ color: '#10b981' }} /> : <Lock size={16} style={{ color: '#94a3b8' }} />}
-              </div>
-              <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Enrollment</h4>
-            </div>
-            {editingSection === 'fortune500' ? (
-              <select value={editValues.fortune500_enrollment_open ?? '1'} onChange={e => ov('fortune500_enrollment_open', e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '600', cursor: 'pointer', background: '#f8fafc', outline: 'none', color: '#334155' }}>
-                <option value="1">Open (Auto-enrolled)</option>
-                <option value="0">Locked (Pre-MainNet)</option>
-              </select>
-            ) : (
-              <div style={{ padding: '10px 14px', borderRadius: '10px', textAlign: 'center', background: parseInt(config.fortune500_enrollment_open ?? 1) ? '#f0fdf4' : '#fef2f2', border: `1px solid ${parseInt(config.fortune500_enrollment_open ?? 1) ? '#bbf7d0' : '#fecaca'}`, fontSize: '13px', fontWeight: '700', color: parseInt(config.fortune500_enrollment_open ?? 1) ? '#059669' : '#dc2626' }}>
-                {parseInt(config.fortune500_enrollment_open ?? 1) ? '✓ Open' : '⏳ Locked'}
-              </div>
-            )}
-          </B>
-
-          <B hover={false} style={{ background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Users size={16} style={{ color: '#6366f1' }} />
-              </div>
-              <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Active Members</h4>
-            </div>
-            <Val v={(f500Data.activeMemberCount || 0).toLocaleString()} suffix="enrolled" />
-          </B>
-        </div>
-
-        {/* Pending distributions — Distribute button */}
-        {f500Loading ? (
-          <B hover={false} style={{ padding: '32px', textAlign: 'center', marginBottom: '16px' }}>
-            <div style={{ width: '28px', height: '28px', border: '3px solid #f1f5f9', borderTop: '3px solid #7c3aed', borderRadius: '50%', animation: 'rwSpin 0.8s linear infinite', margin: '0 auto 10px' }} />
-            <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>Loading distributions...</p>
-          </B>
-        ) : (
-          <B style={{ padding: '0', marginBottom: '16px' }}>
-            {/* Table header */}
-            <div style={{ padding: '12px 20px', background: '#f8fafc', borderBottom: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h4 style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Distribution History</h4>
-              <button onClick={fetchF500Data} style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '11px', fontWeight: '600', cursor: 'pointer', color: '#64748b' }}>Refresh</button>
-            </div>
-            {f500Data.distributions.length === 0 ? (
-              <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
-                <Trophy size={28} style={{ marginBottom: '10px', opacity: 0.3, display: 'block', margin: '0 auto 10px' }} />
-                <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet — DAGGPT needs to report monthly revenue first.</p>
-              </div>
-            ) : (
-              <>
-                {/* Column headers */}
-                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 1fr 140px 160px', padding: '8px 20px', background: '#f8fafc', borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
-                  {['Period','DAGGPT Revenue','Pool Amount','Members','Per Member','Action'].map((h, i) => (
-                    <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: i >= 4 ? 'right' : 'left' }}>{h}</span>
-                  ))}
-                </div>
-                {f500Data.distributions.map((dist, idx) => {
-                  const isPending = dist.status === 'pending';
-                  const isDone = dist.status === 'distributed';
-                  const statusColor = isDone ? '#10b981' : isPending ? '#f59e0b' : '#94a3b8';
-                  const statusBg = isDone ? '#f0fdf4' : isPending ? '#fffbeb' : '#f8fafc';
-                  return (
-                    <div key={dist.id} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 1fr 140px 160px', padding: '14px 20px', alignItems: 'center', borderBottom: idx < f500Data.distributions.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#fafbfc'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>{dist.period}</span>
-                      <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>${parseFloat(dist.total_daggpt_revenue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span style={{ fontSize: '13px', fontWeight: '600', color: '#7c3aed' }}>${parseFloat(dist.pool_amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>{(dist.member_count || 0).toLocaleString()}</span>
-                      <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a', textAlign: 'right' }}>${parseFloat(dist.per_member_amount || 0).toFixed(4)}</span>
-                      <div style={{ textAlign: 'right' }}>
-                        {isPending ? (
-                          <button
-                            onClick={() => handleDistribute(dist.id)}
-                            disabled={distributing}
-                            style={{ padding: '7px 16px', borderRadius: '8px', border: 'none', background: distributing ? '#e2e8f0' : 'linear-gradient(135deg,#7c3aed,#6d28d9)', color: distributing ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: '700', cursor: distributing ? 'not-allowed' : 'pointer' }}
-                          >
-                            {distributing ? 'Distributing…' : '💸 Distribute'}
-                          </button>
-                        ) : (
-                          <span style={{ fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: statusBg, color: statusColor, textTransform: 'uppercase' }}>
-                            {dist.status}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </B>
-        )}
-
-        <B style={{ padding: '18px 24px', display: 'flex', gap: '14px', alignItems: 'flex-start' }} hover={false}>
-          <Info size={16} style={{ color: '#94a3b8', marginTop: '1px', flexShrink: 0 }} />
-          <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.7', margin: 0 }}>
-            The pool is calculated at month-end from the <strong style={{ color: '#0f172a' }}>DAGGPT revenue bridge</strong> (configured via <code style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>DAGGPT_POOL_API_KEY</code> in .env.local).
-            When DAGGPT POSTs revenue, this admin panel shows the pending distribution — click <strong style={{ color: '#7c3aed' }}>💸 Distribute</strong> to release equal shares to all {f500Data.activeMemberCount} enrolled members.
-          </p>
-        </B>
-      </>)}
 
       {/* ═══════════════════════════════════════════════════ */}
       {/* INCENTIVE POOLS TAB                                */}
       {/* ═══════════════════════════════════════════════════ */}
       {activeTab === 'incentive_pools' && (<>
-        <SH title="Incentive Pool Programs" desc="Monthly & quarterly reward pools based on direct sales targets" section="incentive_pools" />
+        <SH title="Incentive Pools" desc="All reward pool programs — Fortune 500, DAG LT Pool, and DAG Army Elite Pool" section="incentive_pools" />
 
-        {/* Explanation card */}
-        <B style={{ marginBottom: '16px', background: '#f8fafc', border: '1px solid #e2e8f0' }} hover={false}>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-            <Info size={18} style={{ color: '#6366f1', flexShrink: 0, marginTop: '2px' }} />
-            <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
-              <strong style={{ color: '#0f172a' }}>How pools work:</strong> A percentage of company revenue is set aside as a shared pool each period.
-              Everyone who meets the direct sales threshold in that period qualifies to share the pool equally.
-              <br /><strong style={{ color: '#0f172a' }}>Fresh count:</strong> Sales targets reset each month (or quarter for Executive). Only sales within the current period count.
-            </div>
+        {/* Overview banner */}
+        <B style={{ marginBottom: '20px', background: 'linear-gradient(135deg,#0f172a 0%,#1e293b 100%)', border: 'none' }} hover={false}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
+            {[
+              { label: 'Fortune 500 Pool', sub: '10% DAGGPT revenue / month', color: '#a78bfa', eligible: 'Soldiers & LTs with $500+ spend' },
+              { label: 'DAG LT Pool', sub: '10% DAGGPT revenue / month', color: '#34d399', eligible: 'LTs who recruited 3 LT directs in 30 days' },
+              { label: 'DAG Army Elite Pool', sub: '50% DAGCHAIN tx fees', color: '#fbbf24', eligible: 'All DAG Lieutenants — MainNet launch' },
+            ].map(p => (
+              <div key={p.label}>
+                <p style={{ fontSize: '10px', fontWeight: '700', color: p.color, textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 4px' }}>{p.label}</p>
+                <p style={{ fontSize: '13px', fontWeight: '800', color: '#fff', margin: '0 0 4px' }}>{p.sub}</p>
+                <p style={{ fontSize: '11px', color: '#94a3b8', margin: 0 }}>{p.eligible}</p>
+              </div>
+            ))}
           </div>
         </B>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
-          {/* ── Discretionary Incentive ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
+
+          {/* ════════════════════════════════════════
+              POOL 1 — FORTUNE 500
+          ════════════════════════════════════════ */}
           {(() => {
-            const poolPct = editingSection === 'incentive_pools' ? editValues.incentive_discretionary_pool_pct : (config.incentive_discretionary_pool_pct ?? 3);
-            const threshold = editingSection === 'incentive_pools' ? editValues.incentive_discretionary_sales_threshold : (config.incentive_discretionary_sales_threshold ?? 1000);
-            const enabled = editingSection === 'incentive_pools' ? editValues.incentive_discretionary_enabled : (config.incentive_discretionary_enabled ?? 1);
+            const poolPct = config.fortune500_pool_pct ?? 10;
             return (
-              <B style={{ padding: '0', border: `1px solid ${parseInt(enabled) ? '#bbf7d0' : 'rgba(0,0,0,0.06)'}` }}>
-                <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <B style={{ padding: '0', border: '1.5px solid #c4b5fd' }}>
+                {/* Header */}
+                <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg,#faf5ff,#ede9fe)', borderRadius: '18px 18px 0 0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <DollarSign size={18} style={{ color: '#10b981' }} />
+                    <div style={{ width: '44px', height: '44px', borderRadius: '13px', background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Trophy size={22} color="#fff" />
                     </div>
                     <div>
-                      <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Discretionary Incentive</h3>
-                      <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Monthly pool - Fresh sale count every month</p>
+                      <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#4c1d95', margin: 0 }}>Fortune 500 Pool</h3>
+                      <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>{poolPct}% of monthly DAGGPT revenue — split equally among eligible members</p>
                     </div>
                   </div>
-                  <div style={{ padding: '4px 12px', borderRadius: '20px', background: parseInt(enabled) ? '#f0fdf4' : '#f8fafc', border: `1px solid ${parseInt(enabled) ? '#bbf7d0' : '#e2e8f0'}`, fontSize: '11px', fontWeight: '700', color: parseInt(enabled) ? '#059669' : '#94a3b8' }}>
-                    {parseInt(enabled) ? 'ACTIVE' : 'DISABLED'}
+                  <div style={{ padding: '5px 14px', borderRadius: '20px', background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: '11px', fontWeight: '700', color: '#059669' }}>ACTIVE</div>
+                </div>
+
+                {/* Eligibility condition */}
+                <div style={{ padding: '16px 24px', background: '#fefce8', borderBottom: '1px solid #fde68a', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <Info size={15} style={{ color: '#d97706', flexShrink: 0, marginTop: '1px' }} />
+                  <div style={{ fontSize: '12px', color: '#92400e', lineHeight: 1.6 }}>
+                    <strong>Eligibility condition (updated):</strong> DAG Soldiers and DAG Lieutenants are enrolled automatically — but only those who have spent <strong>at least $500</strong> in the ecosystem (Validator Nodes, Storage Nodes, DAG Lieutenant upgrade, or DAGGPT credit purchases).
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
-                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool %</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>% of company net revenue</p>
-                    {editingSection === 'incentive_pools' ? ri('incentive_discretionary_pool_pct', '80px') : <Val v={poolPct} suffix="%" size="22px" />}
+
+                {/* Stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool Source</p>
+                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>{poolPct}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>% DAGGPT Rev</span></p>
                   </div>
-                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Sales Threshold</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Min direct sales per month</p>
-                    {editingSection === 'incentive_pools' ? ri('incentive_discretionary_sales_threshold', '100px') : <Val v={`$${Number(threshold).toLocaleString()}`} size="22px" />}
+                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Eligible Members</p>
+                    {f500Loading ? <div style={{ fontSize: '13px', color: '#94a3b8' }}>Loading...</div> : <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>{f500Data.activeMemberCount.toLocaleString()}</p>}
                   </div>
                   <div style={{ padding: '18px 24px' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Status</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Enable or disable this pool</p>
-                    {editingSection === 'incentive_pools' ? (
-                      <select value={editValues.incentive_discretionary_enabled || '1'} onChange={e => ov('incentive_discretionary_enabled', e.target.value)}
-                        style={{ padding: '8px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '700', cursor: 'pointer', background: '#f8fafc', outline: 'none', color: '#334155' }}>
-                        <option value="1">Enabled</option><option value="0">Disabled</option>
-                      </select>
-                    ) : <Val v={parseInt(enabled) ? 'ON' : 'OFF'} size="22px" color={parseInt(enabled) ? '#059669' : '#94a3b8'} />}
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Min. Ecosystem Spend</p>
+                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>$500</p>
                   </div>
+                </div>
+
+                {/* Distribution table */}
+                <div style={{ padding: '0' }}>
+                  {f500Loading ? (
+                    <div style={{ padding: '32px', textAlign: 'center' }}>
+                      <div style={{ width: '28px', height: '28px', border: '3px solid #f1f5f9', borderTop: '3px solid #7c3aed', borderRadius: '50%', animation: 'rwSpin 0.8s linear infinite', margin: '0 auto 10px' }} />
+                      <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>Loading distributions...</p>
+                    </div>
+                  ) : f500Data.distributions.length === 0 ? (
+                    <div style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
+                      <Trophy size={28} style={{ marginBottom: '10px', opacity: 0.3, display: 'block', margin: '0 auto 10px' }} />
+                      <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet — DAGGPT needs to report monthly revenue first.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 1fr 140px 160px', padding: '8px 20px', background: '#f8fafc', borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
+                        {['Period','DAGGPT Revenue','Pool Amount','Members','Per Member','Action'].map((h, i) => (
+                          <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: i >= 4 ? 'right' : 'left' }}>{h}</span>
+                        ))}
+                      </div>
+                      {f500Data.distributions.map((dist, idx) => {
+                        const isPending = dist.status === 'pending';
+                        const isDone = dist.status === 'distributed';
+                        const statusColor = isDone ? '#10b981' : isPending ? '#f59e0b' : '#94a3b8';
+                        const statusBg = isDone ? '#f0fdf4' : isPending ? '#fffbeb' : '#f8fafc';
+                        return (
+                          <div key={dist.id} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 1fr 140px 160px', padding: '14px 20px', alignItems: 'center', borderBottom: idx < f500Data.distributions.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#fafbfc'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>{dist.period}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>${parseFloat(dist.total_daggpt_revenue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#7c3aed' }}>${parseFloat(dist.pool_amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>{(dist.member_count || 0).toLocaleString()}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a', textAlign: 'right' }}>${parseFloat(dist.per_member_amount || 0).toFixed(4)}</span>
+                            <div style={{ textAlign: 'right' }}>
+                              {isPending ? (
+                                <button onClick={() => handleDistribute(dist.id)} disabled={distributing}
+                                  style={{ padding: '7px 16px', borderRadius: '8px', border: 'none', background: distributing ? '#e2e8f0' : 'linear-gradient(135deg,#7c3aed,#6d28d9)', color: distributing ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: '700', cursor: distributing ? 'not-allowed' : 'pointer' }}>
+                                  {distributing ? 'Distributing...' : 'Distribute'}
+                                </button>
+                              ) : (
+                                <span style={{ fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: statusBg, color: statusColor, textTransform: 'uppercase' }}>{dist.status}</span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
+                </div>
+
+                <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f8fafc', borderRadius: '0 0 18px 18px' }}>
+                  <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.6 }}>
+                    <strong style={{ color: '#0f172a' }}>Disbursement:</strong> When DAGGPT POSTs monthly revenue to <code style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>/api/pools/daggpt-revenue</code>, a pending distribution record is created automatically.
+                    Admin clicks <strong>Distribute</strong> to release equal shares to all {f500Data.activeMemberCount} eligible members (those with $500+ ecosystem spend).
+                  </p>
                 </div>
               </B>
             );
           })()}
 
-          {/* ── Lifestyle Bonus ── */}
+          {/* ════════════════════════════════════════
+              POOL 2 — DAG LT POOL
+          ════════════════════════════════════════ */}
           {(() => {
-            const poolPct = editingSection === 'incentive_pools' ? editValues.incentive_lifestyle_pool_pct : (config.incentive_lifestyle_pool_pct ?? 3);
-            const threshold = editingSection === 'incentive_pools' ? editValues.incentive_lifestyle_sales_threshold : (config.incentive_lifestyle_sales_threshold ?? 2000);
-            const enabled = editingSection === 'incentive_pools' ? editValues.incentive_lifestyle_enabled : (config.incentive_lifestyle_enabled ?? 1);
+            const ltPoolPct = config.dag_lt_pool_pct ?? 10;
             return (
-              <B style={{ padding: '0', border: `1px solid ${parseInt(enabled) ? '#c7d2fe' : 'rgba(0,0,0,0.06)'}` }}>
-                <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <B style={{ padding: '0', border: '1.5px solid #6ee7b7' }}>
+                {/* Header */}
+                <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg,#f0fdf4,#d1fae5)', borderRadius: '18px 18px 0 0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Star size={18} style={{ color: '#6366f1' }} />
+                    <div style={{ width: '44px', height: '44px', borderRadius: '13px', background: 'linear-gradient(135deg,#059669,#047857)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Users size={22} color="#fff" />
                     </div>
                     <div>
-                      <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Lifestyle Bonus</h3>
-                      <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Monthly pool - Car / Travel / Home allowance</p>
+                      <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#064e3b', margin: 0 }}>DAG LT Pool</h3>
+                      <p style={{ fontSize: '11px', color: '#047857', margin: '2px 0 0' }}>{ltPoolPct}% of monthly DAGGPT revenue — for qualifying DAG Lieutenants</p>
                     </div>
                   </div>
-                  <div style={{ padding: '4px 12px', borderRadius: '20px', background: parseInt(enabled) ? '#eef2ff' : '#f8fafc', border: `1px solid ${parseInt(enabled) ? '#c7d2fe' : '#e2e8f0'}`, fontSize: '11px', fontWeight: '700', color: parseInt(enabled) ? '#4f46e5' : '#94a3b8' }}>
-                    {parseInt(enabled) ? 'ACTIVE' : 'DISABLED'}
+                  <div style={{ padding: '5px 14px', borderRadius: '20px', background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: '11px', fontWeight: '700', color: '#059669' }}>ACTIVE</div>
+                </div>
+
+                {/* Eligibility condition */}
+                <div style={{ padding: '16px 24px', background: '#ecfdf5', borderBottom: '1px solid #a7f3d0', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <Info size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '1px' }} />
+                  <div style={{ fontSize: '12px', color: '#064e3b', lineHeight: 1.6 }}>
+                    <strong>Eligibility condition:</strong> The user must have <strong>upgraded to DAG Lieutenant</strong> themselves AND have <strong>3 direct referrals who also upgraded to DAG Lieutenant</strong> — all within a <strong>30-day window</strong> from the user's own upgrade date.
+                    Only the qualifying LT earns from this pool (not the 3 referred LTs).
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
-                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool %</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>% of company net revenue</p>
-                    {editingSection === 'incentive_pools' ? ri('incentive_lifestyle_pool_pct', '80px') : <Val v={poolPct} suffix="%" size="22px" />}
+
+                {/* Stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool Source</p>
+                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#059669', margin: 0 }}>{ltPoolPct}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>% DAGGPT Rev</span></p>
                   </div>
-                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Sales Threshold</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Min direct sales per month</p>
-                    {editingSection === 'incentive_pools' ? ri('incentive_lifestyle_sales_threshold', '100px') : <Val v={`$${Number(threshold).toLocaleString()}`} size="22px" />}
+                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Eligible Members</p>
+                    {ltPoolLoading ? <div style={{ fontSize: '13px', color: '#94a3b8' }}>Loading...</div> : <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>{ltPoolData.activeMemberCount.toLocaleString()}</p>}
                   </div>
                   <div style={{ padding: '18px 24px' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Status</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Enable or disable this pool</p>
-                    {editingSection === 'incentive_pools' ? (
-                      <select value={editValues.incentive_lifestyle_enabled || '1'} onChange={e => ov('incentive_lifestyle_enabled', e.target.value)}
-                        style={{ padding: '8px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '700', cursor: 'pointer', background: '#f8fafc', outline: 'none', color: '#334155' }}>
-                        <option value="1">Enabled</option><option value="0">Disabled</option>
-                      </select>
-                    ) : <Val v={parseInt(enabled) ? 'ON' : 'OFF'} size="22px" color={parseInt(enabled) ? '#4f46e5' : '#94a3b8'} />}
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Qualification Window</p>
+                    <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>30 <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>days</span></p>
                   </div>
+                </div>
+
+                {/* Distribution table */}
+                <div style={{ padding: '0' }}>
+                  {ltPoolLoading ? (
+                    <div style={{ padding: '32px', textAlign: 'center' }}>
+                      <div style={{ width: '28px', height: '28px', border: '3px solid #f1f5f9', borderTop: '3px solid #059669', borderRadius: '50%', animation: 'rwSpin 0.8s linear infinite', margin: '0 auto 10px' }} />
+                      <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>Loading distributions...</p>
+                    </div>
+                  ) : ltPoolData.distributions.length === 0 ? (
+                    <div style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
+                      <Users size={28} style={{ marginBottom: '10px', opacity: 0.3, display: 'block', margin: '0 auto 10px' }} />
+                      <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet — DAGGPT needs to report monthly revenue first.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 1fr 140px 160px', padding: '8px 20px', background: '#f8fafc', borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
+                        {['Period','DAGGPT Revenue','Pool Amount','Members','Per Member','Action'].map((h, i) => (
+                          <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: i >= 4 ? 'right' : 'left' }}>{h}</span>
+                        ))}
+                      </div>
+                      {ltPoolData.distributions.map((dist, idx) => {
+                        const isPending = dist.status === 'pending';
+                        const isDone = dist.status === 'distributed';
+                        const statusColor = isDone ? '#10b981' : isPending ? '#f59e0b' : '#94a3b8';
+                        const statusBg = isDone ? '#f0fdf4' : isPending ? '#fffbeb' : '#f8fafc';
+                        return (
+                          <div key={dist.id} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 1fr 140px 160px', padding: '14px 20px', alignItems: 'center', borderBottom: idx < ltPoolData.distributions.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#fafbfc'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>{dist.period}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>${parseFloat(dist.total_daggpt_revenue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#059669' }}>${parseFloat(dist.pool_amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>{(dist.member_count || 0).toLocaleString()}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a', textAlign: 'right' }}>${parseFloat(dist.per_member_amount || 0).toFixed(4)}</span>
+                            <div style={{ textAlign: 'right' }}>
+                              {isPending ? (
+                                <button onClick={() => handleLtDistribute(dist.id)} disabled={ltDistributing}
+                                  style={{ padding: '7px 16px', borderRadius: '8px', border: 'none', background: ltDistributing ? '#e2e8f0' : 'linear-gradient(135deg,#059669,#047857)', color: ltDistributing ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: '700', cursor: ltDistributing ? 'not-allowed' : 'pointer' }}>
+                                  {ltDistributing ? 'Distributing...' : 'Distribute'}
+                                </button>
+                              ) : (
+                                <span style={{ fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: statusBg, color: statusColor, textTransform: 'uppercase' }}>{dist.status}</span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
+                </div>
+
+                <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f0fdf4', borderRadius: '0 0 18px 18px' }}>
+                  <p style={{ fontSize: '12px', color: '#064e3b', margin: 0, lineHeight: 1.6 }}>
+                    <strong style={{ color: '#0f172a' }}>Disbursement:</strong> When DAGGPT reports monthly revenue, 10% is automatically allocated to this pool.
+                    Eligibility is re-evaluated monthly — any LT who qualified (self + 3 direct LT upgrades within 30 days of their own upgrade) appears as an eligible member.
+                    Admin clicks <strong>Distribute</strong> to release equal shares to {ltPoolData.activeMemberCount} qualified members.
+                  </p>
                 </div>
               </B>
             );
           })()}
 
-          {/* ── Executive Performance Incentive ── */}
-          {(() => {
-            const poolPct = editingSection === 'incentive_pools' ? editValues.incentive_executive_pool_pct : (config.incentive_executive_pool_pct ?? 2);
-            const threshold = editingSection === 'incentive_pools' ? editValues.incentive_executive_sales_threshold : (config.incentive_executive_sales_threshold ?? 10000);
-            const enabled = editingSection === 'incentive_pools' ? editValues.incentive_executive_enabled : (config.incentive_executive_enabled ?? 1);
-            return (
-              <B style={{ padding: '0', border: `1px solid ${parseInt(enabled) ? '#fde68a' : 'rgba(0,0,0,0.06)'}` }}>
-                <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#fefce8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Crown size={18} style={{ color: '#eab308' }} />
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Executive Performance Incentive</h3>
-                      <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Quarterly pool - Paid every quarter</p>
-                    </div>
-                  </div>
-                  <div style={{ padding: '4px 12px', borderRadius: '20px', background: parseInt(enabled) ? '#fefce8' : '#f8fafc', border: `1px solid ${parseInt(enabled) ? '#fde68a' : '#e2e8f0'}`, fontSize: '11px', fontWeight: '700', color: parseInt(enabled) ? '#ca8a04' : '#94a3b8' }}>
-                    {parseInt(enabled) ? 'ACTIVE' : 'DISABLED'}
-                  </div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
-                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool %</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>% of company revenue</p>
-                    {editingSection === 'incentive_pools' ? ri('incentive_executive_pool_pct', '80px') : <Val v={poolPct} suffix="%" size="22px" />}
-                  </div>
-                  <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(0,0,0,0.04)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Sales Threshold</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Min direct sales per quarter</p>
-                    {editingSection === 'incentive_pools' ? ri('incentive_executive_sales_threshold', '100px') : <Val v={`$${Number(threshold).toLocaleString()}`} size="22px" />}
-                  </div>
-                  <div style={{ padding: '18px 24px' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Status</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 8px' }}>Enable or disable this pool</p>
-                    {editingSection === 'incentive_pools' ? (
-                      <select value={editValues.incentive_executive_enabled || '1'} onChange={e => ov('incentive_executive_enabled', e.target.value)}
-                        style={{ padding: '8px 12px', borderRadius: '10px', border: '2px solid #e2e8f0', fontSize: '13px', fontWeight: '700', cursor: 'pointer', background: '#f8fafc', outline: 'none', color: '#334155' }}>
-                        <option value="1">Enabled</option><option value="0">Disabled</option>
-                      </select>
-                    ) : <Val v={parseInt(enabled) ? 'ON' : 'OFF'} size="22px" color={parseInt(enabled) ? '#ca8a04' : '#94a3b8'} />}
-                  </div>
-                </div>
-              </B>
-            );
-          })()}
-
-          {/* ── DAG Army Elite Pool (NEW) — MainNet-linked, LTs only ── */}
+          {/* ════════════════════════════════════════
+              POOL 3 — DAG ARMY ELITE POOL
+          ════════════════════════════════════════ */}
           <B style={{ padding: '0', border: '1.5px solid #c4b5fd', background: 'linear-gradient(135deg,#faf5ff 0%,#ede9fe 100%)' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(196,181,253,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(196,181,253,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '18px 18px 0 0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Crown size={18} color="#fff" />
+                <div style={{ width: '44px', height: '44px', borderRadius: '13px', background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Crown size={22} color="#fff" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#4c1d95', margin: 0 }}>DAG Army Elite Pool</h3>
+                  <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#4c1d95', margin: 0 }}>DAG Army Elite Pool</h3>
                   <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>50% of DAGCHAIN blockchain transaction fees — all DAG Lieutenants, forever</p>
                 </div>
               </div>
-              <div style={{ padding: '4px 12px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #fde68a', fontSize: '11px', fontWeight: '700', color: '#d97706' }}>
-                ⏳ COMING SOON
+              <div style={{ padding: '5px 14px', borderRadius: '20px', background: '#fef3c7', border: '1px solid #fde68a', fontSize: '11px', fontWeight: '700', color: '#d97706' }}>COMING SOON</div>
+            </div>
+            <div style={{ padding: '16px 24px', background: 'rgba(237,233,254,0.5)', borderBottom: '1px solid rgba(196,181,253,0.3)', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <Info size={15} style={{ color: '#7c3aed', flexShrink: 0, marginTop: '1px' }} />
+              <div style={{ fontSize: '12px', color: '#5b21b6', lineHeight: 1.6 }}>
+                <strong>Eligibility:</strong> All DAG Lieutenants are permanently enrolled with no cutoff. Activates at DAGCHAIN MainNet launch (Sep–Oct 2026).
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', borderBottom: '1px solid rgba(196,181,253,0.3)' }}>
               <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(196,181,253,0.3)' }}>
                 <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Pool Source</p>
-                <p style={{ fontSize: '11px', color: '#5b21b6', margin: '0 0 8px' }}>% of DAGCHAIN chain fees</p>
-                <Val v={config.elite_pool_blockchain_pct ?? 50} suffix="%" size="22px" color="#7c3aed" />
+                <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>{config.elite_pool_blockchain_pct ?? 50}<span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '600' }}>% Chain Fees</span></p>
               </div>
               <div style={{ padding: '18px 24px', borderRight: '1px solid rgba(196,181,253,0.3)' }}>
                 <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Eligible Members</p>
-                <p style={{ fontSize: '11px', color: '#5b21b6', margin: '0 0 8px' }}>All DAG Lieutenants — no cutoff</p>
-                <Val v="All LTs" size="22px" color="#7c3aed" />
+                <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', margin: 0 }}>All LTs</p>
               </div>
               <div style={{ padding: '18px 24px' }}>
                 <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 6px', letterSpacing: '0.5px' }}>Activates At</p>
-                <p style={{ fontSize: '11px', color: '#5b21b6', margin: '0 0 8px' }}>DAGCHAIN MainNet launch</p>
-                <Val v="Sep–Oct 2026" size="14px" color="#6d28d9" />
+                <p style={{ fontSize: '16px', fontWeight: '800', color: '#6d28d9', margin: 0 }}>Sep–Oct 2026</p>
               </div>
             </div>
-            <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(196,181,253,0.3)', background: 'rgba(237,233,254,0.4)' }}>
+            <div style={{ padding: '14px 24px', background: 'rgba(237,233,254,0.4)', borderRadius: '0 0 18px 18px' }}>
               <p style={{ fontSize: '12px', color: '#5b21b6', margin: 0, lineHeight: 1.6 }}>
                 <strong>Admin action required at MainNet:</strong> Set <code style={{ background: 'rgba(196,181,253,0.4)', padding: '1px 5px', borderRadius: '4px', fontSize: '11px' }}>elite_pool_active = 1</code> in System settings to activate.
                 All current and future DAG Lieutenants are permanently enrolled — no enrollment cutoff.
@@ -1294,24 +1267,20 @@ export default function RewardsManagementComprehensive() {
           </B>
         </div>
 
-        {/* Summary */}
+        {/* 3-Pool Summary */}
         <B style={{ marginTop: '16px', padding: '20px 24px' }} hover={false}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '10px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', margin: '0 0 4px' }}>Discretionary</p>
-              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Monthly | {config.incentive_discretionary_pool_pct ?? 3}% pool | ${Number(config.incentive_discretionary_sales_threshold ?? 1000).toLocaleString()} threshold</p>
+              <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 4px' }}>Fortune 500 Pool</p>
+              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Monthly | {config.fortune500_pool_pct ?? 10}% DAGGPT revenue | $500 min ecosystem spend</p>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '10px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', margin: '0 0 4px' }}>Lifestyle</p>
-              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Monthly | {config.incentive_lifestyle_pool_pct ?? 3}% pool | ${Number(config.incentive_lifestyle_sales_threshold ?? 2000).toLocaleString()} threshold</p>
+              <p style={{ fontSize: '10px', fontWeight: '700', color: '#059669', textTransform: 'uppercase', margin: '0 0 4px' }}>DAG LT Pool</p>
+              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Monthly | {config.dag_lt_pool_pct ?? 10}% DAGGPT revenue | Self + 3 direct LT upgrades in 30 days</p>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '10px', fontWeight: '700', color: '#eab308', textTransform: 'uppercase', margin: '0 0 4px' }}>Executive</p>
-              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Quarterly | {config.incentive_executive_pool_pct ?? 2}% pool | ${Number(config.incentive_executive_sales_threshold ?? 10000).toLocaleString()} threshold</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 4px' }}>Elite Pool</p>
-              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Ongoing | {config.incentive_elite_pool_pct ?? 2}% global revenue | {config.incentive_elite_min_referrals ?? 25} active referrals</p>
+              <p style={{ fontSize: '10px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', margin: '0 0 4px' }}>DAG Army Elite Pool</p>
+              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>Ongoing | {config.elite_pool_blockchain_pct ?? 50}% DAGCHAIN chain fees | All DAG Lieutenants</p>
             </div>
           </div>
         </B>

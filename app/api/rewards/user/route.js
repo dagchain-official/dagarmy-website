@@ -100,7 +100,26 @@ export async function GET(request) {
     const l1CommissionPct    = isLieutenant ? (sc.lieutenant_l1_commission_pct ?? 20) : (sc.soldier_l1_commission_pct ?? 15);
     const taskMultiplier     = isLieutenant ? (sc.task_multiplier_lieutenant ?? 2) : 1;
 
-    // ── 7. Fortune 500 pool data ────────────────────────────────────────────
+    // ── 7. Ecosystem spend (for Fortune 500 eligibility) ────────────────────
+    // Sum up all purchases: validator nodes, storage nodes, LT upgrade, DAGGPT credits
+    const { data: ecosystemPurchases } = await supabase
+      .from('sales_commissions')
+      .select('sale_amount')
+      .eq('user_id', user.id)
+      .in('product_type', ['VALIDATOR_NODE', 'STORAGE_NODE', 'LT_UPGRADE', 'DAGGPT_CREDIT', 'dag_soldier_upgrade', 'dag_lieutenant_upgrade']);
+
+    // Also sum from points_transactions of type 'purchase' or 'node_purchase'
+    const { data: purchaseTxs } = await supabase
+      .from('points_transactions')
+      .select('points, transaction_type')
+      .eq('user_id', user.id)
+      .in('transaction_type', ['node_purchase', 'validator_node', 'storage_node', 'daggpt_credit', 'lt_upgrade']);
+
+    const ecosystemSpend = (ecosystemPurchases || []).reduce(
+      (sum, p) => sum + parseFloat(p.sale_amount || 0), 0
+    );
+
+    // ── 8. Fortune 500 pool data ────────────────────────────────────────────
     const { data: f500Member } = await supabase
       .from('fortune500_members')
       .select('id, enrolled_at, is_active')
@@ -115,11 +134,10 @@ export async function GET(request) {
     const f5cfg = {};
     (f500Config || []).forEach(r => { f5cfg[r.config_key] = r.config_value; });
 
-    // Current month pending or latest distribution
-    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
     const { data: f500Dist } = await supabase
       .from('fortune500_distributions')
       .select('pool_amount, member_count, per_member_amount, status, period')
+      .eq('status', 'distributed')
       .order('period', { ascending: false })
       .limit(1)
       .single();
@@ -129,7 +147,79 @@ export async function GET(request) {
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true);
 
-    // ── 8. Elite Pool data ──────────────────────────────────────────────────
+    // Fortune 500 eligibility: enrolled + $500 ecosystem spend
+    const f500Eligible = !!f500Member?.is_active && ecosystemSpend >= 500;
+
+    // ── 9. DAG LT Pool data ─────────────────────────────────────────────────
+    const { data: ltPoolMember } = await supabase
+      .from('dag_lt_pool_members')
+      .select('id, is_active, qualified_at')
+      .eq('user_id', user.id)
+      .single();
+
+    const { count: ltPoolMemberCount } = await supabase
+      .from('dag_lt_pool_members')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true);
+
+    const { data: ltPoolDist } = await supabase
+      .from('dag_lt_pool_distributions')
+      .select('pool_amount, member_count, per_member_amount, status, period')
+      .eq('status', 'distributed')
+      .order('period', { ascending: false })
+      .limit(1)
+      .single();
+
+    // Count direct referrals who upgraded to LT within 30 days of the user's own upgrade
+    let directLtUpgrades = 0;
+    let daysLeft = null;
+    let ltUpgradedAt = null;
+
+    if (isLieutenant) {
+      // Find the user's own upgrade date from points_transactions
+      const { data: selfUpgradeTx } = await supabase
+        .from('points_transactions')
+        .select('created_at')
+        .eq('user_id', user.id)
+        .eq('transaction_type', 'lieutenant_upgrade')
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .single();
+
+      ltUpgradedAt = selfUpgradeTx?.created_at || user.upgraded_at || null;
+
+      if (ltUpgradedAt) {
+        const upgradeDate = new Date(ltUpgradedAt);
+        const windowEnd = new Date(upgradeDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+        const now = new Date();
+        daysLeft = Math.max(0, Math.ceil((windowEnd - now) / (1000 * 60 * 60 * 24)));
+
+        // Count direct referrals who upgraded to LT within the 30-day window
+        const { data: directRefs } = await supabase
+          .from('referrals')
+          .select('referred_id')
+          .eq('referrer_id', user.id);
+
+        if (directRefs?.length) {
+          const refIds = directRefs.map(r => r.referred_id);
+          const { data: ltUpgrades } = await supabase
+            .from('points_transactions')
+            .select('user_id, created_at')
+            .in('user_id', refIds)
+            .eq('transaction_type', 'lieutenant_upgrade')
+            .gte('created_at', upgradeDate.toISOString())
+            .lte('created_at', windowEnd.toISOString());
+
+          // Unique referred users who upgraded to LT in the window
+          const uniqueUpgrades = new Set((ltUpgrades || []).map(t => t.user_id));
+          directLtUpgrades = uniqueUpgrades.size;
+        }
+      }
+    }
+
+    const ltPoolEligible = !!ltPoolMember?.is_active;
+
+    // ── 10. Elite Pool data ──────────────────────────────────────────────────
     const { data: eliteConfig } = await supabase
       .from('rewards_config')
       .select('config_key, config_value')
@@ -208,30 +298,41 @@ export async function GET(request) {
         l3CommissionPct: sc.l3_commission_pct ?? 2,
         taskMultiplier,
 
-        // Fortune 500 Pool
-        fortune500: {
-          enrolled: !!f500Member?.is_active,
-          enrolledAt: f500Member?.enrolled_at || null,
-          enrollmentOpen: parseInt(f5cfg.fortune500_enrollment_open ?? 1) === 1,
-          poolPct: parseFloat(f5cfg.fortune500_pool_pct ?? 10),
-          totalMembers: f500MemberCount || 0,
-          latestDistribution: f500Dist ? {
-            period: f500Dist.period,
-            poolAmount: parseFloat(f500Dist.pool_amount || 0),
-            perMemberAmount: parseFloat(f500Dist.per_member_amount || 0),
-            status: f500Dist.status,
-          } : null,
+        // Ecosystem spend (for Fortune 500 eligibility display)
+        ecosystemSpend,
+
+        // Incentive Pools (all 3)
+        incentivePools: {
+          fortune500: {
+            isEligible: f500Eligible,
+            enrolled: !!f500Member?.is_active,
+            enrolledAt: f500Member?.enrolled_at || null,
+            enrollmentOpen: parseInt(f5cfg.fortune500_enrollment_open ?? 1) === 1,
+            poolPct: parseFloat(f5cfg.fortune500_pool_pct ?? 10),
+            activeMemberCount: f500MemberCount || 0,
+            lastPayoutAmount: f500Dist?.per_member_amount ? parseFloat(f500Dist.per_member_amount) : null,
+            lastPayoutPeriod: f500Dist?.period || null,
+          },
+          dag_lt_pool: {
+            isEligible: ltPoolEligible,
+            enrolled: !!ltPoolMember?.is_active,
+            qualifiedAt: ltPoolMember?.qualified_at || null,
+            activeMemberCount: ltPoolMemberCount || 0,
+            lastPayoutAmount: ltPoolDist?.per_member_amount ? parseFloat(ltPoolDist.per_member_amount) : null,
+            lastPayoutPeriod: ltPoolDist?.period || null,
+            directLtUpgrades,
+            daysLeft,
+            upgradedAt: ltUpgradedAt,
+          },
+          elite: {
+            isEligible: isLieutenant,
+            active: parseInt(ec.elite_pool_active ?? 0) === 1,
+            blockchainPct: parseFloat(ec.elite_pool_blockchain_pct ?? 50),
+            totalLtMembers: ltMemberCount || 0,
+          },
         },
 
-        // Elite Pool
-        elitePool: {
-          eligible: isLieutenant,
-          active: parseInt(ec.elite_pool_active ?? 0) === 1,
-          blockchainPct: parseFloat(ec.elite_pool_blockchain_pct ?? 50),
-          totalLtMembers: ltMemberCount || 0,
-        },
-
-        // Transaction history (no rank data)
+        // Transaction history
         txHistory,
       },
     });
