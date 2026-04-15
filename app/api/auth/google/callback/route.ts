@@ -222,8 +222,9 @@ export async function GET(req: Request) {
     profile_completed: user.profile_completed || false,
   };
 
-  // New Google users go to profile completion; returning users go to intended destination
-  const finalNext = isNewGoogleUser ? `/complete-profile?email=${encodeURIComponent(user.email)}` : next;
+  // New Google users OR returning users missing WhatsApp → profile completion
+  const needsProfile = isNewGoogleUser || !existingUser?.whatsapp_number || !existingUser?.first_name || !existingUser?.last_name;
+  const finalNext = needsProfile ? `/complete-profile?email=${encodeURIComponent(user.email)}` : next;
 
   const setSessionUrl = new URL(
     `/api/auth/google/set-session?token=${encodeURIComponent(token)}&user=${encodeURIComponent(JSON.stringify(safeUser))}&next=${encodeURIComponent(finalNext)}`,

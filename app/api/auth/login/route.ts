@@ -86,16 +86,21 @@ export async function POST(req: Request) {
     });
 
     // 8. Build safe user object
+    const needsProfileCompletion = !user.whatsapp_number || !user.first_name || !user.last_name;
     const safeUser = {
       id: user.id,
       email: user.email,
       full_name: user.full_name,
+      first_name: user.first_name,
+      last_name: user.last_name,
       role: user.role,
       avatar_url: user.avatar_url,
       is_admin: user.is_admin,
       is_master_admin: user.is_master_admin,
       wallet_address: user.wallet_address,
-      profile_completed: user.profile_completed,
+      whatsapp_number: user.whatsapp_number,
+      profile_completed: user.profile_completed && !needsProfileCompletion,
+      needs_profile_completion: needsProfileCompletion,
     };
 
     const response = NextResponse.json({ success: true, token, user: safeUser });

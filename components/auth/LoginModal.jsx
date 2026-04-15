@@ -182,11 +182,32 @@ export default function LoginModal({ isOpen, onClose }) {
 
   const handleSignin = async (e) => {
     e.preventDefault(); setError(''); setLoading(true);
-    const result = await login(signEmail, signPassword, fpRef.current);
-    setLoading(false);
-    if (!result?.success) setError(result?.error === 'wallet_only_user'
-      ? 'This account uses wallet login. Use "Forgot Password" to set a password.'
-      : result?.error || 'Invalid email or password');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: signEmail, password: signPassword, fingerprint_id: fpRef.current }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error === 'wallet_only_user'
+          ? 'This account uses wallet login. Use "Forgot Password" to set a password.'
+          : data.error || 'Invalid email or password');
+        return;
+      }
+      localStorage.setItem('dagarmy_token', data.token);
+      localStorage.setItem('dagarmy_user', JSON.stringify(data.user));
+      // Show profile completion if WhatsApp / name is missing
+      if (data.user?.needs_profile_completion) {
+        setProfileUserId(data.user.id);
+        setProfileEmail(data.user.email || signEmail);
+        setProfFirstName(data.user.first_name || '');
+        setProfLastName(data.user.last_name || '');
+        setView('profile');
+      } else {
+        window.location.href = data.user?.is_admin ? '/admin/dashboard' : '/student-dashboard';
+      }
+    } catch { setError('Network error. Please try again.'); }
+    finally { setLoading(false); }
   };
 
   const handleRegister = async (e) => {
