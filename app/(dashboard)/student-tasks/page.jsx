@@ -433,8 +433,8 @@ export default function StudentMissionsPage() {
                       {pt==='url_and_screenshot' && <><Link2 size={10} style={{color:'#64748b'}}/><ImageIcon size={10} style={{color:'#64748b'}}/><span style={{fontSize:'10px',fontWeight:'700',color:'#64748b'}}>Link + Screenshot required</span></>}
                       {pt==='url_only' && <><Link2 size={10} style={{color:'#64748b'}}/><span style={{fontSize:'10px',fontWeight:'700',color:'#64748b'}}>Link required</span></>}
                     </div>
-                    {task.recurrence === 'daily' && <div style={{padding:'4px 10px',borderRadius:'8px',background:BG,boxShadow:S_IN_SM}}><span style={{fontSize:'10px',fontWeight:'700',color:'#f59e0b'}}>Daily</span></div>}
-                    {task.recurrence === 'weekly' && <div style={{padding:'4px 10px',borderRadius:'8px',background:BG,boxShadow:S_IN_SM}}><span style={{fontSize:'10px',fontWeight:'700',color:'#ef4444'}}>Weekly</span></div>}
+                    {task.recurrence === 'daily' && <div style={{padding:'4px 10px',borderRadius:'8px',background:BG,boxShadow:S_IN_SM}}><span style={{fontSize:'10px',fontWeight:'700',color:'#64748b'}}>Daily</span></div>}
+                    {task.recurrence === 'weekly' && <div style={{padding:'4px 10px',borderRadius:'8px',background:BG,boxShadow:S_IN_SM}}><span style={{fontSize:'10px',fontWeight:'700',color:'#64748b'}}>Weekly</span></div>}
                     {task.recurrence === 'once' && <div style={{padding:'4px 10px',borderRadius:'8px',background:BG,boxShadow:S_IN_SM}}><span style={{fontSize:'10px',fontWeight:'700',color:'#10b981'}}>One-time</span></div>}
                   </div>
 
@@ -444,11 +444,9 @@ export default function StudentMissionsPage() {
                       <span style={{ fontSize:'22px', fontWeight:'900', color:PURPLE, letterSpacing:'-0.5px' }}>{task.effective_points}</span>
                       <span style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8' }}>DAG Points</span>
                     </div>
-                    {task.lt_bonus > 0 && (
-                      <div style={{ padding:'6px 12px', borderRadius:'10px', background:BG, boxShadow:S_IN_SM }}>
-                        <span style={{ fontSize:'10px', fontWeight:'800', color:PURPLE }}>+{task.lt_bonus} LT bonus</span>
-                      </div>
-                    )}
+                    <div style={{ padding:'6px 12px', borderRadius:'10px', background:BG, boxShadow:S_IN_SM, opacity: isLieutenant ? 1 : 0.45 }}>
+                      <span style={{ fontSize:'10px', fontWeight:'800', color: isLieutenant ? PURPLE : '#94a3b8' }}>+100% LT Bonus</span>
+                    </div>
                   </div>
                 </div>
 
@@ -469,7 +467,7 @@ export default function StudentMissionsPage() {
                       {pt==='screenshot_only' ? 'Submit Screenshot' : pt==='url_and_screenshot' ? 'Submit Proof' : 'Submit Link'}
                     </button>
                   )}
-                  {task.user_status==='pending' && <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#d97706' }}><Clock size={12}/> Under Review</span>}
+                  {task.user_status==='pending' && <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#64748b' }}><Clock size={12}/> Under Review</span>}
                   {task.user_status==='completed' && <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#059669' }}><CheckCircle size={12}/> Completed</span>}
                   {task.user_status==='expired' && <span style={{ display:'flex', alignItems:'center', gap:'4px', fontSize:'11px', fontWeight:'700', color:'#94a3b8' }}><XCircle size={12}/> Expired</span>}
                 </div>
