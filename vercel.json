@@ -1,12 +1,1 @@
-{
-  "crons": [
-    {
-      "path": "/api/social-tasks/activate-scheduled",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/auction-alerts",
-      "schedule": "*/15 * * * *"
-    }
-  ]
-}
+{}
