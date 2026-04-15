@@ -65,13 +65,14 @@ export default function UsersManagement3() {
           // Keep all original Supabase fields
           ...user,
           // Add computed display fields
-          name: user.full_name || user.email?.split('@')[0] || 'Unknown User',
-          displayEmail: user.email || 'N/A',
+          name: user.full_name || ([user.first_name, user.last_name].filter(Boolean).join(' ')) || user.email?.split('@')[0] || `User ${user.id?.slice(0,6)}`,
+          displayEmail: user.email || user.phone || `ID: ${user.id?.slice(0,8)}`,
+          role: user.role || 'student',
           status: isUserActive(user.last_sign_in_at || user.created_at) ? 'Active' : 'Inactive',
           courses: 0,
           joined: new Date(user.created_at).toLocaleDateString(),
           joinedRaw: user.created_at,
-          avatar: getInitials(user.full_name || user.email),
+          avatar: getInitials(user.full_name || [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email || user.id),
           lastActive: getLastActiveText(user.last_sign_in_at || user.created_at),
           lastActiveRaw: user.last_sign_in_at || user.created_at,
           verified: user.email_confirmed_at ? true : false,
@@ -179,12 +180,14 @@ export default function UsersManagement3() {
   };
 
   const filteredUsers = users.filter(user => {
+    const sq = searchQuery.toLowerCase();
     const matchesSearch = searchQuery === "" || 
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase());
+      (user.name || '').toLowerCase().includes(sq) ||
+      (user.displayEmail || '').toLowerCase().includes(sq) ||
+      (user.id || '').toLowerCase().includes(sq);
     
     const matchesRole = filterRole === "All" || 
-      user.role.toLowerCase() === filterRole.toLowerCase();
+      (user.role || '').toLowerCase() === filterRole.toLowerCase();
     
     const matchesStatus = filterStatus === "All" || 
       user.status === filterStatus;

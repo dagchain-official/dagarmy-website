@@ -39,7 +39,7 @@ export async function GET(request) {
     // Build a map: user_id -> user basic info (for referrer lookup)
     const userMap = {};
     users.forEach(u => {
-      userMap[u.id] = { full_name: u.full_name, email: u.email };
+      userMap[u.id] = { full_name: u.full_name, first_name: u.first_name, last_name: u.last_name, email: u.email, id: u.id };
     });
 
     // Attach upline info to each user
@@ -47,9 +47,13 @@ export async function GET(request) {
       const ref = referralMap[u.id];
       if (ref) {
         const referrer = userMap[ref.referrer_id];
+        const referrerName = referrer?.full_name
+          || [referrer?.first_name, referrer?.last_name].filter(Boolean).join(' ')
+          || referrer?.email
+          || (referrer?.id ? `User ${referrer.id.slice(0, 6)}` : 'No upline');
         u.upline = {
           referrer_id: ref.referrer_id,
-          referrer_name: referrer?.full_name || referrer?.email || 'Unknown',
+          referrer_name: referrerName,
           referrer_email: referrer?.email || 'N/A',
           referral_code: ref.referral_code
         };
