@@ -60,7 +60,7 @@ export default function Header2() {
     if (isAdmin) {
       router.push('/admin/dashboard');
     } else {
-      router.push('/student-dashboard');
+      router.push('/dashboard');
     }
   };
   return (

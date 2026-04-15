@@ -40,7 +40,7 @@ export default function AuctionDetailPage() {
         supabase.auth.getUser(),
       ]);
       const pageData = await pageRes.json();
-      if (!pageData.success) { router.push("/student-bidding"); return; }
+      if (!pageData.success) { router.push("/bidding"); return; }
       setItem(pageData.item);
       setBids(pageData.bids || []);
       setActivity((pageData.activity || []).reverse());

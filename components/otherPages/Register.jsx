@@ -203,7 +203,7 @@ export default function Register() {
 
   // ── Google sign-in ──────────────────────────────────────────────────────────
   const handleGoogle = () => {
-    window.location.href = "/api/auth/google?redirect=/student-dashboard";
+    window.location.href = "/api/auth/google?redirect=/dashboard";
   };
 
   // ── Email registration ──────────────────────────────────────────────────────
@@ -234,7 +234,7 @@ export default function Register() {
         localStorage.setItem("dagarmy_token", data.token);
         localStorage.setItem("dagarmy_user", JSON.stringify(data.user));
         setView("success");
-        setTimeout(() => router.push("/student-dashboard"), 1200);
+        setTimeout(() => router.push("/dashboard"), 1200);
       }
     } catch {
       setError("Network error. Please try again.");

@@ -156,7 +156,7 @@ export function AuthProvider({ children }) {
       setUser(data.user);
 
       // Redirect based on role
-      const redirectPath = data.user.is_admin ? '/admin/dashboard' : '/student-dashboard';
+      const redirectPath = data.user.is_admin ? '/admin/dashboard' : '/dashboard';
       window.location.href = redirectPath;
 
       return { success: true };

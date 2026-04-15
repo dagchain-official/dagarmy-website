@@ -106,7 +106,7 @@ function UpgradeSuccessContent() {
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <Link href="/student-rewards" style={{
+              <Link href="/rewards" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 padding: '14px 24px', borderRadius: '12px',
                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
@@ -116,7 +116,7 @@ function UpgradeSuccessContent() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 View My Rewards
               </Link>
-              <Link href="/student-dashboard" style={{
+              <Link href="/dashboard" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '13px 24px', borderRadius: '12px',
                 border: '1.5px solid #e0e7ff', background: '#fff',
@@ -146,7 +146,7 @@ function UpgradeSuccessContent() {
               If your payment was successful, your account will be upgraded within a few minutes. Check your email for a receipt.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <Link href="/student-rewards" style={{
+              <Link href="/rewards" style={{
                 padding: '13px 24px', borderRadius: '12px',
                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 color: '#fff', fontSize: '14px', fontWeight: '700',

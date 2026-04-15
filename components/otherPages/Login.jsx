@@ -34,10 +34,10 @@ export default function Login() {
     // BUT NOT if profile completion form is showing
     if (isAuthenticated && userRole && !showProfileCompletion) {
       if (userRole === 'student') {
-        router.push('/student-dashboard');
+        router.push('/dashboard');
       } else if (userRole === 'trainer') {
         // TODO: Create instructor-dashboard route
-        router.push('/student-dashboard'); // Temporary redirect
+        router.push('/dashboard'); // Temporary redirect
       }
     }
   }, [isAuthenticated, userRole, showProfileCompletion, router]);

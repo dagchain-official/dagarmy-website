@@ -359,7 +359,7 @@ export default function NotificationBell() {
                 textAlign: 'center'
               }}>
                 <a
-                  href="/student-notifications"
+                  href="/notifications"
                   onClick={() => setShowDropdown(false)}
                   style={{
                     fontSize: '13px',

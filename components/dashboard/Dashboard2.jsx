@@ -779,7 +779,7 @@ export default function Dashboard2() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     {/* ── Notification Bell ── */}
                     <button
-                        onClick={() => window.location.href = '/student-notifications'}
+                        onClick={() => window.location.href = '/notifications'}
                         style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '13px', border: 'none', background: '#f0f2f5', cursor: 'pointer', boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)', color: '#64748b', transition: 'all 0.2s ease', flexShrink: 0 }}
                         onMouseEnter={e => { e.currentTarget.style.boxShadow = '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)'; e.currentTarget.style.color = '#4f46e5'; }}
                         onMouseLeave={e => { e.currentTarget.style.boxShadow = '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)'; e.currentTarget.style.color = '#64748b'; }}
@@ -1383,10 +1383,10 @@ export default function Dashboard2() {
                                 </button>
                             </div>
                             {withdrawPayoutMethod === 'bank' && !paymentInfo?.bank_account_name && (
-                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add bank details in <a href="/student-setting" style={{ color: '#6366f1' }}>Settings</a></div>
+                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add bank details in <a href="/settings" style={{ color: '#6366f1' }}>Settings</a></div>
                             )}
                             {withdrawPayoutMethod === 'crypto' && !paymentInfo?.bep20_address && (
-                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add BEP20 wallet in <a href="/student-setting" style={{ color: '#6366f1' }}>Settings</a></div>
+                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add BEP20 wallet in <a href="/settings" style={{ color: '#6366f1' }}>Settings</a></div>
                             )}
                         </div>
 

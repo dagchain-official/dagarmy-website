@@ -60,11 +60,11 @@ export default function RootLayout({
       <body className="counter-scroll">
         <Web3Provider>
           <Context>
-            <div style={{ paddingTop: (pathname?.startsWith('/student-') || pathname?.startsWith('/dag-lieutenant')) ? '0' : '50px' }}>
+            <div style={{ paddingTop: (pathname?.startsWith('/dashboard') || pathname?.startsWith('/missions') || pathname?.startsWith('/my-team') || pathname?.startsWith('/leaderboard') || pathname?.startsWith('/events') || pathname?.startsWith('/notifications') || pathname?.startsWith('/support') || pathname?.startsWith('/settings') || pathname?.startsWith('/rewards') || pathname?.startsWith('/my-courses') || pathname?.startsWith('/referral') || pathname?.startsWith('/bidding') || pathname?.startsWith('/dag-lieutenant')) ? '0' : '50px' }}>
               {children}
             </div>
           </Context>
-          {!pathname?.startsWith("/admin") && !pathname?.startsWith("/student-") && <ChatWidget />}
+          {!pathname?.startsWith("/admin") && !pathname?.startsWith("/dashboard") && !pathname?.startsWith("/missions") && !pathname?.startsWith("/my-team") && !pathname?.startsWith("/leaderboard") && !pathname?.startsWith("/events") && !pathname?.startsWith("/notifications") && !pathname?.startsWith("/support") && !pathname?.startsWith("/settings") && !pathname?.startsWith("/rewards") && !pathname?.startsWith("/my-courses") && !pathname?.startsWith("/bidding") && <ChatWidget />}
         </Web3Provider>
         <Analytics />
       </body>

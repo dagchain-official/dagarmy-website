@@ -138,9 +138,9 @@ export default function DashboardNav2() {
 
       {/* 1. Dashboard */}
       {(() => {
-        const isActive = pathname === '/student-dashboard';
+        const isActive = pathname === '/dashboard';
         return (
-          <div onClick={() => window.location.href='/student-dashboard'}
+          <div onClick={() => window.location.href='/dashboard'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>
@@ -160,16 +160,16 @@ export default function DashboardNav2() {
 
 
       {/* ── My Courses — HIDDEN (restore when ready) ──
-      <div onClick={() => window.location.href='/student-my-courses'} style={{ ...itemStyle(pathname==='/student-my-courses',false,false), marginBottom:7 }}>
+      <div onClick={() => window.location.href='/my-courses'} style={{ ...itemStyle(pathname==='/my-courses',false,false), marginBottom:7 }}>
         ...
       </div>
       ── End My Courses ── */}
 
       {/* 3. My Team */}
       {(() => {
-        const isActive = pathname === '/student-my-team';
+        const isActive = pathname === '/my-team';
         return (
-          <div onClick={() => window.location.href='/student-my-team'}
+          <div onClick={() => window.location.href='/my-team'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>
@@ -189,9 +189,9 @@ export default function DashboardNav2() {
 
       {/* 4. Leaderboard */}
       {(() => {
-        const isActive = pathname === '/student-leaderboard';
+        const isActive = pathname === '/leaderboard';
         return (
-          <div onClick={() => window.location.href='/student-leaderboard'}
+          <div onClick={() => window.location.href='/leaderboard'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>
@@ -211,9 +211,9 @@ export default function DashboardNav2() {
 
       {/* 6. Business Validation — Lieutenants only */}
       {isLieutenant && (() => {
-        const isActive = pathname === '/business-validation';
+        const isActive = pathname === '/notifications';
         return (
-          <div onClick={() => window.location.href='/business-validation'}
+          <div onClick={() => window.location.href='/notifications'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>
@@ -231,10 +231,10 @@ export default function DashboardNav2() {
 
       {/* 7. Mission — red pulsing border when tasks available */}
       {(() => {
-        const isActive = pathname === '/student-tasks';
+        const isActive = pathname === '/missions';
         const hasMission = availableMissions > 0;
         return (
-          <div onClick={() => window.location.href='/student-tasks'}
+          <div onClick={() => window.location.href='/missions'}
             style={{ ...itemStyle(isActive, false, hasMission), marginBottom: 7 }}
             onMouseEnter={e => { if (!isActive) { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.transform = 'scale(1.01)'; }}}
             onMouseLeave={e => { if (!isActive) { e.currentTarget.style.boxShadow = hasMission ? nm.shadowSm : nm.shadowSm; e.currentTarget.style.transform = 'scale(1)'; }}}>
@@ -254,9 +254,9 @@ export default function DashboardNav2() {
 
       {/* 8. Events */}
       {(() => {
-        const isActive = pathname === '/student-events';
+        const isActive = pathname === '/events';
         return (
-          <div onClick={() => window.location.href='/student-events'}
+          <div onClick={() => window.location.href='/events'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>
@@ -276,9 +276,9 @@ export default function DashboardNav2() {
 
       {/* 9. Settings/Profile */}
       {(() => {
-        const isActive = pathname === '/student-setting';
+        const isActive = pathname === '/settings';
         return (
-          <div onClick={() => window.location.href='/student-setting'}
+          <div onClick={() => window.location.href='/settings'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>
@@ -296,9 +296,9 @@ export default function DashboardNav2() {
 
       {/* 9. Support */}
       {(() => {
-        const isActive = pathname === '/student-support';
+        const isActive = pathname === '/support';
         return (
-          <div onClick={() => window.location.href='/student-support'}
+          <div onClick={() => window.location.href='/support'}
             style={{ ...itemStyle(isActive, false, false), marginBottom: 7 }}
             onMouseEnter={e => onEnter(e, isActive, false)}
             onMouseLeave={e => onLeave(e, isActive, false)}>

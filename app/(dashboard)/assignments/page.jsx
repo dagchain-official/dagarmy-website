@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 export default function StudentAssignmentsPage() {
   const router = useRouter();
-  useEffect(() => { router.replace('/student-my-courses'); }, [router]);
+  useEffect(() => { router.replace('/my-courses'); }, [router]);
   return null;
 }
 

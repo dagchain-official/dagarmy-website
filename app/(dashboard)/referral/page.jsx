@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 export default function StudentReferralPage() {
   const router = useRouter();
-  useEffect(() => { router.replace('/student-my-team'); }, []);
+  useEffect(() => { router.replace('/my-team'); }, []);
   return null;
 }
 

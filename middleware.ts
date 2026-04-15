@@ -2,10 +2,25 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const PROTECTED_PATHS = [
-  '/student-dashboard',
+  '/dashboard',
+  '/missions',
+  '/my-team',
+  '/leaderboard',
+  '/events',
+  '/notifications',
+  '/support',
+  '/settings',
+  '/rewards',
+  '/my-courses',
+  '/referral',
+  '/bidding',
+  '/analytics',
+  '/assignments',
+  '/hall-of-fame',
+  '/reviews',
+  '/wishlist',
   '/admin',
   '/(dashboard)',
-  '/rewards',
   '/courses',
   '/hackathons',
 ];
@@ -32,7 +47,7 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith('/auth/login') || pathname.startsWith('/auth/register')) {
     const token = request.cookies.get('dagarmy_token')?.value;
     if (token) {
-      return NextResponse.redirect(new URL('/student-dashboard', request.url));
+      return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
 
