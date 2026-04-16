@@ -40,10 +40,12 @@ export default function Header2() {
 
   };
 
-  // Auto-open signin modal when redirected from /register
+  // Auto-open signin modal when redirected from /register; save referral code to localStorage
   useEffect(() => {
     if (!isAuthenticated && typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+      if (ref) localStorage.setItem('pending_referral_code', ref.toUpperCase());
       if (params.get('signin') === '1') handleSignInClick();
     }
   }, [isAuthenticated]);

@@ -193,10 +193,13 @@ export default function Register() {
 
   useEffect(() => {
     getFingerprint().then(fp => { fpRef.current = fp; });
-    // Grab ?ref= from URL
+    // Grab ?ref= from URL and persist to localStorage so it survives OAuth redirects
     const params = new URLSearchParams(window.location.search);
     const ref = params.get("ref");
-    if (ref) setReferral(ref.toUpperCase());
+    if (ref) {
+      setReferral(ref.toUpperCase());
+      localStorage.setItem('pending_referral_code', ref.toUpperCase());
+    }
   }, []);
 
   useEffect(() => { setError(""); }, [view]);
