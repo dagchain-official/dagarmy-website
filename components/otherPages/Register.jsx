@@ -203,7 +203,8 @@ export default function Register() {
 
   // ── Google sign-in ──────────────────────────────────────────────────────────
   const handleGoogle = () => {
-    window.location.href = "/api/auth/google?redirect=/dashboard";
+    const ref = referral.trim() ? `&ref=${encodeURIComponent(referral.trim())}` : '';
+    window.location.href = `/api/auth/google?redirect=/dashboard${ref}`;
   };
 
   // ── Email registration ──────────────────────────────────────────────────────

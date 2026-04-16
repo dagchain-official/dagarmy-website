@@ -65,10 +65,12 @@ export async function GET(req: Request) {
   }
 
   let next = '/student-dashboard';
+  let ref: string | null = null;
   try {
     if (state) {
       const decoded = JSON.parse(Buffer.from(state, 'base64url').toString());
       next = decoded.next || next;
+      ref  = decoded.ref || null;
     }
   } catch {}
 
@@ -154,15 +156,28 @@ export async function GET(req: Request) {
         return redirectError(appUrl, 'db_failed', createError?.message || 'insert_failed');
       }
       user = newUser;
+      // ── Track referral if a ref code was passed ─────────────────────────────
+      if (ref) {
+        const supabase2 = getSupabase();
+        const { data: referrer } = await supabase2.from('users').select('id').eq('referral_code', ref.toUpperCase()).single();
+        if (referrer && referrer.id !== newUser.id) {
+          await supabase2.from('referrals').insert({
+            referrer_id: referrer.id,
+            referred_id: newUser.id,
+            referral_code: ref.toUpperCase(),
+            status: 'pending',
+          });
+          await supabase2.from('users').update({ referred_by_user_id: referrer.id }).eq('id', newUser.id);
+        }
+      }
       // ── Notify DAGChain of brand-new Google sign-up (fire-and-forget) ──────
-      // Dynamic import avoids TS module resolution issues in this file
       import('@/services/dagchainWebhook').then(({ notifyUserCreated }) => {
         notifyUserCreated({
           id: newUser.id,
           email: newUser.email,
           full_name: newUser.full_name,
           auth_provider: 'google',
-          referral_code_used: null,
+          referral_code_used: ref || null,
         });
       }).catch(() => {});
     } else {

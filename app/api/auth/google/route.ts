@@ -11,6 +11,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ||
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const next = searchParams.get('redirect') || '/student-dashboard';
+  const ref  = searchParams.get('ref') || null;
 
   // Derive app URL from the request itself — avoids www vs non-www mismatch
   const reqUrl = new URL(req.url);
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
     || `${reqUrl.protocol}//${reqUrl.host}`;
 
   const redirectUri = `${appUrl}/api/auth/google/callback`;
-  const state = Buffer.from(JSON.stringify({ next, ts: Date.now() })).toString('base64url');
+  const state = Buffer.from(JSON.stringify({ next, ref, ts: Date.now() })).toString('base64url');
 
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,

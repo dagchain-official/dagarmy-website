@@ -104,7 +104,7 @@ export async function POST(req: Request) {
           // Store pending referral — your existing referral system handles the rest
           await supabase.from('referrals').insert({
             referrer_id: referrer.id,
-            referee_id: user.id,
+            referred_id: user.id,
             referral_code,
             status: 'pending',
           }).single();
