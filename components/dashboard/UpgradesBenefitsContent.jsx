@@ -114,9 +114,9 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
             {[
               { label: 'Signup Bonus', value: `+${soldierSignup} pts` },
               { label: 'Spend-Based Earning', value: `${soldierSpend} pts / $1 spent` },
-              { label: 'L1 Sales Commission', value: `${soldierL1}%` },
-              { label: 'L2 Sales Commission', value: `${l2}%` },
-              { label: 'L3 Sales Commission', value: `${l3}%` },
+              { label: 'L1 Sales Rewards', value: `${soldierL1}%` },
+              { label: 'L2 Sales Rewards', value: `${l2}%` },
+              { label: 'L3 Sales Rewards', value: `${l3}%` },
               { label: 'Fortune 500 Pool', value: 'Auto-enrolled ✓' },
               { label: 'Fortune 500 Pool Req.', value: '$500 self-purchases' },
               { label: 'Elite Pool', value: 'Not eligible' },
@@ -163,9 +163,9 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
             {[
               { label: 'Signup Bonus', value: 'No pts on upgrade', highlight: false },
               { label: 'Spend-Based Earning', value: `${ltSpend} pts / $1 spent`, highlight: true },
-              { label: 'L1 Sales Commission', value: `${ltL1}%`, highlight: true },
-              { label: 'L2 Sales Commission', value: `${l2}%`, highlight: false },
-              { label: 'L3 Sales Commission', value: `${l3}%`, highlight: false },
+              { label: 'L1 Sales Rewards', value: `${ltL1}%`, highlight: true },
+              { label: 'L2 Sales Rewards', value: `${l2}%`, highlight: false },
+              { label: 'L3 Sales Rewards', value: `${l3}%`, highlight: false },
               { label: 'Fortune 500 Pool', value: 'Auto-enrolled ✓', highlight: true },
               { label: 'Fortune 500 Pool Req.', value: '$500 self-purchases', highlight: false },
               { label: 'Elite Pool', value: 'Eligible · Launches at MainNet', highlight: true },
@@ -198,22 +198,22 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
       </div>
 
       {/* ══════════════════════════════════════════════════════ */}
-      {/* SECTION 2 — Sales Commission Structure                 */}
+      {/* SECTION 2 — Sales Reward Structure                 */}
       {/* ══════════════════════════════════════════════════════ */}
       <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
-        <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Sales Commission Structure</p>
+        <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Sales Reward Structure</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
 
         {/* Level breakdown */}
         <NmCard delay={100} style={{ padding: '22px 24px' }}>
-          <p style={{ fontSize: '13px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 16px' }}>Commission Levels</p>
+          <p style={{ fontSize: '13px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 16px' }}>Referral Reward Levels</p>
           <p style={{ fontSize: '11px', color: nm.textPrimary, margin: '0 0 16px', fontWeight: '500', lineHeight: '1.6' }}>
             Earned on every DAGChain or DAGGPT purchase — up to 3 levels deep in your referral chain.
           </p>
           {[
-            { level: 'Level 1', label: 'Direct (your referee buys)', soldierRate: soldierL1, ltRate: ltL1, note: 'varies by tier' },
+            { level: 'Level 1', label: 'Direct (your referee buys)', soldierRate: soldierL1, ltRate: ltL1, note: 'varies by tier — rewards %' },
             { level: 'Level 2', label: '2nd downline buys', soldierRate: l2, ltRate: l2, note: 'fixed' },
             { level: 'Level 3', label: '3rd downline buys', soldierRate: l3, ltRate: l3, note: 'fixed' },
           ].map((row, i) => (
@@ -245,7 +245,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
             </div>
           ))}
 
-          {/* Commission example */}
+          {/* Reward example */}
           <div style={{ marginTop: '18px', padding: '14px 16px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowInsetSm }}>
             <p style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 10px', lineHeight: '1.6' }}>
               Example: $1,000 sale made by your direct referral
@@ -517,13 +517,13 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               step: '1',
               icon: <img src={BADGE('soldier')} alt="DAG SOLDIER" style={{ width: '44px', height: '44px', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))' }} />,
               title: 'Register as DAG SOLDIER',
-              body: `Instant +${soldierSignup} pts on signup. Free to join. Earn ${soldierL1}% L1 commission and ${soldierSpend} pts per $1 spent by directs.`,
+              body: `Instant +${soldierSignup} pts on signup. Free to join. Earn ${soldierL1}% L1 rewards and ${soldierSpend} pts per $1 spent by directs.`,
             },
             {
               step: '2',
               icon: <img src={BADGE('lieutenant')} alt="LIEUTENANT" style={{ width: '44px', height: '44px', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))' }} />,
               title: 'Upgrade to DAG LIEUTENANT',
-              body: `Pay $${ltPrice} USD. Unlock 20% L1 commission, ${ltSpend} pts per $1 spent by directs, and Elite Pool eligibility when MainNet launches.`,
+              body: `Pay $${ltPrice} USD. Unlock 20% L1 rewards, ${ltSpend} pts per $1 spent by directs, Elite Pool eligibility at MainNet, and 149 DGCC Coins auto-staked on DAGChain.`,
             },
             {
               step: '3',

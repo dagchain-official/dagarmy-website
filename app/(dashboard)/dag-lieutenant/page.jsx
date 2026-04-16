@@ -14,15 +14,14 @@ const PERKS = [
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-        <path d="M7 8h2m2 0h6M7 11h4"/>
+        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
       </svg>
     ),
-    title: "The Automation Vault",
-    subtitle: "4,000+ n8n Workflows",
+    title: "20% Direct Sales Commission",
+    subtitle: "Double the Soldier Rate",
     points: [
-      "Searchable library of 4,000+ pre-built n8n workflows for Lead Gen, AI Agents, Crypto Tracking & SaaS Operations",
-      "One-click import — ready to deploy directly into your n8n instance",
+      "Earn 20% commission on every direct referral purchase — DAGChain nodes, DAGGPT credits, validator nodes, and LT upgrades",
+      "DAG Soldier earns only 10%. As a Lieutenant you earn 2× more on every direct sale your network makes",
     ],
     accent: "#6366f1",
   },
@@ -32,26 +31,25 @@ const PERKS = [
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
       </svg>
     ),
-    title: "The Master Prompt Database",
-    subtitle: "Elite AI Super Prompts",
+    title: "1,000 DAG Points on Referral Join",
+    subtitle: "2× the Soldier Referral Bonus",
     points: [
-      "Private, constantly updated repository of high-level prompts for AI content creation",
-      "Industry-specific: SaaS code, photorealistic marketing assets, complex data analysis",
+      "Earn 1,000 DAG Points every time someone joins DAGARMY using your referral code — soldiers earn only 500",
+      "Plus earn another 1,000 points if your direct referral upgrades to DAG Lieutenant",
     ],
     accent: "#8b5cf6",
   },
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
       </svg>
     ),
-    title: "Mentorship & Recorded Training",
-    subtitle: "1-on-1 War Room Access",
+    title: "50 DAG Points per $1 Spent",
+    subtitle: "Spend-Based Earning on Direct Referrals",
     points: [
-      "Direct access to industry veterans for personalized guidance on career paths or startup building",
-      "Lifetime vault access to all previous live sessions, masterclasses, and mentorship recordings",
+      "Earn 50 DAG Points for every $1 spent by your direct (Level 1) referrals on any purchase",
+      "DAG Soldiers earn only 25 pts per $1 — your spend-based earning rate is doubled as a Lieutenant",
     ],
     accent: "#10b981",
   },
@@ -61,11 +59,11 @@ const PERKS = [
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
       </svg>
     ),
-    title: "Exclusive Operations",
-    subtitle: "Hackathons & VIP Lectures",
+    title: "DAG Army Elite Pool",
+    subtitle: "Lieutenant-Exclusive · Launches at MainNet",
     points: [
-      "Lieutenants-Only hackathons with cash prize pools funded by global Business Partners",
-      "Live Q&A sessions with Silicon Valley founders, Blockchain architects, and AI pioneers",
+      "Exclusive access to the Elite Pool — funded by 50% of all DAGChain transaction fees at MainNet launch",
+      "Proportional share distributed among all active Lieutenants. DAG Soldiers are not eligible for this pool",
     ],
     accent: "#f59e0b",
   },
@@ -75,28 +73,42 @@ const PERKS = [
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
     ),
-    title: "Private Alpha Community",
-    subtitle: "Discord · Telegram · WhatsApp",
+    title: "Fortune 500 Pool — Full Access",
+    subtitle: "Monthly DAGGPT Revenue Share",
     points: [
-      "Dedicated Lieutenants-Only multi-channel community for real-time alpha",
-      "First-look intel: breaking tech news, alpha-level job leads, and early-access beta tools",
+      "Share in 10% of monthly DAGGPT revenue, split equally among all enrolled members who meet the $500 self-purchase requirement",
+      "Both Soldiers and Lieutenants are eligible — but Lieutenants earn more overall due to higher commission and referral rates",
     ],
     accent: "#ec4899",
   },
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
-    title: "The Lieutenant's Spotlight",
-    subtitle: "Free Marketing & Visibility",
+    title: "2× Social Mission Bonus",
+    subtitle: "Double Points on Every Task",
     points: [
-      "Weekly feature of your project or profile on DAGARMY's main website and social channels (X/LinkedIn)",
-      "Direct exposure to our network of potential employers and venture partners",
+      "Every social mission (likes, shares, videos, community tasks) earns double DAG Points compared to a Soldier",
+      "Example: a Soldier earns 50 pts for creating a Short — a Lieutenant earns 100 pts for the exact same task",
     ],
     accent: "#0ea5e9",
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
+    title: "3% + 2% Deep Network Commissions",
+    subtitle: "Earn 3 Levels Deep",
+    points: [
+      "Earn 3% on Level 2 purchases (referrals of your referrals) and 2% on Level 3 purchases across your entire downline",
+      "Your referral network compounds — every person in your chain who buys generates passive commission income for you",
+    ],
+    accent: "#ef4444",
   },
   {
     icon: (
@@ -104,36 +116,36 @@ const PERKS = [
         <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     ),
-    title: "Beta-Squad Access",
-    subtitle: "Early Testing & Feedback Loop",
+    title: "Priority Status & Early Access",
+    subtitle: "Lieutenant Badge + Beta Features",
     points: [
-      "Be first to use internal DAGARMY tools and partner software before general release",
-      "Shape the development of the tools you use — direct feedback to dev teams",
+      "Your profile is marked as DAG Lieutenant — visible to the entire DAGARMY network with a verified elite badge",
+      "First access to new DAGARMY platform features, beta tools, and partner product launches before general rollout",
     ],
-    accent: "#ef4444",
+    accent: "#14b8a6",
   },
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
       </svg>
     ),
-    title: "Demo Day Finals",
-    subtitle: "Road to Demo Day — Udaan Program",
+    title: "149 DGCC Coins — Auto-Staked on DAGChain",
+    subtitle: "Earn APY in DGCC Coins",
     points: [
-      "Fast-track access to the 3-stage Udaan selection pipeline: Screening → Validation & Mentor Review → Demo Day Finals, filtering 1,000+ applicants to a curated founder cohort",
-      "Your MVP becomes your proof — Demo Day Finals are earned, not attended. Execution becomes reputation and your traction becomes your signal to investors and partners",
+      "Upon upgrade, 149 DGCC Coins are automatically staked on the DAGChain network on your behalf — no manual action required",
+      "Earn APY paid in DGCC Coins: 1 Year → 12% APY · 2 Years → 18% APY · 3 Years → 24% APY. Choose your lock duration at checkout",
     ],
-    accent: "#14b8a6",
+    accent: "#f59e0b",
   },
 ];
 
 /* ── Stat tiles ── */
 const STATS = [
-  { value: "4,000+", label: "n8n Workflows" },
+  { value: "20%", label: "L1 Sales Rewards" },
+  { value: "1,000", label: "pts per Referral Join" },
+  { value: "50", label: "pts per $1 Spent" },
   { value: "$149", label: "One-Time, Lifetime" },
-  { value: "8", label: "Exclusive Perks" },
-  { value: "500+", label: "Active Lieutenants" },
 ];
 
 function PerkCard({ perk, index }) {
@@ -346,7 +358,7 @@ export default function DagLieutenantPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
           <span style={{ fontSize: "11px", fontWeight: "800", color: "#94a3b8", letterSpacing: "1.2px", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-            The War Chest — 8 Elite Perks
+            Lieutenant Advantages — 9 Exclusive Benefits
           </span>
           <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
         </div>
@@ -354,16 +366,16 @@ export default function DagLieutenantPage() {
 
       {/* ── Perks Grid — 4 + 4 ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "40px" }}>
-        {/* Row 1 — first 4 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
-          {PERKS.slice(0, 4).map((perk, i) => (
+        {/* Row 1 — first 5 */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "20px" }}>
+          {PERKS.slice(0, 5).map((perk, i) => (
             <PerkCard key={i} perk={perk} index={i} />
           ))}
         </div>
         {/* Row 2 — last 4 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
-          {PERKS.slice(4).map((perk, i) => (
-            <PerkCard key={i + 4} perk={perk} index={i + 4} />
+          {PERKS.slice(5).map((perk, i) => (
+            <PerkCard key={i + 5} perk={perk} index={i + 5} />
           ))}
         </div>
       </div>
@@ -452,7 +464,7 @@ export default function DagLieutenantPage() {
               You're already a DAG Lieutenant
             </div>
             <div style={{ fontSize: "13px", color: "#64748b", fontWeight: "450" }}>
-              All 7 perks above are unlocked and available to you. Head to your respective sections to access them.
+              All 8 Lieutenant benefits above are active on your account. Your 20% commission, 1,000 pt referral bonuses, and 50 pts/$1 spend rewards are live.
             </div>
           </div>
         </div>

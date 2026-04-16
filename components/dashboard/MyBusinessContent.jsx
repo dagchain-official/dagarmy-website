@@ -181,11 +181,11 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
       </div>
 
 
-      {/* ── Tier commission banner ── */}
+      {/* ── Tier rewards banner ── */}
       <NmCard delay={250} hover={false} style={{ padding: '14px 20px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: nm.accent, flexShrink: 0 }} />
-          <span style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary }}>Your Level 1 Direct Commission Rate:</span>
+          <span style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary }}>Your Level 1 Direct Rewards Rate:</span>
           <span style={{ fontSize: '15px', fontWeight: '900', color: nm.accent, letterSpacing: '-0.3px' }}>{l1CommPct}%</span>
           <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary }}>
             {isLieutenant ? 'DAG LIEUTENANT' : 'DAG SOLDIER'}
@@ -245,7 +245,7 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
       <NmCard delay={400} hover={false} inset style={{ padding: '28px 32px', overflow: 'visible' }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: 0 }}>Commission Detail</h3>
+          <h3 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: 0 }}>Rewards Detail</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '11px', fontWeight: '600', color: nm.textPrimary }}>From</span>
             <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
@@ -281,7 +281,7 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
               ]} />
             </div>
             <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: 'right' }}>Rate</span>
-            <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: 'right' }}>Commission</span>
+            <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: 'right' }}>Rewards</span>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <PillPopover value={statusFilter} onChange={setStatusFilter} options={[
                 { key: 'all',       label: 'Status'    },
@@ -295,7 +295,7 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
 
           {filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px 0' }}>
-              <p style={{ fontSize: '13px', fontWeight: '600', color: nm.textPrimary, margin: 0 }}>No commission records found</p>
+              <p style={{ fontSize: '13px', fontWeight: '600', color: nm.textPrimary, margin: 0 }}>No rewards records found</p>
             </div>
           ) : (<>{filtered.map((tx, idx) => {
               const isUsdt     = (tx.currency || 'USD').toUpperCase() === 'USDT';
@@ -365,7 +365,7 @@ export default function MyBusinessContent({ mounted: parentMounted }) {
                     {parseFloat(tx.commission_percentage || 0).toFixed(0)}%
                   </div>
 
-                  {/* Commission earned */}
+                  {/* Rewards earned */}
                   <div style={{ textAlign: 'right', fontSize: '14px', fontWeight: '900', color: commColor, letterSpacing: '-0.3px' }}>
                     {isUsdt ? `${commAmt.toFixed(2)} USDT` : `$${commAmt.toFixed(2)}`}
                   </div>
