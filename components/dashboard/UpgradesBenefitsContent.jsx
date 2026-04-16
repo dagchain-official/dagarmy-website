@@ -161,6 +161,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
           </div>
           <div style={{ padding: '4px 0' }}>
             {[
+              { label: 'Signup Bonus', value: 'No pts on upgrade', highlight: false },
               { label: 'Spend-Based Earning', value: `${ltSpend} pts / $1 spent`, highlight: true },
               { label: 'L1 Sales Commission', value: `${ltL1}%`, highlight: true },
               { label: 'L2 Sales Commission', value: `${l2}%`, highlight: false },
