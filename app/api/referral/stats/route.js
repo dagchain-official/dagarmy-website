@@ -18,38 +18,43 @@ export async function GET(request) {
       );
     }
 
-    // Get referral stats from database
-    const { data: stats, error: statsError } = await supabaseAdmin
-      .from('referral_stats')
-      .select('*')
+    // Get referral rows for this referrer
+    const { data: referrals, error: refError } = await supabaseAdmin
+      .from('referrals')
+      .select('id, status, total_points_earned, created_at')
+      .eq('referrer_id', userId);
+
+    if (refError) {
+      console.error('Error fetching referrals:', refError);
+      return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 });
+    }
+
+    const rows = referrals || [];
+    const total_referrals = rows.length;
+    const successful_referrals = rows.filter(r => r.status === 'completed').length;
+    const pending_referrals = rows.filter(r => r.status === 'pending').length;
+    const last_referral_at = rows.length > 0
+      ? rows.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0].created_at
+      : null;
+
+    // Get total points earned from referrals via point_transactions
+    const { data: txns } = await supabaseAdmin
+      .from('point_transactions')
+      .select('amount')
       .eq('user_id', userId)
-      .single();
+      .in('transaction_type', ['referral_join', 'referral_upgrade']);
 
-    if (statsError && statsError.code !== 'PGRST116') {
-      console.error('Error fetching referral stats:', statsError);
-      return NextResponse.json(
-        { error: 'Failed to fetch stats', details: statsError.message },
-        { status: 500 }
-      );
-    }
-
-    // If no stats exist yet, return default values
-    if (!stats) {
-      return NextResponse.json({
-        success: true,
-        stats: {
-          total_referrals: 0,
-          successful_referrals: 0,
-          pending_referrals: 0,
-          total_points_earned: 0,
-          last_referral_at: null
-        }
-      });
-    }
+    const total_points_earned = (txns || []).reduce((sum, t) => sum + (t.amount || 0), 0);
 
     return NextResponse.json({
       success: true,
-      stats
+      stats: {
+        total_referrals,
+        successful_referrals,
+        pending_referrals,
+        total_points_earned,
+        last_referral_at,
+      }
     });
 
   } catch (error) {
