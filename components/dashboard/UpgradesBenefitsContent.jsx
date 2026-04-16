@@ -73,7 +73,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
   const c = config;
   const soldierSignup = c.soldier_signup_bonus || 500;
   const ltPrice = c.lieutenant_upgrade_price_usd || 149;
-  const soldierL1 = Math.max(c.soldier_direct_sales_commission || 15, 15);
+  const soldierL1 = c.soldier_direct_sales_commission || 10;
   const ltL1 = 20;
   const l2 = c.soldier_level2_sales_commission || 3;
   const l3 = c.soldier_level3_sales_commission || 2;
@@ -118,6 +118,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               { label: 'L2 Sales Commission', value: `${l2}%` },
               { label: 'L3 Sales Commission', value: `${l3}%` },
               { label: 'Fortune 500 Pool', value: 'Auto-enrolled ✓' },
+              { label: 'Fortune 500 Pool Req.', value: '$500 self-purchases' },
               { label: 'Elite Pool', value: 'Not eligible' },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 24px', borderBottom: `1px solid ${nm.border}` }}>
@@ -160,12 +161,12 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
           </div>
           <div style={{ padding: '4px 0' }}>
             {[
-              { label: 'Signup Bonus', value: `+${soldierSignup} pts`, highlight: false },
               { label: 'Spend-Based Earning', value: `${ltSpend} pts / $1 spent`, highlight: true },
               { label: 'L1 Sales Commission', value: `${ltL1}%`, highlight: true },
               { label: 'L2 Sales Commission', value: `${l2}%`, highlight: false },
               { label: 'L3 Sales Commission', value: `${l3}%`, highlight: false },
               { label: 'Fortune 500 Pool', value: 'Auto-enrolled ✓', highlight: true },
+              { label: 'Fortune 500 Pool Req.', value: '$500 self-purchases', highlight: false },
               { label: 'Elite Pool', value: 'Eligible · Launches at MainNet', highlight: true },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 24px', borderBottom: `1px solid ${nm.border}`, background: row.highlight ? 'rgba(79,70,229,0.03)' : 'transparent' }}>
@@ -363,6 +364,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
             { label: 'Eligible Tiers', value: 'DAG SOLDIER + DAG LIEUTENANT' },
             { label: 'Distribution', value: 'Equal split among enrolled members' },
             { label: 'Enrollment', value: 'Automatic on membership' },
+            { label: 'Requirement', value: '$500 in self-purchases (mandatory)' },
             { label: 'Frequency', value: 'Monthly distribution' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '9px 0', borderBottom: i < 4 ? `1px solid ${nm.border}` : 'none', gap: '16px' }}>
@@ -424,8 +426,8 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
             </div>
           </div>
           {[
-            { label: 'DAG SOLDIER signup', soldier: `+${soldierSignup} pts`, lt: `+${soldierSignup} pts` },
-            { label: 'Upgrade to DAG LIEUTENANT', soldier: '0 pts (no bonus)', lt: '0 pts (no bonus)' },
+            { label: 'DAG SOLDIER signup', soldier: `+${soldierSignup} pts`, lt: 'N/A' },
+            { label: 'Upgrade to DAG LIEUTENANT', soldier: 'N/A', lt: 'No pts awarded' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '9px 0', borderBottom: i < 1 ? `1px solid ${nm.border}` : 'none', gap: '8px' }}>
               <span style={{ fontSize: '12px', fontWeight: '600', color: nm.textDark, flex: 1 }}>{row.label}</span>
@@ -514,7 +516,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               step: '1',
               icon: <img src={BADGE('soldier')} alt="DAG SOLDIER" style={{ width: '44px', height: '44px', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))' }} />,
               title: 'Register as DAG SOLDIER',
-              body: `Instant +${soldierSignup} pts on signup. Free to join. Earn 15% L1 commission and ${soldierSpend} pts per $1 spent by directs.`,
+              body: `Instant +${soldierSignup} pts on signup. Free to join. Earn ${soldierL1}% L1 commission and ${soldierSpend} pts per $1 spent by directs.`,
             },
             {
               step: '2',
