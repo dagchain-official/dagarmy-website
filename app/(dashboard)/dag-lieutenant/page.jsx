@@ -17,10 +17,10 @@ const PERKS = [
         <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
       </svg>
     ),
-    title: "20% Direct Sales Commission",
+    title: "20% Direct Sales Rewards",
     subtitle: "Double the Soldier Rate",
     points: [
-      "Earn 20% commission on every direct referral purchase — DAGChain nodes, DAGGPT credits, validator nodes, and LT upgrades",
+      "Earn 20% rewards on every direct referral purchase — DAGChain nodes, DAGGPT credits, validator nodes, and LT upgrades",
       "DAG Soldier earns only 10%. As a Lieutenant you earn 2× more on every direct sale your network makes",
     ],
     accent: "#6366f1",
@@ -77,9 +77,24 @@ const PERKS = [
     subtitle: "Monthly DAGGPT Revenue Share",
     points: [
       "Share in 10% of monthly DAGGPT revenue, split equally among all enrolled members who meet the $500 self-purchase requirement",
-      "Both Soldiers and Lieutenants are eligible — but Lieutenants earn more overall due to higher commission and referral rates",
+      "Both Soldiers and Lieutenants are eligible — but Lieutenants earn more overall due to higher rewards and referral rates",
     ],
     accent: "#ec4899",
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
+    title: "DAG LT Pool",
+    subtitle: "Lieutenant-Exclusive Monthly Pool",
+    points: [
+      "Earn from a dedicated LT-only pool funded by 10% of monthly DAGGPT revenue — separate from the Fortune 500 Pool",
+      "Qualify by referring 3 direct LT upgrades within a rolling 30-day window. Pool distributes monthly to all eligible Lieutenants",
+    ],
+    accent: "#10b981",
   },
   {
     icon: (
@@ -102,11 +117,11 @@ const PERKS = [
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg>
     ),
-    title: "3% + 2% Deep Network Commissions",
+    title: "3% + 2% Deep Network Rewards",
     subtitle: "Earn 3 Levels Deep",
     points: [
       "Earn 3% on Level 2 purchases (referrals of your referrals) and 2% on Level 3 purchases across your entire downline",
-      "Your referral network compounds — every person in your chain who buys generates passive commission income for you",
+      "Your referral network compounds — every person in your chain who buys generates passive rewards income for you",
     ],
     accent: "#ef4444",
   },
@@ -144,7 +159,7 @@ const PERKS = [
 const STATS = [
   { value: "20%", label: "L1 Sales Rewards" },
   { value: "1,000", label: "pts per Referral Join" },
-  { value: "50", label: "pts per $1 Spent" },
+  { value: "149", label: "DGCC Auto-Staked" },
   { value: "$149", label: "One-Time, Lifetime" },
 ];
 
@@ -358,7 +373,7 @@ export default function DagLieutenantPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
           <span style={{ fontSize: "11px", fontWeight: "800", color: "#94a3b8", letterSpacing: "1.2px", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-            Lieutenant Advantages — 9 Exclusive Benefits
+            Lieutenant Advantages — 10 Exclusive Benefits
           </span>
           <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
         </div>
@@ -372,8 +387,8 @@ export default function DagLieutenantPage() {
             <PerkCard key={i} perk={perk} index={i} />
           ))}
         </div>
-        {/* Row 2 — last 4 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+        {/* Row 2 — last 5 */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "20px" }}>
           {PERKS.slice(5).map((perk, i) => (
             <PerkCard key={i + 5} perk={perk} index={i + 5} />
           ))}
@@ -464,7 +479,7 @@ export default function DagLieutenantPage() {
               You're already a DAG Lieutenant
             </div>
             <div style={{ fontSize: "13px", color: "#64748b", fontWeight: "450" }}>
-              All 8 Lieutenant benefits above are active on your account. Your 20% commission, 1,000 pt referral bonuses, and 50 pts/$1 spend rewards are live.
+              All 10 Lieutenant benefits above are active on your account. Your 20% rewards, 1,000 pt referral bonuses, and 50 pts/$1 spend rewards are live.
             </div>
           </div>
         </div>
