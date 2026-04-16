@@ -168,6 +168,12 @@ export async function GET(req: Request) {
             status: 'completed',
           });
           await supabase2.from('users').update({ referred_by_user_id: referrer.id }).eq('id', newUser.id);
+          // Award DAG points to referrer (fire-and-forget)
+          fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network'}/api/referral/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ referredUserId: newUser.id }),
+          }).catch(e => console.warn('[google/callback] referral/complete error:', e));
         }
       }
       // ── Notify DAGChain of brand-new Google sign-up (fire-and-forget) ──────

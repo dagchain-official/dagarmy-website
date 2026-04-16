@@ -108,6 +108,12 @@ export async function POST(req: Request) {
             status: 'completed',
           }).single();
           await supabase.from('users').update({ referred_by_user_id: referrer.id }).eq('id', user.id);
+          // Award DAG points to referrer (fire-and-forget — non-blocking)
+          fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network'}/api/referral/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ referredUserId: user.id }),
+          }).catch(e => console.warn('[register] referral/complete error:', e));
         }
       } catch (refErr) {
         // Non-fatal — don't block registration if referral fails
