@@ -37,14 +37,14 @@ export async function GET(request) {
       ? rows.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0].created_at
       : null;
 
-    // Get total points earned from referrals via point_transactions
+    // Get total points earned from referrals via points_transactions
     const { data: txns } = await supabaseAdmin
-      .from('point_transactions')
-      .select('amount')
+      .from('points_transactions')
+      .select('points')
       .eq('user_id', userId)
       .in('transaction_type', ['referral_join', 'referral_upgrade']);
 
-    const total_points_earned = (txns || []).reduce((sum, t) => sum + (t.amount || 0), 0);
+    const total_points_earned = (txns || []).reduce((sum, t) => sum + (t.points || 0), 0);
 
     return NextResponse.json({
       success: true,
