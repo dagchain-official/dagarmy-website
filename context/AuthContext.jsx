@@ -169,7 +169,9 @@ export function AuthProvider({ children }) {
 
   // ── Login with Google ─────────────────────────────────────────────────────
   const loginWithGoogle = useCallback(() => {
-    window.location.href = '/api/auth/google';
+    const ref = typeof window !== 'undefined' ? localStorage.getItem('pending_referral_code') : null;
+    const refParam = ref ? `&ref=${encodeURIComponent(ref)}` : '';
+    window.location.href = `/api/auth/google?redirect=/student-dashboard${refParam}`;
   }, []);
 
   // ── Logout ────────────────────────────────────────────────────────────────

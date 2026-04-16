@@ -163,11 +163,12 @@ export default function LoginModal({ isOpen, onClose }) {
 
   useEffect(() => { setError(''); }, [view]);
 
-  // referral validation
+  // referral validation + persist to localStorage so Google OAuth flow can pick it up
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     const code = referralCode || mainReferral;
     if (!code || code.trim().length < 3) { setRefValid(null); return; }
+    if (typeof window !== 'undefined') localStorage.setItem('pending_referral_code', code.trim().toUpperCase());
     debounceRef.current = setTimeout(async () => {
       try {
         const res = await fetch(`/api/referral/validate?code=${code.trim()}`);
