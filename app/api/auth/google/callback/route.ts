@@ -165,7 +165,7 @@ export async function GET(req: Request) {
             referrer_id: referrer.id,
             referred_id: newUser.id,
             referral_code: ref.toUpperCase(),
-            status: 'pending',
+            status: 'completed',
           });
           await supabase2.from('users').update({ referred_by_user_id: referrer.id }).eq('id', newUser.id);
         }

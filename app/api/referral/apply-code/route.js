@@ -74,7 +74,7 @@ export async function POST(request) {
         referrer_id: codeData.id,
         referred_id: userId,
         referral_code: normalizedCode,
-        status: 'pending',
+        status: 'completed',
         reward_points: 0,
       });
 

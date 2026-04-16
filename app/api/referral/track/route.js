@@ -60,7 +60,7 @@ export async function POST(request) {
         referrer_id: referrer.id,
         referred_id: userId,
         referral_code: referralCode.toUpperCase(),
-        status: 'pending',
+        status: 'completed',
         reward_points: 0
       });
 

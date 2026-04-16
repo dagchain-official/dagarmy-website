@@ -106,7 +106,7 @@ export async function POST(req: Request) {
             referrer_id: referrer.id,
             referred_id: user.id,
             referral_code,
-            status: 'pending',
+            status: 'completed',
           }).single();
         }
       } catch (refErr) {
