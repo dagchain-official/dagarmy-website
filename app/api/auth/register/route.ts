@@ -100,14 +100,14 @@ export async function POST(req: Request) {
           .select('id')
           .eq('referral_code', referral_code.toUpperCase())
           .single();
-        if (referrer) {
-          // Store pending referral — your existing referral system handles the rest
+        if (referrer && referrer.id !== user.id) {
           await supabase.from('referrals').insert({
             referrer_id: referrer.id,
             referred_id: user.id,
-            referral_code,
+            referral_code: referral_code.toUpperCase(),
             status: 'completed',
           }).single();
+          await supabase.from('users').update({ referred_by_user_id: referrer.id }).eq('id', user.id);
         }
       } catch (refErr) {
         // Non-fatal — don't block registration if referral fails
