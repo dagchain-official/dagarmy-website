@@ -17,15 +17,14 @@ export async function POST(request) {
       );
     }
 
-    // Validate the referral code
-    const { data: codeData, error: codeError } = await supabase
-      .from('referral_codes')
-      .select('user_id, is_active')
+    // Validate the referral code — look up in users.referral_code (primary source of truth)
+    const { data: referrer, error: codeError } = await supabase
+      .from('users')
+      .select('id')
       .eq('referral_code', referralCode.toUpperCase())
-      .eq('is_active', true)
       .single();
 
-    if (codeError || !codeData) {
+    if (codeError || !referrer) {
       return NextResponse.json(
         { error: 'Invalid referral code' },
         { status: 400 }
@@ -33,7 +32,7 @@ export async function POST(request) {
     }
 
     // Prevent self-referrals
-    if (codeData.user_id === userId) {
+    if (referrer.id === userId) {
       return NextResponse.json(
         { error: 'Cannot refer yourself' },
         { status: 400 }
@@ -45,7 +44,7 @@ export async function POST(request) {
       .from('referrals')
       .select('id')
       .eq('referred_id', userId)
-      .single();
+      .maybeSingle();
 
     if (existingReferral) {
       return NextResponse.json(
@@ -58,7 +57,7 @@ export async function POST(request) {
     const { error: insertError } = await supabase
       .from('referrals')
       .insert({
-        referrer_id: codeData.user_id,
+        referrer_id: referrer.id,
         referred_id: userId,
         referral_code: referralCode.toUpperCase(),
         status: 'pending',
@@ -76,7 +75,7 @@ export async function POST(request) {
     // Update referred user's referred_by_user_id field
     await supabase
       .from('users')
-      .update({ referred_by_user_id: codeData.user_id })
+      .update({ referred_by_user_id: referrer.id })
       .eq('id', userId);
 
     return NextResponse.json({
