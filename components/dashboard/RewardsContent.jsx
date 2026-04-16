@@ -162,7 +162,7 @@ export default function RewardsContent({ mounted }) {
         <div style={{ marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <h1 style={{ fontSize: '26px', fontWeight: '800', color: nm.textPrimary, margin: 0, letterSpacing: '-0.5px' }}>My Rewards</h1>
-            <p style={{ fontSize: '13px', color: nm.textMuted, margin: '4px 0 0', fontWeight: '500' }}>Track your DAG Points, commissions, and pool earnings</p>
+            <p style={{ fontSize: '13px', color: nm.textMuted, margin: '4px 0 0', fontWeight: '500' }}>Track your DAG Points, rewards, and pool earnings</p>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
             <button onClick={() => setShowRedeemModal(true)}
@@ -193,7 +193,7 @@ export default function RewardsContent({ mounted }) {
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', gap: '24px' }}>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>L1 Commission</p>
+              <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>L1 Rewards</p>
               <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{l1CommissionPct}%</p>
             </div>
             <div style={{ textAlign: 'center' }}>
@@ -231,7 +231,7 @@ export default function RewardsContent({ mounted }) {
               )}
             </div>
             <p style={{ fontSize: '36px', fontWeight: '800', color: nm.textPrimary, letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>${usdEarned.toFixed(2)}</p>
-            <p style={{ fontSize: '11px', color: nm.textMuted, margin: '8px 0 0' }}>Sales commissions</p>
+            <p style={{ fontSize: '11px', color: nm.textMuted, margin: '8px 0 0' }}>Sales rewards</p>
           </NmCard>
           <NmCard delay={200} style={{ padding: '24px 28px', textAlign: 'center' }}>
             <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 14px' }}>USDT Earned</p>
@@ -254,9 +254,9 @@ export default function RewardsContent({ mounted }) {
           ))}
         </div>
 
-        {/* Commission Rates Info Strip */}
+        {/* Rewards Rates Info Strip */}
         <div style={{ marginBottom: '20px', background: nm.bg, borderRadius: '16px', padding: '16px 24px', boxShadow: nm.shadowXs }}>
-          <p style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: '800', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Sales Commission Rates</p>
+          <p style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: '800', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Sales Rewards Rates</p>
           <div style={{ display: 'flex', gap: '32px' }}>
             {[
               { label: 'Level 1 (Direct)', value: `${l1CommissionPct}%`, color: nm.accent },
@@ -276,7 +276,7 @@ export default function RewardsContent({ mounted }) {
         <div style={{ marginBottom: '20px' }}>
           <div style={{ marginBottom: '14px' }}>
             <h2 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 3px', letterSpacing: '-0.3px' }}>Incentive Pools</h2>
-            <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Revenue-sharing pools — passive income on top of your commissions</p>
+            <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Revenue-sharing pools — passive income on top of your rewards</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
 
@@ -462,7 +462,7 @@ export default function RewardsContent({ mounted }) {
               signup_bonus: 'Signup', referral_join: 'Referral Join', referral_upgrade: 'Referral Upgrade',
               spend_based: 'Spend Bonus', rank_refund: 'Rank Refund', rank_burn: 'Burned',
               redeem: 'Redeemed', fortune500_payout: 'Fortune 500', admin_grant: 'Admin Grant',
-              usd_commission: 'Commission',
+              usd_commission: 'Rewards',
             };
 
             const filtered = (rewardData.txHistory || []).filter(tx => {
@@ -580,7 +580,7 @@ export default function RewardsContent({ mounted }) {
             <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'linear-gradient(135deg,#10b981,#059669)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><DollarSign size={18} color="#fff" /></div>
-                <div><h2 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Request Withdrawal</h2><p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Withdraw your USD commissions</p></div>
+                <div><h2 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Request Withdrawal</h2><p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Withdraw your USD rewards</p></div>
               </div>
               <button onClick={() => { setShowWithdrawModal(false); setWithdrawMessage(null); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
