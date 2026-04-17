@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
+import StakingPerkModal from "@/components/StakingPerkModal";
 
 /* ─── Circular Progress Ring ─── */
 function ProgressRing({ value = 0, size = 64, strokeWidth = 5, color = '#6366f1' }) {
@@ -100,6 +101,12 @@ export default function Dashboard2() {
     const [transferAmount, setTransferAmount] = useState(1);
     const [transferring, setTransferring] = useState(false);
     const [transferMsg, setTransferMsg] = useState(null);
+    // Staking perk modal
+    const [showStakingModal, setShowStakingModal] = useState(false);
+    const [stakingModalType, setStakingModalType] = useState(null);   // 'lt_upgrade' | 'dgcc_transfer'
+    const [stakingDgccAmount, setStakingDgccAmount] = useState(149);
+    const [stakingPaymentId, setStakingPaymentId] = useState(null);
+    const [stakingTransferId, setStakingTransferId] = useState(null);
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -110,6 +117,23 @@ export default function Dashboard2() {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
         setTimeout(() => { setMounted(true); setPageOrigin(window.location.origin); }, 100);
         return () => clearInterval(timer);
+    }, []);
+
+    // Detect staking perk params from URL (redirected from /success/upgrade or DGCC transfer)
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const params = new URLSearchParams(window.location.search);
+        const perk = params.get('staking_perk');
+        const sessionId = params.get('session_id');
+        if (perk === 'lt_upgrade' && sessionId) {
+            setStakingModalType('lt_upgrade');
+            setStakingDgccAmount(149);
+            setStakingPaymentId(sessionId);
+            setShowStakingModal(true);
+            // Clean URL so modal doesn't re-open on refresh
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, '', cleanUrl);
+        }
     }, []);
 
     useEffect(() => {
@@ -420,7 +444,21 @@ export default function Dashboard2() {
             if (data.success) {
                 setTransferMsg({ type: 'success', text: data.message });
                 setDgccBalance(data.new_dgcc_balance);
-                setTimeout(() => { setShowTransferModal(false); setTransferMsg(null); setTransferAmount(1); setTransferDest(null); }, 3000);
+                // For daggpt transfers — show staking perk modal
+                if (transferDest === 'daggpt' && data.transfer_id) {
+                    setTimeout(() => {
+                        setShowTransferModal(false);
+                        setTransferMsg(null);
+                        setTransferAmount(1);
+                        setTransferDest(null);
+                        setStakingModalType('dgcc_transfer');
+                        setStakingDgccAmount(amt);
+                        setStakingTransferId(data.transfer_id);
+                        setShowStakingModal(true);
+                    }, 1200);
+                } else {
+                    setTimeout(() => { setShowTransferModal(false); setTransferMsg(null); setTransferAmount(1); setTransferDest(null); }, 3000);
+                }
             } else {
                 setTransferMsg({ type: 'error', text: data.error || 'Transfer failed' });
             }
@@ -1663,6 +1701,23 @@ export default function Dashboard2() {
                     onClose={() => setShowUpgradeModal(false)}
                     onConfirm={() => { setShowUpgradeModal(false); handleStripeUpgrade(false); }}
                     loading={stripeLoading === 'full'}
+                />
+            )}
+
+            {/* ── Staking Perk Modal (LT upgrade + DGCC→DAGGPT transfer) ── */}
+            {showStakingModal && (
+                <StakingPerkModal
+                    type={stakingModalType}
+                    dgccAmount={stakingDgccAmount}
+                    userId={userData?.id}
+                    paymentId={stakingPaymentId}
+                    transferId={stakingTransferId}
+                    onClose={() => {
+                        setShowStakingModal(false);
+                        setStakingModalType(null);
+                        setStakingPaymentId(null);
+                        setStakingTransferId(null);
+                    }}
                 />
             )}
         </div>

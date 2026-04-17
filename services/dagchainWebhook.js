@@ -210,15 +210,23 @@ export function notifyReferralCompleted(referrer, referred, referralCode, source
  * DAG LIEUTENANT ($149 payment confirmed).
  * DAGChain uses this to allocate DGCC staking rewards for the upgraded user.
  *
- * @param {Object} user       - { id, email }
- * @param {string|null} paymentId - Stripe/payment reference (optional)
+ * @param {Object} user            - { id, email }
+ * @param {string|null} paymentId  - Stripe/payment reference (optional)
+ * @param {Object|null} staking    - { duration: 1|2|3, apy: 12|18|24, dgccStaked: 149, claimedAt: ISO }
  */
-export function notifyLieutenantUpgrade(user, paymentId = null) {
+export function notifyLieutenantUpgrade(user, paymentId = null, staking = null) {
   const data = {
     tier:       'DAG_LIEUTENANT',
     upgradedAt: new Date().toISOString(),
     paymentId:  paymentId || null,
   };
+
+  if (staking) {
+    data.stakingDuration  = staking.duration;
+    data.stakingApy       = staking.apy;
+    data.dgccStaked       = staking.dgccStaked || 149;
+    data.stakingClaimedAt = staking.claimedAt || new Date().toISOString();
+  }
 
   dispatch('tier.upgraded', user.id, user.email || null, data);
 }
@@ -228,21 +236,30 @@ export function notifyLieutenantUpgrade(user, paymentId = null) {
  * DAGGPT or to DAGChain directly).
  *
  * DAGChain uses this to:
- *   - destination='daggpt'   → credit staking bonus for identical DGCC amount
- *   - destination='dagchain' → record the incoming DGCC on their own ledger
+ *   - destination='daggpt'   → credit staking bonus (staking fields included)
+ *   - destination='dagchain' → record the incoming DGCC on their own ledger (no staking)
  *
  * @param {Object} user        - { id, email }
  * @param {number} amount      - DGCC Coins transferred (positive integer)
  * @param {string} destination - 'daggpt' | 'dagchain'
  * @param {string|null} transferId - DB row id from dgcc_transfers (for idempotency)
+ * @param {Object|null} staking    - { duration: 1|2|3, apy: 12|18|24, claimedAt: ISO } (daggpt only)
  */
-export function notifyDgccTransfer(user, amount, destination, transferId = null) {
+export function notifyDgccTransfer(user, amount, destination, transferId = null, staking = null) {
   const data = {
     amount,
     destination,
     transferId:    transferId || null,
     transferredAt: new Date().toISOString(),
   };
+
+  // Staking perk only applies when sending to DAGGPT
+  if (staking && destination === 'daggpt') {
+    data.stakingDuration  = staking.duration;
+    data.stakingApy       = staking.apy;
+    data.dgccStaked       = amount;
+    data.stakingClaimedAt = staking.claimedAt || new Date().toISOString();
+  }
 
   // Use transferId as idempotency extra, falling back to timestamp-based key
   const idempotencyExtra = transferId || `${destination}_${amount}_${Date.now()}`;

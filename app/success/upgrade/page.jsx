@@ -21,7 +21,8 @@ function UpgradeSuccessContent() {
         const res = await fetch(`/api/stripe/verify-payment?session_id=${sessionId}`);
         const data = await res.json();
         if (res.ok && data.paid) {
-          setStatus('success');
+          // Redirect to dashboard with staking perk params — modal will fire there
+          router.replace(`/dashboard?staking_perk=lt_upgrade&session_id=${sessionId}`);
         } else {
           setStatus('error');
         }
