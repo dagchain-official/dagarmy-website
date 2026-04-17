@@ -1,77 +1,55 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
- * StakingPerkModal
+ * StakingPerkModal — Editorial, high-end financial aesthetic.
  *
- * Two-step modal:
- *   Step 1 — Congratulations + "Claim Reward" CTA
- *   Step 2 — Staking duration picker (1Y/2Y/3Y) + Submit
- *
- * Props:
- *   type        — 'lt_upgrade' | 'dgcc_transfer'
- *   dgccAmount  — number (149 for LT upgrade, dynamic for transfer)
- *   userId      — string
- *   paymentId   — string|null  (lt_upgrade only)
- *   transferId  — string|null  (dgcc_transfer only)
- *   onClose     — () => void  called after successful submit OR skip
+ * type        — 'lt_upgrade' | 'dgcc_transfer'
+ * dgccAmount  — number
+ * userId      — string
+ * paymentId   — string|null
+ * transferId  — string|null
+ * onClose     — () => void
  */
 
 const STAKING_OPTIONS = [
-  { duration: 1, apy: 12, label: '1 Year',  sublabel: '12% APY' },
-  { duration: 2, apy: 18, label: '2 Years', sublabel: '18% APY' },
-  { duration: 3, apy: 24, label: '3 Years', sublabel: '24% APY' },
+  { duration: 1, apy: 12 },
+  { duration: 2, apy: 18 },
+  { duration: 3, apy: 24 },
 ];
 
-// SVG icon helpers (no emojis per user preference)
-const IconShield = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-  </svg>
-);
+// Design tokens — off-white paper + ink
+const T = {
+  paper:    '#FAF8F3',
+  card:     '#FFFFFF',
+  ink:      '#0A0A0A',
+  ink2:     '#1F1F1F',
+  muted:    '#6B6B6B',
+  line:     '#E8E4DB',
+  lineSoft: '#F0ECE2',
+  accent:   '#D97757',   // warm terracotta — distinctive vs generic purple
+  accentBg: '#FBF3EF',
+  ok:       '#0F7D4C',
+  shadow:   '0 1px 2px rgba(10,10,10,0.04), 0 20px 48px -24px rgba(10,10,10,0.18)',
+};
 
-const IconStar = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-  </svg>
-);
-
-const IconCheck = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12"/>
-  </svg>
-);
-
-const IconClock = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
-  </svg>
-);
-
-const IconPercent = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="19" y1="5" x2="5" y2="19"/>
-    <circle cx="6.5" cy="6.5" r="2.5"/>
-    <circle cx="17.5" cy="17.5" r="2.5"/>
-  </svg>
-);
-
-const IconCoin = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M12 6v2m0 8v2M9.5 9.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5c0 3-5 3-5 5.5 0 1.4 1.1 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/>
-  </svg>
-);
+// Monospace tabular numerics for amounts (authoritative financial feel)
+const MONO = '"JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace';
+const SERIF = '"Domine", "Libre Caslon Text", Georgia, serif';
 
 export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, transferId, onClose }) {
-  const [step, setStep] = useState(1);
-  const [selected, setSelected] = useState(null);
+  const [step, setStep]             = useState(1);
+  const [selected, setSelected]     = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-  const [done, setDone] = useState(false);
+  const [error, setError]           = useState(null);
+  const [done, setDone]             = useState(false);
 
   const amount = Number(dgccAmount) || (type === 'lt_upgrade' ? 149 : 0);
+  const eyebrow = type === 'lt_upgrade' ? 'DAG LIEUTENANT · ONE-TIME PERK' : 'DAGGPT TRANSFER · STAKING PERK';
+
+  // Compute projected return for hero number
+  const projectedDisplay = (amt, apy, years) =>
+    (amt + amt * (apy / 100) * years).toFixed(0);
 
   const handleSubmit = async () => {
     if (!selected) return;
@@ -79,18 +57,12 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
     setError(null);
 
     const body = {
-      type,
-      userId,
+      type, userId,
       stakingDuration: selected.duration,
       stakingApy:      selected.apy,
     };
-
-    if (type === 'lt_upgrade') {
-      body.paymentId = paymentId || null;
-    } else {
-      body.transferId = transferId;
-      body.dgccAmount = amount;
-    }
+    if (type === 'lt_upgrade') body.paymentId = paymentId || null;
+    else { body.transferId = transferId; body.dgccAmount = amount; }
 
     try {
       const res = await fetch('/api/rewards/staking-claim', {
@@ -101,7 +73,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
       const data = await res.json();
       if (res.ok && data.success) {
         setDone(true);
-        setTimeout(() => onClose?.(), 2800);
+        setTimeout(() => onClose?.(), 3000);
       } else {
         setError(data.error || 'Something went wrong. Please try again.');
       }
@@ -113,305 +85,394 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
   };
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 9999,
-      background: 'rgba(15,10,40,0.65)',
-      backdropFilter: 'blur(6px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '16px',
-    }}>
+    <>
+      {/* Import display fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        @keyframes spmFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spmPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+      `}</style>
+
       <div style={{
-        background: 'linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%)',
-        borderRadius: '24px',
-        padding: '40px 36px',
-        maxWidth: '480px',
-        width: '100%',
-        boxShadow: '0 24px 64px rgba(99,102,241,0.2), 0 4px 16px rgba(0,0,0,0.08)',
-        border: '1px solid rgba(99,102,241,0.15)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        position: 'relative',
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'rgba(10,10,10,0.45)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '20px',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Inter", sans-serif',
       }}>
+        <div style={{
+          background: T.card,
+          borderRadius: '4px',
+          width: '100%',
+          maxWidth: '520px',
+          boxShadow: T.shadow,
+          border: `1px solid ${T.line}`,
+          overflow: 'hidden',
+          animation: 'spmFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)',
+        }}>
 
-        {/* ── SUCCESS STATE ── */}
-        {done && (
-          <div style={{ textAlign: 'center', padding: '16px 0' }}>
-            <div style={{
-              width: '72px', height: '72px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 24px',
-              boxShadow: '0 8px 24px rgba(99,102,241,0.4)',
-            }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1e1b4b', margin: '0 0 10px' }}>
-              Staking Activated!
-            </h2>
-            <p style={{ fontSize: '14px', color: '#64748b', margin: 0, lineHeight: 1.6 }}>
-              Your {amount} DGCC Coins have been registered for staking on DAGChain at{' '}
-              <strong style={{ color: '#6366f1' }}>{selected?.apy}% APY</strong> for {selected?.duration} {selected?.duration === 1 ? 'year' : 'years'}.
-            </p>
-          </div>
-        )}
-
-        {/* ── STEP 1 — CONGRATS ── */}
-        {!done && step === 1 && (
-          <div style={{ textAlign: 'center' }}>
-            {/* Badge */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '6px',
-              background: '#fef3c7', border: '1px solid #fde68a',
-              borderRadius: '20px', padding: '5px 14px', marginBottom: '20px',
-            }}>
-              <IconStar />
-              <span style={{ fontSize: '12px', fontWeight: '700', color: '#92400e', letterSpacing: '0.05em' }}>
-                {type === 'lt_upgrade' ? 'DAG LIEUTENANT PERK' : 'DAGGPT TRANSFER PERK'}
-              </span>
-            </div>
-
-            {/* Icon */}
-            <div style={{
-              width: '80px', height: '80px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #eef2ff 0%, #ede9fe 100%)',
-              border: '2px solid rgba(99,102,241,0.2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 24px',
-            }}>
-              <IconShield />
-            </div>
-
-            {type === 'lt_upgrade' ? (
-              <>
-                <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1e1b4b', margin: '0 0 12px', letterSpacing: '-0.5px' }}>
-                  Welcome, DAG Lieutenant!
-                </h2>
-                <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 8px', lineHeight: 1.6 }}>
-                  You have upgraded to DAG Lieutenant — welcome to the world of awesome possibilities.
-                </p>
-                <p style={{ fontSize: '14px', color: '#6366f1', fontWeight: '600', margin: '0 0 28px' }}>
-                  As an esteemed DAG Lieutenant member, here is your one-time perk:
-                </p>
-              </>
-            ) : (
-              <>
-                <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1e1b4b', margin: '0 0 12px', letterSpacing: '-0.5px' }}>
-                  Transfer Successful!
-                </h2>
-                <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 8px', lineHeight: 1.6 }}>
-                  Your {amount} DGCC Coins are on their way to DAGGPT.
-                </p>
-                <p style={{ fontSize: '14px', color: '#6366f1', fontWeight: '600', margin: '0 0 28px' }}>
-                  As a reward, your DGCC can be auto-staked on DAGChain — claim your staking perk below:
-                </p>
-              </>
-            )}
-
-            {/* Perk card */}
-            <div style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              borderRadius: '16px', padding: '20px 24px',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              marginBottom: '28px', textAlign: 'left',
-              boxShadow: '0 8px 24px rgba(99,102,241,0.3)',
-            }}>
-              <div>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', margin: '0 0 4px', fontWeight: '600', letterSpacing: '0.08em' }}>
-                  AUTO-STAKED ON DAGCHAIN
-                </p>
-                <p style={{ fontSize: '28px', fontWeight: '900', color: '#fff', margin: 0, letterSpacing: '-1px' }}>
-                  {amount} DGCC
-                </p>
+          {/* ═════════ SUCCESS STATE ═════════ */}
+          {done && (
+            <div style={{ padding: '56px 48px', textAlign: 'center' }}>
+              <div style={{
+                fontFamily: MONO, fontSize: '10px', letterSpacing: '0.2em',
+                color: T.ok, marginBottom: '28px', fontWeight: 600,
+              }}>
+                ◼ CONFIRMED · ON-CHAIN
               </div>
               <div style={{
-                background: 'rgba(255,255,255,0.15)', borderRadius: '12px', padding: '12px 16px', textAlign: 'center',
+                fontFamily: SERIF, fontSize: '38px', lineHeight: 1.05,
+                color: T.ink, fontWeight: 500, letterSpacing: '-0.02em',
+                margin: '0 0 18px',
               }}>
-                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.75)', margin: '0 0 2px', fontWeight: '600' }}>UP TO</p>
-                <p style={{ fontSize: '22px', fontWeight: '900', color: '#fff', margin: 0 }}>24% APY</p>
+                Your stake is<br/>registered.
               </div>
-            </div>
-
-            <button
-              onClick={() => setStep(2)}
-              style={{
-                width: '100%', padding: '15px 24px', borderRadius: '12px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                color: '#fff', fontSize: '15px', fontWeight: '700',
-                border: 'none', cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              Claim Reward
-            </button>
-
-            <button
-              onClick={() => onClose?.()}
-              style={{
-                marginTop: '10px', width: '100%', padding: '12px',
-                background: 'transparent', border: 'none',
-                color: '#94a3b8', fontSize: '13px', cursor: 'pointer',
-              }}
-            >
-              Skip for now
-            </button>
-          </div>
-        )}
-
-        {/* ── STEP 2 — DURATION PICKER ── */}
-        {!done && step === 2 && (
-          <div>
-            <button
-              onClick={() => setStep(1)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: '#94a3b8', fontSize: '13px', padding: 0, marginBottom: '16px',
-                display: 'flex', alignItems: 'center', gap: '4px',
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-              Back
-            </button>
-
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1e1b4b', margin: '0 0 8px' }}>
-                Choose Your Staking Duration
-              </h2>
-              <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
-                Your <strong style={{ color: '#1e1b4b' }}>{amount} DGCC Coins</strong> will be auto-staked on DAGChain network.
+              <div style={{ width: '40px', height: '1px', background: T.ink, margin: '0 auto 24px' }} />
+              <p style={{ fontSize: '14px', color: T.muted, lineHeight: 1.6, margin: 0, maxWidth: '340px', marginInline: 'auto' }}>
+                <span style={{ fontFamily: MONO, color: T.ink, fontWeight: 600 }}>{amount} DGCC</span> locked for{' '}
+                <span style={{ fontFamily: MONO, color: T.ink, fontWeight: 600 }}>{selected?.duration}Y</span> at{' '}
+                <span style={{ fontFamily: MONO, color: T.accent, fontWeight: 700 }}>{selected?.apy}% APY</span>.
+                Rewards accrue daily on the DAGChain network.
               </p>
             </div>
+          )}
 
-            {/* Duration cards */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-              {STAKING_OPTIONS.map((opt) => {
-                const isSelected = selected?.duration === opt.duration;
-                return (
+          {/* ═════════ STEP 1 — OFFER ═════════ */}
+          {!done && step === 1 && (
+            <div>
+              {/* Top ribbon — editorial */}
+              <div style={{
+                padding: '14px 40px',
+                background: T.paper,
+                borderBottom: `1px solid ${T.line}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              }}>
+                <span style={{
+                  fontFamily: MONO, fontSize: '10px', letterSpacing: '0.22em',
+                  color: T.ink, fontWeight: 600,
+                }}>
+                  {eyebrow}
+                </span>
+                <span style={{
+                  fontFamily: MONO, fontSize: '10px', color: T.muted,
+                }}>
+                  REF-{(transferId || paymentId || 'NEW').slice(-6).toUpperCase()}
+                </span>
+              </div>
+
+              {/* Hero content */}
+              <div style={{ padding: '44px 48px 36px' }}>
+                <div style={{
+                  fontFamily: MONO, fontSize: '11px', letterSpacing: '0.18em',
+                  color: T.muted, marginBottom: '20px', fontWeight: 500,
+                }}>
+                  {type === 'lt_upgrade' ? '01 · UPGRADE CONFIRMED' : '01 · TRANSFER CONFIRMED'}
+                </div>
+
+                <h1 style={{
+                  fontFamily: SERIF, fontSize: '42px', lineHeight: 1.02,
+                  color: T.ink, fontWeight: 500, letterSpacing: '-0.025em',
+                  margin: '0 0 20px',
+                }}>
+                  {type === 'lt_upgrade' ? (
+                    <>Earn up to <span style={{ color: T.accent, fontStyle: 'italic' }}>24%</span> on your Lieutenant perk.</>
+                  ) : (
+                    <>Turn <span style={{ color: T.accent, fontStyle: 'italic' }}>{amount}</span> DGCC into a yield-bearing stake.</>
+                  )}
+                </h1>
+
+                <p style={{
+                  fontSize: '14px', lineHeight: 1.65, color: T.muted,
+                  margin: '0 0 32px', maxWidth: '440px',
+                }}>
+                  {type === 'lt_upgrade'
+                    ? `As a welcome gift, 149 DGCC Coins can be auto-staked on the DAGChain network. Choose your lock duration on the next step.`
+                    : `Before these coins move to DAGGPT, lock them into DAGChain's native staking program for additional rewards.`}
+                </p>
+
+                {/* Data grid — no cards, just typography + lines */}
+                <div style={{
+                  display: 'grid', gridTemplateColumns: '1fr 1fr',
+                  borderTop: `1px solid ${T.line}`,
+                  borderBottom: `1px solid ${T.line}`,
+                  marginBottom: '32px',
+                }}>
+                  <div style={{ padding: '16px 0', borderRight: `1px solid ${T.line}`, paddingRight: '20px' }}>
+                    <div style={{ fontFamily: MONO, fontSize: '10px', color: T.muted, letterSpacing: '0.15em', marginBottom: '6px' }}>
+                      STAKEABLE AMOUNT
+                    </div>
+                    <div style={{ fontFamily: MONO, fontSize: '22px', color: T.ink, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+                      {amount.toLocaleString()} <span style={{ fontSize: '12px', color: T.muted, fontWeight: 400 }}>DGCC</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: '16px 0', paddingLeft: '20px' }}>
+                    <div style={{ fontFamily: MONO, fontSize: '10px', color: T.muted, letterSpacing: '0.15em', marginBottom: '6px' }}>
+                      MAX PROJECTED YIELD
+                    </div>
+                    <div style={{ fontFamily: MONO, fontSize: '22px', color: T.accent, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+                      +{Math.round(amount * 0.24 * 3).toLocaleString()} <span style={{ fontSize: '12px', color: T.muted, fontWeight: 400 }}>DGCC · 3Y · 24% APY</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <button
-                    key={opt.duration}
-                    onClick={() => setSelected(opt)}
+                    onClick={() => setStep(2)}
                     style={{
-                      background: isSelected
-                        ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'
-                        : '#fff',
-                      border: isSelected ? '2px solid #6366f1' : '2px solid #e0e7ff',
-                      borderRadius: '14px',
-                      padding: '16px 20px',
+                      flex: 1,
+                      padding: '16px 24px',
+                      background: T.ink,
+                      color: T.card,
+                      border: 'none',
+                      borderRadius: '2px',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
                       cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      fontFamily: 'inherit',
                       transition: 'all 0.18s ease',
-                      boxShadow: isSelected ? '0 6px 20px rgba(99,102,241,0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
-                      textAlign: 'left',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = T.accent; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = T.ink; }}
+                  >
+                    Choose Duration →
+                  </button>
+                  <button
+                    onClick={() => onClose?.()}
+                    style={{
+                      padding: '16px 20px',
+                      background: 'transparent',
+                      color: T.muted,
+                      border: `1px solid ${T.line}`,
+                      borderRadius: '2px',
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      {/* Selection circle */}
-                      <div style={{
-                        width: '22px', height: '22px', borderRadius: '50%',
-                        background: isSelected ? 'rgba(255,255,255,0.25)' : '#eef2ff',
-                        border: isSelected ? '2px solid rgba(255,255,255,0.6)' : '2px solid #c7d2fe',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0,
-                      }}>
-                        {isSelected && <IconCheck />}
-                      </div>
-                      <div>
-                        <p style={{
-                          fontSize: '16px', fontWeight: '700',
-                          color: isSelected ? '#fff' : '#1e1b4b',
-                          margin: 0,
-                        }}>
-                          {opt.label} Staking
-                        </p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
-                          <span style={{
-                            display: 'flex', alignItems: 'center', gap: '4px',
-                            fontSize: '13px', color: isSelected ? 'rgba(255,255,255,0.8)' : '#64748b',
-                          }}>
-                            <IconCoin />
-                            {amount} DGCC
-                          </span>
-                          <span style={{
-                            display: 'flex', alignItems: 'center', gap: '4px',
-                            fontSize: '13px', color: isSelected ? 'rgba(255,255,255,0.8)' : '#64748b',
-                          }}>
-                            <IconClock />
-                            {opt.duration}Y lock
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* APY badge */}
-                    <div style={{
-                      background: isSelected ? 'rgba(255,255,255,0.2)' : '#eef2ff',
-                      borderRadius: '10px', padding: '8px 14px', textAlign: 'center',
-                    }}>
-                      <p style={{
-                        fontSize: '20px', fontWeight: '900',
-                        color: isSelected ? '#fff' : '#6366f1',
-                        margin: 0, lineHeight: 1,
-                      }}>
-                        {opt.apy}%
-                      </p>
-                      <p style={{
-                        fontSize: '11px', fontWeight: '600',
-                        color: isSelected ? 'rgba(255,255,255,0.7)' : '#818cf8',
-                        margin: '2px 0 0', letterSpacing: '0.05em',
-                      }}>
-                        APY
-                      </p>
-                    </div>
+                    Later
                   </button>
-                );
-              })}
-            </div>
+                </div>
+              </div>
 
-            {/* Error */}
-            {error && (
-              <p style={{
-                fontSize: '13px', color: '#ef4444', background: '#fef2f2',
-                border: '1px solid #fecaca', borderRadius: '8px',
-                padding: '10px 14px', marginBottom: '12px', margin: '0 0 12px',
+              {/* Footer microcopy */}
+              <div style={{
+                padding: '12px 48px',
+                borderTop: `1px solid ${T.line}`,
+                background: T.paper,
+                fontFamily: MONO, fontSize: '10px', color: T.muted, letterSpacing: '0.1em',
               }}>
-                {error}
-              </p>
-            )}
+                ONE-TIME OFFER · EXPIRES ON DISMISS
+              </div>
+            </div>
+          )}
 
-            {/* Submit */}
-            <button
-              onClick={handleSubmit}
-              disabled={!selected || submitting}
-              style={{
-                width: '100%', padding: '15px 24px', borderRadius: '12px',
-                background: selected
-                  ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'
-                  : '#e0e7ff',
-                color: selected ? '#fff' : '#a5b4fc',
-                fontSize: '15px', fontWeight: '700',
-                border: 'none', cursor: selected ? 'pointer' : 'not-allowed',
-                boxShadow: selected ? '0 4px 16px rgba(99,102,241,0.35)' : 'none',
-                opacity: submitting ? 0.7 : 1,
-                transition: 'all 0.18s ease',
-              }}
-            >
-              {submitting ? 'Confirming...' : `Stake ${amount} DGCC${selected ? ` at ${selected.apy}% APY` : ''}`}
-            </button>
+          {/* ═════════ STEP 2 — DURATION SELECT ═════════ */}
+          {!done && step === 2 && (
+            <div>
+              {/* Top ribbon */}
+              <div style={{
+                padding: '14px 40px',
+                background: T.paper,
+                borderBottom: `1px solid ${T.line}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              }}>
+                <button
+                  onClick={() => setStep(1)}
+                  style={{
+                    fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em',
+                    color: T.ink, fontWeight: 600,
+                    background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                  }}
+                >
+                  ← BACK
+                </button>
+                <span style={{
+                  fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em',
+                  color: T.muted, fontWeight: 500,
+                }}>
+                  02 · SELECT TERM
+                </span>
+              </div>
 
-            <button
-              onClick={() => onClose?.()}
-              style={{
-                marginTop: '10px', width: '100%', padding: '12px',
-                background: 'transparent', border: 'none',
-                color: '#94a3b8', fontSize: '13px', cursor: 'pointer',
-              }}
-            >
-              Skip for now
-            </button>
-          </div>
-        )}
+              <div style={{ padding: '36px 48px 24px' }}>
+                <h2 style={{
+                  fontFamily: SERIF, fontSize: '28px', lineHeight: 1.15,
+                  color: T.ink, fontWeight: 500, letterSpacing: '-0.02em',
+                  margin: '0 0 10px',
+                }}>
+                  Choose your lock duration.
+                </h2>
+                <p style={{ fontSize: '13px', color: T.muted, margin: '0 0 28px', lineHeight: 1.6 }}>
+                  Longer terms earn higher APY. Your <span style={{ fontFamily: MONO, color: T.ink, fontWeight: 600 }}>{amount} DGCC</span> will be locked on DAGChain until maturity.
+                </p>
+
+                {/* Option rows — editorial list style */}
+                <div style={{ borderTop: `1px solid ${T.line}` }}>
+                  {STAKING_OPTIONS.map((opt) => {
+                    const isSelected = selected?.duration === opt.duration;
+                    const projected = projectedDisplay(amount, opt.apy, opt.duration);
+                    const gained    = Math.round(amount * (opt.apy / 100) * opt.duration);
+                    return (
+                      <button
+                        key={opt.duration}
+                        onClick={() => setSelected(opt)}
+                        style={{
+                          width: '100%',
+                          display: 'grid',
+                          gridTemplateColumns: 'auto 1fr auto',
+                          alignItems: 'center',
+                          gap: '20px',
+                          padding: '20px 0',
+                          borderBottom: `1px solid ${T.line}`,
+                          background: isSelected ? T.accentBg : 'transparent',
+                          border: 'none',
+                          borderBottomColor: T.line,
+                          borderBottomStyle: 'solid',
+                          borderBottomWidth: '1px',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          fontFamily: 'inherit',
+                          transition: 'background 0.15s ease',
+                          paddingLeft: isSelected ? '16px' : '0',
+                          paddingRight: isSelected ? '16px' : '0',
+                          marginLeft: isSelected ? '-16px' : '0',
+                          marginRight: isSelected ? '-16px' : '0',
+                          width: isSelected ? 'calc(100% + 32px)' : '100%',
+                          position: 'relative',
+                        }}
+                      >
+                        {/* Selection indicator — thin vertical bar instead of radio */}
+                        <div style={{
+                          width: '3px',
+                          height: '40px',
+                          background: isSelected ? T.accent : 'transparent',
+                          marginLeft: isSelected ? '0' : '3px',
+                        }} />
+
+                        {/* Term + stats */}
+                        <div>
+                          <div style={{
+                            fontFamily: SERIF, fontSize: '22px', color: T.ink,
+                            fontWeight: 500, letterSpacing: '-0.015em', marginBottom: '4px',
+                          }}>
+                            {opt.duration} {opt.duration === 1 ? 'Year' : 'Years'}
+                          </div>
+                          <div style={{
+                            fontFamily: MONO, fontSize: '11px', color: T.muted,
+                            letterSpacing: '0.06em',
+                          }}>
+                            +{gained.toLocaleString()} DGCC · MATURES {opt.duration}Y FROM TODAY
+                          </div>
+                        </div>
+
+                        {/* APY — hero right */}
+                        <div style={{ textAlign: 'right', minWidth: '80px' }}>
+                          <div style={{
+                            fontFamily: MONO,
+                            fontSize: '28px',
+                            color: isSelected ? T.accent : T.ink,
+                            fontWeight: 600,
+                            lineHeight: 1,
+                            fontVariantNumeric: 'tabular-nums',
+                            letterSpacing: '-0.02em',
+                          }}>
+                            {opt.apy}%
+                          </div>
+                          <div style={{
+                            fontFamily: MONO, fontSize: '9px',
+                            color: T.muted, letterSpacing: '0.18em', marginTop: '4px',
+                          }}>
+                            APY
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Summary line — only shows when selected */}
+                {selected && (
+                  <div style={{
+                    marginTop: '20px', padding: '14px 16px',
+                    background: T.paper, borderLeft: `2px solid ${T.accent}`,
+                    fontFamily: MONO, fontSize: '11px', color: T.ink, letterSpacing: '0.03em',
+                    lineHeight: 1.5,
+                  }}>
+                    <span style={{ color: T.muted }}>ESTIMATED AT MATURITY ·&nbsp;</span>
+                    <span style={{ fontWeight: 600 }}>{projectedDisplay(amount, selected.apy, selected.duration)} DGCC</span>
+                    <span style={{ color: T.muted }}> (principal + yield)</span>
+                  </div>
+                )}
+
+                {/* Error */}
+                {error && (
+                  <div style={{
+                    marginTop: '16px', padding: '12px 14px',
+                    background: '#FEF2F2', borderLeft: `2px solid #DC2626`,
+                    fontSize: '12px', color: '#991B1B', fontFamily: MONO, letterSpacing: '0.02em',
+                  }}>
+                    {error}
+                  </div>
+                )}
+              </div>
+
+              {/* Submit section */}
+              <div style={{
+                padding: '20px 48px 24px',
+                borderTop: `1px solid ${T.line}`,
+                background: T.paper,
+                display: 'flex', gap: '12px', alignItems: 'center',
+              }}>
+                <button
+                  onClick={handleSubmit}
+                  disabled={!selected || submitting}
+                  style={{
+                    flex: 1,
+                    padding: '15px 24px',
+                    background: selected ? T.ink : T.lineSoft,
+                    color: selected ? T.card : T.muted,
+                    border: 'none',
+                    borderRadius: '2px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    cursor: selected ? 'pointer' : 'not-allowed',
+                    fontFamily: 'inherit',
+                    transition: 'all 0.18s ease',
+                    opacity: submitting ? 0.6 : 1,
+                  }}
+                  onMouseEnter={e => { if (selected && !submitting) e.currentTarget.style.background = T.accent; }}
+                  onMouseLeave={e => { if (selected && !submitting) e.currentTarget.style.background = T.ink; }}
+                >
+                  {submitting
+                    ? '• Submitting to DAGChain...'
+                    : selected
+                      ? `Lock ${amount} DGCC · ${selected.duration}Y · ${selected.apy}% APY`
+                      : 'Select a duration'}
+                </button>
+                <button
+                  onClick={() => onClose?.()}
+                  style={{
+                    padding: '15px 18px', background: 'transparent',
+                    color: T.muted, border: `1px solid ${T.line}`,
+                    borderRadius: '2px', fontSize: '11px', fontWeight: 500,
+                    cursor: 'pointer', fontFamily: MONO, letterSpacing: '0.1em',
+                  }}
+                >
+                  SKIP
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
