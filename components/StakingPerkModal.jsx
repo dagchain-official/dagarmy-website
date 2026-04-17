@@ -31,10 +31,10 @@ const C = {
   subtle:      "#A1A1AA",
   line:        "#EAEAE6",
   lineSoft:    "#F2F1EC",
-  accentA:     "#FB923C",   // orange
-  accentB:     "#F472B6",   // pink
-  accentGrad:  "linear-gradient(135deg, #FB923C 0%, #F472B6 100%)",
-  accentTint:  "#FFF4EC",
+  accentA:     "#059669",   // emerald-600
+  accentB:     "#34D399",   // emerald-400
+  accentGrad:  "linear-gradient(135deg, #059669 0%, #34D399 100%)",
+  accentTint:  "#ECFDF5",   // emerald-50
   ok:          "#10B981",
 };
 
@@ -174,8 +174,16 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
   const eyebrow =
     type === "lt_upgrade" ? "DAG LIEUTENANT · STAKING PERK" : "DAGGPT TRANSFER · STAKING PERK";
 
-  const projected = (amt, apy, years) => Math.round(amt + amt * (apy / 100) * years);
-  const maxYield  = Math.round(amount * 0.24 * 3);
+  const projected = (amt, apy, years) => amt + amt * (apy / 100) * years;
+  const maxYield  = amount * 0.24 * 3;
+  // Smart DGCC formatter — shows decimals for small values, round for large
+  const fmt = (n) => {
+    const num = Number(n) || 0;
+    if (num === 0) return "0";
+    if (Math.abs(num) >= 100) return num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    if (Math.abs(num) >= 1)   return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    return num.toLocaleString(undefined, { maximumFractionDigits: 4 });
+  };
 
   const submit = async () => {
     if (!selected) return;
@@ -285,7 +293,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                     position: "absolute", inset: 0, borderRadius: "50%",
                     background: C.accentGrad,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    boxShadow: "0 12px 32px -8px rgba(251,146,60,0.55)",
+                    boxShadow: "0 12px 32px -8px rgba(16,185,129,0.5)",
                   }}>
                     <motion.svg
                       initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
@@ -320,7 +328,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                     margin: "0 0 14px",
                   }}
                 >
-                  Your stake is <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>registered</em>.
+                  Your stake is <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "inline-block", padding: "0 0.08em" }}>registered</em>.
                 </motion.h1>
 
                 <motion.p
@@ -374,6 +382,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                           fontStyle: "italic",
                           background: C.accentGrad,
                           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                          display: "inline-block", padding: "0 0.08em",
                         }}>yielding</em>.
                       </>
                     ) : (
@@ -382,7 +391,8 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                           fontStyle: "italic",
                           background: C.accentGrad,
                           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                        }}>{amount}</em> DGCC<br />
+                          display: "inline-block", padding: "0 0.08em",
+                        }}>{fmt(amount)}</em> DGCC<br />
                         to work.
                       </>
                     )}
@@ -414,22 +424,22 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                         STAKEABLE
                       </span>
                       <span style={{ fontFamily: MONO, fontSize: "13px", color: C.ink, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
-                        <CountUp to={amount} /> DGCC
+                        {fmt(amount)} DGCC
                       </span>
                     </div>
                     <div style={{
                       padding: "10px 14px", borderRadius: "999px",
-                      background: C.accentTint, border: `1px solid #FED7AA`,
+                      background: C.accentTint, border: `1px solid #A7F3D0`,
                       display: "inline-flex", alignItems: "center", gap: "8px",
                     }}>
-                      <span style={{ fontFamily: MONO, fontSize: "10px", color: "#9A3412", letterSpacing: "0.1em", fontWeight: 600 }}>
+                      <span style={{ fontFamily: MONO, fontSize: "10px", color: "#065F46", letterSpacing: "0.1em", fontWeight: 600 }}>
                         MAX YIELD
                       </span>
                       <span style={{
                         fontFamily: MONO, fontSize: "13px", fontWeight: 700, fontVariantNumeric: "tabular-nums",
                         background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                       }}>
-                        +<CountUp to={maxYield} /> DGCC
+                        +{fmt(maxYield)} DGCC
                       </span>
                     </div>
                   </motion.div>
@@ -523,8 +533,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                       background: C.accentGrad,
                       WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                     }}>
-                      <CountUp to={24} />
-                      <span style={{ fontSize: "28px" }}>%</span>
+                      24<span style={{ fontSize: "28px" }}>%</span>
                     </span>
                     <span style={{ fontFamily: MONO, fontSize: "11px", color: C.muted, letterSpacing: "0.18em", marginLeft: "4px" }}>
                       APY
@@ -568,6 +577,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                     fontStyle: "italic",
                     background: C.accentGrad,
                     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                    display: "inline-block", padding: "0 0.08em",
                   }}>long</em>?
                 </motion.h2>
                 <motion.p
@@ -586,6 +596,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   {STAKING_OPTIONS.map((opt, i) => {
                     const isSelected = selected?.duration === opt.duration;
                     const gained = projected(amount, opt.apy, opt.duration) - amount;
+                    const gainedStr = fmt(gained);
                     return (
                       <motion.button
                         key={opt.duration}
@@ -604,7 +615,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                           padding: "18px 22px",
                           borderRadius: "16px",
                           background: isSelected
-                            ? `linear-gradient(135deg, ${C.accentTint} 0%, #FCE7F3 100%)`
+                            ? `linear-gradient(135deg, ${C.accentTint} 0%, #D1FAE5 100%)`
                             : C.bg,
                           border: isSelected ? `1.5px solid ${C.accentA}` : `1px solid ${C.line}`,
                           cursor: "pointer",
@@ -612,7 +623,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                           fontFamily: "inherit",
                           transition: "background 0.2s, border 0.2s",
                           boxShadow: isSelected
-                            ? "0 8px 24px -8px rgba(251,146,60,0.35)"
+                            ? "0 8px 24px -8px rgba(16,185,129,0.35)"
                             : "0 1px 2px rgba(10,10,10,0.02)",
                         }}
                       >
@@ -644,7 +655,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                             fontFamily: MONO, fontSize: "11px", color: C.muted,
                             letterSpacing: "0.04em",
                           }}>
-                            +{gained.toLocaleString()} DGCC earned
+                            +{gainedStr} DGCC earned
                           </div>
                         </div>
 
@@ -695,7 +706,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                             AT MATURITY
                           </div>
                           <div style={{ fontFamily: MONO, fontSize: "14px", color: C.ink, fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
-                            <CountUp to={projected(amount, selected.apy, selected.duration)} duration={0.6} />
+                            {fmt(projected(amount, selected.apy, selected.duration))}
                             <span style={{ color: C.muted, fontWeight: 400 }}> DGCC</span>
                           </div>
                         </div>
