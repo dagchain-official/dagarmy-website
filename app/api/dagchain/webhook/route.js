@@ -17,7 +17,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     if (secret !== WEBHOOK_SECRET) {
-      console.warn(`DAGChain webhook: secret mismatch — received="${secret?.substring(0, 6)}..." expected prefix="${WEBHOOK_SECRET.substring(0, 6)}..."`)
+      console.warn(`DAGChain webhook: secret mismatch - received="${secret?.substring(0, 6)}..." expected prefix="${WEBHOOK_SECRET.substring(0, 6)}..."`)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -339,7 +339,7 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
     throw new Error(`Failed to insert node purchase: ${insertError.message}`)
   }
 
-  console.log(`[DAGChain webhook] Node purchase recorded — type=${resolvedType}, user=${email || userId}, amount=${saleAmount} ${currency}`)
+  console.log(`[DAGChain webhook] Node purchase recorded - type=${resolvedType}, user=${email || userId}, amount=${saleAmount} ${currency}`)
 
   // Update buyer's dagchain_data with node summary
   if (buyer) {
@@ -388,7 +388,7 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
     const rates = {}
     ;(rateRows || []).forEach(r => { rates[r.config_key] = parseFloat(r.config_value || 0) })
 
-    // Base rates for L2/L3 — L1 is resolved per-upline based on rank
+    // Base rates for L2/L3 - L1 is resolved per-upline based on rank
     const baseL1Rate = (rates['soldier_direct_sales_commission'] || 7) / 100
     const l2Rate     = (rates['soldier_level2_sales_commission']  || 3) / 100
     const l3Rate     = (rates['soldier_level3_sales_commission']  || 2) / 100
@@ -465,7 +465,7 @@ async function handleNodePurchased({ userId, email, timestamp, data = {} }) {
       if (commErr) {
         console.error(`[DAGChain webhook] Commission insert error L${level}:`, commErr.message)
       } else {
-        console.log(`[DAGChain webhook] L${level} commission queued — upline=${uplineId}, rank=${uplineRank || 'none'}, rate=${(rate*100).toFixed(2)}%, amount=${commAmount} ${currency}`)
+        console.log(`[DAGChain webhook] L${level} commission queued - upline=${uplineId}, rank=${uplineRank || 'none'}, rate=${(rate*100).toFixed(2)}%, amount=${commAmount} ${currency}`)
       }
 
       // Move up the chain

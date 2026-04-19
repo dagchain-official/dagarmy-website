@@ -46,7 +46,7 @@ export default function ImageCarousel({ images = [] }) {
           }}
         />
 
-        {/* Bottom gradient — light, subtle */}
+        {/* Bottom gradient - light, subtle */}
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
           background: "linear-gradient(to top, rgba(0,0,0,0.18) 0%, transparent 45%)",
@@ -63,7 +63,7 @@ export default function ImageCarousel({ images = [] }) {
           {current + 1} / {sorted.length}
         </div>
 
-        {/* Prev / Next — shown on hover */}
+        {/* Prev / Next - shown on hover */}
         {sorted.length > 1 && (
           <>
             <button onClick={prev} className="carousel-nav carousel-nav-left"

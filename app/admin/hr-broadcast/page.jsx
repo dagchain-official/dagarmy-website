@@ -19,7 +19,7 @@ const PRIORITIES = [
 const TEMPLATES = [
   { label: 'Welcome',          title: 'Welcome to DAG Army!', body: 'We\'re thrilled to have you on board. Explore your dashboard, complete your profile, and start your journey today.' },
   { label: 'Course Reminder',  title: 'Continue Your Learning', body: 'You have an unfinished course waiting for you. Pick up where you left off and keep making progress!' },
-  { label: 'Inactivity Nudge', title: 'We Miss You!', body: 'It\'s been a while since your last visit. Come back and see what\'s new — new courses, updates, and more await you.' },
+  { label: 'Inactivity Nudge', title: 'We Miss You!', body: 'It\'s been a while since your last visit. Come back and see what\'s new - new courses, updates, and more await you.' },
   { label: 'Cert Ready',       title: 'Your Certificate is Ready', body: 'Congratulations! Your certificate has been issued. Log in to download and share your achievement.' },
   { label: 'Maintenance',      title: 'Scheduled Maintenance Notice', body: 'We will be performing scheduled maintenance. The platform may be temporarily unavailable. We apologize for any inconvenience.' },
 ];
@@ -142,7 +142,7 @@ export default function HRBroadcastPage() {
 
   const selectedAudience  = AUDIENCES.find(a => a.key === audience);
   const selectedPriority  = PRIORITIES.find(p => p.key === priority);
-  const recipientCount    = userCounts[audience] ?? '—';
+  const recipientCount    = userCounts[audience] ?? '-';
 
   const inputStyle = {
     width: '100%', boxSizing: 'border-box',
@@ -373,7 +373,7 @@ export default function HRBroadcastPage() {
                       <div style={{ fontSize: '11px', color: '#94a3b8' }}>{a.desc}</div>
                     </div>
                     <div style={{ fontSize: '12px', fontWeight: '700', color: audience === a.key ? a.color : '#94a3b8', flexShrink: 0 }}>
-                      {userCounts[a.key] ?? '—'}
+                      {userCounts[a.key] ?? '-'}
                     </div>
                   </button>
                 ))}

@@ -105,7 +105,7 @@ export default function PrideLadderSection() {
         overflow: "hidden",
       }}
     >
-      {/* ── Parallax orb — top left ── */}
+      {/* ── Parallax orb - top left ── */}
       <motion.div
         aria-hidden
         style={{
@@ -121,7 +121,7 @@ export default function PrideLadderSection() {
         }}
       />
 
-      {/* ── Parallax orb — bottom right ── */}
+      {/* ── Parallax orb - bottom right ── */}
       <motion.div
         aria-hidden
         style={{
@@ -449,7 +449,7 @@ export default function PrideLadderSection() {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 15, lineHeight: 1.75, color: "#5a5a72", marginBottom: 0,
               }}>
-                The entry point. Soldiers are learners in formation—building foundational AI skills, testing tools, and developing clarity on real-world application. This is not passive consumption. It is structured preparation.
+                The entry point. Soldiers are learners in formation-building foundational AI skills, testing tools, and developing clarity on real-world application. This is not passive consumption. It is structured preparation.
               </p>
             </div>
 
@@ -542,7 +542,7 @@ export default function PrideLadderSection() {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 15, lineHeight: 1.75, color: "#5a5a72", marginBottom: 0,
               }}>
-                The builder rank. Lieutenants are no longer preparing—they are executing. They build prototypes, validate ideas with real users, and generate early market signals. This is where learning transitions into applied work.
+                The builder rank. Lieutenants are no longer preparing-they are executing. They build prototypes, validate ideas with real users, and generate early market signals. This is where learning transitions into applied work.
               </p>
             </div>
 
@@ -698,7 +698,7 @@ export default function PrideLadderSection() {
                 fontSize: 16, fontWeight: 700,
                 color: "#0c0c14", marginBottom: 0, textAlign: "center",
               }}>
-                Inside this ecosystem, authority is not assigned—it is{" "}
+                Inside this ecosystem, authority is not assigned-it is{" "}
                 <span style={{
                   background: GRADIENT,
                   WebkitBackgroundClip: "text",

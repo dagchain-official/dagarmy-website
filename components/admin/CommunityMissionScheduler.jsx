@@ -67,14 +67,14 @@ function CustomSelect({ value, options, onChange, disabled, placeholder }) {
 }
 
 /* ── Community Missions = user ENGAGES with our existing content.
-      Target URL is ALWAYS required — it points to our content. ── */
+      Target URL is ALWAYS required - it points to our content. ── */
 const CSV_HEADERS = [
   'scheduled_date',  // YYYY-MM-DD  e.g. 2026-04-01
   'platform',        // youtube | instagram | twitter | tiktok | facebook | linkedin | discord | telegram
   'action',          // subscribe | follow | like | comment | share | retweet | watch | join
   'title',           // Mission title shown to user
   'description',     // Extra context / instructions (optional)
-  'target_url',      // REQUIRED — URL of our content (channel, post, tweet, video, etc.)
+  'target_url',      // REQUIRED - URL of our content (channel, post, tweet, video, etc.)
   'points',          // Number e.g. 150
   'max_completions', // Usually 1
 ];
@@ -200,7 +200,7 @@ export default function CommunityMissionScheduler() {
     if (!r.title.trim())     return 'Title required';
     if (!r.platform)         return 'Platform required';
     if (!r.action)           return 'Action required';
-    if (!r.target_url.trim()) return 'Target URL required — paste the link to your content';
+    if (!r.target_url.trim()) return 'Target URL required - paste the link to your content';
     if (!r.points || r.points < 1) return 'Points must be > 0';
     return null;
   };
@@ -265,7 +265,7 @@ export default function CommunityMissionScheduler() {
         <div>
           <h2 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', margin: '0 0 3px' }}>Community Mission Scheduler</h2>
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>
-            Schedule engagement missions — subscribe, follow, like, comment on our content. Target URL is required for every row.
+            Schedule engagement missions - subscribe, follow, like, comment on our content. Target URL is required for every row.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -332,7 +332,7 @@ export default function CommunityMissionScheduler() {
                 { label: 'Action',          w: '160px' },
                 { label: 'Mission Title',   w: '200px' },
                 { label: 'Description',     w: '180px' },
-                { label: 'Target URL',      w: '200px', note: 'our content link — required' },
+                { label: 'Target URL',      w: '200px', note: 'our content link - required' },
                 { label: 'Pts',             w: '60px'  },
                 { label: '',               w: '36px'  },
               ].map((col, i) => (
@@ -404,7 +404,7 @@ export default function CommunityMissionScheduler() {
                       style={inputStyle} disabled={isSaved} />
                   </td>
 
-                  {/* Target URL — always required for community missions */}
+                  {/* Target URL - always required for community missions */}
                   <td style={{ padding: '8px 10px' }}>
                     <input value={row.target_url} onChange={e => updateRow(row._id, 'target_url', e.target.value)}
                       placeholder="https://youtube.com/@DAGChain"

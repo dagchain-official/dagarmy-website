@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// wagmi removed — using useAuth() for address and isConnected
+// wagmi removed - using useAuth() for address and isConnected
 
 import { useAuth } from "@/context/AuthContext";
 import ProfileCompletion from "./ProfileCompletion";

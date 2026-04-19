@@ -19,7 +19,7 @@ export default function BusinessModelsGrid() {
               20+ AI Business Models
             </h2>
             <p className="wow fadeInUp" data-wow-delay="0.1s" style={{ fontSize: '18px', color: '#6b7280', marginBottom: '40px', lineHeight: '1.6' }}>
-              Choose your path—from content creation to automation services, find the AI business model that fits your skills
+              Choose your path-from content creation to automation services, find the AI business model that fits your skills
             </p>
           </div>
         </div>

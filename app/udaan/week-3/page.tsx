@@ -371,7 +371,7 @@ export default function Week3Page() {
                   fontWeight: 500,
                   marginBottom: 0
                 }}>
-                  You move into Week 4 with validated insights, real user data, and a refined product ready for structured pitching. Evidence-backed positioning—not assumptions.
+                  You move into Week 4 with validated insights, real user data, and a refined product ready for structured pitching. Evidence-backed positioning-not assumptions.
                 </p>
               </div>
 

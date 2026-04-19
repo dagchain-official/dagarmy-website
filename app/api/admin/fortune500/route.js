@@ -111,7 +111,7 @@ export async function POST(request) {
 
     const perMember = parseFloat(dist.per_member_amount || 0);
     if (perMember <= 0) {
-      return NextResponse.json({ error: 'Per-member amount is 0 — nothing to distribute' }, { status: 400 });
+      return NextResponse.json({ error: 'Per-member amount is 0 - nothing to distribute' }, { status: 400 });
     }
 
     // Fetch each member's current point balance for balance_before tracking
@@ -125,13 +125,13 @@ export async function POST(request) {
     const balanceMap = {};
     (usersData || []).forEach(u => { balanceMap[u.id] = u.dag_points || 0; });
 
-    // Build point_transactions inserts — one per member
+    // Build point_transactions inserts - one per member
     const now = new Date().toISOString();
     const txInserts = members.map(m => ({
       user_id: m.user_id,
       points: Math.round(perMember), // DAG Points equivalent (rounded)
       transaction_type: 'fortune500_payout',
-      description: `Fortune 500 Pool — ${dist.period} distribution ($${perMember.toFixed(4)} per member)`,
+      description: `Fortune 500 Pool - ${dist.period} distribution ($${perMember.toFixed(4)} per member)`,
       balance_before: balanceMap[m.user_id] || 0,
       balance_after: (balanceMap[m.user_id] || 0) + Math.round(perMember),
       created_at: now,
@@ -148,7 +148,7 @@ export async function POST(request) {
     }
 
     // Update user dag_points for all members
-    // (Use RPC if available, otherwise loop — here we do batch updates via the trigger or direct update)
+    // (Use RPC if available, otherwise loop - here we do batch updates via the trigger or direct update)
     for (const m of members) {
       const newBalance = (balanceMap[m.user_id] || 0) + Math.round(perMember);
       await supabase.from('users').update({ dag_points: newBalance }).eq('id', m.user_id);

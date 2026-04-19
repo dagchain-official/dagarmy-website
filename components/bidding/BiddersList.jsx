@@ -1,6 +1,6 @@
 "use client";
 
-// Live-updated bidders leaderboard — sorted by bid_amount DESC.
+// Live-updated bidders leaderboard - sorted by bid_amount DESC.
 // Animated rank changes via CSS transitions.
 const MEDAL = ["🥇", "🥈", "🥉"];
 
@@ -10,7 +10,7 @@ export default function BiddersList({ bids = [], currentUserId, maxWinners = 1 }
       <div className="flex flex-col items-center justify-center py-10 gap-3">
         <div className="text-4xl">🎯</div>
         <p className="text-sm font-semibold" style={{ color: "#6B7280" }}>
-          No bids yet — be the first!
+          No bids yet - be the first!
         </p>
       </div>
     );

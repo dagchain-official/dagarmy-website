@@ -9,7 +9,7 @@
 -- (Tables visible in screenshot as "RLS Disabled in Public")
 -- ═══════════════════════════════════════════════════════════════════
 
--- Enable RLS on all server-managed tables (safe — skips if table doesn't exist)
+-- Enable RLS on all server-managed tables (safe - skips if table doesn't exist)
 DO $$
 DECLARE
   all_tables TEXT[] := ARRAY[
@@ -402,7 +402,7 @@ BEGIN
   RETURN v_code;
 END; $$;
 
--- update_referral_stats (drop first — parameter name changed across migrations)
+-- update_referral_stats (drop first - parameter name changed across migrations)
 DROP FUNCTION IF EXISTS public.update_referral_stats(UUID);
 CREATE OR REPLACE FUNCTION public.update_referral_stats(p_referrer_id UUID)
 RETURNS VOID LANGUAGE plpgsql SET search_path = public AS $$

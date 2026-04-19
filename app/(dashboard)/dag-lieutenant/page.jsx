@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 /* ── Neumorphic tokens ── */
@@ -20,7 +20,7 @@ const PERKS = [
     title: "20% Direct Sales Rewards",
     subtitle: "Double the Soldier Rate",
     points: [
-      "Earn 20% rewards on every direct referral purchase — DAGChain nodes, DAGGPT credits, validator nodes, and LT upgrades",
+      "Earn 20% rewards on every direct referral purchase - DAGChain nodes, DAGGPT credits, validator nodes, and LT upgrades",
       "DAG Soldier earns only 10%. As a Lieutenant you earn 2× more on every direct sale your network makes",
     ],
     accent: "#6366f1",
@@ -34,7 +34,7 @@ const PERKS = [
     title: "1,000 DAG Points on Referral Join",
     subtitle: "2× the Soldier Referral Bonus",
     points: [
-      "Earn 1,000 DAG Points every time someone joins DAGARMY using your referral code — soldiers earn only 500",
+      "Earn 1,000 DAG Points every time someone joins DAGARMY using your referral code - soldiers earn only 500",
       "Plus earn another 1,000 points if your direct referral upgrades to DAG Lieutenant",
     ],
     accent: "#8b5cf6",
@@ -49,7 +49,7 @@ const PERKS = [
     subtitle: "Spend-Based Earning on Direct Referrals",
     points: [
       "Earn 50 DAG Points for every $1 spent by your direct (Level 1) referrals on any purchase",
-      "DAG Soldiers earn only 25 pts per $1 — your spend-based earning rate is doubled as a Lieutenant",
+      "DAG Soldiers earn only 25 pts per $1 - your spend-based earning rate is doubled as a Lieutenant",
     ],
     accent: "#10b981",
   },
@@ -62,7 +62,7 @@ const PERKS = [
     title: "DAG Army Elite Pool",
     subtitle: "Lieutenant-Exclusive · Launches at MainNet",
     points: [
-      "Exclusive access to the Elite Pool — funded by 50% of all DAGChain transaction fees at MainNet launch",
+      "Exclusive access to the Elite Pool - funded by 50% of all DAGChain transaction fees at MainNet launch",
       "Proportional share distributed among all active Lieutenants. DAG Soldiers are not eligible for this pool",
     ],
     accent: "#f59e0b",
@@ -73,11 +73,11 @@ const PERKS = [
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
     ),
-    title: "Fortune 500 Pool — Full Access",
+    title: "Fortune 500 Pool - Full Access",
     subtitle: "Monthly DAGGPT Revenue Share",
     points: [
       "Share in 10% of monthly DAGGPT revenue, split equally among all enrolled members who meet the $500 self-purchase requirement",
-      "Both Soldiers and Lieutenants are eligible — but Lieutenants earn more overall due to higher rewards and referral rates",
+      "Both Soldiers and Lieutenants are eligible - but Lieutenants earn more overall due to higher rewards and referral rates",
     ],
     accent: "#ec4899",
   },
@@ -91,7 +91,7 @@ const PERKS = [
     title: "DAG LT Pool",
     subtitle: "Lieutenant-Exclusive Monthly Pool",
     points: [
-      "Earn from a dedicated LT-only pool funded by 10% of monthly DAGGPT revenue — separate from the Fortune 500 Pool",
+      "Earn from a dedicated LT-only pool funded by 10% of monthly DAGGPT revenue - separate from the Fortune 500 Pool",
       "Qualify by referring 3 direct LT upgrades within a rolling 30-day window. Pool distributes monthly to all eligible Lieutenants",
     ],
     accent: "#10b981",
@@ -106,7 +106,7 @@ const PERKS = [
     subtitle: "Double Points on Every Task",
     points: [
       "Every social mission (likes, shares, videos, community tasks) earns double DAG Points compared to a Soldier",
-      "Example: a Soldier earns 50 pts for creating a Short — a Lieutenant earns 100 pts for the exact same task",
+      "Example: a Soldier earns 50 pts for creating a Short - a Lieutenant earns 100 pts for the exact same task",
     ],
     accent: "#0ea5e9",
   },
@@ -121,7 +121,7 @@ const PERKS = [
     subtitle: "Earn 3 Levels Deep",
     points: [
       "Earn 3% on Level 2 purchases (referrals of your referrals) and 2% on Level 3 purchases across your entire downline",
-      "Your referral network compounds — every person in your chain who buys generates passive rewards income for you",
+      "Your referral network compounds - every person in your chain who buys generates passive rewards income for you",
     ],
     accent: "#ef4444",
   },
@@ -134,7 +134,7 @@ const PERKS = [
     title: "Priority Status & Early Access",
     subtitle: "Lieutenant Badge + Beta Features",
     points: [
-      "Your profile is marked as DAG Lieutenant — visible to the entire DAGARMY network with a verified elite badge",
+      "Your profile is marked as DAG Lieutenant - visible to the entire DAGARMY network with a verified elite badge",
       "First access to new DAGARMY platform features, beta tools, and partner product launches before general rollout",
     ],
     accent: "#14b8a6",
@@ -145,10 +145,10 @@ const PERKS = [
         <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
       </svg>
     ),
-    title: "149 DGCC Coins — Auto-Staked on DAGChain",
+    title: "149 DGCC Coins - Auto-Staked on DAGChain",
     subtitle: "Earn APY in DGCC Coins",
     points: [
-      "Upon upgrade, 149 DGCC Coins are automatically staked on the DAGChain network on your behalf — no manual action required",
+      "Upon upgrade, 149 DGCC Coins are automatically staked on the DAGChain network on your behalf - no manual action required",
       "Earn APY paid in DGCC Coins: 1 Year → 12% APY · 2 Years → 18% APY · 3 Years → 24% APY. Choose your lock duration at checkout",
     ],
     accent: "#f59e0b",
@@ -219,12 +219,20 @@ export default function DagLieutenantPage() {
   const { userProfile } = useAuth();
   const [userData, setUserData] = useState(null);
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [mob, setMob] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const stored = localStorage.getItem("dagarmy_user");
     if (stored) {
       try { setUserData(JSON.parse(stored)); } catch {}
     }
+  }, []);
+
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   const isLieutenant =
@@ -253,7 +261,7 @@ export default function DagLieutenantPage() {
   };
 
   return (
-    <div style={{ width: "100%", padding: "32px 36px", background: BG, minHeight: "100vh", boxSizing: "border-box" }}>
+    <div style={{ width: "100%", padding: mob ? "20px 14px 80px" : "32px 36px", background: BG, minHeight: "100vh", boxSizing: "border-box" }}>
       <style>{`
         @keyframes nm-up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
         @keyframes float { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-6px); } }
@@ -263,7 +271,7 @@ export default function DagLieutenantPage() {
       {/* ── Hero Banner ── */}
       <div style={{
         background: BG, borderRadius: "28px", boxShadow: S_UP_L,
-        padding: "52px 48px", marginBottom: "32px",
+        padding: mob ? "24px 18px" : "52px 48px", marginBottom: mob ? "20px" : "32px",
         animation: "nm-up 0.4s ease-out 0.06s both",
         position: "relative", overflow: "hidden",
       }}>
@@ -271,7 +279,7 @@ export default function DagLieutenantPage() {
         <div style={{ position: "absolute", top: "-60px", right: "-60px", width: "280px", height: "280px", borderRadius: "50%", boxShadow: S_UP, opacity: 0.5, pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: "-40px", right: "180px", width: "160px", height: "160px", borderRadius: "50%", boxShadow: S_UP, opacity: 0.35, pointerEvents: "none" }} />
 
-        <div style={{ position: "relative", zIndex: 1, display: "flex", gap: "48px", alignItems: "center" }}>
+        <div style={{ position: "relative", zIndex: 1, display: "flex", gap: mob ? "0" : "48px", alignItems: "center", flexDirection: mob ? "column" : "row" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
           {/* Badge */}
           <div style={{
@@ -282,21 +290,21 @@ export default function DagLieutenantPage() {
             animation: "shimmer 3s ease-in-out infinite",
           }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill={PURPLE}><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/></svg>
-            Elite Tier — DAG Lieutenant
+            Elite Tier - DAG Lieutenant
           </div>
 
-          <h2 style={{ fontSize: "38px", fontWeight: "900", color: "#0f172a", margin: "0 0 16px", letterSpacing: "-1px", lineHeight: 1.15 }}>
+          <h2 style={{ fontSize: mob ? "26px" : "38px", fontWeight: "900", color: "#0f172a", margin: "0 0 16px", letterSpacing: "-1px", lineHeight: 1.15 }}>
             Built for Builders.<br/>
             <span style={{ color: PURPLE }}>Not just Learners.</span>
           </h2>
 
           <p style={{ fontSize: "16px", color: "#475569", lineHeight: "1.75", margin: "0 0 12px", fontWeight: "450", maxWidth: "580px" }}>
-            DAG Lieutenant is for people who refuse to cap their potential. You're not here to consume —
+            DAG Lieutenant is for people who refuse to cap their potential. You're not here to consume -
             you're here to <strong style={{ color: "#0f172a", fontWeight: "700" }}>build products, lead teams, and shape the future</strong> of tech and finance.
           </p>
           <p style={{ fontSize: "15px", color: "#64748b", lineHeight: "1.7", margin: "0 0 32px", fontWeight: "450", maxWidth: "560px" }}>
             While others are still learning the basics, Lieutenants are already shipping, automating,
-            collaborating, and getting noticed. This isn't a subscription — it's a <strong style={{ color: "#0f172a", fontWeight: "700" }}>commitment to your own growth</strong>.
+            collaborating, and getting noticed. This isn't a subscription - it's a <strong style={{ color: "#0f172a", fontWeight: "700" }}>commitment to your own growth</strong>.
           </p>
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
@@ -354,6 +362,7 @@ export default function DagLieutenantPage() {
           </div>
 
           {/* ── Stats column ── */}
+          {!mob && (
           <div style={{ display: "flex", flexDirection: "column", gap: "14px", flexShrink: 0, width: "190px" }}>
             {STATS.map((s, i) => (
               <div key={i} style={{
@@ -365,6 +374,7 @@ export default function DagLieutenantPage() {
               </div>
             ))}
           </div>
+          )}
         </div>
       </div>
 
@@ -373,22 +383,20 @@ export default function DagLieutenantPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
           <span style={{ fontSize: "11px", fontWeight: "800", color: "#94a3b8", letterSpacing: "1.2px", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-            Lieutenant Advantages — 10 Exclusive Benefits
+            Lieutenant Advantages - 10 Exclusive Benefits
           </span>
           <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
         </div>
       </div>
 
-      {/* ── Perks Grid — 4 + 4 ── */}
+      {/* ── Perks Grid ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "40px" }}>
-        {/* Row 1 — first 5 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(5, 1fr)", gap: mob ? "12px" : "20px" }}>
           {PERKS.slice(0, 5).map((perk, i) => (
             <PerkCard key={i} perk={perk} index={i} />
           ))}
         </div>
-        {/* Row 2 — last 5 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(5, 1fr)", gap: mob ? "12px" : "20px" }}>
           {PERKS.slice(5).map((perk, i) => (
             <PerkCard key={i + 5} perk={perk} index={i + 5} />
           ))}
@@ -399,9 +407,10 @@ export default function DagLieutenantPage() {
       {!isLieutenant && (
         <div style={{
           background: BG, borderRadius: "24px", boxShadow: S_UP_L,
-          padding: "40px 44px", animation: "nm-up 0.4s ease-out 0.5s both",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          gap: "32px", flexWrap: "wrap",
+          padding: mob ? "24px 18px" : "40px 44px", animation: "nm-up 0.4s ease-out 0.5s both",
+          display: "flex", alignItems: mob ? "stretch" : "center", justifyContent: "space-between",
+          flexDirection: mob ? "column" : "row",
+          gap: mob ? "20px" : "32px", flexWrap: "wrap",
         }}>
           <div style={{ maxWidth: "480px" }}>
             <div style={{
@@ -417,7 +426,7 @@ export default function DagLieutenantPage() {
             </h3>
             <p style={{ fontSize: "13.5px", color: "#64748b", margin: 0, lineHeight: "1.65", fontWeight: "450" }}>
               Join hundreds of builders who chose to invest in themselves.
-              No monthly fees, no hidden costs — just unlimited access to every perk, forever.
+              No monthly fees, no hidden costs - just unlimited access to every perk, forever.
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
@@ -448,7 +457,7 @@ export default function DagLieutenantPage() {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
-              {stripeLoading ? "Redirecting..." : "Upgrade Now — $149"}
+              {stripeLoading ? "Redirecting..." : "Upgrade Now - $149"}
             </button>
             <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: "500" }}>
               Secure checkout via Stripe
@@ -487,3 +496,4 @@ export default function DagLieutenantPage() {
     </div>
   );
 }
+

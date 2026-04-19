@@ -132,7 +132,7 @@ function ApplyModal({ onClose, onSuccess }) {
           </div>
           <div>
             <label style={lbl}>Social Media Links</label>
-            <input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn — paste all links" {...inp()} />
+            <input value={form.social_links} onChange={set('social_links')} placeholder="YouTube, Instagram, Twitter, LinkedIn - paste all links" {...inp()} />
           </div>
           <div className="amb-form-row">
             <div>
@@ -234,7 +234,7 @@ export default function AmbassadorPage() {
 
   const benefits = [
     { icon: <Ic.cpu />, label: 'Free DAGGPT Access', desc: 'All approved ambassadors receive full complimentary access to DAGGPT\'s multi-module AI platform.' },
-    { icon: <Ic.coins />, label: 'Referral Earnings', desc: 'Earn rewards tied to real ecosystem activity — subscriptions, validator & storage nodes, upgrades.' },
+    { icon: <Ic.coins />, label: 'Referral Earnings', desc: 'Earn rewards tied to real ecosystem activity - subscriptions, validator & storage nodes, upgrades.' },
     { icon: <Ic.star />, label: 'Points & Redemptions', desc: 'Accumulate DAG points per referral and activity. Redeem for GasCoin, credits, or premium features.' },
     { icon: <Ic.award />, label: 'Official Badge & Recognition', desc: 'Verified badge, featured profile on website (performance-based), and early feature previews.' },
     { icon: <Ic.globe />, label: 'Regional Leadership', desc: 'Represent your region, lead local community events, and shape adoption in your language.' },
@@ -245,9 +245,9 @@ export default function AmbassadorPage() {
     { q: 'Is this an investment program?', a: 'No. The Ambassador Program is a performance-based referral and marketing initiative tied to actual product usage. There is no investment element.' },
     { q: 'Is there a joining fee?', a: 'No. Applying and joining is completely free. There is no mandatory investment or payment required.' },
     { q: 'Are earnings guaranteed?', a: 'No. All rewards are based solely on verified ecosystem activity and product usage generated through your referral link.' },
-    { q: 'Can I create content in my regional language?', a: 'Yes — regional language content is highly encouraged. We actively look for creators who can reach local communities in their native language.' },
+    { q: 'Can I create content in my regional language?', a: 'Yes - regional language content is highly encouraged. We actively look for creators who can reach local communities in their native language.' },
     { q: 'How long does the review take?', a: 'Our team reviews applications personally within 5–10 business days. Shortlisted candidates are contacted directly via email.' },
-    { q: 'What type of content should I create?', a: 'Product walkthroughs, AI tool demos, validator node guides, blockchain education, ecosystem overviews, use-case tutorials — anything that educates your audience.' },
+    { q: 'What type of content should I create?', a: 'Product walkthroughs, AI tool demos, validator node guides, blockchain education, ecosystem overviews, use-case tutorials - anything that educates your audience.' },
   ];
 
   const CTABtn = ({ children, dark, onClick }) => (
@@ -298,7 +298,7 @@ export default function AmbassadorPage() {
             <span style={{ background: '#111', color: '#fff', borderRadius: '100px', padding: '2px 10px', fontSize: '10px', fontWeight: '700', letterSpacing: '0.5px', textTransform: 'uppercase' }}>2026 Cohort</span>
           </div>
 
-          {/* Headline — word by word */}
+          {/* Headline - word by word */}
           <h1 style={{ fontSize: 'clamp(42px, 6vw, 76px)', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1.0, margin: '0 0 28px', color: '#111' }}>
             {['Represent', 'the', 'Future', 'of'].map((w, i) => (
               <span key={i} className="amb-word" style={{ display: 'inline-block', marginRight: '0.28em', opacity: 0 }}>{w}</span>
@@ -321,7 +321,7 @@ export default function AmbassadorPage() {
 
           <div className="amb-hero-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
             <CTABtn dark onClick={() => setModal(true)}>
-              Apply Now — It&apos;s Free <Ic.arrow />
+              Apply Now - It&apos;s Free <Ic.arrow />
             </CTABtn>
             <CTABtn onClick={() => document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' })}>
               Learn More <Ic.chevron />
@@ -371,7 +371,7 @@ export default function AmbassadorPage() {
           <div className="amb-grid amb-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               { label: 'DAG Army', sub: 'Community-driven AI & Web3 movement', dot: '#3b82f6' },
-              { label: 'DAGGPT', sub: 'Multi-module AI platform — one subscription, all tools', dot: '#8b5cf6' },
+              { label: 'DAGGPT', sub: 'Multi-module AI platform - one subscription, all tools', dot: '#8b5cf6' },
               { label: 'DAGChain', sub: 'AI-native Layer 1 blockchain infrastructure', dot: '#10b981' },
             ].map((item, i) => (
               <div key={i} className="amb-card" style={{
@@ -579,7 +579,7 @@ export default function AmbassadorPage() {
         </div>
       </section>
 
-      {/* ═══ WHY JOIN — FULL WIDTH BANNER ═════════════════════ */}
+      {/* ═══ WHY JOIN - FULL WIDTH BANNER ═════════════════════ */}
       <section style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', padding: '120px 24px' }}>
         <div className="amb-two-col" style={{ maxWidth: '1000px', margin: '0 auto', alignItems: 'center' }}>
           <div className="amb-reveal">
@@ -590,7 +590,7 @@ export default function AmbassadorPage() {
             <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, margin: '0 0 32px' }}>
               AI and blockchain are reshaping global infrastructure. As a DAG Army Ambassador, you grow alongside a Layer 1 network from day one.
             </p>
-            <CTABtn dark onClick={() => setModal(true)}>Apply Now — Free <Ic.arrow /></CTABtn>
+            <CTABtn dark onClick={() => setModal(true)}>Apply Now - Free <Ic.arrow /></CTABtn>
           </div>
           <div className="amb-grid" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[

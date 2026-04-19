@@ -33,17 +33,17 @@ export async function POST(request) {
       <p><strong>Name:</strong> ${full_name}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Country:</strong> ${country}</p>
-      <p><strong>Telegram:</strong> ${telegram || '—'}</p>
-      <p><strong>Social Links:</strong> ${social_links || '—'}</p>
-      <p><strong>Follower Count:</strong> ${follower_count || '—'}</p>
-      <p><strong>Content Niche:</strong> ${content_niche || '—'}</p>
-      <p><strong>Statement:</strong><br/>${statement || '—'}</p>
+      <p><strong>Telegram:</strong> ${telegram || '-'}</p>
+      <p><strong>Social Links:</strong> ${social_links || '-'}</p>
+      <p><strong>Follower Count:</strong> ${follower_count || '-'}</p>
+      <p><strong>Content Niche:</strong> ${content_niche || '-'}</p>
+      <p><strong>Statement:</strong><br/>${statement || '-'}</p>
     `;
 
     try {
       await sendEmail('support@dagchain.network', {
         to: ['support@dagchain.network'],
-        subject: `New Ambassador Application — ${full_name} (${country})`,
+        subject: `New Ambassador Application - ${full_name} (${country})`,
         html: notifyHtml,
       });
     } catch (emailErr) {
@@ -56,7 +56,7 @@ export async function POST(request) {
       <p>We have received your DAG Army Ambassador application. Our team will review it and reach out to shortlisted candidates.</p>
       <p>If you have questions, contact us at <a href="mailto:support@dagarmy.network">support@dagarmy.network</a>.</p>
       <br/>
-      <p>— The DAG Army Team</p>
+      <p>- The DAG Army Team</p>
     `;
 
     try {

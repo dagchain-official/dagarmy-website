@@ -26,7 +26,7 @@ function generateTemporaryPassword() {
 }
 
 export async function POST(request) {
-  // Always enforce master admin via session cookie — no bypass
+  // Always enforce master admin via session cookie - no bypass
   const guard = await requireMasterAdmin(request);
   if (guard) return guard;
 

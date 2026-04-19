@@ -179,13 +179,13 @@ export default function Blogs2() {
                           onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadowHover; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                           onMouseLeave={e => { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.transform = 'translateY(0)'; }}
                         >
-                          {/* Thumbnail — left side, fixed width */}
+                          {/* Thumbnail - left side, fixed width */}
                           {article.imageUrl && (
                             <div className="blog-post-thumb" style={{ width: '200px', minWidth: '200px', height: '260px', borderRadius: '10px', overflow: 'hidden', marginRight: '16px', flexShrink: 0, boxShadow: nm.shadowSm }}>
                               <img src={article.imageUrl} alt={article.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={e => { e.target.src = '/images/blog/default-blog.jpg'; }} />
                             </div>
                           )}
-                          {/* Content — right side */}
+                          {/* Content - right side */}
                           <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                             {/* Categories */}
                             {article.categories?.length > 0 && (

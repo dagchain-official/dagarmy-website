@@ -32,7 +32,7 @@ WHERE
     AND full_name != ''
     AND email IS NOT NULL;
 
--- Verification query — should return 0 rows after migration
+-- Verification query - should return 0 rows after migration
 -- SELECT id, email, auth_provider, profile_completed
 -- FROM public.users
 -- WHERE auth_provider = 'google'

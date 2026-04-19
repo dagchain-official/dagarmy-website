@@ -11,7 +11,7 @@ export default function CertificationBadges() {
               Certification Levels
             </h2>
             <p className="wow fadeInUp" data-wow-delay="0.1s" style={{ fontSize: '18px', color: '#6b7280', marginBottom: '60px', lineHeight: '1.6' }}>
-              Progress through three levels of mastery—each unlocking new opportunities and recognition
+              Progress through three levels of mastery-each unlocking new opportunities and recognition
             </p>
           </div>
         </div>

@@ -254,7 +254,7 @@ export default function WebinarInvitation() {
               Webinar Invitation Email
             </h2>
             <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>
-              Select recipients with checkboxes — progress is saved across page refreshes
+              Select recipients with checkboxes - progress is saved across page refreshes
             </p>
           </div>
           <button
@@ -300,7 +300,7 @@ export default function WebinarInvitation() {
         }}>
           <span style={{ fontSize: '15px' }}>💾</span>
           <span style={{ fontSize: '12px', color: '#15803d', fontWeight: '600' }}>
-            Sent progress is automatically saved — refreshing this page will <strong>not</strong> lose your progress.
+            Sent progress is automatically saved - refreshing this page will <strong>not</strong> lose your progress.
           </span>
         </div>
 
@@ -414,7 +414,7 @@ export default function WebinarInvitation() {
 
               <div style={{ marginTop: '10px', padding: '8px 12px', background: '#fffbeb', borderRadius: '8px', border: '1px solid #fde68a' }}>
                 <div style={{ fontSize: '11px', color: '#92400e', fontWeight: '600' }}>
-                  ⏱️ Max {BATCH_SIZE} emails per batch — wait ~1 hr between batches to avoid SMTP rate limits.
+                  ⏱️ Max {BATCH_SIZE} emails per batch - wait ~1 hr between batches to avoid SMTP rate limits.
                 </div>
               </div>
             </div>
@@ -562,7 +562,7 @@ export default function WebinarInvitation() {
                             textDecoration: isSent ? 'line-through' : 'none',
                             opacity: isSent ? 0.6 : 1,
                           }}>
-                            {u.displayName || '—'}
+                            {u.displayName || '-'}
                           </div>
 
                           {/* Email */}

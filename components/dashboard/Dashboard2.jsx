@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 import StakingPerkModal from "@/components/StakingPerkModal";
@@ -9,7 +9,7 @@ function ProgressRing({ value = 0, size = 64, strokeWidth = 5, color = '#6366f1'
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const [offset, setOffset] = useState(circumference);
-    useEffect(() => {
+    useLayoutEffect(() => {
         const timer = setTimeout(() => setOffset(circumference - (value / 100) * circumference), 200);
         return () => clearTimeout(timer);
     }, [value, circumference]);
@@ -41,6 +41,13 @@ function Sparkline({ data, color = '#6366f1', width = 80, height = 32 }) {
 
 export default function Dashboard2() {
     const { userProfile, address } = useAuth();
+    const [mob, setMob] = useState(true);
+    useLayoutEffect(() => {
+        const check = () => setMob(window.innerWidth < 768);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
     const [userName, setUserName] = useState('Student');
     const [userAvatar, setUserAvatar] = useState(null);
     const [userData, setUserData] = useState(null);
@@ -72,7 +79,7 @@ export default function Dashboard2() {
     const [userTier, setUserTier] = useState('DAG_SOLDIER');
     // Live commission rates from rewards_config (admin-configurable)
     const [commissionRates, setCommissionRates] = useState({
-        soldier_l1: 10,   // updated from 15 — admin can change via Rewards Engine
+        soldier_l1: 10,   // updated from 15 - admin can change via Rewards Engine
         lieutenant_l1: 20,
         l2: 3,
         l3: 2,
@@ -157,17 +164,6 @@ export default function Dashboard2() {
                 const data = await response.json();
 
                 if (data.user) {
-                    // Redirect to profile completion if not yet done
-                    if (!data.user.profile_completed) {
-                        window.dispatchEvent(new CustomEvent('dagarmy:show-profile-completion', {
-                            detail: {
-                                email: data.user.email,
-                                walletAddress: data.user.wallet_address
-                            }
-                        }));
-                        window.location.href = '/';
-                        return;
-                    }
                     setUserData(data.user);
                     const fullName = data.user.full_name ||
                         (`${data.user.first_name || ''} ${data.user.last_name || ''}`).trim() ||
@@ -396,7 +392,7 @@ export default function Dashboard2() {
 
     // Redeem DAG Points handler
     const REDEEM_CONFIG = {
-        dgcc: { ratio: 2500, label: 'DGCC Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb' },
+        dgcc: { ratio: 2500, label: 'DGCC Coins', unit: 'Coin', color: '#6366f1', light: '#f0f2f5' },
     };
     const handleDashboardRedeem = async () => {
         if (!userData?.email) return;
@@ -444,7 +440,7 @@ export default function Dashboard2() {
             if (data.success) {
                 setTransferMsg({ type: 'success', text: data.message });
                 setDgccBalance(data.new_dgcc_balance);
-                // For daggpt transfers — show staking perk modal
+                // For daggpt transfers - show staking perk modal
                 if (transferDest === 'daggpt' && data.transfer_id) {
                     setTimeout(() => {
                         setShowTransferModal(false);
@@ -571,12 +567,12 @@ export default function Dashboard2() {
         { name: 'VANGUARD', cost: 1500, color: '#10b981' },
         { name: 'GUARDIAN', cost: 3200, color: '#3b82f6' },
         { name: 'STRIKER', cost: 7000, color: '#8b5cf6' },
-        { name: 'INVOKER', cost: 10000, color: '#ec4899' },
-        { name: 'COMMANDER', cost: 15000, color: '#f59e0b' },
+        { name: 'INVOKER', cost: 10000, color: '#8b5cf6' },
+        { name: 'COMMANDER', cost: 15000, color: '#6366f1' },
         { name: 'CHAMPION', cost: 20000, color: '#ef4444' },
         { name: 'CONQUEROR', cost: 30000, color: '#dc2626' },
         { name: 'PARAGON', cost: 40000, color: '#7c3aed' },
-        { name: 'MYTHIC', cost: 50000, color: '#fbbf24' },
+        { name: 'MYTHIC', cost: 50000, color: '#6366f1' },
     ];
     const isLieutenant = userTier === 'DAG_LIEUTENANT' || userTier === 'DAG LIEUTENANT';
     const currentRankIdx = currentRank === 'None' ? -1 : RANKS.findIndex(r => r.name === currentRank);
@@ -628,8 +624,8 @@ export default function Dashboard2() {
         .sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
 
     const EVENT_COLORS = {
-        workshop: '#6366f1', quiz: '#10b981', project: '#f59e0b',
-        meeting: '#ec4899', deadline: '#ef4444', default: '#8b5cf6'
+        workshop: '#6366f1', quiz: '#10b981', project: '#6366f1',
+        meeting: '#8b5cf6', deadline: '#ef4444', default: '#8b5cf6'
     };
     const getEventColor = (event) => {
         if (event._color) return event._color;
@@ -692,7 +688,7 @@ export default function Dashboard2() {
                                     </div>
                                     {!canUpgrade && (
                                         <div style={{ background: 'rgba(239,68,68,0.06)', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px', textAlign: 'center' }}>
-                                            <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: '600' }}>Insufficient points — you need {(burnCost - dagPoints).toLocaleString()} more DAG Points</div>
+                                            <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: '600' }}>Insufficient points - you need {(burnCost - dagPoints).toLocaleString()} more DAG Points</div>
                                         </div>
                                     )}
                                     <div style={{ background: 'rgba(99,102,241,0.06)', borderRadius: '12px', padding: '12px 16px', marginBottom: '24px' }}>
@@ -741,13 +737,13 @@ export default function Dashboard2() {
                             <>
                                 {/* Header */}
                                 <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-                                    <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg,#f59e0b,#d97706)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                                    <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <circle cx="12" cy="12" r="8"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/>
                                         </svg>
                                     </div>
                                     <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.4px' }}>Transfer DGCC Coins</div>
-                                    <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Available: <strong style={{ color: '#92400e' }}>{dgccBalance} DGCC</strong></div>
+                                    <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Available: <strong style={{ color: '#4f46e5' }}>{dgccBalance} DGCC</strong></div>
                                 </div>
 
                                 {/* Destination Picker */}
@@ -792,7 +788,7 @@ export default function Dashboard2() {
                                         style={{ flex: 1, padding: '14px', borderRadius: '12px', border: 'none', background: '#e2e8f0', cursor: 'pointer', fontWeight: '700', color: '#64748b', fontSize: '14px' }}>Cancel</button>
                                     <button onClick={handleDgccTransfer}
                                         disabled={!transferDest || !transferAmount || Number(transferAmount) > dgccBalance || transferring}
-                                        style={{ flex: 2, padding: '14px', borderRadius: '12px', border: 'none', background: (!transferDest || transferring) ? '#cbd5e1' : 'linear-gradient(135deg,#f59e0b,#d97706)', cursor: (!transferDest || transferring) ? 'not-allowed' : 'pointer', fontWeight: '800', color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: transferDest ? '4px 4px 12px rgba(245,158,11,0.4)' : 'none' }}>
+                                        style={{ flex: 2, padding: '14px', borderRadius: '12px', border: 'none', background: (!transferDest || transferring) ? '#cbd5e1' : 'linear-gradient(135deg,#6366f1,#4f46e5)', cursor: (!transferDest || transferring) ? 'not-allowed' : 'pointer', fontWeight: '800', color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: transferDest ? '4px 4px 12px rgba(99,102,241,0.4)' : 'none' }}>
                                         {transferring ? (<><span style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />Transferring...</>) : `Transfer ${transferAmount} DGCC`}
                                     </button>
                                 </div>
@@ -803,18 +799,18 @@ export default function Dashboard2() {
             )}
 
             {/* ─── Header ─── */}
-            <div style={{ marginBottom: '32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ marginBottom: mob ? '20px' : '32px', display: 'flex', flexDirection: 'row', alignItems: mob ? 'flex-start' : 'center', justifyContent: 'space-between', gap: '0' }}>
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                        <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.6px' }}>
+                        <h1 style={{ fontSize: mob ? '22px' : '28px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.6px' }}>
                             {greeting}, <span style={{ color: '#6366f1' }}>{userName}</span>
                         </h1>
                     </div>
-                    <p style={{ fontSize: '14px', color: '#0f172a', margin: 0, fontWeight: '450' }}>
+                    <p style={{ fontSize: '13px', color: '#0f172a', margin: 0, fontWeight: '450' }}>
                         {currentTime ? currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '\u00A0'}
                     </p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
                     {/* ── Notification Bell ── */}
                     <button
                         onClick={() => window.location.href = '/notifications'}
@@ -827,45 +823,44 @@ export default function Dashboard2() {
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                         </svg>
-                        {/* Notification dot indicator */}
                         <div style={{ position: 'absolute', top: '9px', right: '9px', width: '8px', height: '8px', borderRadius: '50%', background: '#4f46e5', border: '2px solid #f0f2f5', boxShadow: '0 0 0 1px rgba(79,70,229,0.3)' }}/>
                     </button>
 
-                    {!isLieutenant && (
-                        <>
-                            <button
-                                onClick={() => setShowUpgradeModal(true)}
-                                disabled={!!stripeLoading}
-                                style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 16px', borderRadius: '10px', border: 'none', background: '#f0f2f5', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)', transition: 'all 0.2s ease' }}
-                                onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.boxShadow = '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)'; } }}
-                                onMouseLeave={e => { if (!stripeLoading) { e.currentTarget.style.boxShadow = '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)'; } }}
-                            >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 4l3 12h14l3-12" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v8m-4-4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                                {stripeLoading === 'full' ? 'Redirecting...' : 'Upgrade to Lieutenant'}
-                                <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 6px', borderRadius: '5px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
-                            </button>
-                        </>
+                    {!mob && !isLieutenant && (
+                        <button
+                            onClick={() => setShowUpgradeModal(true)}
+                            disabled={!!stripeLoading}
+                            style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 16px', borderRadius: '10px', border: 'none', background: '#f0f2f5', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: stripeLoading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)', transition: 'all 0.2s ease' }}
+                            onMouseEnter={e => { if (!stripeLoading) { e.currentTarget.style.boxShadow = '8px 8px 20px rgba(0,0,0,0.16), -6px -6px 16px rgba(255,255,255,0.95)'; } }}
+                            onMouseLeave={e => { if (!stripeLoading) { e.currentTarget.style.boxShadow = '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)'; } }}
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 4l3 12h14l3-12" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v8m-4-4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            {stripeLoading === 'full' ? 'Redirecting...' : 'Upgrade to Lieutenant'}
+                            <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 6px', borderRadius: '5px', background: '#eef2ff', color: '#6366f1' }}>$149</span>
+                        </button>
                     )}
-                    <div style={{
-                        padding: '10px 18px', background: '#f0f2f5', borderRadius: '14px',
-                        boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)',
-                        display: 'flex', alignItems: 'center', gap: '10px'
-                    }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 0 3px rgba(16,185,129,0.15)' }} />
-                        <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a', fontVariantNumeric: 'tabular-nums' }}>
-                            {currentTime ? currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '\u00A0'}
-                        </span>
-                    </div>
+                    {!mob && (
+                        <div style={{
+                            padding: '10px 18px', background: '#f0f2f5', borderRadius: '14px',
+                            boxShadow: '6px 6px 14px rgba(0,0,0,0.13), -4px -4px 12px rgba(255,255,255,0.9)',
+                            display: 'flex', alignItems: 'center', gap: '10px'
+                        }}>
+                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 0 3px rgba(16,185,129,0.15)' }} />
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a', fontVariantNumeric: 'tabular-nums' }}>
+                                {currentTime ? currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '\u00A0'}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* ─── Bento Grid ─── */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridAutoRows: 'minmax(0, auto)', gap: '18px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: mob ? 'repeat(2, 1fr)' : 'repeat(12, 1fr)', gridAutoRows: 'minmax(0, auto)', gap: mob ? '12px' : '18px' }}>
 
                 {/* ━━━ ROW 1: 6 equal cards (span 2 each) ━━━ */}
 
                 {/* Card 1: Welcome / Profile */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }} hover={false}>
+                <NmCard span={mob ? '1' : '2'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }} hover={false}>
                     <div style={{
                         width: '96px', height: '96px', borderRadius: '50%',
                         background: '#f0f2f5',
@@ -887,7 +882,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 2: Tier Badge */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }}>
+                <NmCard span={mob ? '1' : '2'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '12px' }}>
                     <img
                         src={isLieutenant ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'}
                         alt={tierLabel}
@@ -899,7 +894,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 3: Commission Rate */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '8px', padding: '20px' }}>
+                <NmCard span={mob ? '1' : '2'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', aspectRatio: '1 / 1', gap: '8px', padding: '20px' }}>
                     <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '4px' }}>
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                     </div>
@@ -912,7 +907,7 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 4: DAG Points */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
+                <NmCard span={mob ? '1' : '2'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="#6366f1" stroke="none">
@@ -931,34 +926,32 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* Card 5: DGCC Coins */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px', cursor: 'pointer' }}
+                <NmCard span={mob ? '1' : '2'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px', cursor: 'pointer' }}
                   onClick={() => { setShowTransferModal(true); setTransferDest(null); setTransferAmount(1); setTransferMsg(null); }}
                 >
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(245,158,11,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="12" cy="12" r="8" />
                                 <line x1="12" y1="8" x2="12" y2="16" />
                                 <line x1="8" y1="10" x2="16" y2="10" />
                                 <line x1="8" y1="14" x2="16" y2="14" />
                             </svg>
                         </div>
-                        {dgccBalance > 0 && (
-                            <span style={{ fontSize: '9px', fontWeight: '700', padding: '3px 8px', borderRadius: '100px', background: '#fef3c7', color: '#d97706', border: '1px solid #fde68a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tap to Transfer</span>
-                        )}
+
                     </div>
                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ fontSize: '36px', fontWeight: '800', color: dgccBalance > 0 ? '#92400e' : '#0f172a', letterSpacing: '-1.5px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                        <div style={{ fontSize: '36px', fontWeight: '800', color: dgccBalance > 0 ? '#4f46e5' : '#0f172a', letterSpacing: '-1.5px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
                             {dgccBalance > 0 ? dgccBalance.toLocaleString() : '00'}
                         </div>
                     </div>
-                    <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(245,158,11,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#f59e0b', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    <span style={{ padding: '4px 14px', borderRadius: '100px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)', color: '#6366f1', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
                         DGCC Coins
                     </span>
                 </NmCard>
 
                 {/* Card 6: Referrals */}
-                <NmCard span="2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
+                <NmCard span={mob ? '1' : '2'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', aspectRatio: '1 / 1', padding: '20px 20px 28px' }}>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#f0f2f5', boxShadow: 'inset 4px 4px 8px rgba(99,102,241,0.2), inset -3px -3px 7px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -980,33 +973,58 @@ export default function Dashboard2() {
                 </NmCard>
 
                 {/* ━━━ ROW 1.5: Tier Benefits Strip ━━━ */}
-                <NmCard span="12" hover={false} inset={true} style={{ padding: '24px 28px' }}>
+                <NmCard span={mob ? '2' : '12'} hover={false} inset={true} style={{ padding: mob ? '16px' : '24px 28px' }}>
+                  {mob ? (
+                    /* Mobile: compact stacked layout */
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                            <img src={isLieutenant ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'} alt={tierLabel} style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+                            <div style={{ fontSize: '13px', fontWeight: '900', color: '#4f46e5' }}>{tierLabel}</div>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '10px' }}>
+                            {[
+                                { label: 'L1', value: `${isLieutenant ? commissionRates.lieutenant_l1 : commissionRates.soldier_l1}%`, color: '#4f46e5' },
+                                { label: 'L2', value: '3%', color: '#10b981' },
+                                { label: 'L3', value: '2%', color: '#6366f1' },
+                            ].map(r => (
+                                <div key={r.label} style={{ textAlign: 'center', padding: '8px 4px', background: '#f0f2f5', borderRadius: '10px', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.85)' }}>
+                                    <div style={{ fontSize: '9px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>{r.label}</div>
+                                    <div style={{ fontSize: '20px', fontWeight: '900', color: r.color, lineHeight: 1.2 }}>{r.value}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                            {[
+                                { label: 'Pts/$ Spend', value: `${isLieutenant ? 50 : 25}`, color: '#8b5cf6' },
+                                { label: 'Task Mult.', value: isLieutenant ? '2×' : '1×', color: '#6366f1' },
+                            ].map(r => (
+                                <div key={r.label} style={{ textAlign: 'center', padding: '8px 4px', background: '#f0f2f5', borderRadius: '10px', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.85)' }}>
+                                    <div style={{ fontSize: '9px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>{r.label}</div>
+                                    <div style={{ fontSize: '20px', fontWeight: '900', color: r.color, lineHeight: 1.2 }}>{r.value}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                  ) : (
                     <div style={{ display: 'flex', alignItems: 'stretch', gap: '20px' }}>
-
                         {/* Left: Tier identity */}
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', flexShrink: 0, minWidth: '130px', padding: '10px 20px', background: '#f0f2f5', borderRadius: '16px', boxShadow: '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.88)' }}>
-                            <img
-                                src={isLieutenant ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'}
-                                alt={tierLabel}
-                                style={{ width: '56px', height: '56px', objectFit: 'contain', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.14))' }}
-                            />
+                            <img src={isLieutenant ? '/images/badges/dag-lieutenant.svg' : '/images/badges/dag-soldier.svg'} alt={tierLabel} style={{ width: '56px', height: '56px', objectFit: 'contain', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.14))' }} />
                             <div style={{ textAlign: 'center' }}>
                                 <div style={{ fontSize: '9px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '3px' }}>Active Tier</div>
                                 <div style={{ fontSize: '13px', fontWeight: '900', color: '#4f46e5', letterSpacing: '-0.2px', whiteSpace: 'nowrap' }}>{tierLabel}</div>
                             </div>
                         </div>
-
                         {/* Divider */}
                         <div style={{ width: '1px', background: 'rgba(0,0,0,0.07)', flexShrink: 0, alignSelf: 'stretch' }} />
-
                         {/* Rate cards grid */}
                         <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
                             {[
                                 { label: 'L1 Commission', value: `${isLieutenant ? commissionRates.lieutenant_l1 : commissionRates.soldier_l1}%`, sub: 'on direct sales', color: '#4f46e5' },
                                 { label: 'L2 Commission', value: '3%', sub: 'on 2nd downline', color: '#10b981' },
-                                { label: 'L3 Commission', value: '2%', sub: 'on 3rd downline', color: '#f59e0b' },
+                                { label: 'L3 Commission', value: '2%', sub: 'on 3rd downline', color: '#6366f1' },
                                 { label: 'Spend Earn Rate', value: `${isLieutenant ? 50 : 25}`, sub: 'pts per $1 spent', color: '#8b5cf6' },
-                                { label: 'Task Multiplier', value: isLieutenant ? '2×' : '1×', sub: isLieutenant ? 'LT bonus active' : 'base rate', color: '#06b6d4' },
+                                { label: 'Task Multiplier', value: isLieutenant ? '2×' : '1×', sub: isLieutenant ? 'LT bonus active' : 'base rate', color: '#6366f1' },
                             ].map(r => (
                                 <div key={r.label} style={{ textAlign: 'center', padding: '14px 12px', background: '#f0f2f5', borderRadius: '14px', boxShadow: '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.88)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                                     <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{r.label}</div>
@@ -1037,49 +1055,69 @@ export default function Dashboard2() {
                             </div>
                             {!isLieutenant && (
                                 <button onClick={() => setShowUpgradeModal(true)} style={{ padding: '10px 14px', borderRadius: '12px', fontSize: '12px', fontWeight: '800', background: 'linear-gradient(145deg, #7c7ff5, #5a5de8)', color: '#fff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '4px 4px 10px rgba(99,102,241,0.4), -2px -2px 6px rgba(255,255,255,0.7)', textAlign: 'center' }}>
-                                    Upgrade to LT — $149
+                                    Upgrade to LT - $149
                                 </button>
                             )}
                         </div>
 
                     </div>
+                  )}
                 </NmCard>
 
-
-
                 {/* ━━━ ROW 2: Schedule Calendar ━━━ */}
-                <NmCard span="12" style={{ padding: '24px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                        <div>
-                            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Schedule Calendar</h3>
-                            <p style={{ fontSize: '12px', color: '#0f172a', margin: '4px 0 0 0', fontWeight: '500' }}>Your upcoming events and deadlines</p>
+                <NmCard span={mob ? '2' : '12'} style={{ padding: mob ? '14px' : '24px' }}>
+                    {mob ? (
+                        /* Mobile: title + nav on same row, subtitle below */
+                        <div style={{ marginBottom: '14px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                                <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Schedule Calendar</h3>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <button onClick={prevMonth} style={{ width: '28px', height: '28px', borderRadius: '7px', border: 'none', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
+                                    </button>
+                                    <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', whiteSpace: 'nowrap' }}>
+                                        {monthNames[calendarMonth.getMonth()]} {calendarMonth.getFullYear()}
+                                    </span>
+                                    <button onClick={nextMonth} style={{ width: '28px', height: '28px', borderRadius: '7px', border: 'none', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.11), -3px -3px 8px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <p style={{ fontSize: '11px', color: '#64748b', margin: 0, fontWeight: '500', whiteSpace: 'nowrap' }}>Your upcoming events and deadlines</p>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <button onClick={prevMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
-                            </button>
-                            <span style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', minWidth: '140px', textAlign: 'center' }}>
-                                {monthNames[calendarMonth.getMonth()]} {calendarMonth.getFullYear()}
-                            </span>
-                            <button onClick={nextMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
-                            </button>
+                    ) : (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <div>
+                                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>Schedule Calendar</h3>
+                                <p style={{ fontSize: '12px', color: '#0f172a', margin: '4px 0 0 0', fontWeight: '500' }}>Your upcoming events and deadlines</p>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <button onClick={prevMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
+                                </button>
+                                <span style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', minWidth: '140px', textAlign: 'center' }}>
+                                    {monthNames[calendarMonth.getMonth()]} {calendarMonth.getFullYear()}
+                                </span>
+                                <button onClick={nextMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    )}
 
-                    {/* Calendar Header — 7 day labels */}
+                    {/* Calendar Header - 7 day labels */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', marginBottom: '8px', paddingBottom: '10px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                            <div key={day} style={{ textAlign: 'center', fontSize: '11px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{day}</div>
+                        {(mob ? ['S','M','T','W','T','F','S'] : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']).map((day, i) => (
+                            <div key={i} style={{ textAlign: 'center', fontSize: '11px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{day}</div>
                         ))}
                     </div>
 
-                    {/* Calendar Grid — all weeks, fixed cell height */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
+                    {/* Calendar Grid - all weeks, fixed cell height */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: mob ? '3px' : '4px' }}>
                         {calendarDays.map((date, idx) => (
                             <div key={idx} style={{
-                                height: '72px', display: 'flex', flexDirection: 'column', padding: '6px', overflow: 'visible', position: 'relative',
-                                borderRadius: '10px', fontSize: '12px', fontWeight: '600', cursor: date.inactive ? 'default' : 'pointer',
+                                height: mob ? '40px' : '72px', display: 'flex', flexDirection: 'column', padding: mob ? '4px' : '6px', overflow: 'visible', position: 'relative',
+                                borderRadius: '8px', fontSize: '11px', fontWeight: '600', cursor: date.inactive ? 'default' : 'pointer',
                                 background: date.today ? '#f0f2f5' : date.inactive ? '#e8eaed' : '#f0f2f5',
                                 boxShadow: date.today ? 'inset 5px 5px 12px rgba(99,102,241,0.25), inset -3px -3px 8px rgba(255,255,255,0.9)' : date.inactive ? 'none' : '5px 5px 12px rgba(0,0,0,0.11), -4px -4px 10px rgba(255,255,255,0.9)',
                                 color: date.inactive ? '#cbd5e1' : '#0f172a',
@@ -1121,7 +1159,7 @@ export default function Dashboard2() {
                         ))}
                     </div>
 
-                    {/* Upcoming Events Carousel — 4 at a time, flanking arrows */}
+                    {/* Upcoming Events Carousel - 4 at a time, flanking arrows */}
                     {upcomingEvents.length > 0 && (() => {
                         const PAGE = 4;
                         const maxIdx = Math.max(0, upcomingEvents.length - PAGE);
@@ -1172,8 +1210,8 @@ export default function Dashboard2() {
                     })()}
                 </NmCard>
 
-                {/* ━━━ ROW 3: Referral + Redeem + Withdraw — 3 equal columns ━━━ */}
-                <div style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px', alignItems: 'stretch' }}>
+                {/* ━━━ ROW 3: Referral + Redeem + Withdraw - 3 equal columns ━━━ */}
+                <div style={{ gridColumn: mob ? 'span 2' : 'span 12', display: 'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(3, 1fr)', gap: mob ? '12px' : '18px', alignItems: 'stretch' }}>
 
                     {/* Referral Card */}
                     <NmCard span="1" style={{ padding: '24px' }}>
@@ -1356,8 +1394,8 @@ export default function Dashboard2() {
                                     </div>
                                     <div style={{ fontSize: '11px', color: canRedeem ? '#0f172a' : '#ef4444', fontWeight: '600', textAlign: 'center', marginBottom: '12px' }}>
                                         Costs <strong style={{ color: canRedeem ? '#0f172a' : '#ef4444' }}>{pointsCost.toLocaleString()} pts</strong>
-                                        {!canRedeem && maxAmount === 0 && ' — insufficient points'}
-                                        {!canRedeem && maxAmount > 0 && ` — need ${(pointsCost - dagPoints).toLocaleString()} more`}
+                                        {!canRedeem && maxAmount === 0 && ' - insufficient points'}
+                                        {!canRedeem && maxAmount > 0 && ` - need ${(pointsCost - dagPoints).toLocaleString()} more`}
                                     </div>
                                     {redeemMsg && (
                                         <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: redeemMsg.type === 'success' ? '#6366f1' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
@@ -1372,85 +1410,114 @@ export default function Dashboard2() {
                         })()}
                     </NmCard>
 
-                    {/* Withdraw USD / USDT card */}
+                    {/* Transfer DGCC Card */}
                     <NmCard span="1" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
                         {/* Header */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                            <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#f0f2f5', boxShadow: '4px 4px 10px rgba(99,102,241,0.18), -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+                                </svg>
                             </div>
                             <div>
-                                <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Withdraw</div>
-                                <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>USD or USDT payout</div>
+                                <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Transfer DGCC</div>
+                                <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '600' }}>Send to DAGGPT or DAGChain</div>
                             </div>
                         </div>
 
-                        {/* Earnings */}
-                        <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 14px', marginBottom: '14px', boxShadow: 'inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <span style={{ fontSize: '11px', fontWeight: '600', color: '#0f172a' }}>Earned</span>
-                            <span style={{ fontSize: '18px', fontWeight: '900', color: '#6366f1', letterSpacing: '-0.5px' }}>${usdEarned.toFixed(2)}</span>
+                        {/* DGCC Balance display */}
+                        <div style={{ background: '#f0f2f5', borderRadius: '10px', padding: '10px 14px', marginBottom: '14px', boxShadow: 'inset 4px 4px 10px rgba(99,102,241,0.12), inset -3px -3px 8px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '11px', fontWeight: '600', color: '#64748b' }}>Available Balance</span>
+                            <span style={{ fontSize: '18px', fontWeight: '900', color: dgccBalance > 0 ? '#4f46e5' : '#94a3b8', letterSpacing: '-0.5px' }}>
+                                {dgccBalance > 0 ? dgccBalance.toLocaleString() : '00'} <span style={{ fontSize: '11px', fontWeight: '600', color: '#6366f1' }}>DGCC</span>
+                            </span>
                         </div>
 
-                        {/* Month picker */}
-                        <div style={{ marginBottom: '10px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '5px' }}>Reward Month</div>
-                            <input type="month" value={withdrawMonth} onChange={e => setWithdrawMonth(e.target.value)}
-                                max={(() => { const d = new Date(); d.setMonth(d.getMonth() - 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; })()}
-                                style={{ width: '100%', padding: '7px 10px', border: 'none', borderRadius: '8px', fontSize: '12px', outline: 'none', boxSizing: 'border-box', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)', color: '#0f172a' }}
-                                onFocus={e => e.target.style.boxShadow = 'inset 3px 3px 7px rgba(99,102,241,0.15), inset -2px -2px 5px rgba(255,255,255,0.9)'} onBlur={e => e.target.style.boxShadow = 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)'}
-                            />
-                        </div>
-
-                        {/* Payout method */}
+                        {/* Destination Picker */}
                         <div style={{ marginBottom: '12px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '5px' }}>Payout via</div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-                                <button type="button" onClick={() => setWithdrawPayoutMethod('bank')} style={{ padding: '8px', borderRadius: '9px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s', border: 'none', background: '#f0f2f5', boxShadow: withdrawPayoutMethod === 'bank' ? 'inset 4px 4px 9px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)' : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)' }}>
-                                    <div style={{ fontSize: '11px', fontWeight: '700', color: withdrawPayoutMethod === 'bank' ? '#6366f1' : '#0f172a', marginBottom: '2px' }}>Bank</div>
-                                    {paymentInfo?.bank_account_name
-                                        ? <div style={{ fontSize: '10px', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bank_name || 'Saved'}</div>
-                                        : <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Not set</div>
-                                    }
-                                </button>
-                                <button type="button" onClick={() => setWithdrawPayoutMethod('crypto')} style={{ padding: '8px', borderRadius: '9px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s', border: 'none', background: '#f0f2f5', boxShadow: withdrawPayoutMethod === 'crypto' ? 'inset 4px 4px 9px rgba(99,102,241,0.18), inset -3px -3px 7px rgba(255,255,255,0.9)' : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)' }}>
-                                    <div style={{ fontSize: '11px', fontWeight: '700', color: withdrawPayoutMethod === 'crypto' ? '#6366f1' : '#0f172a', marginBottom: '2px' }}>USDT</div>
-                                    {paymentInfo?.bep20_address
-                                        ? <div style={{ fontSize: '10px', color: '#0f172a', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{paymentInfo.bep20_address.slice(0, 10)}…</div>
-                                        : <div style={{ fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Not set</div>
-                                    }
-                                </button>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>Send To</div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                {[
+                                    { key: 'daggpt', label: 'DAGGPT', icon: '🤖', desc: 'AI generation credits', accent: '#6366f1' },
+                                    { key: 'dagchain', label: 'DAGChain', icon: '⛓️', desc: 'Blockchain wallet', accent: '#10b981' },
+                                ].map(opt => (
+                                    <button key={opt.key} onClick={() => setTransferDest(opt.key)}
+                                        style={{
+                                            padding: '10px 8px', borderRadius: '10px',
+                                            border: `2px solid ${transferDest === opt.key ? opt.accent : '#e2e8f0'}`,
+                                            background: transferDest === opt.key ? `${opt.accent}10` : '#f0f2f5',
+                                            cursor: dgccBalance > 0 ? 'pointer' : 'not-allowed',
+                                            textAlign: 'left',
+                                            boxShadow: transferDest === opt.key
+                                                ? `inset 3px 3px 8px ${opt.accent}20, inset -2px -2px 6px rgba(255,255,255,0.8)`
+                                                : '4px 4px 9px rgba(0,0,0,0.09), -3px -3px 7px rgba(255,255,255,0.9)',
+                                            transition: 'all 0.2s',
+                                            opacity: dgccBalance > 0 ? 1 : 0.5,
+                                        }}>
+                                        <div style={{ fontSize: '16px', marginBottom: '3px' }}>{opt.icon}</div>
+                                        <div style={{ fontSize: '11px', fontWeight: '800', color: transferDest === opt.key ? opt.accent : '#0f172a' }}>{opt.label}</div>
+                                        <div style={{ fontSize: '9px', color: '#94a3b8', marginTop: '1px', fontWeight: '500' }}>{opt.desc}</div>
+                                    </button>
+                                ))}
                             </div>
-                            {withdrawPayoutMethod === 'bank' && !paymentInfo?.bank_account_name && (
-                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add bank details in <a href="/settings" style={{ color: '#6366f1' }}>Settings</a></div>
-                            )}
-                            {withdrawPayoutMethod === 'crypto' && !paymentInfo?.bep20_address && (
-                                <div style={{ marginTop: '6px', fontSize: '10px', color: '#0f172a', fontWeight: '600' }}>Add BEP20 wallet in <a href="/settings" style={{ color: '#6366f1' }}>Settings</a></div>
+                        </div>
+
+                        {/* Amount input */}
+                        <div style={{ marginBottom: '12px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '6px' }}>Amount (DGCC)</div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <button onClick={() => setTransferAmount(a => Math.max(1, a - 1))}
+                                    style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f0f2f5', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6366f1', flexShrink: 0 }}>−</button>
+                                <input
+                                    type="number" min="1" max={dgccBalance} value={transferAmount}
+                                    onChange={e => setTransferAmount(Math.max(1, Math.min(dgccBalance, parseInt(e.target.value) || 1)))}
+                                    style={{ flex: 1, padding: '7px 10px', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: '800', color: '#0f172a', textAlign: 'center', outline: 'none', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.09), inset -2px -2px 5px rgba(255,255,255,0.9)' }}
+                                />
+                                <button onClick={() => setTransferAmount(a => Math.min(dgccBalance, a + 1))}
+                                    style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f0f2f5', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6366f1', flexShrink: 0 }}>+</button>
+                                <button onClick={() => setTransferAmount(dgccBalance)}
+                                    style={{ padding: '7px 10px', borderRadius: '8px', border: 'none', background: '#f0f2f5', cursor: 'pointer', fontSize: '10px', fontWeight: '700', color: '#6366f1', boxShadow: '3px 3px 7px rgba(0,0,0,0.09), -2px -2px 5px rgba(255,255,255,0.9)', flexShrink: 0 }}>MAX</button>
+                            </div>
+                            {Number(transferAmount) > dgccBalance && (
+                                <div style={{ fontSize: '10px', color: '#ef4444', fontWeight: '600', marginTop: '5px' }}>Exceeds balance ({dgccBalance} DGCC)</div>
                             )}
                         </div>
 
-                        {/* Duplicate request notice */}
-                        {withdrawHistory.some(r => r.reward_month === withdrawMonth) && (
-                            <div style={{ marginBottom: '10px', padding: '7px 10px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', fontSize: '10px', fontWeight: '600', color: '#6366f1' }}>
-                                Request already submitted for {withdrawMonth} — Status: <strong>{withdrawHistory.find(r => r.reward_month === withdrawMonth)?.status}</strong>
+                        {/* Transfer message feedback */}
+                        {transferMsg && (
+                            <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: transferMsg.type === 'success' ? '#10b981' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
+                                {transferMsg.text}
                             </div>
                         )}
 
-                        {withdrawMsg && (
-                            <div style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '8px', background: '#f0f2f5', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)', color: withdrawMsg.type === 'success' ? '#6366f1' : '#ef4444', fontSize: '11px', fontWeight: '600' }}>
-                                {withdrawMsg.text}
-                            </div>
-                        )}
-
+                        {/* Transfer button */}
                         {(() => {
-                            const noDetails = withdrawPayoutMethod === 'bank' ? !paymentInfo?.bank_account_name : !paymentInfo?.bep20_address;
-                            const alreadyExists = withdrawHistory.some(r => r.reward_month === withdrawMonth);
-                            const disabled = withdrawing || noDetails || alreadyExists || usdEarned < 10;
+                            const canTransfer = !!transferDest && Number(transferAmount) > 0 && Number(transferAmount) <= dgccBalance && dgccBalance > 0;
                             return (
-                                <button onClick={handleDashboardWithdraw} disabled={disabled} style={{ width: '100%', marginTop: 'auto', padding: '10px', borderRadius: '10px', border: 'none', background: disabled ? '#f0f2f5' : '#6366f1', color: disabled ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: '700', cursor: disabled ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: disabled ? 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' : '5px 5px 12px rgba(99,102,241,0.3), -3px -3px 8px rgba(255,255,255,0.9)' }}>
-                                    {withdrawing ? 'Submitting…' : usdEarned < 10 ? `Min. $10 required` : 'Request Withdrawal'}
+                                <button
+                                    onClick={handleDgccTransfer}
+                                    disabled={!canTransfer || transferring}
+                                    style={{
+                                        width: '100%', marginTop: 'auto', padding: '10px', borderRadius: '10px', border: 'none',
+                                        background: canTransfer && !transferring ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : '#f0f2f5',
+                                        color: canTransfer && !transferring ? '#fff' : '#94a3b8',
+                                        fontSize: '12px', fontWeight: '700',
+                                        cursor: canTransfer && !transferring ? 'pointer' : 'not-allowed',
+                                        transition: 'all 0.2s',
+                                        boxShadow: canTransfer && !transferring
+                                            ? '5px 5px 12px rgba(99,102,241,0.35), -3px -3px 8px rgba(255,255,255,0.9)'
+                                            : 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                    }}>
+                                    {transferring ? (
+                                        <>
+                                            <span style={{ width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />
+                                            Transferring…
+                                        </>
+                                    ) : !transferDest ? 'Select a Destination' : dgccBalance === 0 ? 'No DGCC Balance' : `Transfer ${transferAmount} DGCC → ${transferDest === 'daggpt' ? 'DAGGPT' : 'DAGChain'}`}
                                 </button>
                             );
-                        })()}
+        })()}
                     </NmCard>
 
                 </div>
@@ -1468,7 +1535,7 @@ export default function Dashboard2() {
                                 </div>
                                 <div>
                                     <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px' }}>DAGChain Account</div>
-                                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>Linked — synced from dagchain.network</div>
+                                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>Linked - synced from dagchain.network</div>
                                 </div>
                             </div>
                             <a href="https://dagchain.network" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '700', color: '#6366f1', textDecoration: 'none', padding: '7px 14px', borderRadius: '8px', border: 'none', background: '#f0f2f5', boxShadow: '5px 5px 12px rgba(0,0,0,0.13), -4px -4px 10px rgba(255,255,255,0.9)' }}>
@@ -1490,7 +1557,7 @@ export default function Dashboard2() {
                                     <div style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '10px' }}>Referral Code</div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '2px', flex: 1 }}>
-                                            {dagchainData?.referralCode || '—'}
+                                            {dagchainData?.referralCode || '-'}
                                         </div>
                                         {dagchainData?.referralCode && (
                                             <button onClick={handleCopyDagchainCode} style={{ padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #c7d2fe', background: dagchainCopied ? '#eef2ff' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: '700', color: '#6366f1', transition: 'all 0.15s' }}>
@@ -1546,7 +1613,7 @@ export default function Dashboard2() {
                                     </div>
                                     <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '500', marginBottom: '8px' }}>Points earned on DAGChain</div>
                                     {dagchainData?.rewards?.pending && (
-                                        <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: '700' }}>
+                                        <div style={{ fontSize: '11px', color: '#6366f1', fontWeight: '700' }}>
                                             Pending rewards available
                                         </div>
                                     )}

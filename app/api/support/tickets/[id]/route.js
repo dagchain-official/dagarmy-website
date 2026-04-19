@@ -6,7 +6,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// GET /api/support/tickets/[id] — fetch ticket + messages
+// GET /api/support/tickets/[id] - fetch ticket + messages
 export async function GET(request, context) {
   try {
     const { id } = await context.params;

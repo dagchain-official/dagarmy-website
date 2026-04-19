@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback } from "react";
 import { Users, Copy, Check, Crown, ChevronDown, GitBranch, TrendingUp, Clock, Award } from "lucide-react";
 import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 
@@ -20,6 +20,14 @@ const nm = {
 };
 
 export default function ReferralContent({ mounted }) {
+  const [mob, setMob] = useState(true);
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  const [treeExpanded, setTreeExpanded] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -119,7 +127,7 @@ export default function ReferralContent({ mounted }) {
   const TreeNode = ({ node, isRoot = false, depth = 0 }) => {
     const hasChildren = node.children && node.children.length > 0;
     const isCollapsed = collapsedNodes.has(node.id);
-    const joinDate = node.joinedAt ? new Date(node.joinedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+    const joinDate = node.joinedAt ? new Date(node.joinedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-';
     const initials = node.name && node.name !== 'Unknown' ? node.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
     const isLt = node.tier === 'DAG LIEUTENANT' || node.tier === 'DAG_LIEUTENANT';
     const statusMap = { rewarded: 'Rewarded', completed: 'Completed', pending: 'Pending' };
@@ -202,8 +210,8 @@ export default function ReferralContent({ mounted }) {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
 
-      {/* ── Stat cards ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '20px' }}>
+      {/* ── Stat cards — 2×2 on mobile, 4-col on desktop ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: mob ? '10px' : '14px', marginBottom: '20px' }}>
         {[
           { label: 'Total Referrals', value: referralData.totalReferrals,                           sub: 'All time'          },
           { label: 'Successful',      value: referralData.successfulReferrals,                      sub: 'Completed sign-ups' },
@@ -216,52 +224,49 @@ export default function ReferralContent({ mounted }) {
           </NmCard>
         ))}
         {/* Referral code card */}
-        <NmCard delay={150} style={{ padding: '22px 24px' }}>
-          <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 14px', textAlign: 'center' }}>Your Code</p>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-            <p style={{ fontSize: '24px', fontWeight: '800', color: nm.textPrimary, fontFamily: 'monospace', letterSpacing: '3px', lineHeight: 1, margin: 0 }}>
-              {referralData.referralCode || '—'}
+        <NmCard delay={150} style={{ padding: mob ? '16px 14px' : '22px 24px' }}>
+          <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 10px', textAlign: 'center' }}>Your Code</p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', minWidth: 0 }}>
+            <p style={{ fontSize: mob ? '18px' : '24px', fontWeight: '800', color: nm.textPrimary, fontFamily: 'monospace', letterSpacing: mob ? '2px' : '3px', lineHeight: 1, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0, flex: 1, textAlign: 'center' }}>
+              {referralData.referralCode || '-'}
             </p>
             <button
               onClick={() => { navigator.clipboard.writeText(referralData.referralCode); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-              style={{ width: '36px', height: '36px', borderRadius: '50%', border: 'none', background: nm.bg, boxShadow: copied ? nm.shadowInset : nm.shadowSm, color: copied ? nm.accent : nm.textPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.25s ease', flexShrink: 0 }}
+              style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: nm.bg, boxShadow: copied ? nm.shadowInset : nm.shadowSm, color: copied ? nm.accent : nm.textPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.25s ease', flexShrink: 0 }}
               onMouseEnter={e => { if (!copied) e.currentTarget.style.boxShadow = nm.shadow; }}
               onMouseLeave={e => { if (!copied) e.currentTarget.style.boxShadow = nm.shadowSm; }}
             >
-              {copied ? <Check size={15} /> : <Copy size={15} />}
+              {copied ? <Check size={13} /> : <Copy size={13} />}
             </button>
           </div>
         </NmCard>
       </div>
 
-      {/* ── Referral code card ── */}
-      <NmCard delay={200} style={{ marginBottom: '16px', padding: '28px 32px' }}>
-        <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 20px' }}>My Referral Link</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      {/* ── Referral link card ── */}
+      <NmCard delay={200} style={{ marginBottom: '16px', padding: mob ? '18px 16px' : '28px 32px' }}>
+        <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 16px' }}>My Referral Link</p>
+        <div style={{ display: 'flex', flexDirection: mob ? 'column' : 'row', alignItems: mob ? 'stretch' : 'center', gap: mob ? '10px' : '16px' }}>
 
           {/* Link */}
-          <div style={{ flex: 1, minWidth: 0, background: nm.bg, borderRadius: '14px', padding: '16px 20px', boxShadow: nm.shadowInset }}>
-            <p style={{ fontSize: '14px', fontWeight: '500', color: nm.textPrimary, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{referralLink}</p>
+          <div style={{ flex: 1, minWidth: 0, background: nm.bg, borderRadius: '14px', padding: '14px 16px', boxShadow: nm.shadowInset }}>
+            <p style={{ fontSize: mob ? '12px' : '14px', fontWeight: '500', color: nm.textPrimary, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{referralLink}</p>
           </div>
 
-          {/* Copy link button */}
-          <button
-            onClick={copyReferralCode}
-            style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '16px 26px', borderRadius: '14px', border: 'none', background: nm.bg, boxShadow: copied ? nm.shadowInset : nm.shadowSm, color: copied ? nm.accent : nm.textPrimary, fontSize: '15px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.25s ease', flexShrink: 0, letterSpacing: '0.2px' }}
-            onMouseEnter={e => { if (!copied) e.currentTarget.style.boxShadow = nm.shadow; }}
-            onMouseLeave={e => { if (!copied) e.currentTarget.style.boxShadow = nm.shadowSm; }}
-          >
-            {copied ? <Check size={17} /> : <Copy size={17} />}
-            {copied ? 'Copied!' : 'Copy Link'}
-          </button>
+          {/* Copy + Share row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            {/* Copy link button */}
+            <button
+              onClick={copyReferralCode}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: mob ? '12px 18px' : '16px 26px', borderRadius: '14px', border: 'none', background: nm.bg, boxShadow: copied ? nm.shadowInset : nm.shadowSm, color: copied ? nm.accent : nm.textPrimary, fontSize: mob ? '13px' : '15px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.25s ease', flexShrink: 0 }}
+              onMouseEnter={e => { if (!copied) e.currentTarget.style.boxShadow = nm.shadow; }}
+              onMouseLeave={e => { if (!copied) e.currentTarget.style.boxShadow = nm.shadowSm; }}
+            >
+              {copied ? <Check size={15} /> : <Copy size={15} />}
+              {copied ? 'Copied!' : 'Copy Link'}
+            </button>
 
-          {/* Divider */}
-          <div style={{ width: '1px', height: '48px', background: nm.border, flexShrink: 0 }} />
-
-          {/* Share via — horizontal row */}
-          <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '11px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', whiteSpace: 'nowrap' }}>Share</span>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            {/* Share icons */}
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[
                 {
                   name: 'WhatsApp',
@@ -358,7 +363,7 @@ export default function ReferralContent({ mounted }) {
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '13px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 3px' }}>Upgrade to DAG Lieutenant</p>
-              <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0 }}>Unlock <strong>1,000 pts</strong> per referral join, <strong>1,000 pts</strong> per upgrade, and <strong>50 pts per $1</strong> spent by your directs — double your Soldier rates.</p>
+              <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0 }}>Unlock <strong>1,000 pts</strong> per referral join, <strong>1,000 pts</strong> per upgrade, and <strong>50 pts per $1</strong> spent by your directs - double your Soldier rates.</p>
             </div>
             <button
               onClick={() => setShowUpgradeModal(true)}
@@ -374,9 +379,9 @@ export default function ReferralContent({ mounted }) {
       )}
 
       {/* ── How it works ── */}
-      <NmCard delay={280} hover={false} style={{ marginBottom: '16px', padding: '24px 28px' }}>
+      <NmCard delay={280} hover={false} style={{ marginBottom: '16px', padding: mob ? '18px 16px' : '24px 28px' }}>
         <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 18px' }}>How Referrals Work</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(2,1fr)', gap: '12px' }}>
           {[
             { step: '01', title: 'Share Your Link',  desc: 'Copy your unique referral link and share it with your network.' },
             { step: '02', title: 'They Sign Up',     desc: 'Your referral creates an account as a DAG SOLDIER using your code.' },
@@ -415,86 +420,112 @@ export default function ReferralContent({ mounted }) {
         </div>
       </NmCard>
 
-      {/* ── Referral network tree ── */}
+      {/* ── Referral network tree (collapsed by default) ── */}
       <NmCard delay={360} hover={false} style={{ marginBottom: '16px', padding: '0', overflow: 'hidden' }}>
-        {/* Tree header */}
-        <div style={{ padding: '20px 28px 18px', borderBottom: `1px solid ${nm.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* Clickable tree header — toggles expand/collapse */}
+        <div
+          onClick={() => setTreeExpanded(e => !e)}
+          style={{ padding: mob ? '16px 16px' : '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: treeExpanded ? `1px solid ${nm.border}` : 'none', gap: '12px' }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <GitBranch size={16} color={nm.accent} />
             </div>
-            <div>
-              <p style={{ fontSize: '15px', fontWeight: '700', color: nm.textPrimary, margin: 0 }}>Referral Network Tree</p>
-              <p style={{ fontSize: '11px', color: nm.textPrimary, margin: 0 }}>Click any node to expand or collapse</p>
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: nm.textPrimary, margin: 0 }}>Referral Network Tree</p>
+              <p style={{ fontSize: '11px', color: nm.textMuted, margin: 0 }}>
+                {treeMeta ? `${treeMeta.totalDownline} members · depth ${treeMeta.maxDepth}` : 'View your downline network'}
+              </p>
             </div>
           </div>
-          {treeMeta && (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              {[{ label: 'Total Network', val: treeMeta.totalDownline }, { label: 'Max Depth', val: treeMeta.maxDepth }].map(m => (
-                <div key={m.label} style={{ textAlign: 'center', padding: '8px 16px', background: nm.bg, borderRadius: '10px', boxShadow: nm.shadowInsetSm }}>
-                  <p style={{ fontSize: '18px', fontWeight: '900', color: nm.textPrimary, letterSpacing: '-0.5px', margin: 0 }}>{m.val}</p>
-                  <p style={{ fontSize: '10px', fontWeight: '600', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.4px', margin: 0 }}>{m.label}</p>
-                </div>
-              ))}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <span style={{ fontSize: '11px', fontWeight: '700', color: nm.accent }}>{treeExpanded ? 'Collapse' : 'Expand'}</span>
+            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.25s', transform: treeExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+              <ChevronDown size={14} color={nm.accent} />
             </div>
-          )}
+          </div>
         </div>
-        {/* Tree body */}
-        <div style={{ padding: '24px 28px', overflowX: 'auto', minHeight: '180px' }}>
-          {treeLoading ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 0', gap: '10px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadowXs, border: `2px solid transparent`, borderTopColor: nm.accent, animation: 'spin 0.8s linear infinite' }} />
-              <span style={{ fontSize: '13px', color: nm.textPrimary }}>Building your network tree...</span>
-            </div>
-          ) : treeError ? (
-            <div style={{ textAlign: 'center', padding: '48px 0' }}>
-              <p style={{ fontSize: '13px', color: nm.textPrimary, margin: 0 }}>{treeError}</p>
-            </div>
-          ) : !treeData || (treeData.children && treeData.children.length === 0) ? (
-            <div style={{ textAlign: 'center', padding: '48px 0' }}>
-              <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: nm.bg, boxShadow: nm.shadowInset, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-                <Users size={22} color={nm.textPrimary} />
+
+        {/* Tree body — only rendered when expanded */}
+        {treeExpanded && (
+          <div style={{ padding: mob ? '16px 12px' : '24px 28px', overflowX: 'auto', minHeight: '120px', WebkitOverflowScrolling: 'touch' }}>
+            {treeLoading ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '10px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: nm.bg, boxShadow: nm.shadowXs, border: `2px solid transparent`, borderTopColor: nm.accent, animation: 'spin 0.8s linear infinite' }} />
+                <span style={{ fontSize: '13px', color: nm.textPrimary }}>Building your network tree...</span>
               </div>
-              <p style={{ fontSize: '14px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 6px' }}>No referrals yet</p>
-              <p style={{ fontSize: '12px', color: nm.textPrimary, margin: 0 }}>Share your referral link to start building your network</p>
-            </div>
-          ) : (
-            <div style={{ display: 'inline-block', minWidth: '100%' }}>
-              <TreeNode node={treeData} isRoot depth={0} />
-            </div>
-          )}
-        </div>
+            ) : treeError ? (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <p style={{ fontSize: '13px', color: nm.textPrimary, margin: 0 }}>{treeError}</p>
+              </div>
+            ) : !treeData || (treeData.children && treeData.children.length === 0) ? (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: nm.bg, boxShadow: nm.shadowInset, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                  <Users size={22} color={nm.textMuted} />
+                </div>
+                <p style={{ fontSize: '14px', fontWeight: '700', color: nm.textPrimary, margin: '0 0 4px' }}>No referrals yet</p>
+                <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Share your referral link to start building your network</p>
+              </div>
+            ) : (
+              <div style={{ display: 'inline-block', minWidth: '100%' }}>
+                <TreeNode node={treeData} isRoot depth={0} />
+              </div>
+            )}
+          </div>
+        )}
       </NmCard>
 
       {/* ── Earnings breakdown table ── */}
-      <NmCard delay={400} inset hover={false} style={{ padding: '24px 28px' }}>
+      <NmCard delay={400} inset hover={false} style={{ padding: mob ? '18px 14px' : '24px 28px' }}>
         <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 16px' }}>Earnings Breakdown</p>
-        {/* Header row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '8px 12px', background: nm.bg, borderRadius: '8px', boxShadow: nm.shadowXs, marginBottom: '6px' }}>
-          {['Scenario', 'Your Tier', 'DAG Points'].map((h, i) => (
-            <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: i === 2 ? 'right' : 'left' }}>{h}</span>
-          ))}
-        </div>
-        {[
-          { scenario: 'Referral joins',    tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
-          { scenario: 'Referral joins',    tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
-          { scenario: 'Referral upgrades', tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
-          { scenario: 'Referral upgrades', tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
-        ].map((row, idx) => (
-          <div
-            key={idx}
-            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '11px 12px', alignItems: 'center', borderBottom: idx < 3 ? `1px solid ${nm.border}` : 'none', borderRadius: '6px', background: row.isYou ? nm.accentLight : 'transparent', transition: 'background 0.15s' }}
-            onMouseEnter={e => { if (!row.isYou) e.currentTarget.style.background = 'rgba(0,0,0,0.025)'; }}
-            onMouseLeave={e => { if (!row.isYou) e.currentTarget.style.background = 'transparent'; }}
-          >
-            <span style={{ fontSize: '12px', color: nm.textPrimary, fontWeight: '500' }}>{row.scenario}</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: row.isYou ? nm.shadowInsetSm : nm.shadowXs, color: row.isYou ? nm.accent : nm.textPrimary }}>{row.tier}</span>
-              {row.isYou && <span style={{ fontSize: '9px', fontWeight: '800', color: nm.accent }}>YOU</span>}
-            </div>
-            <span style={{ fontSize: '14px', fontWeight: '800', color: row.isYou ? nm.accent : nm.textPrimary, textAlign: 'right', letterSpacing: '-0.3px' }}>+{row.points.toLocaleString()}</span>
+        {mob ? (
+          /* Mobile: card list */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {[
+              { scenario: 'Referral joins',    tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
+              { scenario: 'Referral joins',    tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
+              { scenario: 'Referral upgrades', tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
+              { scenario: 'Referral upgrades', tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
+            ].map((row, idx) => (
+              <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', borderRadius: '12px', background: row.isYou ? nm.accentLight : nm.bg, boxShadow: row.isYou ? nm.shadowInsetSm : nm.shadowXs }}>
+                <div>
+                  <p style={{ margin: 0, fontSize: '12px', fontWeight: '700', color: nm.textPrimary }}>{row.scenario}</p>
+                  <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: row.isYou ? nm.accent : nm.textPrimary }}>{row.tier}{row.isYou ? ' (YOU)' : ''}</span>
+                </div>
+                <span style={{ fontSize: '16px', fontWeight: '800', color: row.isYou ? nm.accent : nm.textPrimary }}>+{row.points.toLocaleString()}</span>
+              </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          <>
+          {/* Header row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '8px 12px', background: nm.bg, borderRadius: '8px', boxShadow: nm.shadowXs, marginBottom: '6px' }}>
+            {['Scenario', 'Your Tier', 'DAG Points'].map((h, i) => (
+              <span key={h} style={{ fontSize: '10px', fontWeight: '700', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: i === 2 ? 'right' : 'left' }}>{h}</span>
+            ))}
+          </div>
+          {[
+            { scenario: 'Referral joins',    tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
+            { scenario: 'Referral joins',    tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
+            { scenario: 'Referral upgrades', tier: 'DAG SOLDIER',    points: 500,  isYou: !isLieutenant },
+            { scenario: 'Referral upgrades', tier: 'DAG LIEUTENANT', points: 1000, isYou: isLieutenant  },
+          ].map((row, idx) => (
+            <div
+              key={idx}
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '11px 12px', alignItems: 'center', borderBottom: idx < 3 ? `1px solid ${nm.border}` : 'none', borderRadius: '6px', background: row.isYou ? nm.accentLight : 'transparent', transition: 'background 0.15s' }}
+              onMouseEnter={e => { if (!row.isYou) e.currentTarget.style.background = 'rgba(0,0,0,0.025)'; }}
+              onMouseLeave={e => { if (!row.isYou) e.currentTarget.style.background = 'transparent'; }}
+            >
+              <span style={{ fontSize: '12px', color: nm.textPrimary, fontWeight: '500' }}>{row.scenario}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: nm.bg, boxShadow: row.isYou ? nm.shadowInsetSm : nm.shadowXs, color: row.isYou ? nm.accent : nm.textPrimary }}>{row.tier}</span>
+                {row.isYou && <span style={{ fontSize: '9px', fontWeight: '800', color: nm.accent }}>YOU</span>}
+              </div>
+              <span style={{ fontSize: '14px', fontWeight: '800', color: row.isYou ? nm.accent : nm.textPrimary, textAlign: 'right', letterSpacing: '-0.3px' }}>+{row.points.toLocaleString()}</span>
+            </div>
+          ))}
+          </>
+        )}
       </NmCard>
 
       {showUpgradeModal && (

@@ -116,7 +116,7 @@ export default function ProblemSolution() {
                 Perfect for Tier 2/3 City Students
               </h3>
               <p style={{ fontSize: '16px', color: '#6b7280', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
-                Limited local opportunities? No problem. Learn AI skills that work anywhere, serve clients globally, and create impact in your community—all from your laptop.
+                Limited local opportunities? No problem. Learn AI skills that work anywhere, serve clients globally, and create impact in your community-all from your laptop.
               </p>
             </div>
           </div>

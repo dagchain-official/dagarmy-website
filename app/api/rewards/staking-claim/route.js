@@ -6,7 +6,7 @@ import { notifyLieutenantUpgrade, notifyDgccTransfer } from '@/services/dagchain
  * POST /api/rewards/staking-claim
  *
  * Records the user's staking duration choice and fires the enriched DAGChain webhook.
- * Idempotent — if already claimed, returns 200 with alreadyClaimed: true.
+ * Idempotent - if already claimed, returns 200 with alreadyClaimed: true.
  *
  * Body (lt_upgrade):
  *   { type: 'lt_upgrade', userId, stakingDuration: 1|2|3, stakingApy: 12|18|24, paymentId? }
@@ -80,7 +80,7 @@ export async function POST(request) {
         { duration: dur, apy, dgccStaked: 149, claimedAt }
       );
 
-      console.log(`[staking-claim] lt_upgrade claimed — user=${userId} dur=${dur}Y apy=${apy}%`);
+      console.log(`[staking-claim] lt_upgrade claimed - user=${userId} dur=${dur}Y apy=${apy}%`);
       return NextResponse.json({ success: true, type: 'lt_upgrade', stakingDuration: dur, stakingApy: apy, dgccStaked: 149 });
     }
 
@@ -137,7 +137,7 @@ export async function POST(request) {
         { duration: dur, apy, claimedAt }
       );
 
-      console.log(`[staking-claim] dgcc_transfer claimed — user=${userId} amount=${amt} dur=${dur}Y apy=${apy}%`);
+      console.log(`[staking-claim] dgcc_transfer claimed - user=${userId} amount=${amt} dur=${dur}Y apy=${apy}%`);
       return NextResponse.json({ success: true, type: 'dgcc_transfer', stakingDuration: dur, stakingApy: apy, dgccStaked: amt });
     }
 

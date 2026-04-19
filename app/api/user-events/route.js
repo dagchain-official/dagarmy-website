@@ -77,7 +77,7 @@ export async function GET(request) {
   }
 }
 
-// POST /api/user-events — create a new event
+// POST /api/user-events - create a new event
 export async function POST(request) {
   try {
     const body = await request.json();

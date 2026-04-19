@@ -14,7 +14,7 @@ SELECT
   user_id,
   SUM(ABS(points))          AS points,          -- total burned (negative) → refund as positive
   'rank_burn_refund'        AS transaction_type,
-  'Rank system deprecated — burned points fully refunded' AS description,
+  'Rank system deprecated - burned points fully refunded' AS description,
   NOW()                     AS created_at
 FROM points_transactions
 WHERE transaction_type = 'rank_burn'

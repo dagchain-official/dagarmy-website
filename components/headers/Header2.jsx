@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// wagmi removed — no longer needed
+// wagmi removed - no longer needed
 
 import MobileNav from "./MobileNav";
 import LoginModal from "../auth/LoginModal";
@@ -35,7 +35,7 @@ export default function Header2() {
   const handleSignInClick = async () => {
     sessionStorage.removeItem('dagarmy_logged_out');
     
-    // Wallet disconnection removed — now using email/Google auth
+    // Wallet disconnection removed - now using email/Google auth
     setShowLoginModal(true);
 
   };
@@ -130,6 +130,8 @@ export default function Header2() {
               }}>
               About
             </Link>
+            {/* COMING SOON: Course moved to footer — uncomment below to restore to nav */}
+            {false && (
             <Link href="/courses" style={{
               fontSize: '14px',
               fontWeight: '500',
@@ -153,6 +155,7 @@ export default function Header2() {
               }}>
               Course
             </Link>
+            )}
             <Link href="/careers" style={{
               fontSize: '14px',
               fontWeight: '500',
@@ -300,6 +303,8 @@ export default function Header2() {
               }}>
               Jobs
             </Link>
+            {/* COMING SOON: Mentorship moved to footer — uncomment below to restore to nav */}
+            {false && (
             <Link href="/mentorship" style={{
               fontSize: '14px',
               fontWeight: '500',
@@ -323,6 +328,7 @@ export default function Header2() {
               }}>
               Mentorship
             </Link>
+            )}
             <Link href="/rewards-overview" style={{
               fontSize: '14px',
               fontWeight: '500',
@@ -346,6 +352,8 @@ export default function Header2() {
               }}>
               Rewards
             </Link>
+            {/* COMING SOON: Hackathons moved to footer — uncomment below to restore to nav */}
+            {false && (
             <Link href="/hackathons" style={{
               fontSize: '14px',
               fontWeight: '500',
@@ -369,6 +377,7 @@ export default function Header2() {
               }}>
               Hackathons
             </Link>
+            )}
             <div
               style={{ position: 'relative', paddingBottom: '8px' }}
               onMouseEnter={() => {
@@ -492,75 +501,31 @@ export default function Header2() {
             `}</style>
           </nav>
 
-          {/* Sign In / Dashboard Button - Animated */}
-          <div className="header-btn" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            {/* Notification Bell - Only show for authenticated users */}
+          {/* Sign In / Dashboard Button + Notification Bell */}
+          <div className="header-btn" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginLeft: 'auto' }}>
+            {/* Notification Bell - always visible for authenticated users */}
             {isAuthenticated && <NotificationBell />}
-            
+
+            {/* Animated Sign In / Dashboard — hidden on mobile via CSS (.animated-header-btn) */}
             <button
               onClick={isAuthenticated ? handleDashboardClick : handleSignInClick}
-              className={styles.animatedSigninBtn}
+              className={`${styles.animatedSigninBtn} animated-header-btn`}
             >
               {isAuthenticated ? (
                 <>
-                  <span>D</span>
-                  <span>a</span>
-                  <span>s</span>
-                  <span>h</span>
-                  <span>b</span>
-                  <span>o</span>
-                  <span>a</span>
-                  <span>r</span>
-                  <span>d</span>
+                  <span>D</span><span>a</span><span>s</span><span>h</span>
+                  <span>b</span><span>o</span><span>a</span><span>r</span><span>d</span>
                 </>
               ) : (
                 <>
-                  <span>S</span>
-                  <span>i</span>
-                  <span>g</span>
-                  <span>n</span>
-                  <span> </span>
-                  <span>I</span>
-                  <span>n</span>
+                  <span>S</span><span>i</span><span>g</span><span>n</span>
+                  <span> </span><span>I</span><span>n</span>
                 </>
               )}
             </button>
-            {/* Register button commented out - using Sign In for both new and returning users */}
-            {/* <Link
-              href={`/register`}
-              className="relative flex items-center gap-1 bg-[#1f2937] px-5 py-2 border-2 border-[#1f2937] text-sm rounded-xl font-semibold text-white cursor-pointer overflow-hidden transition-all duration-600 ease-in-out hover:text-white hover:rounded-3xl group hover:transition-all hover:duration-700"
-              style={{ textDecoration: 'none', height: '38px', minWidth: '120px', justifyContent: 'center' }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="absolute w-4 fill-white z-[20] transition-all duration-700 ease-in-out -left-1/4 group-hover:left-2 group-hover:fill-white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-              <span
-                className="relative z-[10] transition-all duration-700 ease-in-out -translate-x-2 group-hover:translate-x-2"
-              >
-                Register
-              </span>
-              <span
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#131836] rounded-full opacity-0 transition-all duration-700 ease-in-out group-hover:w-[150px] group-hover:h-[150px] group-hover:opacity-100 z-[0]"
-              ></span>
-              <svg
-                viewBox="0 0 24 24"
-                className="absolute w-4 fill-white z-[20] transition-all duration-700 ease-in-out right-2 group-hover:-right-1/4 group-hover:fill-white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-            </Link> */}
           </div>
 
-          {/* Mobile Menu Toggle - Hamburger to X Animation */}
+          {/* Mobile Hamburger — shown via CSS on ≤1280px */}
           <button
             className="mobile-nav-toggler"
             type="button"

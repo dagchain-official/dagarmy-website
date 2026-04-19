@@ -12,7 +12,7 @@ const builders = [
     id: 1,
     name: "Arjun Mehta",
     role: "AI Startup Builder",
-    testimonial: "UDAAN didn't just teach me—it forced me to ship. I went from concept to working AI prototype in 6 weeks. The structured feedback from mentors and the accountability within the cohort made execution inevitable."
+    testimonial: "UDAAN didn't just teach me-it forced me to ship. I went from concept to working AI prototype in 6 weeks. The structured feedback from mentors and the accountability within the cohort made execution inevitable."
   },
   {
     id: 2,
@@ -66,7 +66,7 @@ const builders = [
     id: 10,
     name: "Sneha Reddy",
     role: "AI Startup Founder",
-    testimonial: "The mentorship here isn't about motivation—it's about execution guidance. My mentor helped me refine my AI workflow, identify real use cases, and build investor-grade clarity. I'm now fundraising."
+    testimonial: "The mentorship here isn't about motivation-it's about execution guidance. My mentor helped me refine my AI workflow, identify real use cases, and build investor-grade clarity. I'm now fundraising."
   },
   {
     id: 11,

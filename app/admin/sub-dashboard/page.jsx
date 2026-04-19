@@ -208,7 +208,7 @@ export default function SubDashboardPage() {
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {[
               { label: 'Modules', value: accessibleCards.length, color: '#6366f1', bg: '#eef2ff' },
-              ...(hasHR && hrData?.stats ? [{ label: 'Members', value: hrData.stats.totalUsers ?? '—', color: '#0d9488', bg: '#f0fdfa' }] : []),
+              ...(hasHR && hrData?.stats ? [{ label: 'Members', value: hrData.stats.totalUsers ?? '-', color: '#0d9488', bg: '#f0fdfa' }] : []),
               ...(hasHR && hrData?.stats?.openTickets ? [{ label: 'Open Tickets', value: hrData.stats.openTickets, color: '#f59e0b', bg: '#fffbeb' }] : []),
             ].map(s => (
               <div key={s.label} style={{ padding: '10px 18px', borderRadius: '12px', background: s.bg, border: `1px solid ${s.color}20`, textAlign: 'center' }}>
@@ -219,7 +219,7 @@ export default function SubDashboardPage() {
           </div>
         </div>
 
-        {/* HR Stats Section — shown inline when user has HR/users permission */}
+        {/* HR Stats Section - shown inline when user has HR/users permission */}
         {hasHR && (
           <div style={{ marginBottom: '32px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
@@ -232,16 +232,16 @@ export default function SubDashboardPage() {
               const s = hrData?.stats || {};
               return (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                  <StatCard label="Total Members" value={s.totalUsers ?? '—'} sub={`${s.activeThisMonth ?? 0} active this month`} color="#6366f1" bg="#eef2ff" trend={s.newThisWeek}
+                  <StatCard label="Total Members" value={s.totalUsers ?? '-'} sub={`${s.activeThisMonth ?? 0} active this month`} color="#6366f1" bg="#eef2ff" trend={s.newThisWeek}
                     icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>}
                   />
-                  <StatCard label="New This Week" value={s.newThisWeek ?? '—'} sub={`${s.newThisMonth ?? 0} this month`} color="#0d9488" bg="#f0fdfa" trend={s.newToday}
+                  <StatCard label="New This Week" value={s.newThisWeek ?? '-'} sub={`${s.newThisMonth ?? 0} this month`} color="#0d9488" bg="#f0fdfa" trend={s.newToday}
                     icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>}
                   />
-                  <StatCard label="Open Tickets" value={s.openTickets ?? '—'} sub={`${s.resolvedThisWeek ?? 0} resolved this week`} color="#f59e0b" bg="#fffbeb"
+                  <StatCard label="Open Tickets" value={s.openTickets ?? '-'} sub={`${s.resolvedThisWeek ?? 0} resolved this week`} color="#f59e0b" bg="#fffbeb"
                     icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>}
                   />
-                  <StatCard label="Certs Issued" value={s.certsThisMonth ?? '—'} sub="this month" color="#10b981" bg="#f0fdf4"
+                  <StatCard label="Certs Issued" value={s.certsThisMonth ?? '-'} sub="this month" color="#10b981" bg="#f0fdf4"
                     icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>}
                   />
                 </div>
@@ -282,7 +282,7 @@ export default function SubDashboardPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', padding: '16px 20px' }}>
                   <div style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>Member Growth</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '14px' }}>New signups — last 6 months</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '14px' }}>New signups - last 6 months</div>
                   <MiniBar data={hrData?.monthlySignups} />
                 </div>
                 <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8edf5', overflow: 'hidden', flex: 1 }}>

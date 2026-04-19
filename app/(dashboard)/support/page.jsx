@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback } from "react";
 
 /* ── Neumorphic design tokens ── */
 const BG      = '#eef0f5';
@@ -10,7 +10,7 @@ const S_IN_SM = 'inset 3px 3px 7px rgba(0,0,0,0.10), inset -2px -2px 6px rgba(25
 const PURPLE  = '#6366f1';
 const S_PURPLE= '5px 5px 14px rgba(99,102,241,0.40), -3px -3px 8px rgba(255,255,255,0.6)';
 
-/* ── Status badge — neumorphic inset chips, monochrome except status dot ── */
+/* ── Status badge - neumorphic inset chips, monochrome except status dot ── */
 const STATUS_META = {
   open:            { label:'Open',           dot:'#6366f1' },
   in_progress:     { label:'In Progress',    dot:'#f59e0b' },
@@ -52,9 +52,9 @@ const CATS = [
 const FAQS = [
   { q:'How long does it take to get a response?',         a:'Our support team typically responds within 24 hours on business days. Urgent issues are usually addressed within a few hours.' },
   { q:'How do I access my course materials?',             a:'Navigate to "My Courses" in the sidebar. All enrolled course materials, videos, and downloads are available there. If you cannot see a course you enrolled in, please submit a ticket.' },
-  { q:'My DAG Points are not showing correctly — what should I do?', a:'Points are updated in real-time. If there is a discrepancy, wait 5 minutes and refresh. If the issue persists, submit a ticket under the Rewards category with the transaction details.' },
+  { q:'My DAG Points are not showing correctly - what should I do?', a:'Points are updated in real-time. If there is a discrepancy, wait 5 minutes and refresh. If the issue persists, submit a ticket under the Rewards category with the transaction details.' },
   { q:'How do I get my referral commission?',             a:'Referral commissions are tracked automatically when someone signs up using your referral link. You can view your referral earnings on the Rewards page.' },
-  { q:'I forgot my password — how do I reset it?',        a:'On the login page, click Forgot Password and enter your registered email. You will receive a reset link within a few minutes. Check your spam folder if you do not see it.' },
+  { q:'I forgot my password - how do I reset it?',        a:'On the login page, click Forgot Password and enter your registered email. You will receive a reset link within a few minutes. Check your spam folder if you do not see it.' },
   { q:'Can I upgrade my membership tier?',                a:'Yes! Visit the Rewards page and click the Upgrade to DAG Lieutenant button. The upgrade requires a one-time fee and unlocks additional earning potential and bonuses.' },
   { q:'How do I download my certificate after completing a course?', a:'Go to the Certifications section in your dashboard. Completed course certificates are available to download as PDF once all modules and assessments are finished.' },
   { q:'What happens after I submit a support ticket?',    a:'You will see the ticket appear in "My Tickets" with status "Open". Our team will review it and reply directly in the ticket thread. You will also receive a bell notification when we respond.' },
@@ -86,6 +86,14 @@ export default function StudentSupportPage() {
   const [mounted,      setMounted]      = useState(false);
   const [form,         setForm]         = useState({ subject:'', category:'technical', message:'' });
   const [openFaq,      setOpenFaq]      = useState(null);
+  const [mob,          setMob]          = useState(true);
+
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 100);
@@ -157,7 +165,7 @@ export default function StudentSupportPage() {
   };
 
   return (
-    <main style={{ width:'100%', padding:'32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
+    <main style={{ width:'100%', padding: mob ? '20px 14px 80px' : '32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
       <style>{`
         @keyframes nm-up  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
         @keyframes spin    { to{transform:rotate(360deg)} }
@@ -166,28 +174,32 @@ export default function StudentSupportPage() {
       `}</style>
 
       {/* ── Header ── */}
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'32px',
+      <div style={{ display:'flex', alignItems: mob ? 'flex-start' : 'center', justifyContent:'space-between',
+        flexDirection: mob ? 'column' : 'row', gap: mob ? '12px' : '0',
+        marginBottom: mob ? '16px' : '32px',
         animation: mounted ? 'nm-up 0.4s ease-out both' : 'none' }}>
-        <div style={{ display:'flex', alignItems:'center', gap:'16px' }}>
-          <div style={{ width:'52px', height:'52px', borderRadius:'16px', background:BG, boxShadow:S_UP,
+        <div style={{ display:'flex', alignItems:'center', gap: mob ? '10px' : '16px' }}>
+          <div style={{ width: mob ? '40px' : '52px', height: mob ? '40px' : '52px', borderRadius:'16px', background:BG, boxShadow:S_UP,
             display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
           </div>
           <div>
-            <h1 style={{ fontSize:'26px', fontWeight:'800', color:'#0f172a', margin:'0 0 2px',
+            <h1 style={{ fontSize: mob ? '20px' : '26px', fontWeight:'800', color:'#0f172a', margin:'0 0 2px',
               letterSpacing:'-0.5px', fontFamily:'Nasalization, sans-serif' }}>Support</h1>
-            <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
+            {!mob && <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
               Submit a ticket and we will respond within 24 hours on business days
-            </p>
+            </p>}
           </div>
         </div>
         <button onClick={() => { setShowNewForm(true); setActiveTicket(null); }}
-          style={{ display:'flex', alignItems:'center', gap:'7px', padding:'11px 22px',
+          style={{ display:'flex', alignItems:'center', gap:'7px',
+            padding: mob ? '9px 16px' : '11px 22px',
             borderRadius:'14px', border:'none', background:PURPLE, color:'#fff',
             fontSize:'13px', fontWeight:'700', cursor:'pointer', boxShadow:S_PURPLE,
-            whiteSpace:'nowrap', flexShrink:0, transition:'background 0.15s' }}
+            whiteSpace:'nowrap', flexShrink:0, transition:'background 0.15s',
+            alignSelf: mob ? 'stretch' : 'auto', justifyContent: mob ? 'center' : 'flex-start' }}
           onMouseEnter={e => e.currentTarget.style.background = '#4f46e5'}
           onMouseLeave={e => e.currentTarget.style.background = PURPLE}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -196,7 +208,7 @@ export default function StudentSupportPage() {
       </div>
 
       {/* ── Stat tiles ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'16px', marginBottom:'28px', maxWidth:'440px',
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap: mob ? '8px' : '16px', marginBottom: mob ? '16px' : '28px', maxWidth: mob ? '100%' : '440px',
         animation: mounted ? 'nm-up 0.38s ease-out 0.05s both' : 'none' }}>
         {[
           { label:'Open',        value:stats.open,       dot:'#6366f1' },
@@ -216,7 +228,7 @@ export default function StudentSupportPage() {
       </div>
 
       {/* ══════════════════════════════════════════════════
-          DEFAULT VIEW — ticket list + FAQ + contact
+          DEFAULT VIEW - ticket list + FAQ + contact
       ══════════════════════════════════════════════════ */}
       {!showNewForm && !activeTicket && (
         <div style={{ animation: mounted ? 'nm-up 0.4s ease-out 0.08s both' : 'none' }}>
@@ -311,7 +323,7 @@ export default function StudentSupportPage() {
           </div>
 
           {/* Telegram + Tips grid */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px' }}>
+          <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: mob ? '12px' : '20px' }}>
 
             {/* Email support card */}
             <div style={{ background:BG, borderRadius:'22px', boxShadow:S_UP, padding:'24px',
@@ -404,14 +416,14 @@ export default function StudentSupportPage() {
 
           <form onSubmit={handleSubmit} style={{ padding:'24px 28px', display:'flex', flexDirection:'column', gap:'22px' }}>
 
-            {/* Step 1 — Category */}
+            {/* Step 1 - Category */}
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'14px' }}>
                 <div style={{ width:'26px', height:'26px', borderRadius:'8px', background:BG, boxShadow:S_IN_SM,
                   fontSize:'12px', fontWeight:'900', color:PURPLE, display:'flex', alignItems:'center', justifyContent:'center' }}>1</div>
                 <span style={{ fontWeight:'800', fontSize:'14px', color:'#0f172a' }}>Choose a Category</span>
               </div>
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px' }}>
+              <div style={{ display:'grid', gridTemplateColumns: mob ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap:'10px' }}>
                 {CATS.map(cat => (
                   <button type="button" key={cat.value}
                     onClick={() => setForm(f => ({ ...f, category:cat.value }))}
@@ -427,7 +439,7 @@ export default function StudentSupportPage() {
               </div>
             </div>
 
-            {/* Step 2 — Subject */}
+            {/* Step 2 - Subject */}
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'10px' }}>
                 <div style={{ width:'26px', height:'26px', borderRadius:'8px', background:BG, boxShadow:S_IN_SM,
@@ -438,7 +450,7 @@ export default function StudentSupportPage() {
                 placeholder="Brief description of your issue…" required style={nmInput} />
             </div>
 
-            {/* Step 3 — Description */}
+            {/* Step 3 - Description */}
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'10px' }}>
                 <div style={{ width:'26px', height:'26px', borderRadius:'8px', background:BG, boxShadow:S_IN_SM,
@@ -446,7 +458,7 @@ export default function StudentSupportPage() {
                 <span style={{ fontWeight:'800', fontSize:'14px', color:'#0f172a' }}>Describe Your Issue</span>
               </div>
               <textarea value={form.message} onChange={e=>setForm(f=>({...f,message:e.target.value}))}
-                placeholder="Provide as much detail as possible — include error messages, steps tried, and what you expected to happen…"
+                placeholder="Provide as much detail as possible - include error messages, steps tried, and what you expected to happen…"
                 required rows={6} style={{...nmInput, resize:'vertical', lineHeight:1.65}} />
             </div>
 

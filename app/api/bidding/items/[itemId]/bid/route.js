@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 
 // POST /api/bidding/items/[itemId]/bid
-// Body: { userId, amount }   — amount = DAG Points to add
+// Body: { userId, amount }   - amount = DAG Points to add
 // Works for both new bids and top-ups (handled atomically in DB function)
 export async function POST(request, { params }) {
   try {

@@ -34,7 +34,7 @@ function redirectError(appUrl: string, code: string, detail?: string) {
   return NextResponse.redirect(`${appUrl}/?google_error=${code}${reason}`);
 }
 
-// GET — Google sends user back here with ?code=...
+// GET - Google sends user back here with ?code=...
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const code  = searchParams.get('code');
@@ -243,9 +243,8 @@ export async function GET(req: Request) {
     profile_completed: user.profile_completed || false,
   };
 
-  // New Google users OR returning users missing WhatsApp → profile completion
-  const needsProfile = isNewGoogleUser || !existingUser?.whatsapp_number || !existingUser?.first_name || !existingUser?.last_name;
-  const finalNext = needsProfile ? `/complete-profile?email=${encodeURIComponent(user.email)}` : next;
+  // Always go to dashboard — profile can be completed via Settings in the dashboard sidebar
+  const finalNext = next;
 
   const setSessionUrl = new URL(
     `/api/auth/google/set-session?token=${encodeURIComponent(token)}&user=${encodeURIComponent(JSON.stringify(safeUser))}&next=${encodeURIComponent(finalNext)}`,

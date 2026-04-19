@@ -88,7 +88,7 @@ export async function GET(request) {
           }
 
           await supabaseAdmin.from('notifications').insert({
-            title: `⏰ ${milestone.label} left — ${item.title}`,
+            title: `⏰ ${milestone.label} left - ${item.title}`,
             message: `Highest bid: ${item.current_highest_bid} DAG Points by ${bidderName} | Total bidders: ${item.total_bids_count}`,
             type: 'warning',
             priority: milestone.ms <= 60 * 60 * 1000 ? 'urgent' : 'high',

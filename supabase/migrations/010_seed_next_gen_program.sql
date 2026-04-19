@@ -79,7 +79,7 @@ VALUES (
 INSERT INTO lessons (module_id, lesson_number, title, description, type, duration, order_index, is_published) VALUES
 ('00000000-0000-0000-0001-000000000002', '2.1', 'Theory: Anatomy of a Web App', 'Understanding the relationship between the Client (Frontend), the Server (Logic), and the Database (Memory).', 'theory', '1 Hour', 1, true),
 ('00000000-0000-0000-0001-000000000002', '2.2', 'The Drill: The Replit Agent Workflow', 'Watching an AI manage environment variables, file structures, and cloud hosting.', 'drill', '1 Hour', 2, true),
-('00000000-0000-0000-0001-000000000002', '2.3', 'The Drill: Persistence Layer', 'Connecting Supabase for user authentication—making your app ''remember'' who users are.', 'drill', '1 Hour', 3, true),
+('00000000-0000-0000-0001-000000000002', '2.3', 'The Drill: Persistence Layer', 'Connecting Supabase for user authentication-making your app ''remember'' who users are.', 'drill', '1 Hour', 3, true),
 ('00000000-0000-0000-0001-000000000002', '2.4', 'The Drill: The Live Launch', 'Troubleshooting ''Vibe-Logic'' errors and deploying to a global URL.', 'drill', '1 Hour', 4, true);
 
 -- Module 3: Autonomous Systems & Agentic Future

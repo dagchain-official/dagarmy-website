@@ -2029,7 +2029,7 @@ export default function UsersManagement3() {
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: '800', color: '#3730a3' }}>Admin DAG Points Grant</div>
                     <div style={{ fontSize: '11px', color: '#6366f1', fontWeight: '500' }}>
-                      Current balance: <strong>{editUserModal?.dag_points ?? '—'} pts</strong> — every grant is logged with a transaction ID
+                      Current balance: <strong>{editUserModal?.dag_points ?? '-'} pts</strong> - every grant is logged with a transaction ID
                     </div>
                   </div>
                 </div>
@@ -2132,7 +2132,7 @@ export default function UsersManagement3() {
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: '800', color: '#065f46' }}>Admin USD Credit</div>
                     <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '500' }}>
-                      Current balance: <strong>${(editUserModal?.usd_earned ?? 0).toFixed(2)}</strong> — credited instantly via sales_commissions trigger
+                      Current balance: <strong>${(editUserModal?.usd_earned ?? 0).toFixed(2)}</strong> - credited instantly via sales_commissions trigger
                     </div>
                   </div>
                 </div>

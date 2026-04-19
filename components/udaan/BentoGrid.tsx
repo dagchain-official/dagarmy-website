@@ -1,5 +1,5 @@
 "use client";
-// BentoGrid — exact reference layout, rem→px, no emojis
+// BentoGrid - exact reference layout, rem→px, no emojis
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
@@ -43,17 +43,17 @@ export default function BentoGrid() {
           </p>
         </motion.div>
 
-        {/* Bento grid — exact reference layout */}
+        {/* Bento grid - exact reference layout */}
         <div className="udaan-bento-grid">
 
-          {/* Big card — spans 2 cols */}
+          {/* Big card - spans 2 cols */}
           <div className="udaan-bento-span2"><Card i={0}>
             <div style={{ background: "#111", borderRadius: 18, padding: 40, height: "100%", minHeight: 280, position: "relative", overflow: "hidden" }}>
               <div style={{ position: "absolute", right: -40, top: -40, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(91,75,236,0.2) 0%, transparent 70%)", pointerEvents: "none" }} />
               <div style={{ display:"inline-flex", alignItems:"center", padding:"5px 12px", borderRadius:999, fontSize:"11px", fontWeight:700, letterSpacing:"0.07em", textTransform:"uppercase", background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.12)", color:"rgba(255,255,255,0.6)", marginBottom:20 }}>Live Platform</div>
               <h3 style={{ fontSize:"1.4rem", fontWeight:800, letterSpacing:"-0.03em", color:"#fff", marginBottom:12 }}>The Founder Operating System</h3>
               <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", lineHeight: 1.7, maxWidth: 380 }}>
-                From first idea to shipped product — structured accountability, peer validation,
+                From first idea to shipped product - structured accountability, peer validation,
                 and cross-border collaboration baked in.
               </p>
               <div style={{ position: "absolute", bottom: 32, right: 32 }}>
@@ -66,7 +66,7 @@ export default function BentoGrid() {
             </div>
           </Card></div>
 
-          {/* Tall card — spans 2 rows */}
+          {/* Tall card - spans 2 rows */}
           <div className="udaan-bento-row2"><Card i={1}>
             <div style={{ background:"#fff", border:"1px solid #f0f0f0", borderRadius:18, padding:28, height:"100%", minHeight:400, display:"flex", flexDirection:"column" }}>
               <div style={{ display:"inline-flex", alignItems:"center", gap:5, padding:"5px 12px", borderRadius:999, fontSize:"11px", fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", background:"rgba(16,185,129,0.08)", border:"1px solid rgba(16,185,129,0.18)", color:"#059669", marginBottom:20, alignSelf:"flex-start" }}><svg width="7" height="7" viewBox="0 0 7 7" fill="none"><polyline points="1 3.5 2.5 5 6 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg> Execution Focus</div>
@@ -146,7 +146,7 @@ export default function BentoGrid() {
             </div>
           </Card>
 
-          {/* Wide bottom card — spans 3 cols */}
+          {/* Wide bottom card - spans 3 cols */}
           <div className="udaan-bento-span3"><Card i={4}>
             <div style={{ background:"#fff", border:"1px solid #f0f0f0", borderRadius:18, padding:"28px 36px" }} className="udaan-bento-bottom-grid">
               {[

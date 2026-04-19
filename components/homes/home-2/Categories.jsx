@@ -205,7 +205,8 @@ export default function Categories() {
                           color: isHovered ? '#000000' : '#1f2937',
                           transition: 'color 0.4s ease',
                           lineHeight: '1.5',
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'normal',
+                          wordBreak: 'break-word'
                         }}>
                           {elm.title}
                         </h5>

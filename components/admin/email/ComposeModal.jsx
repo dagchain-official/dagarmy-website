@@ -312,7 +312,7 @@ export default function ComposeModal({
       const data = await res.json();
       if (res.ok) { onSent?.(); onClose(); }
       else setError(data.error || 'Failed to send');
-    } catch { setError('Network error — please try again'); }
+    } catch { setError('Network error - please try again'); }
     finally { setSending(false); }
   };
 
@@ -638,7 +638,7 @@ export default function ComposeModal({
           <input ref={fileInputRef} type="file" multiple onChange={handleFileChange} style={{ display: 'none' }} />
           {signature && (
             <button
-              title={sigEnabled ? 'Signature is ON — click to remove from this email' : 'Signature is OFF — click to add to this email'}
+              title={sigEnabled ? 'Signature is ON - click to remove from this email' : 'Signature is OFF - click to add to this email'}
               onClick={() => {
                 setSigEnabled(v => !v);
               }}
@@ -758,7 +758,7 @@ export default function ComposeModal({
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                <span style={{ color: '#fff', fontSize: '13px', fontWeight: '700' }}>Email Preview — Branded Template</span>
+                <span style={{ color: '#fff', fontSize: '13px', fontWeight: '700' }}>Email Preview - Branded Template</span>
               </div>
               <button onClick={() => setShowEmailPreview(false)} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: '#fff', cursor: 'pointer', padding: '5px 6px', borderRadius: '7px', display: 'flex', alignItems: 'center' }}>
                 {IcoClose}

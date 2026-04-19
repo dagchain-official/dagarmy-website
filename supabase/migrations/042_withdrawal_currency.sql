@@ -7,7 +7,7 @@ ALTER TABLE withdrawal_requests
   ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'USD'
     CHECK (currency IN ('USD', 'USDT'));
 
--- amount_usd was used for both — rename semantics via a new amount column
+-- amount_usd was used for both - rename semantics via a new amount column
 -- Keep amount_usd for backward compat, add amount_usdt for USDT requests
 ALTER TABLE withdrawal_requests
   ADD COLUMN IF NOT EXISTS amount_usdt DECIMAL(10,2);

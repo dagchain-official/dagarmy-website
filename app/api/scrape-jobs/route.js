@@ -96,7 +96,7 @@ export async function GET(request) {
         const job = {
           id: jobId,
           company: null,
-          companyLogo: logoMap[jobId] || null, // from listing page — media.licdn.com URLs are public
+          companyLogo: logoMap[jobId] || null, // from listing page - media.licdn.com URLs are public
           jobTitle: null,
           level: null,
           location: null,
@@ -115,7 +115,7 @@ export async function GET(request) {
           console.error(`Error extracting company for job ${jobId}:`, e.message);
         }
 
-        // Extract job title — use listing page value (clean) first
+        // Extract job title - use listing page value (clean) first
         try {
           job.jobTitle = titleMap[jobId] ||
                          $job('h1.top-card-layout__title').text().trim() ||
@@ -193,7 +193,7 @@ export async function GET(request) {
   }
 }
 
-// DELETE /api/scrape-jobs — flush all cached job results so next search re-scrapes fresh data
+// DELETE /api/scrape-jobs - flush all cached job results so next search re-scrapes fresh data
 export async function DELETE() {
   try {
     const keys = await redis.keys('jobs:*');

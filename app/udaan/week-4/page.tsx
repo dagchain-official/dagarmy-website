@@ -148,7 +148,7 @@ export default function Week4Page() {
                   color: "#5a5a72",
                   marginBottom: 0
                 }}>
-                  Week 4 prepares you for structured evaluation inside the 3 Stage Selection Model. Your narrative is refined with defined traction signals. This is not about selling—this is about demonstrating execution.
+                  Week 4 prepares you for structured evaluation inside the 3 Stage Selection Model. Your narrative is refined with defined traction signals. This is not about selling-this is about demonstrating execution.
                 </p>
               </div>
 

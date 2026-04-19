@@ -105,7 +105,7 @@ export function AuthProvider({ children }) {
             if (isMounted.current) setUser(parsed);
           } catch {}
         }
-        // Validate with server in background — only clear session on explicit
+        // Validate with server in background - only clear session on explicit
         // 401/403 (truly invalid token). Network errors / 5xx must never log the user out,
         // as a cold-start or transient server hiccup was causing immediate post-login logouts.
         fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
@@ -118,7 +118,7 @@ export function AuthProvider({ children }) {
                 localStorage.setItem(USER_KEY, JSON.stringify(data.user));
               }
             } else if (r.status === 401 || r.status === 403) {
-              // Token is genuinely invalid/expired — clear session
+              // Token is genuinely invalid/expired - clear session
               if (!isMounted.current) return;
               setUser(null);
               localStorage.removeItem(TOKEN_KEY);
@@ -126,7 +126,7 @@ export function AuthProvider({ children }) {
             }
             // Any other status (5xx, network error) → keep existing session untouched
           })
-          .catch(() => { /* network error — keep session, don't log out */ });
+          .catch(() => { /* network error - keep session, don't log out */ });
       }
 
       if (isMounted.current) setIsLoading(false);

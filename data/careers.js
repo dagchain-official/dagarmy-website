@@ -10,7 +10,7 @@ export const CAREERS = [
       'Be the bridge between DAGArmy and the Indian Web3 developer community. Evangelize our platform, run local hackathons, and grow our technical ecosystem across India.',
     responsibilities: [
       'Build and nurture relationships with blockchain developers, communities, and universities across India',
-      'Create technical content — tutorials, blog posts, video walkthroughs — for the Indian developer audience',
+      'Create technical content - tutorials, blog posts, video walkthroughs - for the Indian developer audience',
       'Represent DAGArmy at meetups, hackathons, and Web3 conferences in India',
       'Gather developer feedback and relay product insights to our core team',
       'Onboard developers onto DAGChain and DAGArmy platforms',
@@ -70,7 +70,7 @@ export const CAREERS = [
       'Lead DAGArmy\'s developer community efforts across the MENA region, building technical relationships and driving ecosystem growth in one of the fastest-growing Web3 markets.',
     responsibilities: [
       'Engage and grow the developer community across MENA (UAE, Saudi Arabia, Egypt, Nigeria, Kenya, and broader Africa)',
-      'Produce Arabic and English technical content — guides, tutorials, explainers',
+      'Produce Arabic and English technical content - guides, tutorials, explainers',
       'Attend and speak at regional blockchain events and conferences',
       'Partner with universities, accelerators, and blockchain hubs across MENA',
       'Feed regional developer needs back to the product team',

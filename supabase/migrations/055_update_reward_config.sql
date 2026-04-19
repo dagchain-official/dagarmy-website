@@ -1,5 +1,5 @@
 -- ============================================================
--- Migration 055: Update Reward Config — New Tier-Based System
+-- Migration 055: Update Reward Config - New Tier-Based System
 -- ============================================================
 -- Removes old referral/commission configs and inserts the new
 -- simplified tier-only reward values.
@@ -41,7 +41,7 @@ WHERE config_key IN (
 -- Self bonuses
 INSERT INTO rewards_config (config_key, config_value, description, updated_at) VALUES
   ('soldier_signup_bonus',    500, 'DAG Points awarded to new DAG SOLDIER on signup',    NOW()),
-  ('lieutenant_upgrade_bonus', 0,  'DAG Points awarded on LT upgrade — intentionally 0',  NOW())
+  ('lieutenant_upgrade_bonus', 0,  'DAG Points awarded on LT upgrade - intentionally 0',  NOW())
 ON CONFLICT (config_key) DO UPDATE SET
   config_value = EXCLUDED.config_value,
   description  = EXCLUDED.description,

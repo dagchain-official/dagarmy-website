@@ -100,7 +100,7 @@ export default function Vision2030() {
       }} />
 
       {/* ═══════════════════════════════════════════════════
-          HERO ROW — Vision 2030 Masthead + Opening Statement
+          HERO ROW - Vision 2030 Masthead + Opening Statement
       ═══════════════════════════════════════════════════ */}
       <div className="v2030-hero-row" style={{
         maxWidth: 1400, margin: "0 auto",
@@ -152,7 +152,7 @@ export default function Vision2030() {
       </div>
 
       {/* ═══════════════════════════════════════════════════
-          BENTO GRID ROW 1 — Stat + Landscape Image (no purple card here)
+          BENTO GRID ROW 1 - Stat + Landscape Image (no purple card here)
       ═══════════════════════════════════════════════════ */}
       <div className="v2030-bento-row1" style={{
         maxWidth: 1400, margin: "0 auto",
@@ -162,7 +162,7 @@ export default function Vision2030() {
         gridTemplateColumns: "320px 1fr",
         gap: 16,
       }}>
-        {/* CELL A — 100,000 stat */}
+        {/* CELL A - 100,000 stat */}
         <Reveal>
             <div style={{
               background: "linear-gradient(135deg, #f8f8ff 0%, #f0f0fa 100%)",
@@ -194,7 +194,7 @@ export default function Vision2030() {
             </div>
         </Reveal>
 
-        {/* CELL B — Vision image, full landscape */}
+        {/* CELL B - Vision image, full landscape */}
         <Reveal delay={0.06}>
           <div style={{
             borderRadius: 20,
@@ -226,7 +226,7 @@ export default function Vision2030() {
       </div>
 
       {/* ═══════════════════════════════════════════════════
-          BENTO GRID ROW 2 — Year + Cycle + Mission + Community + Purple card
+          BENTO GRID ROW 2 - Year + Cycle + Mission + Community + Purple card
       ═══════════════════════════════════════════════════ */}
       <div className="v2030-bento-row2" style={{
         maxWidth: 1400, margin: "0 auto",
@@ -236,7 +236,7 @@ export default function Vision2030() {
         gridTemplateColumns: "180px 180px 1fr 1fr 280px",
         gap: 16,
       }}>
-          {/* CELL — 2030 */}
+          {/* CELL - 2030 */}
           <Reveal>
             <div style={{
               background: "#07070f",
@@ -265,7 +265,7 @@ export default function Vision2030() {
             </div>
           </Reveal>
 
-        {/* CELL — 4× */}
+        {/* CELL - 4× */}
         <Reveal delay={0.04}>
           <div style={{
             background: "linear-gradient(135deg, #faf8ff 0%, #f3f0ff 100%)",
@@ -294,7 +294,7 @@ export default function Vision2030() {
           </div>
         </Reveal>
 
-        {/* CELL — 1 Lakh Mission */}
+        {/* CELL - 1 Lakh Mission */}
         <Reveal delay={0.08}>
           <div style={{
             background: "#ffffff",
@@ -355,7 +355,7 @@ export default function Vision2030() {
           </div>
         </Reveal>
 
-        {/* CELL — Collaborative AI Community */}
+        {/* CELL - Collaborative AI Community */}
         <Reveal delay={0.12}>
           <div style={{
             background: "#ffffff",
@@ -407,7 +407,7 @@ export default function Vision2030() {
           </div>
           </Reveal>
 
-        {/* CELL — Purple "Compounding impact" card (was Row 1 CELL C) */}
+        {/* CELL - Purple "Compounding impact" card (was Row 1 CELL C) */}
         <Reveal delay={0.14}>
           <div style={{
             background: "linear-gradient(160deg, #5457e8 0%, #7c3aed 100%)",
@@ -445,7 +445,7 @@ export default function Vision2030() {
         </div>
 
         {/* ═══════════════════════════════════════════════════
-            THE PRINCIPLE — Full-width editorial quote strip
+            THE PRINCIPLE - Full-width editorial quote strip
       ═══════════════════════════════════════════════════ */}
       <div style={{
         maxWidth: 1400, margin: "0 auto",
@@ -462,7 +462,7 @@ export default function Vision2030() {
             gap: "0 80px",
             alignItems: "center",
           }}>
-            {/* Left — label + quote */}
+            {/* Left - label + quote */}
             <div>
               <div style={{
                 display: "flex", alignItems: "center", gap: 14, marginBottom: 40,
@@ -498,7 +498,7 @@ export default function Vision2030() {
                 </blockquote>
             </div>
 
-            {/* Right — 3 pillars + description */}
+            {/* Right - 3 pillars + description */}
             <div>
               <div className="v2030-pillars" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 40 }}>
                 {[
@@ -528,7 +528,7 @@ export default function Vision2030() {
                 fontSize: 15, lineHeight: 1.9, color: "rgba(255,255,255,0.55)",
                 margin: "0 0 16px",
               }}>
-                It turns ambition into measurable execution — and execution into a credential
+                It turns ambition into measurable execution - and execution into a credential
                 that compounds in credibility over time.
               </p>
               <p style={{
@@ -545,7 +545,7 @@ export default function Vision2030() {
       </div>
 
       {/* ═══════════════════════════════════════════════════
-            YOUR NEXT STEP + CHOOSE YOUR PATH — Side by side
+            YOUR NEXT STEP + CHOOSE YOUR PATH - Side by side
         ═══════════════════════════════════════════════════ */}
         <div className="v2030-nextstep-row" style={{
           maxWidth: 1400, margin: "0 auto",
@@ -556,7 +556,7 @@ export default function Vision2030() {
           gap: 16,
           alignItems: "stretch",
         }}>
-          {/* Left — Your Next Step narrative */}
+          {/* Left - Your Next Step narrative */}
           <Reveal style={{ height: "100%" }}>
             <div style={{
               background: "linear-gradient(180deg, #f8f8ff 0%, #f0f0fa 100%)",
@@ -596,7 +596,7 @@ export default function Vision2030() {
                 Built for people who want to launch, validate, and scale responsibly.
                 Every cohort is curated through a defined{" "}
                 <strong style={{ color: "#6366f1", fontWeight: 700 }}>Builder Selection Process</strong>.
-                Seats are limited — not for marketing, but to protect focus and mentorship depth.
+                Seats are limited - not for marketing, but to protect focus and mentorship depth.
               </p>
             </div>
             <div style={{
@@ -607,14 +607,14 @@ export default function Vision2030() {
                 margin: 0,
               }}>
                 If you are ready to build an MVP, validate with real users, and step into
-                structured founder accountability —{" "}
+                structured founder accountability -{" "}
                 <span style={{ color: "#6366f1" }}>this is where that journey begins.</span>
               </p>
             </div>
           </div>
         </Reveal>
 
-          {/* Right — Choose Your Path + Closing Declaration stacked */}
+          {/* Right - Choose Your Path + Closing Declaration stacked */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <Reveal delay={0.04}>
               <div style={{
@@ -673,7 +673,7 @@ export default function Vision2030() {
               </Reveal>
             ))}
 
-            {/* Closing declaration — fills remaining height to align with left card bottom */}
+            {/* Closing declaration - fills remaining height to align with left card bottom */}
             <Reveal delay={0.28} style={{ flex: 1 }}>
               <div className="v2030-closing-decl" style={{
                 display: "grid",

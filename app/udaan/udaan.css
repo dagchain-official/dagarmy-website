@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   UDAAN — Exact source CSS, scoped under .udaan-page
+   UDAAN - Exact source CSS, scoped under .udaan-page
    to prevent Bootstrap/SCSS interference from DAGARMY
 ───────────────────────────────────────────────────────── */
 
@@ -33,7 +33,7 @@
   font-family: var(--font-dm, 'DM Sans', system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  /* Re-establish 16px rem base — Bootstrap sets html to 62.5% which breaks rem */
+  /* Re-establish 16px rem base - Bootstrap sets html to 62.5% which breaks rem */
   font-size: 16px;
 }
 
@@ -248,7 +248,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS — Class-based (added to components)
+   RESPONSIVE BREAKPOINTS - Class-based (added to components)
    ═══════════════════════════════════════════════════════════ */
 
 /* ── HERO TITLE ── */
@@ -759,7 +759,7 @@
     border-bottom: none !important;
   }
 
-  /* Reject/Accept inner grid — keep 2 columns on mobile */
+  /* Reject/Accept inner grid - keep 2 columns on mobile */
   .udaan-code-reject-accept {
     grid-template-columns: 1fr 1fr !important;
     gap: 16px !important;
@@ -782,7 +782,7 @@
 }
 
 /* ─────────────────────────────
-   VISION 2030 SECTION — Mobile
+   VISION 2030 SECTION - Mobile
 ───────────────────────────── */
 @media (max-width: 900px) {
   /* Hero row: masthead stacks above opening statement */

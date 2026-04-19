@@ -8,9 +8,9 @@ import { NextResponse } from 'next/server';
  * 3. Redirects to the final destination (dashboard)
  *
  * Query params:
- *   token — JWT token
- *   user  — JSON-encoded safe user object
- *   next  — destination path after login
+ *   token - JWT token
+ *   user  - JSON-encoded safe user object
+ *   next  - destination path after login
  */
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '')
     || `${reqUrl.protocol}//${reqUrl.host}`;
 
-  // Final destination — must be a same-origin path
+  // Final destination - must be a same-origin path
   const destination = next.startsWith('/') ? `${appUrl}${next}` : next;
 
   const html = `<!DOCTYPE html>
@@ -68,7 +68,7 @@ export async function GET(req: Request) {
     } catch(e) {
       console.error('Session set error:', e);
     }
-    // Always redirect — even on error
+    // Always redirect - even on error
     window.location.replace(dest);
   })();
 </script>

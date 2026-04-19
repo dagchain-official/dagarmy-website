@@ -55,7 +55,7 @@ export async function POST(request) {
   }
 
   try {
-    // Idempotency check — skip if already a lieutenant
+    // Idempotency check - skip if already a lieutenant
     const { data: user, error: userError } = await supabase
       .from('users')
       .select('id, tier, email, full_name, username')

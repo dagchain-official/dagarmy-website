@@ -10,11 +10,15 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'ik.imagekit.io',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
     ],
   },
   // Required: silence Turbopack vs webpack config conflict in Next.js 16
   turbopack: {},
-  // Reduce memory pressure — prevents OOM crash on large component files
+  // Reduce memory pressure - prevents OOM crash on large component files
   productionBrowserSourceMaps: false,
   // Allow production builds to succeed despite type warnings
   typescript: {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 /* ── Neumorphic design tokens ───────────────────────────── */
@@ -101,7 +101,7 @@ function EventCard({ event, onJoin, onDelete, joining }) {
         {/* Date badge + type pill row */}
         <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:'16px' }}>
 
-          {/* Date badge — inset box */}
+          {/* Date badge - inset box */}
           <div style={{ background: BG, boxShadow: S_IN, borderRadius:'14px', padding:'10px 14px', textAlign:'center', minWidth:'52px' }}>
             <div style={{ fontSize:'9px', fontWeight:'800', color: color.accent, letterSpacing:'1px' }}>{badge.month}</div>
             <div style={{ fontSize:'24px', fontWeight:'900', color:'#0f172a', lineHeight:1, letterSpacing:'-1px' }}>{badge.day}</div>
@@ -241,6 +241,13 @@ function CreateEventModal({ onClose, onCreated, userId }) {
   });
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState('');
+  const [mob,     setMob]     = useState(true);
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -269,6 +276,135 @@ function CreateEventModal({ onClose, onCreated, userId }) {
   const lbl = { fontSize:'10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase',
     letterSpacing:'0.7px', marginBottom:'7px', display:'block' };
 
+  /* ─── MOBILE: bottom sheet ─────────────────────────────── */
+  if (mob) return (
+    <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.5)', backdropFilter:'blur(6px)',
+      zIndex:10000, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+
+      <div style={{ background:BG, borderRadius:'24px 24px 0 0', boxShadow:'0 -8px 40px rgba(0,0,0,0.2)',
+        display:'flex', flexDirection:'column', maxHeight:'92dvh',
+        animation:'sheet-up 0.28s cubic-bezier(0.34,1.1,0.64,1)' }}>
+
+        {/* Drag handle */}
+        <div style={{ width:'40px', height:'4px', borderRadius:'4px', background:'#d1d5db',
+          margin:'12px auto 0', flexShrink:0 }} />
+
+        {/* Sticky header */}
+        <div style={{ padding:'14px 18px 10px', display:'flex', alignItems:'center',
+          justifyContent:'space-between', flexShrink:0, borderBottom:'1px solid rgba(0,0,0,0.05)' }}>
+          <div>
+            <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#0f172a', margin:'0 0 2px',
+              fontFamily:'Nasalization, sans-serif' }}>Create Event</h2>
+            <p style={{ fontSize:'11px', color:'#94a3b8', margin:0 }}>Schedule a community event</p>
+          </div>
+          <button onClick={onClose}
+            style={{ width:'34px', height:'34px', borderRadius:'10px', border:'none', background:BG,
+              boxShadow:S_UP, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center',
+              color:'#64748b', flexShrink:0 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div style={{ overflowY:'auto', WebkitOverflowScrolling:'touch', padding:'14px 18px 6px',
+          display:'flex', flexDirection:'column', gap:'13px', flex:1 }}>
+
+          {error && <div style={{ padding:'10px 14px', background:BG, boxShadow:S_IN,
+            borderRadius:'10px', fontSize:'12px', color:'#dc2626', fontWeight:'600' }}>{error}</div>}
+
+          <div><label style={lbl}>Title *</label>
+            <input style={nmInput} value={form.title} onChange={e => set('title', e.target.value)}
+              placeholder="e.g. Intro to Blockchain" required /></div>
+
+          <div><label style={lbl}>Description</label>
+            <textarea style={{ ...nmInput, minHeight:'64px', resize:'none' }}
+              value={form.description} onChange={e => set('description', e.target.value)}
+              placeholder="What will you be discussing?" /></div>
+
+          {/* Date full-width */}
+          <div><label style={lbl}>Date *</label>
+            <input type="date" style={nmInput} value={form.event_date}
+              onChange={e => set('event_date', e.target.value)} required /></div>
+
+          {/* Times 2-col */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px' }}>
+            <div><label style={lbl}>Start Time</label>
+              <input type="time" style={nmInput} value={form.event_time}
+                onChange={e => set('event_time', e.target.value)} /></div>
+            <div><label style={lbl}>End Time</label>
+              <input type="time" style={nmInput} value={form.end_time}
+                onChange={e => set('end_time', e.target.value)} /></div>
+          </div>
+
+          {/* Type + Capacity */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px' }}>
+            <div><label style={lbl}>Type</label>
+              <select style={{ ...nmInput, cursor:'pointer' }} value={form.event_type}
+                onChange={e => set('event_type', e.target.value)}>
+                <option value="workshop">Workshop</option><option value="quiz">Quiz</option>
+                <option value="project">Project</option><option value="meeting">Meeting</option>
+                <option value="deadline">Deadline</option>
+              </select></div>
+            <div><label style={lbl}>Max Capacity</label>
+              <input type="number" min="1" style={nmInput} value={form.max_capacity}
+                onChange={e => set('max_capacity', e.target.value)} placeholder="Unlimited" /></div>
+          </div>
+
+          {/* Online toggle */}
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between',
+            padding:'12px 14px', borderRadius:'12px', background:BG, boxShadow:S_IN }}>
+            <div>
+              <div style={{ fontSize:'13px', fontWeight:'700', color:'#0f172a' }}>Online Event</div>
+              <div style={{ fontSize:'11px', color:'#94a3b8', marginTop:'1px' }}>Join via meeting link</div>
+            </div>
+            <button type="button" onClick={() => set('is_online', !form.is_online)}
+              style={{ width:'46px', height:'26px', borderRadius:'100px', border:'none', cursor:'pointer',
+                background: form.is_online ? PURPLE : '#cbd5e1', position:'relative',
+                transition:'background 0.25s', flexShrink:0,
+                boxShadow: form.is_online ? S_PURPLE : S_IN_SM }}>
+              <div style={{ width:'20px', height:'20px', borderRadius:'50%', background:'#fff',
+                position:'absolute', top:'3px', transition:'left 0.25s',
+                left: form.is_online ? '23px' : '3px', boxShadow:'0 1px 4px rgba(0,0,0,0.22)' }} />
+            </button>
+          </div>
+
+          {form.is_online ? (
+            <div><label style={lbl}>Meeting Link</label>
+              <input style={nmInput} value={form.meeting_link}
+                onChange={e => set('meeting_link', e.target.value)} placeholder="https://meet.google.com/..." /></div>
+          ) : (
+            <div><label style={lbl}>Location</label>
+              <input style={nmInput} value={form.location}
+                onChange={e => set('location', e.target.value)} placeholder="e.g. Room 101" /></div>
+          )}
+        </div>
+
+        {/* Pinned submit — always above nav bar */}
+        <div style={{ padding:'12px 18px', paddingBottom:'calc(12px + env(safe-area-inset-bottom, 0px))',
+          borderTop:'1px solid rgba(0,0,0,0.05)', flexShrink:0, background:BG }}>
+          <button type="button" onClick={handleSubmit} disabled={loading}
+            style={{ width:'100%', padding:'14px', borderRadius:'14px', border:'none',
+              background: loading ? BG : PURPLE, color: loading ? '#94a3b8' : '#fff',
+              fontSize:'14px', fontWeight:'700', cursor: loading ? 'not-allowed' : 'pointer',
+              display:'flex', alignItems:'center', justifyContent:'center', gap:'8px',
+              boxShadow: loading ? S_IN : S_PURPLE, transition:'all 0.2s' }}>
+            {loading
+              ? <><div style={{ width:'16px', height:'16px', border:'2px solid rgba(100,116,139,0.3)',
+                  borderTopColor:'#64748b', borderRadius:'50%', animation:'spin 0.8s linear infinite' }} /> Creating...</>
+              : <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg> Create Event</>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ─── DESKTOP: centred modal (unchanged) ──────────────── */
   return (
     <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.45)', backdropFilter:'blur(8px)',
       display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999, padding:'20px' }}
@@ -279,7 +415,6 @@ function CreateEventModal({ onClose, onCreated, userId }) {
         boxShadow:'16px 16px 40px rgba(0,0,0,0.18), -10px -10px 30px rgba(255,255,255,0.95)',
         animation:'nm-up 0.3s ease-out both' }}>
 
-        {/* Modal header */}
         <div style={{ padding:'26px 28px 20px', display:'flex', alignItems:'flex-start', justifyContent:'space-between' }}>
           <div>
             <h2 style={{ fontSize:'18px', fontWeight:'800', color:'#0f172a', margin:'0 0 4px', fontFamily:'Nasalization, sans-serif' }}>Create Event</h2>
@@ -296,116 +431,29 @@ function CreateEventModal({ onClose, onCreated, userId }) {
         </div>
 
         <form onSubmit={handleSubmit} style={{ padding:'4px 28px 28px', display:'flex', flexDirection:'column', gap:'16px' }}>
-
-          {error && (
-            <div style={{ padding:'12px 16px', background: BG, boxShadow: S_IN,
-              borderRadius:'12px', fontSize:'12px', color:'#dc2626', fontWeight:'600' }}>
-              {error}
-            </div>
-          )}
-
-          {/* Title */}
-          <div>
-            <label style={lbl}>Title *</label>
-            <input style={nmInput} value={form.title} onChange={e => set('title', e.target.value)}
-              placeholder="e.g. Intro to Blockchain" required />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label style={lbl}>Description</label>
-            <textarea style={{ ...nmInput, minHeight:'80px', resize:'vertical' }}
-              value={form.description} onChange={e => set('description', e.target.value)}
-              placeholder="What will you be teaching or discussing?" />
-          </div>
-
-          {/* Date / Time row */}
+          {error && <div style={{ padding:'12px 16px', background: BG, boxShadow: S_IN, borderRadius:'12px', fontSize:'12px', color:'#dc2626', fontWeight:'600' }}>{error}</div>}
+          <div><label style={lbl}>Title *</label><input style={nmInput} value={form.title} onChange={e => set('title', e.target.value)} placeholder="e.g. Intro to Blockchain" required /></div>
+          <div><label style={lbl}>Description</label><textarea style={{ ...nmInput, minHeight:'80px', resize:'vertical' }} value={form.description} onChange={e => set('description', e.target.value)} placeholder="What will you be teaching or discussing?" /></div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'12px' }}>
-            <div>
-              <label style={lbl}>Date *</label>
-              <input type="date" style={nmInput} value={form.event_date}
-                onChange={e => set('event_date', e.target.value)} required />
-            </div>
-            <div>
-              <label style={lbl}>Start Time</label>
-              <input type="time" style={nmInput} value={form.event_time}
-                onChange={e => set('event_time', e.target.value)} />
-            </div>
-            <div>
-              <label style={lbl}>End Time</label>
-              <input type="time" style={nmInput} value={form.end_time}
-                onChange={e => set('end_time', e.target.value)} />
-            </div>
+            <div><label style={lbl}>Date *</label><input type="date" style={nmInput} value={form.event_date} onChange={e => set('event_date', e.target.value)} required /></div>
+            <div><label style={lbl}>Start Time</label><input type="time" style={nmInput} value={form.event_time} onChange={e => set('event_time', e.target.value)} /></div>
+            <div><label style={lbl}>End Time</label><input type="time" style={nmInput} value={form.end_time} onChange={e => set('end_time', e.target.value)} /></div>
           </div>
-
-          {/* Type / Capacity row */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px' }}>
-            <div>
-              <label style={lbl}>Event Type</label>
-              <select style={{ ...nmInput, cursor:'pointer' }} value={form.event_type}
-                onChange={e => set('event_type', e.target.value)}>
-                <option value="workshop">Workshop</option>
-                <option value="quiz">Quiz</option>
-                <option value="project">Project</option>
-                <option value="meeting">Meeting</option>
-                <option value="deadline">Deadline</option>
-              </select>
-            </div>
-            <div>
-              <label style={lbl}>Max Capacity</label>
-              <input type="number" min="1" style={nmInput} value={form.max_capacity}
-                onChange={e => set('max_capacity', e.target.value)} placeholder="Unlimited" />
-            </div>
+            <div><label style={lbl}>Event Type</label><select style={{ ...nmInput, cursor:'pointer' }} value={form.event_type} onChange={e => set('event_type', e.target.value)}><option value="workshop">Workshop</option><option value="quiz">Quiz</option><option value="project">Project</option><option value="meeting">Meeting</option><option value="deadline">Deadline</option></select></div>
+            <div><label style={lbl}>Max Capacity</label><input type="number" min="1" style={nmInput} value={form.max_capacity} onChange={e => set('max_capacity', e.target.value)} placeholder="Unlimited" /></div>
           </div>
-
-          {/* Online toggle */}
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between',
-            padding:'14px 16px', borderRadius:'14px', background: BG, boxShadow: S_IN }}>
-            <div>
-              <div style={{ fontSize:'13px', fontWeight:'700', color:'#0f172a' }}>Online Event</div>
-              <div style={{ fontSize:'11px', color:'#94a3b8', marginTop:'2px' }}>Attendees join via meeting link</div>
-            </div>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 16px', borderRadius:'14px', background: BG, boxShadow: S_IN }}>
+            <div><div style={{ fontSize:'13px', fontWeight:'700', color:'#0f172a' }}>Online Event</div><div style={{ fontSize:'11px', color:'#94a3b8', marginTop:'2px' }}>Attendees join via meeting link</div></div>
             <button type="button" onClick={() => set('is_online', !form.is_online)}
-              style={{ width:'46px', height:'26px', borderRadius:'100px', border:'none', cursor:'pointer',
-                background: form.is_online ? PURPLE : '#cbd5e1',
-                position:'relative', transition:'background 0.25s', flexShrink:0,
-                boxShadow: form.is_online ? S_PURPLE : S_IN_SM }}>
-              <div style={{ width:'20px', height:'20px', borderRadius:'50%', background:'#fff',
-                position:'absolute', top:'3px', transition:'left 0.25s',
-                left: form.is_online ? '23px' : '3px',
-                boxShadow:'0 1px 4px rgba(0,0,0,0.22)' }} />
+              style={{ width:'46px', height:'26px', borderRadius:'100px', border:'none', cursor:'pointer', background: form.is_online ? PURPLE : '#cbd5e1', position:'relative', transition:'background 0.25s', flexShrink:0, boxShadow: form.is_online ? S_PURPLE : S_IN_SM }}>
+              <div style={{ width:'20px', height:'20px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', transition:'left 0.25s', left: form.is_online ? '23px' : '3px', boxShadow:'0 1px 4px rgba(0,0,0,0.22)' }} />
             </button>
           </div>
-
-          {/* Link / Location */}
-          {form.is_online ? (
-            <div>
-              <label style={lbl}>Meeting Link</label>
-              <input style={nmInput} value={form.meeting_link}
-                onChange={e => set('meeting_link', e.target.value)} placeholder="https://meet.google.com/..." />
-            </div>
-          ) : (
-            <div>
-              <label style={lbl}>Location</label>
-              <input style={nmInput} value={form.location}
-                onChange={e => set('location', e.target.value)} placeholder="e.g. Room 101 or address" />
-            </div>
-          )}
-
-          {/* Submit */}
+          {form.is_online ? (<div><label style={lbl}>Meeting Link</label><input style={nmInput} value={form.meeting_link} onChange={e => set('meeting_link', e.target.value)} placeholder="https://meet.google.com/..." /></div>) : (<div><label style={lbl}>Location</label><input style={nmInput} value={form.location} onChange={e => set('location', e.target.value)} placeholder="e.g. Room 101 or address" /></div>)}
           <button type="submit" disabled={loading}
-            style={{ width:'100%', padding:'14px', borderRadius:'16px', border:'none',
-              background: loading ? BG : PURPLE,
-              color: loading ? '#94a3b8' : '#fff',
-              fontSize:'14px', fontWeight:'700', cursor: loading ? 'not-allowed' : 'pointer',
-              display:'flex', alignItems:'center', justifyContent:'center', gap:'8px',
-              boxShadow: loading ? S_IN : S_PURPLE, transition:'all 0.2s', marginTop:'4px' }}>
-            {loading ? (
-              <><div style={{ width:'16px', height:'16px', border:'2px solid rgba(100,116,139,0.3)',
-                borderTopColor:'#64748b', borderRadius:'50%', animation:'spin 0.8s linear infinite' }} /> Creating...</>
-            ) : (
-              <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Event</>
-            )}
+            style={{ width:'100%', padding:'14px', borderRadius:'16px', border:'none', background: loading ? BG : PURPLE, color: loading ? '#94a3b8' : '#fff', fontSize:'14px', fontWeight:'700', cursor: loading ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', boxShadow: loading ? S_IN : S_PURPLE, transition:'all 0.2s', marginTop:'4px' }}>
+            {loading ? (<><div style={{ width:'16px', height:'16px', border:'2px solid rgba(100,116,139,0.3)', borderTopColor:'#64748b', borderRadius:'50%', animation:'spin 0.8s linear infinite' }} /> Creating...</>) : (<><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Event</>)}
           </button>
         </form>
       </div>
@@ -415,8 +463,8 @@ function CreateEventModal({ onClose, onCreated, userId }) {
 
 /* ── Main Page ── */
 export default function StudentEventsPage() {
-  const { address } = useAuth();
-  const [userData,   setUserData]   = useState(null);
+  const { userProfile } = useAuth();
+  const userData = userProfile;  // useAuth already holds the full user object
   const [events,     setEvents]     = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [filter,     setFilter]     = useState('upcoming');
@@ -424,25 +472,21 @@ export default function StudentEventsPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [toast,      setToast]      = useState(null);
   const [mounted,    setMounted]    = useState(false);
+  const [mob,        setMob]        = useState(true);
 
-  useEffect(() => { requestAnimationFrame(() => setMounted(true)); }, []);
+  useLayoutEffect(() => { requestAnimationFrame(() => setMounted(true)); }, []);
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3200);
   };
 
-  useEffect(() => {
-    async function fetchUser() {
-      if (!address) return;
-      try {
-        const res  = await fetch(`/api/auth/user?wallet=${address.toLowerCase()}`);
-        const data = await res.json();
-        if (data.user) setUserData(data.user);
-      } catch {}
-    }
-    fetchUser();
-  }, [address]);
 
   const fetchEvents = useCallback(async () => {
     if (!userData?.id) return;
@@ -495,21 +539,24 @@ export default function StudentEventsPage() {
 
   return (
     <>
-      <div style={{ width:'100%', padding:'32px 36px', background: BG, minHeight:'100vh', boxSizing:'border-box' }}>
+      <div style={{ width:'100%', padding: mob ? '20px 14px 80px' : '32px 36px', background: BG, minHeight:'100vh', boxSizing:'border-box' }}>
         <style>{`
           @keyframes spin  { to { transform:rotate(360deg); } }
           @keyframes nm-up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
           @keyframes nm-sk { 0%,100%{opacity:0.55} 50%{opacity:0.85} }
+          @keyframes sheet-up { from { transform:translateY(100%); } to { transform:translateY(0); } }
           .nm-card:hover { box-shadow: ${S_UP_LG} !important; }
         `}</style>
 
         {/* ── Header ── */}
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'32px',
+        <div style={{ display:'flex', alignItems: mob ? 'flex-start' : 'center', justifyContent:'space-between',
+          flexDirection: mob ? 'column' : 'row', gap: mob ? '12px' : '0',
+          marginBottom: mob ? '20px' : '32px',
           animation: mounted ? 'nm-up 0.4s ease-out both' : 'none' }}>
-          <div style={{ display:'flex', alignItems:'center', gap:'16px' }}>
-            <div style={{ width:'52px', height:'52px', borderRadius:'16px', background: BG, boxShadow: S_UP,
+          <div style={{ display:'flex', alignItems:'center', gap: mob ? '10px' : '16px' }}>
+            <div style={{ width: mob ? '40px' : '52px', height: mob ? '40px' : '52px', borderRadius:'16px', background: BG, boxShadow: S_UP,
               display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8">
                 <rect x="3" y="4" width="18" height="18" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <line x1="16" y1="2" x2="16" y2="6" strokeLinecap="round"/>
                 <line x1="8"  y1="2" x2="8"  y2="6" strokeLinecap="round"/>
@@ -517,20 +564,22 @@ export default function StudentEventsPage() {
               </svg>
             </div>
             <div>
-              <h1 style={{ fontSize:'26px', fontWeight:'800', color:'#0f172a', margin:'0 0 2px',
+              <h1 style={{ fontSize: mob ? '20px' : '26px', fontWeight:'800', color:'#0f172a', margin:'0 0 2px',
                 letterSpacing:'-0.5px', fontFamily:'Nasalization, sans-serif' }}>Community Events</h1>
-              <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
+              {!mob && <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
                 Browse, join and host learning sessions with the DAGARMY community
-              </p>
+              </p>}
             </div>
           </div>
 
           {/* Create Event button */}
           <button onClick={() => setShowCreate(true)}
-            style={{ display:'flex', alignItems:'center', gap:'7px', padding:'11px 22px',
+            style={{ display:'flex', alignItems:'center', gap:'7px',
+              padding: mob ? '9px 16px' : '11px 22px',
               borderRadius:'14px', border:'none', background: PURPLE, color:'#fff',
               fontSize:'13px', fontWeight:'700', cursor:'pointer', boxShadow: S_PURPLE,
-              whiteSpace:'nowrap', transition:'all 0.15s', flexShrink:0 }}
+              whiteSpace:'nowrap', transition:'all 0.15s', alignSelf: mob ? 'stretch' : 'auto',
+              justifyContent: mob ? 'center' : 'flex-start' }}
             onMouseEnter={e => e.currentTarget.style.background = '#4f46e5'}
             onMouseLeave={e => e.currentTarget.style.background = PURPLE}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -539,7 +588,7 @@ export default function StudentEventsPage() {
         </div>
 
         {/* ── Stat tiles ── */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'16px', marginBottom:'32px', maxWidth:'480px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap: mob ? '8px' : '16px', marginBottom: mob ? '16px' : '32px', maxWidth: mob ? '100%' : '480px' }}>
           {[
             { label:'Total Events', value: events.length,   icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
             { label:'Upcoming',     value: filter === 'upcoming' ? events.length : 0, icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14" strokeLinecap="round"/></svg> },
@@ -575,7 +624,7 @@ export default function StudentEventsPage() {
 
         {/* ── Events grid ── */}
         {loading ? (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'20px' }}>
+          <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: mob ? '12px' : '20px' }}>
             {[1,2,3,4].map(i => (
               <div key={i} style={{ background: BG, borderRadius:'22px', height:'320px',
                 boxShadow: S_UP, animation:'nm-sk 1.5s ease-in-out infinite' }} />
@@ -606,7 +655,7 @@ export default function StudentEventsPage() {
             )}
           </div>
         ) : (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'20px' }}>
+          <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: mob ? '12px' : '20px' }}>
             {events.map((event, i) => (
               <div key={event.id} style={{ animation: mounted ? `nm-up 0.35s ease-out ${i * 0.04}s both` : 'none' }}>
                 <EventCard event={event} onJoin={handleJoin} onDelete={handleDelete} joining={joining} />
@@ -623,7 +672,7 @@ export default function StudentEventsPage() {
 
       {/* ── Toast ── */}
       {toast && (
-        <div style={{ position:'fixed', bottom:'24px', right:'24px', zIndex:99999,
+        <div style={{ position:'fixed', bottom: mob ? '80px' : '24px', right: mob ? '12px' : '24px', left: mob ? '12px' : 'auto', zIndex:99999,
           padding:'13px 20px', borderRadius:'14px',
           background: BG,
           boxShadow: toast.type === 'error'

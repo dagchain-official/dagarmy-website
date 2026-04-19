@@ -1,6 +1,6 @@
 /**
  * DAGARMY + DAGGPT Supabase Full Backup Script
- * Exports ALL table data to JSON files — free, no PITR needed.
+ * Exports ALL table data to JSON files - free, no PITR needed.
  * Run: node scripts/backup-supabase.js
  */
 
@@ -8,7 +8,7 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-// ─── CONFIG — manually parse .env.local (no dotenv needed) ──────────────────
+// ─── CONFIG - manually parse .env.local (no dotenv needed) ──────────────────
 const envPath = path.join(__dirname, '../.env.local');
 const envContent = fs.readFileSync(envPath, 'utf8');
 envContent.split('\n').forEach(line => {
@@ -78,7 +78,7 @@ async function exportTable(tableName) {
       .range(page * pageSize, (page + 1) * pageSize - 1);
 
     if (error) {
-      // Table might not exist — skip gracefully
+      // Table might not exist - skip gracefully
       if (error.code === '42P01' || error.message.includes('does not exist')) {
         return { skipped: true };
       }

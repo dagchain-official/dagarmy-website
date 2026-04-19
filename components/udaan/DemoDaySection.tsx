@@ -226,10 +226,10 @@ export default function DemoDaySection() {
           </span>
         </motion.div>
 
-        {/* Stage cards — asymmetric bento */}
+        {/* Stage cards - asymmetric bento */}
         <div className="udaan-bento-grid" style={{ gridTemplateRows: "auto auto" }}>
 
-          {/* ── STAGE 1: Screening — spans full top row ── */}
+          {/* ── STAGE 1: Screening - spans full top row ── */}
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             animate={stagesInView ? { opacity: 1, y: 0 } : {}}
@@ -332,7 +332,7 @@ export default function DemoDaySection() {
             </div>
           </motion.div>
 
-          {/* ── STAGE 1 stat card — 1 col tall ── */}
+          {/* ── STAGE 1 stat card - 1 col tall ── */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={stagesInView ? { opacity: 1, x: 0 } : {}}
@@ -398,7 +398,7 @@ export default function DemoDaySection() {
             </div>
           </motion.div>
 
-          {/* ── STAGE 2: Validation & Mentor Review — spans 2 cols ── */}
+          {/* ── STAGE 2: Validation & Mentor Review - spans 2 cols ── */}
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             animate={stagesInView ? { opacity: 1, y: 0 } : {}}
@@ -503,7 +503,7 @@ export default function DemoDaySection() {
 
         </div>
 
-        {/* ── STAGE 3: Demo Day Finals — full width feature card ── */}
+        {/* ── STAGE 3: Demo Day Finals - full width feature card ── */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={stagesInView ? { opacity: 1, y: 0 } : {}}

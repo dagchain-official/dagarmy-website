@@ -68,7 +68,7 @@ export default function Hero() {
   const computeEndRef = useRef<() => void>(() => {});
   computeEndRef.current = () => {
     if (!blockRef.current || !textRef.current) return;
-    // getBoundingClientRect gives screen-space coords — subtract block's left to get relative offset
+    // getBoundingClientRect gives screen-space coords - subtract block's left to get relative offset
     const blockRect = blockRef.current.getBoundingClientRect();
     const inner = textInnerRef.current ?? textRef.current;
     const innerRect = inner.getBoundingClientRect();
@@ -76,7 +76,7 @@ export default function Hero() {
     // rawEndX = right edge of text relative to block's left edge + 8px gap
     const rawEndX = (innerRect.right - blockRect.left) + 8;
     // On desktop the block is inline-block shrink-wrapped to the text, so blockWidth ≈ textWidth.
-    // On mobile the block is 100% wide, so blockWidth >> textWidth — only cap in that case.
+    // On mobile the block is 100% wide, so blockWidth >> textWidth - only cap in that case.
     const isMobileLayout = innerRect.width < blockRect.width * 0.85;
     const endX = isMobileLayout
       ? Math.min(rawEndX, blockRect.width - planeW - 4)
@@ -132,7 +132,7 @@ export default function Hero() {
         backgroundSize: "80px 80px",
       }} />
 
-      {/* ── ACCENT LINES — architectural framing ── */}
+      {/* ── ACCENT LINES - architectural framing ── */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         {/* Top-right corner accent */}
         <div style={{
@@ -198,7 +198,7 @@ export default function Hero() {
             <div style={{ width: 28, height: 1, background: "#c7c7e0" }} />
           </motion.div>
 
-          {/* UDAAN — Nasalization + split line + plane */}
+          {/* UDAAN - Nasalization + split line + plane */}
           <div style={{ marginBottom: "clamp(12px, 1.5vh, 20px)", textAlign: "center" }}>
             <div ref={blockRef} className="udaan-hero-title-block">
               <motion.div
@@ -226,7 +226,7 @@ export default function Hero() {
                   transformOrigin: "left center",
                 }}
               />
-              {/* Plane — sweeps from x:0 to end of text width, capped to viewport */}
+              {/* Plane - sweeps from x:0 to end of text width, capped to viewport */}
               {planeEndX > 0 && (
                 <motion.img
                   ref={planeRef}
@@ -251,7 +251,7 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Subtitle — single line */}
+          {/* Subtitle - single line */}
           <motion.div
             className="udaan-hero-subtitle"
             initial={{ opacity: 0, y: 18 }}
@@ -366,7 +366,7 @@ export default function Hero() {
                 fontWeight: 400,
               }}>
                 AI is reshaping ownership and opportunity.
-                The question is not whether AI will define the future —
+                The question is not whether AI will define the future -
                 it is <strong style={{ color: "#0a0a0f", fontWeight: 600 }}>who will build within it.</strong>
               </p>
             </div>
@@ -426,7 +426,7 @@ export default function Hero() {
                 "Rank Through Contribution",
                 "100K Founders by 2030",
                 "AI Startup Ecosystem",
-                "Soldiers Prepare — Lieutenants Build",
+                "Soldiers Prepare - Lieutenants Build",
                 "Action Over Observation",
                 "Contribution-Based Ranking",
                 "Serious Startup Execution",

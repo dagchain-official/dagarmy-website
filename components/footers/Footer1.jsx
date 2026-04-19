@@ -52,8 +52,8 @@ export default function Footer1({ parentClass = "footer" }) {
           {/* Top Section: Logo + Contact Info on Left, Link Columns on Right */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '2fr 1fr 1fr 1fr',
-            gap: '60px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: '40px',
             marginBottom: '48px'
           }}>
             {/* Logo and Contact Info Section */}
@@ -138,23 +138,27 @@ export default function Footer1({ parentClass = "footer" }) {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {menuItems[0].links.map((link, index) => (
                   <li key={index} style={{ marginBottom: '12px' }}>
-                    <Link href={link.href} style={{
-                      fontSize: '15px',
-                      fontWeight: '500',
-                      color: '#374151',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
-                      {link.name}
-                    </Link>
+                    {link.soon ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', opacity: 0.45, cursor: 'default' }}>
+                        <span style={{ fontSize: '15px', fontWeight: '500', color: '#374151' }}>{link.name}</span>
+                        <span style={{ fontSize: '12px', fontWeight: '700', color: '#6366f1', background: 'rgba(99,102,241,0.1)', borderRadius: '5px', padding: '2px 6px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Soon</span>
+                      </span>
+                    ) : (
+                      <Link href={link.href} style={{
+                        fontSize: '15px', fontWeight: '500', color: '#374151',
+                        textDecoration: 'none', transition: 'color 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Advance Links */}
+            {/* Advance Links — active links only */}
             <div>
               <h5 style={{
                 fontSize: '16px',
@@ -166,14 +170,11 @@ export default function Footer1({ parentClass = "footer" }) {
                 Advance
               </h5>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {menuItems[1].links.map((link, index) => (
+                {menuItems[1].links.filter(l => !l.soon).map((link, index) => (
                   <li key={index} style={{ marginBottom: '12px' }}>
                     <Link href={link.href} style={{
-                      fontSize: '15px',
-                      fontWeight: '500',
-                      color: '#374151',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s ease'
+                      fontSize: '15px', fontWeight: '500', color: '#374151',
+                      textDecoration: 'none', transition: 'color 0.2s ease'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = '#000000'}
                     onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
@@ -209,6 +210,51 @@ export default function Footer1({ parentClass = "footer" }) {
                     onMouseLeave={(e) => e.currentTarget.style.color = '#374151'}>
                       {link.name}
                     </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Coming Soon Column */}
+            <div>
+              <h5 style={{
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#000000',
+                marginBottom: '20px',
+                letterSpacing: '-0.01em'
+              }}>
+                Coming Soon
+              </h5>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {[
+                  { name: 'Courses', href: '/courses' },
+                  { name: 'Mentorship', href: '/mentorship' },
+                  { name: 'Hackathons', href: '/hackathons' },
+                  { name: 'Events', href: '/events' },
+                  { name: 'Become a Trainer', href: '/trainer' },
+                ].map((item, i) => (
+                  <li key={i} style={{ marginBottom: '12px' }}>
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      opacity: 0.45,
+                      cursor: 'default',
+                    }}>
+                      <span style={{ fontSize: '15px', fontWeight: '500', color: '#374151' }}>
+                        {item.name}
+                      </span>
+                      <span style={{
+                        fontSize: '12px', fontWeight: '700',
+                        color: '#6366f1',
+                        background: 'rgba(99,102,241,0.1)',
+                        borderRadius: '5px',
+                        padding: '2px 6px',
+                        letterSpacing: '0.05em',
+                        textTransform: 'uppercase',
+                      }}>Soon</span>
+                    </span>
                   </li>
                 ))}
               </ul>

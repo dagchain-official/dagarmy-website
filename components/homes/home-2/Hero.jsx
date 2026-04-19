@@ -99,10 +99,20 @@ export default function Hero() {
 
   return (
     <>
+      <style>{`
+        @media (max-width: 991px) {
+          .hero-video-col { display: none !important; }
+          .hero-content-col { padding-top: 40px !important; padding-bottom: 40px !important; }
+          .hero-content-col h1 { font-size: clamp(28px, 8vw, 42px) !important; }
+          .hero-content-col p { max-width: 100% !important; }
+          .bottom-btns { flex-direction: column !important; align-items: flex-start !important; }
+          .bottom-btns a.custom-explore-btn { width: 100% !important; min-width: unset !important; }
+        }
+      `}</style>
       <div className="page-title-home2" style={{ background: '#fff !important', backgroundColor: '#fff', paddingBottom: '0' }}>
         <div className="tf-container" style={{ background: '#fff' }}>
           <div className="row items-center" style={{ alignItems: 'center', minHeight: 'auto' }}>
-            <div className="col-lg-6">
+            <div className="col-lg-6 hero-content-col">
               <div className="content" style={{ paddingTop: '60px', paddingBottom: '0', marginBottom: '0' }}>
                 <h1 className="fw-7 wow fadeInUp" data-wow-delay="0.2s" style={{
                   fontSize: 'clamp(36px, 4vw, 58px)',
@@ -190,7 +200,7 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 hero-video-col">
               <div style={{
                 width: '100%',
                 maxWidth: '500px',

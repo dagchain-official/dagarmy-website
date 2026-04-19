@@ -110,17 +110,17 @@ export default function Features() {
 
   return (
     <section 
-      className={styles['features-section'] || ''}
+      className="features-section"
       style={{
         padding: '80px 0',
         background: '#fafafa',
         position: 'relative'
       }}
     >
-      <div className={`tf-container ${styles['features-container'] || ''}`} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+      <div className="tf-container features-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h2 
-            className={styles['section-heading'] || ''}
+            className="section-heading"
             style={{
               fontSize: '36px',
               fontWeight: '700',
@@ -132,7 +132,7 @@ export default function Features() {
             Learning Experience
           </h2>
           <p 
-            className={styles['section-description'] || ''}
+            className="section-description"
             style={{
               fontSize: '18px',
               color: '#6b7280',
@@ -146,7 +146,7 @@ export default function Features() {
 
         <div 
           ref={sliderRef}
-          className={styles['features-grid'] || ''}
+          className="features-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -158,14 +158,14 @@ export default function Features() {
           onTouchEnd={handleTouchEnd}
         >
           <div style={{
-            display: 'contents',
+            display: 'flex',
             transform: `translateX(-${currentSlide * 100}%)`,
             transition: 'transform 0.5s ease-in-out'
           }}>
           {features.map((feature, index) => (
             <div
               key={index}
-              className={`wow fadeInUp ${styles['feature-card'] || ''} ${currentSlide === index ? 'active' : ''}`}
+              className={`wow fadeInUp feature-card ${currentSlide === index ? 'active' : ''}`}
               data-wow-delay={`${0.1 * (index + 1)}s`}
               style={{
                 background: '#ffffff',

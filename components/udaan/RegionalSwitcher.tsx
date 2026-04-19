@@ -11,7 +11,7 @@ const regions = [
     title: "From IT powerhouse to AI startup nation.",
     subtitle: "Freelancer → Founder",
     color: "#5b4bec",
-    emotion: "The world's largest democracy is writing its greatest chapter yet — not in boardrooms abroad, but in co-working spaces in Pune, Hyderabad, and Jaipur. AI is the new infrastructure.",
+    emotion: "The world's largest democracy is writing its greatest chapter yet - not in boardrooms abroad, but in co-working spaces in Pune, Hyderabad, and Jaipur. AI is the new infrastructure.",
     stat: "680M+",
     statLabel: "Internet users by 2025",
     cities: ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Pune", "Jaipur"],
@@ -43,7 +43,7 @@ const regions = [
     title: "The rising tiger is going digital.",
     subtitle: "Skill → Startup",
     color: "#f59e0b",
-    emotion: "Bangladesh's rise in global tech outsourcing is a foundation — not a ceiling. Dhaka's next generation isn't freelancing. They're founding.",
+    emotion: "Bangladesh's rise in global tech outsourcing is a foundation - not a ceiling. Dhaka's next generation isn't freelancing. They're founding.",
     stat: "170M+",
     statLabel: "Population, fastest growing economy",
     cities: ["Dhaka", "Chittagong", "Sylhet", "Rajshahi"],
@@ -113,7 +113,7 @@ export default function RegionalSwitcher() {
               {/* Left */}
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#aaa" }}>{r.code} — {r.label}</span>
+                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#aaa" }}>{r.code} - {r.label}</span>
                 </div>
                 <div style={{ fontSize: "13px", fontWeight: 700, color: r.accent, marginBottom: 12 }}>{r.subtitle}</div>
                 <h3 style={{ fontSize: "clamp(1.2rem,2.5vw,1.8rem)", fontWeight: 800, letterSpacing: "-0.03em", color: "#111", marginBottom: 20, maxWidth: 440 }}>{r.title}</h3>

@@ -135,9 +135,9 @@ export async function GET(request) {
       const earnMap = {};
       const redeemMap = {};
       (txAll || []).forEach(t => {
-        // rank_burn_refund is a balance correction, not a real earn event — exclude from earned
+        // rank_burn_refund is a balance correction, not a real earn event - exclude from earned
         if (t.points > 0 && t.transaction_type !== 'rank_burn_refund') earnMap[t.user_id] = (earnMap[t.user_id] || 0) + t.points;
-        // rank_burn transactions are deprecated/refunded — exclude from redeemed
+        // rank_burn transactions are deprecated/refunded - exclude from redeemed
         else if (t.points < 0 && t.transaction_type !== 'rank_burn') redeemMap[t.user_id] = (redeemMap[t.user_id] || 0) + Math.abs(t.points);
       });
 

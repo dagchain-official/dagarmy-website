@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { getAdminSession } from '@/lib/admin-auth';
 
-// POST /api/bidding/admin/items/[itemId]/close — manually close auction
+// POST /api/bidding/admin/items/[itemId]/close - manually close auction
 export async function POST(request, { params }) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -155,7 +155,7 @@ BEGIN
   -- ── 4. Validate minimum bid / increment rules ──────────────────
   IF NOT FOUND THEN
     -- New bidder: must meet starting_bid AND be > current_highest + increment
-    -- (unless no bids yet — first bid just needs starting_bid)
+    -- (unless no bids yet - first bid just needs starting_bid)
     IF v_item.current_highest_bid = 0 THEN
       v_min_required := v_item.starting_bid;
     ELSE
@@ -171,7 +171,7 @@ BEGIN
     END IF;
   ELSE
     -- Existing bidder top-up: their NEW total must be > current_highest + increment
-    -- (unless they ARE the current highest bidder — then just adding is fine)
+    -- (unless they ARE the current highest bidder - then just adding is fine)
     IF v_item.current_highest_bidder_id <> p_user_id THEN
       v_min_required := v_item.current_highest_bid + v_item.min_increment;
       IF v_new_total < v_min_required THEN
@@ -283,7 +283,7 @@ BEGIN
     -- Record refund transaction
     INSERT INTO points_transactions (user_id, points, transaction_type, description, reference_id)
     VALUES (v_loser.user_id, v_loser.bid_amount, 'bid_refund',
-      format('Bid refunded — auction closed: %s', v_item.title),
+      format('Bid refunded - auction closed: %s', v_item.title),
       p_item_id::TEXT);
 
     -- Mark bid as refunded
@@ -293,7 +293,7 @@ BEGIN
   -- ── Handle items with NO bids (cancelled case) ────────────────
   IF v_winners = 0 THEN
     UPDATE bid_items SET status = 'cancelled', closed_at = NOW() WHERE id = p_item_id;
-    RETURN jsonb_build_object('ok', true, 'winners', 0, 'note', 'No bids — marked cancelled');
+    RETURN jsonb_build_object('ok', true, 'winners', 0, 'note', 'No bids - marked cancelled');
   END IF;
 
   -- ── Mark item as closed ────────────────────────────────────────
@@ -315,7 +315,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- ================================================================
 -- Auto-activate auctions when starts_at is reached
--- (Called by cron job — just marks status='active')
+-- (Called by cron job - just marks status='active')
 -- ================================================================
 CREATE OR REPLACE FUNCTION activate_pending_auctions()
 RETURNS INTEGER AS $$

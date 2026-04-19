@@ -74,7 +74,7 @@ export default function OurVisions() {
               </p>
               <ul className="list">
                 <li className="item wow fadeInUp">
-                  <strong>A Training Camp:</strong> We teach practical, "battle-ready" skills for the 2026 economy—from AI to Blockchain security.
+                  <strong>A Training Camp:</strong> We teach practical, "battle-ready" skills for the 2026 economy-from AI to Blockchain security.
                 </li>
                 <li className="item wow fadeInUp">
                   <strong>A Launchpad:</strong> We provide mentorship and strategic guidance to turn prototypes into products and ideas into startups.

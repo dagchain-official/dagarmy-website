@@ -27,7 +27,7 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Determine bucket — caller can pass `bucket` field, default to course-assets
+    // Determine bucket - caller can pass `bucket` field, default to course-assets
     const bucket = formData.get('bucket') || 'course-assets';
 
     // Upload to Supabase Storage

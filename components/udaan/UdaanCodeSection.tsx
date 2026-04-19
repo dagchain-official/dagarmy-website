@@ -206,7 +206,7 @@ export default function UdaanCodeSection() {
               >
                 <div style={{ borderLeft: `3px solid ${INDIGO}`, paddingLeft: 24 }}>
                   <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 22, lineHeight: 1.4, color: "#0c0c14", margin: "0 0 8px", fontStyle: "italic" }}>"Respect is not optional."</p>
-                  <span style={{ fontSize: 12, color: "#9494aa", fontWeight: 600, letterSpacing: "0.06em" }}>— The Udaan Code</span>
+                  <span style={{ fontSize: 12, color: "#9494aa", fontWeight: 600, letterSpacing: "0.06em" }}>- The Udaan Code</span>
                 </div>
                 <div style={{ marginTop: 32, background: "#fafafa", border: "1px solid #ebebf5", borderRadius: 12, padding: "20px 24px" }}>
                   <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "#9494aa", marginBottom: 10 }}>Enforcement</div>
@@ -218,7 +218,7 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
-      {/* ── ARTICLE 02: Zero Politics — full-bleed #fafafa band ── */}
+      {/* ── ARTICLE 02: Zero Politics - full-bleed #fafafa band ── */}
       <div ref={p2Ref} style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
         <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
           <div className="udaan-code-article-rail-rev" style={{ display: "grid", gridTemplateColumns: "1fr 200px", minHeight: 300 }}>
@@ -281,7 +281,7 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
-      {/* ── ARTICLE 03: No Fake Claims — white bg ── */}
+      {/* ── ARTICLE 03: No Fake Claims - white bg ── */}
       <div ref={p3Ref} style={{ borderBottom: "1px solid #ebebf5" }}>
         <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
           <motion.div
@@ -353,7 +353,7 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
-      {/* ── CONTRIBUTION FIRST — full-bleed #fafafa ── */}
+      {/* ── CONTRIBUTION FIRST - full-bleed #fafafa ── */}
       <div style={{ borderBottom: "1px solid #ebebf5", background: "#fafafa" }}>
         <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
           <div className="udaan-code-contribution-grid" style={{ display: "grid", gridTemplateColumns: "1fr 380px", minHeight: 280 }}>
@@ -411,7 +411,7 @@ export default function UdaanCodeSection() {
         </div>
       </div>
 
-      {/* ── RESPONSIBLE CULTURE + GUARDRAIL — white bg ── */}
+      {/* ── RESPONSIBLE CULTURE + GUARDRAIL - white bg ── */}
       <div ref={guardRef} style={{ borderBottom: "1px solid #ebebf5" }}>
         <div className="udaan-code-wrap" style={{ ...wrapStyle }}>
           <div className="udaan-code-guard-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
@@ -505,7 +505,7 @@ export default function UdaanCodeSection() {
                 style={{ background: "linear-gradient(135deg, #f4f3ff 0%, #ede9fe 100%)", border: "1px solid #ddd9ff", borderRadius: 12, padding: "20px 24px" }}
               >
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700, color: "#0c0c14", margin: 0, lineHeight: 1.6 }}>
-                  Inside this ecosystem, authority is not assigned—it is{" "}
+                  Inside this ecosystem, authority is not assigned-it is{" "}
                   <span style={gradText}>demonstrated through action</span>.
                 </p>
               </motion.div>

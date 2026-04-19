@@ -6,7 +6,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// PATCH /api/admin/user-events/[id] — deactivate (set is_active = false)
+// PATCH /api/admin/user-events/[id] - deactivate (set is_active = false)
 export async function PATCH(request, context) {
   try {
     const { id } = await context.params;
@@ -24,7 +24,7 @@ export async function PATCH(request, context) {
   }
 }
 
-// DELETE /api/admin/user-events/[id] — hard delete
+// DELETE /api/admin/user-events/[id] - hard delete
 export async function DELETE(request, context) {
   try {
     const { id } = await context.params;

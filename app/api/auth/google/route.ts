@@ -5,7 +5,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ||
 
 /**
  * GET /api/auth/google
- * Initiates Google OAuth — derives the redirect_uri from the actual request origin
+ * Initiates Google OAuth - derives the redirect_uri from the actual request origin
  * so it always matches whatever the callback route will see.
  */
 export async function GET(req: Request) {
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   const next = searchParams.get('redirect') || '/student-dashboard';
   const ref  = searchParams.get('ref') || null;
 
-  // Derive app URL from the request itself — avoids www vs non-www mismatch
+  // Derive app URL from the request itself - avoids www vs non-www mismatch
   const reqUrl = new URL(req.url);
   const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '')
     || `${reqUrl.protocol}//${reqUrl.host}`;

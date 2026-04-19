@@ -177,7 +177,7 @@ export default function JobDetailPage({ slug }) {
                   { label: "Location", value: job.location },
                   { label: "Work Mode", value: job.work_mode },
                   { label: "Type", value: job.employment_type },
-                  { label: "Department", value: job.department || "—" },
+                  { label: "Department", value: job.department || "-" },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <div style={{ fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>{label}</div>

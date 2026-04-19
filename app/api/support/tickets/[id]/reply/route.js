@@ -79,7 +79,7 @@ export async function POST(request, context) {
           });
         }
       } catch (notifErr) {
-        // Non-blocking — don't fail the reply if notification fails
+        // Non-blocking - don't fail the reply if notification fails
         console.error('Failed to send notification for ticket reply:', notifErr);
       }
     }

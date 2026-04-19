@@ -182,7 +182,7 @@ function DetailPanel({ app, onClose, onStatusChange }) {
         <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexShrink: 0 }}>
           <div>
             <p style={{ margin: "0 0 3px", fontSize: "11px", fontWeight: "700", color: "#6366f1", textTransform: "uppercase", letterSpacing: "0.8px" }}>
-              {app.department} — {app.region}
+              {app.department} - {app.region}
             </p>
             <h2 style={{ margin: "0 0 4px", fontSize: "18px", fontWeight: "800", color: "#0f172a", letterSpacing: "-0.3px" }}>{app.role_title}</h2>
             <p style={{ margin: 0, fontSize: "13px", color: "#64748b" }}>
@@ -212,7 +212,7 @@ function DetailPanel({ app, onClose, onStatusChange }) {
             </div>
           </div>
 
-          {/* Email button — navigates to /admin/email with pre-filled compose */}
+          {/* Email button - navigates to /admin/email with pre-filled compose */}
           <button onClick={() => router.push(emailUrl)} style={{
             width: "100%", padding: "10px", borderRadius: "10px", marginBottom: "16px",
             border: "1.5px solid #6366f1", background: "#eff0ff",
@@ -417,7 +417,7 @@ export default function MasterCareersApplications() {
                     <div style={{ fontWeight: "600", color: "#374151", fontSize: "13px" }}>{app.role_title}</div>
                     <div style={{ color: "#94a3b8", fontSize: "12px", marginTop: "1px" }}>{app.department}</div>
                   </td>
-                  <td style={{ padding: "14px 16px" }}><span style={{ fontSize: "13px", color: "#64748b" }}>{app.region || "—"}</span></td>
+                  <td style={{ padding: "14px 16px" }}><span style={{ fontSize: "13px", color: "#64748b" }}>{app.region || "-"}</span></td>
                   <td style={{ padding: "14px 16px" }}><span style={{ fontSize: "13px", color: "#64748b", whiteSpace: "nowrap" }}>{new Date(app.applied_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span></td>
                   <td style={{ padding: "14px 16px" }}><StatusBadge status={app.status} /></td>
                   <td style={{ padding: "14px 16px" }}>

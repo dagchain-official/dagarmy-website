@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 
-// GET /api/bidding/items — public list of active + upcoming auctions
+// GET /api/bidding/items - public list of active + upcoming auctions
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);

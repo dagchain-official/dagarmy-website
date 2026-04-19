@@ -18,7 +18,7 @@ BEGIN
       VALUES (r.id, bonus_amount, 0, 0, bonus_amount);
 
       INSERT INTO public.credit_transactions (user_id, type, amount, balance_after, description)
-      VALUES (r.id, 'bonus', bonus_amount, bonus_amount, 'Welcome bonus — 2 DGCC (retroactive signup grant)');
+      VALUES (r.id, 'bonus', bonus_amount, bonus_amount, 'Welcome bonus - 2 DGCC (retroactive signup grant)');
 
     -- ── Case 2: user has a credit row but total_bonus = 0 (no bonus yet) ─
     ELSIF EXISTS (SELECT 1 FROM public.user_credits WHERE user_id = r.id AND (total_bonus IS NULL OR total_bonus = 0)) THEN
@@ -36,13 +36,13 @@ BEGIN
         'bonus',
         bonus_amount,
         uc.balance,
-        'Welcome bonus — 2 DGCC (retroactive signup grant)'
+        'Welcome bonus - 2 DGCC (retroactive signup grant)'
       FROM public.user_credits uc
       WHERE uc.user_id = r.id;
 
     -- ── Case 3: already has bonus → skip ────────────────────────────────
     ELSE
-      -- Do nothing — user already received their signup bonus
+      -- Do nothing - user already received their signup bonus
       NULL;
     END IF;
 

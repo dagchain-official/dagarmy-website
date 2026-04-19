@@ -14,14 +14,14 @@ const supabase = createClient(
  * Sends a broadcast email to a targeted audience segment.
  *
  * Body:
- *   mode          'template' | 'plain'   — email format
+ *   mode          'template' | 'plain'   - email format
  *   audience      'all' | 'student' | 'instructor' | 'inactive' | 'new'
  *   priority      'normal' | 'high' | 'urgent'
  *   subject       Email subject line
  *   bannerHeadline  (template mode) Large banner headline
  *   bannerSub       (template mode) Smaller sub-headline (optional)
  *   greeting        (template mode) Opening line, supports {{name}} placeholder
- *   bodyText        Main message body (plain text — newlines become <br> in template mode)
+ *   bodyText        Main message body (plain text - newlines become <br> in template mode)
  *   ctaText         (template mode) CTA button label (optional)
  *   ctaUrl          (template mode) CTA button URL (optional)
  *   senderName      Shown at bottom of template email
@@ -67,7 +67,7 @@ export async function POST(request) {
       const cutoff = new Date(now); cutoff.setDate(now.getDate() - 7);
       query = query.gte('created_at', cutoff.toISOString());
     }
-    // 'all' — no extra filter
+    // 'all' - no extra filter
 
     const { data: users, error: usersErr } = await query;
     if (usersErr) throw usersErr;
@@ -104,7 +104,7 @@ export async function POST(request) {
           priority,
         });
       } else {
-        // Plain text mode — minimal HTML wrapper
+        // Plain text mode - minimal HTML wrapper
         html = `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"></head>
 <body style="font-family:Arial,sans-serif;font-size:14px;color:#000;line-height:1.6;padding:24px;max-width:600px;margin:0 auto;">

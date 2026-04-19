@@ -33,7 +33,7 @@ export async function GET(request) {
       });
     }
 
-    // DAGARMY native users — get or create their generated referral code
+    // DAGARMY native users - get or create their generated referral code
     const { data: referralCode, error } = await supabaseAdmin.rpc('get_or_create_referral_code', {
       p_user_id: userId
     });

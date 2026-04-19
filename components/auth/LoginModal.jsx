@@ -22,7 +22,7 @@ const GoogleIcon = () => (
   </svg>
 );
 
-// ── Shared input style — light theme, matches DAGCHAIN exactly
+// ── Shared input style - light theme, matches DAGCHAIN exactly
 const inputStyle = {
   width: '100%',
   padding: '11px 14px',
@@ -197,16 +197,8 @@ export default function LoginModal({ isOpen, onClose }) {
       }
       localStorage.setItem('dagarmy_token', data.token);
       localStorage.setItem('dagarmy_user', JSON.stringify(data.user));
-      // Show profile completion if WhatsApp / name is missing
-      if (data.user?.needs_profile_completion) {
-        setProfileUserId(data.user.id);
-        setProfileEmail(data.user.email || signEmail);
-        setProfFirstName(data.user.first_name || '');
-        setProfLastName(data.user.last_name || '');
-        setView('profile');
-      } else {
-        window.location.href = data.user?.is_admin ? '/admin/dashboard' : '/student-dashboard';
-      }
+      // Always redirect to dashboard — profile can be completed from settings
+      window.location.href = data.user?.is_admin ? '/admin/dashboard' : '/student-dashboard';
     } catch { setError('Network error. Please try again.'); }
     finally { setLoading(false); }
   };
@@ -226,18 +218,8 @@ export default function LoginModal({ isOpen, onClose }) {
       else {
         localStorage.setItem('dagarmy_token', data.token);
         localStorage.setItem('dagarmy_user', JSON.stringify(data.user));
-        // New user — show profile completion step
-        if (data.isNewUser && !data.user?.profile_completed) {
-          setProfileUserId(data.user.id);
-          setProfileEmail(data.user.email || regEmail);
-          // Pre-split full_name into first/last if present
-          const parts = (data.user.full_name || regName || '').trim().split(' ');
-          setProfFirstName(parts[0] || regName);
-          setProfLastName(parts.slice(1).join(' ') || '');
-          setView('profile');
-        } else {
-          window.location.href = '/student-dashboard';
-        }
+        // Always redirect to dashboard — profile can be completed from settings
+        window.location.href = '/student-dashboard';
       }
     } catch { setError('Network error. Please try again.'); }
     finally { setLoading(false); }
@@ -289,7 +271,7 @@ export default function LoginModal({ isOpen, onClose }) {
         style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
       />
 
-      {/* Card — EXACT DAGCHAIN light style */}
+      {/* Card - EXACT DAGCHAIN light style */}
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -536,7 +518,7 @@ export default function LoginModal({ isOpen, onClose }) {
                   </div>
                   <div>
                     <div style={{ fontSize: '17px', fontWeight: 700, color: '#111827', lineHeight: 1.2 }}>Complete Your Profile</div>
-                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>One last step — tell us a bit about yourself</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>One last step - tell us a bit about yourself</div>
                   </div>
                 </div>
 

@@ -99,7 +99,7 @@ export async function POST(request) {
         <p style="color: #64748b; margin-top: 0;">Received via dagarmy.network/careers</p>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
         <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 8px 0; color: #64748b; width: 140px; font-size: 14px;">Role</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a; font-size: 14px;">${role_title} — ${region || ''}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b; width: 140px; font-size: 14px;">Role</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a; font-size: 14px;">${role_title} - ${region || ''}</td></tr>
           <tr><td style="padding: 8px 0; color: #64748b; font-size: 14px;">Name</td><td style="padding: 8px 0; color: #0f172a; font-size: 14px;">${name}</td></tr>
           <tr><td style="padding: 8px 0; color: #64748b; font-size: 14px;">Email</td><td style="padding: 8px 0; color: #0f172a; font-size: 14px;"><a href="mailto:${email}" style="color: #3b82f6;">${email}</a></td></tr>
           ${phone ? `<tr><td style="padding: 8px 0; color: #64748b; font-size: 14px;">Phone</td><td style="padding: 8px 0; color: #0f172a; font-size: 14px;">${phone}</td></tr>` : ''}
@@ -115,12 +115,12 @@ export async function POST(request) {
     Promise.all([
       sendEmail('hr@dagchain.network', {
         to: ['hr@dagchain.network'],
-        subject: `New Application: ${role_title} — ${name}`,
+        subject: `New Application: ${role_title} - ${name}`,
         html: notificationHtml,
       }),
       sendEmail('admin@dagchain.network', {
         to: ['admin@dagchain.network'],
-        subject: `New Application: ${role_title} — ${name}`,
+        subject: `New Application: ${role_title} - ${name}`,
         html: notificationHtml,
       }),
     ]).catch((err) => console.error('Notification email error:', err));

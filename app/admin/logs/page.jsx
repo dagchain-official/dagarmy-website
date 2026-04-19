@@ -188,7 +188,7 @@ export default function AdminLogsPage() {
             <div>
               <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.5px' }}>Activity Logs</h1>
               <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0', fontWeight: '450' }}>
-                {total.toLocaleString()} total events — every platform action captured
+                {total.toLocaleString()} total events - every platform action captured
               </p>
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function AdminLogsPage() {
                 </div>
               </div>
 
-              {/* Description — full width */}
+              {/* Description - full width */}
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'block', marginBottom: '6px' }}>Description *</label>
                 <textarea
@@ -436,7 +436,7 @@ export default function AdminLogsPage() {
 
                     {/* Actor */}
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#334155', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{log.actor_name || '—'}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#334155', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{log.actor_name || '-'}</div>
                       <div style={{ fontSize: '10px', color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{log.actor_email || ''}</div>
                     </div>
 

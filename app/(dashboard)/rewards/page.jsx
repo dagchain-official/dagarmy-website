@@ -151,7 +151,7 @@ export default function StudentRewardsPage() {
   };
 
   const REDEEM_CONFIG = {
-    dgcc: { ratio: 2500, label: 'DGCC Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb', border: '#fde68a', desc: 'DAGChain Gas Coin — use in DAGGPT or transfer to DAGChain' },
+    dgcc: { ratio: 2500, label: 'DGCC Coins', unit: 'Coin', color: '#f59e0b', light: '#fffbeb', border: '#fde68a', desc: 'DAGChain Gas Coin - use in DAGGPT or transfer to DAGChain' },
   };
 
   const handleRedeem = async () => {
@@ -427,7 +427,7 @@ export default function StudentRewardsPage() {
                     iconColor: '#059669',
                     iconBg: 'linear-gradient(135deg,#059669,#047857)',
                     eligibleTiers: ['DAG LIEUTENANT', 'DAG_LIEUTENANT'],
-                    condition: 'Self upgrade to DAG LT + 3 direct referrals who also upgraded to DAG LT — all within 30 days',
+                    condition: 'Self upgrade to DAG LT + 3 direct referrals who also upgraded to DAG LT - all within 30 days',
                     eligible: ltPool.isEligible || false,
                     activeMembers: ltPool.activeMemberCount || 0,
                     lastPayout: ltPool.lastPayoutAmount || null,
@@ -448,7 +448,7 @@ export default function StudentRewardsPage() {
                     iconColor: '#7c3aed',
                     iconBg: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
                     eligibleTiers: ['DAG LIEUTENANT', 'DAG_LIEUTENANT'],
-                    condition: 'All DAG Lieutenants — permanently enrolled. Activates at DAGCHAIN MainNet (Sep–Oct 2026).',
+                    condition: 'All DAG Lieutenants - permanently enrolled. Activates at DAGCHAIN MainNet (Sep–Oct 2026).',
                     eligible: isLieutenant,
                     activeMembers: null,
                     lastPayout: null,
@@ -466,7 +466,7 @@ export default function StudentRewardsPage() {
                       </div>
                       <div>
                         <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>Incentive Pools</h2>
-                        <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Recurring reward pools — distributed monthly from DAGGPT revenue</p>
+                        <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Recurring reward pools - distributed monthly from DAGGPT revenue</p>
                       </div>
                     </div>
 
@@ -749,7 +749,7 @@ export default function StudentRewardsPage() {
                       const typeBorder = isSale ? '#99f6e4' : isEarned ? '#a7f3d0' : isBurned ? '#fecaca' : '#c7d2fe';
                       const typeLabel  = isSale ? 'Sale' : isEarned ? 'Earned' : isBurned ? 'Burned' : 'Redeemed';
                       const dateStr    = new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                      const txnId      = tx.transaction_id || '—';
+                      const txnId      = tx.transaction_id || '-';
                       return (
                         <div
                           key={tx.id || idx}
@@ -760,7 +760,7 @@ export default function StudentRewardsPage() {
                           {/* Transaction ID with copy */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                             <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: '700', color: '#475569', letterSpacing: '0.3px' }}>{txnId}</span>
-                            {txnId !== '—' && (
+                            {txnId !== '-' && (
                               <button
                                 onClick={() => navigator.clipboard.writeText(txnId)}
                                 title="Copy Transaction ID"
@@ -1058,7 +1058,7 @@ export default function StudentRewardsPage() {
                 )}
               </div>
 
-              {/* No payment info warning — only show if BOTH methods are missing */}
+              {/* No payment info warning - only show if BOTH methods are missing */}
               {(!paymentInfo || (!paymentInfo.bank_account_name && !paymentInfo.bep20_address)) && (
                 <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', padding: '14px 18px', marginBottom: '16px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '1px' }}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" strokeLinecap="round" strokeLinejoin="round"/><line x1="12" y1="9" x2="12" y2="13" strokeLinecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" strokeLinecap="round"/></svg>

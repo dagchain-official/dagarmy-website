@@ -33,7 +33,7 @@ SELECT
   'rewards',
   pt.user_id, u.email, u.full_name,
   pt.user_id, u.email, u.full_name,
-  COALESCE(pt.description, pt.transaction_type, 'transaction') || ' — ' || pt.points::TEXT || ' pts',
+  COALESCE(pt.description, pt.transaction_type, 'transaction') || ' - ' || pt.points::TEXT || ' pts',
   jsonb_build_object(
     'points',            pt.points,
     'transaction_type',  pt.transaction_type,
@@ -55,7 +55,7 @@ SELECT
   'sale_paid', 'sales',
   sc.user_id, u.email, u.full_name,
   sc.id,
-  'Sale marked paid: ' || COALESCE(sc.product_name, sc.product_type) || ' — $' || sc.sale_amount::TEXT || ' (commission $' || sc.commission_amount::TEXT || ')',
+  'Sale marked paid: ' || COALESCE(sc.product_name, sc.product_type) || ' - $' || sc.sale_amount::TEXT || ' (commission $' || sc.commission_amount::TEXT || ')',
   jsonb_build_object(
     'sale_amount',       sc.sale_amount,
     'commission_amount', sc.commission_amount,

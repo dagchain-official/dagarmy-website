@@ -4,17 +4,23 @@ export const menuItems = [
     delay: "0.2s",
     links: [
       { name: "About", href: "/about" },
-      { name: "Course", href: "/courses" },
       { name: "Jobs", href: "/jobs" },
+      { name: "Careers", href: "/careers" },
+      { name: "Ambassador", href: "/ambassador" },
     ],
   },
   {
     title: "Advance",
     delay: "0.3s",
     links: [
-      { name: "Mentorship", href: "/mentorship" },
-      { name: "Hackathon", href: "/hackathons" },
-      { name: "Blogs", href: "/blog" },
+      { name: "Udaan", href: "/udaan" },
+      { name: "Rewards", href: "/rewards-overview" },
+      { name: "Blog", href: "/blog" },
+      { name: "FAQ", href: "/faq" },
+      // Coming Soon — commented out from top nav but preserved here
+      { name: "Courses", href: "/courses", soon: true },
+      { name: "Mentorship", href: "/mentorship", soon: true },
+      { name: "Hackathons", href: "/hackathons", soon: true },
     ],
   },
   {

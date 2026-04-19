@@ -67,7 +67,7 @@ BEGIN
     'rewards',
     NEW.user_id, v_email, v_name,
     NEW.user_id, v_email, v_name,
-    COALESCE(NEW.description, NEW.transaction_type) || ' — ' || NEW.points::TEXT || ' pts',
+    COALESCE(NEW.description, NEW.transaction_type) || ' - ' || NEW.points::TEXT || ' pts',
     jsonb_build_object('points', NEW.points, 'transaction_type', NEW.transaction_type, 'transaction_id', NEW.transaction_id),
     'info'
   );
@@ -92,7 +92,7 @@ BEGIN
       'sale_paid', 'sales',
       NEW.user_id, v_email, v_name,
       NEW.id,
-      'Sale marked paid: ' || COALESCE(NEW.product_name, NEW.product_type) || ' — $' || NEW.sale_amount::TEXT || ' (commission $' || NEW.commission_amount::TEXT || ')',
+      'Sale marked paid: ' || COALESCE(NEW.product_name, NEW.product_type) || ' - $' || NEW.sale_amount::TEXT || ' (commission $' || NEW.commission_amount::TEXT || ')',
       jsonb_build_object('sale_amount', NEW.sale_amount, 'commission_amount', NEW.commission_amount, 'product_type', NEW.product_type, 'commission_level', NEW.commission_level),
       'info'
     );

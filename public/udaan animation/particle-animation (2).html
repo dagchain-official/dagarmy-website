@@ -53,7 +53,7 @@
 </head>
 <body>
 
-<!-- SVG grain filter — applied only to text -->
+<!-- SVG grain filter - applied only to text -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
@@ -111,7 +111,7 @@ renderer.setSize(W, H);
 renderer.setClearColor(0x000000, 0);
 wrap.appendChild(renderer.domElement);
 
-// Lights tuned for white bg — use indigo/violet tones
+// Lights tuned for white bg - use indigo/violet tones
 const sl1 = new THREE.SpotLight(0x6366f1, 2.5);
 sl1.position.set(300, -200, 600);
 scene.add(sl1);
@@ -125,7 +125,7 @@ scene.add(new THREE.AmbientLight(0x4f46e5, 0.7));
 
 // ── PARTICLES ────────────────────────────────────────────────────────────────
 const N = 2400, R = 255;
-// Indigo/violet palette — visible on white
+// Indigo/violet palette - visible on white
 const COLORS = [0x6366f1, 0x7c3aed, 0x8b5cf6, 0x4f46e5, 0xa78bfa, 0x818cf8, 0x6d28d9];
 
 const particleGroup = new THREE.Object3D();

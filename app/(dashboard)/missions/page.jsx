@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Zap, CheckCircle, Clock, XCircle, ExternalLink, X, Send, Trophy, Target, Sun, Users, Flame, Upload, Link2, ImageIcon } from "lucide-react";
 
 /* ─── Design tokens ─────────────────────────────────────── */
@@ -164,6 +164,14 @@ export default function StudentMissionsPage() {
   const [submitting, setSubmitting]   = useState(false);
   const [message, setMessage]         = useState({ type:'', text:'' });
   const [mounted, setMounted]         = useState(false);
+  const [mob, setMob]                 = useState(false);
+
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => { requestAnimationFrame(() => setMounted(true)); }, []);
 
@@ -248,7 +256,7 @@ export default function StudentMissionsPage() {
   );
 
   return (
-    <div style={{ width:'100%', padding:'32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
+    <div style={{ width:'100%', padding: mob ? '20px 16px' : '32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg); } }
         @keyframes nm-up   { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
@@ -273,8 +281,8 @@ export default function StudentMissionsPage() {
         </div>
       </div>
 
-      {/* ── Stat tiles ─────────────────────────────────────── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:'16px', marginBottom:'32px' }}>
+      {/* ── Stat tiles ──────────────────────────────────── */}
+      <div style={{ display:'grid', gridTemplateColumns: mob ? 'repeat(3,1fr)' : 'repeat(6,1fr)', gap: mob ? '10px' : '16px', marginBottom: mob ? '20px' : '32px' }}>
         {[
           { label:'Daily',         value: dailyTasks.length,          icon: <Sun size={20} style={{ color:'#f59e0b' }} /> },
           { label:'Streak',        value: streakTasks.length,         icon: <Flame size={20} style={{ color:'#ef4444' }} /> },
@@ -284,13 +292,13 @@ export default function StudentMissionsPage() {
           { label:'Points Earned', value: stats.total_points_earned,  icon: <Trophy size={20} style={{ color:PURPLE }} /> },
         ].map((s, i) => (
           <div key={i} className="nm-card"
-            style={{ background:BG, borderRadius:'18px', padding:'18px 14px', boxShadow:S_UP, display:'flex', flexDirection:'column', alignItems:'center', gap:'10px',
+            style={{ background:BG, borderRadius: mob ? '14px' : '18px', padding: mob ? '12px 8px' : '18px 14px', boxShadow:S_UP, display:'flex', flexDirection:'column', alignItems:'center', gap: mob ? '6px' : '10px',
               border:'1.5px solid transparent', animation: mounted?`nm-up 0.38s ease-out ${i*0.05}s both`:'none', transition:'box-shadow 0.2s' }}>
-            <div style={{ width:'40px', height:'40px', borderRadius:'13px', background:BG, boxShadow:S_IN, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <div style={{ width: mob ? '32px' : '40px', height: mob ? '32px' : '40px', borderRadius:'13px', background:BG, boxShadow:S_IN, display:'flex', alignItems:'center', justifyContent:'center' }}>
               {s.icon}
             </div>
-            <div style={{ fontSize:'22px', fontWeight:'900', color:'#0f172a', letterSpacing:'-1px', lineHeight:1 }}>{s.value ?? 0}</div>
-            <div style={{ fontSize:'10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.6px', textAlign:'center' }}>{s.label}</div>
+            <div style={{ fontSize: mob ? '18px' : '22px', fontWeight:'900', color:'#0f172a', letterSpacing:'-1px', lineHeight:1 }}>{s.value ?? 0}</div>
+            <div style={{ fontSize: mob ? '8px' : '10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.6px', textAlign:'center' }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -305,23 +313,25 @@ export default function StudentMissionsPage() {
         </div>
       )}
 
-      {/* ── Tabs ───────────────────────────────────────────── */}
-      <div style={{ display:'inline-flex', gap:'0', marginBottom:'28px', background:BG, borderRadius:'18px', padding:'5px', boxShadow:S_IN, animation: mounted?'nm-up 0.4s ease-out 0.08s both':'none' }}>
+      {/* ── Tabs ─────────────────────────────────────── */}
+      <div style={{ display: 'flex', width: mob ? '100%' : 'auto', gap:'0', marginBottom:'20px', background:BG, borderRadius:'18px', padding:'5px', boxShadow:S_IN, animation: mounted?'nm-up 0.4s ease-out 0.08s both':'none', overflowX: mob ? 'auto' : 'visible', WebkitOverflowScrolling:'touch', msOverflowStyle: mob ? 'none' : undefined, scrollbarWidth: mob ? 'none' : undefined }}>
         {tabDef.map(tab => {
           const Icon   = tab.icon;
           const active = activeTab === tab.key;
           const done   = tab.tasks.filter(t=>t.user_status==='completed').length;
           const avail  = tab.tasks.filter(t=>t.user_status==='available').length;
+          const mobLabel = tab.key === 'daily' ? 'Daily' : tab.key === 'streak' ? 'Streak' : 'Community';
           return (
             <button key={tab.key} onClick={() => { setActiveTab(tab.key); setStatusFilter('all'); }}
-              style={{ display:'flex', alignItems:'center', gap:'8px', padding:'10px 20px', borderRadius:'13px', cursor:'pointer', fontSize:'13px', fontWeight:'700', transition:'all 0.2s', whiteSpace:'nowrap',
+              style={{ display:'flex', alignItems:'center', gap:'6px', padding: mob ? '9px 16px' : '10px 20px', borderRadius:'13px', cursor:'pointer', fontSize: mob ? '12px' : '13px', fontWeight:'700', transition:'all 0.2s', whiteSpace:'nowrap', flexShrink: 0, flex: mob ? '1 1 0' : 'none',
                 background: active ? PURPLE : 'transparent',
                 color:      active ? '#fff'  : '#64748b',
                 boxShadow:  active ? S_PURPLE : 'none',
-                border: !active && avail>0 ? '1.5px solid #ef4444' : '1.5px solid transparent' }}>
-              <Icon size={15}/>
-              {tab.label}
-              <span style={{ fontSize:'11px', fontWeight:'800', padding:'2px 8px', borderRadius:'100px', transition:'all 0.2s',
+                border: !active && avail>0 ? '1.5px solid #ef4444' : '1.5px solid transparent',
+                justifyContent: 'center' }}>
+              <Icon size={13}/>
+              {mob ? mobLabel : tab.label}
+              <span style={{ fontSize:'10px', fontWeight:'800', padding:'2px 7px', borderRadius:'100px', transition:'all 0.2s',
                 background: active ? 'rgba(255,255,255,0.22)' : BG,
                 color:      active ? '#fff' : PURPLE,
                 boxShadow:  active ? 'none' : S_IN_SM }}>
@@ -344,14 +354,14 @@ export default function StudentMissionsPage() {
             <div style={{ fontSize:'12px', color:'#64748b', lineHeight:1.65 }}>
               Sign in to all 3 platforms (DAGCHAIN, DAGARMY, DAGGPT) every day <strong>Monday–Sunday</strong> without any break.
               Complete all 7 days consecutively and claim <strong>900 DAG Points total</strong> (300 per platform).
-              Can be claimed once per week — up to <strong>52 times a year</strong>!
+              Can be claimed once per week - up to <strong>52 times a year</strong>!
             </div>
           </div>
         </div>
       )}
 
-      {/* ── Status filter pills ─────────────────────────────── */}
-      <div style={{ display:'flex', gap:'10px', marginBottom:'28px', animation: mounted?'nm-up 0.4s ease-out 0.12s both':'none' }}>
+      {/* ── Status filter pills ──────────────────────── */}
+      <div style={{ display:'flex', gap:'8px', marginBottom:'20px', flexWrap: mob ? 'nowrap' : 'wrap', overflowX: mob ? 'auto' : 'visible', WebkitOverflowScrolling:'touch', msOverflowStyle: mob ? 'none' : undefined, scrollbarWidth: mob ? 'none' : undefined, animation: mounted?'nm-up 0.4s ease-out 0.12s both':'none' }}>
         {['all','available','pending','completed'].map(s => {
           const active = statusFilter === s;
           const pillHasAlert = s==='available' && tabTasks.filter(t=>t.user_status==='available').length>0;
@@ -377,11 +387,11 @@ export default function StudentMissionsPage() {
             {tasks.length===0 ? 'No missions available yet' : `No ${statusFilter==='all'?'':statusFilter+' '}${activeTab} missions`}
           </p>
           <p style={{ fontSize:'13px', color:'#94a3b8', margin:0 }}>
-            {tasks.length===0 ? 'Check back soon — missions will appear here.' : 'Try a different filter.'}
+            {tasks.length===0 ? 'Check back soon - missions will appear here.' : 'Try a different filter.'}
           </p>
         </div>
       ) : (
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'20px' }}>
+        <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: mob ? '14px' : '20px' }}>
           {filtered.map((task, i) => {
             const sb     = STATUS[task.user_status] || STATUS.available;
             const isAvail= task.user_status === 'available';

@@ -117,7 +117,7 @@ function extractAttachmentFromSource(sourceBuf, bodyStructure, attachIdx) {
   // Get the outer boundary from bodyStructure parameters
   const outerBoundary = bodyStructure?.parameters?.boundary;
   if (!outerBoundary) {
-    // Single part — just decode the body
+    // Single part - just decode the body
     const bodyStart = src.indexOf('\r\n\r\n') !== -1
       ? src.indexOf('\r\n\r\n') + 4
       : src.indexOf('\n\n') + 2;

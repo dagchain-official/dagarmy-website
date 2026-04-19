@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
-const GREETING = "Hi! I'm the DAGARMY Assistant 👋\nHow can I help you today? Ask me anything about DAGARMY — membership, courses, rewards, or how to join!";
+const GREETING = "Hi! I'm the DAGARMY Assistant 👋\nHow can I help you today? Ask me anything about DAGARMY - membership, courses, rewards, or how to join!";
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen]     = useState(false);

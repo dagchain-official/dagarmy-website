@@ -101,9 +101,9 @@ function CreateAuctionContent() {
   // Validation per step
   const stepValid = [
     form.title.trim().length > 0 && form.description.trim().length > 0,  // step 0
-    true,                                                                   // step 1 — images optional
+    true,                                                                   // step 1 - images optional
     form.starting_bid > 0 && form.min_increment > 0 && form.ends_at,       // step 2
-    true,                                                                   // step 3 — preview
+    true,                                                                   // step 3 - preview
   ];
 
   // Save / publish
@@ -373,8 +373,8 @@ function CreateAuctionContent() {
                   style={{ width: 80, height: 80, borderRadius: 10, objectFit: "cover", border: "1px solid #e2e8f0", flexShrink: 0 }} />
               )}
               <div>
-                <h2 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 900, color: "#1e293b" }}>{form.title || "—"}</h2>
-                <p style={{ margin: "0 0 8px", fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>{form.description || "—"}</p>
+                <h2 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 900, color: "#1e293b" }}>{form.title || "-"}</h2>
+                <p style={{ margin: "0 0 8px", fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>{form.description || "-"}</p>
                 {form.features.filter(f => f.trim()).map((f, i) => (
                   <span key={i} style={{ display: "inline-block", marginRight: 6, marginBottom: 4, padding: "2px 8px", borderRadius: 6, background: "#ede9fe", color: "#4f46e5", fontSize: 11, fontWeight: 600 }}>
                     ✓ {f}

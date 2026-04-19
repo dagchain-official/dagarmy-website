@@ -7,7 +7,7 @@ const sections = [
   {
     id: "what-are-cookies",
     title: "1. What Are Cookies?",
-    content: `Cookies are small text files placed on your device when you visit a website. They allow the site to remember information about your visit — such as your login session, preferences, and how you interact with the platform — making your next visit easier and the platform more useful.
+    content: `Cookies are small text files placed on your device when you visit a website. They allow the site to remember information about your visit - such as your login session, preferences, and how you interact with the platform - making your next visit easier and the platform more useful.
 
 Cookies are widely used across the internet. By using DAG Army (https://dagarmy.network), you consent to our use of cookies as described in this policy.`,
   },
@@ -40,7 +40,7 @@ Examples:
 • Feature usage patterns (e.g., which community tools are most active).
 • Error tracking to identify and fix platform issues.
 
-All analytics data is aggregated and anonymized — it does not identify you personally.
+All analytics data is aggregated and anonymized - it does not identify you personally.
 
 2.4. Marketing and Communication Cookies
 These cookies are used to deliver relevant communications and measure the effectiveness of our outreach. They are only activated if you have given explicit consent.
@@ -54,9 +54,9 @@ Examples:
     title: "3. Third-Party Cookies",
     content: `Some features on DAG Army are powered by third-party services that may set their own cookies. These include:
 
-• Supabase — Authentication and session management.
-• Analytics Providers — Aggregated usage analytics (data is anonymized).
-• Payment Gateways (e.g., Stripe) — Secure transaction processing. These cookies are governed by Stripe's own privacy and cookie policies.
+• Supabase - Authentication and session management.
+• Analytics Providers - Aggregated usage analytics (data is anonymized).
+• Payment Gateways (e.g., Stripe) - Secure transaction processing. These cookies are governed by Stripe's own privacy and cookie policies.
 
 We do not control third-party cookies. We recommend reviewing the privacy policies of these providers for full details.`,
   },

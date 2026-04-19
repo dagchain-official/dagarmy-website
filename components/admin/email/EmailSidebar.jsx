@@ -114,7 +114,7 @@ export default function EmailSidebar({
         </span>
         <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
       </button>
-      {/* Color dot — only for real IMAP folders */}
+      {/* Color dot - only for real IMAP folders */}
       {path !== STARRED_PATH && (
         <button
           title="Change color"

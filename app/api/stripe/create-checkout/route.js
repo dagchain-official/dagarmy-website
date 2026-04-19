@@ -49,7 +49,7 @@ export async function POST(request) {
 
     const baseUrl = request.headers.get('origin') || 'https://dagarmy.network';
     const productName = 'DAG Lieutenant Upgrade';
-    const productDesc = 'Upgrade from DAG Soldier to DAG Lieutenant — unlock full earning potential, referral bonuses, and exclusive benefits.';
+    const productDesc = 'Upgrade from DAG Soldier to DAG Lieutenant - unlock full earning potential, referral bonuses, and exclusive benefits.';
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

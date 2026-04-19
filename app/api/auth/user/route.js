@@ -72,7 +72,7 @@ export async function POST(request) {
       })
     }
 
-    // Silently sync DAGChain data — never blocks or fails the auth response
+    // Silently sync DAGChain data - never blocks or fails the auth response
     if (email && reown_access_token) {
       syncDagchainUser({
         email,

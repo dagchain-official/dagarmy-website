@@ -12,7 +12,7 @@ export const udaanData = {
       "Not for passive learners.",
       "For founders."
     ],
-    vision: "By 2030, we aim to enable 100,000 AI startup founders across India, Pakistan, and Bangladesh — builders creating products, companies, and economic impact from our cities, our towns, and our communities.",
+    vision: "By 2030, we aim to enable 100,000 AI startup founders across India, Pakistan, and Bangladesh - builders creating products, companies, and economic impact from our cities, our towns, and our communities.",
     stats: [
       { value: "100k", label: "Founders Goal" },
       { value: "3", label: "Countries" },
@@ -88,7 +88,7 @@ export const udaanData = {
     builderCircle: {
       title: "Builder Circle",
       description: "For those ready to build seriously, the Builder Circle provides structured mentorship, cohort-based acceleration, execution frameworks, demo opportunities, and accountability systems.",
-      purpose: "This layer exists for founders who are no longer experimenting — they are launching.",
+      purpose: "This layer exists for founders who are no longer experimenting - they are launching.",
       values: [
         "It funds sustainability.",
         "It protects quality.",
@@ -170,7 +170,7 @@ export const udaanData = {
       "100,000 strong.",
       "By 2030."
     ],
-    call: "If you believe AI should create ownership — not just employment — this is where you start."
+    call: "If you believe AI should create ownership - not just employment - this is where you start."
   },
 
   antiInstitute: {

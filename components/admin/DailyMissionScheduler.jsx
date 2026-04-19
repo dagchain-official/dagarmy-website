@@ -262,7 +262,7 @@ export default function DailyMissionScheduler() {
         <div>
           <h2 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', margin: '0 0 3px' }}>Daily Mission Scheduler</h2>
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>
-            Schedule daily missions in bulk — upload a CSV or fill rows manually. Each mission activates on its scheduled date.
+            Schedule daily missions in bulk - upload a CSV or fill rows manually. Each mission activates on its scheduled date.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -290,7 +290,7 @@ export default function DailyMissionScheduler() {
           Drag & drop CSV here, or click to browse
         </p>
         <p style={{ fontSize: '11px', color: '#cbd5e1', margin: '4px 0 0' }}>
-          Use the template above — headers: {CSV_HEADERS.join(', ')}
+          Use the template above - headers: {CSV_HEADERS.join(', ')}
         </p>
       </div>
 

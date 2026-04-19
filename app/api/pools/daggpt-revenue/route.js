@@ -3,9 +3,9 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 
 /**
  * POST /api/pools/daggpt-revenue
- * Secured endpoint — DAGGPT backend posts monthly revenue here.
+ * Secured endpoint - DAGGPT backend posts monthly revenue here.
  * Creates distribution records for BOTH Fortune 500 AND DAG LT Pool.
- * Idempotent — rejects duplicate submissions for the same month.
+ * Idempotent - rejects duplicate submissions for the same month.
  *
  * Headers: Authorization: Bearer <DAGGPT_API_KEY>
  * Body: { report_month: 'YYYY-MM', total_revenue: number }
@@ -37,7 +37,7 @@ export async function POST(request) {
       );
     }
 
-    // Idempotency — check if already reported
+    // Idempotency - check if already reported
     const { data: existing } = await supabase
       .from('daggpt_revenue_reports')
       .select('id')

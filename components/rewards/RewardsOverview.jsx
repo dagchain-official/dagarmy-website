@@ -57,7 +57,7 @@ export default function RewardsOverview() {
                 fontWeight: '400',
                 maxWidth: '540px'
               }}>
-                A reward system that values what you actually contribute—not just when you joined.
+                A reward system that values what you actually contribute-not just when you joined.
               </p>
 
               {/* Download Button */}
@@ -570,7 +570,7 @@ export default function RewardsOverview() {
               maxWidth: '800px',
               margin: '0 auto 12px'
             }}>
-              Collecting points is good, but <span style={{ fontWeight: '600', color: '#000000' }}>Rank</span> is better. To move up the ladder—from Starter to Mythic—you must make a choice.
+              Collecting points is good, but <span style={{ fontWeight: '600', color: '#000000' }}>Rank</span> is better. To move up the ladder-from Starter to Mythic-you must make a choice.
             </p>
             
             <p style={{
@@ -1173,7 +1173,7 @@ export default function RewardsOverview() {
                     margin: 0,
                     maxWidth: '320px'
                   }}>
-                    Consistency is the primary metric we reward. Contributors who demonstrate sustained, monthly impact are eligible for the Discretionary Excellence Fund—a resource pool reserved specifically for those actively driving ecosystem stability.
+                    Consistency is the primary metric we reward. Contributors who demonstrate sustained, monthly impact are eligible for the Discretionary Excellence Fund-a resource pool reserved specifically for those actively driving ecosystem stability.
                   </p>
                 </div>
                 
@@ -1215,7 +1215,7 @@ export default function RewardsOverview() {
                     margin: 0,
                     maxWidth: '320px'
                   }}>
-                    For our most dedicated leaders, support extends beyond the digital platform. High-impact contributors can qualify for the Lifestyle Support Tier, which provides assistance for real-world logistical needs—such as travel and operational costs—to facilitate their leadership duties.
+                    For our most dedicated leaders, support extends beyond the digital platform. High-impact contributors can qualify for the Lifestyle Support Tier, which provides assistance for real-world logistical needs-such as travel and operational costs-to facilitate their leadership duties.
                   </p>
                 </div>
               </div>

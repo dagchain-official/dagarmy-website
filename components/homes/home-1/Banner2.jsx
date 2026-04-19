@@ -16,7 +16,7 @@ export default function Banner2() {
                   {" "}
                   Effective learning starts with assessment. Learning a new
                   skill <br />
-                  is hard work—Signal makes it easier.
+                  is hard work-Signal makes it easier.
                 </p>
               </div>
               <a

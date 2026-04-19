@@ -5,7 +5,7 @@ const MAIL_ICON = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 const PHONE_ICON = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.56 2 2 0 0 1 3.6 1.37h3a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45 12.05 12.05 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E`;
 const WEB_ICON  = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='2' y1='12' x2='22' y2='12'/%3E%3Cpath d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'/%3E%3C/svg%3E`;
 
-// Single icon row — NO wrapper table, just a <tr> to be placed inside one shared contacts table
+// Single icon row - NO wrapper table, just a <tr> to be placed inside one shared contacts table
 const iRow = (src, content) =>
   `<tr>
     <td style="border:none;padding:4px 12px 4px 0;vertical-align:middle;white-space:nowrap;">
@@ -13,7 +13,7 @@ const iRow = (src, content) =>
     </td>
   </tr>`;
 
-// Wraps icon rows into ONE table — no gaps between rows
+// Wraps icon rows into ONE table - no gaps between rows
 const contacts = (email, phone) =>
   `<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;border:none;margin-top:10px;">
     ${iRow(MAIL_ICON, `<a href="mailto:${email||''}" style="color:#475569;text-decoration:none;">${email||'email@dagchain.network'}</a>`)}
@@ -249,7 +249,7 @@ export default function SignatureEditor() {
               onFocus={e => e.target.style.borderColor = '#6366f1'}
               onBlur={e => e.target.style.borderColor = '#e2e8f0'}
             />
-            <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '5px' }}>Use inline styles only — email clients strip CSS classes.</div>
+            <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '5px' }}>Use inline styles only - email clients strip CSS classes.</div>
           </div>
         )}
 

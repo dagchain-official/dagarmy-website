@@ -72,7 +72,7 @@ const SEED_CHAT = [
   {id:"s4",type:"system",text:"@Crypt0King outbid @AlphaDAG → 1,250,000 DAG Points"},
   {id:"s5",type:"system",text:"@WhaleFund joined the auction pool"},
   {id:"s6",type:"user",user:"CryptoQueen",text:"Let's go! 🚀"},
-  {id:"s7",type:"system",text:"Real-time updates — drop your bid now!"},
+  {id:"s7",type:"system",text:"Real-time updates - drop your bid now!"},
 ];
 
 function sortedPool(items){
@@ -220,7 +220,7 @@ export default function AuctionHallPage(){
     setChatInput("");
   };
 
-  /* ── Stat cards config — NO emojis, pure SVG + DAGARMY logo ── */
+  /* ── Stat cards config - NO emojis, pure SVG + DAGARMY logo ── */
   const statCards=[
     {label:"Active Auctions", value:activeCount,                              accent:PURPLE,  icon:<IcoAuction c={PURPLE}/>},
     {label:"Active Bidders",  value:dbEmpty?52:activeBidders,                accent:PURPLE2, icon:<IcoPeople c={PURPLE2}/>},
@@ -261,7 +261,7 @@ export default function AuctionHallPage(){
 
         {/* ── Col 1: BANNER ── */}
         <div style={{display:"flex",flexDirection:"column",minHeight:0}}>
-          <SecTitle>{/* empty — same height as other col titles */}</SecTitle>
+          <SecTitle>{/* empty - same height as other col titles */}</SecTitle>
           <div style={{flex:1,background:BG,boxShadow:S.card,borderRadius:22,padding:18,display:"flex",flexDirection:"column",overflow:"hidden",minHeight:0}}>
 
             {/* Image well */}
@@ -284,13 +284,13 @@ export default function AuctionHallPage(){
 
             {/* Product info */}
             <div style={{flexShrink:0,display:"flex",flexDirection:"column",gap:8}}>
-              {/* Title + countdown + available — all inline */}
+              {/* Title + countdown + available - all inline */}
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
                 <div style={{flex:1,minWidth:0}}>
                   <p style={{margin:"0 0 2px",fontSize:9,fontWeight:700,color:T.muted,textTransform:"uppercase",letterSpacing:"0.1em"}}>Product</p>
                   <h3 style={{margin:0,fontSize:18,fontWeight:900,color:T.primary,fontFamily:NASA,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{featured?.title||"Select an auction"}</h3>
                 </div>
-                {/* Live + Available — SIDE BY SIDE */}
+                {/* Live + Available - SIDE BY SIDE */}
                 <div style={{display:"flex",gap:6,flexShrink:0,alignItems:"stretch"}}>
                   <div style={{background:BG,boxShadow:S.concave,borderRadius:10,padding:"5px 10px",textAlign:"center"}}>
                     <p style={{margin:"0 0 1px",fontSize:8,fontWeight:800,color:T.muted,textTransform:"uppercase"}}>{isClosed?"Ended":isActive?"Live":"Upcoming"}</p>
@@ -367,7 +367,7 @@ export default function AuctionHallPage(){
             <div style={{background:BG,boxShadow:S.card,borderRadius:20,padding:"14px 12px 10px",display:"flex",flexDirection:"column",overflow:"hidden"}}>
               <div style={{textAlign:"center",marginBottom:10,flexShrink:0}}>
                 <p style={{margin:"0 0 2px",fontSize:12,fontWeight:900,color:T.primary,textTransform:"uppercase",letterSpacing:"0.08em"}}>Auction Participants</p>
-                <p style={{margin:0,fontSize:10,color:T.muted,fontWeight:600}}>Current auction — staked DAG Points</p>
+                <p style={{margin:0,fontSize:10,color:T.muted,fontWeight:600}}>Current auction - staked DAG Points</p>
               </div>
               <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:3,paddingBottom:8}}>
                 {itemBids.map((b,i)=>(
@@ -378,7 +378,7 @@ export default function AuctionHallPage(){
               </div>
             </div>
 
-            {/* All-Time Winners — 3 columns: name | wins | total */}
+            {/* All-Time Winners - 3 columns: name | wins | total */}
             <div style={{background:BG,boxShadow:S.card,borderRadius:20,padding:"14px 12px 10px",display:"flex",flexDirection:"column",overflow:"hidden"}}>
               <div style={{textAlign:"center",marginBottom:10,flexShrink:0}}>
                 <p style={{margin:"0 0 2px",fontSize:12,fontWeight:900,color:T.primary,textTransform:"uppercase",letterSpacing:"0.08em"}}>All-Time Winners</p>
@@ -446,7 +446,7 @@ export default function AuctionHallPage(){
                   {img?<img src={img.url} alt="" style={{width:34,height:34,objectFit:"contain"}}/>:<span style={{fontSize:20,opacity:0.3}}>📦</span>}
                 </div>
                 <div style={{flex:1,minWidth:0}}>
-                  {/* Title — Nasalization */}
+                  {/* Title - Nasalization */}
                   <p style={{margin:"0 0 3px",fontSize:12,fontWeight:900,color:isSel?PURPLE:closed?T.muted:T.primary,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontFamily:NASA}}>{item.title}</p>
                   <p style={{margin:"0 0 6px",fontSize:11,color:live?PURPLE:closed?T.muted:PURPLE2,fontWeight:800,textTransform:"uppercase"}}>
                     {closed?"🔒 Ended":live?"● Live":"◎ Upcoming"}

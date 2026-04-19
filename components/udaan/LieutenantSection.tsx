@@ -146,7 +146,7 @@ export default function LieutenantSection() {
       <div className="wrap">
         <div className="udaan-bento-grid">
 
-          {/* A: Identity — spans 2 cols */}
+          {/* A: Identity - spans 2 cols */}
           <motion.div
             {...fadeUp(0.1)}
             className="udaan-bento-span2"
@@ -190,7 +190,7 @@ export default function LieutenantSection() {
             </div>
           </motion.div>
 
-            {/* B: AI Economy — light card with bold statement design */}
+            {/* B: AI Economy - light card with bold statement design */}
             <motion.div
               {...fadeUp(0.15)}
               style={{
@@ -245,7 +245,7 @@ export default function LieutenantSection() {
               </div>
             </motion.div>
 
-          {/* C: Execution capability list — 1 col */}
+          {/* C: Execution capability list - 1 col */}
           <motion.div
             {...fadeUp(0.2)}
             style={{
@@ -290,7 +290,7 @@ export default function LieutenantSection() {
             </div>
           </motion.div>
 
-              {/* D: Builder to Leader — spans 2 cols, light mode */}
+              {/* D: Builder to Leader - spans 2 cols, light mode */}
               <motion.div
                 {...fadeUp(0.25)}
                 className="udaan-bento-span2"
@@ -351,7 +351,7 @@ export default function LieutenantSection() {
 
         </div>
 
-        {/* ── BOTTOM MANIFESTO — light ── */}
+        {/* ── BOTTOM MANIFESTO - light ── */}
         <motion.div
           {...fadeUp(0.35)}
           className="udaan-lt-manifesto"

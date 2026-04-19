@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback } from "react";
 import LieutenantUpgradeModal from "@/components/dashboard/LieutenantUpgradeModal";
 import { Award, DollarSign, ChevronRight, Trophy, Zap, Crown, ArrowUp, Flame, Shield, Lock, Star, Users } from "lucide-react";
 
@@ -19,6 +19,13 @@ const nm = {
 };
 
 export default function RewardsContent({ mounted }) {
+  const [mob, setMob] = useState(true);
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stripeLoading, setStripeLoading] = useState(false);
@@ -148,7 +155,7 @@ export default function RewardsContent({ mounted }) {
     </div>
   );
 
-  const { dagPoints, isLieutenant, usdEarned, usdtEarned, totalPointsEarned, totalPointsBurned, totalPointsRedeemed, spendPtsRate, l1CommissionPct, l2CommissionPct, l3CommissionPct, taskMultiplier, ecosystemSpend, incentivePools } = rewardData;
+  const { dagPoints, isLieutenant, usdEarned, usdtEarned, totalPointsEarned, totalPointsBurned, totalPointsRedeemed, spendPtsRate, l1CommissionPct, l2CommissionPct, l3CommissionPct, taskMultiplier, directL1SalesVolume, incentivePools } = rewardData;
   const fortune500 = incentivePools?.fortune500 || { isEligible: false, enrolled: false, enrollmentOpen: true, poolPct: 10, activeMemberCount: 0, lastPayoutAmount: null };
   const ltPool = incentivePools?.dag_lt_pool || { isEligible: false, enrolled: false, activeMemberCount: 0, directLtUpgrades: 0, daysLeft: null };
   const elitePool = incentivePools?.elite || { isEligible: false, active: false, blockchainPct: 50, totalLtMembers: 0 };
@@ -159,12 +166,12 @@ export default function RewardsContent({ mounted }) {
     <>
       <div>
         {/* Header */}
-        <div style={{ marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ marginBottom: '28px', display: 'flex', flexDirection: mob ? 'column' : 'row', alignItems: mob ? 'flex-start' : 'center', justifyContent: 'space-between', gap: '16px' }}>
           <div>
-            <h1 style={{ fontSize: '26px', fontWeight: '800', color: nm.textPrimary, margin: 0, letterSpacing: '-0.5px' }}>My Rewards</h1>
+            <h1 style={{ fontSize: mob ? '20px' : '26px', fontWeight: '800', color: nm.textPrimary, margin: 0, letterSpacing: '-0.5px' }}>My Rewards</h1>
             <p style={{ fontSize: '13px', color: nm.textMuted, margin: '4px 0 0', fontWeight: '500' }}>Track your DAG Points, rewards, and pool earnings</p>
           </div>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
             <button onClick={() => setShowRedeemModal(true)}
               style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 20px', borderRadius: '12px', border: 'none', background: nm.bg, boxShadow: nm.shadowSm, color: nm.accent, fontSize: '13px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.boxShadow = nm.shadow; e.currentTarget.style.transform = 'translateY(-1px)'; }}
@@ -183,32 +190,60 @@ export default function RewardsContent({ mounted }) {
         </div>
 
         {/* Tier Badge */}
-        <div style={{ marginBottom: '20px', background: nm.bg, borderRadius: '16px', padding: '16px 24px', boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `linear-gradient(135deg, ${tierColor}, ${tierColor}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            {isLieutenant ? <Crown size={22} color="#fff" /> : <Shield size={22} color="#fff" />}
-          </div>
-          <div>
-            <p style={{ margin: 0, fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Your Tier</p>
-            <p style={{ margin: '2px 0 0', fontSize: '18px', fontWeight: '900', color: tierColor, letterSpacing: '-0.3px' }}>{tierLabel}</p>
-          </div>
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: '24px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>L1 Rewards</p>
-              <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{l1CommissionPct}%</p>
+        {mob ? (
+          /* Mobile: stack icon+name / stats grid */
+          <div style={{ marginBottom: '20px', background: nm.bg, borderRadius: '16px', padding: '16px', boxShadow: nm.shadowSm }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: `linear-gradient(135deg, ${tierColor}, ${tierColor}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                {isLieutenant ? <Crown size={20} color="#fff" /> : <Shield size={20} color="#fff" />}
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Your Tier</p>
+                <p style={{ margin: '2px 0 0', fontSize: '16px', fontWeight: '900', color: tierColor, letterSpacing: '-0.3px' }}>{tierLabel}</p>
+              </div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Spend Rate</p>
-              <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{spendPtsRate} pts/$</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Task Multiplier</p>
-              <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{taskMultiplier}×</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
+              {[
+                { label: 'L1 Rewards', value: `${l1CommissionPct}%` },
+                { label: 'Spend Rate', value: `${spendPtsRate} pts/$` },
+                { label: 'Task Mult.', value: `${taskMultiplier}�` },
+              ].map((s, i) => (
+                <div key={i} style={{ textAlign: 'center', padding: '10px 8px', background: nm.bg, borderRadius: '12px', boxShadow: nm.shadowInsetSm }}>
+                  <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{s.label}</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '16px', fontWeight: '900', color: nm.textPrimary, letterSpacing: '-0.5px' }}>{s.value}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        ) : (
+          /* Desktop: original single row */
+          <div style={{ marginBottom: '20px', background: nm.bg, borderRadius: '16px', padding: '16px 24px', boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `linear-gradient(135deg, ${tierColor}, ${tierColor}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              {isLieutenant ? <Crown size={22} color="#fff" /> : <Shield size={22} color="#fff" />}
+            </div>
+            <div>
+              <p style={{ margin: 0, fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Your Tier</p>
+              <p style={{ margin: '2px 0 0', fontSize: '18px', fontWeight: '900', color: tierColor, letterSpacing: '-0.3px' }}>{tierLabel}</p>
+            </div>
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: '24px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>L1 Rewards</p>
+                <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{l1CommissionPct}%</p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Spend Rate</p>
+                <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{spendPtsRate} pts/$</p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Task Multiplier</p>
+                <p style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: '900', color: nm.textPrimary }}>{taskMultiplier}�</p>
+              </div>
+            </div>
+          </div>
+        )}
 
-        {/* Top Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
+        {/* Top Stats - 2x2 on mobile */}
+        <div style={{ display: 'grid', gridTemplateColumns: mob ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: mob ? '10px' : '16px', marginBottom: '20px' }}>
           <NmCard delay={50} style={{ padding: '24px 28px', textAlign: 'center' }}>
             <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 14px' }}>DAG Points</p>
             <p style={{ fontSize: '36px', fontWeight: '800', color: nm.accent, letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>{dagPoints.toLocaleString()}</p>
@@ -240,8 +275,8 @@ export default function RewardsContent({ mounted }) {
           </NmCard>
         </div>
 
-        {/* Points Summary Strip */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginBottom: '20px' }}>
+        {/* Points Summary Strip - single col on mobile */}
+        <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(3,1fr)', gap: '12px', marginBottom: '20px' }}>
           {[
             { label: 'Total Points Earned', value: totalPointsEarned },
             { label: 'Points Burned (legacy)', value: totalPointsBurned },
@@ -254,10 +289,10 @@ export default function RewardsContent({ mounted }) {
           ))}
         </div>
 
-        {/* Rewards Rates Info Strip */}
-        <div style={{ marginBottom: '20px', background: nm.bg, borderRadius: '16px', padding: '16px 24px', boxShadow: nm.shadowXs }}>
+        {/* Rewards Rates Info Strip - wrap on mobile */}
+        <div style={{ marginBottom: '20px', background: nm.bg, borderRadius: '16px', padding: mob ? '14px 16px' : '16px 24px', boxShadow: nm.shadowXs }}>
           <p style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: '800', color: nm.textPrimary, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Sales Rewards Rates</p>
-          <div style={{ display: 'flex', gap: '32px' }}>
+          <div style={{ display: 'flex', gap: mob ? '16px' : '32px', flexWrap: 'wrap' }}>
             {[
               { label: 'Level 1 (Direct)', value: `${l1CommissionPct}%`, color: nm.accent },
               { label: 'Level 2', value: `${l2CommissionPct}%`, color: '#10b981' },
@@ -272,13 +307,13 @@ export default function RewardsContent({ mounted }) {
           </div>
         </div>
 
-        {/* Incentive Pools */}
+        {/* Incentive Pools - stack on mobile */}
         <div style={{ marginBottom: '20px' }}>
           <div style={{ marginBottom: '14px' }}>
             <h2 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 3px', letterSpacing: '-0.3px' }}>Incentive Pools</h2>
-            <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Revenue-sharing pools — passive income on top of your rewards</p>
+            <p style={{ fontSize: '12px', color: nm.textMuted, margin: 0 }}>Revenue-sharing pools - passive income on top of your rewards</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : 'repeat(3,1fr)', gap: '14px' }}>
 
             {/* Fortune 500 Pool */}
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadowSm, overflow: 'hidden' }}>
@@ -293,7 +328,7 @@ export default function RewardsContent({ mounted }) {
                   </div>
                 </div>
                 <span style={{ flexShrink: 0, fontSize: '9px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: fortune500.isEligible ? '#f5f3ff' : nm.bg, boxShadow: fortune500.isEligible ? 'none' : nm.shadowInsetSm, color: fortune500.isEligible ? '#7c3aed' : nm.textMuted, border: fortune500.isEligible ? '1px solid #c4b5fd' : 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                  {fortune500.isEligible ? 'Eligible' : fortune500.enrolled ? 'Need $500 spend' : 'Not Enrolled'}
+                  {fortune500.isEligible ? 'Eligible' : fortune500.enrolled ? 'Need 500 DGCC L1 Sales' : 'Not Enrolled'}
                 </span>
               </div>
               <div style={{ padding: '16px 20px' }}>
@@ -302,11 +337,11 @@ export default function RewardsContent({ mounted }) {
                 </p>
                 <div style={{ marginBottom: '10px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                    <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase' }}>Ecosystem Spend</span>
-                    <span style={{ fontSize: '11px', fontWeight: '800', color: (ecosystemSpend || 0) >= 500 ? '#7c3aed' : nm.textPrimary }}>${(ecosystemSpend || 0).toFixed(0)} / $500</span>
+                    <span style={{ fontSize: '10px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase' }}>Direct L1 Sales</span>
+                    <span style={{ fontSize: '11px', fontWeight: '800', color: (directL1SalesVolume || 0) >= 500 ? '#7c3aed' : nm.textPrimary }}>${(directL1SalesVolume || 0).toFixed(0)} / 500 DGCC</span>
                   </div>
                   <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg,#7c3aed,#6d28d9)', width: `${Math.min(100, ((ecosystemSpend || 0) / 500) * 100)}%`, transition: 'width 1s ease' }} />
+                    <div style={{ height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg,#7c3aed,#6d28d9)', width: `${Math.min(100, ((directL1SalesVolume || 0) / 500) * 100)}%`, transition: 'width 1s ease' }} />
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -316,7 +351,7 @@ export default function RewardsContent({ mounted }) {
                   </div>
                   <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
                     <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Last Payout</p>
-                    <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.accent }}>{fortune500.lastPayoutAmount ? `$${parseFloat(fortune500.lastPayoutAmount).toFixed(2)}` : '—'}</p>
+                    <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.accent }}>{fortune500.lastPayoutAmount ? `$${parseFloat(fortune500.lastPayoutAmount).toFixed(2)}` : '-'}</p>
                   </div>
                 </div>
               </div>
@@ -345,7 +380,7 @@ export default function RewardsContent({ mounted }) {
                     <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textSecondary, margin: '8px 0 12px' }}>DAG LIEUTENANT exclusive</p>
                     <button onClick={() => setShowUpgradeModal(true)}
                       style={{ padding: '9px 18px', borderRadius: '9px', border: 'none', background: 'linear-gradient(135deg,#059669,#047857)', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                    >Upgrade to Join — $149</button>
+                    >Upgrade to Join - $149</button>
                   </div>
                 ) : (
                   <>
@@ -371,7 +406,7 @@ export default function RewardsContent({ mounted }) {
                       </div>
                       <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
                         <p style={{ margin: 0, fontSize: '9px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Last Payout</p>
-                        <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.accent }}>{ltPool.lastPayoutAmount ? `$${parseFloat(ltPool.lastPayoutAmount).toFixed(2)}` : '—'}</p>
+                        <p style={{ margin: '3px 0 0', fontSize: '18px', fontWeight: '900', color: nm.accent }}>{ltPool.lastPayoutAmount ? `$${parseFloat(ltPool.lastPayoutAmount).toFixed(2)}` : '-'}</p>
                       </div>
                     </div>
                   </>
@@ -402,12 +437,12 @@ export default function RewardsContent({ mounted }) {
                     <p style={{ fontSize: '12px', fontWeight: '700', color: nm.textSecondary, margin: '8px 0 12px' }}>DAG LIEUTENANT exclusive</p>
                     <button onClick={() => setShowUpgradeModal(true)}
                       style={{ padding: '9px 18px', borderRadius: '9px', border: 'none', background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                    >Upgrade to Join — $149</button>
+                    >Upgrade to Join - $149</button>
                   </div>
                 ) : (
                   <>
                     <p style={{ fontSize: '11px', color: nm.textMuted, margin: '0 0 12px', lineHeight: 1.6 }}>
-                      <strong style={{ color: nm.textPrimary }}>Eligibility: </strong>All DAG Lieutenants — permanently enrolled. Activates Sep–Oct 2026.
+                      <strong style={{ color: nm.textPrimary }}>Eligibility: </strong>All DAG Lieutenants - permanently enrolled. Activates Sep�Oct 2026.
                     </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                       <div style={{ background: nm.bg, borderRadius: '10px', padding: '10px 12px', boxShadow: nm.shadowInsetSm }}>
@@ -422,7 +457,7 @@ export default function RewardsContent({ mounted }) {
                     </div>
                     <div style={{ marginTop: '10px', fontSize: '11px', color: '#7c3aed', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '5px' }}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      You are enrolled — activates at MainNet launch
+                      You are enrolled - activates at MainNet launch
                     </div>
                   </>
                 )}
@@ -432,18 +467,20 @@ export default function RewardsContent({ mounted }) {
         </div>
 
         {/* Transaction History */}
-        <NmCard delay={400} hover={false} inset={true} style={{ padding: '28px 32px', overflow: 'visible' }}>
+        <NmCard delay={400} hover={false} inset={true} style={{ padding: mob ? '18px 14px' : '28px 32px', overflow: 'visible' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
             <h3 style={{ fontSize: '15px', fontWeight: '800', color: nm.textPrimary, margin: 0 }}>Transaction History</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '11px', fontWeight: '600', color: nm.textMuted }}>From</span>
-              <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={{ padding: '5px 10px', borderRadius: '8px', border: 'none', background: nm.bg, boxShadow: nm.shadowInsetSm, fontSize: '12px', color: nm.textPrimary, outline: 'none' }} />
-              <span style={{ fontSize: '11px', fontWeight: '600', color: nm.textMuted }}>To</span>
-              <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={{ padding: '5px 10px', borderRadius: '8px', border: 'none', background: nm.bg, boxShadow: nm.shadowInsetSm, fontSize: '12px', color: nm.textPrimary, outline: 'none' }} />
-              {(dateFrom || dateTo) && (
-                <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ padding: '5px 10px', borderRadius: '8px', border: 'none', background: nm.bg, boxShadow: nm.shadowSm, fontSize: '11px', fontWeight: '700', color: nm.textMuted, cursor: 'pointer' }}>Clear</button>
-              )}
-            </div>
+            {!mob && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: '600', color: nm.textMuted }}>From</span>
+                <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={{ padding: '5px 10px', borderRadius: '8px', border: 'none', background: nm.bg, boxShadow: nm.shadowInsetSm, fontSize: '12px', color: nm.textPrimary, outline: 'none' }} />
+                <span style={{ fontSize: '11px', fontWeight: '600', color: nm.textMuted }}>To</span>
+                <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={{ padding: '5px 10px', borderRadius: '8px', border: 'none', background: nm.bg, boxShadow: nm.shadowInsetSm, fontSize: '12px', color: nm.textPrimary, outline: 'none' }} />
+                {(dateFrom || dateTo) && (
+                  <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ padding: '5px 10px', borderRadius: '8px', border: 'none', background: nm.bg, boxShadow: nm.shadowSm, fontSize: '11px', fontWeight: '700', color: nm.textMuted, cursor: 'pointer' }}>Clear</button>
+                )}
+              </div>
+            )}
           </div>
           {/* Tabs */}
           <div style={{ display: 'flex', gap: '6px', marginBottom: '18px' }}>
@@ -483,6 +520,33 @@ export default function RewardsContent({ mounted }) {
               </div>
             );
 
+            /* Mobile: compact card list */
+            if (mob) return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {filtered.map((tx, idx) => {
+                  const isUsd = tx.transaction_type === 'usd_commission';
+                  const isPositive = tx.points > 0 || (isUsd && tx.payment_status === 'paid');
+                  const typeLabel = ({
+                    signup_bonus:'Signup', referral_join:'Referral Join', referral_upgrade:'Referral Upgrade',
+                    spend_based:'Spend Bonus', rank_refund:'Rank Refund', rank_burn:'Burned',
+                    redeem:'Redeemed', fortune500_payout:'Fortune 500', admin_grant:'Admin Grant',
+                    usd_commission:'Rewards',
+                  })[tx.transaction_type] || tx.transaction_type;
+                  const amount = isUsd ? `$${(tx.amount||0).toFixed(2)}` : `${isPositive?'+':'-'}${Math.abs(tx.points||0).toLocaleString()} pts`;
+                  const dateStr = new Date(tx.created_at).toLocaleDateString('en-US',{ month:'short', day:'numeric', year:'numeric' });
+                  return (
+                    <div key={tx.id||idx} style={{ background: nm.bg, borderRadius: '12px', padding: '12px 14px', boxShadow: nm.shadowXs, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ margin: 0, fontSize: '12px', fontWeight: '700', color: nm.textPrimary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tx.description || typeLabel}</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '10px', color: nm.textMuted }}>{dateStr} � <span style={{ fontWeight:'700', color: nm.textSecondary }}>{typeLabel}</span></p>
+                      </div>
+                      <span style={{ fontSize: '14px', fontWeight: '800', color: isPositive ? nm.accent : '#ef4444', flexShrink: 0 }}>{amount}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+
             return (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr 130px 110px 140px', padding: '8px 14px', background: nm.bg, boxShadow: nm.shadowInsetSm, borderRadius: '8px', marginBottom: '4px' }}>
@@ -496,8 +560,8 @@ export default function RewardsContent({ mounted }) {
                   const typeLabel = TYPE_LABELS[tx.transaction_type] || tx.transaction_type;
                   const amount = isUsd
                     ? `$${(tx.amount || 0).toFixed(2)}`
-                    : `${isPositive ? '+' : '−'}${Math.abs(tx.points || 0).toLocaleString()} pts`;
-                  const txnId = tx.transaction_id || '—';
+                    : `${isPositive ? '+' : '-'}${Math.abs(tx.points || 0).toLocaleString()} pts`;
+                  const txnId = tx.transaction_id || '-';
                   const dateStr = new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                   const isRefund = tx.transaction_type === 'rank_refund';
 
@@ -509,7 +573,7 @@ export default function RewardsContent({ mounted }) {
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                         <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: '700', color: '#1e293b' }}>{txnId}</span>
-                        {txnId !== '—' && <button onClick={() => navigator.clipboard.writeText(txnId)} title="Copy" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', color: '#64748b' }}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>}
+                        {txnId !== '-' && <button onClick={() => navigator.clipboard.writeText(txnId)} title="Copy" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', color: '#64748b' }}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>}
                       </div>
                       <span style={{ fontSize: '13px', color: '#1e293b', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', paddingRight: '12px' }}>{tx.description || tx.transaction_type}</span>
                       <div>
@@ -550,7 +614,7 @@ export default function RewardsContent({ mounted }) {
                   <>
                     <p style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '10px' }}>DAGCHAIN Gas Coins</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                      <button onClick={() => setRedeemAmount(a => Math.max(1, a - 1))} style={{ width: '36px', height: '36px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>−</button>
+                      <button onClick={() => setRedeemAmount(a => Math.max(1, a - 1))} style={{ width: '36px', height: '36px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>-</button>
                       <input type="number" min={1} max={maxAmount} value={redeemAmount} onChange={e => setRedeemAmount(Math.max(1, Math.min(maxAmount, parseInt(e.target.value) || 1)))} style={{ flex: 1, textAlign: 'center', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '18px', fontWeight: '800', color: '#0f172a', outline: 'none' }} />
                       <button onClick={() => setRedeemAmount(a => Math.min(maxAmount, a + 1))} style={{ width: '36px', height: '36px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>+</button>
                     </div>
@@ -564,7 +628,7 @@ export default function RewardsContent({ mounted }) {
                     {redeemMessage && <div style={{ marginBottom: '16px', padding: '12px 16px', borderRadius: '10px', background: redeemMessage.type === 'success' ? '#f0fdf4' : '#fef2f2', border: `1px solid ${redeemMessage.type === 'success' ? '#bbf7d0' : '#fecaca'}`, color: redeemMessage.type === 'success' ? '#166534' : '#991b1b', fontSize: '13px', fontWeight: '600' }}>{redeemMessage.text}</div>}
                     <button onClick={handleRedeem} disabled={!canRedeem || redeeming}
                       style={{ width: '100%', padding: '14px', borderRadius: '12px', border: 'none', background: canRedeem && !redeeming ? 'linear-gradient(135deg,#f59e0b,#d97706)' : '#e2e8f0', color: canRedeem && !redeeming ? '#fff' : '#94a3b8', fontSize: '14px', fontWeight: '700', cursor: canRedeem && !redeeming ? 'pointer' : 'not-allowed' }}
-                    >{redeeming ? 'Processing…' : `Redeem ${redeemAmount} Coin${redeemAmount !== 1 ? 's' : ''} for ${pointsCost.toLocaleString()} pts`}</button>
+                    >{redeeming ? 'Processing�' : `Redeem ${redeemAmount} Coin${redeemAmount !== 1 ? 's' : ''} for ${pointsCost.toLocaleString()} pts`}</button>
                   </>
                 );
               })()}
@@ -619,3 +683,4 @@ export default function RewardsContent({ mounted }) {
     </>
   );
 }
+

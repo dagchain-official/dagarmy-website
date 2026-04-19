@@ -154,7 +154,7 @@ export default function FinalCTA() {
                 lineHeight: 1.65,
               }}
             >
-              If you believe AI should create ownership — not just employment —
+              If you believe AI should create ownership - not just employment -
               this is where you start.
             </motion.p>
           </div>

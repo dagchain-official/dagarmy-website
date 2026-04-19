@@ -16,11 +16,11 @@ const FAQ_SECTIONS = [
     faqs: [
       {
         q: "What is DAGARMY and what does it offer?",
-        a: "DAG Army is a global community building the infrastructure for a decentralized, AI-powered future. It sits at the intersection of three products: DAG Army (the community movement), DAGGPT (a multi-module AI platform), and DAGChain (an AI-native Layer 1 blockchain). Members learn, build, earn rewards, and participate in a real ecosystem — not just a course platform."
+        a: "DAG Army is a global community building the infrastructure for a decentralized, AI-powered future. It sits at the intersection of three products: DAG Army (the community movement), DAGGPT (a multi-module AI platform), and DAGChain (an AI-native Layer 1 blockchain). Members learn, build, earn rewards, and participate in a real ecosystem - not just a course platform."
       },
       {
         q: "Who can join DAGARMY?",
-        a: "DAGARMY is open to anyone — students, builders, creators, developers, and professionals. There are no credential or experience requirements to join. You start as a DAG Soldier (entry level) and progress through the ranks — DAG Lieutenant, DAG Captain, DAG General — based on your contribution and activity."
+        a: "DAGARMY is open to anyone - students, builders, creators, developers, and professionals. There are no credential or experience requirements to join. You start as a DAG Soldier (entry level) and progress through the ranks - DAG Lieutenant, DAG Captain, DAG General - based on your contribution and activity."
       },
       {
         q: "Is DAGARMY a course platform or a community?",
@@ -32,15 +32,15 @@ const FAQ_SECTIONS = [
       },
       {
         q: "What is DAGGPT?",
-        a: "DAGGPT is the ecosystem's multi-module AI platform — one subscription gives you access to all tools. It is one of the three core products ambassadors represent, alongside DAG Army and DAGChain."
+        a: "DAGGPT is the ecosystem's multi-module AI platform - one subscription gives you access to all tools. It is one of the three core products ambassadors represent, alongside DAG Army and DAGChain."
       },
       {
         q: "What is DAGARMY's vision for 2030?",
-        a: "By 2030, DAGARMY aims to enable 100,000 AI startup founders across India, Pakistan, and Bangladesh — builders creating products, companies, and economic impact from their cities, towns, and communities. The focus is on turning AI skill into ownership, not just employment."
+        a: "By 2030, DAGARMY aims to enable 100,000 AI startup founders across India, Pakistan, and Bangladesh - builders creating products, companies, and economic impact from their cities, towns, and communities. The focus is on turning AI skill into ownership, not just employment."
       },
       {
         q: "What are the membership ranks inside DAGARMY?",
-        a: "DAGARMY has four ranks: DAG Soldier (entry point — open network access, weekly sessions, community resources), DAG Lieutenant (Builder Circle — structured mentorship, cohort acceleration, accountability), DAG Captain (proven builder — mentors others, leads initiatives, requires 2+ AI products launched), and DAG General (ecosystem leader — builds sustainable ventures and leads regional chapters)."
+        a: "DAGARMY has four ranks: DAG Soldier (entry point - open network access, weekly sessions, community resources), DAG Lieutenant (Builder Circle - structured mentorship, cohort acceleration, accountability), DAG Captain (proven builder - mentors others, leads initiatives, requires 2+ AI products launched), and DAG General (ecosystem leader - builds sustainable ventures and leads regional chapters)."
       }
     ]
   },
@@ -88,7 +88,7 @@ const FAQ_SECTIONS = [
     faqs: [
       {
         q: "What are the three course streams on DAGARMY?",
-        a: "DAGARMY currently offers three learning streams: (1) Artificial Intelligence — the 'Vibe Coder' track covering AI tools, no-code SaaS, prompt engineering, generative filmmaking, automation, and more. (2) Blockchain — the 'Web3 Soldier' track covering DeFi, NFTs, smart contracts, DAOs, tokenomics, and blockchain gaming. (3) Data Mastery & Visual Storytelling — covering Power BI, Tableau, Excel dashboards, and data design."
+        a: "DAGARMY currently offers three learning streams: (1) Artificial Intelligence - the 'Vibe Coder' track covering AI tools, no-code SaaS, prompt engineering, generative filmmaking, automation, and more. (2) Blockchain - the 'Web3 Soldier' track covering DeFi, NFTs, smart contracts, DAOs, tokenomics, and blockchain gaming. (3) Data Mastery & Visual Storytelling - covering Power BI, Tableau, Excel dashboards, and data design."
       },
       {
         q: "Which courses are free and which require DAG Lieutenant access?",
@@ -100,11 +100,11 @@ const FAQ_SECTIONS = [
       },
       {
         q: "How long are the courses?",
-        a: "Course durations range from 5 to 10 hours depending on the topic and level. Each course is broken into structured lessons — typically 8 to 15 lessons per course. All courses are self-paced so you can progress on your own schedule."
+        a: "Course durations range from 5 to 10 hours depending on the topic and level. Each course is broken into structured lessons - typically 8 to 15 lessons per course. All courses are self-paced so you can progress on your own schedule."
       },
       {
         q: "What level are the courses aimed at?",
-        a: "DAGARMY offers courses across three levels: Beginner, Intermediate, and Advanced. Entry-level courses like Vibe Coding 101 and Blockchain Foundations require no prior experience. Intermediate courses build on fundamentals, and advanced courses — such as Tokenomics 101, Custom GPT & Agent Building, and Cyber Security in Web3 — assume solid prior knowledge in the subject area."
+        a: "DAGARMY offers courses across three levels: Beginner, Intermediate, and Advanced. Entry-level courses like Vibe Coding 101 and Blockchain Foundations require no prior experience. Intermediate courses build on fundamentals, and advanced courses - such as Tokenomics 101, Custom GPT & Agent Building, and Cyber Security in Web3 - assume solid prior knowledge in the subject area."
       }
     ]
   },
@@ -132,7 +132,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: "What are the Ambassador tiers and what do they offer?",
-        a: "There are three tiers: Silver (1,000+ followers) — standard referral rewards, free DAGGPT access, official ambassador badge, private community access. Gold (50,000+ followers) — enhanced reward rate, performance bonuses, featured website profile, priority support, early ecosystem access. Platinum (100,000+ followers) — custom partnership terms, regional leadership role, revenue-share agreements, direct executive access, co-branded campaigns."
+        a: "There are three tiers: Silver (1,000+ followers) - standard referral rewards, free DAGGPT access, official ambassador badge, private community access. Gold (50,000+ followers) - enhanced reward rate, performance bonuses, featured website profile, priority support, early ecosystem access. Platinum (100,000+ followers) - custom partnership terms, regional leadership role, revenue-share agreements, direct executive access, co-branded campaigns."
       },
       {
         q: "What benefits do all ambassadors receive?",
@@ -156,23 +156,23 @@ const FAQ_SECTIONS = [
     faqs: [
       {
         q: "What is the Udaan Initiative?",
-        a: "Udaan is DAGARMY's movement to enable 100,000 AI startup founders across India, Pakistan, and Bangladesh by 2030. It is not a course, an institute, or a coaching center — it is a collaborative AI founder network designed to turn skill into startups. The focus is on builders from South Asia's Tier-2 cities, towns, and communities that don't usually make TechCrunch."
+        a: "Udaan is DAGARMY's movement to enable 100,000 AI startup founders across India, Pakistan, and Bangladesh by 2030. It is not a course, an institute, or a coaching center - it is a collaborative AI founder network designed to turn skill into startups. The focus is on builders from South Asia's Tier-2 cities, towns, and communities that don't usually make TechCrunch."
       },
       {
         q: "Who is Udaan designed for?",
-        a: "Udaan is for founders — not passive learners. It is designed for people who want to build AI startups and need a structured ecosystem around them. The initiative specifically targets talent from India, Pakistan, and Bangladesh who have the ambition to create AI-powered ventures but lack a coordinated support network to turn that skill into ownership."
+        a: "Udaan is for founders - not passive learners. It is designed for people who want to build AI startups and need a structured ecosystem around them. The initiative specifically targets talent from India, Pakistan, and Bangladesh who have the ambition to create AI-powered ventures but lack a coordinated support network to turn that skill into ownership."
       },
       {
         q: "What is the difference between the Open Network and the Builder Circle?",
-        a: "The Open Network is open to anyone. It provides weekly founder sessions, collaborative problem-solving spaces, idea validation rooms, and peer-driven discussions. There's no gatekeeping — knowledge flows horizontally. The Builder Circle is for those ready to build seriously. It provides structured mentorship, cohort-based acceleration, execution frameworks, demo opportunities, and accountability systems. It exists for founders who are no longer experimenting — they are launching."
+        a: "The Open Network is open to anyone. It provides weekly founder sessions, collaborative problem-solving spaces, idea validation rooms, and peer-driven discussions. There's no gatekeeping - knowledge flows horizontally. The Builder Circle is for those ready to build seriously. It provides structured mentorship, cohort-based acceleration, execution frameworks, demo opportunities, and accountability systems. It exists for founders who are no longer experimenting - they are launching."
       },
       {
-        q: "What does Udaan promise — and what doesn't it promise?",
+        q: "What does Udaan promise - and what doesn't it promise?",
         a: "Udaan does not promise overnight income, does not guarantee outcomes, and does not sell shortcuts. It builds founders who understand leverage, ownership, and disciplined execution. The Founder Pledge captures this: 'I will build. I will support others. I will not wait for opportunity. I will create it.'"
       },
       {
         q: "How does Udaan differ from other AI education programs?",
-        a: "Most programs teach AI tools — Udaan focuses on building AI ventures. Most communities reward attendance — Udaan rewards contribution. Most platforms stop at education — Udaan begins at execution. Rank inside the movement is earned through contribution, not payment. Influence is built through action, not noise."
+        a: "Most programs teach AI tools - Udaan focuses on building AI ventures. Most communities reward attendance - Udaan rewards contribution. Most platforms stop at education - Udaan begins at execution. Rank inside the movement is earned through contribution, not payment. Influence is built through action, not noise."
       }
     ]
   },
@@ -188,11 +188,11 @@ const FAQ_SECTIONS = [
     faqs: [
       {
         q: "What is the DAGARMY rewards philosophy?",
-        a: "DAGARMY rewards Proof of Work — not Proof of Hype. The system values what you actually contribute, not just when you joined. Points are earned through verified activity: signing up, completing courses, referring members, upgrading your tier, and contributing to the ecosystem."
+        a: "DAGARMY rewards Proof of Work - not Proof of Hype. The system values what you actually contribute, not just when you joined. Points are earned through verified activity: signing up, completing courses, referring members, upgrading your tier, and contributing to the ecosystem."
       },
       {
         q: "What is the difference between DAG Soldier and DAG Lieutenant?",
-        a: "DAG Soldier is the entry tier — every new member starts here and receives a 500-point signup bonus with access to the open network, weekly sessions, and community resources. DAG Lieutenant is the Builder Circle tier — it unlocks structured mentorship, cohort acceleration, and accountability systems. Upgrading to Lieutenant requires demonstrating commitment, joining the Builder Circle, and shipping products."
+        a: "DAG Soldier is the entry tier - every new member starts here and receives a 500-point signup bonus with access to the open network, weekly sessions, and community resources. DAG Lieutenant is the Builder Circle tier - it unlocks structured mentorship, cohort acceleration, and accountability systems. Upgrading to Lieutenant requires demonstrating commitment, joining the Builder Circle, and shipping products."
       },
       {
         q: "How do referral rewards work for Soldiers vs Lieutenants?",
@@ -204,11 +204,11 @@ const FAQ_SECTIONS = [
       },
       {
         q: "What can DAG points be redeemed for?",
-        a: "DAG points can be redeemed for GasCoin, platform credits, and premium features within the DAGARMY and DAGChain ecosystem. The rewards system is designed around real ecosystem activity — subscriptions, validator nodes, storage nodes, and product upgrades all contribute to and benefit from the points system."
+        a: "DAG points can be redeemed for GasCoin, platform credits, and premium features within the DAGARMY and DAGChain ecosystem. The rewards system is designed around real ecosystem activity - subscriptions, validator nodes, storage nodes, and product upgrades all contribute to and benefit from the points system."
       },
       {
         q: "How do I track my rewards and referral activity?",
-        a: "After logging in, your full rewards dashboard shows your current DAG point balance, transaction history (points earned per action), your referral tree showing who you've referred and their activity, your current tier status, and any pending rewards. The system is transparent — every point has a source."
+        a: "After logging in, your full rewards dashboard shows your current DAG point balance, transaction history (points earned per action), your referral tree showing who you've referred and their activity, your current tier status, and any pending rewards. The system is transparent - every point has a source."
       }
     ]
   }
@@ -349,7 +349,7 @@ export default function FAQPage() {
           </h1>
 
           <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', maxWidth: '520px', margin: '0 auto 24px' }}>
-            Everything you need to know about DAGARMY — from courses and careers to rewards and the Udaan initiative.
+            Everything you need to know about DAGARMY - from courses and careers to rewards and the Udaan initiative.
           </p>
 
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, color: '#64748b', fontSize: '13px' }}>

@@ -36,10 +36,10 @@ export async function POST(request) {
       .single();
 
     if (fetchError || !referral) {
-      // No referral — user joined organically, nothing to award
+      // No referral - user joined organically, nothing to award
       return NextResponse.json({
         success: true,
-        message: 'No referral record found — no upline to reward',
+        message: 'No referral record found - no upline to reward',
         noReferral: true,
       });
     }
@@ -95,7 +95,7 @@ export async function POST(request) {
       p_user_id: l1Referrer.id,
       p_points: upgradeBonusPts,
       p_transaction_type: 'referral_upgrade',
-      p_description: `Referral upgrade bonus — your referral upgraded to DAG LIEUTENANT (+${upgradeBonusPts} pts, ${l1Label} rate)`,
+      p_description: `Referral upgrade bonus - your referral upgraded to DAG LIEUTENANT (+${upgradeBonusPts} pts, ${l1Label} rate)`,
       p_reference_id: referral.id,
     });
 
@@ -109,11 +109,11 @@ export async function POST(request) {
       p_user_id: l1Referrer.id,
       p_points: spendPts,
       p_transaction_type: 'spend_based',
-      p_description: `Spend-based bonus — referral spent $${amountPaidUsd} on LT upgrade (+${spendPts} pts @ ${spendRate} pts/$)`,
+      p_description: `Spend-based bonus - referral spent $${amountPaidUsd} on LT upgrade (+${spendPts} pts @ ${spendRate} pts/$)`,
       p_reference_id: referral.id,
     });
 
-    // 3️⃣ USD commission — L1 (15% Soldier / 20% LT)
+    // 3️⃣ USD commission - L1 (15% Soldier / 20% LT)
     const l1CommPct = l1IsLt
       ? (cfg.lieutenant_l1_commission_pct ?? 20)
       : (cfg.soldier_l1_commission_pct ?? 15);

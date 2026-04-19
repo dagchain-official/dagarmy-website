@@ -298,7 +298,7 @@ export default function JobsPanel() {
     type: job.location?.toLowerCase().includes('remote') ? 'Remote' : 'Full-time',
   }));
 
-  // Silent cache-only load — no spinner, instant if cached, silent if not
+  // Silent cache-only load - no spinner, instant if cached, silent if not
   // If cached jobs have no logos (stale data), flush and re-scrape fresh
   const tryLoadFromCache = async () => {
     try {
@@ -327,7 +327,7 @@ export default function JobsPanel() {
     } catch {}
   };
 
-  // Full scrape — triggered only by explicit Search button click
+  // Full scrape - triggered only by explicit Search button click
   const handleSearch = async () => {
     setIsLoading(true);
     setHasSearched(true);

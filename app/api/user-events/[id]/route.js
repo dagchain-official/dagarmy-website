@@ -29,7 +29,7 @@ export async function DELETE(request, context) {
     }
 
     if (event.created_by !== userId) {
-      return NextResponse.json({ error: 'Not authorised — only the creator can delete this event' }, { status: 403 });
+      return NextResponse.json({ error: 'Not authorised - only the creator can delete this event' }, { status: 403 });
     }
 
     // Delete RSVPs first (cascade should handle it but be explicit)

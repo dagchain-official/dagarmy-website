@@ -24,7 +24,7 @@ export async function POST(request) {
 
     const normalizedCode = referralCode.trim().toUpperCase();
 
-    // 1. Validate the referral code — look up in users.referral_code (primary source of truth)
+    // 1. Validate the referral code - look up in users.referral_code (primary source of truth)
     const { data: codeData, error: codeError } = await supabase
       .from('users')
       .select('id')

@@ -18,7 +18,7 @@ export const testimonials = [
     name: "Arjun Singh",
     role: "Product Developer",
     rating: 5,
-    text: "DAGARMY didn't just teach me tech skills—they helped me launch my own startup. The mentorship program connected me with industry veterans who guided me every step of the way.",
+    text: "DAGARMY didn't just teach me tech skills-they helped me launch my own startup. The mentorship program connected me with industry veterans who guided me every step of the way.",
   },
   {
     id: 4,
@@ -53,7 +53,7 @@ export const testimonials = [
     name: "Aditya Kumar",
     role: "Mobile App Developer",
     rating: 5,
-    text: "From struggling to find opportunities to building apps used by millions—DAGARMY made it happen. Their practical, project-based learning is exactly what the industry needs.",
+    text: "From struggling to find opportunities to building apps used by millions-DAGARMY made it happen. Their practical, project-based learning is exactly what the industry needs.",
   },
   {
     id: 9,
@@ -67,7 +67,7 @@ export const testimonials = [
     name: "Rohan Desai",
     role: "Tech Entrepreneur",
     rating: 5,
-    text: "DAGARMY didn't just teach me to code—they taught me to think like an entrepreneur. With their support, I launched my SaaS startup, and we're already generating revenue!",
+    text: "DAGARMY didn't just teach me to code-they taught me to think like an entrepreneur. With their support, I launched my SaaS startup, and we're already generating revenue!",
   },
 ];
 

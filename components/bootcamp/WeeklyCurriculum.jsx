@@ -240,7 +240,7 @@ export default function WeeklyCurriculum() {
               4-Week Curriculum
             </h2>
             <p className="wow fadeInUp" data-wow-delay="0.1s" style={{ fontSize: '18px', color: '#6b7280', marginBottom: '60px', lineHeight: '1.6' }}>
-              From discovering opportunities to launching your AI business—everything you need in 4 intensive weeks
+              From discovering opportunities to launching your AI business-everything you need in 4 intensive weeks
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-// auth.js — replaces config/reown.js
+// auth.js - replaces config/reown.js
 // Reown/Wagmi config removed. This file exports shared auth configuration.
 
 export const AUTH_CONFIG = {

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 const supabase = createClient(
@@ -55,7 +55,7 @@ export async function GET(request) {
     // ── 4. USDT earned ──────────────────────────────────────────────────────
     const totalUsdtEarned = parseFloat(user.dagchain_data?.usdt_earned || 0);
 
-    // ── 5. DAG Points — live calculation from points_transactions ───────────
+    // ── 5. DAG Points - live calculation from points_transactions ───────────
     const { data: allTxs } = await supabase
       .from('points_transactions')
       .select('points, transaction_type')
@@ -100,22 +100,17 @@ export async function GET(request) {
     const l1CommissionPct    = isLieutenant ? (sc.lieutenant_l1_commission_pct ?? 20) : (sc.soldier_l1_commission_pct ?? 15);
     const taskMultiplier     = isLieutenant ? (sc.task_multiplier_lieutenant ?? 2) : 1;
 
-    // ── 7. Ecosystem spend (for Fortune 500 eligibility) ────────────────────
-    // Sum up all purchases: validator nodes, storage nodes, LT upgrade, DAGGPT credits
-    const { data: ecosystemPurchases } = await supabase
+    // ── 7. Direct L1 Sales volume (for Fortune 500 eligibility) ────────────
+    // Requirement: \ in Level 1 direct (non-self) sales
+    const { data: directL1Sales } = await supabase
       .from('sales_commissions')
       .select('sale_amount')
       .eq('user_id', user.id)
-      .in('product_type', ['VALIDATOR_NODE', 'STORAGE_NODE', 'LT_UPGRADE', 'DAGGPT_CREDIT', 'dag_soldier_upgrade', 'dag_lieutenant_upgrade']);
+      .eq('commission_level', 1)
+      .not('is_self_sale', 'eq', true)
+      .in('payment_status', ['pending', 'paid']);
 
-    // Also sum from points_transactions of type 'purchase' or 'node_purchase'
-    const { data: purchaseTxs } = await supabase
-      .from('points_transactions')
-      .select('points, transaction_type')
-      .eq('user_id', user.id)
-      .in('transaction_type', ['node_purchase', 'validator_node', 'storage_node', 'daggpt_credit', 'lt_upgrade']);
-
-    const ecosystemSpend = (ecosystemPurchases || []).reduce(
+    const directL1SalesVolume = (directL1Sales || []).reduce(
       (sum, p) => sum + parseFloat(p.sale_amount || 0), 0
     );
 
@@ -147,8 +142,8 @@ export async function GET(request) {
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true);
 
-    // Fortune 500 eligibility: enrolled + $500 ecosystem spend
-    const f500Eligible = !!f500Member?.is_active && ecosystemSpend >= 500;
+    // Fortune 500 eligibility: enrolled + $500 in direct L1 sales (not self-purchases)
+    const f500Eligible = !!f500Member?.is_active && directL1SalesVolume >= 500;
 
     // ── 9. DAG LT Pool data ─────────────────────────────────────────────────
     const { data: ltPoolMember } = await supabase
@@ -252,7 +247,7 @@ export async function GET(request) {
       const isAdminGrant = c.product_type === 'ADMIN_GRANT';
       const desc = isAdminGrant
         ? `Admin grant: ${c.product_name || 'USD credit'}`
-        : `${c.product_name || 'Product'} — Level ${c.commission_level} commission`;
+        : `${c.product_name || 'Product'} - Level ${c.commission_level} commission`;
       return {
         id: `usd_${c.id}`,
         transaction_id: c.sale_id || null,
@@ -298,8 +293,8 @@ export async function GET(request) {
         l3CommissionPct: sc.l3_commission_pct ?? 2,
         taskMultiplier,
 
-        // Ecosystem spend (for Fortune 500 eligibility display)
-        ecosystemSpend,
+        // Direct L1 sales volume (for Fortune 500 eligibility display)
+        directL1SalesVolume,
 
         // Incentive Pools (all 3)
         incentivePools: {
@@ -345,3 +340,5 @@ export async function GET(request) {
     );
   }
 }
+
+

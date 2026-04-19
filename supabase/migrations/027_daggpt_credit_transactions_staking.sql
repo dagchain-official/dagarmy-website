@@ -1,5 +1,5 @@
 -- Migration 027: Add staking perk columns to DAGGPT's credit_transactions table
--- (DAGGPT uses the same Supabase DB as DAGARMY — billing data lives here)
+-- (DAGGPT uses the same Supabase DB as DAGARMY - billing data lives here)
 -- Run in Supabase SQL Editor
 
 ALTER TABLE credit_transactions

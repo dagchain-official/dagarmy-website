@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     // 4. Create or update user
     let user;
     if (existing && !existing.password_hash) {
-      // Existing wallet-only user — add email+password to their account
+      // Existing wallet-only user - add email+password to their account
       const { data: updated, error } = await supabase
         .from('users')
         .update({
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
             status: 'completed',
           }).single();
           await supabase.from('users').update({ referred_by_user_id: referrer.id }).eq('id', user.id);
-          // Award DAG points to referrer (fire-and-forget — non-blocking)
+          // Award DAG points to referrer (fire-and-forget - non-blocking)
           fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://dagarmy.network'}/api/referral/complete`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -116,12 +116,12 @@ export async function POST(req: Request) {
           }).catch(e => console.warn('[register] referral/complete error:', e));
         }
       } catch (refErr) {
-        // Non-fatal — don't block registration if referral fails
+        // Non-fatal - don't block registration if referral fails
         console.warn('[register] Referral error:', refErr);
       }
     }
 
-    // 6. Notify DAGChain of new user (fire-and-forget — never blocks registration)
+    // 6. Notify DAGChain of new user (fire-and-forget - never blocks registration)
     notifyUserCreated({
       id: user.id,
       email: user.email,

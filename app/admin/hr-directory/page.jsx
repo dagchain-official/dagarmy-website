@@ -15,7 +15,7 @@ function getInitials(name, email) {
   return n.slice(0, 2).toUpperCase();
 }
 function timeAgo(dateStr) {
-  if (!dateStr) return '—';
+  if (!dateStr) return '-';
   const diff = Date.now() - new Date(dateStr).getTime();
   const m = Math.floor(diff / 60000);
   if (m < 1) return 'just now';
@@ -27,7 +27,7 @@ function timeAgo(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 function formatDate(dateStr) {
-  if (!dateStr) return '—';
+  if (!dateStr) return '-';
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
@@ -265,7 +265,7 @@ export default function HRDirectoryPage() {
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: '13.5px', fontWeight: '600', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {u.full_name || '—'}
+                      {u.full_name || '-'}
                     </div>
                     <div style={{ fontSize: '11px', color: '#94a3b8' }}>Last active {timeAgo(u.last_sign_in_at)}</div>
                   </div>
@@ -290,7 +290,7 @@ export default function HRDirectoryPage() {
                       Linked
                     </span>
                   ) : (
-                    <span style={{ fontSize: '11px', fontWeight: '600', color: '#cbd5e1' }}>—</span>
+                    <span style={{ fontSize: '11px', fontWeight: '600', color: '#cbd5e1' }}>-</span>
                   )}
                 </div>
                 {/* Status */}
@@ -364,7 +364,7 @@ export default function HRDirectoryPage() {
               <div style={{ width: '64px', height: '64px', borderRadius: '18px', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: '800', color: '#fff', marginBottom: '12px', border: '2px solid rgba(255,255,255,0.4)' }}>
                 {getInitials(viewUser.full_name, viewUser.email)}
               </div>
-              <div style={{ fontSize: '20px', fontWeight: '800', color: '#fff', marginBottom: '4px' }}>{viewUser.full_name || '—'}</div>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#fff', marginBottom: '4px' }}>{viewUser.full_name || '-'}</div>
               <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>{viewUser.email}</div>
             </div>
             {/* Modal body */}
@@ -374,7 +374,7 @@ export default function HRDirectoryPage() {
                 { label: 'Status', value: isActive(viewUser) ? 'Active' : 'Inactive', isStatus: true, active: isActive(viewUser) },
                 { label: 'Joined', value: formatDate(viewUser.created_at) },
                 { label: 'Last Active', value: timeAgo(viewUser.last_sign_in_at) },
-                { label: 'Referred By', value: viewUser.upline?.referrer_name || '—' },
+                { label: 'Referred By', value: viewUser.upline?.referrer_name || '-' },
               ].map(row => (
                 <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
                   <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '600' }}>{row.label}</span>

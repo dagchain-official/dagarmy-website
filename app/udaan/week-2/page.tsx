@@ -404,7 +404,7 @@ export default function Week2Page() {
                   fontWeight: 500,
                   marginBottom: 0
                 }}>
-                  The shift is immediate. You are no longer discussing ideas. You are showing execution. A working prototype ready for real user testing—not theory, not slides.
+                  The shift is immediate. You are no longer discussing ideas. You are showing execution. A working prototype ready for real user testing-not theory, not slides.
                 </p>
               </div>
 

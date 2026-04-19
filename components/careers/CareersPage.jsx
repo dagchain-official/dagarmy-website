@@ -377,7 +377,7 @@ function ApplicationModal({ job, onClose, onSuccess }) {
         <div style={{ padding: '24px 28px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <p style={{ margin: '0 0 4px', fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {job.department} — {job.region}
+              {job.department} - {job.region}
             </p>
             <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '700', color: '#1e1b4b', fontFamily: "'Inter', sans-serif" }}>
               {job.title}
@@ -460,7 +460,7 @@ function ApplicationModal({ job, onClose, onSuccess }) {
                   </div>
                   <div style={{ textAlign: 'left' }}>
                     <p style={{ margin: 0, fontSize: '13px', fontWeight: '700', color: '#0891b2' }}>{resumeFile.name}</p>
-                    <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>{(resumeFile.size / 1024).toFixed(0)} KB — click to change</p>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>{(resumeFile.size / 1024).toFixed(0)} KB - click to change</p>
                   </div>
                 </div>
               ) : (
@@ -649,7 +649,7 @@ export default function CareersPage() {
   const CULTURE = [
     { icon: <IconGlobe />, title: 'Remote-First', desc: 'Work from anywhere. We hire for talent, not timezone.', color: '#6366f1' },
     { icon: <IconBriefcase />, title: 'Web3 Native', desc: 'We live and breathe blockchain. Every role has real impact.', color: '#8b5cf6' },
-    { icon: <IconCheck />, title: 'Community Driven', desc: "You're not just an employee — you're part of the DAGArmy.", color: '#06b6d4' },
+    { icon: <IconCheck />, title: 'Community Driven', desc: "You're not just an employee - you're part of the DAGArmy.", color: '#06b6d4' },
     { icon: <IconArrowRight />, title: 'High Growth', desc: 'Early-stage startup with global scale. Grow fast with us.', color: '#0891b2' },
   ];
 
@@ -702,7 +702,7 @@ export default function CareersPage() {
             maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto',
             color: '#64748b',
           }}>
-            DAGArmy is a fast-growing Web3 community platform. We&apos;re looking for driven, mission-aligned people to help us build the decentralized future — from anywhere in the world.
+            DAGArmy is a fast-growing Web3 community platform. We&apos;re looking for driven, mission-aligned people to help us build the decentralized future - from anywhere in the world.
           </p>
 
           <button
@@ -850,7 +850,7 @@ export default function CareersPage() {
               </p>
               <a
                 className="neu-btn"
-                href="mailto:hr@dagchain.network?subject=Open Application — DAGArmy"
+                href="mailto:hr@dagchain.network?subject=Open Application - DAGArmy"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '10px',
                   background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',

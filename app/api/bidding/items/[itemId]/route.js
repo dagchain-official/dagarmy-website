@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 
-// GET /api/bidding/items/[itemId] — item detail + ranked bidder list
+// GET /api/bidding/items/[itemId] - item detail + ranked bidder list
 export async function GET(request, { params }) {
   try {
     const { itemId } = params;

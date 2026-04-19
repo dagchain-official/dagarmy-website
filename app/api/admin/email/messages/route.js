@@ -49,7 +49,7 @@ export async function GET(request) {
     if (!forceRefresh) {
       const cached = await getCachedList(accountEmail, folder, page, limit);
       if (cached) {
-        // Check if cache is getting stale — refresh in background without blocking
+        // Check if cache is getting stale - refresh in background without blocking
         const staleAt = await redis.get(staleKey);
         if (!staleAt || Date.now() > parseInt(staleAt)) {
           // Fire-and-forget background refresh
@@ -63,7 +63,7 @@ export async function GET(request) {
       }
     }
 
-    // Cache miss or forced refresh — fetch live from IMAP
+    // Cache miss or forced refresh - fetch live from IMAP
     const result = await fetchMessages(accountEmail, folder, { page, limit });
     await redis.set(staleKey, Date.now() + STALE_AFTER * 1000, { ex: TTL_LIST });
     return NextResponse.json({ ...result, folder, accountEmail });

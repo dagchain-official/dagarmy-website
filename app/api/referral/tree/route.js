@@ -20,7 +20,7 @@ export async function GET(request) {
     // Then join with users to get names/tiers in a second query
     // This is more efficient than recursive per-level queries
 
-    // Step 1: Get all referral relationships (no depth limit needed — we'll BFS in JS)
+    // Step 1: Get all referral relationships (no depth limit needed - we'll BFS in JS)
     const { data: allReferrals, error: refError } = await supabaseAdmin
       .from('referrals')
       .select('referrer_id, referred_id, status, reward_points, created_at, total_points_earned');
@@ -108,7 +108,7 @@ export async function GET(request) {
       return {
         id: u.id,
         name: u.full_name || 'Unknown',
-        email: u.email ? u.email.replace(/(.{2}).*(@.*)/, '$1***$2') : '—',
+        email: u.email ? u.email.replace(/(.{2}).*(@.*)/, '$1***$2') : '-',
         tier: u.tier || 'DAG SOLDIER',
         rank: u.current_rank || 'None',
         joinedAt: u.created_at,

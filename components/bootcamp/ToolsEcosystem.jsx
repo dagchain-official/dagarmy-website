@@ -19,7 +19,7 @@ export default function ToolsEcosystem() {
               No-Code Tools Ecosystem
             </h2>
             <p className="wow fadeInUp" data-wow-delay="0.1s" style={{ fontSize: '18px', color: '#6b7280', marginBottom: '60px', lineHeight: '1.6' }}>
-              Master these powerful AI and automation tools—no programming required
+              Master these powerful AI and automation tools-no programming required
             </p>
           </div>
         </div>

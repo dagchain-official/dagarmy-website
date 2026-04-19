@@ -4,8 +4,8 @@ import Footer1 from "@/components/footers/Footer1";
 import FAQPage from "@/components/faq/FAQPage";
 
 export const metadata = {
-  title: "FAQ — DAGARMY",
-  description: "Frequently asked questions about DAGARMY — courses, careers, ambassador program, Udaan initiative, rewards, and more.",
+  title: "FAQ - DAGARMY",
+  description: "Frequently asked questions about DAGARMY - courses, careers, ambassador program, Udaan initiative, rewards, and more.",
 };
 
 export default function FAQRoute() {

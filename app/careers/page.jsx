@@ -4,7 +4,7 @@ import CareersPage from "@/components/careers/CareersPage";
 import { Suspense } from "react";
 
 export const metadata = {
-  title: "Careers — DAGArmy",
+  title: "Careers - DAGArmy",
   description: "Join the DAGArmy team. We're hiring Developer Relations Managers and Sales Interns across India, Southeast Asia, MENA, and globally.",
 };
 

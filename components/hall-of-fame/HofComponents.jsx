@@ -223,7 +223,7 @@ export function ChampionCard({ champion, category, isCurrentUser, isLoading }) {
 export function MiniChip({ champion, category }) {
   const cat = CATS[category];
   if (!champion) {
-    return <span style={{ fontSize: "12px", color: "#cbd5e1" }}>—</span>;
+    return <span style={{ fontSize: "12px", color: "#cbd5e1" }}>-</span>;
   }
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>

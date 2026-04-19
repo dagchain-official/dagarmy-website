@@ -286,7 +286,7 @@ export default function CourseListNeo() {
                         e.currentTarget.style.boxShadow = '6px 6px 14px rgba(96,165,250,0.3), -2px -2px 8px rgba(255,255,255,0.7)';
                       }}
                     >
-                      {course.is_free ? 'Enroll Now — FREE' : `Enroll — ${course.currency} ${course.price}`}
+                      {course.is_free ? 'Enroll Now - FREE' : `Enroll - ${course.currency} ${course.price}`}
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                     </button>
                   </NmCard>
@@ -325,7 +325,7 @@ export default function CourseListNeo() {
                   )}
                 </div>
 
-                {/* RIGHT — Curriculum */}
+                {/* RIGHT - Curriculum */}
                 <NmCard hover={false} style={{ overflow: 'hidden', padding: 0 }}>
                   {/* Header */}
                   <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(148,163,184,0.2)' }}>

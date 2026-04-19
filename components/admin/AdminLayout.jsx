@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { API_ENDPOINT_COUNT } from "@/data/api-endpoint-count";
 import SubAdminLayout from "@/components/admin/SubAdminLayout";
 
-// Module-level cache — fetched once per browser session, never again on remount
+// Module-level cache - fetched once per browser session, never again on remount
 let _countsCache = null;
 let _countsFetching = false;
 
@@ -40,7 +40,7 @@ export default function AdminLayout({ children }) {
   const _authInitialised = React.useRef(false);
 
   useEffect(() => {
-    // Don't redirect from the login pages themselves — avoids infinite loop
+    // Don't redirect from the login pages themselves - avoids infinite loop
     if (pathname === '/admin/login' || pathname === '/admin/auth-login') {
       setIsLoading(false);
       return;
@@ -54,7 +54,7 @@ export default function AdminLayout({ children }) {
       return;
     }
 
-    // Only update state on first run — subsequent pathname changes just verify auth
+    // Only update state on first run - subsequent pathname changes just verify auth
     if (_authInitialised.current) return;
     _authInitialised.current = true;
 
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }) {
       } catch (e) {}
     }
 
-    // Single batched state update — avoids multiple re-renders
+    // Single batched state update - avoids multiple re-renders
     setUserEmail(email);
     setUserName(name);
     setIsMasterAdmin(masterAdmin);
@@ -103,7 +103,7 @@ export default function AdminLayout({ children }) {
     router.push('/admin/login');
   };
 
-  // Login pages render without the admin shell — must be BEFORE isLoading gate
+  // Login pages render without the admin shell - must be BEFORE isLoading gate
   if (pathname === '/admin/login' || pathname === '/admin/auth-login') {
     return <>{children}</>;
   }

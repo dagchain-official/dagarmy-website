@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { getAdminSession } from '@/lib/admin-auth';
 
-// GET /api/bidding/admin/items — all items (all statuses) for admin
+// GET /api/bidding/admin/items - all items (all statuses) for admin
 export async function GET(request) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -25,7 +25,7 @@ export async function GET(request) {
   }
 }
 
-// POST /api/bidding/admin/items — create new auction item
+// POST /api/bidding/admin/items - create new auction item
 export async function POST(request) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -17,7 +17,7 @@ export async function POST(request) {
       );
     }
 
-    // Validate the referral code — look up in users.referral_code (primary source of truth)
+    // Validate the referral code - look up in users.referral_code (primary source of truth)
     const { data: referrer, error: codeError } = await supabase
       .from('users')
       .select('id')

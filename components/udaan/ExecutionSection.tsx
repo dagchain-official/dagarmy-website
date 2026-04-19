@@ -80,7 +80,7 @@ export default function ExecutionSection() {
           marginBottom: "clamp(80px, 10vh, 128px)",
         }}>
 
-          {/* LEFT — massive typographic statement */}
+          {/* LEFT - massive typographic statement */}
           <motion.div
             initial={{ opacity: 0, y: 36 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -130,10 +130,10 @@ export default function ExecutionSection() {
             </p>
           </motion.div>
 
-          {/* RIGHT — two stacked content blocks */}
+          {/* RIGHT - two stacked content blocks */}
           <div style={{ display: "flex", flexDirection: "column", gap: 2, paddingTop: 8 }}>
 
-            {/* Block A — Execution Over Theory */}
+            {/* Block A - Execution Over Theory */}
             <ContentBlock
               delay={0.2}
               number="A"
@@ -155,7 +155,7 @@ export default function ExecutionSection() {
               }
             />
 
-            {/* Block B — Not passive learning */}
+            {/* Block B - Not passive learning */}
             <ContentBlock
               delay={0.3}
               number="B"
@@ -167,7 +167,7 @@ export default function ExecutionSection() {
                   <span style={grad}><strong>Startup Runway</strong></span>{" "}
                   where ideas are converted into working models through{" "}
                   <strong style={{ color: "#0a0a0f" }}>execution.</strong>{" "}
-                  The outcome is not a certificate — it is a{" "}
+                  The outcome is not a certificate - it is a{" "}
                   <span style={grad}><strong>functional prototype, early validation,
                   and a monetization pathway</strong></span>{" "}
                   inside real <strong style={{ color: "#0a0a0f" }}>AI entrepreneurship.</strong>
@@ -338,7 +338,7 @@ function ClosingManifesto({ inView }: { inView: boolean }) {
         overflow: "hidden",
       }}
     >
-      {/* Left — builder-first culture text */}
+      {/* Left - builder-first culture text */}
       <div style={{
         padding: "clamp(36px, 4vw, 56px)",
         background: "#f4f4f8",
@@ -362,7 +362,7 @@ function ClosingManifesto({ inView }: { inView: boolean }) {
         </p>
       </div>
 
-      {/* Right — closing statement, full black */}
+      {/* Right - closing statement, full black */}
       <div style={{
         padding: "clamp(36px, 4vw, 56px)",
         background: "#0a0a0f",

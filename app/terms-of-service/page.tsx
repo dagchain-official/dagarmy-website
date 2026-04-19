@@ -49,10 +49,10 @@ Each user may maintain only one active account. Creating duplicate accounts to c
     id: "ranks-rewards",
     title: "5. Ranks, Referrals, and Rewards",
     content: `5.1. Rank System
-DAG Army operates a contribution-based rank system. Ranks (Soldier, Lieutenant, and higher) are earned through verified contributions, referrals, and ecosystem participation — not solely through payment.
+DAG Army operates a contribution-based rank system. Ranks (Soldier, Lieutenant, and higher) are earned through verified contributions, referrals, and ecosystem participation - not solely through payment.
 
 5.2. Referral Program
-The referral program is designed to reward genuine network growth. Any attempt to game, manipulate, or artificially inflate referral counts — including self-referrals, fake accounts, or coordinated abuse — will result in forfeiture of all associated rewards and permanent account suspension.
+The referral program is designed to reward genuine network growth. Any attempt to game, manipulate, or artificially inflate referral counts - including self-referrals, fake accounts, or coordinated abuse - will result in forfeiture of all associated rewards and permanent account suspension.
 
 5.3. Reward Points
 Points earned through contributions and referrals hold no monetary value outside the DAG Army platform. We reserve the right to adjust, revoke, or modify point values and reward structures at any time with reasonable notice.
@@ -78,7 +78,7 @@ Violation of these rules may result in immediate account suspension or permanent
     id: "ip",
     title: "7. Intellectual Property",
     content: `7.1. Our Content
-All platform content — including the DAG Army brand, logos, course materials, design assets, and software — is the exclusive property of DAGChain Network and is protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written permission.
+All platform content - including the DAG Army brand, logos, course materials, design assets, and software - is the exclusive property of DAGChain Network and is protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written permission.
 
 7.2. Your Content
 You retain ownership of any original content you contribute to the platform (e.g., ideas posted for validation, project descriptions). By submitting content, you grant DAGChain Network a non-exclusive, royalty-free, worldwide license to display and promote that content within the platform ecosystem.`,
@@ -87,7 +87,7 @@ You retain ownership of any original content you contribute to the platform (e.g
     id: "disclaimers",
     title: "8. Disclaimers and Limitation of Liability",
     content: `8.1. No Guarantee of Outcomes
-DAG Army provides tools, community, and structure — but we make no guarantees of income, business success, startup outcomes, or employment. Results depend entirely on the effort, skill, and execution of each individual member.
+DAG Army provides tools, community, and structure - but we make no guarantees of income, business success, startup outcomes, or employment. Results depend entirely on the effort, skill, and execution of each individual member.
 
 8.2. Platform Availability
 We strive for high uptime but do not guarantee uninterrupted access. We are not liable for any losses resulting from temporary platform unavailability.

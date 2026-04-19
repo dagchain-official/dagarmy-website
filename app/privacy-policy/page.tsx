@@ -7,7 +7,7 @@ const sections = [
   {
     id: "overview",
     title: "1. Overview and Mission",
-    content: `DAGChain Network ("the Company," "we," "us," or "our") operates the DAG Army platform (https://dagarmy.network). We recognize that privacy is a fundamental right. This Privacy Policy describes our standards for collecting, processing, and protecting your personal data when you use DAG Army — a structured AI Startup Ecosystem for builders, founders, and contributors across India, Pakistan, and Bangladesh.
+    content: `DAGChain Network ("the Company," "we," "us," or "our") operates the DAG Army platform (https://dagarmy.network). We recognize that privacy is a fundamental right. This Privacy Policy describes our standards for collecting, processing, and protecting your personal data when you use DAG Army - a structured AI Startup Ecosystem for builders, founders, and contributors across India, Pakistan, and Bangladesh.
 
 This document is designed to meet the requirements of applicable data protection frameworks, including the EU General Data Protection Regulation (GDPR) and applicable laws in the jurisdictions we serve.`,
   },
@@ -76,10 +76,10 @@ To exercise these rights, email: support@dagarmy.network. We will respond within
     title: "6. Data Sharing and Sub-Processors",
     content: `We do not sell your personal data. We share it only with sub-processors necessary for platform operation:
 
-• Supabase — Database hosting and authentication (USA / Global)
-• Stripe / Payment Gateway — Subscription billing and upgrade processing (USA / Global)
-• Cloudflare — DDoS protection and CDN (Global)
-• Email Service Provider — Transactional and notification emails (Global)
+• Supabase - Database hosting and authentication (USA / Global)
+• Stripe / Payment Gateway - Subscription billing and upgrade processing (USA / Global)
+• Cloudflare - DDoS protection and CDN (Global)
+• Email Service Provider - Transactional and notification emails (Global)
 
 All sub-processors are contractually obligated to handle your data in accordance with applicable privacy laws.`,
   },

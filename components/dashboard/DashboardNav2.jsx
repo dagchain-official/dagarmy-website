@@ -109,7 +109,7 @@ export default function DashboardNav2() {
   });
 
   return (
-    /* ── Flat single column — layout wrapper handles overflow/scroll ── */
+    /* ── Flat single column - layout wrapper handles overflow/scroll ── */
     <div style={{ display: 'flex', flexDirection: 'column', padding: '0 8px 20px', background: nm.bg }}>
 
       <style>{`
@@ -133,7 +133,7 @@ export default function DashboardNav2() {
       <div style={{ height: '1px', background: 'rgba(0,0,0,0.07)', margin: '0 4px 14px' }}/>
 
       {/* ═══════════════════════════════════════
-          NAV ITEMS — flat, no sub-container
+          NAV ITEMS - flat, no sub-container
       ═══════════════════════════════════════ */}
 
       {/* 1. Dashboard */}
@@ -159,7 +159,7 @@ export default function DashboardNav2() {
       })()}
 
 
-      {/* ── My Courses — HIDDEN (restore when ready) ──
+      {/* ── My Courses - HIDDEN (restore when ready) ──
       <div onClick={() => window.location.href='/my-courses'} style={{ ...itemStyle(pathname==='/my-courses',false,false), marginBottom:7 }}>
         ...
       </div>
@@ -209,7 +209,7 @@ export default function DashboardNav2() {
       })()}
 
 
-      {/* 6. Business Validation — Lieutenants only */}
+      {/* 6. Business Validation - Lieutenants only */}
       {isLieutenant && (() => {
         const isActive = pathname === '/notifications';
         return (
@@ -229,7 +229,7 @@ export default function DashboardNav2() {
         );
       })()}
 
-      {/* 7. Mission — red pulsing border when tasks available */}
+      {/* 7. Mission - red pulsing border when tasks available */}
       {(() => {
         const isActive = pathname === '/missions';
         const hasMission = availableMissions > 0;
@@ -334,7 +334,7 @@ export default function DashboardNav2() {
         );
       })()}
 
-      {/* DAG WAR Room — Coming Soon, after DAG Lieutenant */}
+      {/* DAG WAR Room - Coming Soon, after DAG Lieutenant */}
       <div style={{ ...itemStyle(false, true, false), marginBottom: 7, cursor: 'default' }}>
         <div style={iconStyle(false, true)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -349,7 +349,7 @@ export default function DashboardNav2() {
       </div>
 
       {/* ═══════════════════════════════════════
-          EXPLORE ECOSYSTEM — flows right after DAG Lieutenant,
+          EXPLORE ECOSYSTEM - flows right after DAG Lieutenant,
           no wrapping container, layout sidebar handles scroll
       ═══════════════════════════════════════ */}
 
@@ -385,7 +385,7 @@ export default function DashboardNav2() {
         </svg>
       </button>
 
-      {/* DAGGPT — same size as DAGCHAIN */}
+      {/* DAGGPT - same size as DAGCHAIN */}
       <button onClick={() => handleSSOJump('daggpt')} style={{
         display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px',
         borderRadius: '12px', marginBottom: '10px', background: nm.bg, border: '1.5px solid #1a4a8a',
@@ -409,7 +409,7 @@ export default function DashboardNav2() {
         </svg>
       </button>
 
-      {/* DAG Academy — Coming Soon, same button pattern as DAGCHAIN/DAGGPT but greyed out */}
+      {/* DAG Academy - Coming Soon, same button pattern as DAGCHAIN/DAGGPT but greyed out */}
       <button disabled style={{
         display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px',
         borderRadius: '12px', marginBottom: '10px', background: nm.bg,

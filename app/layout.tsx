@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import "./globals.css";
+import "../components/headers/Header2.global.css";
 import "../public/scss/main.scss";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -36,13 +37,29 @@ export default function RootLayout({
   const pathname = usePathname();
 
   useEffect(() => {
+    // Ensure viewport-fit=cover so iOS Safari honours env(safe-area-inset-*)
+    const existing = document.querySelector('meta[name="viewport"]');
+    if (existing) {
+      const content = existing.getAttribute('content') || '';
+      if (!content.includes('viewport-fit')) {
+        existing.setAttribute('content', content + ', viewport-fit=cover');
+      }
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+      document.head.appendChild(meta);
+    }
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       import("bootstrap/dist/js/bootstrap.esm" as any).then(() => {});
     }
   }, []);
 
   useEffect(() => {
-    // Skip WOW.js on admin pages — it causes re-render flicker
+    // Skip WOW.js on admin pages - it causes re-render flicker
     if (pathname?.startsWith("/admin")) return;
     const wowModule = require("wowjs");
     // wowjs exports differently under webpack vs Turbopack
@@ -64,7 +81,14 @@ export default function RootLayout({
               {children}
             </div>
           </Context>
-          {!pathname?.startsWith("/admin") && !pathname?.startsWith("/dashboard") && !pathname?.startsWith("/missions") && !pathname?.startsWith("/my-team") && !pathname?.startsWith("/leaderboard") && !pathname?.startsWith("/events") && !pathname?.startsWith("/notifications") && !pathname?.startsWith("/support") && !pathname?.startsWith("/settings") && !pathname?.startsWith("/rewards") && !pathname?.startsWith("/my-courses") && !pathname?.startsWith("/bidding") && <ChatWidget />}
+          {/* ChatWidget: marketing pages only — never on dashboard or admin */}
+          {(() => {
+            const DASHBOARD_PATHS = ['/admin', '/dashboard', '/missions', '/my-team', '/leaderboard',
+              '/events', '/notifications', '/support', '/settings', '/rewards', '/my-courses',
+              '/referral', '/bidding', '/dag-lieutenant'];
+            const isDashboard = DASHBOARD_PATHS.some(p => pathname?.startsWith(p));
+            return !isDashboard ? <ChatWidget /> : null;
+          })()}
         </Web3Provider>
         <Analytics />
       </body>

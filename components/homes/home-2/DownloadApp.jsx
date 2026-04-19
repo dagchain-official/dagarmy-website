@@ -25,15 +25,30 @@ export default function DownloadApp() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
   return (
-    <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px' }}>
+    <section className="section-mobile-app" style={{ background: '#ffffff', paddingTop: '40px', paddingBottom: '40px', overflow: 'hidden' }}>
+      <style>{`
+        @media (max-width: 991px) {
+          .download-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+          .download-right-col > div {
+            margin-top: 0 !important;
+          }
+          .download-heading {
+            font-size: 28px !important;
+          }
+        }
+      `}</style>
       <div className="tf-container">
-        <div className={`row ${styles['download-section']}`} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', order: 1 }}>
+        <div className={`row ${styles['download-section']} download-grid`} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
+          <div className="download-left-col" style={{ display: 'flex', flexDirection: 'column', height: '100%', order: 1 }}>
             <div className={`content-left ${styles['content-left']}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
               <div style={{ flex: '0 0 auto' }}>
                 <h2
-                  className="fw-7 letter-spacing-1 wow fadeInUp"
+                  className="fw-7 letter-spacing-1 wow fadeInUp download-heading"
                   data-wow-delay="0.2s"
                   style={{
                     fontSize: '36px',
@@ -73,7 +88,7 @@ export default function DownloadApp() {
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', order: 2, alignItems: 'flex-start' }}>
+          <div className="download-right-col" style={{ display: 'flex', order: 2, alignItems: 'flex-start' }}>
             <div className={styles['benefits-card']} style={{ width: '100%', marginTop: '110px' }}>
               <div style={{ background: '#ffffff', borderRadius: '16px', padding: '32px', border: '1px solid #f0f0f0', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)', minHeight: '380px' }}>
                 <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '28px', color: '#1a1a1a' }}>What You Get as a DAG Army Member</h3>

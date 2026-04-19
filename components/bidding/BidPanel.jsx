@@ -18,7 +18,7 @@ export default function BidPanel({
   const minRequired = (() => {
     if (item.current_highest_bid === 0) return item.starting_bid;
     if (userBid) {
-      // existing bidder — top-up must make total > current_highest + increment
+      // existing bidder - top-up must make total > current_highest + increment
       // unless they ARE the current highest
       if (item.current_highest_bidder_id === userBid?.user_id) return item.min_increment;
       const needed = item.current_highest_bid + item.min_increment;
@@ -80,7 +80,7 @@ export default function BidPanel({
           <p className="text-[11px] uppercase tracking-widest font-semibold"
             style={{ color: "#92400E" }}>Current Highest</p>
           <p className="text-2xl font-black mt-0.5" style={{ color: "#F59E0B" }}>
-            ⬡ {item.current_highest_bid === 0 ? "—" : item.current_highest_bid?.toLocaleString()}
+            ⬡ {item.current_highest_bid === 0 ? "-" : item.current_highest_bid?.toLocaleString()}
           </p>
         </div>
         <div className="text-right">
@@ -96,7 +96,7 @@ export default function BidPanel({
       <div className="flex items-center gap-2">
         <div className="w-2 h-2 rounded-full" style={{ background: "#10B981" }} />
         <span className="text-sm" style={{ color: "#9CA3AF" }}>
-          Available: <strong style={{ color: "#E5E7EB" }}>⬡ {userPoints?.toLocaleString() ?? "—"}</strong> DAG Points
+          Available: <strong style={{ color: "#E5E7EB" }}>⬡ {userPoints?.toLocaleString() ?? "-"}</strong> DAG Points
         </span>
       </div>
 

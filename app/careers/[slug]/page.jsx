@@ -10,14 +10,14 @@ export async function generateMetadata({ params }) {
       `${process.env.NEXT_PUBLIC_SITE_URL || "https://dagarmy.network"}/api/careers/jobs/${slug}`,
       { cache: "no-store" }
     );
-    if (!res.ok) return { title: "Job Not Found — DAGArmy" };
+    if (!res.ok) return { title: "Job Not Found - DAGArmy" };
     const { job } = await res.json();
     return {
-      title: `${job.title} — DAGArmy Careers`,
+      title: `${job.title} - DAGArmy Careers`,
       description: job.summary,
     };
   } catch {
-    return { title: "Careers — DAGArmy" };
+    return { title: "Careers - DAGArmy" };
   }
 }
 

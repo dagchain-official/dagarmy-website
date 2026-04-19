@@ -5,22 +5,22 @@ import { motion, AnimatePresence } from "framer-motion";
 const ARTICLES = [
   {
     title: "Builders First",
-    body: `This is a builder community. Members are expected to take action, execute ideas, and share progress. Spectators are welcome — builders are respected.\n\nDAGARMY rewards execution, not observation. Anyone can watch, but recognition and opportunities go to those who build, test, and ship real work. Progress is valued more than perfection. If you are here, you are expected to move — not just consume.`,
+    body: `This is a builder community. Members are expected to take action, execute ideas, and share progress. Spectators are welcome - builders are respected.\n\nDAGARMY rewards execution, not observation. Anyone can watch, but recognition and opportunities go to those who build, test, and ship real work. Progress is valued more than perfection. If you are here, you are expected to move - not just consume.`,
     rules: ["Take action on your ideas", "Execute, don't just plan", "Share your progress publicly"],
   },
   {
     title: "Contribution Over Competition",
-    body: `We compete with the world. We collaborate within the community. If someone asks a question — we respond. If someone shares a challenge — we guide. If someone shows progress — we support.\n\nInside DAGARMY, growth is collective. Members help each other move faster, avoid mistakes, and unlock opportunities. Strong internal collaboration makes us stronger externally. Your peer's win is the community's win.`,
+    body: `We compete with the world. We collaborate within the community. If someone asks a question - we respond. If someone shares a challenge - we guide. If someone shows progress - we support.\n\nInside DAGARMY, growth is collective. Members help each other move faster, avoid mistakes, and unlock opportunities. Strong internal collaboration makes us stronger externally. Your peer's win is the community's win.`,
     rules: ["Answer questions when you can", "Share challenges openly", "Celebrate others' progress"],
   },
   {
     title: "No Toxicity, No Ego",
-    body: `Zero tolerance for mocking beginners, aggressive selling, fake success claims, misleading income promises, or political and religious debates. Respect is non-negotiable.\n\nA safe and professional environment is mandatory. Trust and credibility are built through respect, honesty, and discipline. Toxicity destroys culture — and culture is our foundation. Every member is responsible for maintaining this standard.`,
+    body: `Zero tolerance for mocking beginners, aggressive selling, fake success claims, misleading income promises, or political and religious debates. Respect is non-negotiable.\n\nA safe and professional environment is mandatory. Trust and credibility are built through respect, honesty, and discipline. Toxicity destroys culture - and culture is our foundation. Every member is responsible for maintaining this standard.`,
     rules: ["No mocking beginners", "No fake success claims", "No aggressive selling or spam", "No political or religious debates"],
   },
   {
     title: "Teach What You Know",
-    body: `If you know something valuable — host a session, share a resource, guide a member. Knowledge hoarding is weakness. Knowledge sharing builds leaders.\n\nLeadership begins with contribution. Members who share insights, tools, and experience accelerate the entire ecosystem. Teaching is a pathway to authority and influence within DAGARMY. The more you give, the more you grow.`,
+    body: `If you know something valuable - host a session, share a resource, guide a member. Knowledge hoarding is weakness. Knowledge sharing builds leaders.\n\nLeadership begins with contribution. Members who share insights, tools, and experience accelerate the entire ecosystem. Teaching is a pathway to authority and influence within DAGARMY. The more you give, the more you grow.`,
     rules: ["Share resources freely", "Host sessions when you can", "Guide newer members"],
   },
   {
@@ -30,7 +30,7 @@ const ARTICLES = [
   },
   {
     title: "Rank Through Contribution",
-    body: `Community ranks — Soldier, Lieutenant, and beyond — reflect contribution, execution, leadership, and support. Not just payment. Leadership is earned.\n\nStatus within the community is merit-based. Advancement comes from impact, consistency, and service — not financial transactions. Authority must be demonstrated through action. Titles mean nothing without the work behind them.`,
+    body: `Community ranks - Soldier, Lieutenant, and beyond - reflect contribution, execution, leadership, and support. Not just payment. Leadership is earned.\n\nStatus within the community is merit-based. Advancement comes from impact, consistency, and service - not financial transactions. Authority must be demonstrated through action. Titles mean nothing without the work behind them.`,
     rules: ["Ranks are earned through action", "Leadership requires demonstrated impact", "Consistency matters more than one-time effort"],
   },
   {
@@ -40,17 +40,17 @@ const ARTICLES = [
   },
   {
     title: "Integrity Above All",
-    body: `We do not copy blindly, scam clients, fake case studies, or inflate results. Reputation is our biggest asset.\n\nTrust is the currency of this community. Ethical behavior, transparency, and honest reporting protect the long-term strength of DAGARMY and its members. One dishonest act can destroy years of credibility — for you and for the community.`,
+    body: `We do not copy blindly, scam clients, fake case studies, or inflate results. Reputation is our biggest asset.\n\nTrust is the currency of this community. Ethical behavior, transparency, and honest reporting protect the long-term strength of DAGARMY and its members. One dishonest act can destroy years of credibility - for you and for the community.`,
     rules: ["No fake case studies or inflated results", "No client deception", "Transparency in all dealings"],
   },
   {
     title: "The 1 Lakh Founder Mission",
-    body: `Every member joins with awareness: we are part of something bigger. By 2030 — 100,000+ AI founders. If one grows, we all grow.\n\nDAGARMY is a movement, not just a network. Each member contributes to a shared mission of building a large-scale AI founder ecosystem across regions and industries. Your individual growth is inseparable from the collective mission.`,
+    body: `Every member joins with awareness: we are part of something bigger. By 2030 - 100,000+ AI founders. If one grows, we all grow.\n\nDAGARMY is a movement, not just a network. Each member contributes to a shared mission of building a large-scale AI founder ecosystem across regions and industries. Your individual growth is inseparable from the collective mission.`,
     rules: ["Contribute to the 100K mission", "Think beyond yourself", "Help at least one other founder grow"],
   },
   {
     title: "The Founder Pledge",
-    body: `Every member affirms: "I will build. I will support. I will act with integrity. I will grow with the community. I will help create 1 lakh AI founders."\n\nThis pledge reflects personal responsibility. Every member commits to discipline, contribution, and ethical growth — strengthening both individual success and the collective mission. By accepting this constitution, you are not just joining a community — you are joining a movement.`,
+    body: `Every member affirms: "I will build. I will support. I will act with integrity. I will grow with the community. I will help create 1 lakh AI founders."\n\nThis pledge reflects personal responsibility. Every member commits to discipline, contribution, and ethical growth - strengthening both individual success and the collective mission. By accepting this constitution, you are not just joining a community - you are joining a movement.`,
     rules: [],
   },
 ];
@@ -174,7 +174,7 @@ function ModalContent({ onClose }: { onClose: () => void }) {
                 transition: "background 0.3s",
               }}
             >
-              {canAccept ? "I Accept — Join the Movement →" : "Read the full pledge to continue"}
+              {canAccept ? "I Accept - Join the Movement →" : "Read the full pledge to continue"}
             </button>
           </div>
         </div>

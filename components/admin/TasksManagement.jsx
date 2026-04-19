@@ -167,7 +167,7 @@ export default function TasksManagement() {
           </div>
           <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.5px' }}>Missions</h1>
         </div>
-        <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>Manage Daily &amp; Community missions — use the schedulers to create new tasks</p>
+        <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>Manage Daily &amp; Community missions - use the schedulers to create new tasks</p>
       </div>
 
       {/* Message */}
@@ -372,7 +372,7 @@ export default function TasksManagement() {
                             )}
                           </div>
                           <p style={{ fontSize: '12px', color: '#64748b', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {sub.task?.title || 'Unknown task'} — <span style={{ color: plat.color, fontWeight: '600' }}>{plat.label}</span>
+                            {sub.task?.title || 'Unknown task'} - <span style={{ color: plat.color, fontWeight: '600' }}>{plat.label}</span>
                           </p>
                           <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
                             {sub.proof_url && (

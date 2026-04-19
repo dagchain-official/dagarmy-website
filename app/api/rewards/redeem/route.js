@@ -128,7 +128,7 @@ export async function POST(request) {
 
     if (dgccUpdateError) {
       console.error('DGCC balance update error:', dgccUpdateError);
-      // Points already deducted — log but don't fail silently
+      // Points already deducted - log but don't fail silently
       // In production, a reconciliation job would handle this
     }
 

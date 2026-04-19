@@ -128,7 +128,7 @@ export default function HallOfFamePage() {
                     {loading ? "Loading…" : error ? "Error loading data" : `${monthLabel} Champions`}
                   </span>
                   {!loading && !error && (
-                    <span style={{ fontSize: "12px", color: "#94a3b8" }}>— one winner per category</span>
+                    <span style={{ fontSize: "12px", color: "#94a3b8" }}>- one winner per category</span>
                   )}
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function HallOfFamePage() {
                           <span style={{ fontSize: "13px", fontWeight: "600", color: "#1e293b" }}>{m.label}</span>
                         </div>
 
-                        {/* Mini chips — only when collapsed */}
+                        {/* Mini chips - only when collapsed */}
                         {!isExpanded && (
                           <div style={{ flex: 1, display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "0" }}>
                             {CAT_ORDER.map((cat, ci) => (

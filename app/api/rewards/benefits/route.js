@@ -10,12 +10,12 @@ const BENEFIT_KEYS = [
   // Tier bonuses
   'soldier_signup_bonus',
   'lieutenant_upgrade_price_usd',
-  // Referral bonuses (new flat values — no rank multiplier)
+  // Referral bonuses (new flat values - no rank multiplier)
   'soldier_refers_soldier_join',
   'soldier_refers_soldier_upgrade',
   'lieutenant_refers_soldier_join',
   'lieutenant_refers_soldier_upgrade',
-  // Sales commissions — new tier-based flat rates
+  // Sales commissions - new tier-based flat rates
   'soldier_direct_sales_commission',
   'soldier_level2_sales_commission',
   'soldier_level3_sales_commission',
@@ -65,7 +65,7 @@ export async function GET() {
       soldier_refers_soldier_upgrade: 500,
       lieutenant_refers_soldier_join: 1000,
       lieutenant_refers_soldier_upgrade: 1000,
-      // Sales commissions — new flat tier rates
+      // Sales commissions - new flat tier rates
       soldier_direct_sales_commission: 15,
       soldier_level2_sales_commission: 3,
       soldier_level3_sales_commission: 2,

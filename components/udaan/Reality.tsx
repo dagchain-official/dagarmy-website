@@ -25,7 +25,7 @@ export default function Reality() {
     <section ref={ref} style={{ background: "#fff", padding: "120px 0 0" }}>
       {/* Full-width dark banner */}
       <div style={{ background: "#111", padding: "80px 5vw" }}>
-          {/* Headline — full width */}
+          {/* Headline - full width */}
           <RevealBlock i={0}>
             <h2 style={{ fontSize: "clamp(2.8rem,6vw,5.5rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, color: "#fff", marginBottom: 48 }}>
               Everyone is learning AI.<br />
@@ -36,7 +36,7 @@ export default function Reality() {
 
           {/* Body + panel in grid */}
           <div className="udaan-reality-dark-grid">
-            {/* Left — body text */}
+            {/* Left - body text */}
             <div>
               <RevealBlock i={2}>
                 <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "17px", lineHeight: 1.8, maxWidth: 480, marginBottom: 32 }}>
@@ -74,12 +74,12 @@ export default function Reality() {
                   <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", lineHeight: 1.7, fontStyle: "italic", margin: 0 }}>
                     &ldquo;Talent without structure becomes noise. Skill without ownership becomes dependency.&rdquo;
                   </p>
-                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.2)", marginTop: 8, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>— The Udaan Manifesto</div>
+                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.2)", marginTop: 8, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>- The Udaan Manifesto</div>
                 </div>
               </RevealBlock>
             </div>
 
-            {/* Right — contrast panel + stats below */}
+            {/* Right - contrast panel + stats below */}
             <RevealBlock i={2}>
               <div>
                 {/* Comparison table */}
@@ -168,7 +168,7 @@ export default function Reality() {
               </RevealBlock>
             </div>
 
-            {/* Right — comparison cards */}
+            {/* Right - comparison cards */}
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <RevealBlock i={1}>
                 <div className="udaan-reality-comparison-cards">

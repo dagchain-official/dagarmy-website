@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
  * POST /api/referral/validate
  * Validate a referral code
  */
-// GET /api/referral/validate?code=XXX — used by frontend referral validation
+// GET /api/referral/validate?code=XXX - used by frontend referral validation
 export async function GET(request) {
   try {
     const supabase = supabaseAdmin;
@@ -16,7 +16,7 @@ export async function GET(request) {
       return NextResponse.json({ valid: false, error: 'Referral code is required' }, { status: 400 });
     }
 
-    // Look up in users.referral_code — primary source of truth (196 records vs 11 in referral_codes table)
+    // Look up in users.referral_code - primary source of truth (196 records vs 11 in referral_codes table)
     const { data, error } = await supabase
       .from('users')
       .select('id, full_name')
@@ -35,7 +35,7 @@ export async function GET(request) {
   }
 }
 
-// POST /api/referral/validate — legacy support
+// POST /api/referral/validate - legacy support
 export async function POST(request) {
   try {
     const supabase = supabaseAdmin;

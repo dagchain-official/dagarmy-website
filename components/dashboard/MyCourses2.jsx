@@ -89,7 +89,7 @@ export default function MyCourses() {
   const nmShadow = '8px 8px 20px rgba(0,0,0,0.12), -6px -6px 16px rgba(255,255,255,0.95)';
   const nmInset  = 'inset 6px 6px 14px rgba(0,0,0,0.12), inset -4px -4px 12px rgba(255,255,255,0.9)';
 
-  // ── Stat tiles — per tab
+  // ── Stat tiles - per tab
   const totalPoints = ASSIGNMENTS.reduce((s, a) => s + a.points, 0);
   const completedPoints = ASSIGNMENTS.filter(a => a.status === 'completed').reduce((s, a) => s + a.points, 0);
 
@@ -204,7 +204,7 @@ export default function MyCourses() {
             />
           </div>
 
-          {/* All modules — flat 2-column grid */}
+          {/* All modules - flat 2-column grid */}
           {(() => {
             const allModules = nextGenProgram.modules.filter(mod => {
               if (!searchQuery.trim()) return true;
@@ -337,7 +337,7 @@ export default function MyCourses() {
                   { name: 'User Interview Framework', desc: 'Structured questions to validate problem existence' },
                   { name: 'Problem Canvas Template', desc: 'Document your findings systematically' },
                 ],
-                outcome: 'You leave Week 1 with clarity before execution—no assumptions, no guesswork. Just structured discovery ready for build.',
+                outcome: 'You leave Week 1 with clarity before execution-no assumptions, no guesswork. Just structured discovery ready for build.',
               },
               {
                 week: 2,
@@ -356,7 +356,7 @@ export default function MyCourses() {
                   { name: 'No-Code AI Platforms', desc: 'Build functional prototypes without coding' },
                   { name: 'API Integration Tools', desc: 'Connect AI models to your interface' },
                 ],
-                outcome: 'You are no longer discussing ideas. You are showing execution. A working prototype ready for real user testing—not theory, not slides.',
+                outcome: 'You are no longer discussing ideas. You are showing execution. A working prototype ready for real user testing-not theory, not slides.',
               },
               {
                 week: 3,
@@ -374,14 +374,14 @@ export default function MyCourses() {
                   { name: 'User Testing Framework', desc: 'Structured feedback collection methods' },
                   { name: 'Analytics Setup', desc: 'Track user behavior and engagement' },
                 ],
-                outcome: 'You move into Week 4 with validated insights, real user data, and a refined product ready for structured pitching. Evidence-backed positioning—not assumptions.',
+                outcome: 'You move into Week 4 with validated insights, real user data, and a refined product ready for structured pitching. Evidence-backed positioning-not assumptions.',
               },
               {
                 week: 4,
                 title: 'Pitch & Founder Positioning',
                 subtitle: 'Structured Evaluation Readiness',
                 accent: '#6366f1',
-                description: 'Execution must be communicated clearly. Week 4 prepares you for structured evaluation inside the 3 Stage Selection Model. Your narrative is refined with defined traction signals. This is not about selling—this is about demonstrating execution.',
+                description: 'Execution must be communicated clearly. Week 4 prepares you for structured evaluation inside the 3 Stage Selection Model. Your narrative is refined with defined traction signals. This is not about selling-this is about demonstrating execution.',
                 objective: 'Prepare for structured evaluation inside the 3 Stage Selection Model. Your narrative is refined with defined traction signals.',
                 deliverables: [
                   { title: '5-Minute Pitch', desc: 'A structured pitch presentation ready for evaluation.' },
@@ -786,7 +786,7 @@ export default function MyCourses() {
                 <div style={{ padding: '12px 16px', borderRadius: '12px', background: 'rgba(99,102,241,0.06)', borderLeft: '3px solid #6366f1' }}>
                   <div style={{ fontSize: '11px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: '5px' }}>Mission</div>
                   <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.6, fontStyle: 'italic' }}>
-                    Convert intent into execution. In 4 weeks you move from idea to a live, validated AI startup — not theory, not slides.
+                    Convert intent into execution. In 4 weeks you move from idea to a live, validated AI startup - not theory, not slides.
                   </p>
                 </div>
               </div>

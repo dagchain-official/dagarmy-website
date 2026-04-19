@@ -84,7 +84,7 @@ export const nextGenProgram = {
           id: "2.3",
           title: "The Drill: Persistence Layer",
           type: "drill",
-          description: "Connecting Supabase for user authentication—making your app 'remember' who users are.",
+          description: "Connecting Supabase for user authentication-making your app 'remember' who users are.",
           duration: "1 Hour"
         },
         {

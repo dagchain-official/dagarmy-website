@@ -1,14 +1,14 @@
 /**
- * DAG Auth Shared Library — DAGARMY (Next.js / TypeScript)
+ * DAG Auth Shared Library - DAGARMY (Next.js / TypeScript)
  * ─────────────────────────────────────────────────────────
  * Provides JWT ops (platform session + SSO cross-platform),
  * bcrypt password utils, and fingerprint abuse detection.
  *
  * env vars required:
- *   DAG_JWT_SECRET        — platform JWT signing secret (DAGARMY-specific)
- *   SHARED_SSO_SECRET     — shared across all 3 platforms (MUST MATCH dagchain & daggpt)
- *   SUPABASE_SERVICE_ROLE_KEY  — for Supabase admin ops
- *   NEXT_PUBLIC_SUPABASE_URL   — Supabase project URL
+ *   DAG_JWT_SECRET        - platform JWT signing secret (DAGARMY-specific)
+ *   SHARED_SSO_SECRET     - shared across all 3 platforms (MUST MATCH dagchain & daggpt)
+ *   SUPABASE_SERVICE_ROLE_KEY  - for Supabase admin ops
+ *   NEXT_PUBLIC_SUPABASE_URL   - Supabase project URL
  */
 
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
@@ -132,7 +132,7 @@ export async function checkFingerprint(
 
   if (error) {
     console.error('[checkFingerprint] Supabase RPC error:', error.message);
-    return { allowed: true }; // Fail open — don't block on infrastructure errors
+    return { allowed: true }; // Fail open - don't block on infrastructure errors
   }
 
   return data as FingerprintResult;

@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase/server'
 /**
  * GET /api/dagchain/status?email=...
  * Returns cached DAGChain data for a user from Supabase.
- * No live DAGChain API call — reads stored dagchain_data.
+ * No live DAGChain API call - reads stored dagchain_data.
  */
 export async function GET(request) {
   try {

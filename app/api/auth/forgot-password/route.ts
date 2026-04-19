@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       });
     } catch (emailErr) {
       console.error('[forgot-password] Email send failed:', emailErr);
-      // Still return success — token is stored, user can contact support
+      // Still return success - token is stored, user can contact support
     }
 
     return NextResponse.json({ success: true, message: 'If that email exists, a reset link has been sent.' });

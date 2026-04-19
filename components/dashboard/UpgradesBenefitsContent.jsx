@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import { Info } from 'lucide-react';
 
 const nm = {
@@ -17,7 +17,7 @@ const nm = {
 
 function NmCard({ children, style = {}, delay = 0, hover = true }) {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setMounted(true), delay); return () => clearTimeout(t); }, [delay]);
+  useLayoutEffect(() => { const t = setTimeout(() => setMounted(true), delay); return () => clearTimeout(t); }, [delay]);
   return (
     <div
       style={{
@@ -39,6 +39,13 @@ function NmCard({ children, style = {}, delay = 0, hover = true }) {
 const BADGE = key => `/images/badges/dag-${key}.svg`;
 
 export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
+  const [mob, setMob] = useState(true);
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -90,13 +97,11 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
     <div>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* SECTION 1 — Tier Comparison                           */}
-      {/* ══════════════════════════════════════════════════════ */}
+      {/* SECTION 1 - Tier Comparison */}
       <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Tier Comparison</p>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
 
         {/* DAG SOLDIER */}
         <NmCard delay={0} style={{ padding: '0', overflow: 'hidden' }}>
@@ -105,7 +110,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               <img src={BADGE('soldier')} alt="DAG SOLDIER" style={{ width: '42px', height: '42px', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))' }} />
               <div>
                 <h3 style={{ fontSize: '16px', fontWeight: '800', color: nm.textPrimary, margin: 0 }}>DAG SOLDIER</h3>
-                <p style={{ fontSize: '11px', color: nm.textDark, margin: '2px 0 0', fontWeight: '500' }}>Free tier · automatic on registration</p>
+                <p style={{ fontSize: '11px', color: nm.textDark, margin: '2px 0 0', fontWeight: '500' }}>Free tier � automatic on registration</p>
               </div>
               <span style={{ marginLeft: 'auto', fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', background: nm.bg, boxShadow: nm.shadowXs, color: nm.textPrimary }}>FREE</span>
             </div>
@@ -117,8 +122,8 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               { label: 'L1 Sales Rewards', value: `${soldierL1}%` },
               { label: 'L2 Sales Rewards', value: `${l2}%` },
               { label: 'L3 Sales Rewards', value: `${l3}%` },
-              { label: 'Fortune 500 Pool', value: 'Auto-enrolled ✓' },
-              { label: 'Fortune 500 Pool Req.', value: '$500 self-purchases' },
+              { label: 'Fortune 500 Pool', value: 'Auto-enrolled ?' },
+              { label: 'Fortune 500 Pool Req.', value: '$500 direct L1 sales' },
               { label: 'Elite Pool', value: 'Not eligible' },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 24px', borderBottom: `1px solid ${nm.border}` }}>
@@ -166,9 +171,9 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               { label: 'L1 Sales Rewards', value: `${ltL1}%`, highlight: true },
               { label: 'L2 Sales Rewards', value: `${l2}%`, highlight: false },
               { label: 'L3 Sales Rewards', value: `${l3}%`, highlight: false },
-              { label: 'Fortune 500 Pool', value: 'Auto-enrolled ✓', highlight: true },
-              { label: 'Fortune 500 Pool Req.', value: '$500 self-purchases', highlight: false },
-              { label: 'Elite Pool', value: 'Eligible · Launches at MainNet', highlight: true },
+              { label: 'Fortune 500 Pool', value: 'Auto-enrolled ?', highlight: true },
+              { label: 'Fortune 500 Pool Req.', value: '$500 direct L1 sales', highlight: false },
+              { label: 'Elite Pool', value: 'Eligible � Launches at MainNet', highlight: true },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 24px', borderBottom: `1px solid ${nm.border}`, background: row.highlight ? 'rgba(79,70,229,0.03)' : 'transparent' }}>
                 <span style={{ fontSize: '12px', fontWeight: '600', color: nm.textPrimary }}>{row.label}</span>
@@ -197,23 +202,20 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
         </NmCard>
       </div>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* SECTION 2 — Sales Reward Structure                 */}
-      {/* ══════════════════════════════════════════════════════ */}
+      {/* SECTION 2 - Sales Reward Structure */}
       <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Sales Reward Structure</p>
       </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
 
         {/* Level breakdown */}
         <NmCard delay={100} style={{ padding: '22px 24px' }}>
           <p style={{ fontSize: '13px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 16px' }}>Referral Reward Levels</p>
           <p style={{ fontSize: '11px', color: nm.textPrimary, margin: '0 0 16px', fontWeight: '500', lineHeight: '1.6' }}>
-            Earned on every DAGChain or DAGGPT purchase — up to 3 levels deep in your referral chain.
+            Earned on every DAGChain or DAGGPT purchase - up to 3 levels deep in your referral chain.
           </p>
           {[
-            { level: 'Level 1', label: 'Direct (your referee buys)', soldierRate: soldierL1, ltRate: ltL1, note: 'varies by tier — rewards %' },
+            { level: 'Level 1', label: 'Direct (your referee buys)', soldierRate: soldierL1, ltRate: ltL1, note: 'varies by tier - rewards %' },
             { level: 'Level 2', label: '2nd downline buys', soldierRate: l2, ltRate: l2, note: 'fixed' },
             { level: 'Level 3', label: '3rd downline buys', soldierRate: l3, ltRate: l3, note: 'fixed' },
           ].map((row, i) => (
@@ -291,7 +293,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
         <NmCard delay={140} style={{ padding: '22px 24px', display: 'flex', flexDirection: 'column' }}>
           <p style={{ fontSize: '13px', fontWeight: '800', color: nm.textPrimary, margin: '0 0 4px' }}>Spend-Based DAG Points</p>
           <p style={{ fontSize: '11px', color: nm.textDark, margin: '0 0 16px', fontWeight: '500', lineHeight: '1.6' }}>
-            Earn DAG Points for every $1 spent by your <strong>direct (Level 1) referrals</strong> on any purchase — nodes, DAGGPT credits, validator nodes, LT upgrades.
+            Earn DAG Points for every $1 spent by your <strong>direct (Level 1) referrals</strong> on any purchase - nodes, DAGGPT credits, validator nodes, LT upgrades.
           </p>
 
           {[
@@ -338,14 +340,11 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
         </NmCard>
       </div>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* SECTION 3 — Incentive Pools                           */}
-      {/* ══════════════════════════════════════════════════════ */}
+      {/* SECTION 3 - Incentive Pools */}
       <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Incentive Pools</p>
       </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
         {/* Fortune 500 Pool */}
         <NmCard delay={160} style={{ padding: '22px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
@@ -365,7 +364,7 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
             { label: 'Eligible Tiers', value: 'DAG SOLDIER + DAG LIEUTENANT' },
             { label: 'Distribution', value: 'Equal split among enrolled members' },
             { label: 'Enrollment', value: 'Automatic on membership' },
-            { label: 'Requirement', value: '$500 in self-purchases (mandatory)' },
+            { label: 'Requirement', value: '$500 in direct L1 sales (mandatory)' },
             { label: 'Frequency', value: 'Monthly distribution' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '9px 0', borderBottom: i < 4 ? `1px solid ${nm.border}` : 'none', gap: '16px' }}>
@@ -404,14 +403,11 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
         </NmCard>
       </div>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* SECTION 4 — How to Earn DAG Points                    */}
-      {/* ══════════════════════════════════════════════════════ */}
+      {/* SECTION 4 - How to Earn DAG Points */}
       <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>How to Earn DAG Points</p>
       </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
 
         {/* Signup & Tier Upgrade */}
         <NmCard delay={200} style={{ padding: '20px 24px' }}>
@@ -481,9 +477,9 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
           <p style={{ fontSize: '13px', fontWeight: '800', color: nm.textPrimary, margin: 0 }}>Daily &amp; Community Missions</p>
         </div>
         <p style={{ fontSize: '11px', color: nm.textDark, margin: '0 0 12px', lineHeight: '1.6', fontWeight: '500' }}>
-          Complete social missions to earn DAG Points. DAG LIEUTENANT earns a <strong style={{ color: nm.accent }}>+100% bonus</strong> on every mission (2× base pts).
+          Complete social missions to earn DAG Points. DAG LIEUTENANT earns a <strong style={{ color: nm.accent }}>+100% bonus</strong> on every mission (2� base pts).
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mob ? 'repeat(2,1fr)' : 'repeat(5,1fr)', gap: '10px' }}>
           {[
             { label: 'Like & Share post', base: c.social_task_like_share || 10, category: 'Daily' },
             { label: 'Comment / Watch', base: c.social_task_comments_watch || 10, category: 'Daily' },
@@ -495,23 +491,20 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
               <div style={{ fontSize: '9px', fontWeight: '700', color: task.category === 'Daily' ? nm.textDark : nm.accent, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>{task.category}</div>
               <div style={{ fontSize: '11px', fontWeight: '600', color: nm.textDark, marginBottom: '8px', lineHeight: '1.4' }}>{task.label}</div>
               <div style={{ fontSize: '18px', fontWeight: '900', color: nm.textPrimary }}>~{task.base}</div>
-              <div style={{ fontSize: '9px', fontWeight: '600', color: nm.textMuted, marginBottom: '4px' }}>pts · Soldier</div>
+              <div style={{ fontSize: '9px', fontWeight: '600', color: nm.textMuted, marginBottom: '4px' }}>pts � Soldier</div>
               <div style={{ fontSize: '18px', fontWeight: '900', color: nm.accent }}>~{task.base * 2}</div>
-              <div style={{ fontSize: '9px', fontWeight: '600', color: nm.accent }}>pts · LT</div>
+              <div style={{ fontSize: '9px', fontWeight: '600', color: nm.accent }}>pts � LT</div>
             </div>
           ))}
         </div>
       </NmCard>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* SECTION 5 — How it Works (Steps)                      */}
-      {/* ══════════════════════════════════════════════════════ */}
+      {/* SECTION 5 - How it Works */}
       <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <p style={{ fontSize: '11px', fontWeight: '700', color: nm.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>How to Get Started</p>
       </div>
-
       <NmCard delay={260} style={{ padding: '24px', marginBottom: '24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mob ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: mob ? '14px' : '8px' }}>
           {[
             {
               step: '1',
@@ -560,3 +553,4 @@ export default function UpgradesBenefitsContent({ mounted: parentMounted }) {
     </div>
   );
 }
+

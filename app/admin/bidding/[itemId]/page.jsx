@@ -96,7 +96,7 @@ export default function AdminAuctionControlPage() {
                 border:     `1px solid ${isActive ? "#86efac" : isClosed ? "#e2e8f0" : "#fde68a"}`,
               }}>{item.status?.toUpperCase()}</span>
               <span style={{ fontSize: 12, color: "#94a3b8" }}>
-                Ends {item.ends_at ? new Date(item.ends_at).toLocaleString() : "—"}
+                Ends {item.ends_at ? new Date(item.ends_at).toLocaleString() : "-"}
               </span>
             </div>
           </div>

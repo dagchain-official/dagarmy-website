@@ -59,7 +59,7 @@ function EmailPageInner() {
       const res  = await fetch('/api/admin/email/folders');
       const data = await res.json();
       if (res.ok) setFolders(data.folders || []);
-      else        setError((data.error || 'Failed to load mailbox') + (data.details ? ` — ${data.details}` : ''));
+      else        setError((data.error || 'Failed to load mailbox') + (data.details ? ` - ${data.details}` : ''));
     } catch {
       setError('Could not connect to mailbox. Check credentials.');
     } finally {
@@ -73,7 +73,7 @@ function EmailPageInner() {
   const prefetchCache = useRef(new Map()); // uid -> Promise|data
   const prefetchTimeout = useRef(new Map()); // uid -> timeout
 
-  // Core fetch — used by both normal load and search
+  // Core fetch - used by both normal load and search
   const fetchMessages = useCallback(async (folder, page, search = '') => {
     setLoadingMessages(true);
     try {
@@ -137,7 +137,7 @@ function EmailPageInner() {
     setCurrentPage(1);
     if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
     if (!q.trim()) {
-      // Empty query — reload normal messages
+      // Empty query - reload normal messages
       loadMessages(activeFolder, 1);
       return;
     }
@@ -184,7 +184,7 @@ function EmailPageInner() {
     const key = `${activeFolder}::${msg.uid}`;
     const cached = prefetchCache.current.get(key);
 
-    // If prefetch already resolved to a plain object — instant!
+    // If prefetch already resolved to a plain object - instant!
     if (cached && typeof cached.then !== 'function') {
       setSelectedMessage({ ...cached, folder: activeFolder });
       setLoadingMessage(false);
@@ -195,7 +195,7 @@ function EmailPageInner() {
     try {
       let data;
       if (cached && typeof cached.then === 'function') {
-        // Prefetch in-flight — await it instead of making a new request
+        // Prefetch in-flight - await it instead of making a new request
         data = await cached;
       } else {
         const res = await fetch(`/api/admin/email/message?folder=${encodeURIComponent(activeFolder)}&uid=${msg.uid}`);

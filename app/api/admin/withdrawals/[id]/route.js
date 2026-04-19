@@ -103,7 +103,7 @@ export async function PATCH(request, context) {
           console.error('Error settling commissions on withdrawal paid:', commErr.message);
         }
       } else if (status === 'rejected') {
-        // Revert 'requested' commissions back to 'pending' (earned) — restores balance
+        // Revert 'requested' commissions back to 'pending' (earned) - restores balance
         const { error: commErr } = await supabaseAdmin
           .from('sales_commissions')
           .update({ payment_status: 'pending' })

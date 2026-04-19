@@ -390,7 +390,7 @@ export default function NextStepSection() {
               >
                 Every cohort is curated through a defined{" "}
                 <strong style={{ color: "#6366f1" }}>Builder Selection Process</strong>.
-                Seats are limited intentionally — not for marketing, but to protect focus
+                Seats are limited intentionally - not for marketing, but to protect focus
                 and mentorship depth. You will be surrounded by early-stage AI founders
                 working toward the same goal:{" "}
                 <strong style={{ color: "#0c0c14" }}>execution</strong>.

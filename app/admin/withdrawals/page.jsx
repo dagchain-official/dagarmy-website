@@ -76,10 +76,10 @@ export default function AdminWithdrawalsPage() {
   const getUserName = (req) => {
     const u = req.users;
     if (!u) return req.user_id?.slice(0, 8) + '...';
-    return u.full_name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.email || '—';
+    return u.full_name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.email || '-';
   };
 
-  const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
+  const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
 
   return (
     <AdminLayout>
@@ -184,7 +184,7 @@ export default function AdminWithdrawalsPage() {
                     {/* User */}
                     <div>
                       <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>{getUserName(req)}</div>
-                      <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{req.users?.email || '—'}</div>
+                      <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{req.users?.email || '-'}</div>
                     </div>
                     {/* Month */}
                     <div style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>{req.reward_month}</div>
@@ -257,7 +257,7 @@ export default function AdminWithdrawalsPage() {
                           {req.payout_method === 'crypto' ? (
                             <div>
                               <div style={{ fontSize: '12px', fontWeight: '700', color: '#10b981', marginBottom: '6px' }}>USDT BEP20 Address</div>
-                              <div style={{ fontSize: '12px', color: '#475569', fontFamily: 'monospace', wordBreak: 'break-all', background: '#f8fafc', padding: '8px 10px', borderRadius: '8px' }}>{req.bep20_address || '—'}</div>
+                              <div style={{ fontSize: '12px', color: '#475569', fontFamily: 'monospace', wordBreak: 'break-all', background: '#f8fafc', padding: '8px 10px', borderRadius: '8px' }}>{req.bep20_address || '-'}</div>
                             </div>
                           ) : req.bank_snapshot ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>

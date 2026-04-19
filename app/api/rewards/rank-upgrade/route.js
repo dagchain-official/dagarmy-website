@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 /**
  * POST /api/rewards/rank-upgrade
- * DEPRECATED — the rank system has been removed as of migration 054.
+ * DEPRECATED - the rank system has been removed as of migration 054.
  * Returns 410 Gone.
  */
 export async function POST() {

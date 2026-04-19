@@ -197,7 +197,7 @@ function CompleteProfileInner() {
                   onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
                   onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }} />
               </div>
-              <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '4px' }}>Used for team communications — we don't spam</p>
+              <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '4px' }}>Used for team communications - we don't spam</p>
             </div>
 
             {/* Referral Code */}

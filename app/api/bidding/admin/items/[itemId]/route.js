@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { getAdminSession } from '@/lib/admin-auth';
 
-// PUT /api/bidding/admin/items/[itemId] — update auction (only before it starts)
+// PUT /api/bidding/admin/items/[itemId] - update auction (only before it starts)
 export async function PUT(request, { params }) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -42,7 +42,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE /api/bidding/admin/items/[itemId] — cancel auction & refund all bids
+// DELETE /api/bidding/admin/items/[itemId] - cancel auction & refund all bids
 export async function DELETE(request, { params }) {
   const session = await getAdminSession(request);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

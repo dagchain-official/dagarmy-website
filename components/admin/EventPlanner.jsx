@@ -335,7 +335,7 @@ export default function EventPlanner() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: 0 }}>User-Created Events</h3>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0' }}>Events created by students — you can deactivate or delete any event</p>
+              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0' }}>Events created by students - you can deactivate or delete any event</p>
             </div>
             <div style={{ display: 'flex', gap: '16px' }}>
               {[{ label: 'Total', value: userEvents.length, color: '#6366f1', bg: '#ede9fe' },
@@ -367,7 +367,7 @@ export default function EventPlanner() {
                     <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>{event.title}</div>
                     {event.max_capacity && <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>Cap: {event.max_capacity}</div>}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#475569', fontWeight: '600' }}>{event.creator_name || '—'}</div>
+                  <div style={{ fontSize: '12px', color: '#475569', fontWeight: '600' }}>{event.creator_name || '-'}</div>
                   <div style={{ fontSize: '12px', color: '#64748b' }}>{new Date(event.event_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}</div>
                   <div>
                     <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '100px', background: (EVENT_COLORS[event.event_type] ? EVENT_COLORS[event.event_type] + '22' : '#ede9fe'), color: EVENT_COLORS[event.event_type] || '#6366f1', textTransform: 'capitalize' }}>

@@ -11,7 +11,7 @@ const tiers = [
     badgeText: "#059669",
     cta: "Join for Free",
     ctaClass: "btn-ghost",
-    desc: "The entry point — anyone can join. No gatekeeping. No hierarchy of credentials. Only contribution.",
+    desc: "The entry point - anyone can join. No gatekeeping. No hierarchy of credentials. Only contribution.",
     features: ["Weekly founder sessions", "Idea validation rooms", "Collaborative problem-solving", "Peer-driven discussions"],
     locked: false,
   },
@@ -35,7 +35,7 @@ const tiers = [
     badgeText: "#d97706",
     cta: "Earned through contribution",
     ctaClass: "btn-ghost",
-    desc: "Earned through contribution — never bought. Rank inside this movement is earned through contribution, not payment.",
+    desc: "Earned through contribution - never bought. Rank inside this movement is earned through contribution, not payment.",
     features: ["Lead regional chapters", "Mentor next cohorts", "Represent the movement", "Shape the ecosystem"],
     locked: true,
   },
@@ -61,7 +61,7 @@ export default function Ecosystem() {
             <span style={{ color: "#888" }}>standard.</span>
           </h2>
           <p style={{ fontSize: "15px", color: "#666", lineHeight: 1.75, marginTop: 16, maxWidth: 520 }}>
-            From open access to earned leadership — every level is unlocked through what you ship, not what you pay.
+            From open access to earned leadership - every level is unlocked through what you ship, not what you pay.
           </p>
         </motion.div>
 

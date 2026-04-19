@@ -17,7 +17,7 @@ export default function About() {
           <div className="col-lg-5">
             <div className="content-right wow fadeInUp" data-wow-delay="0.1s">
               <p>
-                At DAGARMY, we believe that brilliance is universal, but opportunity is not. We are not just another EdTech platform—we are a Talent Engagement and Incubation Engine, bridging the gap between hidden talent and global tech giants.
+                At DAGARMY, we believe that brilliance is universal, but opportunity is not. We are not just another EdTech platform-we are a Talent Engagement and Incubation Engine, bridging the gap between hidden talent and global tech giants.
               </p>
             </div>
           </div>

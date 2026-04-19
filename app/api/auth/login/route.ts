@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
     // 2. Check if user has a password set
     if (!user.password_hash) {
-      // Wallet-only user — prompt them to set password
+      // Wallet-only user - prompt them to set password
       if (user.wallet_address) {
         return NextResponse.json({
           error: 'wallet_only_user',
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Account is suspended. Please contact support.' }, { status: 403 });
     }
 
-    // 5. Fingerprint check (soft — login is allowed but flagged if suspicious)
+    // 5. Fingerprint check (soft - login is allowed but flagged if suspicious)
     if (fingerprint_id) {
       const fp = await checkFingerprint(fingerprint_id, normalizedEmail, 'dagarmy', 5);
       if (!fp.allowed) {
@@ -86,7 +86,6 @@ export async function POST(req: Request) {
     });
 
     // 8. Build safe user object
-    const needsProfileCompletion = !user.whatsapp_number || !user.first_name || !user.last_name;
     const safeUser = {
       id: user.id,
       email: user.email,
@@ -99,8 +98,7 @@ export async function POST(req: Request) {
       is_master_admin: user.is_master_admin,
       wallet_address: user.wallet_address,
       whatsapp_number: user.whatsapp_number,
-      profile_completed: user.profile_completed && !needsProfileCompletion,
-      needs_profile_completion: needsProfileCompletion,
+      profile_completed: user.profile_completed,
     };
 
     const response = NextResponse.json({ success: true, token, user: safeUser });

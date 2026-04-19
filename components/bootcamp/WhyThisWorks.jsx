@@ -94,7 +94,7 @@ export default function WhyThisWorks() {
                 From Job-Seeker to Problem-Solver
               </h3>
               <p style={{ fontSize: '17px', opacity: 0.95, maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
-                This bootcamp doesn't just teach AI tools—it transforms your mindset. You'll learn to identify opportunities, create solutions, and build income streams that don't depend on traditional employment.
+                This bootcamp doesn't just teach AI tools-it transforms your mindset. You'll learn to identify opportunities, create solutions, and build income streams that don't depend on traditional employment.
               </p>
             </div>
           </div>

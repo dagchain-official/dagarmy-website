@@ -10,12 +10,12 @@ import { notifyDgccTransfer } from '@/services/dagchainWebhook';
  * Body: { user_email, destination: 'daggpt' | 'dagchain', amount }
  *
  * Since DAGARMY and DAGGPT share the SAME Supabase project, the DAGGPT
- * transfer is a direct in-DB write to user_credits — no webhook needed.
+ * transfer is a direct in-DB write to user_credits - no webhook needed.
  * DAGChain is a separate system and still uses a signed webhook.
  */
 
 // DAGCHAIN_WEBHOOK_URL / DAGCHAIN_WEBHOOK_SECRET are only kept here for legacy
-// reference — the actual dispatch now goes through notifyDgccTransfer() which
+// reference - the actual dispatch now goes through notifyDgccTransfer() which
 // uses the correct DAGARMY_OUTGOING_SECRET header.
 
 export async function POST(request) {
@@ -82,7 +82,7 @@ export async function POST(request) {
       );
     }
 
-    // ── DAGGPT: Direct Supabase write (same DB — no webhook needed) ──────────
+    // ── DAGGPT: Direct Supabase write (same DB - no webhook needed) ──────────
     let credited = false;
     let transferId = null;
 
@@ -123,7 +123,7 @@ export async function POST(request) {
         type:            'dgcc_transfer',
         amount:          transferAmount,
         balance_after:   newCreditBalance,
-        description:     `DGCC transfer from DAGARMY — ${transferAmount} DGCC Coin${transferAmount > 1 ? 's' : ''}`,
+        description:     `DGCC transfer from DAGARMY - ${transferAmount} DGCC Coin${transferAmount > 1 ? 's' : ''}`,
         charged_usd:     0,
         charged_credits: 0,
         profit_usd:      0,
@@ -141,7 +141,7 @@ export async function POST(request) {
     let webhookOk = destination === 'daggpt'; // already handled above
 
     if (destination === 'dagchain') {
-      // notifyDgccTransfer is fire-and-forget — it never throws
+      // notifyDgccTransfer is fire-and-forget - it never throws
       notifyDgccTransfer({ id: user.id, email: user_email }, transferAmount, 'dagchain', null);
       webhookOk = true; // mark ok; actual delivery is async with retries
     }

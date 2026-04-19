@@ -403,7 +403,7 @@ export default function Week1Page() {
                   fontWeight: 500,
                   marginBottom: 0
                 }}>
-                  This is where the shift from curiosity to direction happens. You leave Week 1 with clarity before execution—no assumptions, no guesswork. Just structured discovery ready for build.
+                  This is where the shift from curiosity to direction happens. You leave Week 1 with clarity before execution-no assumptions, no guesswork. Just structured discovery ready for build.
                 </p>
               </div>
 

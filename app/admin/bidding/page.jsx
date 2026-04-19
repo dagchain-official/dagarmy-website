@@ -208,7 +208,7 @@ export default function AdminBiddingPage() {
 
                   {/* Ends at */}
                   <span style={{ fontSize: 11, color: "#64748b" }}>
-                    {item.ends_at ? new Date(item.ends_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "—"}
+                    {item.ends_at ? new Date(item.ends_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "-"}
                   </span>
 
                   {/* Actions */}

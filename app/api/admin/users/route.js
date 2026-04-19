@@ -89,7 +89,7 @@ export async function GET(request) {
       return acc;
     }, {});
 
-    // Calculate growth (users created in last 7 days) — students only
+    // Calculate growth (users created in last 7 days) - students only
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     const newUsersThisWeek = studentUsers.filter(user =>

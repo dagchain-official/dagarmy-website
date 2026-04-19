@@ -20,7 +20,7 @@ ALTER TABLE public.social_tasks
 ALTER TABLE public.social_tasks
   DROP CONSTRAINT IF EXISTS social_tasks_task_type_check;
 
--- (no re-add needed — task_type was TEXT NOT NULL with no CHECK in migration 020)
+-- (no re-add needed - task_type was TEXT NOT NULL with no CHECK in migration 020)
 
 -- ── 1. Extend mission_type CHECK to allow 'streak' ─────────────────
 ALTER TABLE public.social_tasks
@@ -99,19 +99,19 @@ INSERT INTO public.social_tasks
    mission_type, proof_type, recurrence, max_completions_per_user, is_active)
 VALUES
   ('dagchain', 'login_streak',
-   '7-Day Login Streak — DAGCHAIN.NETWORK',
+   '7-Day Login Streak - DAGCHAIN.NETWORK',
    'Sign in to dagchain.network every day Monday through Sunday without any break. Submit screenshots showing your login for all 7 days. Earn 300 DAG Points per platform. Claimable once per week (up to 52 times per year).',
    300, 'https://dagchain.network',
    'streak', 'screenshot_only', 'weekly', 52, TRUE),
 
   ('dagarmy', 'login_streak',
-   '7-Day Login Streak — DAGARMY.NETWORK',
+   '7-Day Login Streak - DAGARMY.NETWORK',
    'Sign in to dagarmy.network every day Monday through Sunday without any break. Submit screenshots showing your login for all 7 days. Earn 300 DAG Points per platform.',
    300, 'https://dagarmy.network',
    'streak', 'screenshot_only', 'weekly', 52, TRUE),
 
   ('daggpt', 'login_streak',
-   '7-Day Login Streak — DAGGPT.NETWORK',
+   '7-Day Login Streak - DAGGPT.NETWORK',
    'Sign in to daggpt.network every day Monday through Sunday without any break. Submit screenshots showing your login for all 7 days. Earn 300 DAG Points per platform.',
    300, 'https://daggpt.network',
    'streak', 'screenshot_only', 'weekly', 52, TRUE);

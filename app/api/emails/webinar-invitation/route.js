@@ -8,7 +8,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// The sender account — must match an entry in smtp-client.js ACCOUNT_MAP
+// The sender account - must match an entry in smtp-client.js ACCOUNT_MAP
 const SENDER_EMAIL = 'admin@dagchain.network';
 const BATCH_SIZE = 25;
 
@@ -20,7 +20,7 @@ const BATCH_SIZE = 25;
  * {
  *   mode: "test" | "batch",
  *   testEmail: "test@example.com" (required if mode is "test")
- *   userIds: ["id1", "id2", ...] (required if mode is "batch" — max 25)
+ *   userIds: ["id1", "id2", ...] (required if mode is "batch" - max 25)
  * }
  */
 export async function POST(request) {

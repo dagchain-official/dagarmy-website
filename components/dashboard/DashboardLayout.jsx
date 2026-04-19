@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
   return (
     <div style={{ display: "flex", width: "100%", minHeight: "100vh", background: "#f0f2f5" }}>
 
-      {/* ── Sidebar — always visible on desktop, drawer on mobile/tablet ── */}
+      {/* ── Sidebar - always visible on desktop, drawer on mobile/tablet ── */}
       {isDesktop ? (
         <div style={{
           width: "clamp(200px, 18vw, 248px)",
@@ -69,7 +69,7 @@ export default function DashboardLayout({ children }) {
       {/* ── Main content ── */}
       <div style={{ flex: 1, minWidth: 0, background: "#f0f2f5", position: "relative" }}>
 
-        {/* Hamburger toggle — only on tablet/mobile */}
+        {/* Hamburger toggle - only on tablet/mobile */}
         {!isDesktop && (
           <button
             onClick={() => setSidebarOpen(true)}

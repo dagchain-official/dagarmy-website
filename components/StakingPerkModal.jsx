@@ -1,18 +1,17 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 
 /**
- * StakingPerkModal — Dribbble-tier premium white aesthetic.
- * Motion: spring physics, animated count-up, layoutId morph, SVG path draw-in.
+ * StakingPerkModal - Mobile-optimised premium white aesthetic.
  *
  * Props:
- *   type        — 'lt_upgrade' | 'dgcc_transfer'
- *   dgccAmount  — number
- *   userId      — string
- *   paymentId   — string|null
- *   transferId  — string|null
- *   onClose     — () => void
+ *   type        - 'lt_upgrade' | 'dgcc_transfer'
+ *   dgccAmount  - number
+ *   userId      - string
+ *   paymentId   - string|null
+ *   transferId  - string|null
+ *   onClose     - () => void
  */
 
 const STAKING_OPTIONS = [
@@ -23,19 +22,19 @@ const STAKING_OPTIONS = [
 
 // ─── Design tokens ──────────────────────────────────────────────
 const C = {
-  bg:          "#FFFFFF",
-  canvas:      "#FAFAF7",
-  ink:         "#0A0A0A",
-  ink2:        "#1C1C1C",
-  muted:       "#71717A",
-  subtle:      "#A1A1AA",
-  line:        "#EAEAE6",
-  lineSoft:    "#F2F1EC",
-  accentA:     "#059669",   // emerald-600
-  accentB:     "#34D399",   // emerald-400
-  accentGrad:  "linear-gradient(135deg, #059669 0%, #34D399 100%)",
-  accentTint:  "#ECFDF5",   // emerald-50
-  ok:          "#10B981",
+  bg:         "#FFFFFF",
+  canvas:     "#FAFAF7",
+  ink:        "#0A0A0A",
+  ink2:       "#1C1C1C",
+  muted:      "#71717A",
+  subtle:     "#A1A1AA",
+  line:       "#EAEAE6",
+  lineSoft:   "#F2F1EC",
+  accentA:    "#059669",
+  accentB:    "#34D399",
+  accentGrad: "linear-gradient(135deg, #059669 0%, #34D399 100%)",
+  accentTint: "#ECFDF5",
+  ok:         "#10B981",
 };
 
 const SERIF = '"Fraunces", "Instrument Serif", Georgia, serif';
@@ -65,14 +64,14 @@ function AmbientOrbs() {
       pointerEvents: "none", borderRadius: "inherit",
     }}>
       {[
-        { bg: "#FFE4CC", size: 420, x: "-12%",  y: "-18%", delay: 0 },
-        { bg: "#FFD6E8", size: 380, x: "75%",   y: "-10%", delay: 2 },
-        { bg: "#E8E2FF", size: 340, x: "30%",   y: "80%",  delay: 4 },
+        { bg: "#E8E2FF", size: 320, x: "-12%", y: "-18%", delay: 0 },
+        { bg: "#D1FAE5", size: 280, x: "75%",  y: "-10%", delay: 2 },
+        { bg: "#EEF2FF", size: 260, x: "30%",  y: "80%",  delay: 4 },
       ].map((o, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6, x: [0, 20, 0, -20, 0], y: [0, -15, 0, 15, 0] }}
+          animate={{ opacity: 0.5, x: [0, 16, 0, -16, 0], y: [0, -12, 0, 12, 0] }}
           transition={{
             opacity: { duration: 1.2, delay: 0.1 * i },
             x: { duration: 18 + i * 2, repeat: Infinity, ease: "easeInOut", delay: o.delay },
@@ -84,7 +83,7 @@ function AmbientOrbs() {
             width: o.size, height: o.size,
             borderRadius: "50%",
             background: o.bg,
-            filter: "blur(80px)",
+            filter: "blur(60px)",
           }}
         />
       ))}
@@ -92,9 +91,8 @@ function AmbientOrbs() {
   );
 }
 
-// ─── Stylized yield curve SVG (draws in on mount) ───────────────
+// ─── Stylized yield curve SVG ────────────────────────────────────
 function YieldCurve({ highlight }) {
-  // Curve represents exponential growth; 3 points = 1Y, 2Y, 3Y
   return (
     <svg viewBox="0 0 200 120" fill="none" style={{ width: "100%", height: "auto", display: "block" }}>
       <defs>
@@ -103,56 +101,40 @@ function YieldCurve({ highlight }) {
           <stop offset="100%" stopColor={C.accentB} />
         </linearGradient>
         <linearGradient id="sgp-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={C.accentA} stopOpacity="0.18" />
+          <stop offset="0%"   stopColor={C.accentA} stopOpacity="0.18" />
           <stop offset="100%" stopColor={C.accentB} stopOpacity="0" />
         </linearGradient>
       </defs>
-
-      {/* Grid guides */}
       {[30, 60, 90].map((y) => (
         <line key={y} x1="0" y1={y} x2="200" y2={y} stroke={C.line} strokeDasharray="2 4" strokeWidth="0.5" />
       ))}
-
-      {/* Area under curve (fades in) */}
       <motion.path
         d="M 10 100 Q 70 92 100 72 T 190 18 L 190 110 L 10 110 Z"
         fill="url(#sgp-fill)"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.8 }}
       />
-
-      {/* Main curve — draws in */}
       <motion.path
         d="M 10 100 Q 70 92 100 72 T 190 18"
-        stroke="url(#sgp-stroke)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        fill="none"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
+        stroke="url(#sgp-stroke)" strokeWidth="2.5" strokeLinecap="round" fill="none"
+        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
         transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
       />
-
-      {/* Data points */}
       {[
-        { cx: 10,  cy: 100, label: "0Y", apy: null, visible: true },
-        { cx: 70,  cy: 90,  label: "1Y", apy: "12%" },
-        { cx: 130, cy: 60,  label: "2Y", apy: "18%" },
-        { cx: 190, cy: 18,  label: "3Y", apy: "24%" },
+        { cx: 10,  cy: 100, apy: null },
+        { cx: 70,  cy: 90,  apy: "12%" },
+        { cx: 130, cy: 60,  apy: "18%" },
+        { cx: 190, cy: 18,  apy: "24%" },
       ].map((p, i) => (
-        <motion.g
-          key={i}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <motion.g key={i}
+          initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6 + i * 0.12, type: "spring", stiffness: 260, damping: 18 }}
         >
           <circle cx={p.cx} cy={p.cy} r="5" fill="#fff" stroke="url(#sgp-stroke)" strokeWidth="2" />
           {p.apy && (
             <text x={p.cx} y={p.cy - 10} textAnchor="middle"
-                  fill={highlight === p.apy ? C.ink : C.muted}
-                  fontSize="9" fontWeight="600"
-                  fontFamily={MONO}>
+              fill={highlight === p.apy ? C.ink : C.muted}
+              fontSize="9" fontWeight="600" fontFamily={MONO}>
               {p.apy}
             </text>
           )}
@@ -169,14 +151,20 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError]           = useState(null);
   const [done, setDone]             = useState(false);
+  const [mob, setMob]               = useState(true);
+
+  useEffect(() => {
+    const check = () => setMob(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const amount = Number(dgccAmount) || (type === "lt_upgrade" ? 149 : 0);
-  const eyebrow =
-    type === "lt_upgrade" ? "DAG LIEUTENANT · STAKING PERK" : "DAGGPT TRANSFER · STAKING PERK";
+  const eyebrow = type === "lt_upgrade" ? "DAG LIEUTENANT · STAKING PERK" : "DAGGPT TRANSFER · STAKING PERK";
 
   const projected = (amt, apy, years) => amt + amt * (apy / 100) * years;
   const maxYield  = amount * 0.24 * 3;
-  // Smart DGCC formatter — shows decimals for small values, round for large
   const fmt = (n) => {
     const num = Number(n) || 0;
     if (num === 0) return "0";
@@ -189,16 +177,11 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
     if (!selected) return;
     setSubmitting(true);
     setError(null);
-    const body = {
-      type, userId,
-      stakingDuration: selected.duration,
-      stakingApy:      selected.apy,
-    };
+    const body = { type, userId, stakingDuration: selected.duration, stakingApy: selected.apy };
     if (type === "lt_upgrade") body.paymentId = paymentId || null;
     else { body.transferId = transferId; body.dgccAmount = amount; }
-
     try {
-      const res = await fetch("/api/rewards/staking-claim", {
+      const res  = await fetch("/api/rewards/staking-claim", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -217,8 +200,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
     }
   };
 
-  // Spring preset reused across elements
-  const spring = { type: "spring", stiffness: 380, damping: 32 };
+  const spring  = { type: "spring", stiffness: 380, damping: 32 };
   const stagger = (i) => ({ ...spring, delay: 0.08 + i * 0.06 });
 
   return (
@@ -239,54 +221,64 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
           position: "fixed", inset: 0, zIndex: 9999,
           background: "rgba(245, 243, 238, 0.72)",
           backdropFilter: "blur(20px)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: "24px",
+          display: "flex", alignItems: mob ? "flex-end" : "center", justifyContent: "center",
+          padding: mob ? "0" : "16px",
+          paddingBottom: mob ? "78px" : "16px",
           fontFamily: '"Inter", -apple-system, sans-serif',
         }}
+        onClick={(e) => { if (e.target === e.currentTarget) onClose?.(); }}
       >
         {/* Modal */}
         <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          initial={{ opacity: 0, y: mob ? 40 : 24, scale: mob ? 1 : 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 26 }}
           style={{
             position: "relative",
             width: "100%",
-            maxWidth: step === 1 ? "720px" : "560px",
+            maxWidth: mob ? "100%" : (step === 1 ? "720px" : "560px"),
             background: C.bg,
-            borderRadius: "24px",
+            borderRadius: mob ? "20px 20px 0 0" : "24px",
             overflow: "hidden",
-            boxShadow:
-              "0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 4px rgba(10,10,10,0.04), 0 24px 80px -20px rgba(10,10,10,0.22)",
+            boxShadow: "0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 4px rgba(10,10,10,0.04), 0 24px 80px -20px rgba(10,10,10,0.22)",
             border: `1px solid ${C.line}`,
+            maxHeight: mob ? "calc(85vh - 78px)" : "95vh",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
           }}
         >
+          {/* Mobile drag handle */}
+          {mob && (
+            <div style={{ display: "flex", justifyContent: "center", paddingTop: "12px", paddingBottom: "4px" }}>
+              <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: C.line }} />
+            </div>
+          )}
+
           <AmbientOrbs />
 
           <AnimatePresence mode="wait">
+
             {/* ══════════ SUCCESS ══════════ */}
             {done && (
               <motion.div
                 key="done"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                style={{ position: "relative", padding: "72px 56px", textAlign: "center" }}
+                style={{
+                  position: "relative",
+                  padding: mob ? "40px 24px 48px" : "72px 56px",
+                  textAlign: "center",
+                }}
               >
-                {/* Spring checkmark + ripple */}
                 <motion.div
                   initial={{ scale: 0 }} animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 220, damping: 16, delay: 0.05 }}
-                  style={{ position: "relative", width: "88px", height: "88px", margin: "0 auto 28px" }}
+                  style={{ position: "relative", width: "72px", height: "72px", margin: "0 auto 24px" }}
                 >
                   {[0, 1].map((i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ scale: 0.4, opacity: 0.6 }}
-                      animate={{ scale: 2, opacity: 0 }}
+                    <motion.div key={i}
+                      initial={{ scale: 0.4, opacity: 0.6 }} animate={{ scale: 2, opacity: 0 }}
                       transition={{ duration: 1.6, delay: 0.3 + i * 0.5, repeat: Infinity }}
-                      style={{
-                        position: "absolute", inset: 0, borderRadius: "50%",
-                        background: C.accentGrad, opacity: 0.15,
-                      }}
+                      style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.accentGrad, opacity: 0.15 }}
                     />
                   ))}
                   <div style={{
@@ -298,7 +290,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                     <motion.svg
                       initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                       transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      width="40" height="40" viewBox="0 0 24 24" fill="none"
+                      width="32" height="32" viewBox="0 0 24 24" fill="none"
                       stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
                     >
                       <motion.polyline points="20 6 9 17 4 12"
@@ -309,12 +301,8 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                 </motion.div>
 
                 <motion.div
-                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.55 }}
-                  style={{
-                    fontFamily: MONO, fontSize: "10px", letterSpacing: "0.28em",
-                    color: C.ok, fontWeight: 600, marginBottom: "18px",
-                  }}
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}
+                  style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.28em", color: C.ok, fontWeight: 600, marginBottom: "14px" }}
                 >
                   ✦ ON-CHAIN · CONFIRMED
                 </motion.div>
@@ -323,17 +311,17 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.65, type: "spring", stiffness: 180, damping: 22 }}
                   style={{
-                    fontFamily: SERIF, fontSize: "44px", lineHeight: 1.05,
-                    color: C.ink, fontWeight: 400, letterSpacing: "-0.03em",
-                    margin: "0 0 14px",
+                    fontFamily: SERIF, fontSize: mob ? "30px" : "44px", lineHeight: 1.08,
+                    color: C.ink, fontWeight: 400, letterSpacing: "-0.03em", margin: "0 0 12px",
                   }}
                 >
-                  Your stake is <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "inline-block", padding: "0 0.08em" }}>registered</em>.
+                  Your stake is{" "}
+                  <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "inline-block", padding: "0 0.08em" }}>registered</em>.
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-                  style={{ fontSize: "15px", color: C.muted, lineHeight: 1.6, margin: "0 auto", maxWidth: "420px" }}
+                  style={{ fontSize: "14px", color: C.muted, lineHeight: 1.6, margin: "0 auto", maxWidth: "380px" }}
                 >
                   <span style={{ fontFamily: MONO, color: C.ink, fontWeight: 600 }}>{amount.toLocaleString()} DGCC</span> locked for{" "}
                   <span style={{ fontFamily: MONO, color: C.ink, fontWeight: 600 }}>{selected?.duration}Y</span> at{" "}
@@ -350,19 +338,20 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                 key="step1"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                style={{ position: "relative", display: "grid", gridTemplateColumns: "1.15fr 0.85fr" }}
+                style={{
+                  position: "relative",
+                  display: "grid",
+                  gridTemplateColumns: mob ? "1fr" : "1.15fr 0.85fr",
+                }}
               >
-                {/* LEFT — Editorial content */}
-                <div style={{ padding: "40px 36px 36px 40px" }}>
+                {/* LEFT - Editorial content */}
+                <div style={{ padding: mob ? "28px 20px 24px" : "40px 36px 36px 40px" }}>
                   <motion.div
                     initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={stagger(0)}
-                    style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "28px" }}
+                    style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: mob ? "18px" : "28px" }}
                   >
                     <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: C.accentGrad }} />
-                    <span style={{
-                      fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em",
-                      color: C.ink, fontWeight: 600,
-                    }}>
+                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.2em", color: C.ink, fontWeight: 600 }}>
                       {eyebrow}
                     </span>
                   </motion.div>
@@ -370,40 +359,28 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   <motion.h1
                     initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={stagger(1)}
                     style={{
-                      fontFamily: SERIF, fontSize: "46px", lineHeight: 1.0,
-                      color: C.ink, fontWeight: 400, letterSpacing: "-0.035em",
-                      margin: "0 0 18px",
+                      fontFamily: SERIF,
+                      fontSize: mob ? "28px" : "46px",
+                      lineHeight: 1.05,
+                      color: C.ink, fontWeight: 400, letterSpacing: "-0.03em",
+                      margin: mob ? "0 0 12px" : "0 0 18px",
                     }}
                   >
                     {type === "lt_upgrade" ? (
-                      <>
-                        Your Lieutenant<br />
-                        perk, <em style={{
-                          fontStyle: "italic",
-                          background: C.accentGrad,
-                          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                          display: "inline-block", padding: "0 0.08em",
-                        }}>yielding</em>.
+                      <>Your Lieutenant perk,{" "}
+                        <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "inline-block", padding: "0 0.08em" }}>yielding</em>.
                       </>
                     ) : (
-                      <>
-                        Put <em style={{
-                          fontStyle: "italic",
-                          background: C.accentGrad,
-                          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                          display: "inline-block", padding: "0 0.08em",
-                        }}>{fmt(amount)}</em> DGCC<br />
-                        to work.
+                      <>Put{" "}
+                        <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "inline-block", padding: "0 0.08em" }}>{fmt(amount)}</em>{" "}
+                        DGCC to work.
                       </>
                     )}
                   </motion.h1>
 
                   <motion.p
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={stagger(2)}
-                    style={{
-                      fontSize: "14px", color: C.muted, lineHeight: 1.65,
-                      margin: "0 0 28px", maxWidth: "380px",
-                    }}
+                    style={{ fontSize: "13px", color: C.muted, lineHeight: 1.6, margin: mob ? "0 0 20px" : "0 0 28px", maxWidth: "380px" }}
                   >
                     {type === "lt_upgrade"
                       ? "149 DGCC Coins are waiting to auto-stake on DAGChain. Choose a lock-up term and start earning daily."
@@ -413,32 +390,25 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   {/* Metric pills */}
                   <motion.div
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={stagger(3)}
-                    style={{ display: "flex", gap: "10px", marginBottom: "32px", flexWrap: "wrap" }}
+                    style={{ display: "flex", gap: "8px", marginBottom: mob ? "22px" : "32px", flexWrap: "wrap" }}
                   >
                     <div style={{
-                      padding: "10px 14px", borderRadius: "999px",
+                      padding: "8px 12px", borderRadius: "999px",
                       background: C.canvas, border: `1px solid ${C.line}`,
-                      display: "inline-flex", alignItems: "center", gap: "8px",
+                      display: "inline-flex", alignItems: "center", gap: "6px",
                     }}>
-                      <span style={{ fontFamily: MONO, fontSize: "10px", color: C.muted, letterSpacing: "0.1em" }}>
-                        STAKEABLE
-                      </span>
-                      <span style={{ fontFamily: MONO, fontSize: "13px", color: C.ink, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
+                      <span style={{ fontFamily: MONO, fontSize: "9px", color: C.muted, letterSpacing: "0.1em" }}>STAKEABLE</span>
+                      <span style={{ fontFamily: MONO, fontSize: "12px", color: C.ink, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
                         {fmt(amount)} DGCC
                       </span>
                     </div>
                     <div style={{
-                      padding: "10px 14px", borderRadius: "999px",
-                      background: C.accentTint, border: `1px solid #A7F3D0`,
-                      display: "inline-flex", alignItems: "center", gap: "8px",
+                      padding: "8px 12px", borderRadius: "999px",
+                      background: C.accentTint, border: "1px solid #A7F3D0",
+                      display: "inline-flex", alignItems: "center", gap: "6px",
                     }}>
-                      <span style={{ fontFamily: MONO, fontSize: "10px", color: "#065F46", letterSpacing: "0.1em", fontWeight: 600 }}>
-                        MAX YIELD
-                      </span>
-                      <span style={{
-                        fontFamily: MONO, fontSize: "13px", fontWeight: 700, fontVariantNumeric: "tabular-nums",
-                        background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                      }}>
+                      <span style={{ fontFamily: MONO, fontSize: "9px", color: "#065F46", letterSpacing: "0.1em", fontWeight: 600 }}>MAX YIELD</span>
+                      <span style={{ fontFamily: MONO, fontSize: "12px", fontWeight: 700, fontVariantNumeric: "tabular-nums", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                         +{fmt(maxYield)} DGCC
                       </span>
                     </div>
@@ -447,19 +417,22 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   {/* Actions */}
                   <motion.div
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={stagger(4)}
-                    style={{ display: "flex", gap: "10px", alignItems: "center" }}
+                    style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: mob ? "wrap" : "nowrap" }}
                   >
                     <motion.button
                       whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }}
                       onClick={() => setStep(2)}
                       style={{
                         position: "relative", overflow: "hidden",
-                        padding: "14px 24px", borderRadius: "999px",
+                        padding: mob ? "13px 20px" : "14px 24px",
+                        borderRadius: "999px",
                         background: C.ink, color: C.bg, border: "none",
                         fontSize: "13px", fontWeight: 600, letterSpacing: "0.02em",
                         cursor: "pointer", fontFamily: "inherit",
                         display: "inline-flex", alignItems: "center", gap: "8px",
                         boxShadow: "0 4px 12px -2px rgba(10,10,10,0.2)",
+                        flex: mob ? "1" : "unset",
+                        justifyContent: mob ? "center" : "flex-start",
                       }}
                     >
                       <span style={{ position: "relative", zIndex: 1 }}>Choose Duration</span>
@@ -467,79 +440,54 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                         animate={{ x: [0, 4, 0] }}
                         transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
                         style={{ position: "relative", zIndex: 1 }}
-                      >
-                        →
-                      </motion.span>
-                      {/* Shimmer */}
+                      >→</motion.span>
                       <span style={{
                         position: "absolute", top: 0, left: 0, width: "40%", height: "100%",
                         background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)",
                         animation: "spmShimmer 2.8s infinite",
                       }} />
                     </motion.button>
-                    <button
-                      onClick={() => onClose?.()}
-                      style={{
-                        padding: "14px 18px", background: "transparent",
-                        color: C.muted, border: "none",
-                        fontSize: "13px", fontWeight: 500, cursor: "pointer",
-                        fontFamily: "inherit",
-                      }}
-                    >
-                      Maybe later
-                    </button>
+
                   </motion.div>
                 </div>
 
-                {/* RIGHT — Yield visualization */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                  style={{
-                    position: "relative",
-                    background: `linear-gradient(135deg, ${C.canvas} 0%, ${C.accentTint} 100%)`,
-                    padding: "40px 32px",
-                    display: "flex", flexDirection: "column", justifyContent: "space-between",
-                    borderLeft: `1px solid ${C.line}`,
-                  }}
-                >
-                  <div style={{ position: "relative" }}>
-                    <div style={{
-                      fontFamily: MONO, fontSize: "10px", letterSpacing: "0.2em",
-                      color: C.muted, marginBottom: "6px", fontWeight: 600,
-                    }}>
-                      YIELD PROJECTION
+                {/* RIGHT - Yield visualization (desktop only) */}
+                {!mob && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                    style={{
+                      position: "relative",
+                      background: `linear-gradient(135deg, ${C.canvas} 0%, ${C.accentTint} 100%)`,
+                      padding: "40px 32px",
+                      display: "flex", flexDirection: "column", justifyContent: "space-between",
+                      borderLeft: `1px solid ${C.line}`,
+                    }}
+                  >
+                    <div style={{ position: "relative" }}>
+                      <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.2em", color: C.muted, marginBottom: "6px", fontWeight: 600 }}>
+                        YIELD PROJECTION
+                      </div>
+                      <div style={{ fontFamily: SERIF, fontSize: "20px", color: C.ink, fontWeight: 500, letterSpacing: "-0.02em" }}>
+                        1Y → 3Y Lock
+                      </div>
                     </div>
-                    <div style={{
-                      fontFamily: SERIF, fontSize: "20px", color: C.ink,
-                      fontWeight: 500, letterSpacing: "-0.02em",
-                    }}>
-                      1Y → 3Y Lock
+                    <div style={{ margin: "20px 0", position: "relative" }}>
+                      <YieldCurve highlight="24%" />
                     </div>
-                  </div>
-
-                  <div style={{ margin: "20px 0", position: "relative" }}>
-                    <YieldCurve highlight="24%" />
-                  </div>
-
-                  {/* Up-to APY */}
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-                    <span style={{ fontFamily: MONO, fontSize: "10px", color: C.muted, letterSpacing: "0.18em" }}>
-                      UP&nbsp;TO
-                    </span>
-                    <span style={{
-                      fontFamily: SERIF, fontSize: "56px", fontWeight: 400, lineHeight: 0.9,
-                      letterSpacing: "-0.04em",
-                      background: C.accentGrad,
-                      WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                    }}>
-                      24<span style={{ fontSize: "28px" }}>%</span>
-                    </span>
-                    <span style={{ fontFamily: MONO, fontSize: "11px", color: C.muted, letterSpacing: "0.18em", marginLeft: "4px" }}>
-                      APY
-                    </span>
-                  </div>
-                </motion.div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                      <span style={{ fontFamily: MONO, fontSize: "10px", color: C.muted, letterSpacing: "0.18em" }}>UP&nbsp;TO</span>
+                      <span style={{
+                        fontFamily: SERIF, fontSize: "56px", fontWeight: 400, lineHeight: 0.9,
+                        letterSpacing: "-0.04em",
+                        background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                      }}>
+                        24<span style={{ fontSize: "28px" }}>%</span>
+                      </span>
+                      <span style={{ fontFamily: MONO, fontSize: "11px", color: C.muted, letterSpacing: "0.18em", marginLeft: "4px" }}>APY</span>
+                    </div>
+                  </motion.div>
+                )}
               </motion.div>
             )}
 
@@ -549,7 +497,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                 key="step2"
                 initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                style={{ position: "relative", padding: "32px 40px 32px" }}
+                style={{ position: "relative", padding: mob ? "20px 16px 0" : "32px 40px 32px", display: mob ? "flex" : "block", flexDirection: mob ? "column" : "unset" }}
               >
                 <motion.button
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
@@ -558,7 +506,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   style={{
                     fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em",
                     color: C.ink, fontWeight: 600, background: "none", border: "none",
-                    cursor: "pointer", padding: 0, marginBottom: "18px",
+                    cursor: "pointer", padding: 0, marginBottom: mob ? "14px" : "18px",
                     display: "inline-flex", alignItems: "center", gap: "6px",
                   }}
                 >
@@ -568,21 +516,19 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                 <motion.h2
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={stagger(1)}
                   style={{
-                    fontFamily: SERIF, fontSize: "36px", lineHeight: 1.02,
-                    color: C.ink, fontWeight: 400, letterSpacing: "-0.03em",
-                    margin: "0 0 10px",
+                    fontFamily: SERIF,
+                    fontSize: mob ? "26px" : "36px",
+                    lineHeight: 1.05, color: C.ink, fontWeight: 400, letterSpacing: "-0.03em",
+                    margin: mob ? "0 0 8px" : "0 0 10px",
                   }}
                 >
-                  Lock it for how <em style={{
-                    fontStyle: "italic",
-                    background: C.accentGrad,
-                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                    display: "inline-block", padding: "0 0.08em",
-                  }}>long</em>?
+                  Lock it for how{" "}
+                  <em style={{ fontStyle: "italic", background: C.accentGrad, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "inline-block", padding: "0 0.08em" }}>long</em>?
                 </motion.h2>
+
                 <motion.p
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={stagger(2)}
-                  style={{ fontSize: "13px", color: C.muted, margin: "0 0 24px", lineHeight: 1.6 }}
+                  style={{ fontSize: "13px", color: C.muted, margin: mob ? "0 0 16px" : "0 0 24px", lineHeight: 1.6 }}
                 >
                   Longer = higher APY. Your{" "}
                   <span style={{ fontFamily: MONO, color: C.ink, fontWeight: 600 }}>
@@ -591,79 +537,61 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   stays locked on DAGChain until maturity.
                 </motion.p>
 
-                {/* Options */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
+                {/* Staking options */}
+                <div style={{ display: "flex", flexDirection: "column", gap: mob ? "8px" : "10px", marginBottom: mob ? "14px" : "20px" }}>
                   {STAKING_OPTIONS.map((opt, i) => {
                     const isSelected = selected?.duration === opt.duration;
-                    const gained = projected(amount, opt.apy, opt.duration) - amount;
-                    const gainedStr = fmt(gained);
+                    const gained     = projected(amount, opt.apy, opt.duration) - amount;
                     return (
                       <motion.button
                         key={opt.duration}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ ...stagger(3 + i) }}
                         onClick={() => setSelected(opt)}
-                        whileHover={{ y: -2 }}
+                        whileHover={{ y: mob ? 0 : -2 }}
                         whileTap={{ scale: 0.99 }}
                         style={{
                           position: "relative",
-                          display: "grid",
-                          gridTemplateColumns: "1fr auto",
-                          alignItems: "center",
-                          gap: "20px",
-                          padding: "18px 22px",
-                          borderRadius: "16px",
-                          background: isSelected
-                            ? `linear-gradient(135deg, ${C.accentTint} 0%, #D1FAE5 100%)`
-                            : C.bg,
+                          display: "grid", gridTemplateColumns: "1fr auto",
+                          alignItems: "center", gap: "12px",
+                          padding: mob ? "14px 14px" : "18px 22px",
+                          borderRadius: "14px",
+                          background: isSelected ? `linear-gradient(135deg, ${C.accentTint} 0%, #D1FAE5 100%)` : C.bg,
                           border: isSelected ? `1.5px solid ${C.accentA}` : `1px solid ${C.line}`,
-                          cursor: "pointer",
-                          textAlign: "left",
-                          fontFamily: "inherit",
+                          cursor: "pointer", textAlign: "left", fontFamily: "inherit",
                           transition: "background 0.2s, border 0.2s",
-                          boxShadow: isSelected
-                            ? "0 8px 24px -8px rgba(16,185,129,0.35)"
-                            : "0 1px 2px rgba(10,10,10,0.02)",
+                          boxShadow: isSelected ? "0 8px 24px -8px rgba(16,185,129,0.3)" : "0 1px 2px rgba(10,10,10,0.02)",
                         }}
                       >
-                        {/* layoutId accent bar */}
                         {isSelected && (
                           <motion.div
                             layoutId="spm-active"
                             style={{
-                              position: "absolute", left: "0", top: "14%", bottom: "14%",
-                              width: "3px", borderRadius: "999px",
-                              background: C.accentGrad,
+                              position: "absolute", left: 0, top: "14%", bottom: "14%",
+                              width: "3px", borderRadius: "999px", background: C.accentGrad,
                             }}
                             transition={{ type: "spring", stiffness: 380, damping: 30 }}
                           />
                         )}
-
                         <div>
                           <div style={{
-                            fontFamily: SERIF, fontSize: "24px", color: C.ink,
-                            fontWeight: 500, letterSpacing: "-0.02em", marginBottom: "4px",
+                            fontFamily: SERIF, fontSize: mob ? "20px" : "24px", color: C.ink,
+                            fontWeight: 500, letterSpacing: "-0.02em", marginBottom: "3px",
                             display: "flex", alignItems: "baseline", gap: "6px",
                           }}>
                             {opt.duration}
-                            <span style={{ fontSize: "14px", color: C.muted, fontWeight: 400 }}>
+                            <span style={{ fontSize: "13px", color: C.muted, fontWeight: 400 }}>
                               {opt.duration === 1 ? "year" : "years"}
                             </span>
                           </div>
-                          <div style={{
-                            fontFamily: MONO, fontSize: "11px", color: C.muted,
-                            letterSpacing: "0.04em",
-                          }}>
-                            +{gainedStr} DGCC earned
+                          <div style={{ fontFamily: MONO, fontSize: "10px", color: C.muted, letterSpacing: "0.04em" }}>
+                            +{fmt(gained)} DGCC earned
                           </div>
                         </div>
-
-                        <div style={{ textAlign: "right", minWidth: "74px" }}>
+                        <div style={{ textAlign: "right", minWidth: "60px" }}>
                           <div style={{
-                            fontFamily: SERIF, fontSize: "32px", fontWeight: 400,
-                            lineHeight: 1, letterSpacing: "-0.03em",
-                            fontVariantNumeric: "tabular-nums",
+                            fontFamily: SERIF, fontSize: mob ? "26px" : "32px", fontWeight: 400,
+                            lineHeight: 1, letterSpacing: "-0.03em", fontVariantNumeric: "tabular-nums",
                             background: isSelected ? C.accentGrad : "none",
                             WebkitBackgroundClip: isSelected ? "text" : "initial",
                             WebkitTextFillColor: isSelected ? "transparent" : C.ink,
@@ -671,10 +599,7 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                           }}>
                             {opt.apy}%
                           </div>
-                          <div style={{
-                            fontFamily: MONO, fontSize: "9px",
-                            color: C.muted, letterSpacing: "0.2em", marginTop: "2px",
-                          }}>
+                          <div style={{ fontFamily: MONO, fontSize: "9px", color: C.muted, letterSpacing: "0.2em", marginTop: "2px" }}>
                             APY
                           </div>
                         </div>
@@ -687,33 +612,24 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                 <AnimatePresence>
                   {selected && (
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.25 }}
-                      style={{ overflow: "hidden", marginBottom: "16px" }}
+                      initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
+                      style={{ overflow: "hidden", marginBottom: "14px" }}
                     >
                       <div style={{
-                        padding: "14px 16px",
-                        background: C.canvas,
-                        border: `1px solid ${C.line}`,
+                        padding: "12px 14px",
+                        background: C.canvas, border: `1px solid ${C.line}`,
                         borderRadius: "12px",
-                        display: "flex", alignItems: "center", justifyContent: "space-between",
-                        gap: "12px",
+                        display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px",
                       }}>
                         <div>
-                          <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.2em", color: C.muted, marginBottom: "2px" }}>
-                            AT MATURITY
-                          </div>
-                          <div style={{ fontFamily: MONO, fontSize: "14px", color: C.ink, fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
+                          <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.2em", color: C.muted, marginBottom: "2px" }}>AT MATURITY</div>
+                          <div style={{ fontFamily: MONO, fontSize: "13px", color: C.ink, fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
                             {fmt(projected(amount, selected.apy, selected.duration))}
                             <span style={{ color: C.muted, fontWeight: 400 }}> DGCC</span>
                           </div>
                         </div>
-                        <div style={{
-                          fontFamily: MONO, fontSize: "10px", color: C.muted,
-                          letterSpacing: "0.08em", textAlign: "right",
-                        }}>
+                        <div style={{ fontFamily: MONO, fontSize: "9px", color: C.muted, letterSpacing: "0.08em", textAlign: "right" }}>
                           {new Date(Date.now() + selected.duration * 365 * 24 * 60 * 60 * 1000)
                             .toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })
                             .toUpperCase()}
@@ -728,18 +644,25 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                   <motion.div
                     initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
                     style={{
-                      marginBottom: "14px", padding: "10px 14px",
+                      marginBottom: "12px", padding: "10px 14px",
                       background: "#FEF2F2", border: "1px solid #FECACA",
-                      borderRadius: "10px", fontSize: "12px", color: "#991B1B",
-                      fontFamily: MONO,
+                      borderRadius: "10px", fontSize: "12px", color: "#991B1B", fontFamily: MONO,
                     }}
                   >
                     {error}
                   </motion.div>
                 )}
 
-                {/* Submit */}
-                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                {/* Submit — sticky footer on mobile */}
+                <div style={{
+                  position: mob ? "sticky" : "static",
+                  bottom: 0,
+                  background: mob ? C.bg : "transparent",
+                  borderTop: mob && selected ? `1px solid ${C.line}` : "none",
+                  padding: mob ? "12px 0 16px" : "0",
+                  marginTop: mob ? "auto" : "0",
+                  display: "flex", gap: "10px", alignItems: "center",
+                }}>
                   <motion.button
                     whileHover={selected && !submitting ? { y: -1 } : {}}
                     whileTap={selected && !submitting ? { scale: 0.99 } : {}}
@@ -747,7 +670,8 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                     disabled={!selected || submitting}
                     style={{
                       flex: 1, position: "relative", overflow: "hidden",
-                      padding: "15px 24px", borderRadius: "999px",
+                      padding: mob ? "14px 16px" : "15px 24px",
+                      borderRadius: "999px",
                       background: selected ? C.ink : C.lineSoft,
                       color: selected ? C.bg : C.subtle,
                       border: "none",
@@ -773,17 +697,6 @@ export default function StakingPerkModal({ type, dgccAmount, userId, paymentId, 
                       }} />
                     )}
                   </motion.button>
-                  <button
-                    onClick={() => onClose?.()}
-                    style={{
-                      padding: "15px 18px", background: "transparent",
-                      color: C.muted, border: "none",
-                      fontSize: "13px", fontWeight: 500, cursor: "pointer",
-                      fontFamily: "inherit",
-                    }}
-                  >
-                    Skip
-                  </button>
                 </div>
               </motion.div>
             )}

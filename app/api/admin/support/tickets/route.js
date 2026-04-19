@@ -59,7 +59,7 @@ export async function GET(request) {
   }
 }
 
-// PATCH /api/admin/support/tickets — update ticket (status, priority, assigned_to)
+// PATCH /api/admin/support/tickets - update ticket (status, priority, assigned_to)
 export async function PATCH(request) {
   try {
     const body = await request.json();

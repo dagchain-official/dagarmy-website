@@ -13,7 +13,7 @@ const PERKS = [
     subtitle: "4,000+ n8n Workflows",
     points: [
       "Searchable library of 4,000+ pre-built n8n workflows for Lead Gen, AI Agents, Crypto Tracking & SaaS Operations",
-      "One-click import — ready to deploy directly into your n8n instance",
+      "One-click import - ready to deploy directly into your n8n instance",
     ],
     accent: "#6366f1",
     bg: "rgba(99,102,241,0.07)",
@@ -104,7 +104,7 @@ const PERKS = [
     subtitle: "Early Testing & Feedback Loop",
     points: [
       "Be first to use internal DAGARMY tools and partner software before general release",
-      "Shape the development of the tools you use — direct feedback to dev teams",
+      "Shape the development of the tools you use - direct feedback to dev teams",
     ],
     accent: "#ef4444",
     bg: "rgba(239,68,68,0.07)",
@@ -116,10 +116,10 @@ const PERKS = [
       </svg>
     ),
     title: "Demo Day Finals",
-    subtitle: "Road to Demo Day — Udaan Program",
+    subtitle: "Road to Demo Day - Udaan Program",
     points: [
       "Fast-track access to the 3-stage Udaan selection pipeline: Screening → Validation & Mentor Review → Demo Day Finals, filtering 1,000+ applicants to a curated founder cohort",
-      "Your MVP becomes your proof — Demo Day Finals are earned, not attended. Execution becomes reputation and your traction becomes your signal to investors and partners",
+      "Your MVP becomes your proof - Demo Day Finals are earned, not attended. Execution becomes reputation and your traction becomes your signal to investors and partners",
     ],
     accent: "#14b8a6",
     bg: "rgba(20,184,166,0.07)",
@@ -346,7 +346,7 @@ export default function LieutenantUpgradeModal({ onClose, onConfirm, loading }) 
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
-              {loading ? "Redirecting..." : "Upgrade to Lieutenant — $149"}
+              {loading ? "Redirecting..." : "Upgrade to Lieutenant - $149"}
             </button>
           </div>
         </div>

@@ -59,7 +59,7 @@ export async function GET(request) {
       is_self_sale: !r.buyer_id || r.buyer_id === user.id,
     }));
 
-    // Build summary — split by currency
+    // Build summary - split by currency
     const summary = {
       totalUsd:  0,
       totalUsdt: 0,

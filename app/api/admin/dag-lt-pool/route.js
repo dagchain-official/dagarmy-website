@@ -102,7 +102,7 @@ export async function POST(request) {
 
     const perMember = parseFloat(dist.per_member_amount || 0);
     if (perMember <= 0) {
-      return NextResponse.json({ error: 'Per-member amount is 0 — nothing to distribute' }, { status: 400 });
+      return NextResponse.json({ error: 'Per-member amount is 0 - nothing to distribute' }, { status: 400 });
     }
 
     const memberIds = members.map(m => m.user_id);
@@ -120,7 +120,7 @@ export async function POST(request) {
       user_id: m.user_id,
       points: Math.round(perMember),
       transaction_type: 'dag_lt_pool_payout',
-      description: `DAG LT Pool — ${dist.period} distribution ($${perMember.toFixed(4)} per member)`,
+      description: `DAG LT Pool - ${dist.period} distribution ($${perMember.toFixed(4)} per member)`,
       balance_before: balanceMap[m.user_id] || 0,
       balance_after: (balanceMap[m.user_id] || 0) + Math.round(perMember),
       created_at: now,

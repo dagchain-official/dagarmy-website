@@ -1,35 +1,51 @@
-/* Header2 Mobile Responsive Styles */
+/* ── Header2 Responsive Styles ──────────────────────────── */
 
-.stickyHeader {
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 9999 !important;
-  width: 100% !important;
-  background: #ffffff !important;
-  border-bottom: 1px solid #e5e7eb !important;
-}
-
-/* Hide navigation menu on mobile, show hamburger */
-@media (max-width: 1280px) {
-  .mobile-nav-toggler {
-    display: flex !important;
-  }
-  
-  nav {
-    display: none !important;
-  }
-}
-
-/* Show navigation menu on desktop, hide hamburger */
+/* Desktop: show full nav, hide hamburger */
 @media (min-width: 1281px) {
-  .mobile-nav-toggler {
+  .mobile-nav-toggler { display: none !important; }
+  .header-nav          { display: flex !important; }
+  .header-btn-mobile-hidden { display: flex !important; }
+}
+
+/* Tablet + Mobile: hide full nav, show hamburger */
+@media (max-width: 1280px) {
+  /* Hide desktop navigation links */
+  .header-inner-wrap nav,
+  nav.header-nav {
     display: none !important;
   }
-  
-  nav {
+
+  /* Show hamburger button */
+  .mobile-nav-toggler {
     display: flex !important;
+    order: 10;
   }
+
+  /* Hide the animated Sign In / Dashboard button on mobile.
+     Keep it in the mobile drawer instead. */
+  .header-btn .animated-header-btn {
+    display: none !important;
+  }
+
+  /* Tighten logo spacing on mobile */
+  #site-logo span {
+    font-size: 17px !important;
+  }
+
+  /* Shrink header padding on small screens */
+  .header-inner-wrap {
+    padding: 0 16px !important;
+    gap: 8px !important;
+  }
+
+  /* Push hamburger to the far right */
+  .header-inner-wrap {
+    justify-content: space-between;
+  }
+}
+
+/* Very small screens — further reduce logo text */
+@media (max-width: 400px) {
+  #site-logo span { display: none !important; }
+  .header-inner-wrap { padding: 0 12px !important; }
 }

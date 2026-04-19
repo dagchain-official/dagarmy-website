@@ -68,7 +68,7 @@ const gaps = [
 ];
 
 const visionPoints = [
-  { label: 'A Training Camp', body: 'We teach practical, "battle-ready" skills for the 2026 economy—from AI to Blockchain security.' },
+  { label: 'A Training Camp', body: 'We teach practical, "battle-ready" skills for the 2026 economy-from AI to Blockchain security.' },
   { label: 'A Launchpad', body: 'We provide mentorship and strategic guidance to turn prototypes into products and ideas into startups.' },
   { label: 'A Bridge', body: 'We vet our "Soldiers" through real-world challenges so companies hire proven excellence.' },
 ];
@@ -91,7 +91,7 @@ export default function AboutNeo() {
           WHO WE ARE
         </p>
 
-        {/* Headline + intro — two columns */}
+        {/* Headline + intro - two columns */}
         <div className="about-hero-grid">
           <h1 style={{ fontSize: '38px', fontWeight: '800', color: '#0f172a', lineHeight: '1.2', margin: 0 }}>
             We Are Building a{' '}
@@ -99,11 +99,11 @@ export default function AboutNeo() {
             of "Vibe Coders," Technical Experts, and Visionary Entrepreneurs
           </h1>
           <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.8', margin: 0, paddingTop: '6px' }}>
-            At DAGARMY, we believe that brilliance is universal, but opportunity is not. We are not just another EdTech platform—we are a Talent Engagement and Incubation Engine, bridging the gap between hidden talent and global tech giants.
+            At DAGARMY, we believe that brilliance is universal, but opportunity is not. We are not just another EdTech platform-we are a Talent Engagement and Incubation Engine, bridging the gap between hidden talent and global tech giants.
           </p>
         </div>
 
-        {/* Photo grid — neumorphic frame */}
+        {/* Photo grid - neumorphic frame */}
         <NmCard hover={false} style={{ padding: '16px', borderRadius: '24px' }}>
           <div className="about-photo-mosaic">
             {/* Top-left wide */}

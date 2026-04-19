@@ -27,7 +27,7 @@ const lieutenantFeatures = ['Launch & Validate Real AI Projects', 'Access to Str
 
 const grantsItems = [
   { label: 'RESOURCE ACCESS FRAMEWORK', title: 'Meritocratic Efficiency', body: 'Your rank dictates your resource access. As you progress from Starter to Mythic, the ecosystem unlocks higher efficiency tiers, ensuring that long-term contributors receive a larger share of the value they generate.' },
-  { label: 'IMPACT RECOGNITION SYSTEM', title: 'Performance Fellowships', body: 'Consistency is the primary metric we reward. Contributors who demonstrate sustained, monthly impact are eligible for the Discretionary Excellence Fund—a resource pool reserved specifically for those actively driving ecosystem stability.' },
+  { label: 'IMPACT RECOGNITION SYSTEM', title: 'Performance Fellowships', body: 'Consistency is the primary metric we reward. Contributors who demonstrate sustained, monthly impact are eligible for the Discretionary Excellence Fund-a resource pool reserved specifically for those actively driving ecosystem stability.' },
   { label: 'LEADERSHIP SUPPORT INFRASTRUCTURE', title: 'Ambassador Logistics Program', body: 'For our most dedicated leaders, support extends beyond the digital platform. High-impact contributors can qualify for the Lifestyle Support Tier, which provides assistance for real-world logistical needs.' },
 ];
 
@@ -54,7 +54,7 @@ export default function RewardsOverviewNeo() {
                 NOT PROOF OF HYPE.
               </h2>
               <p style={{ fontSize: '17px', lineHeight: '1.65', color: '#475569', marginBottom: '28px', maxWidth: '480px' }}>
-                A reward system that values what you actually contribute—not just when you joined.
+                A reward system that values what you actually contribute-not just when you joined.
               </p>
 
               {/* Download CTA */}
@@ -72,7 +72,7 @@ export default function RewardsOverviewNeo() {
               </a>
             </div>
 
-            {/* Right — shield image */}
+            {/* Right - shield image */}
             <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src="/finalendingframe.png" alt="Merit Shield" style={{ width: '100%', maxWidth: '420px', height: 'auto', objectFit: 'contain', display: 'block' }} />
             </div>
@@ -116,7 +116,7 @@ export default function RewardsOverviewNeo() {
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
               <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: '800', color: '#0f172a', marginBottom: '14px' }}>How You Earn</h2>
               <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', maxWidth: '560px', margin: '0 auto' }}>
-                We quantify your impact using <strong style={{ color: '#0f172a' }}>DAG Points</strong> — your Reputation Score.
+                We quantify your impact using <strong style={{ color: '#0f172a' }}>DAG Points</strong> - your Reputation Score.
               </p>
             </div>
 

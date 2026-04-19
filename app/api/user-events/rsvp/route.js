@@ -37,7 +37,7 @@ export async function POST(request) {
     }
 
     if (action === 'join') {
-      // Check capacity — only count non-creator RSVPs
+      // Check capacity - only count non-creator RSVPs
       if (event.max_capacity !== null) {
         const { count } = await supabase
           .from('user_event_rsvps')

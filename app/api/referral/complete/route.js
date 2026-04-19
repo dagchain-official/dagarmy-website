@@ -38,7 +38,7 @@ export async function POST(request) {
       );
     }
 
-    // Idempotency guard — skip if already awarded
+    // Idempotency guard - skip if already awarded
     if (referral.points_earned_on_join > 0) {
       return NextResponse.json({
         success: true,
@@ -85,7 +85,7 @@ export async function POST(request) {
       p_user_id: referrer.id,
       p_points: bonusAmount,
       p_transaction_type: 'referral_join',
-      p_description: `Referral join bonus — ${tierLabel} referrer (+${bonusAmount} DAG Points)`,
+      p_description: `Referral join bonus - ${tierLabel} referrer (+${bonusAmount} DAG Points)`,
       p_reference_id: referral.id,
     });
 

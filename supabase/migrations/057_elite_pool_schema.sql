@@ -3,8 +3,8 @@
 -- ============================================================
 -- Creates the Elite Pool infrastructure for DAG LIEUTENANTS.
 -- Fund source: 50% of DAGCHAIN blockchain transaction fees.
--- Status: Coming Soon — activates at MainNet launch (Sep-Oct 2026).
--- Membership: All DAG LIEUTENANTs — current and future — forever.
+-- Status: Coming Soon - activates at MainNet launch (Sep-Oct 2026).
+-- Membership: All DAG LIEUTENANTs - current and future - forever.
 -- No separate members table needed: membership = users.tier = 'DAG_LIEUTENANT'
 -- ============================================================
 

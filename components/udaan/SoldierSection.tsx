@@ -142,7 +142,7 @@ export default function SoldierSection() {
       <div className="wrap">
         <div className="udaan-bento-grid" style={{ gridTemplateRows: "auto auto" }}>
 
-          {/* A: Identity — spans 2 cols */}
+          {/* A: Identity - spans 2 cols */}
           <motion.div
             {...fadeUp(0.1)}
             className="udaan-bento-span2"
@@ -177,7 +177,7 @@ export default function SoldierSection() {
             </div>
           </motion.div>
 
-            {/* B: Mindset shift — 1 col, light */}
+            {/* B: Mindset shift - 1 col, light */}
             <motion.div
               {...fadeUp(0.15)}
               style={{
@@ -230,7 +230,7 @@ export default function SoldierSection() {
               </div>
             </motion.div>
 
-          {/* C: Skills list — 1 col */}
+          {/* C: Skills list - 1 col */}
           <motion.div
             {...fadeUp(0.2)}
             style={{
@@ -273,7 +273,7 @@ export default function SoldierSection() {
             </div>
           </motion.div>
 
-          {/* D: Skill-to-startup transition — spans 2 cols */}
+          {/* D: Skill-to-startup transition - spans 2 cols */}
           <motion.div
             {...fadeUp(0.25)}
             className="udaan-bento-span2"
@@ -321,7 +321,7 @@ export default function SoldierSection() {
                     How do I apply AI inside a company?
                   </p>
                   <p style={{ fontSize: 13, lineHeight: 1.7, color: "#c4c4d4", marginBottom: 0 }}>
-                    The old model focused on AI as a tool to enhance existing company workflows — a support function, not a foundation for building.
+                    The old model focused on AI as a tool to enhance existing company workflows - a support function, not a foundation for building.
                   </p>
                 </div>
                 {/* New Q */}
@@ -357,7 +357,7 @@ export default function SoldierSection() {
 
         </div>
 
-          {/* ── BOTTOM FULL-WIDTH MANIFESTO STRIP — light ── */}
+          {/* ── BOTTOM FULL-WIDTH MANIFESTO STRIP - light ── */}
           <motion.div
             {...fadeUp(0.35)}
             className="udaan-soldier-manifesto"

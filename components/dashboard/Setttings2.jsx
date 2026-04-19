@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 
@@ -30,6 +30,20 @@ export default function Setttings() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [mob, setMob] = useState(true);
+  // DGCC transfer state
+  const [dgccBalance, setDgccBalance]   = useState(0);
+  const [transferDest, setTransferDest] = useState(null);
+  const [transferAmt, setTransferAmt]   = useState(1);
+  const [transferring, setTransferring] = useState(false);
+  const [transferMsg, setTransferMsg]   = useState(null);
+
+  useLayoutEffect(() => {
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
   const [paymentSaving, setPaymentSaving] = useState(false);
   const [paymentSaved, setPaymentSaved] = useState(false);
   const [paymentError, setPaymentError] = useState('');
@@ -140,15 +154,10 @@ export default function Setttings() {
             wallet_address: data.user.wallet_address || ''
           });
           
-          if (data.user.avatar_url) {
-            setAvatarPreview(data.user.avatar_url);
-          }
-          
-          if (data.user.banner_url) {
-            setBannerPreview(data.user.banner_url);
-          }
+          if (data.user.avatar_url) setAvatarPreview(data.user.avatar_url);
+          if (data.user.banner_url) setBannerPreview(data.user.banner_url);
+          setDgccBalance(data.user.dgcc_balance || 0);
 
-          // Load payment info
           setPaymentForm({
             preferred_payout: data.user.preferred_payout || 'bank',
             bep20_address: data.user.bep20_address || '',
@@ -357,7 +366,7 @@ export default function Setttings() {
   });
 
   return (
-    <div style={{ width:'100%', padding:'32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
+    <div style={{ width:'100%', padding: mob ? '20px 14px 80px' : '32px 36px', background:BG, minHeight:'100vh', boxSizing:'border-box' }}>
       <style>{`
         @keyframes nm-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
         @keyframes spin  { to{transform:rotate(360deg)} }
@@ -365,26 +374,26 @@ export default function Setttings() {
       `}</style>
 
       {/* ── Page header ── */}
-      <div style={{ marginBottom:'32px', animation:'nm-up 0.4s ease-out both' }}>
-        <div style={{ display:'flex', alignItems:'flex-end', gap:'16px' }}>
-          <div style={{ width:'52px', height:'52px', borderRadius:'16px', background:BG, boxShadow:S_UP,
+      <div style={{ marginBottom: mob ? '18px' : '32px', animation:'nm-up 0.4s ease-out both' }}>
+        <div style={{ display:'flex', alignItems: mob ? 'center' : 'flex-end', gap: mob ? '10px' : '16px' }}>
+          <div style={{ width: mob ? '40px' : '52px', height: mob ? '40px' : '52px', borderRadius:'16px', background:BG, boxShadow:S_UP,
             display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
             </svg>
           </div>
-          <div style={{ display:'flex', alignItems:'baseline', gap:'12px' }}>
-            <h1 style={{ fontSize:'26px', fontWeight:'800', color:'#0f172a', margin:0,
+          <div style={{ display:'flex', alignItems: mob ? 'flex-start' : 'baseline', flexDirection: mob ? 'column' : 'row', gap: mob ? '2px' : '12px' }}>
+            <h1 style={{ fontSize: mob ? '20px' : '26px', fontWeight:'800', color:'#0f172a', margin:0,
               letterSpacing:'-0.5px', fontFamily:'Nasalization, sans-serif', lineHeight:1 }}>Settings</h1>
-            <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
+            {!mob && <p style={{ fontSize:'13px', color:'#94a3b8', margin:0, fontWeight:'500' }}>
               Manage your profile, preferences, and account settings
-            </p>
+            </p>}
           </div>
         </div>
       </div>
 
-      {/* ── 2-column grid ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'1.5fr 1fr', gap:'24px', alignItems:'stretch',
+      {/* ── 2-column grid (1-col on mobile) ── */}
+      <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : '1.5fr 1fr', gap:'24px', alignItems:'stretch',
         animation:'nm-up 0.4s ease-out 0.06s both' }}>
 
         {/* ════ LEFT COLUMN ════ */}
@@ -414,7 +423,7 @@ export default function Setttings() {
             </div>
             {/* Avatar row */}
             <div style={{ position:'relative', padding:'0 24px', height:'24px' }}>
-              {/* Avatar — absolutely overlaps the banner */}
+              {/* Avatar - absolutely overlaps the banner */}
               <div
                 onClick={() => document.getElementById('avatar-input').click()}
                 style={{ position:'absolute', top:'-44px', left:'24px',
@@ -437,21 +446,30 @@ export default function Setttings() {
                 <input id="avatar-input" type="file" accept="image/*" onChange={handleAvatarChange} style={{ display:'none' }} />
               </div>
             </div>
-            {/* Name + pills row — fully below banner */}
-            <div style={{ padding:'0 24px 20px', display:'flex', alignItems:'center', gap:'16px' }}>
-              {/* spacer for avatar width */}
-              <div style={{ width:'88px', flexShrink:0 }} />
+            {/* Name + tier row */}
+            <div style={{
+              padding: mob ? '0 16px 20px 120px' : '0 24px 20px',
+              display:'flex',
+              alignItems: mob ? 'flex-start' : 'center',
+              flexDirection: mob ? 'column' : 'row',
+              gap: mob ? '6px' : '16px',
+              minWidth: 0,
+            }}>
+              {/* Desktop-only spacer to push content past the avatar */}
+              {!mob && <div style={{ width:'88px', flexShrink:0 }} />}
+
               {/* Name */}
-              <div>
-                <div style={{ fontSize:'16px', fontWeight:'800', color:'#0f172a' }}>
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ fontSize:'16px', fontWeight:'800', color:'#0f172a',
+                  whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
                   {formData.first_name || formData.last_name
                     ? `${formData.first_name} ${formData.last_name}`.trim()
                     : 'Your Name'}
                 </div>
               </div>
-              {/* Tier + Rank pills — pushed to far right */}
-              <div style={{ display:'flex', alignItems:'center', gap:'12px', flexWrap:'wrap', marginLeft:'auto' }}>
-                {/* Tier: badge circle + pill */}
+
+              {/* Tier pill — rank removed */}
+              <div style={{ display:'flex', alignItems:'center', gap:'8px', flexShrink:0, marginLeft: mob ? 0 : 'auto' }}>
                 {(() => {
                   const tier = userData?.tier || 'DAG_SOLDIER';
                   const isSoldier = tier !== 'DAG_LIEUTENANT';
@@ -459,35 +477,14 @@ export default function Setttings() {
                   const tierBadge = isSoldier ? '/images/badges/dag-soldier.svg' : '/images/badges/dag-lieutenant.svg';
                   return (
                     <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
-                      <div style={{ width:'48px', height:'48px', borderRadius:'50%', background:BG,
+                      <div style={{ width:'36px', height:'36px', borderRadius:'50%', background:BG,
                         boxShadow:S_UP, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                        <img src={tierBadge} alt={tierLabel}
-                          style={{ width:'30px', height:'30px', objectFit:'contain' }} />
+                        <img src={tierBadge} alt={tierLabel} style={{ width:'22px', height:'22px', objectFit:'contain' }} />
                       </div>
                       <div style={{ padding:'5px 13px', borderRadius:'20px', background:BG, boxShadow:S_IN,
                         fontSize:'10px', fontWeight:'800', color:'#475569',
                         textTransform:'uppercase', letterSpacing:'0.5px' }}>
                         {tierLabel}
-                      </div>
-                    </div>
-                  );
-                })()}
-                {/* Rank: badge circle + pill */}
-                {(() => {
-                  const rawRank = userData?.current_rank;
-                  const rank = (rawRank && rawRank !== 'None') ? rawRank : 'STARTER';
-                  const rankBadge = `/images/badges/dag-${rank.toLowerCase()}.svg`;
-                  return (
-                    <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
-                      <div style={{ width:'48px', height:'48px', borderRadius:'50%', background:BG,
-                        boxShadow:S_UP, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                        <img src={rankBadge} alt={rank}
-                          style={{ width:'30px', height:'30px', objectFit:'contain' }} />
-                      </div>
-                      <div style={{ padding:'5px 13px', borderRadius:'20px', background:BG, boxShadow:S_IN,
-                        fontSize:'10px', fontWeight:'800', color:PURPLE,
-                        textTransform:'uppercase', letterSpacing:'0.5px' }}>
-                        {rank}
                       </div>
                     </div>
                   );
@@ -511,7 +508,7 @@ export default function Setttings() {
 
             <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:'16px', flex:1 }}>
               {/* Name row */}
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
+              <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap:'14px' }}>
                 <div>
                   <label style={lbl}>First Name</label>
                   <input className="nm-inp" type="text" name="first_name" value={formData.first_name}
@@ -590,7 +587,7 @@ export default function Setttings() {
               <span style={{ fontSize:'15px', fontWeight:'800', color:'#0f172a' }}>Social Links</span>
             </div>
             <form onSubmit={handleSocialSubmit} style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
+              <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap:'14px' }}>
                 {[
                   { name:'facebook',  label:'Facebook',  placeholder:'facebook.com/username' },
                   { name:'x',         label:'X',         placeholder:'x.com/username' },
@@ -692,7 +689,7 @@ export default function Setttings() {
               ) : (
                 <>
                   <p style={{ fontSize:'13px', color:'#64748b', marginBottom:'14px', marginTop:0 }}>
-                    Not applied yet. Enter one below — this can only be done once.
+                    Not applied yet. Enter one below - this can only be done once.
                   </p>
                   <div style={{ display:'flex', gap:'10px' }}>
                     <input className="nm-inp" type="text" value={referralInput}
@@ -739,124 +736,139 @@ export default function Setttings() {
         </div>
       </div>
 
-      {/* ════ PAYMENT & WITHDRAWAL ════ */}
-      <div style={{ marginTop:'28px', background:BG, borderRadius:'22px', boxShadow:S_UP, overflow:'hidden',
-        animation:'nm-up 0.4s ease-out 0.1s both' }}>
-        {/* Header */}
-        <div style={{ padding:'20px 26px', borderBottom:'1px solid rgba(0,0,0,0.05)',
-          display:'flex', alignItems:'center', gap:'14px' }}>
-          <div style={{ width:'40px', height:'40px', borderRadius:'13px', background:BG, boxShadow:S_IN,
-            display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-            </svg>
-          </div>
-          <div>
-            <div style={{ fontSize:'15px', fontWeight:'800', color:'#0f172a' }}>Payment &amp; Withdrawal</div>
-            <div style={{ fontSize:'12px', color:'#94a3b8', marginTop:'2px' }}>Choose how to receive your USD rewards. Minimum withdrawal: $10.</div>
-          </div>
-        </div>
-
-        <form onSubmit={handlePaymentSubmit} style={{ padding:'24px 26px', display:'flex', flexDirection:'column', gap:'22px' }}>
-
-          {/* Payout toggle */}
-          <div>
-            <label style={lbl}>Preferred Payout Method</label>
-            <div style={{ display:'flex', gap:'12px' }}>
-              {[
-                { value:'bank',   label:'Bank Transfer',  desc:'Credited on 10th of following month' },
-                { value:'crypto', label:'USDT (BEP20)',   desc:'Sent within 24hrs of approval' },
-              ].map(opt => (
-                <label key={opt.value} onClick={() => setPaymentForm(p=>({...p, preferred_payout:opt.value}))}
-                  style={{ flex:1, display:'flex', alignItems:'flex-start', gap:'12px', padding:'14px 16px',
-                    borderRadius:'16px', cursor:'pointer', background:BG, transition:'box-shadow 0.2s',
-                    boxShadow: paymentForm.preferred_payout===opt.value ? S_IN : S_UP }}>
-                  <div style={{ width:'18px', height:'18px', borderRadius:'50%', flexShrink:0, marginTop:'1px',
-                    background:BG, boxShadow: paymentForm.preferred_payout===opt.value ? S_IN_SM : S_UP,
-                    display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    {paymentForm.preferred_payout===opt.value &&
-                      <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:PURPLE }} />}
-                  </div>
-                  <div>
-                    <div style={{ fontSize:'13px', fontWeight:'800', color: paymentForm.preferred_payout===opt.value ? PURPLE : '#0f172a', marginBottom:'2px' }}>{opt.label}</div>
-                    <div style={{ fontSize:'11px', color:'#94a3b8' }}>{opt.desc}</div>
-                  </div>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Crypto fields */}
-          {paymentForm.preferred_payout === 'crypto' && (
-            <div style={{ background:BG, borderRadius:'16px', boxShadow:S_IN, padding:'18px 20px' }}>
-              <div style={{ fontSize:'12px', fontWeight:'800', color:'#475569', textTransform:'uppercase',
-                letterSpacing:'0.7px', marginBottom:'14px' }}>BEP20 Wallet Address</div>
-              <label style={lbl}>USDT BEP20 Address <span style={{ color:'#ef4444' }}>*</span></label>
-              <input className="nm-inp" type="text" name="bep20_address" value={paymentForm.bep20_address}
-                onChange={handlePaymentChange} placeholder="0x…"
-                style={nmInput({ fontFamily:'monospace', letterSpacing:'0.5px' })} />
-              <div style={{ fontSize:'11px', color:'#94a3b8', marginTop:'8px' }}>
-                Only BEP20 (BSC) network addresses are accepted. Wrong network = permanent loss.
+      {/* ════ DGCC TRANSFER ════ */}
+      {(() => {
+        const canTransfer = !!transferDest && Number(transferAmt) > 0 && Number(transferAmt) <= dgccBalance && dgccBalance > 0;
+        const handleDgccTransfer = async () => {
+          if (!canTransfer || transferring) return;
+          setTransferring(true); setTransferMsg(null);
+          try {
+            const userEmail = userData?.email || (() => { try { return JSON.parse(localStorage.getItem('dagarmy_user') || '{}').email; } catch { return null; } })();
+            const res = await fetch('/api/rewards/dgcc/transfer', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ user_email: userEmail, destination: transferDest, amount: Number(transferAmt) }),
+            });
+            const data = await res.json();
+            if (data.success) {
+              setDgccBalance(b => b - Number(transferAmt));
+              setTransferMsg({ type:'success', text:`✓ ${transferAmt} DGCC sent to ${transferDest === 'daggpt' ? 'DAGGPT' : 'DAGChain'} successfully!` });
+              setTimeout(() => { setTransferMsg(null); setTransferDest(null); setTransferAmt(1); }, 4000);
+            } else {
+              setTransferMsg({ type:'error', text: data.error || 'Transfer failed. Please try again.' });
+            }
+          } catch { setTransferMsg({ type:'error', text:'Network error. Please try again.' }); }
+          finally { setTransferring(false); }
+        };
+        return (
+          <div style={{ marginTop:'28px', background:BG, borderRadius:'22px', boxShadow:S_UP, overflow:'hidden',
+            animation:'nm-up 0.4s ease-out 0.1s both' }}>
+            {/* Header */}
+            <div style={{ padding:'20px 26px', borderBottom:'1px solid rgba(0,0,0,0.05)',
+              display:'flex', alignItems:'center', gap:'14px' }}>
+              <div style={{ width:'40px', height:'40px', borderRadius:'13px', background:BG, boxShadow:S_IN,
+                display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontSize:'15px', fontWeight:'800', color:'#0f172a' }}>Transfer DGCC</div>
+                <div style={{ fontSize:'12px', color:'#94a3b8', marginTop:'2px' }}>Send your DGCC coins to DAGGPT or DAGChain. 1 DGCC = $1.</div>
               </div>
             </div>
-          )}
 
-          {/* Bank fields */}
-          {paymentForm.preferred_payout === 'bank' && (
-            <div style={{ background:BG, borderRadius:'16px', boxShadow:S_IN, padding:'18px 20px' }}>
-              <div style={{ fontSize:'12px', fontWeight:'800', color:'#475569', textTransform:'uppercase',
-                letterSpacing:'0.7px', marginBottom:'14px' }}>Bank Account Details</div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
-                {[
-                  { name:'bank_account_name',   label:'Account Holder Name', placeholder:'As per bank records',         required:true,  full:true },
-                  { name:'bank_account_number', label:'Account Number',       placeholder:'Enter account number',        required:true,  full:false },
-                  { name:'bank_name',           label:'Bank Name',            placeholder:'e.g. HDFC Bank',              required:true,  full:false },
-                  { name:'bank_branch',         label:'Branch / Location',    placeholder:'e.g. Mumbai, Andheri West',   required:false, full:false },
-                  { name:'bank_swift_iban',     label:'SWIFT / IBAN Code',    placeholder:'e.g. HDFCINBB',               required:false, full:false },
-                ].map(f => (
-                  <div key={f.name} style={{ gridColumn: f.full ? '1 / -1' : 'auto' }}>
-                    <label style={lbl}>{f.label} {f.required && <span style={{ color:'#ef4444' }}>*</span>}</label>
-                    <input className="nm-inp" type="text" name={f.name} value={paymentForm[f.name]}
-                      onChange={handlePaymentChange} placeholder={f.placeholder} style={nmInput()} />
-                  </div>
-                ))}
+            <div style={{ padding: mob ? '18px 16px' : '24px 26px', display:'flex', flexDirection:'column', gap:'20px' }}>
+
+              {/* Balance display */}
+              <div style={{ background:BG, borderRadius:'16px', boxShadow:S_IN, padding:'16px 20px',
+                display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                <span style={{ fontSize:'11px', fontWeight:'700', color:'#64748b', textTransform:'uppercase', letterSpacing:'0.6px' }}>Available Balance</span>
+                <span style={{ fontSize:'22px', fontWeight:'900', color: dgccBalance > 0 ? PURPLE : '#94a3b8', letterSpacing:'-1px' }}>
+                  {dgccBalance > 0 ? dgccBalance.toLocaleString() : '0'}
+                  <span style={{ fontSize:'12px', fontWeight:'600', color:PURPLE, marginLeft:'5px' }}>DGCC</span>
+                </span>
               </div>
-            </div>
-          )}
 
-          {/* Feedback */}
-          {paymentError && (
-            <div style={{ padding:'12px 16px', borderRadius:'13px', background:BG,
-              boxShadow:'4px 4px 10px rgba(239,68,68,0.18), -3px -3px 8px rgba(255,255,255,0.9)',
-              color:'#dc2626', fontSize:'13px', fontWeight:'600' }}>{paymentError}</div>
-          )}
-          {paymentSaved && (
-            <div style={{ padding:'12px 16px', borderRadius:'13px', background:BG,
-              boxShadow:'4px 4px 10px rgba(16,185,129,0.18), -3px -3px 8px rgba(255,255,255,0.9)',
-              color:'#059669', fontSize:'13px', fontWeight:'700',
-              display:'flex', alignItems:'center', gap:'8px' }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              Payment info saved successfully.
-            </div>
-          )}
+              {/* Destination picker */}
+              <div>
+                <label style={{ fontSize:'10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.7px', marginBottom:'10px', display:'block' }}>Send To</label>
+                <div style={{ display:'grid', gridTemplateColumns: mob ? '1fr 1fr' : '1fr 1fr', gap:'10px' }}>
+                  {[
+                    { key:'daggpt',   label:'DAGGPT',   icon:'🤖', desc:'AI generation credits', accent:'#6366f1' },
+                    { key:'dagchain', label:'DAGChain', icon:'⛓️', desc:'Blockchain wallet',      accent:'#10b981' },
+                  ].map(opt => (
+                    <button key={opt.key} type="button"
+                      onClick={() => { if (dgccBalance > 0) setTransferDest(opt.key); }}
+                      style={{ padding:'14px 12px', borderRadius:'14px',
+                        border:`2px solid ${transferDest === opt.key ? opt.accent : 'transparent'}`,
+                        background:BG, cursor: dgccBalance > 0 ? 'pointer' : 'not-allowed',
+                        textAlign:'left', transition:'all 0.2s', opacity: dgccBalance > 0 ? 1 : 0.5,
+                        boxShadow: transferDest === opt.key ? S_IN : S_UP }}>
+                      <div style={{ fontSize:'20px', marginBottom:'4px' }}>{opt.icon}</div>
+                      <div style={{ fontSize:'12px', fontWeight:'800', color: transferDest === opt.key ? opt.accent : '#0f172a' }}>{opt.label}</div>
+                      <div style={{ fontSize:'10px', color:'#94a3b8', marginTop:'2px' }}>{opt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-          <div>
-            <button type="submit" disabled={paymentSaving} style={{ ...saveBtn(paymentSaving), alignSelf:'flex-start' }}
-              onMouseEnter={e => { if(!paymentSaving){ e.currentTarget.style.background='#4f46e5'; } }}
-              onMouseLeave={e => { if(!paymentSaving){ e.currentTarget.style.background=PURPLE; } }}>
-              {paymentSaving
-                ? <><div style={{ width:'14px', height:'14px', border:'2px solid rgba(255,255,255,0.3)',
-                    borderTopColor:'#fff', borderRadius:'50%', animation:'spin 0.8s linear infinite' }} /> Saving…</>
-                : <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    Save Payment Info
-                  </>
-              }
-            </button>
+              {/* Amount input */}
+              <div>
+                <label style={{ fontSize:'10px', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.7px', marginBottom:'10px', display:'block' }}>Amount (DGCC)</label>
+                <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
+                  <button type="button" onClick={() => setTransferAmt(a => Math.max(1, a - 1))}
+                    style={{ width:'38px', height:'38px', borderRadius:'10px', border:'none', background:BG, boxShadow:S_UP,
+                      fontSize:'18px', fontWeight:'700', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:PURPLE, flexShrink:0 }}>−</button>
+                  <input type="number" min="1" max={dgccBalance} value={transferAmt}
+                    onChange={e => setTransferAmt(Math.max(1, Math.min(dgccBalance, parseInt(e.target.value)||1)))}
+                    style={{ flex:1, padding:'10px', border:'none', borderRadius:'10px', fontSize:'18px', fontWeight:'900',
+                      color:'#0f172a', textAlign:'center', outline:'none', background:BG, boxShadow:S_IN, fontFamily:'inherit' }} />
+                  <button type="button" onClick={() => setTransferAmt(a => Math.min(dgccBalance, a + 1))}
+                    style={{ width:'38px', height:'38px', borderRadius:'10px', border:'none', background:BG, boxShadow:S_UP,
+                      fontSize:'18px', fontWeight:'700', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:PURPLE, flexShrink:0 }}>+</button>
+                  <button type="button" onClick={() => setTransferAmt(dgccBalance)}
+                    style={{ padding:'10px 14px', borderRadius:'10px', border:'none', background:BG, boxShadow:S_UP,
+                      cursor:'pointer', fontSize:'11px', fontWeight:'800', color:PURPLE, flexShrink:0 }}>MAX</button>
+                </div>
+                {Number(transferAmt) > dgccBalance && (
+                  <div style={{ fontSize:'11px', color:'#ef4444', fontWeight:'600', marginTop:'6px' }}>Exceeds balance ({dgccBalance} DGCC)</div>
+                )}
+              </div>
+
+              {/* Feedback */}
+              {transferMsg && (
+                <div style={{ padding:'12px 16px', borderRadius:'13px', background:BG,
+                  boxShadow: transferMsg.type==='success'
+                    ? '4px 4px 10px rgba(16,185,129,0.18), -3px -3px 8px rgba(255,255,255,0.9)'
+                    : '4px 4px 10px rgba(239,68,68,0.18), -3px -3px 8px rgba(255,255,255,0.9)',
+                  color: transferMsg.type==='success' ? '#059669' : '#dc2626',
+                  fontSize:'13px', fontWeight:'600' }}>{transferMsg.text}</div>
+              )}
+
+              {/* Transfer button */}
+              <button type="button" onClick={handleDgccTransfer} disabled={!canTransfer || transferring}
+                style={{ width:'100%', padding:'14px', borderRadius:'16px', border:'none',
+                  background: canTransfer && !transferring ? PURPLE : BG,
+                  color: canTransfer && !transferring ? '#fff' : '#94a3b8',
+                  fontSize:'14px', fontWeight:'700',
+                  cursor: canTransfer && !transferring ? 'pointer' : 'not-allowed',
+                  display:'flex', alignItems:'center', justifyContent:'center', gap:'8px',
+                  boxShadow: canTransfer && !transferring ? S_PURPLE : S_IN,
+                  transition:'all 0.2s' }}>
+                {transferring
+                  ? <><div style={{ width:'16px', height:'16px', border:'2px solid rgba(255,255,255,0.3)',
+                      borderTopColor:'#fff', borderRadius:'50%', animation:'spin 0.8s linear infinite' }} /> Sending…</>
+                  : <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+                    </svg> Send DGCC</>
+                }
+              </button>
+            </div>
           </div>
-        </form>
-      </div>
+        );
+      })()}
 
     </div>
   );
 }
+

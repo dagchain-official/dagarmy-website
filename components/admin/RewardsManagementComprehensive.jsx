@@ -182,7 +182,7 @@ export default function RewardsManagementComprehensive() {
       soldier_refers_soldier_join: '500', soldier_refers_soldier_upgrade: '500',
       lieutenant_refers_soldier_join: '1000', lieutenant_refers_soldier_upgrade: '1000',
       max_commission_levels: '3',
-      // Commission rates — new tier-based values
+      // Commission rates - new tier-based values
       soldier_direct_sales_commission: '15', soldier_level2_sales_commission: '3', soldier_level3_sales_commission: '2',
       lieutenant_direct_sales_commission_default: '20', lieutenant_level2_sales_commission: '3', lieutenant_level3_sales_commission: '2',
       // Social tasks
@@ -210,7 +210,7 @@ export default function RewardsManagementComprehensive() {
       if (!u.email) { sm('error', 'Not authenticated'); return; }
       let keys = [];
       if (section === 'signup') {
-        // lieutenant_self_upgrade_bonus removed — new arch gives 0 pts on upgrade
+        // lieutenant_self_upgrade_bonus removed - new arch gives 0 pts on upgrade
         keys = ['soldier_signup_bonus','lieutenant_upgrade_price_usd'];
       } else if (section === 'referral') {
         keys = [
@@ -433,14 +433,14 @@ export default function RewardsManagementComprehensive() {
                       </div>
                       <div>
                         <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: 0 }}>DAG SOLDIER</h3>
-                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Free tier — auto on registration</p>
+                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Free tier - auto on registration</p>
                       </div>
                     </div>
                     <span style={{ fontSize: '10px', fontWeight: '700', padding: '4px 12px', borderRadius: '100px', background: '#f0fdf4', color: '#10b981', textTransform: 'uppercase' }}>Auto-triggered</span>
                   </div>
                 </div>
 
-                {/* ROW 1 — Signup Bonus */}
+                {/* ROW 1 - Signup Bonus */}
                 <div style={{ display: 'grid', gridTemplateColumns: '8px 1fr auto', gap: '12px', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
                   <div>
@@ -455,7 +455,7 @@ export default function RewardsManagementComprehensive() {
                   )}
                 </div>
 
-                {/* ROW 2 — Upgrade Cost (matching LT's "Tier Upgrade Payment" row) */}
+                {/* ROW 2 - Upgrade Cost (matching LT's "Tier Upgrade Payment" row) */}
                 <div style={{ display: 'grid', gridTemplateColumns: '8px 1fr auto', gap: '12px', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', background: '#f8fafc' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
                   <div>
@@ -463,12 +463,12 @@ export default function RewardsManagementComprehensive() {
                       <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Upgrade Cost</span>
                       <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '100px', background: '#f0fdf4', color: '#10b981', textTransform: 'uppercase' }}>Free</span>
                     </div>
-                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>No payment required — free tier</span>
+                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>No payment required - free tier</span>
                   </div>
                   <span style={{ fontSize: '16px', fontWeight: '800', color: '#10b981', fontVariantNumeric: 'tabular-nums' }}>$0</span>
                 </div>
 
-                {/* ROW 3 — Tier Benefits */}
+                {/* ROW 3 - Tier Benefits */}
                 <div style={{ padding: '14px 24px', flex: 1 }}>
                   <p style={{ fontSize: '11px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 10px' }}>Tier Benefits</p>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -485,7 +485,7 @@ export default function RewardsManagementComprehensive() {
                         </div>
                       </div>
                     ))}
-                    {/* Reward Pool — full width */}
+                    {/* Reward Pool - full width */}
                     <div style={{ gridColumn: 'span 2', padding: '10px 12px', borderRadius: '10px', background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
                       <p style={{ margin: '0 0 4px', fontSize: '10px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.4px' }}>🏆 Reward Pool</p>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -524,7 +524,7 @@ export default function RewardsManagementComprehensive() {
                       </div>
                       <div>
                         <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: 0 }}>DAG LIEUTENANT</h3>
-                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Paid upgrade — no DAG Points awarded</p>
+                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Paid upgrade - no DAG Points awarded</p>
                       </div>
                     </div>
                     {editingSection === 'signup' ? (
@@ -540,7 +540,7 @@ export default function RewardsManagementComprehensive() {
                   </div>
                 </div>
 
-                {/* ROW 1 — Previous Signup Bonus (greyed, lines up with Soldier's "Signup Bonus") */}
+                {/* ROW 1 - Previous Signup Bonus (greyed, lines up with Soldier's "Signup Bonus") */}
                 <div style={{ display: 'grid', gridTemplateColumns: '8px 1fr auto', gap: '12px', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', background: '#fafbfc' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#cbd5e1', flexShrink: 0 }} />
                   <div>
@@ -553,7 +553,7 @@ export default function RewardsManagementComprehensive() {
                   <span style={{ fontSize: '16px', fontWeight: '800', color: '#cbd5e1', textDecoration: 'line-through', fontVariantNumeric: 'tabular-nums' }}>{s} pts</span>
                 </div>
 
-                {/* ROW 2 — Tier Upgrade Payment (lines up with Soldier's "Upgrade Cost") */}
+                {/* ROW 2 - Tier Upgrade Payment (lines up with Soldier's "Upgrade Cost") */}
                 <div style={{ display: 'grid', gridTemplateColumns: '8px 1fr auto', gap: '12px', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366f1', flexShrink: 0 }} />
                   <div>
@@ -561,12 +561,12 @@ export default function RewardsManagementComprehensive() {
                       <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Tier Upgrade Payment</span>
                       <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '100px', background: '#eef2ff', color: '#6366f1', textTransform: 'uppercase' }}>Stripe</span>
                     </div>
-                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>Pays for the LT tier — no DAG Points issued</span>
+                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>Pays for the LT tier - no DAG Points issued</span>
                   </div>
                   <span style={{ fontSize: '16px', fontWeight: '800', color: '#64748b', fontVariantNumeric: 'tabular-nums' }}>0 pts</span>
                 </div>
 
-                {/* ROW 3 — Tier Benefits (lines up with Soldier's benefits grid) */}
+                {/* ROW 3 - Tier Benefits (lines up with Soldier's benefits grid) */}
                 <div style={{ padding: '14px 24px', flex: 1 }}>
                   <p style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 10px' }}>Tier Benefits Unlocked</p>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -583,7 +583,7 @@ export default function RewardsManagementComprehensive() {
                         </div>
                       </div>
                     ))}
-                    {/* Reward Pools — full width */}
+                    {/* Reward Pools - full width */}
                     <div style={{ gridColumn: 'span 2', padding: '10px 12px', borderRadius: '10px', background: '#eef2ff', border: '1px solid #c7d2fe' }}>
                       <p style={{ margin: '0 0 8px', fontSize: '10px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.4px' }}>🏆 Reward Pools</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -629,7 +629,7 @@ export default function RewardsManagementComprehensive() {
         <B style={{ padding: '18px 24px', display: 'flex', gap: '14px', alignItems: 'flex-start' }} hover={false}>
           <Info size={16} style={{ color: '#94a3b8', marginTop: '1px', flexShrink: 0 }} />
           <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.7', margin: 0 }}>
-            Upgrading to DAG LIEUTENANT is a <strong style={{ color: '#0f172a' }}>paid tier change (${"$"}{config.lieutenant_upgrade_price_usd || 149})</strong> — it does <strong style={{ color: '#0f172a' }}>not</strong> award additional DAG Points. The benefit is an <strong style={{ color: '#6366f1' }}>improved commission rate (20%)</strong>, <strong style={{ color: '#6366f1' }}>2× task multiplier</strong>, and <strong style={{ color: '#6366f1' }}>Elite Pool eligibility</strong> at MainNet.
+            Upgrading to DAG LIEUTENANT is a <strong style={{ color: '#0f172a' }}>paid tier change (${"$"}{config.lieutenant_upgrade_price_usd || 149})</strong> - it does <strong style={{ color: '#0f172a' }}>not</strong> award additional DAG Points. The benefit is an <strong style={{ color: '#6366f1' }}>improved commission rate (20%)</strong>, <strong style={{ color: '#6366f1' }}>2× task multiplier</strong>, and <strong style={{ color: '#6366f1' }}>Elite Pool eligibility</strong> at MainNet.
           </p>
         </B>
       </>)}
@@ -834,7 +834,7 @@ export default function RewardsManagementComprehensive() {
       {/* SALES TAB                                          */}
       {/* ═══════════════════════════════════════════════════ */}
       {activeTab === 'sales' && (<>
-        <SH title="Sales Commissions" desc="USD commission percentages for product sales — applicable to both DAG SOLDIER and DAG LIEUTENANT" section="sales" />
+        <SH title="Sales Commissions" desc="USD commission percentages for product sales - applicable to both DAG SOLDIER and DAG LIEUTENANT" section="sales" />
 
         {/* Soldier Commissions */}
         <B style={{ padding: '0', marginBottom: '16px' }}>
@@ -842,7 +842,7 @@ export default function RewardsManagementComprehensive() {
             <h4 style={{ fontSize: '12px', fontWeight: '800', color: '#10b981', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>DAG SOLDIER Commissions</h4>
           </div>
           {[
-            ['Soldier Direct Sales','Level 1 — flat 15% commission (Soldier tier)','soldier_l1_commission_pct',DollarSign,'#10b981','#f0fdf4'],
+            ['Soldier Direct Sales','Level 1 - flat 15% commission (Soldier tier)','soldier_l1_commission_pct',DollarSign,'#10b981','#f0fdf4'],
             ['Soldier Level 2 Commission','2nd level downline','l2_commission_pct',TrendingUp,'#059669','#ecfdf5'],
             ['Soldier Level 3 Commission','3rd level downline','l3_commission_pct',TrendingUp,'#047857','#d1fae5'],
           ].map(([t,d,k,Icon,color,bg], i) => {
@@ -879,7 +879,7 @@ export default function RewardsManagementComprehensive() {
             <h4 style={{ fontSize: '12px', fontWeight: '800', color: '#0ea5e9', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>DAG LIEUTENANT Commissions</h4>
           </div>
           {[
-            ['Lieutenant Direct Sales','Level 1 — flat 20% commission (Lieutenant tier)','lieutenant_l1_commission_pct',DollarSign,'#0ea5e9','#e0f2fe'],
+            ['Lieutenant Direct Sales','Level 1 - flat 20% commission (Lieutenant tier)','lieutenant_l1_commission_pct',DollarSign,'#0ea5e9','#e0f2fe'],
             ['DAG LIEUTENANT Level 2 Commission','2nd level downline (shared rate)','l2_commission_pct',TrendingUp,'#6366f1','#eef2ff'],
             ['DAG LIEUTENANT Level 3 Commission','3rd level downline (shared rate)','l3_commission_pct',TrendingUp,'#8b5cf6','#f5f3ff'],
           ].map(([t,d,k,Icon,color,bg], i) => {
@@ -1028,7 +1028,7 @@ export default function RewardsManagementComprehensive() {
       {/* INCENTIVE POOLS TAB                                */}
       {/* ═══════════════════════════════════════════════════ */}
       {activeTab === 'incentive_pools' && (<>
-        <SH title="Incentive Pools" desc="All reward pool programs — Fortune 500, DAG LT Pool, and DAG Army Elite Pool" section="incentive_pools" />
+        <SH title="Incentive Pools" desc="All reward pool programs - Fortune 500, DAG LT Pool, and DAG Army Elite Pool" section="incentive_pools" />
 
         {/* Overview banner */}
         <B style={{ marginBottom: '20px', background: 'linear-gradient(135deg,#0f172a 0%,#1e293b 100%)', border: 'none' }} hover={false}>
@@ -1036,7 +1036,7 @@ export default function RewardsManagementComprehensive() {
             {[
               { label: 'Fortune 500 Pool', sub: '10% DAGGPT revenue / month', color: '#a78bfa', eligible: 'Soldiers & LTs with $500+ spend' },
               { label: 'DAG LT Pool', sub: '10% DAGGPT revenue / month', color: '#34d399', eligible: 'LTs who recruited 3 LT directs in 30 days' },
-              { label: 'DAG Army Elite Pool', sub: '50% DAGCHAIN tx fees', color: '#fbbf24', eligible: 'All DAG Lieutenants — MainNet launch' },
+              { label: 'DAG Army Elite Pool', sub: '50% DAGCHAIN tx fees', color: '#fbbf24', eligible: 'All DAG Lieutenants - MainNet launch' },
             ].map(p => (
               <div key={p.label}>
                 <p style={{ fontSize: '10px', fontWeight: '700', color: p.color, textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 4px' }}>{p.label}</p>
@@ -1050,7 +1050,7 @@ export default function RewardsManagementComprehensive() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
 
           {/* ════════════════════════════════════════
-              POOL 1 — FORTUNE 500
+              POOL 1 - FORTUNE 500
           ════════════════════════════════════════ */}
           {(() => {
             const poolPct = config.fortune500_pool_pct ?? 10;
@@ -1064,7 +1064,7 @@ export default function RewardsManagementComprehensive() {
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#4c1d95', margin: 0 }}>Fortune 500 Pool</h3>
-                      <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>{poolPct}% of monthly DAGGPT revenue — split equally among eligible members</p>
+                      <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>{poolPct}% of monthly DAGGPT revenue - split equally among eligible members</p>
                     </div>
                   </div>
                   <div style={{ padding: '5px 14px', borderRadius: '20px', background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: '11px', fontWeight: '700', color: '#059669' }}>ACTIVE</div>
@@ -1074,7 +1074,7 @@ export default function RewardsManagementComprehensive() {
                 <div style={{ padding: '16px 24px', background: '#fefce8', borderBottom: '1px solid #fde68a', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                   <Info size={15} style={{ color: '#d97706', flexShrink: 0, marginTop: '1px' }} />
                   <div style={{ fontSize: '12px', color: '#92400e', lineHeight: 1.6 }}>
-                    <strong>Eligibility condition (updated):</strong> DAG Soldiers and DAG Lieutenants are enrolled automatically — but only those who have spent <strong>at least $500</strong> in the ecosystem (Validator Nodes, Storage Nodes, DAG Lieutenant upgrade, or DAGGPT credit purchases).
+                    <strong>Eligibility condition (updated):</strong> DAG Soldiers and DAG Lieutenants are enrolled automatically - but only those who have spent <strong>at least $500</strong> in the ecosystem (Validator Nodes, Storage Nodes, DAG Lieutenant upgrade, or DAGGPT credit purchases).
                   </div>
                 </div>
 
@@ -1109,7 +1109,7 @@ export default function RewardsManagementComprehensive() {
                   ) : f500Data.distributions.length === 0 ? (
                     <div style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
                       <Trophy size={28} style={{ marginBottom: '10px', opacity: 0.3, display: 'block', margin: '0 auto 10px' }} />
-                      <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet — DAGGPT needs to report monthly revenue first.</p>
+                      <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet - DAGGPT needs to report monthly revenue first.</p>
                     </div>
                   ) : (
                     <>
@@ -1191,7 +1191,7 @@ export default function RewardsManagementComprehensive() {
           })()}
 
           {/* ════════════════════════════════════════
-              POOL 2 — DAG LT POOL
+              POOL 2 - DAG LT POOL
           ════════════════════════════════════════ */}
           {(() => {
             const ltPoolPct = config.dag_lt_pool_pct ?? 10;
@@ -1205,7 +1205,7 @@ export default function RewardsManagementComprehensive() {
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#064e3b', margin: 0 }}>DAG LT Pool</h3>
-                      <p style={{ fontSize: '11px', color: '#047857', margin: '2px 0 0' }}>{ltPoolPct}% of monthly DAGGPT revenue — for qualifying DAG Lieutenants</p>
+                      <p style={{ fontSize: '11px', color: '#047857', margin: '2px 0 0' }}>{ltPoolPct}% of monthly DAGGPT revenue - for qualifying DAG Lieutenants</p>
                     </div>
                   </div>
                   <div style={{ padding: '5px 14px', borderRadius: '20px', background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: '11px', fontWeight: '700', color: '#059669' }}>ACTIVE</div>
@@ -1215,7 +1215,7 @@ export default function RewardsManagementComprehensive() {
                 <div style={{ padding: '16px 24px', background: '#ecfdf5', borderBottom: '1px solid #a7f3d0', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                   <Info size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '1px' }} />
                   <div style={{ fontSize: '12px', color: '#064e3b', lineHeight: 1.6 }}>
-                    <strong>Eligibility condition:</strong> The user must have <strong>upgraded to DAG Lieutenant</strong> themselves AND have <strong>3 direct referrals who also upgraded to DAG Lieutenant</strong> — all within a <strong>30-day window</strong> from the user's own upgrade date.
+                    <strong>Eligibility condition:</strong> The user must have <strong>upgraded to DAG Lieutenant</strong> themselves AND have <strong>3 direct referrals who also upgraded to DAG Lieutenant</strong> - all within a <strong>30-day window</strong> from the user's own upgrade date.
                     Only the qualifying LT earns from this pool (not the 3 referred LTs).
                   </div>
                 </div>
@@ -1246,7 +1246,7 @@ export default function RewardsManagementComprehensive() {
                   ) : ltPoolData.distributions.length === 0 ? (
                     <div style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
                       <Users size={28} style={{ marginBottom: '10px', opacity: 0.3, display: 'block', margin: '0 auto 10px' }} />
-                      <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet — DAGGPT needs to report monthly revenue first.</p>
+                      <p style={{ fontSize: '13px', fontWeight: '600', margin: 0 }}>No distributions yet - DAGGPT needs to report monthly revenue first.</p>
                     </div>
                   ) : (
                     <>
@@ -1290,7 +1290,7 @@ export default function RewardsManagementComprehensive() {
                 <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#f0fdf4' }}>
                   <p style={{ fontSize: '12px', color: '#064e3b', margin: 0, lineHeight: 1.6 }}>
                     <strong style={{ color: '#0f172a' }}>Disbursement:</strong> When DAGGPT reports monthly revenue, 10% is automatically allocated to this pool.
-                    Eligibility is re-evaluated monthly — any LT who qualified (self + 3 direct LT upgrades within 30 days of their own upgrade) appears as an eligible member.
+                    Eligibility is re-evaluated monthly - any LT who qualified (self + 3 direct LT upgrades within 30 days of their own upgrade) appears as an eligible member.
                     Admin clicks <strong>Distribute</strong> to release equal shares to {ltPoolData.activeMemberCount} qualified members.
                   </p>
                 </div>
@@ -1329,7 +1329,7 @@ export default function RewardsManagementComprehensive() {
           })()}
 
           {/* ════════════════════════════════════════
-              POOL 3 — DAG ARMY ELITE POOL
+              POOL 3 - DAG ARMY ELITE POOL
           ════════════════════════════════════════ */}
           <B style={{ padding: '0', border: '1.5px solid #c4b5fd', background: 'linear-gradient(135deg,#faf5ff 0%,#ede9fe 100%)' }}>
             <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(196,181,253,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '18px 18px 0 0' }}>
@@ -1339,7 +1339,7 @@ export default function RewardsManagementComprehensive() {
                 </div>
                 <div>
                   <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#4c1d95', margin: 0 }}>DAG Army Elite Pool</h3>
-                  <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>50% of DAGCHAIN blockchain transaction fees — all DAG Lieutenants, forever</p>
+                  <p style={{ fontSize: '11px', color: '#6d28d9', margin: '2px 0 0' }}>50% of DAGCHAIN blockchain transaction fees - all DAG Lieutenants, forever</p>
                 </div>
               </div>
               {editingSection === 'incentive_pools' ? (
@@ -1384,7 +1384,7 @@ export default function RewardsManagementComprehensive() {
             <div style={{ padding: '14px 24px', background: 'rgba(237,233,254,0.4)', borderRadius: '0 0 18px 18px' }}>
               <p style={{ fontSize: '12px', color: '#5b21b6', margin: 0, lineHeight: 1.6 }}>
                 <strong>Admin action required at MainNet:</strong> Click <strong>Edit</strong> above and toggle the pool status to <strong>Active</strong> to activate at launch.
-                All current and future DAG Lieutenants are permanently enrolled — no enrollment cutoff.
+                All current and future DAG Lieutenants are permanently enrolled - no enrollment cutoff.
               </p>
             </div>
           </B>
@@ -1457,7 +1457,7 @@ export default function RewardsManagementComprehensive() {
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
               <Info size={18} style={{ color: '#94a3b8', flexShrink: 0, marginTop: '2px' }} />
               <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.7 }}>
-                <strong style={{ color: '#0f172a' }}>Tier Architecture:</strong> The system operates on a flat 2-tier model — <strong>DAG Soldier</strong> and <strong>DAG Lieutenant</strong>.
+                <strong style={{ color: '#0f172a' }}>Tier Architecture:</strong> The system operates on a flat 2-tier model - <strong>DAG Soldier</strong> and <strong>DAG Lieutenant</strong>.
                 <br />Commission rates are fixed per tier (15%/3%/2% for Soldiers, 20%/3%/2% for Lieutenants).
                 <br />The DGCC exchange rate controls how many DAG Points users must spend to earn 1 DGCC Coin. Lower the number to make redemptions easier.
               </div>
@@ -1470,7 +1470,7 @@ export default function RewardsManagementComprehensive() {
       {/* SALES DAG POINTS TAB                               */}
       {/* ═══════════════════════════════════════════════════ */}
       {activeTab === 'sales_dag_points' && (<>
-        <SH title="Sales DAG Points" desc="DAG Points awarded per $ of sale amount — auto-triggered when a sale is marked paid" section="sales_dag_points" />
+        <SH title="Sales DAG Points" desc="DAG Points awarded per $ of sale amount - auto-triggered when a sale is marked paid" section="sales_dag_points" />
 
         {/* How it works banner */}
         <B style={{ marginBottom: '20px', background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)', border: '1.5px solid #a7f3d0' }}>
@@ -1577,7 +1577,7 @@ export default function RewardsManagementComprehensive() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
               <div>
                 <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>Points Ledger</h2>
-                <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0' }}>All DAG Points transactions across all users — searchable by Txn ID, user, or type</p>
+                <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0' }}>All DAG Points transactions across all users - searchable by Txn ID, user, or type</p>
               </div>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <button onClick={fetchLedger} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '12px', fontWeight: '600', cursor: 'pointer', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -1631,7 +1631,7 @@ export default function RewardsManagementComprehensive() {
                   const typeBorder= isSale ? '#99f6e4' : isEarned ? '#a7f3d0' : isBurned ? '#fecaca' : '#c7d2fe';
                   const typeLabel = isSale ? 'Sale' : isEarned ? 'Earned' : isBurned ? 'Burned' : 'Redeemed';
                   const dateStr   = new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                  const txnId     = tx.transaction_id || '—';
+                  const txnId     = tx.transaction_id || '-';
                   return (
                     <div
                       key={tx.id || idx}
@@ -1642,7 +1642,7 @@ export default function RewardsManagementComprehensive() {
                       {/* Txn ID */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                         <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: '700', color: '#475569', letterSpacing: '0.2px' }}>{txnId}</span>
-                        {txnId !== '—' && (
+                        {txnId !== '-' && (
                           <button
                             onClick={() => navigator.clipboard.writeText(txnId)}
                             title="Copy"

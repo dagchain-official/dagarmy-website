@@ -1,4 +1,4 @@
--- ============================================================
+﻿-- ============================================================
 -- Migration 056: Fortune 500 Pool
 -- ============================================================
 -- Creates the Fortune 500 incentive pool infrastructure:
@@ -160,3 +160,4 @@ CREATE TRIGGER trigger_auto_enroll_fortune500
 -- SELECT COUNT(*) FROM fortune500_members WHERE is_active = TRUE;
 -- SELECT COUNT(*) FROM users WHERE role IN ('student','trainer','user');
 -- (both counts should match)
+

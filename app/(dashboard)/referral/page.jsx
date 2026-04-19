@@ -137,7 +137,7 @@ function _OriginalStudentReferralPage() {
     const tierStyle = TIER_STYLE[node.tier] || TIER_STYLE['DAG SOLDIER'];
     const statusStyle = node.referralStatus ? (STATUS_STYLE[node.referralStatus] || STATUS_STYLE.pending) : null;
     const depthColor = DEPTH_COLORS[depth % DEPTH_COLORS.length];
-    const joinDate = node.joinedAt ? new Date(node.joinedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+    const joinDate = node.joinedAt ? new Date(node.joinedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-';
     const initials = node.name && node.name !== 'Unknown'
       ? node.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
       : '?';
@@ -377,7 +377,7 @@ function _OriginalStudentReferralPage() {
                   <div style={{ flex: 1, minWidth: '160px' }}>
                     <p style={{ fontSize: '10px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Code</p>
                     <p style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace', letterSpacing: '3px', margin: 0 }}>
-                      {referralData.referralCode || '—'}
+                      {referralData.referralCode || '-'}
                     </p>
                   </div>
                   <div style={{ flex: 2, minWidth: '200px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '10px 14px', boxShadow: 'inset 3px 3px 7px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.9)' }}>
@@ -477,7 +477,7 @@ function _OriginalStudentReferralPage() {
                     <p style={{ fontSize: '12px', color: '#047857', margin: 0, lineHeight: 1.5 }}>
                       You earn <strong>25 DAG Points per $</strong> on sales made by your direct referrals.
                       {isLieutenant && (
-                        <span> As a <strong>DAG LIEUTENANT</strong>, you receive a <strong>+20% bonus</strong> — earning <strong>30 pts/$</strong> on referral sales.</span>
+                        <span> As a <strong>DAG LIEUTENANT</strong>, you receive a <strong>+20% bonus</strong> - earning <strong>30 pts/$</strong> on referral sales.</span>
                       )}
                     </p>
                   </div>
@@ -501,7 +501,7 @@ function _OriginalStudentReferralPage() {
                       </div>
                       <div>
                         <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>Referral Network Tree</h2>
-                        <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Your full downline — click any node to expand or collapse</p>
+                        <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Your full downline - click any node to expand or collapse</p>
                       </div>
                     </div>
                     {treeMeta && (
@@ -599,7 +599,7 @@ function _OriginalStudentReferralPage() {
                   <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(99,102,241,0.08)', borderRadius: '10px', boxShadow: 'inset 3px 3px 7px rgba(99,102,241,0.12), inset -2px -2px 5px rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <Crown size={16} color="#6366f1" />
                     <p style={{ fontSize: '12px', color: '#4338ca', margin: 0, fontWeight: '600' }}>
-                      Upgrade to <strong>DAG LIEUTENANT</strong> to earn a 20% bonus on all referral points — turning 500 into 600 and 2,500 into 3,000.
+                      Upgrade to <strong>DAG LIEUTENANT</strong> to earn a 20% bonus on all referral points - turning 500 into 600 and 2,500 into 3,000.
                     </p>
                   </div>
                 )}

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.user_events (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- RSVP tracking table (excludes creator — creator is always host)
+-- RSVP tracking table (excludes creator - creator is always host)
 CREATE TABLE IF NOT EXISTS public.user_event_rsvps (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   event_id UUID REFERENCES public.user_events(id) ON DELETE CASCADE,

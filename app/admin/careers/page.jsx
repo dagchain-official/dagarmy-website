@@ -102,7 +102,7 @@ function DetailPanel({ app, onClose, onStatusChange, onNotesSave }) {
         <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
           <div>
             <p style={{ margin: '0 0 3px', fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              {app.department} — {app.region}
+              {app.department} - {app.region}
             </p>
             <h2 style={{ margin: '0 0 4px', fontSize: '18px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px' }}>{app.role_title}</h2>
             <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
@@ -411,7 +411,7 @@ export default function AdminCareersPage() {
                       <div style={{ color: '#94a3b8', fontSize: '12px', marginTop: '1px' }}>{app.department}</div>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
-                      <span style={{ fontSize: '13px', color: '#64748b' }}>{app.region || '—'}</span>
+                      <span style={{ fontSize: '13px', color: '#64748b' }}>{app.region || '-'}</span>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
                       <span style={{ fontSize: '13px', color: '#64748b', whiteSpace: 'nowrap' }}>

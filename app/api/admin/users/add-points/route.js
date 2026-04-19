@@ -6,7 +6,7 @@ import { requirePermission } from '@/lib/admin-auth';
  * POST /api/admin/users/add-points
  * Master Admin grants (or deducts) DAG Points for a specific user.
  * Every operation is recorded in points_transactions with type 'admin_grant'
- * and a unique transaction_id — visible in the Points Ledger tab.
+ * and a unique transaction_id - visible in the Points Ledger tab.
  *
  * Body: { userId, amount (integer, non-zero), reason (string) }
  */
@@ -33,7 +33,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Call add_dag_points DB function — auto-generates transaction_id, updates user totals
+    // Call add_dag_points DB function - auto-generates transaction_id, updates user totals
     const description = `Admin grant: ${reason.trim()} (user: ${user.full_name || user.email})`;
     const { data: txnId, error: fnErr } = await supabase.rpc('add_dag_points', {
       p_user_id:          userId,

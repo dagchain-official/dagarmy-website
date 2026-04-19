@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-// /auth/login — redirects to home page, which opens the login modal
+// /auth/login - redirects to home page, which opens the login modal
 // This page exists to satisfy middleware redirects for unauthenticated users
 function AuthLoginRedirect() {
   const router = useRouter();
@@ -15,7 +15,7 @@ function AuthLoginRedirect() {
     if (redirect && redirect !== '/') {
       sessionStorage.setItem('dagarmy_login_redirect', redirect);
     }
-    // Go to home — the LoginModal can be triggered there
+    // Go to home - the LoginModal can be triggered there
     router.replace('/?login=1');
   }, [redirect, router]);
 

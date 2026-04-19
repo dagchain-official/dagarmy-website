@@ -38,7 +38,7 @@ function Row({ label, value }) {
   return (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
       <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600', minWidth: '110px', paddingTop: '1px', flexShrink: 0 }}>{label}</span>
-      <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: '500', flex: 1, wordBreak: 'break-word' }}>{value || '—'}</span>
+      <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: '500', flex: 1, wordBreak: 'break-word' }}>{value || '-'}</span>
     </div>
   );
 }
@@ -314,10 +314,10 @@ export default function AdminAmbassadorPage() {
                       <span style={{ fontSize: '13px', color: '#374151', fontWeight: '600' }}>{app.country}</span>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
-                      <span style={{ fontSize: '13px', color: '#64748b' }}>{app.content_niche || '—'}</span>
+                      <span style={{ fontSize: '13px', color: '#64748b' }}>{app.content_niche || '-'}</span>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
-                      <span style={{ fontSize: '13px', color: '#64748b' }}>{app.follower_count || '—'}</span>
+                      <span style={{ fontSize: '13px', color: '#64748b' }}>{app.follower_count || '-'}</span>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
                       <span style={{ fontSize: '13px', color: '#64748b', whiteSpace: 'nowrap' }}>

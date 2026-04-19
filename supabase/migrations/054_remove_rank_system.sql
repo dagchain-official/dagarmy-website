@@ -43,7 +43,7 @@ BEGIN
       v_total_burned,
       v_current_pts,
       v_current_pts + v_total_burned,
-      'DAG Points refund — rank system has been removed. All burned points restored.',
+      'DAG Points refund - rank system has been removed. All burned points restored.',
       'rank_refund',
       NOW()
     );

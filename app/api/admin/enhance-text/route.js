@@ -5,7 +5,7 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 /**
  * POST /api/admin/enhance-text
- * Enhances a given text using Google Gemini — fixes spelling, grammar,
+ * Enhances a given text using Google Gemini - fixes spelling, grammar,
  * and rewrites it to sound professional while preserving intent.
  */
 export async function POST(request) {
@@ -21,8 +21,8 @@ export async function POST(request) {
     }
 
     const prompt = type === 'title'
-      ? `You are an expert email copywriter. Rewrite the given email subject line to be clear, professional, and compelling. Fix any spelling or grammar mistakes. Keep it concise (under 80 characters). Return only the rewritten subject line — no quotes, no explanation.\n\nSubject: ${text}`
-      : `You are a senior business communications expert. Your job is to ACTIVELY REWRITE and ELEVATE the following email to make it noticeably more polished, professional, and impactful. Do NOT return the same text. You MUST make meaningful improvements:\n\n- Upgrade word choices to sound more authoritative and professional\n- Improve sentence flow and rhythm\n- Make the opening and closing more compelling and warm\n- Strengthen calls-to-action to be more motivating\n- Fix any grammar or spelling issues\n- Preserve ALL original points, lists, and structure — do not remove content\n- Return the COMPLETE rewritten email — do not truncate or summarize\n- CRITICAL: Return plain text only — absolutely NO Markdown, NO asterisks, NO bold (**), NO italics (*), NO headers (#), NO bullet symbols. Just clean plain text.\n- Return ONLY the rewritten email text with no explanation, preamble, or commentary\n\nEmail to enhance:\n${text}`
+      ? `You are an expert email copywriter. Rewrite the given email subject line to be clear, professional, and compelling. Fix any spelling or grammar mistakes. Keep it concise (under 80 characters). Return only the rewritten subject line - no quotes, no explanation.\n\nSubject: ${text}`
+      : `You are a senior business communications expert. Your job is to ACTIVELY REWRITE and ELEVATE the following email to make it noticeably more polished, professional, and impactful. Do NOT return the same text. You MUST make meaningful improvements:\n\n- Upgrade word choices to sound more authoritative and professional\n- Improve sentence flow and rhythm\n- Make the opening and closing more compelling and warm\n- Strengthen calls-to-action to be more motivating\n- Fix any grammar or spelling issues\n- Preserve ALL original points, lists, and structure - do not remove content\n- Return the COMPLETE rewritten email - do not truncate or summarize\n- CRITICAL: Return plain text only - absolutely NO Markdown, NO asterisks, NO bold (**), NO italics (*), NO headers (#), NO bullet symbols. Just clean plain text.\n- Return ONLY the rewritten email text with no explanation, preamble, or commentary\n\nEmail to enhance:\n${text}`
 
     const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
       method: 'POST',

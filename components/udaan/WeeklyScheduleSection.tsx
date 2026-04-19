@@ -81,7 +81,7 @@ export default function WeeklyScheduleSection() {
             marginBottom: 72,
           }}
         >
-          {/* Left — headline */}
+          {/* Left - headline */}
           <div>
             <div style={{
               display: "flex",
@@ -122,7 +122,7 @@ export default function WeeklyScheduleSection() {
             </h2>
           </div>
 
-          {/* Right — description + stats */}
+          {/* Right - description + stats */}
           <div style={{ paddingBottom: 4 }}>
             <p style={{
               fontFamily: "var(--font-dm, 'DM Sans', sans-serif)",
