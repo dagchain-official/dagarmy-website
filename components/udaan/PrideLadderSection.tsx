@@ -98,6 +98,7 @@ export default function PrideLadderSection() {
   return (
     <section
       ref={sectionRef}
+      className="udaan-prideladder-section"
       style={{
         background: "#f7f7fb",
         padding: "100px 0",
@@ -165,6 +166,7 @@ export default function PrideLadderSection() {
 
         {/* ── SECTION HEADER ── */}
         <motion.div
+          className="udaan-prideladder-header"
           style={{
             display: "flex",
             alignItems: "flex-end",
@@ -229,7 +231,7 @@ export default function PrideLadderSection() {
             </p>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: "0 0 auto" }}>
+          <div className="udaan-prideladder-stats" style={{ display: "flex", flexDirection: "column", gap: 12, flex: "0 0 auto" }}>
             {[
               { label: "RANKS", value: "02" },
               { label: "ENTRY", value: "Earned" },

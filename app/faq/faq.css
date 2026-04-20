@@ -17,14 +17,78 @@
 
 /* ─────────────────────────────
    TABLET  ≤ 900px
+   !important required to beat
+   inline JSX gridTemplateColumns
 ───────────────────────────── */
 @media (max-width: 900px) {
   .faq-layout {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
   }
 
+  /* Un-stick the sidebar so it doesn't cover FAQ content */
   .faq-sidebar {
-    position: static;
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+/* ─────────────────────────────
+   MOBILE  ≤ 640px
+───────────────────────────── */
+@media (max-width: 640px) {
+
+  /* ── Hero info bar: hide icon, wrap text cleanly ── */
+  .faq-hero-bar {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    gap: 4px !important;
+    padding: 10px 16px !important;
+    font-size: 12px !important;
+  }
+  .faq-hero-bar svg {
+    display: none;
+  }
+
+  /* ── Hide "SECTIONS" label — redundant on mobile ── */
+  .faq-sidebar-label {
+    display: none;
+  }
+
+  /* ── Category nav: wrap pills instead of horizontal scroll ── */
+  .faq-cat-nav {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    padding: 10px !important;
+    gap: 6px !important;
+    border-radius: 14px !important;
+  }
+
+  /* Each category button as a pill */
+  .faq-cat-nav button {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* ── Hide the contact card — saves vertical space ── */
+  .faq-contact-card {
+    display: none !important;
+  }
+
+  /* ── Explore other sections chips ── */
+  .faq-explore {
+    gap: 6px !important;
+  }
+  .faq-explore button {
+    font-size: 11px !important;
+    padding: 7px 12px !important;
+    border-radius: 9px !important;
   }
 }

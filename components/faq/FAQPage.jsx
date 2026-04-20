@@ -278,7 +278,7 @@ function FAQItem({ q, a, isOpen, onToggle }) {
       {isOpen && (
         <div style={{ padding: '0 22px 20px' }}>
           <div style={{ width: '36px', height: '2px', background: 'linear-gradient(90deg,#818cf8,#a78bfa)', borderRadius: '2px', marginBottom: '12px' }} />
-          <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.75', margin: 0 }}>{a}</p>
+          <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.75', margin: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>{a}</p>
         </div>
       )}
     </div>
@@ -352,7 +352,7 @@ export default function FAQPage() {
             Everything you need to know about DAGARMY - from courses and careers to rewards and the Udaan initiative.
           </p>
 
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, color: '#64748b', fontSize: '13px' }}>
+          <div className="faq-hero-bar" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, color: '#64748b', fontSize: '13px' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             Browse by section below or{' '}
             <Link href="/blog" style={{ color: '#818cf8', textDecoration: 'none', fontWeight: '600' }}>visit our blog</Link>
@@ -367,9 +367,9 @@ export default function FAQPage() {
 
           {/* Sidebar */}
           <aside className="faq-sidebar" style={{ position: 'sticky', top: '100px' }}>
-            <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 12px 4px' }}>Sections</p>
+            <p className="faq-sidebar-label" style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', color: '#94a3b8', textTransform: 'uppercase', margin: '0 0 12px 4px' }}>Sections</p>
 
-            <div style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div className="faq-cat-nav" style={{ background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {sections.map((section) => {
                 const active = activeSection === section.id;
                 return (
@@ -397,7 +397,7 @@ export default function FAQPage() {
             </div>
 
             {/* Contact card */}
-            <div style={{ marginTop: '20px', background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '22px' }}>
+            <div className="faq-contact-card" style={{ marginTop: '20px', background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '22px' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: nm.bg, boxShadow: nm.shadowSm, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '14px' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -448,7 +448,7 @@ export default function FAQPage() {
             {/* Explore other sections */}
             <div style={{ marginTop: '32px', background: nm.bg, borderRadius: '18px', boxShadow: nm.shadow, padding: '24px' }}>
               <p style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', margin: '0 0 14px', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Explore other sections</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div className="faq-explore" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {sections.filter(s => s.id !== activeSection).map(section => (
                   <button
                     key={section.id}

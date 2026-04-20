@@ -10,7 +10,6 @@ const PROTECTED_PATHS = [
   '/notifications',
   '/support',
   '/settings',
-  '/rewards',
   '/my-courses',
   '/referral',
   '/bidding',

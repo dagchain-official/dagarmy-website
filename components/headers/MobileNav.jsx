@@ -60,10 +60,11 @@ export default function MobileNav({ isOpen = false, onClose = () => {} }) {
       {/* Drawer */}
       <div style={{
         position: 'fixed', top: 0, left: 0,
-        width: '82vw', maxWidth: '300px', height: '100vh',
+        width: '82vw', maxWidth: '300px',
+        height: '70vh', maxHeight: '560px',
         background: '#ffffff',
         boxShadow: '4px 0 32px rgba(0,0,0,0.18)',
-        zIndex: 9999, overflowY: 'auto', overflowX: 'hidden',
+        zIndex: 9999, overflowY: 'hidden', overflowX: 'hidden',
         display: 'flex', flexDirection: 'column',
         borderTopRightRadius: '20px', borderBottomRightRadius: '20px',
       }}>
@@ -93,8 +94,8 @@ export default function MobileNav({ isOpen = false, onClose = () => {} }) {
           </button>
         </div>
 
-        {/* Nav links */}
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        {/* Nav links — scrollable inside the capped drawer */}
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflowY: 'auto' }}>
           {navLink('/', 'Home')}
           {navLink('/about', 'About')}
           {/* COMING SOON — Courses hidden from nav, in footer with Soon tag

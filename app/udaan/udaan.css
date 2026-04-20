@@ -865,3 +865,78 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────
+   PRIDELADDER SECTION — Mobile
+───────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .udaan-prideladder-section { padding: 56px 0 56px !important; }
+  .udaan-prideladder-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 24px !important;
+    margin-bottom: 40px !important;
+  }
+  .udaan-prideladder-stats {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100%;
+  }
+  .udaan-prideladder-stats > div {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    padding: 8px 14px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   VISION 2030 — Principle wrapper responsive padding
+   and 2030 rotating cell fix on mobile
+───────────────────────────────────────────────────────── */
+.v2030-principle-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 64px 0;
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 900px) { .v2030-principle-wrap { padding: 16px 24px 0 !important; } }
+@media (max-width: 640px) { .v2030-principle-wrap { padding: 16px 16px 0 !important; } }
+
+/* 2030 rotating number cell: un-rotate on small screens */
+@media (max-width: 640px) {
+  .v2030-2030-cell {
+    min-height: 100px !important;
+    height: auto !important;
+    padding: 20px 24px !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+  .v2030-2030-cell .v2030-2030-label {
+    position: static !important;
+  }
+  .v2030-2030-number {
+    transform: none !important;
+    font-size: clamp(36px, 9vw, 56px) !important;
+    letter-spacing: -0.03em !important;
+  }
+}
+
+/* Vision image cell: landscape on mobile */
+.v2030-vision-img-cell { height: 320px; }
+@media (max-width: 640px) {
+  .v2030-vision-img-cell {
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    background: #08071a !important;
+  }
+  .v2030-vision-img-cell img {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+  /* Hide overlay text completely on mobile — image speaks for itself */
+  .v2030-img-overlay {
+    display: none !important;
+  }
+}

@@ -77,7 +77,8 @@
     margin-bottom: 8px !important;
   }
 
-  footer > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a,
+  footer > div > div:first-child > div:not(:first-child) ul li span > span:first-child {
     font-size: 11px !important;
     line-height: 1.5 !important;
   }
@@ -171,7 +172,8 @@
     font-size: 12px !important;
   }
 
-  footer > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a,
+  footer > div > div:first-child > div:not(:first-child) ul li span > span:first-child {
     font-size: 10px !important;
   }
 
@@ -194,7 +196,8 @@
     font-size: 11px !important;
   }
 
-  footer > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a,
+  footer > div > div:first-child > div:not(:first-child) ul li span > span:first-child {
     font-size: 9px !important;
   }
 
@@ -231,7 +234,8 @@
     margin-bottom: 6px !important;
   }
 
-  footer > div > div:first-child > div:not(:first-child) ul li a {
+  footer > div > div:first-child > div:not(:first-child) ul li a,
+  footer > div > div:first-child > div:not(:first-child) ul li span > span:first-child {
     font-size: 8px !important;
   }
 

@@ -120,7 +120,7 @@ export default function Vision2030() {
           }}>The Movement</div>
             <h1 style={{
               fontFamily: "'Nasalization',sans-serif",
-              fontSize: "clamp(96px, 14vw, 200px)",
+              fontSize: "clamp(52px, 14vw, 200px)",
               fontWeight: 400, lineHeight: 0.86,
               letterSpacing: "-0.04em",
               margin: "0 0 0 -5px",
@@ -196,7 +196,7 @@ export default function Vision2030() {
 
         {/* CELL B - Vision image, full landscape */}
         <Reveal delay={0.06}>
-          <div style={{
+          <div className="v2030-vision-img-cell" style={{
             borderRadius: 20,
             overflow: "hidden",
             position: "relative",
@@ -207,7 +207,7 @@ export default function Vision2030() {
               alt="Vision 2030"
               style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%", display: "block" }}
             />
-            <div style={{
+            <div className="v2030-img-overlay" style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
               background: "linear-gradient(to top, rgba(7,7,15,0.75) 0%, transparent 100%)",
               padding: "40px 36px 28px",
@@ -238,7 +238,7 @@ export default function Vision2030() {
       }}>
           {/* CELL - 2030 */}
           <Reveal>
-            <div style={{
+            <div className="v2030-2030-cell" style={{
               background: "#07070f",
               borderRadius: 20,
               display: "flex", flexDirection: "column",
@@ -247,12 +247,12 @@ export default function Vision2030() {
               overflow: "hidden",
               position: "relative",
             }}>
-              <div style={{
+              <div className="v2030-2030-label" style={{
                 fontSize: 9, fontWeight: 700, letterSpacing: "0.24em",
                 textTransform: "uppercase", color: "rgba(163,163,255,0.6)",
                 position: "absolute", top: 24,
               }}>Target year</div>
-              <div style={{
+              <div className="v2030-2030-number" style={{
                 fontFamily: "'Nasalization',sans-serif",
                 fontSize: "clamp(42px, 4.5vw, 62px)",
                 fontWeight: 400, lineHeight: 1, color: "#ffffff",
@@ -447,11 +447,7 @@ export default function Vision2030() {
         {/* ═══════════════════════════════════════════════════
             THE PRINCIPLE - Full-width editorial quote strip
       ═══════════════════════════════════════════════════ */}
-      <div style={{
-        maxWidth: 1400, margin: "0 auto",
-        padding: "16px 64px 0",
-        position: "relative", zIndex: 1,
-      }}>
+      <div className="v2030-principle-wrap">
         <Reveal>
           <div className="v2030-principle-strip" style={{
             background: "linear-gradient(135deg, #07070f 0%, #1a1a3e 100%)",

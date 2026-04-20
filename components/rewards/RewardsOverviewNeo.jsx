@@ -170,67 +170,6 @@ export default function RewardsOverviewNeo() {
         </div>
       </section>
 
-      {/* ── Burn To Rise ── */}
-      <section style={{ background: nm.bg, padding: '0 24px 64px' }}>
-        <div className="tf-container">
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: '800', color: '#0f172a', marginBottom: '12px' }}>
-                The <span style={{ background: 'linear-gradient(135deg,#f59e0b,#ef4444)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Burn</span> To Rise
-              </h2>
-              <p style={{ fontSize: '15px', color: '#64748b', maxWidth: '600px', margin: '0 auto 8px', lineHeight: '1.7' }}>
-                Collecting points is good, but <strong style={{ color: '#0f172a' }}>Rank</strong> is better. To move up the ladder you must make a choice.
-              </p>
-              <p style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>
-                You have to "<span style={{ background: 'linear-gradient(135deg,#f59e0b,#ef4444)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Burn</span>" your points.
-              </p>
-            </div>
-
-            {/* Rank progression */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '32px', marginBottom: '32px', flexWrap: 'wrap' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ width: '120px', height: '120px', margin: '0 auto 12px', background: nm.bg, borderRadius: '50%', boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src="/images/badges/dag-starter.svg" alt="Starter" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
-                </div>
-                <p style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px', margin: '0 0 2px' }}>Starter</p>
-                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Starting Point</p>
-              </div>
-
-              <div style={{ flex: '0 0 200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                <div style={{ width: '100%', height: '3px', background: 'linear-gradient(90deg,#94a3b8,#818cf8)', borderRadius: '2px', opacity: 0.5 }} />
-                <div style={{ position: 'absolute', zIndex: 2, background: 'linear-gradient(135deg,#f59e0b,#ef4444)', borderRadius: '10px', padding: '8px 20px', color: '#fff', fontSize: '13px', fontWeight: '800', letterSpacing: '0.5px', boxShadow: '0 4px 16px rgba(239,68,68,0.35)', textTransform: 'uppercase' }}>
-                  BURN
-                </div>
-              </div>
-
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ width: '120px', height: '120px', margin: '0 auto 12px', background: nm.bg, borderRadius: '50%', boxShadow: nm.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src="/images/badges/dag-mythic.svg" alt="Mythic" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
-                </div>
-                <p style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px', margin: '0 0 2px' }}>Mythic</p>
-                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>Elite Status</p>
-              </div>
-            </div>
-
-            {/* 3-col card */}
-            <div style={{ background: nm.bg, borderRadius: '20px', boxShadow: nm.shadow, padding: '36px' }}>
-              <div className="rewards-three-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0' }}>
-                {[
-                  { title: 'The Commitment', body: 'Burning wipes your point balance to zero.' },
-                  { title: 'The Reward', body: 'In exchange, you permanently unlock a higher Rank.' },
-                  { title: 'The Benefit', body: 'Higher ranks unlock better resource access, larger shares of ecosystem value, and leadership opportunities.' },
-                ].map((item, i) => (
-                  <div key={i} style={{ paddingLeft: i > 0 ? '32px' : 0, paddingRight: i < 2 ? '32px' : 0, borderRight: i < 2 ? '1px solid rgba(148,163,184,0.2)' : 'none' }}>
-                    <div style={{ width: '36px', height: '3px', background: 'linear-gradient(90deg,#818cf8,#a78bfa)', borderRadius: '2px', marginBottom: '14px' }} />
-                    <h5 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', marginBottom: '10px' }}>{item.title}</h5>
-                    <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.65', margin: 0 }}>{item.body}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── Choose Your Path ── */}
       <section style={{ background: nm.bg, padding: '0 24px 64px' }}>

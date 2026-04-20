@@ -296,24 +296,21 @@ export default function HomeRedesign() {
     { sym: "⬟", title: "General", sub: "Elite. The top 1% of the entire Army.", color: "#ef4444" },
   ];
 
-  const ecosystem = [
-    { num: "01", dot: "#7c3aed", name: "DAG ARMY", tag: "COMMUNITY & MISSIONS", desc: "Community platform, missions engine, live leaderboard, Udaan program, and Ambassador network — all in one home base.", href: "/", ext: false },
-    { num: "02", dot: "#6d28d9", name: "DAGGPT", tag: "MULTI-MODAL AI PLATFORM", desc: "Text, image, video, music & website generation. Every frontier AI model — Gemini, Claude, Llama — one subscription, one login.", href: "https://daggpt.network", ext: true },
-    { num: "03", dot: "#0f766e", name: "DAGCHAIN", tag: "LAYER 1 BLOCKCHAIN", desc: "AI-native Layer 1 infrastructure. Validator nodes, GasCoin, and on-chain intelligence — built for the next decade of the internet.", href: "https://dagchain.network", ext: true },
+  const tiers = [
+    { code: "T·01", name: "SILVER",   req: "1,000+ Followers",  accent: "#64748b", perks: ["Ambassador Badge", "DAGGPT Access", "Private Community", "Branded Content Kit"] },
+    { code: "T·02", name: "GOLD",     req: "50,000+ Followers", accent: "#d97706", perks: ["Everything in Silver", "Featured Profile", "Priority Support", "Early Access"], hot: true },
+    { code: "T·03", name: "PLATINUM", req: "100K+ Followers",   accent: "#7c3aed", perks: ["Everything in Gold", "Regional Leadership Role", "Co-Branded Campaigns", "Executive Access"] },
   ];
 
-  const tiers = [
-    { code: "T·01", name: "SILVER", req: "1,000+ Followers", accent: "#64748b", perks: ["Ambassador Badge", "DAGGPT Access", "Private Community", "Branded Content Kit"] },
-    { code: "T·02", name: "GOLD", req: "50,000+ Followers", accent: "#d97706", perks: ["Everything in Silver", "Featured Profile", "Priority Support", "Early Access"], hot: true },
-    { code: "T·03", name: "PLATINUM", req: "100K+ Followers", accent: "#7c3aed", perks: ["Everything in Gold", "Regional Leadership Role", "Co-Branded Campaigns", "Executive Access"] },
+  const ecosystem = [
+    { num:"01", dot:"#7c3aed", name:"DAG ARMY",  tag:"COMMUNITY & MISSIONS",   desc:"Community platform, missions engine, live leaderboard, Udaan program, and Ambassador network — all in one home base.",                                      href:"/",                      ext:false },
+    { num:"02", dot:"#6d28d9", name:"DAGGPT",    tag:"MULTI-MODAL AI PLATFORM", desc:"Text, image, video, music & website generation. Every frontier AI model — Gemini, Claude, Llama — one subscription, one login.",                               href:"https://daggpt.network", ext:true  },
+    { num:"03", dot:"#0f766e", name:"DAGCHAIN",  tag:"LAYER 1 BLOCKCHAIN",     desc:"AI-native Layer 1 infrastructure. Validator nodes, GasCoin, and on-chain intelligence — built for the next decade of the internet.",                         href:"https://dagchain.network",ext:true  },
   ];
 
   return (
-    <div style={{
+    <div className="dag-home" style={{
       background: "#ffffff", overflowX: "hidden", fontFamily: "'Space Grotesk',sans-serif",
-      /* Pull up enough that the component's top sits at/above viewport top (y=0).
-         GSAP "top top" pin then fires at page load, not on first scroll.
-         Breakdown: navbar(~64px) + layout paddingTop(50px) + buffer(16px) = 130px */
       marginTop: "-130px",
     }}>
 
@@ -364,19 +361,121 @@ export default function HomeRedesign() {
         .v4-rank { transition:transform 0.2s; cursor:default; }
         .v4-rank:hover { transform:translateX(8px); }
 
-        /* Thin horizontal accent line animation */
         @keyframes scrollB { 0%,100%{transform:translateY(0)} 60%{transform:translateY(8px)} }
 
-        /* Responsive */
-        @media(max-width:1100px){
-          .v4-hero-h  { font-size:clamp(56px,10vw,130px)!important; }
-          .v4-2col    { grid-template-columns:1fr!important; }
-          .v4-3col    { grid-template-columns:1fr!important; }
+        /* ─────────────────────────────────────────────────────────
+           SECTION PADDING HELPER
+           ───────────────────────────────────────────────────────── */
+        .rsp-section { padding:140px 60px 120px; }
+
+        /* Responsive horizontal padding for all sections */
+        @media(max-width:1280px){ .dag-home > section { padding-left:40px!important; padding-right:40px!important; } }
+        @media(max-width:1100px){ .dag-home > section { padding-left:36px!important; padding-right:36px!important; } }
+        @media(max-width:768px) { .dag-home > section { padding-left:24px!important; padding-right:24px!important; } }
+        @media(max-width:480px) { .dag-home > section { padding-left:16px!important; padding-right:16px!important; } }
+
+        /* ─────────────────────────────────────────────────────────
+           ECOSYSTEM ROW
+           ───────────────────────────────────────────────────────── */
+        .v4-eco-row { display:grid; grid-template-columns:56px 220px 1fr 44px; gap:28px; align-items:center; padding:36px 0; border-bottom:1px solid rgba(8,3,14,0.07); }
+
+        /* ─────────────────────────────────────────────────────────
+           LAPTOP  ≤ 1280px
+           ───────────────────────────────────────────────────────── */
+        @media(max-width:1280px){
+          .rsp-section { padding:100px 40px 90px!important; }
+          .v4-hero-h   { font-size:clamp(56px,10vw,130px)!important; }
         }
-        @media(max-width:680px){
-          .v4-hero-h  { font-size:clamp(44px,13vw,88px)!important; letter-spacing:-3px!important; }
-          .v4-cta-row { flex-direction:column!important; align-items:stretch!important; }
+
+        /* ─────────────────────────────────────────────────────────
+           SMALL LAPTOP / LARGE TABLET  ≤ 1100px
+           ───────────────────────────────────────────────────────── */
+        @media(max-width:1100px){
+          .v4-hero-h      { font-size:clamp(52px,9vw,120px)!important; }
+          .v4-2col        { grid-template-columns:1fr!important; gap:48px!important; }
+          .v4-3col        { grid-template-columns:1fr 1fr!important; gap:2px!important; }
+          .v4-eco-row     { grid-template-columns:40px 1fr 44px!important; }
+          .v4-eco-name-col{ display:none!important; }
+          .v4-eco-mobile-tag { display:block!important; }
+          .v4-eco-mobile-name { display:block!important; }
+          .rsp-section    { padding:80px 36px 72px!important; }
+          .rsp-h2-xl      { font-size:clamp(44px,7vw,88px)!important; }
+        }
+
+        /* ─────────────────────────────────────────────────────────
+           TABLET  ≤ 768px
+           ───────────────────────────────────────────────────────── */
+        @media(max-width:768px){
           .v4-stat-grid { display:none!important; }
+          .h-dec      { display:none!important; }
+          .v4-scroll-ind { display:none!important; }
+          .v4-pin-wrap { height:300vh!important; }
+
+          /* Phase bottom lists */
+          .v4-path-list { flex-direction:column!important; gap:16px!important; align-items:center!important; }
+
+          /* Sections */
+          .rsp-section { padding:60px 24px 56px!important; }
+          .v4-2col    { grid-template-columns:1fr!important; gap:40px!important; }
+          .v4-3col    { grid-template-columns:1fr!important; }
+          .v4-4col        { grid-template-columns:1fr 1fr!important; }
+          .v4-belief      { grid-template-columns:1fr!important; }
+          .v4-belief-grid { grid-template-columns:1fr!important; gap:0!important; }
+          .v4-eco-row     { grid-template-columns:32px 1fr 32px!important; gap:16px!important; padding:24px 0!important; }
+          .v4-eco-name-col{ display:none!important; }
+          .v4-cta-row     { flex-direction:column!important; align-items:stretch!important; }
+          .v4-cta-row a,.v4-cta-row button { text-align:center!important; }
+          .rsp-h2-xl      { font-size:clamp(36px,8vw,72px)!important; letter-spacing:-2px!important; }
+          .rsp-h2-lg      { font-size:clamp(28px,7vw,56px)!important; letter-spacing:-1px!important; }
+          .v4-hero-h      { font-size:clamp(44px,12vw,88px)!important; letter-spacing:0px!important; }
+          .v4-udaan-stats { grid-template-columns:1fr 1fr!important; }
+          .v4-week-arch   { grid-template-columns:1fr 1fr!important; }
+          .v4-dark-card   { min-height:320px!important; padding:36px 28px!important; }
+          .mani-line      { letter-spacing:0px!important; }
+          .v4-feat-grid   { grid-template-columns:1fr 1fr!important; }
+          .v4-paths-hdr   { flex-direction:column!important; align-items:flex-start!important; gap:16px!important; }
+          /* Phase headings — open up letter spacing on tablet */
+          .v4-phase-h     { letter-spacing:0px!important; }
+          /* Phase 1 mobile: break out of flex flow so titles land ON the globe */
+          .v4-ph1         { display:block!important; position:absolute!important; }
+          .v4-ph1-top     { position:absolute!important; top:3%!important; left:0!important; right:0!important; text-align:center!important; }
+          .v4-ph1-center  { position:absolute!important; top:50%!important; left:0!important; right:0!important; transform:translateY(-50%)!important; text-align:center!important; }
+          .v4-ph1-bottom  { position:absolute!important; bottom:0!important; left:0!important; right:0!important; padding:12px 8px 16px!important; display:flex!important; flex-direction:row!important; justify-content:space-around!important; align-items:flex-start!important; gap:4px!important; flex-wrap:nowrap!important; }
+          .v4-ph1-bottom > div { display:flex!important; flex-direction:column!important; align-items:center!important; }
+          .v4-ph1-num   { display:none!important; }
+          .v4-ph1-title { font-size:13px!important; letter-spacing:0.5px!important; }
+          .v4-ph1-desc  { font-size:10px!important; max-width:100px!important; }
+          /* Phase 0 mobile: ONE ARMY centered on globe, CTAs pinned below */
+          .v4-ph0         { display:block!important; position:absolute!important; }
+          .v4-ph0-center  { position:absolute!important; top:50%!important; left:0!important; right:0!important; transform:translateY(-50%)!important; text-align:center!important; }
+          .v4-ph0-bottom  { position:absolute!important; bottom:0!important; left:0!important; right:0!important; text-align:center!important; display:flex!important; flex-direction:column!important; align-items:center!important; padding:0 16px 16px!important; gap:10px!important; }
+        }
+
+        /* ─────────────────────────────────────────────────────────
+           MOBILE  ≤ 480px
+           ───────────────────────────────────────────────────────── */
+        @media(max-width:480px){
+          .v4-hero-h      { font-size:clamp(36px,14vw,64px)!important; letter-spacing:0px!important; }
+          .v4-pin-wrap    { height:260vh!important; }
+          .rsp-section    { padding:48px 16px 44px!important; }
+          .v4-2col,.v4-3col { grid-template-columns:1fr!important; }
+          .v4-4col        { grid-template-columns:1fr 1fr!important; }
+          .v4-udaan-stats { grid-template-columns:1fr 1fr!important; }
+          .v4-week-arch   { grid-template-columns:1fr 1fr!important; }
+          .v4-feat-grid   { grid-template-columns:1fr!important; }
+          .v4-belief      { grid-template-columns:1fr!important; }
+          .v4-belief-grid { grid-template-columns:1fr!important; gap:0!important; }
+          .rsp-h2-xl      { font-size:clamp(28px,11vw,52px)!important; letter-spacing:0px!important; }
+          .rsp-h2-lg      { font-size:clamp(22px,9vw,40px)!important; letter-spacing:0px!important; }
+          .v4-eco-row     { grid-template-columns:28px 1fr!important; gap:12px!important; }
+          .v4-eco-arr     { display:none!important; }
+          .v4-dark-card   { min-height:280px!important; padding:28px 20px!important; }
+          .v4-btn-p,.v4-btn-g { padding:14px 20px!important; font-size:10px!important; }
+          .v4-perk        { font-size:10px!important; padding:4px 8px!important; }
+          .v4-scroll-ind  { display:none!important; }
+          .v4-cta-row     { flex-direction:column!important; align-items:stretch!important; }
+          /* Phase headings — open up at 480px */
+          .v4-phase-h     { letter-spacing:0.5px!important; }
         }
       `}</style>
 
@@ -465,7 +564,7 @@ export default function HomeRedesign() {
 
             {/* ── PHASE 0 — ONE ARMY. ──
                  Layout: titles centered over globe; subtext+CTAs pinned to bottom */}
-            <div ref={phase0Ref} style={{
+            <div ref={phase0Ref} className="v4-ph0" style={{
               opacity: 1, position: "absolute", inset: 0,
               display: "flex", flexDirection: "column",
               justifyContent: "space-between", alignItems: "center",
@@ -476,17 +575,17 @@ export default function HomeRedesign() {
               <div />
 
               {/* CENTER — only the big display titles */}
-              <div>
+              <div className="v4-ph0-center">
                 <h1 className="h-w1 v4-hero-h pt" style={{
                   fontFamily: "'Michroma',monospace",
                   fontSize: "clamp(72px,13vw,210px)",
-                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-6px",
+                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-2px",
                   color: "#08030e", textTransform: "uppercase", margin: 0,
                 }}>ONE</h1>
                 <h1 className="h-w2 v4-hero-h" style={{
                   fontFamily: "'Michroma',monospace",
                   fontSize: "clamp(72px,13vw,210px)",
-                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-6px",
+                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-2px",
                   color: "transparent",
                   WebkitTextStroke: "2px #7c3aed",
                   textTransform: "uppercase", margin: 0,
@@ -494,7 +593,7 @@ export default function HomeRedesign() {
               </div>
 
               {/* BOTTOM — subtext + CTAs, safely below the globe sphere */}
-              <div style={{ pointerEvents: "auto" }}>
+              <div className="v4-ph0-bottom" style={{ pointerEvents: "auto" }}>
                 <p className="h-sub" style={{
                   fontFamily: "'Space Grotesk',sans-serif", fontSize: "clamp(13px,1.1vw,16px)",
                   color: "rgba(8,3,14,0.65)", lineHeight: "1.9",
@@ -531,7 +630,7 @@ export default function HomeRedesign() {
 
             {/* ── PHASE 1 — THREE PATHS. ──
                  Label sits above globe; UDAAN/AMBASSADOR/MISSIONS below */}
-            <div ref={phase1Ref} style={{
+            <div ref={phase1Ref} className="v4-ph1" style={{
               opacity: 0, position: "absolute", inset: 0,
               display: "flex", flexDirection: "column",
               justifyContent: "space-between", alignItems: "center",
@@ -539,34 +638,34 @@ export default function HomeRedesign() {
               textAlign: "center", pointerEvents: "none",
             }}>
               {/* TOP — label above sphere */}
-              <div>
+              <div className="v4-ph1-top">
                 <Label num="01" text="Choose Your Path" style={{ fontSize: "18px", letterSpacing: "3px" }} />
               </div>
 
-              {/* CENTER — display titles only */}
-              <div>
-                <h2 className="pt" style={{
+              {/* CENTER — display titles, overlaid on globe */}
+              <div className="v4-ph1-center">
+                <h2 className="pt v4-phase-h" style={{
                   fontFamily: "'Michroma',monospace",
-                  fontSize: "clamp(64px,12vw,200px)",
-                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-6px",
+                  fontSize: "clamp(48px,11vw,200px)",
+                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-2px",
                   color: "#08030e", textTransform: "uppercase", margin: 0,
                 }}>THREE</h2>
-                <h2 style={{
+                <h2 className="v4-phase-h" style={{
                   fontFamily: "'Michroma',monospace",
-                  fontSize: "clamp(64px,12vw,200px)",
-                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-6px",
+                  fontSize: "clamp(48px,11vw,200px)",
+                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-2px",
                   color: "transparent", WebkitTextStroke: "2px #7c3aed",
                   textTransform: "uppercase", margin: 0,
                 }}>PATHS.</h2>
               </div>
 
               {/* BOTTOM — path names below sphere */}
-              <div style={{ display: "flex", gap: "48px", flexWrap: "wrap", justifyContent: "center" }}>
+              <div className="v4-ph1-bottom" style={{ display: "flex", gap: "48px", flexWrap: "wrap", justifyContent: "center" }}>
                 {[["UDAAN", "4-week AI startup sprint."], ["AMBASSADOR", "Lead your region."], ["MISSIONS", "Show up. Earn your tier."]].map(([t, d], i) => (
                   <div key={i}>
-                    <div style={{ fontFamily: "'Michroma',monospace", fontSize: "12px", letterSpacing: "1.5px", color: "rgba(124,58,237,0.7)", marginBottom: "8px" }}>0{i + 1}</div>
-                    <div className="pt" style={{ fontFamily: "'Michroma',monospace", fontSize: "22px", color: "#08030e", letterSpacing: "0.5px", marginBottom: "5px" }}>{t}</div>
-                    <div className="pt-sub" style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "15px", color: "rgba(8,3,14,0.65)" }}>{d}</div>
+                    <div className="v4-ph1-num" style={{ fontFamily: "'Michroma',monospace", fontSize: "12px", letterSpacing: "1.5px", color: "rgba(124,58,237,0.7)", marginBottom: "8px" }}>0{i + 1}</div>
+                    <div className="pt v4-ph1-title" style={{ fontFamily: "'Michroma',monospace", fontSize: "22px", color: "#08030e", letterSpacing: "0.5px", marginBottom: "5px" }}>{t}</div>
+                    <div className="pt-sub v4-ph1-desc" style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "15px", color: "rgba(8,3,14,0.65)" }}>{d}</div>
                   </div>
                 ))}
               </div>
@@ -588,16 +687,16 @@ export default function HomeRedesign() {
 
               {/* CENTER — display titles */}
               <div>
-                <h2 style={{
+                <h2 className="v4-phase-h" style={{
                   fontFamily: "'Michroma',monospace",
                   fontSize: "clamp(64px,12vw,200px)",
-                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-6px",
+                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-2px",
                   color: "#f0ebff", textTransform: "uppercase", margin: 0,
                 }}>ONE</h2>
-                <h2 style={{
+                <h2 className="v4-phase-h" style={{
                   fontFamily: "'Michroma',monospace",
                   fontSize: "clamp(64px,12vw,200px)",
-                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-6px",
+                  fontWeight: "400", lineHeight: "0.88", letterSpacing: "-2px",
                   color: "transparent", WebkitTextStroke: "1.5px rgba(220,210,255,0.55)",
                   textTransform: "uppercase", margin: 0,
                 }}>FUTURE.</h2>
@@ -653,11 +752,11 @@ export default function HomeRedesign() {
               { text: "THIS IS NOT", op: "0.28", sz: "clamp(36px,5vw,78px)" },
               { text: "A COURSE PLATFORM.", op: "0.28", sz: "clamp(36px,5vw,78px)" },
               { text: "THIS IS A", op: "0.95", sz: "clamp(36px,5vw,78px)" },
-              { text: "MOVEMENT.", op: "1", sz: "clamp(58px,9vw,148px)", stroke: true },
+              { text: "MOVEMENT.", op: "1", sz: "clamp(38px,9vw,148px)", stroke: true },
             ].map((line, i) => (
               <div key={i} className="mani-line" style={{
                 fontFamily: "'Michroma',monospace",
-                fontSize: line.sz, fontWeight: "400", lineHeight: "1.08", letterSpacing: "-2px",
+                fontSize: line.sz, fontWeight: "400", lineHeight: "1.08", letterSpacing: "-0.5px",
                 margin: "0 0 4px", textTransform: "uppercase",
                 color: line.stroke ? "transparent" : `rgba(240,235,255,${line.op})`,
                 ...(line.stroke ? { WebkitTextStroke: "2px rgba(240,235,255,0.9)" } : {}),
@@ -665,9 +764,9 @@ export default function HomeRedesign() {
             ))}
           </div>
 
-          <div className="dag-ssr v4-2col" style={{
+          <div className="dag-ssr v4-belief-grid" style={{
             display: "grid", gridTemplateColumns: "1fr 1fr",
-            gap: "0 80px", marginTop: "96px", borderTop: "1px solid rgba(124,58,237,0.12)", paddingTop: "56px"
+            gap: "0 80px", marginTop: "96px", borderTop: "1px solid rgba(124,58,237,0.18)", paddingTop: "56px"
           }}>
             {[
               { n: "01", title: "No Background Filters", body: "Skills define your place here — not your city, degree, or starting point." },
@@ -675,10 +774,10 @@ export default function HomeRedesign() {
               { n: "03", title: "No Location Limits", body: "40+ countries. One community. Local in language, global in ambition." },
               { n: "04", title: "Practical Over Theoretical", body: "Every mission, module, and program leads to real-world outcomes." },
             ].map((b, i) => (
-              <div key={i} className="sc-item" style={{ padding: "32px 0", borderBottom: "1px solid rgba(124,58,237,0.08)" }}>
-                <div style={{ fontFamily: "'Michroma',monospace", fontSize: "9px", color: "rgba(124,58,237,0.4)", marginBottom: "14px" }}>{b.n}</div>
-                <p style={{ fontFamily: "'Michroma',monospace", fontSize: "11px", letterSpacing: "0.5px", color: "rgba(240,235,255,0.7)", margin: "0 0 10px", textTransform: "uppercase" }}>{b.title}</p>
-                <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "13px", color: "rgba(196,181,253,0.3)", lineHeight: "1.9", margin: 0 }}>{b.body}</p>
+              <div key={i} className="sc-item" style={{ padding: "32px 0", borderBottom: "1px solid rgba(124,58,237,0.14)" }}>
+                <div style={{ fontFamily: "'Michroma',monospace", fontSize: "12px", color: "rgba(167,139,250,0.88)", marginBottom: "14px", letterSpacing: "2px" }}>{b.n}</div>
+                <p style={{ fontFamily: "'Michroma',monospace", fontSize: "13px", letterSpacing: "1px", color: "rgba(240,235,255,1.0)", margin: "0 0 12px", textTransform: "uppercase", fontWeight: "600" }}>{b.title}</p>
+                <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "14px", color: "rgba(210,200,255,0.78)", lineHeight: "1.9", margin: 0 }}>{b.body}</p>
               </div>
             ))}
           </div>
@@ -707,7 +806,7 @@ export default function HomeRedesign() {
               <h2 style={{
                 fontFamily: "'Michroma',monospace",
                 fontSize: "clamp(44px,5.5vw,88px)",
-                fontWeight: "400", lineHeight: "1.0", letterSpacing: "-3px",
+                fontWeight: "400", lineHeight: "1.0", letterSpacing: "-0.5px",
                 color: "#08030e", textTransform: "uppercase", margin: "0 0 24px",
               }}>UDAAN<span style={{ color: "rgba(124,58,237,0.4)" }}>.</span></h2>
               <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "15px", color: "rgba(8,3,14,0.65)", lineHeight: "1.9", maxWidth: "420px", margin: "0 0 44px" }}>
@@ -715,7 +814,7 @@ export default function HomeRedesign() {
                 validated prototype. Four phases. Four deliverables. Zero fluff.
               </p>
               {/* Stat row */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1px", background: "rgba(124,58,237,0.12)", marginBottom: "48px" }}>
+              <div className="v4-week-arch" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1px", background: "rgba(124,58,237,0.12)", marginBottom: "48px" }}>
                 {[["4", "Weeks"], ["4", "Phases"], ["4", "Deliverables"], ["1", "Founder Track"]].map(([n, l], i) => (
                   <div key={i} style={{ padding: "20px 14px", background: "#fff", textAlign: "center" }}>
                     <div style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(18px,2vw,26px)", color: "#3b0764", letterSpacing: "-1px", lineHeight: 1, marginBottom: "5px", fontWeight: "600" }}>{n}</div>
@@ -781,7 +880,7 @@ export default function HomeRedesign() {
               </div>
 
               {/* Program Architecture stat strip */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1px", background: "rgba(124,58,237,0.12)", margin: "24px 0 0" }}>
+              <div className="v4-week-arch" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1px", background: "rgba(124,58,237,0.12)", margin: "24px 0 0" }}>
                 {[
                   ["4", "Defined Phases", "Weekly progression"],
                   ["4", "Deliverables", "Measurable output"],
@@ -821,13 +920,13 @@ export default function HomeRedesign() {
                 <h2 style={{
                   fontFamily: "'Michroma',monospace",
                   fontSize: "clamp(44px,7vw,110px)",
-                  fontWeight: "400", lineHeight: "0.92", letterSpacing: "-4px",
+                  fontWeight: "400", lineHeight: "0.92", letterSpacing: "-1px",
                   color: "#08030e", textTransform: "uppercase", margin: 0,
                 }}>SHOW UP.</h2>
                 <h2 style={{
                   fontFamily: "'Michroma',monospace",
                   fontSize: "clamp(44px,7vw,110px)",
-                  fontWeight: "400", lineHeight: "0.92", letterSpacing: "-4px",
+                  fontWeight: "400", lineHeight: "0.92", letterSpacing: "-1px",
                   color: "transparent", WebkitTextStroke: "2px #7c3aed",
                   textTransform: "uppercase", margin: 0,
                 }}>LEVEL UP.</h2>
@@ -901,7 +1000,7 @@ export default function HomeRedesign() {
               <Label num="06" text="Your Path" dark />
               <h2 style={{
                 fontFamily: "'Michroma',monospace", fontSize: "clamp(30px,4.5vw,64px)",
-                fontWeight: "400", color: "#f0ebff", letterSpacing: "-2px", lineHeight: "1.05", margin: 0, textTransform: "uppercase",
+                fontWeight: "400", color: "#f0ebff", letterSpacing: "0px", lineHeight: "1.05", margin: 0, textTransform: "uppercase",
               }}>
                 DIFFERENT PATHS.<br />
                 <span style={{ color: "transparent", WebkitTextStroke: "1px rgba(196,181,253,0.25)" }}>SAME DESTINATION.</span>
@@ -965,7 +1064,7 @@ export default function HomeRedesign() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           <div className="dag-sr" style={{ marginBottom: "72px" }}>
             <Label num="07" text="The Ecosystem" />
-            <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(34px,5vw,80px)", fontWeight: "400", letterSpacing: "-2px", lineHeight: "1.0", margin: 0, color: "#08030e", textTransform: "uppercase" }}>
+            <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(34px,5vw,80px)", fontWeight: "400", letterSpacing: "0px", lineHeight: "1.0", margin: 0, color: "#08030e", textTransform: "uppercase" }}>
               THREE PRODUCTS.<br />
               <span style={{ color: "transparent", WebkitTextStroke: "1.5px rgba(124,58,237,0.3)" }}>ONE VISION.</span>
             </h2>
@@ -973,16 +1072,20 @@ export default function HomeRedesign() {
 
           <div className="dag-ssr" style={{ display: "flex", flexDirection: "column", borderTop: "1px solid rgba(8,3,14,0.07)" }}>
             {ecosystem.map((e, i) => (
-              <div key={i} className="sc-item v4-eco"
+              <div key={i} className="sc-item v4-eco v4-eco-row"
                 onClick={() => e.ext && window.open(e.href, "_blank")}
                 style={{ display: "grid", gridTemplateColumns: "56px 220px 1fr 44px", gap: "28px", alignItems: "center", padding: "36px 0", borderBottom: "1px solid rgba(8,3,14,0.07)", cursor: e.ext ? "pointer" : "default" }}>
                 <span style={{ fontFamily: "'Michroma',monospace", fontSize: "12px", color: "rgba(124,58,237,0.65)", letterSpacing: "1px", fontWeight: "600" }}>{e.num}</span>
-                <div>
+                <div className="v4-eco-name-col">
                   <p style={{ fontFamily: "'Michroma',monospace", fontSize: "11px", color: e.dot, letterSpacing: "2px", margin: "0 0 7px", textTransform: "uppercase", fontWeight: "600" }}>{e.tag}</p>
                   <p style={{ fontFamily: "'Michroma',monospace", fontSize: "20px", color: "#08030e", margin: 0, letterSpacing: "-0.5px" }}>{e.name}</p>
                 </div>
-                <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "14px", color: "rgba(8,3,14,0.62)", lineHeight: "1.85", margin: 0 }}>{e.desc}</p>
-                <div style={{ width: "36px", height: "36px", border: `1px solid ${e.dot}30`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Michroma',monospace", fontSize: "12px", color: e.dot }}>→</div>
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ fontFamily: "'Michroma',monospace", fontSize: "11px", color: e.dot, letterSpacing: "2px", margin: "0 0 5px", textTransform: "uppercase", fontWeight: "600", display: "none" }} className="v4-eco-mobile-tag">{e.tag}</p>
+                  <p style={{ fontFamily: "'Michroma',monospace", fontSize: "16px", color: "#08030e", margin: "0 0 6px", letterSpacing: "0px" }} className="v4-eco-mobile-name">{e.name}</p>
+                  <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "14px", color: "rgba(8,3,14,0.62)", lineHeight: "1.85", margin: 0, overflow: "hidden", textOverflow: "ellipsis" }}>{e.desc}</p>
+                </div>
+                <div className="v4-eco-arr" style={{ width: "36px", height: "36px", border: `1px solid ${e.dot}30`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Michroma',monospace", fontSize: "12px", color: e.dot }}>→</div>
               </div>
             ))}
           </div>
@@ -1000,7 +1103,7 @@ export default function HomeRedesign() {
 
             <div className="dag-sr">
               <Label num="08" text="Ambassador Program" />
-              <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(34px,5vw,80px)", fontWeight: "400", color: "#08030e", letterSpacing: "-2px", lineHeight: "1.0", margin: "0 0 24px", textTransform: "uppercase" }}>
+              <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(28px,5vw,80px)", fontWeight: "400", color: "#08030e", letterSpacing: "0px", lineHeight: "1.15", margin: "0 0 24px", textTransform: "uppercase", overflowWrap: "break-word", wordBreak: "break-word" }}>
                 REPRESENT<br />YOUR<br />REGION.
               </h2>
               <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "15px", color: "rgba(8,3,14,0.68)", lineHeight: "1.9", margin: "0 0 16px", maxWidth: "380px" }}>
@@ -1028,16 +1131,13 @@ export default function HomeRedesign() {
                 {tiers.map((tier, i) => (
                   <div key={i} className="sc-item v4-tier" style={{
                     padding: "26px 28px", background: "#f8f5ff",
-                    borderLeft: `3px solid ${tier.hot ? tier.accent : "transparent"}`,
+                    borderLeft: `3px solid ${tier.accent}`,
                     position: "relative",
                   }}>
-                    {tier.hot && (
-                      <span style={{ position: "absolute", top: "16px", right: "20px", fontFamily: "'Michroma',monospace", fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: tier.accent, border: `1px solid ${tier.accent}50`, padding: "3px 10px", fontWeight: "600" }}>POPULAR</span>
-                    )}
-                    <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "12px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px", flexWrap: "wrap" }}>
                       <span style={{ fontFamily: "'Michroma',monospace", fontSize: "11px", letterSpacing: "1px", color: tier.accent, fontWeight: "600" }}>{tier.code}</span>
-                      <span style={{ fontFamily: "'Michroma',monospace", fontSize: "15px", color: "#3b0764", letterSpacing: "1.5px" }}>{tier.name}</span>
-                      <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "12px", color: "rgba(8,3,14,0.60)", marginLeft: "auto" }}>{tier.req}</span>
+                      <span style={{ fontFamily: "'Michroma',monospace", fontSize: "14px", color: "#3b0764", letterSpacing: "1px" }}>{tier.name}</span>
+                      <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "11px", color: "rgba(8,3,14,0.60)", marginLeft: "auto", whiteSpace: "nowrap" }}>{tier.req}</span>
                     </div>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                       {tier.perks.map((perk, j) => (
@@ -1082,8 +1182,8 @@ export default function HomeRedesign() {
             <div style={{ marginBottom: "28px" }}>
               <span style={{ fontFamily: "'Michroma',monospace", fontSize: "12px", letterSpacing: "3px", color: "rgba(255,255,255,0.70)", textTransform: "uppercase", fontWeight: "600" }}>09 // JOIN THE MOVEMENT</span>
             </div>
-            <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(44px,8vw,130px)", fontWeight: "400", lineHeight: "0.9", letterSpacing: "-5px", color: "#fff", textTransform: "uppercase", margin: "0 0 8px" }}>READY TO JOIN</h2>
-            <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(44px,8vw,130px)", fontWeight: "400", lineHeight: "0.9", letterSpacing: "-5px", color: "transparent", WebkitTextStroke: "1.5px rgba(255,255,255,0.3)", textTransform: "uppercase", margin: "0 0 56px" }}>THE ARMY?</h2>
+            <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(44px,8vw,130px)", fontWeight: "400", lineHeight: "0.9", letterSpacing: "-1px", color: "#fff", textTransform: "uppercase", margin: "0 0 8px" }}>READY TO JOIN</h2>
+            <h2 style={{ fontFamily: "'Michroma',monospace", fontSize: "clamp(44px,8vw,130px)", fontWeight: "400", lineHeight: "0.9", letterSpacing: "-1px", color: "transparent", WebkitTextStroke: "1.5px rgba(255,255,255,0.3)", textTransform: "uppercase", margin: "0 0 56px" }}>THE ARMY?</h2>
             <p style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)", lineHeight: "1.95", maxWidth: "460px", margin: "0 auto 56px" }}>
               No background filters. No location limits. No shortcuts promised.<br />Just the Army — and a place for you in it.
             </p>
