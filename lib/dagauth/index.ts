@@ -179,10 +179,12 @@ export async function logSSOSession(params: {
 const PLATFORM_URLS: Record<string, string> = {
   dagarmy: process.env.NEXT_PUBLIC_DAGARMY_URL || 'https://dagarmy.network',
   daggpt: process.env.NEXT_PUBLIC_DAGGPT_URL || 'https://daggpt.network',
-  dagchain: process.env.NEXT_PUBLIC_DAGCHAIN_URL || 'https://dagchain.network',
 };
 
 export function buildSSORedirectUrl(targetPlatform: string, ssoToken: string): string {
+  if (targetPlatform === 'dagchain') {
+    return `https://dashboard.dagchain.network/dashboard?sso_token=${encodeURIComponent(ssoToken)}`;
+  }
   const base = PLATFORM_URLS[targetPlatform] || '#';
   return `${base}?sso_token=${encodeURIComponent(ssoToken)}`;
 }
